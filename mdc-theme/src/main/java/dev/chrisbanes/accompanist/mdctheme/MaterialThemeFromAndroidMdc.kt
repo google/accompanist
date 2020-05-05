@@ -19,6 +19,7 @@ package dev.chrisbanes.accompanist.mdctheme
 import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.Typeface
+import android.os.Build
 import android.util.TypedValue
 import androidx.annotation.StyleRes
 import androidx.compose.Composable
@@ -475,7 +476,7 @@ fun TypedArray.getTextUnitOrNull(
 ): TextUnit? {
     val tv = tempTypedValue.getOrSet { TypedValue() }
     if (getValue(index, tv) && tv.type == TypedValue.TYPE_DIMENSION) {
-        return when (tv.complexUnit) {
+        return when (tv.complexUnitCompat) {
             // For SP values, we convert the value directly to an TextUnit.Sp
             TypedValue.COMPLEX_UNIT_SP -> TypedValue.complexToFloat(tv.data).sp
             // For DIP values, we convert the value to an TextUnit.Em (roughly equivalent)
@@ -498,7 +499,7 @@ fun TypedArray.getCornerSizeOrNull(index: Int): CornerSize? {
     if (getValue(index, tv)) {
         return when (tv.type) {
             TypedValue.TYPE_DIMENSION -> {
-                when (tv.complexUnit) {
+                when (tv.complexUnitCompat) {
                     // For DIP and PX values, we convert the value to the equivalent
                     TypedValue.COMPLEX_UNIT_DIP -> CornerSize(TypedValue.complexToFloat(tv.data).dp)
                     TypedValue.COMPLEX_UNIT_PX -> CornerSize(TypedValue.complexToFloat(tv.data).px)
@@ -522,3 +523,12 @@ fun TypedArray.getCornerSizeOrNull(index: Int): CornerSize? {
 fun TypedArray.getCornerSize(index: Int, fallback: CornerSize): CornerSize {
     return getCornerSizeOrNull(index) ?: fallback
 }
+
+/**
+ * A workaround since [TypedValue.getComplexUnit] is API 22+
+ */
+private inline val TypedValue.complexUnitCompat
+    get() = when {
+        Build.VERSION.SDK_INT > 22 -> complexUnit
+        else -> TypedValue.COMPLEX_UNIT_MASK and (data shr TypedValue.COMPLEX_UNIT_SHIFT)
+    }
