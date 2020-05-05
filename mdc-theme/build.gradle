@@ -24,9 +24,22 @@ android {
     compileSdkVersion 29
 
     defaultConfig {
-        minSdkVersion 15
-
+        minSdkVersion 21
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerVersion Libs.AndroidX.UI.kotlinCompilerVersion
+        kotlinCompilerExtensionVersion Libs.AndroidX.UI.version
     }
 
     lintOptions {
@@ -49,7 +62,10 @@ android {
 }
 
 dependencies {
-    api Libs.AndroidX.core
+    implementation Libs.AndroidX.coreKtx
+    implementation Libs.AndroidX.UI.composeRuntime
+    implementation Libs.AndroidX.UI.material
+    implementation Libs.mdc
 
     androidTestImplementation Libs.Kotlin.stdlib
     androidTestImplementation Libs.junit

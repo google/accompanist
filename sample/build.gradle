@@ -34,14 +34,10 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
-    dataBinding {
-        enabled = true
-    }
 }
 
 dependencies {
-    implementation project(':library')
+    implementation project(':mdc-theme')
 
     api Libs.Kotlin.stdlib
 }
