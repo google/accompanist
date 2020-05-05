@@ -45,7 +45,7 @@ android {
     lintOptions {
         textReport true
         textOutput 'stdout'
-        // We run a full lint analysis as build part in CI, so skip vital checks for assemble tasks.
+        // We run a full lint analysis as build part in CI, so skip vital checks for assemble tasks
         checkReleaseBuilds false
     }
 
@@ -66,12 +66,13 @@ dependencies {
     implementation Libs.AndroidX.UI.composeRuntime
     implementation Libs.AndroidX.UI.material
     implementation Libs.mdc
+    implementation Libs.Kotlin.stdlib
 
-    androidTestImplementation Libs.Kotlin.stdlib
     androidTestImplementation Libs.junit
-    androidTestImplementation Libs.AndroidX.Test.core
-    androidTestImplementation Libs.AndroidX.Test.ext
+    androidTestImplementation Libs.AndroidX.UI.test
+    androidTestImplementation Libs.AndroidX.UI.platform
     androidTestImplementation Libs.AndroidX.Test.rules
+    androidTestImplementation Libs.AndroidX.Test.runner
 }
 
 apply plugin: "com.vanniktech.maven.publish"
