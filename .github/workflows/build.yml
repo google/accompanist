@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: macOS-latest
+    runs-on: ubuntu-latest
     env:
       JAVA_TOOL_OPTIONS: -Xmx5120m
       GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2 -Dkotlin.incremental=false -Dkotlin.compiler.execution.strategy=in-process
@@ -13,15 +13,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: set up JDK 1.8
+      - name: set up JDK 11
         uses: actions/setup-java@v1
         with:
-          java-version: 1.8
+          java-version: 11
 
       - name: Decrypt secrets
-        run: release/signing-setup.sh $ENCRYPT_KEY
-        env:
-          ENCRYPT_KEY: ${{ secrets.ENCRYPT_KEY }}
+        run: release/signing-setup.sh ${{ secrets.ENCRYPT_KEY }}
 
       - name: Generate cache key
         run: ./checksum.sh checksum.txt
@@ -30,101 +28,9 @@ jobs:
         with:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('checksum.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
 
       - name: Build, lint and spotless
-        run: ./gradlew spotlessCheck assemble lintDebug --scan
-
-      - name: Clean secrets
-        if: always()
-        run: release/signing-cleanup.sh
-
-#  test:
-#    runs-on: macOS-latest
-#    needs: build
-#    strategy:
-#      matrix:
-#        api-level: [21, 23, 26, 29]
-#    env:
-#      JAVA_TOOL_OPTIONS: -Xmx3072m
-#      GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2 -Dkotlin.incremental=false -Dkotlin.compiler.execution.strategy=in-process
-#      TERM: dumb
-#
-#    steps:
-#      - uses: actions/checkout@v2
-#
-#      - name: set up JDK 1.8
-#        uses: actions/setup-java@v1
-#        with:
-#          java-version: 1.8
-#
-#      - name: Decrypt secrets
-#        run: release/signing-setup.sh $ENCRYPT_KEY
-#        env:
-#          ENCRYPT_KEY: ${{ secrets.ENCRYPT_KEY }}
-#
-#      - name: Generate cache key
-#        run: ./checksum.sh checksum.txt
-#
-#      - uses: actions/cache@v1
-#        with:
-#          path: ~/.gradle/caches
-#          key: ${{ runner.os }}-gradle-${{ hashFiles('checksum.txt') }}
-#          restore-keys: |
-#            ${{ runner.os }}-gradle-
-#
-#      - name: Run tests
-#        uses: reactivecircus/android-emulator-runner@v2
-#        with:
-#          api-level: ${{ matrix.api-level }}
-#          script: ./gradlew connectedCheck
-#
-#      - name: Clean secrets
-#        if: always()
-#        run: release/signing-cleanup.sh
-#
-#      - name: Copy test results
-#        if: always()
-#        run: |
-#          mkdir -p junit
-#          find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} junit/ \;
-#      - name: Upload test results
-#        if: always()
-#        uses: actions/upload-artifact@v1
-#        with:
-#          name: junit-results
-#          path: junit
-
-  deploy:
-    if: github.ref == 'refs/heads/master'
-    runs-on: macOS-latest
-    needs: [build] # TODO: this should depend on test too
-    env:
-      JAVA_TOOL_OPTIONS: -Xmx5120m
-      GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2 -Dkotlin.incremental=false -Dkotlin.compiler.execution.strategy=in-process
-      TERM: dumb
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: set up JDK 1.8
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.8
-
-      - name: Decrypt secrets
-        run: release/signing-setup.sh $ENCRYPT_KEY
-        env:
-          ENCRYPT_KEY: ${{ secrets.ENCRYPT_KEY }}
-
-      - name: Generate cache key
-        run: ./checksum.sh checksum.txt
-
-      - uses: actions/cache@v1
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('checksum.txt') }}
+        run: ./gradlew spotlessCheck build lintDebug --scan
 
       - name: Deploy to Sonatype
         run: ./gradlew uploadArchives --no-parallel
@@ -135,3 +41,16 @@ jobs:
       - name: Clean secrets
         if: always()
         run: release/signing-cleanup.sh
+
+      - name: Copy test results
+        if: always()
+        run: |
+          mkdir -p junit
+          find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} junit/ \;
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v1
+        with:
+          name: junit-results
+          path: junit
