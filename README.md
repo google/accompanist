@@ -1,14 +1,8 @@
 # Accompanist
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/dev.chrisbanes/accompanist/badge.svg)](https://search.maven.org/search?q=g:dev.chrisbanes.accompanist)
+Accompanist is a group of libraries which contains some utilities which I've found myself copying around projects which use [Jetpack Compose][compose]. Currently it contains:
 
-TODO
-
-### Why the name?
-
-The library is all about adding some utilities which I need to Compose. Music composing is done by a
-composer, and since this library is about supporting composition, the supporting role of an
-[accompanist](https://en.wikipedia.org/wiki/Accompaniment) felt like a good name.
+ * [Material Design Components theme interoperability](./mdc-theme/README.md)
 
 ## Download
 
@@ -18,12 +12,19 @@ repositories {
 }
 
 dependencies {
-    implementation "dev.chrisbanes.accompanist:TODO:<latest-version>"
+    implementation "dev.chrisbanes.accompanist:accompanist-mdc-theme:<version>"
 }
 ```
 
-Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap].
-These are updated on every commit.
+Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap]. These are updated on every commit.
+
+
+---
+
+#### Why the name?
+
+The library is all about adding some utilities around Compose. Music composing is done by a
+composer, and since this library is about supporting composition, the supporting role of an [accompanist](https://en.wikipedia.org/wiki/Accompaniment) felt like a good name.
 
 ## Contributions
 
@@ -51,4 +52,6 @@ License for the specific language governing permissions and limitations under
 the License.
 ```
 
+[compose]: https://developer.android.com/jetpack/compose
 [snap]: https://oss.sonatype.org/content/repositories/snapshots/
+[mdc]: https://material.io/develop/android/

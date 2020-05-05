@@ -73,7 +73,7 @@ import kotlin.concurrent.getOrSet
  * theme. Defaults to `false`
  */
 @Composable
-fun MaterialThemeFromAndroidMdcTheme(
+fun MaterialThemeFromMdcTheme(
     context: Context = ContextAmbient.current,
     readColors: Boolean = true,
     readTypography: Boolean = true,
@@ -81,7 +81,7 @@ fun MaterialThemeFromAndroidMdcTheme(
     useTextColors: Boolean = false,
     children: @Composable() () -> Unit
 ) {
-    val (colors, type, shapes) = generateMaterialThemeFromAndroidMdcTheme(
+    val (colors, type, shapes) = generateMaterialThemeFromMdcTheme(
         context,
         readColors,
         readTypography,
@@ -114,7 +114,7 @@ fun MaterialThemeFromAndroidMdcTheme(
  * theme. Defaults to `false`
  */
 @Composable
-fun generateMaterialThemeFromAndroidMdcTheme(
+fun generateMaterialThemeFromMdcTheme(
     context: Context = ContextAmbient.current,
     readColors: Boolean = true,
     readTypography: Boolean = true,
@@ -122,6 +122,10 @@ fun generateMaterialThemeFromAndroidMdcTheme(
     useTextColors: Boolean = false
 ): Triple<ColorPalette, Typography, Shapes> {
     return context.obtainStyledAttributes(R.styleable.AccompanistMdcTheme).use { ta ->
+        require(ta.hasValue(R.styleable.AccompanistMdcTheme_colorPrimary)) {
+            "MaterialThemeUsingMdcTheme requires the host context's theme " +
+                    "to extend Theme.MaterialComponents"
+        }
 
         val colors: ColorPalette = if (readColors) {
             /* First we'll read the Material color palette */
