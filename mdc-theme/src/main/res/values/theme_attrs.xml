@@ -17,7 +17,7 @@
 
 <resources>
 
-    <declare-styleable name="ComposeTheme">
+    <declare-styleable name="AccompanistMdcTheme">
         <attr name="colorPrimary" />
         <attr name="colorPrimaryVariant" />
         <attr name="colorSecondary" />
@@ -53,7 +53,7 @@
         <attr name="isLightTheme" />
     </declare-styleable>
 
-    <declare-styleable name="ComposeTextAppearance">
+    <declare-styleable name="AccompanistMdcTextAppearance">
         <attr name="android:textColor" />
         <attr name="android:textSize" />
         <attr name="android:textStyle" />
@@ -78,7 +78,7 @@
         <attr name="android:fontVariationSettings"/>
     </declare-styleable>
 
-    <declare-styleable name="ComposeShapeAppearance">
+    <declare-styleable name="AccompanistMdcShapeAppearance">
         <attr name="cornerSize" />
         <attr name="cornerSizeTopLeft" />
         <attr name="cornerSizeTopRight" />

@@ -122,21 +122,21 @@ fun generateMaterialThemeFromAndroidMdcTheme(
     readShapes: Boolean = true,
     useTextColors: Boolean = false
 ): Triple<ColorPalette, Typography, Shapes> {
-    return context.obtainStyledAttributes(R.styleable.ComposeTheme).use { ta ->
+    return context.obtainStyledAttributes(R.styleable.AccompanistMdcTheme).use { ta ->
 
         val colors: ColorPalette = if (readColors) {
             /* First we'll read the Material color palette */
-            val primary = ta.getComposeColor(R.styleable.ComposeTheme_colorPrimary)
-            val primaryVariant = ta.getComposeColor(R.styleable.ComposeTheme_colorPrimaryVariant)
-            val onPrimary = ta.getComposeColor(R.styleable.ComposeTheme_colorOnPrimary)
-            val secondary = ta.getComposeColor(R.styleable.ComposeTheme_colorSecondary)
-            val onSecondary = ta.getComposeColor(R.styleable.ComposeTheme_colorOnSecondary)
-            val background = ta.getComposeColor(R.styleable.ComposeTheme_android_colorBackground)
-            val onBackground = ta.getComposeColor(R.styleable.ComposeTheme_colorOnBackground)
-            val surface = ta.getComposeColor(R.styleable.ComposeTheme_colorSurface)
-            val onSurface = ta.getComposeColor(R.styleable.ComposeTheme_colorOnSurface)
+            val primary = ta.getComposeColor(R.styleable.AccompanistMdcTheme_colorPrimary)
+            val primaryVariant = ta.getComposeColor(R.styleable.AccompanistMdcTheme_colorPrimaryVariant)
+            val onPrimary = ta.getComposeColor(R.styleable.AccompanistMdcTheme_colorOnPrimary)
+            val secondary = ta.getComposeColor(R.styleable.AccompanistMdcTheme_colorSecondary)
+            val onSecondary = ta.getComposeColor(R.styleable.AccompanistMdcTheme_colorOnSecondary)
+            val background = ta.getComposeColor(R.styleable.AccompanistMdcTheme_android_colorBackground)
+            val onBackground = ta.getComposeColor(R.styleable.AccompanistMdcTheme_colorOnBackground)
+            val surface = ta.getComposeColor(R.styleable.AccompanistMdcTheme_colorSurface)
+            val onSurface = ta.getComposeColor(R.styleable.AccompanistMdcTheme_colorOnSurface)
 
-            val isLightTheme = ta.getBoolean(R.styleable.ComposeTheme_isLightTheme, true)
+            val isLightTheme = ta.getBoolean(R.styleable.AccompanistMdcTheme_isLightTheme, true)
 
             if (isLightTheme) {
                 lightColorPalette(
@@ -181,67 +181,67 @@ fun generateMaterialThemeFromAndroidMdcTheme(
             typography = typography.merge(
                 h1 = textStyleFromTextAppearance(
                     context,
-                    ta.getResourceIdOrThrow(R.styleable.ComposeTheme_textAppearanceHeadline1),
+                    ta.getResourceIdOrThrow(R.styleable.AccompanistMdcTheme_textAppearanceHeadline1),
                     useTextColors
                 ),
                 h2 = textStyleFromTextAppearance(
                     context,
-                    ta.getResourceIdOrThrow(R.styleable.ComposeTheme_textAppearanceHeadline2),
+                    ta.getResourceIdOrThrow(R.styleable.AccompanistMdcTheme_textAppearanceHeadline2),
                     useTextColors
                 ),
                 h3 = textStyleFromTextAppearance(
                     context,
-                    ta.getResourceIdOrThrow(R.styleable.ComposeTheme_textAppearanceHeadline3),
+                    ta.getResourceIdOrThrow(R.styleable.AccompanistMdcTheme_textAppearanceHeadline3),
                     useTextColors
                 ),
                 h4 = textStyleFromTextAppearance(
                     context,
-                    ta.getResourceIdOrThrow(R.styleable.ComposeTheme_textAppearanceHeadline4),
+                    ta.getResourceIdOrThrow(R.styleable.AccompanistMdcTheme_textAppearanceHeadline4),
                     useTextColors
                 ),
                 h5 = textStyleFromTextAppearance(
                     context,
-                    ta.getResourceIdOrThrow(R.styleable.ComposeTheme_textAppearanceHeadline5),
+                    ta.getResourceIdOrThrow(R.styleable.AccompanistMdcTheme_textAppearanceHeadline5),
                     useTextColors
                 ),
                 h6 = textStyleFromTextAppearance(
                     context,
-                    ta.getResourceIdOrThrow(R.styleable.ComposeTheme_textAppearanceHeadline6),
+                    ta.getResourceIdOrThrow(R.styleable.AccompanistMdcTheme_textAppearanceHeadline6),
                     useTextColors
                 ),
                 subtitle1 = textStyleFromTextAppearance(
                     context,
-                    ta.getResourceIdOrThrow(R.styleable.ComposeTheme_textAppearanceSubtitle1),
+                    ta.getResourceIdOrThrow(R.styleable.AccompanistMdcTheme_textAppearanceSubtitle1),
                     useTextColors
                 ),
                 subtitle2 = textStyleFromTextAppearance(
                     context,
-                    ta.getResourceIdOrThrow(R.styleable.ComposeTheme_textAppearanceSubtitle2),
+                    ta.getResourceIdOrThrow(R.styleable.AccompanistMdcTheme_textAppearanceSubtitle2),
                     useTextColors
                 ),
                 body1 = textStyleFromTextAppearance(
                     context,
-                    ta.getResourceIdOrThrow(R.styleable.ComposeTheme_textAppearanceBody1),
+                    ta.getResourceIdOrThrow(R.styleable.AccompanistMdcTheme_textAppearanceBody1),
                     useTextColors
                 ),
                 body2 = textStyleFromTextAppearance(
                     context,
-                    ta.getResourceIdOrThrow(R.styleable.ComposeTheme_textAppearanceBody2),
+                    ta.getResourceIdOrThrow(R.styleable.AccompanistMdcTheme_textAppearanceBody2),
                     useTextColors
                 ),
                 button = textStyleFromTextAppearance(
                     context,
-                    ta.getResourceIdOrThrow(R.styleable.ComposeTheme_textAppearanceButton),
+                    ta.getResourceIdOrThrow(R.styleable.AccompanistMdcTheme_textAppearanceButton),
                     useTextColors
                 ),
                 caption = textStyleFromTextAppearance(
                     context,
-                    ta.getResourceIdOrThrow(R.styleable.ComposeTheme_textAppearanceCaption),
+                    ta.getResourceIdOrThrow(R.styleable.AccompanistMdcTheme_textAppearanceCaption),
                     useTextColors
                 ),
                 overline = textStyleFromTextAppearance(
                     context,
-                    ta.getResourceIdOrThrow(R.styleable.ComposeTheme_textAppearanceOverline),
+                    ta.getResourceIdOrThrow(R.styleable.AccompanistMdcTheme_textAppearanceOverline),
                     useTextColors
                 )
             )
@@ -254,17 +254,17 @@ fun generateMaterialThemeFromAndroidMdcTheme(
             Shapes(
                 small = readShapeAppearance(
                     context = context,
-                    id = ta.getResourceIdOrThrow(R.styleable.ComposeTheme_shapeAppearanceSmallComponent),
+                    id = ta.getResourceIdOrThrow(R.styleable.AccompanistMdcTheme_shapeAppearanceSmallComponent),
                     fallbackSize = CornerSize(4.dp)
                 ),
                 medium = readShapeAppearance(
                     context = context,
-                    id = ta.getResourceIdOrThrow(R.styleable.ComposeTheme_shapeAppearanceMediumComponent),
+                    id = ta.getResourceIdOrThrow(R.styleable.AccompanistMdcTheme_shapeAppearanceMediumComponent),
                     fallbackSize = CornerSize(4.dp)
                 ),
                 large = readShapeAppearance(
                     context = context,
-                    id = ta.getResourceIdOrThrow(R.styleable.ComposeTheme_shapeAppearanceLargeComponent),
+                    id = ta.getResourceIdOrThrow(R.styleable.AccompanistMdcTheme_shapeAppearanceLargeComponent),
                     fallbackSize = CornerSize(0.dp)
                 )
             )
@@ -282,10 +282,10 @@ private fun textStyleFromTextAppearance(
     @StyleRes id: Int,
     useTextColor: Boolean
 ): TextStyle {
-    return context.obtainStyledAttributes(id, R.styleable.ComposeTextAppearance).use { a ->
-        val textStyle = a.getInt(R.styleable.ComposeTextAppearance_android_textStyle, -1)
-        val textFontWeight = a.getInt(R.styleable.ComposeTextAppearance_android_textFontWeight, -1)
-        val typeface = a.getInt(R.styleable.ComposeTextAppearance_android_typeface, -1)
+    return context.obtainStyledAttributes(id, R.styleable.AccompanistMdcTextAppearance).use { a ->
+        val textStyle = a.getInt(R.styleable.AccompanistMdcTextAppearance_android_textStyle, -1)
+        val textFontWeight = a.getInt(R.styleable.AccompanistMdcTextAppearance_android_textFontWeight, -1)
+        val typeface = a.getInt(R.styleable.AccompanistMdcTextAppearance_android_typeface, -1)
 
         // TODO read and expand android:fontVariationSettings.
         // Variable fonts are not supported in Compose yet
@@ -294,17 +294,17 @@ private fun textStyleFromTextAppearance(
 
         TextStyle(
             color = if (useTextColor) {
-                a.getComposeColor(R.styleable.ComposeTextAppearance_android_textColor)
+                a.getComposeColor(R.styleable.AccompanistMdcTextAppearance_android_textColor)
             } else Color.Unset,
-            fontSize = a.getTextUnit(R.styleable.ComposeTextAppearance_android_textSize, density),
-            lineHeight = a.getTextUnit(R.styleable.ComposeTextAppearance_android_lineHeight, density),
+            fontSize = a.getTextUnit(R.styleable.AccompanistMdcTextAppearance_android_textSize, density),
+            lineHeight = a.getTextUnit(R.styleable.AccompanistMdcTextAppearance_android_lineHeight, density),
             fontFamily = when {
                 // FYI, this only works with static font files in assets
-                a.hasValue(R.styleable.ComposeTextAppearance_android_fontFamily) -> {
-                    a.getFontFamilyOrNull(R.styleable.ComposeTextAppearance_android_fontFamily)
+                a.hasValue(R.styleable.AccompanistMdcTextAppearance_android_fontFamily) -> {
+                    a.getFontFamilyOrNull(R.styleable.AccompanistMdcTextAppearance_android_fontFamily)
                 }
-                a.hasValue(R.styleable.ComposeTextAppearance_fontFamily) -> {
-                    a.getFontFamilyOrNull(R.styleable.ComposeTextAppearance_fontFamily)
+                a.hasValue(R.styleable.AccompanistMdcTextAppearance_fontFamily) -> {
+                    a.getFontFamilyOrNull(R.styleable.AccompanistMdcTextAppearance_fontFamily)
                 }
                 // Values below are from frameworks/base attrs.xml
                 typeface == 1 -> FontFamily.SansSerif
@@ -327,19 +327,19 @@ private fun textStyleFromTextAppearance(
                 (textStyle and Typeface.BOLD) != 0 -> FontWeight.Bold
                 else -> null
             },
-            fontFeatureSettings = a.getString(R.styleable.ComposeTextAppearance_android_fontFeatureSettings),
+            fontFeatureSettings = a.getString(R.styleable.AccompanistMdcTextAppearance_android_fontFeatureSettings),
             shadow = run {
-                val shadowColor = a.getComposeColor(R.styleable.ComposeTextAppearance_android_shadowColor)
+                val shadowColor = a.getComposeColor(R.styleable.AccompanistMdcTextAppearance_android_shadowColor)
                 if (shadowColor != Color.Unset) {
-                    val dx = a.getFloat(R.styleable.ComposeTextAppearance_android_shadowDx, 0f)
-                    val dy = a.getFloat(R.styleable.ComposeTextAppearance_android_shadowDy, 0f)
-                    val rad = a.getFloat(R.styleable.ComposeTextAppearance_android_shadowRadius, 0f)
+                    val dx = a.getFloat(R.styleable.AccompanistMdcTextAppearance_android_shadowDx, 0f)
+                    val dy = a.getFloat(R.styleable.AccompanistMdcTextAppearance_android_shadowDy, 0f)
+                    val rad = a.getFloat(R.styleable.AccompanistMdcTextAppearance_android_shadowRadius, 0f)
                     Shadow(color = shadowColor, offset = Offset(dx, dy), blurRadius = rad.px)
                 } else null
             },
             letterSpacing = when {
-                a.hasValue(R.styleable.ComposeTextAppearance_android_letterSpacing) -> {
-                    a.getFloat(R.styleable.ComposeTextAppearance_android_letterSpacing, 0f).em
+                a.hasValue(R.styleable.AccompanistMdcTextAppearance_android_letterSpacing) -> {
+                    a.getFloat(R.styleable.AccompanistMdcTextAppearance_android_letterSpacing, 0f).em
                 }
                 else -> TextUnit.Inherit
             }
@@ -353,23 +353,23 @@ private fun readShapeAppearance(
     @StyleRes id: Int,
     fallbackSize: CornerSize
 ): CornerBasedShape {
-    return context.obtainStyledAttributes(id, R.styleable.ComposeShapeAppearance).use { a ->
+    return context.obtainStyledAttributes(id, R.styleable.AccompanistMdcShapeAppearance).use { a ->
         val defaultCornerSize = a.getCornerSize(
-            R.styleable.ComposeShapeAppearance_cornerSize, fallbackSize)
+            R.styleable.AccompanistMdcShapeAppearance_cornerSize, fallbackSize)
         val cornerSizeTL = a.getCornerSizeOrNull(
-            R.styleable.ComposeShapeAppearance_cornerSizeTopLeft)
+            R.styleable.AccompanistMdcShapeAppearance_cornerSizeTopLeft)
         val cornerSizeTR = a.getCornerSizeOrNull(
-            R.styleable.ComposeShapeAppearance_cornerSizeTopRight)
+            R.styleable.AccompanistMdcShapeAppearance_cornerSizeTopRight)
         val cornerSizeBL = a.getCornerSizeOrNull(
-            R.styleable.ComposeShapeAppearance_cornerSizeBottomLeft)
+            R.styleable.AccompanistMdcShapeAppearance_cornerSizeBottomLeft)
         val cornerSizeBR = a.getCornerSizeOrNull(
-            R.styleable.ComposeShapeAppearance_cornerSizeBottomRight)
+            R.styleable.AccompanistMdcShapeAppearance_cornerSizeBottomRight)
 
         /**
          * We do not support the individual `cornerFamilyTopLeft`, etc, since Compose only supports
          * one corner type per shape. Therefore we only read the `cornerFamily` attribute.
          */
-        when (a.getInt(R.styleable.ComposeShapeAppearance_cornerFamily, 0)) {
+        when (a.getInt(R.styleable.AccompanistMdcShapeAppearance_cornerFamily, 0)) {
             0 -> {
                 RoundedCornerShape(
                     topLeft = cornerSizeTL ?: defaultCornerSize,
