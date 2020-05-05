@@ -111,7 +111,6 @@ fun MaterialThemeFromAndroidMdcTheme(
  * @param readTypography whether the read the MDC typography text appearances from the context's theme
  * @param readShapes whether the read the MDC shape appearances from the context's theme
  * @param useTextColors whether to read the colors from the `TextAppearance`s associated from the
- * @param useTextColors whether to read the colors from the `TextAppearance`s associated from the
  * theme. Defaults to `false`
  */
 @Composable
@@ -130,11 +129,14 @@ fun generateMaterialThemeFromAndroidMdcTheme(
             val primaryVariant = ta.getComposeColor(R.styleable.AccompanistMdcTheme_colorPrimaryVariant)
             val onPrimary = ta.getComposeColor(R.styleable.AccompanistMdcTheme_colorOnPrimary)
             val secondary = ta.getComposeColor(R.styleable.AccompanistMdcTheme_colorSecondary)
+            val secondaryVariant = ta.getComposeColor(R.styleable.AccompanistMdcTheme_colorSecondaryVariant)
             val onSecondary = ta.getComposeColor(R.styleable.AccompanistMdcTheme_colorOnSecondary)
             val background = ta.getComposeColor(R.styleable.AccompanistMdcTheme_android_colorBackground)
             val onBackground = ta.getComposeColor(R.styleable.AccompanistMdcTheme_colorOnBackground)
             val surface = ta.getComposeColor(R.styleable.AccompanistMdcTheme_colorSurface)
             val onSurface = ta.getComposeColor(R.styleable.AccompanistMdcTheme_colorOnSurface)
+            val error = ta.getComposeColor(R.styleable.AccompanistMdcTheme_colorError)
+            val onError = ta.getComposeColor(R.styleable.AccompanistMdcTheme_colorOnError)
 
             val isLightTheme = ta.getBoolean(R.styleable.AccompanistMdcTheme_isLightTheme, true)
 
@@ -144,11 +146,14 @@ fun generateMaterialThemeFromAndroidMdcTheme(
                     primaryVariant = primaryVariant,
                     onPrimary = onPrimary,
                     secondary = secondary,
+                    secondaryVariant = secondaryVariant,
                     onSecondary = onSecondary,
                     background = background,
                     onBackground = onBackground,
                     surface = surface,
-                    onSurface = onSurface
+                    onSurface = onSurface,
+                    error = error,
+                    onError = onError
                 )
             } else {
                 darkColorPalette(
@@ -160,7 +165,9 @@ fun generateMaterialThemeFromAndroidMdcTheme(
                     background = background,
                     onBackground = onBackground,
                     surface = surface,
-                    onSurface = onSurface
+                    onSurface = onSurface,
+                    error = error,
+                    onError = onError
                 )
             }
         } else {

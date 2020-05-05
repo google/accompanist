@@ -20,31 +20,30 @@
     <declare-styleable name="AccompanistMdcTheme">
         <attr name="colorPrimary" />
         <attr name="colorPrimaryVariant" />
+        <attr name="colorOnPrimary" />
         <attr name="colorSecondary" />
         <attr name="colorSecondaryVariant" />
-        <attr name="colorSurface" />
-        <attr name="colorOnPrimary" />
         <attr name="colorOnSecondary" />
-        <attr name="colorOnBackground" />
-        <attr name="android:colorBackground" />
-        <attr name="colorOnError" />
+        <attr name="colorSurface" />
         <attr name="colorOnSurface" />
-        <attr name="colorPrimarySurface" />
-        <attr name="colorOnPrimarySurface" />
+        <attr name="android:colorBackground" />
+        <attr name="colorOnBackground" />
+        <attr name="colorError" />
+        <attr name="colorOnError" />
 
-        <attr name="textAppearanceBody1"/>
-        <attr name="textAppearanceBody2"/>
-        <attr name="textAppearanceButton"/>
-        <attr name="textAppearanceCaption"/>
-        <attr name="textAppearanceHeadline1"/>
-        <attr name="textAppearanceHeadline2"/>
-        <attr name="textAppearanceHeadline3"/>
-        <attr name="textAppearanceHeadline4"/>
-        <attr name="textAppearanceHeadline5"/>
-        <attr name="textAppearanceHeadline6"/>
-        <attr name="textAppearanceOverline"/>
-        <attr name="textAppearanceSubtitle1"/>
-        <attr name="textAppearanceSubtitle2"/>
+        <attr name="textAppearanceBody1" />
+        <attr name="textAppearanceBody2" />
+        <attr name="textAppearanceButton" />
+        <attr name="textAppearanceCaption" />
+        <attr name="textAppearanceHeadline1" />
+        <attr name="textAppearanceHeadline2" />
+        <attr name="textAppearanceHeadline3" />
+        <attr name="textAppearanceHeadline4" />
+        <attr name="textAppearanceHeadline5" />
+        <attr name="textAppearanceHeadline6" />
+        <attr name="textAppearanceOverline" />
+        <attr name="textAppearanceSubtitle1" />
+        <attr name="textAppearanceSubtitle2" />
 
         <attr name="shapeAppearanceSmallComponent" />
         <attr name="shapeAppearanceMediumComponent" />
@@ -61,10 +60,10 @@
 
         <attr name="android:typeface" />
 
-        <attr name="android:shadowColor"  />
-        <attr name="android:shadowDx"  />
-        <attr name="android:shadowDy"  />
-        <attr name="android:shadowRadius"  />
+        <attr name="android:shadowColor" />
+        <attr name="android:shadowDx" />
+        <attr name="android:shadowDy" />
+        <attr name="android:shadowRadius" />
 
         <attr name="android:lineHeight" />
         <attr name="android:letterSpacing" />
@@ -75,7 +74,7 @@
         <attr name="fontFamily" />
 
         <!-- TODOs below -->
-        <attr name="android:fontVariationSettings"/>
+        <attr name="android:fontVariationSettings" />
     </declare-styleable>
 
     <declare-styleable name="AccompanistMdcShapeAppearance">

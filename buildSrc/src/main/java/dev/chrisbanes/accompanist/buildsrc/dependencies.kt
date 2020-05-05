@@ -25,10 +25,10 @@ object Libs {
 
     const val gradleMavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.11.1"
 
-    const val junit = "junit:junit:4.12"
+    const val junit = "junit:junit:4.13"
 
     object Kotlin {
-        private const val version = "1.3.70"
+        private const val version = "1.3.72"
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib:$version"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
     }
@@ -36,7 +36,6 @@ object Libs {
     object AndroidX {
         object Test {
             private const val version = "1.2.0"
-            const val core = "androidx.test:core:$version"
             const val runner = "androidx.test:runner:$version"
             const val rules = "androidx.test:rules:$version"
 
@@ -58,6 +57,9 @@ object Libs {
             const val animation = "androidx.ui:ui-animation:$version"
             const val tooling = "androidx.ui:ui-tooling:$version"
             const val livedata = "androidx.ui:ui-livedata:$version"
+
+            const val platform = "androidx.ui:ui-platform:$version"
+            const val test = "androidx.ui:ui-test:$version"
         }
 
         const val core = "androidx.core:core:1.2.0"

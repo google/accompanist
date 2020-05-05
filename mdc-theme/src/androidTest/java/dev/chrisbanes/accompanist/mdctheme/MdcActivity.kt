@@ -14,30 +14,8 @@
  * limitations under the License.
  */
 
-import dev.chrisbanes.accompanist.buildsrc.Libs
+package dev.chrisbanes.accompanist.mdctheme
 
-apply plugin: 'com.android.application'
+import androidx.appcompat.app.AppCompatActivity
 
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-
-android {
-    compileSdkVersion 29
-
-    defaultConfig {
-        applicationId "dev.chrisbanes.insetter.sample"
-        minSdkVersion 21
-        targetSdkVersion 29
-
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
-}
-
-dependencies {
-    implementation project(':mdc-theme')
-
-    implementation Libs.Kotlin.stdlib
-}
+class MdcActivity : AppCompatActivity()
