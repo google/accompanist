@@ -53,7 +53,7 @@ class MaterialThemeTest {
 
     @Test
     fun colors() = composeTestRule.setContent {
-        MaterialThemeFromAndroidMdcTheme {
+        MaterialThemeFromMdcTheme {
             val color = MaterialTheme.colors
 
             assertEquals(colorResource(R.color.Aquamarine), color.primary)
@@ -77,7 +77,7 @@ class MaterialThemeTest {
 
     @Test
     fun shapes() = composeTestRule.setContent {
-        MaterialThemeFromAndroidMdcTheme {
+        MaterialThemeFromMdcTheme {
             val shapes = MaterialTheme.shapes
             val density = DensityAmbient.current
 
@@ -107,7 +107,7 @@ class MaterialThemeTest {
 
     @Test
     fun type() = composeTestRule.setContent {
-        MaterialThemeFromAndroidMdcTheme {
+        MaterialThemeFromMdcTheme {
             val typography = MaterialTheme.typography
             val density = DensityAmbient.current
 

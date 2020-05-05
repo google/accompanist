@@ -16,13 +16,13 @@ MaterialTheme(
 
 If you're migrating an existing app though, you will likely already have your brand/design styling parameters declared in the [Android Themes and Styling](https://medium.com/androiddevelopers/android-styling-themes-vs-styles-ebe05f917578) system. Wouldn't it be nice if we could re-use them in our compose layouts? 
 
-Enter the `accompanist-mdc-theme` library, which contains the `MaterialThemeFromAndroidMdcTheme` function. 
+Enter the `accompanist-mdc-theme` library, which contains a number of functions to help inter-operate between the two.
 
 For times when you want to copy over your context's [Material Design Components][mdc] theme to your compose layouts, you can use it like so:
 
 
 ``` kotlin
-MaterialThemeFromAndroidMdcTheme {
+MaterialThemeFromMdcTheme {
     // MaterialTheme.colors, MaterialTheme.shapes, MaterialTheme.typography
     // will now contain copies of the context theme
 }
@@ -32,10 +32,10 @@ This is especially handy when you're migrating an existing app, a fragment (or o
 
 ### Customizing the theme
 
-The `MaterialThemeFromAndroidMdcTheme()` function will automatically read host context's MDC theme and pass them to [`MaterialTheme`][materialtheme] on your behalf, but if you want to customize the generated values, you can do so via the `generateMaterialThemeFromAndroidMdcTheme()` function:
+The `MaterialThemeFromMdcTheme()` function will automatically read host context's MDC theme and pass them to [`MaterialTheme`][materialtheme] on your behalf, but if you want to customize the generated values, you can do so via the `generateMaterialThemeFromMdcTheme()` function:
 
 ``` kotlin
-var (colors, type, shapes) = generateMaterialThemeFromAndroidMdcTheme()
+var (colors, type, shapes) = generateMaterialThemeFromMdcTheme()
 
 // Modify colors, type or shapes are required. Then pass them
 // through to MaterialTheme...
