@@ -21,6 +21,7 @@ import android.content.res.Resources
 import android.content.res.TypedArray
 import android.graphics.Typeface
 import android.os.Build
+import android.util.Log
 import android.util.TypedValue
 import androidx.annotation.StyleRes
 import androidx.compose.Composable
@@ -84,7 +85,16 @@ fun MaterialThemeFromMdcTheme(
     useTextColors: Boolean = false,
     children: @Composable() () -> Unit
 ) {
-    val (colors, type, shapes) = remember(context.theme.key) {
+    // We try and use the theme key value if available, which should be a perfect key for caching
+    // and avoid the expensive theme lookups in re-compositions.
+    //
+    // If the key is not available, we use the Theme itself as a rough approximation. Using the
+    // Theme instance as the key is not perfect, but it should work for 90% of cases.
+    // It falls down when the theme is manually mutated after a composition has happened
+    // (via `applyStyle()`, `rebase()`, `setTo()`), but the majority of apps do not use those.
+    val key = context.theme.key ?: context.theme
+
+    val (colors, type, shapes) = remember(key) {
         generateMaterialThemeFromMdcTheme(
             context,
             readColors,
@@ -388,18 +398,18 @@ private fun readShapeAppearance(
         when (a.getInt(R.styleable.AccompanistMdcShapeAppearance_cornerFamily, 0)) {
             0 -> {
                 RoundedCornerShape(
-                    topLeft = cornerSizeTL ?: defaultCornerSize,
-                    topRight = cornerSizeTR ?: defaultCornerSize,
-                    bottomRight = cornerSizeBR ?: defaultCornerSize,
-                    bottomLeft = cornerSizeBL ?: defaultCornerSize
+                        topLeft = cornerSizeTL ?: defaultCornerSize,
+                        topRight = cornerSizeTR ?: defaultCornerSize,
+                        bottomRight = cornerSizeBR ?: defaultCornerSize,
+                        bottomLeft = cornerSizeBL ?: defaultCornerSize
                 )
             }
             1 -> {
                 CutCornerShape(
-                    topLeft = cornerSizeTL ?: defaultCornerSize,
-                    topRight = cornerSizeTR ?: defaultCornerSize,
-                    bottomRight = cornerSizeBR ?: defaultCornerSize,
-                    bottomLeft = cornerSizeBL ?: defaultCornerSize
+                        topLeft = cornerSizeTL ?: defaultCornerSize,
+                        topRight = cornerSizeTR ?: defaultCornerSize,
+                        bottomRight = cornerSizeBR ?: defaultCornerSize,
+                        bottomLeft = cornerSizeBL ?: defaultCornerSize
                 )
             }
             else -> throw IllegalArgumentException("Unknown cornerFamily set in ShapeAppearance")
@@ -556,8 +566,12 @@ private inline val TypedValue.complexUnitCompat
  * The cost of this reflective invoke is a lot cheaper than the full theme read which currently
  * happens on every re-composition.
  */
-private inline val Resources.Theme.key: Any
-    get() = sThemeGetKeyMethod.invoke(this)!!
+private inline val Resources.Theme.key: Any?
+    get() = try {
+        sThemeGetKeyMethod.invoke(this)
+    } catch (e: ReflectiveOperationException) {
+        Log.i("MaterialThemeFromMdcTheme", "Failed to retrieve theme key", e)
+    }
 
 private val sThemeGetKeyMethod: Method by lazy {
     Resources.Theme::class.java.getDeclaredMethod("getKey").apply {
