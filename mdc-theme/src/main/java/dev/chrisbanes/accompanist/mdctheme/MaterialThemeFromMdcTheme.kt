@@ -17,12 +17,14 @@
 package dev.chrisbanes.accompanist.mdctheme
 
 import android.content.Context
+import android.content.res.Resources
 import android.content.res.TypedArray
 import android.graphics.Typeface
 import android.os.Build
 import android.util.TypedValue
 import androidx.annotation.StyleRes
 import androidx.compose.Composable
+import androidx.compose.remember
 import androidx.core.content.res.getColorOrThrow
 import androidx.core.content.res.getResourceIdOrThrow
 import androidx.core.content.res.use
@@ -54,6 +56,7 @@ import androidx.ui.unit.dp
 import androidx.ui.unit.em
 import androidx.ui.unit.px
 import androidx.ui.unit.sp
+import java.lang.reflect.Method
 import kotlin.concurrent.getOrSet
 
 /**
@@ -81,13 +84,15 @@ fun MaterialThemeFromMdcTheme(
     useTextColors: Boolean = false,
     children: @Composable() () -> Unit
 ) {
-    val (colors, type, shapes) = generateMaterialThemeFromMdcTheme(
-        context,
-        readColors,
-        readTypography,
-        readShapes,
-        useTextColors
-    )
+    val (colors, type, shapes) = remember(context.theme.key) {
+        generateMaterialThemeFromMdcTheme(
+            context,
+            readColors,
+            readTypography,
+            readShapes,
+            useTextColors
+        )
+    }
 
     MaterialTheme(
         typography = type,
@@ -543,3 +548,19 @@ private inline val TypedValue.complexUnitCompat
         Build.VERSION.SDK_INT > 22 -> complexUnit
         else -> TypedValue.COMPLEX_UNIT_MASK and (data shr TypedValue.COMPLEX_UNIT_SHIFT)
     }
+
+/**
+ * This is gross, but we need a way to check for theme equality. Theme does not implement
+ * `equals()` or `hashCode()`, but it does have a hidden method called `getKey()`.
+ *
+ * The cost of this reflective invoke is a lot cheaper than the full theme read which currently
+ * happens on every re-composition.
+ */
+private inline val Resources.Theme.key: Any
+    get() = sThemeGetKeyMethod.invoke(this)!!
+
+private val sThemeGetKeyMethod: Method by lazy {
+    Resources.Theme::class.java.getDeclaredMethod("getKey").apply {
+        isAccessible = true
+    }
+}
