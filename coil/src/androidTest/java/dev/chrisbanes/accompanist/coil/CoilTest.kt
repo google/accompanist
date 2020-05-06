@@ -14,6 +14,23 @@
  * limitations under the License.
  */
 
-include ':mdc-theme'
-include ':coil'
-include ':sample'
+package dev.chrisbanes.accompanist.coil
+
+import androidx.test.filters.MediumTest
+import androidx.ui.test.createComposeRule
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
+
+@MediumTest
+@RunWith(JUnit4::class)
+class CoilTest {
+    @get:Rule
+    val composeTestRule = createComposeRule()
+
+    @Test
+    fun test() {
+        // TODO
+    }
+}

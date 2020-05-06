@@ -1,0 +1,88 @@
+/*
+ * Copyright 2020 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import dev.chrisbanes.accompanist.buildsrc.Libs
+
+apply plugin: 'com.android.library'
+
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion 29
+
+    defaultConfig {
+        minSdkVersion 21
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    packagingOptions {
+        def e = excludes
+        // AGP 4.1.0-alpha06 added an exclude which breaks Kotlin libraries. Remove the exclude
+        // until we upgrade to an AGP version with a fix
+        e.remove("/META-INF/*.kotlin_module")
+        excludes = e
+    }
+
+    composeOptions {
+        kotlinCompilerVersion Libs.AndroidX.UI.kotlinCompilerVersion
+        kotlinCompilerExtensionVersion Libs.AndroidX.UI.version
+    }
+
+    lintOptions {
+        textReport true
+        textOutput 'stdout'
+        // We run a full lint analysis as build part in CI, so skip vital checks for assemble tasks
+        checkReleaseBuilds false
+    }
+
+    // TODO replace with https://issuetracker.google.com/issues/72050365 once released.
+    libraryVariants.all {
+        it.generateBuildConfig.enabled = false
+    }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+}
+
+dependencies {
+    implementation Libs.coil
+
+    implementation Libs.AndroidX.coreKtx
+    implementation Libs.AndroidX.UI.composeRuntime
+    implementation Libs.AndroidX.UI.foundation
+
+    implementation Libs.Kotlin.stdlib
+
+    androidTestImplementation Libs.junit
+    androidTestImplementation Libs.AndroidX.UI.test
+    androidTestImplementation Libs.AndroidX.UI.platform
+    androidTestImplementation Libs.AndroidX.Test.rules
+    androidTestImplementation Libs.AndroidX.Test.runner
+}
+
+apply plugin: "com.vanniktech.maven.publish"
