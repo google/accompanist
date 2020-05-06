@@ -37,6 +37,14 @@ android {
         compose true
     }
 
+    packagingOptions {
+        def e = excludes
+        // AGP 4.1.0-alpha06 added an exclude which breaks Kotlin libraries. Remove the exclude
+        // until we upgrade to an AGP version with a fix
+        e.remove("/META-INF/*.kotlin_module")
+        excludes = e
+    }
+
     composeOptions {
         kotlinCompilerVersion Libs.AndroidX.UI.kotlinCompilerVersion
         kotlinCompilerExtensionVersion Libs.AndroidX.UI.version
