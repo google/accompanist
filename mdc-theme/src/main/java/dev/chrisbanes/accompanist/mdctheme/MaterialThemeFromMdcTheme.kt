@@ -566,13 +566,15 @@ private inline val TypedValue.complexUnitCompat
  * The cost of this reflective invoke is a lot cheaper than the full theme read which currently
  * happens on every re-composition.
  */
+@get:Suppress("PrivateApi")
 private inline val Resources.Theme.key: Any?
     get() = try {
         sThemeGetKeyMethod.invoke(this)
     } catch (e: ReflectiveOperationException) {
-        Log.i("MaterialThemeFromMdcTheme", "Failed to retrieve theme key", e)
+        Log.i("MaterialThemeFromMdc", "Failed to retrieve theme key", e)
     }
 
+@delegate:Suppress("PrivateApi")
 private val sThemeGetKeyMethod: Method by lazy {
     Resources.Theme::class.java.getDeclaredMethod("getKey").apply {
         isAccessible = true
