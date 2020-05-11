@@ -49,12 +49,9 @@ import androidx.ui.graphics.painter.Painter
 import androidx.ui.unit.IntPx
 import androidx.ui.unit.PxSize
 import coil.Coil
-import coil.request.ErrorResult
 import coil.request.GetRequest
+import coil.request.GetRequestBuilder
 import coil.request.RequestResult
-import coil.request.SuccessResult
-import coil.size.Scale
-import coil.transform.Transformation
 import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -74,9 +71,9 @@ private val saturation = FloatPropKey()
  * loaded.
  */
 @Composable
-fun NetworkImageWithCrossfade(
+fun CoilImageWithCrossfade(
     data: Any,
-    transformations: List<Transformation> = emptyList(),
+    requestBuilder: ((GetRequestBuilder) -> Unit)? = null,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     crossfadeDuration: Int = 1000,
@@ -124,15 +121,27 @@ fun NetworkImageWithCrossfade(
             else -> constraints.minHeight
         }
 
-        val image = loadImage(data, requestWidth.value, requestHeight.value, transformations) {
-            // Once loaded, update the load state
+        val result = GetRequest.Builder(ContextAmbient.current)
+                .data(data)
+                .size(requestWidth.value, requestHeight.value)
+                .apply {
+                    if (requestBuilder != null) {
+                        requestBuilder(this)
+                    }
+                }
+                .build()
+                .executeAsComposable()
+
+        if (result != null && imgLoadState == ImageLoadState.Empty) {
             imgLoadState = ImageLoadState.Loaded
         }
 
         Transition(definition = transitionDef, toState = imgLoadState) { transitionState ->
-            if (image != null) {
+            if (result?.drawable != null) {
+                val asset = result.drawable!!.toBitmap().asImageAsset()
+
                 // Create and update the ImageLoadingColorMatrix from the transition state
-                val matrix = remember(image) { ImageLoadingColorMatrix() }
+                val matrix = remember(asset) { ImageLoadingColorMatrix() }
                 matrix.saturationFraction = transitionState[saturation]
                 matrix.alphaFraction = transitionState[alpha]
                 matrix.brightnessFraction = transitionState[brightness]
@@ -141,9 +150,9 @@ fun NetworkImageWithCrossfade(
                 // instance every time
                 val cf = ColorMatrixColorFilter(matrix)
                 Image(
-                        painter = AndroidColorMatrixImagePainter(image, cf),
-                        contentScale = contentScale,
-                        alignment = alignment
+                    painter = AndroidColorMatrixImagePainter(asset, cf),
+                    contentScale = contentScale,
+                    alignment = alignment
                 )
             }
         }
@@ -154,9 +163,9 @@ fun NetworkImageWithCrossfade(
  * A simple composable which loads an image using [Coil] into a [Box]
  */
 @Composable
-fun NetworkImage(
+fun CoilImage(
     data: Any,
-    transformations: List<Transformation> = emptyList(),
+    requestBuilder: ((GetRequestBuilder) -> Unit)? = null,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
@@ -175,14 +184,23 @@ fun NetworkImage(
             else -> constraints.minHeight
         }
 
-        val image = loadImage(data, requestWidth.value, requestHeight.value, transformations)
+        val result = GetRequest.Builder(ContextAmbient.current)
+                .data(data)
+                .size(requestWidth.value, requestHeight.value)
+                .apply {
+                    if (requestBuilder != null) {
+                        requestBuilder(this)
+                    }
+                }
+                .build()
+                .executeAsComposable()
 
-        if (image != null) {
+        if (result?.drawable != null) {
             Image(
-                    painter = ImagePainter(image),
-                    contentScale = contentScale,
-                    alignment = alignment,
-                    colorFilter = colorFilter
+                painter = ImagePainter(result.drawable!!.toBitmap().asImageAsset()),
+                contentScale = contentScale,
+                alignment = alignment,
+                colorFilter = colorFilter
             )
         }
     }
@@ -219,40 +237,15 @@ private class AndroidColorMatrixImagePainter(
  * A simple [loadImage] composable, which loads [data].
  */
 @Composable
-fun loadImage(
-    data: Any,
-    width: Int,
-    height: Int,
-    transformations: List<Transformation> = emptyList(),
-    onResult: (RequestResult) -> Unit = {}
-): ImageAsset? {
+fun GetRequest.executeAsComposable(): RequestResult? {
+    var result by stateFor<RequestResult?>(this) { null }
     val context = ContextAmbient.current
 
-    val request = remember(data, width, height) {
-        GetRequest.Builder(context)
-                .data(data)
-                .apply {
-                    if (width > 0 && height > 0) {
-                        size(width, height)
-                        scale(Scale.FIT)
-                    }
-                }
-                .transformations(transformations)
-                .build()
-    }
-
-    var image by stateFor<ImageAsset?>(request) { null }
-
     // Launch and execute a new request when it changes
-    onCommit(request) {
+    onCommit(this) {
         val job = CoroutineScope(Dispatchers.Main).launch {
-            // Start loading the image and await the result.
-            val result = Coil.imageLoader(context).execute(request)
-            image = when (result) {
-                is SuccessResult -> result.drawable.toBitmap().asImageAsset()
-                is ErrorResult -> result.drawable?.toBitmap()?.asImageAsset()
-            }
-            onResult(result)
+            // Start loading the image and await the result
+            result = Coil.imageLoader(context).execute(this@executeAsComposable)
         }
 
         // Cancel the request if the input to onCommit changes or
@@ -260,5 +253,5 @@ fun loadImage(
         onDispose { job.cancel() }
     }
 
-    return image
+    return result
 }
