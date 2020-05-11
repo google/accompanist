@@ -19,7 +19,9 @@ package dev.chrisbanes.accompanist.coil
 import android.graphics.ColorMatrix
 
 /**
- * An extension to [ColorMatrix] which implements the Material image loading pattern
+ * An extension to [ColorMatrix] which implements the Material Design image loading pattern.
+ *
+ * @see https://material.io/archive/guidelines/patterns/loading-images.html
  */
 class ImageLoadingColorMatrix : ColorMatrix() {
     private val elements = FloatArray(20)

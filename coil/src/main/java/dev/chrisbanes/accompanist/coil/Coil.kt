@@ -28,6 +28,7 @@ import androidx.compose.stateFor
 import androidx.core.graphics.drawable.toBitmap
 import androidx.ui.animation.Transition
 import androidx.ui.core.Alignment
+import androidx.ui.core.Constraints
 import androidx.ui.core.ContentScale
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
@@ -36,7 +37,6 @@ import androidx.ui.core.hasBoundedHeight
 import androidx.ui.core.hasBoundedWidth
 import androidx.ui.core.hasFixedHeight
 import androidx.ui.core.hasFixedWidth
-import androidx.ui.foundation.Box
 import androidx.ui.foundation.Image
 import androidx.ui.geometry.Offset
 import androidx.ui.graphics.Canvas
@@ -66,9 +66,29 @@ private val alpha = FloatPropKey()
 private val brightness = FloatPropKey()
 private val saturation = FloatPropKey()
 
+private val Constraints.requestWidth
+    get() = if (hasFixedWidth || hasBoundedWidth) maxWidth else minWidth
+
+private val Constraints.requestHeight
+    get() = if (hasFixedHeight || hasBoundedHeight) maxHeight else minHeight
+
 /**
- * A composable which loads an image using [Coil] into a [Box], using a crossfade when first
- * loaded.
+ * Creates a composable that will attempt to load the given [data] using [Coil], and then
+ * display the result in an [Image], using a crossfade when first loaded.
+ *
+ * The crossfade used is an implementation of the Material Design 'loading images' pattern,
+ * animating the image's saturation, alpha and exposure. More information on the pattern can be
+ * seen [here](https://material.io/archive/guidelines/patterns/loading-images.html).
+ *
+ * @param data The data to load. See [GetRequestBuilder.data] for the types allowed.
+ * @param requestBuilder Lambda which allows customization of the [GetRequestBuilder]
+ * @param alignment Optional alignment parameter used to place the loaded [ImageAsset] in the
+ * given bounds defined by the width and height.
+ * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
+ * used if the bounds are a different size from the intrinsic size of the loaded [ImageAsset].
+ * @param crossfadeDuration The duration of the crossfade animation in milliseconds.
+ * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
+ * background)
  */
 @Composable
 fun CoilImageWithCrossfade(
@@ -109,21 +129,12 @@ fun CoilImageWithCrossfade(
             }
         }
 
-        val requestWidth = when {
-            constraints.hasFixedWidth -> constraints.maxWidth
-            constraints.hasBoundedWidth -> constraints.maxWidth
-            else -> constraints.minWidth
-        }
-
-        val requestHeight = when {
-            constraints.hasFixedHeight -> constraints.maxHeight
-            constraints.hasBoundedHeight -> constraints.maxHeight
-            else -> constraints.minHeight
-        }
-
+        // A new GetRequest will be created on every composition, which allows the requestBuilder
+        // to work on every invocation. executeAsComposable() guards the actual execution so that
+        // the request is only run if the request changes.
         val result = GetRequest.Builder(ContextAmbient.current)
                 .data(data)
-                .size(requestWidth.value, requestHeight.value)
+                .size(constraints.requestWidth.value, constraints.requestHeight.value)
                 .apply {
                     if (requestBuilder != null) {
                         requestBuilder(this)
@@ -160,7 +171,17 @@ fun CoilImageWithCrossfade(
 }
 
 /**
- * A simple composable which loads an image using [Coil] into a [Box]
+ * Creates a composable that will attempt to load the given [data] using [Coil], and then
+ * display the result in an [Image].
+ *
+ * @param data The data to load. See [GetRequestBuilder.data] for the types allowed.
+ * @param requestBuilder Lambda which allows customization of the [GetRequestBuilder]
+ * @param alignment Optional alignment parameter used to place the loaded [ImageAsset] in the
+ * given bounds defined by the width and height.
+ * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
+ * used if the bounds are a different size from the intrinsic size of the loaded [ImageAsset].
+ * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
+ * background)
  */
 @Composable
 fun CoilImage(
@@ -172,21 +193,12 @@ fun CoilImage(
     modifier: Modifier = Modifier
 ) {
     WithConstraints(modifier) { constraints, _ ->
-        val requestWidth = when {
-            constraints.hasFixedWidth -> constraints.maxWidth
-            constraints.hasBoundedWidth -> constraints.maxWidth
-            else -> constraints.minWidth
-        }
-
-        val requestHeight = when {
-            constraints.hasFixedHeight -> constraints.maxHeight
-            constraints.hasBoundedHeight -> constraints.maxHeight
-            else -> constraints.minHeight
-        }
-
+        // A new GetRequest will be created on every composition, which allows the requestBuilder
+        // to work on every invocation. executeAsComposable() guards the actual execution so that
+        // the request is only run if the request changes.
         val result = GetRequest.Builder(ContextAmbient.current)
                 .data(data)
-                .size(requestWidth.value, requestHeight.value)
+                .size(constraints.requestWidth.value, constraints.requestHeight.value)
                 .apply {
                     if (requestBuilder != null) {
                         requestBuilder(this)
@@ -195,9 +207,13 @@ fun CoilImage(
                 .build()
                 .executeAsComposable()
 
-        if (result?.drawable != null) {
+        val resultDrawable = result?.drawable
+        if (resultDrawable != null) {
+            val painter = remember(resultDrawable) {
+                ImagePainter(resultDrawable.toBitmap().asImageAsset())
+            }
             Image(
-                painter = ImagePainter(result.drawable!!.toBitmap().asImageAsset()),
+                painter = painter,
                 contentScale = contentScale,
                 alignment = alignment,
                 colorFilter = colorFilter
@@ -234,7 +250,10 @@ private class AndroidColorMatrixImagePainter(
 }
 
 /**
- * A simple [loadImage] composable, which loads [data].
+ * This will execute the [GetRequest] within a composable, ensuring that the request is only
+ * execute once and storing the result, and cancelling requests as required.
+ *
+ * @return the result from the request execution, or `null` if the request has not finished yet.
  */
 @Composable
 fun GetRequest.executeAsComposable(): RequestResult? {
