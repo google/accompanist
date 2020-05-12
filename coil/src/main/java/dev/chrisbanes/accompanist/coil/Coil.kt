@@ -93,7 +93,7 @@ private val Constraints.requestHeight
 @Composable
 fun CoilImageWithCrossfade(
     data: Any,
-    requestBuilder: ((GetRequestBuilder) -> Unit)? = null,
+    requestBuilder: ((GetRequestBuilder) -> GetRequestBuilder)? = null,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     crossfadeDuration: Int = 1000,
@@ -135,10 +135,8 @@ fun CoilImageWithCrossfade(
         val result = GetRequest.Builder(ContextAmbient.current)
                 .data(data)
                 .size(constraints.requestWidth.value, constraints.requestHeight.value)
-                .apply {
-                    if (requestBuilder != null) {
-                        requestBuilder(this)
-                    }
+                .let {
+                    if (requestBuilder != null) requestBuilder(it) else it
                 }
                 .build()
                 .executeAsComposable()
@@ -186,7 +184,7 @@ fun CoilImageWithCrossfade(
 @Composable
 fun CoilImage(
     data: Any,
-    requestBuilder: ((GetRequestBuilder) -> Unit)? = null,
+    requestBuilder: ((GetRequestBuilder) -> GetRequestBuilder)? = null,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
@@ -199,10 +197,8 @@ fun CoilImage(
         val result = GetRequest.Builder(ContextAmbient.current)
                 .data(data)
                 .size(constraints.requestWidth.value, constraints.requestHeight.value)
-                .apply {
-                    if (requestBuilder != null) {
-                        requestBuilder(this)
-                    }
+                .let {
+                    if (requestBuilder != null) requestBuilder(it) else it
                 }
                 .build()
                 .executeAsComposable()
