@@ -29,6 +29,10 @@ import java.util.Collections
 import java.util.Comparator
 import java.util.HashMap
 
+/**
+ * A [ListActivity] which automatically populates the list of sample activities in this app
+ * with the category `dev.chrisbanes.accompanist.sample.SAMPLE_CODE`.
+ */
 class MainActivity : ListActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

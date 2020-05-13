@@ -336,7 +336,7 @@ private fun textStyleFromTextAppearance(
             fontSize = a.getTextUnit(R.styleable.AccompanistMdcTextAppearance_android_textSize, density),
             lineHeight = a.getTextUnit(R.styleable.AccompanistMdcTextAppearance_android_lineHeight, density),
             fontFamily = when {
-                fontFamilyWeight != null -> fontFamilyWeight.first
+                fontFamilyWeight != null -> fontFamilyWeight.fontFamily
                 // Values below are from frameworks/base attrs.xml
                 typeface == 1 -> FontFamily.SansSerif
                 typeface == 2 -> FontFamily.Serif
@@ -357,7 +357,7 @@ private fun textStyleFromTextAppearance(
                 // Else, check the text style for bold
                 (textStyle and Typeface.BOLD) != 0 -> FontWeight.Bold
                 // Else, the font family might have an implicit weight (san-serif-light, etc)
-                fontFamilyWeight != null -> fontFamilyWeight.second
+                fontFamilyWeight != null -> fontFamilyWeight.weight
                 else -> null
             },
             fontFeatureSettings = a.getString(R.styleable.AccompanistMdcTextAppearance_android_fontFeatureSettings),
@@ -468,8 +468,8 @@ private fun TypedArray.getComposeColor(
  * @param index index of attribute to retrieve.
  * @param fallback Value to return if the attribute is not defined or cannot be coerced to an [FontFamily].
  */
-private fun TypedArray.getFontFamily(index: Int, fallback: FontFamily): Pair<FontFamily, FontWeight> {
-    return getFontFamilyOrNull(index) ?: (fallback to FontWeight.Normal)
+private fun TypedArray.getFontFamily(index: Int, fallback: FontFamily): FontFamilyWeight {
+    return getFontFamilyOrNull(index) ?: FontFamilyWeight(fallback)
 }
 
 /**
@@ -478,27 +478,33 @@ private fun TypedArray.getFontFamily(index: Int, fallback: FontFamily): Pair<Fon
  *
  * @param index index of attribute to retrieve.
  */
-private fun TypedArray.getFontFamilyOrNull(index: Int): Pair<FontFamily, FontWeight>? {
+private fun TypedArray.getFontFamilyOrNull(index: Int): FontFamilyWeight? {
     val tv = tempTypedValue.getOrSet { TypedValue() }
     if (getValue(index, tv) && tv.type == TypedValue.TYPE_STRING) {
         if (tv.resourceId != 0) {
-            return font(tv.resourceId).asFontFamily() to FontWeight.Normal
+            // If there's a resource ID, it's probably a @font resource
+            return FontFamilyWeight(font(tv.resourceId).asFontFamily())
         }
         return when (tv.string) {
-            "san-serif" -> FontFamily.SansSerif to FontWeight.Normal
-            "sans-serif-thin" -> FontFamily.SansSerif to FontWeight.Thin
-            "san-serif-light" -> FontFamily.SansSerif to FontWeight.Light
-            "sans-serif-medium" -> FontFamily.SansSerif to FontWeight.Medium
-            "sans-serif-black" -> FontFamily.SansSerif to FontWeight.Black
-            "serif" -> FontFamily.Serif to FontWeight.Normal
-            "cursive" -> FontFamily.Cursive to FontWeight.Normal
-            "monospace" -> FontFamily.Monospace to FontWeight.Normal
+            "san-serif" -> FontFamilyWeight(FontFamily.SansSerif)
+            "sans-serif-thin" -> FontFamilyWeight(FontFamily.SansSerif, FontWeight.Thin)
+            "san-serif-light" -> FontFamilyWeight(FontFamily.SansSerif, FontWeight.Light)
+            "sans-serif-medium" -> FontFamilyWeight(FontFamily.SansSerif, FontWeight.Medium)
+            "sans-serif-black" -> FontFamilyWeight(FontFamily.SansSerif, FontWeight.Black)
+            "serif" -> FontFamilyWeight(FontFamily.Serif)
+            "cursive" -> FontFamilyWeight(FontFamily.Cursive)
+            "monospace" -> FontFamilyWeight(FontFamily.Monospace)
             // TODO: Compose does not expose a FontFamily for "sans-serif-condensed" yet
             else -> null
         }
     }
     return null
 }
+
+private data class FontFamilyWeight(
+    val fontFamily: FontFamily,
+    val weight: FontWeight = FontWeight.Normal
+)
 
 /**
  * Returns the given index as a [TextUnit], or [fallback] if the value can not be coerced to a [TextUnit].
