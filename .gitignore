@@ -25,3 +25,8 @@ gradle.xml
 # Do not commit plain-text signing info
 release/*.properties
 release/*.gpg
+
+# VS Code config
+org.eclipse.buildship.core.prefs
+.classpath
+.project
