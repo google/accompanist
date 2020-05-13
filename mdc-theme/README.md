@@ -1,4 +1,4 @@
-## Jetpack Compose + Material Design Components theme interoperability
+# Jetpack Compose + Material Design Components theme interoperability
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/dev.chrisbanes.accompanist/accompanist-mdc-theme/badge.svg)](https://search.maven.org/search?q=g:dev.chrisbanes.accompanist)
 
