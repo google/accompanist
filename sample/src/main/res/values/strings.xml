@@ -17,4 +17,5 @@
 <resources>
     <string name="app_name">Accompanist Sample</string>
     <string name="mdc_title">MDC Integration sample</string>
+    <string name="coil_title">Coil Integration sample</string>
 </resources>

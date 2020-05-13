@@ -35,6 +35,7 @@ android {
 
     buildFeatures {
         compose true
+        buildConfig false
     }
 
     composeOptions {
@@ -47,11 +48,6 @@ android {
         textOutput 'stdout'
         // We run a full lint analysis as build part in CI, so skip vital checks for assemble tasks
         checkReleaseBuilds false
-    }
-
-    // TODO replace with https://issuetracker.google.com/issues/72050365 once released.
-    libraryVariants.all {
-        it.generateBuildConfig.enabled = false
     }
 
     packagingOptions {

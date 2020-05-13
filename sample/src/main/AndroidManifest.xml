@@ -18,6 +18,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="dev.chrisbanes.accompanist.sample">
 
+    <!-- Used for loading images from the network -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -39,6 +42,16 @@
         <activity
             android:name=".mdc.MdcSampleActivity"
             android:label="@string/mdc_title"
+            android:theme="@style/Theme.AccompanistSample.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".coil.CoilSampleActivity"
+            android:label="@string/coil_title"
             android:theme="@style/Theme.AccompanistSample.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
