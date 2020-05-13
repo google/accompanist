@@ -98,7 +98,7 @@ fun MdcSample() {
 
                 ExtendedFloatingActionButton(
                     onClick = {},
-                    text = { Text(text = "Text Button") },
+                    text = { Text(text = "Extended FAB") },
                     icon = { Icon(Icons.Default.Favorite) }
                 )
                 Spacer(modifier = Modifier.preferredHeight(8.dp))
