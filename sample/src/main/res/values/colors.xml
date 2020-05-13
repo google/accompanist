@@ -15,6 +15,8 @@
   -->
 
 <resources>
-    <string name="app_name">Accompanist Sample</string>
-    <string name="mdc_title">MDC Integration sample</string>
+    <color name="deep_orange_300">#ff8a65</color>
+    <color name="deep_orange_600">#f4511e</color>
+    <color name="pink_a200">#ff4081</color>
+    <color name="pink_dark">#c60055</color>
 </resources>
