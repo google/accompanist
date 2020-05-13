@@ -17,6 +17,7 @@
 package dev.chrisbanes.accompanist.coil
 
 import android.graphics.ColorMatrixColorFilter
+import android.graphics.drawable.Drawable
 import androidx.animation.FloatPropKey
 import androidx.animation.transitionDefinition
 import androidx.compose.Composable
@@ -49,9 +50,9 @@ import androidx.ui.graphics.painter.Painter
 import androidx.ui.unit.IntPx
 import androidx.ui.unit.PxSize
 import coil.Coil
+import coil.decode.DataSource
 import coil.request.GetRequest
 import coil.request.GetRequestBuilder
-import coil.request.RequestResult
 import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -179,12 +180,12 @@ fun CoilImageWithCrossfade(
             imgLoadState = ImageLoadState.Loaded
         }
 
-        Transition(definition = transitionDef, toState = imgLoadState) { transitionState ->
-            if (result?.drawable != null) {
-                val asset = result.drawable!!.toBitmap().asImageAsset()
+        val image = result?.image
 
+        Transition(definition = transitionDef, toState = imgLoadState) { transitionState ->
+            if (image != null) {
                 // Create and update the ImageLoadingColorMatrix from the transition state
-                val matrix = remember(asset) { ImageLoadingColorMatrix() }
+                val matrix = remember(image) { ImageLoadingColorMatrix() }
                 matrix.saturationFraction = transitionState[saturation]
                 matrix.alphaFraction = transitionState[alpha]
                 matrix.brightnessFraction = transitionState[brightness]
@@ -193,11 +194,13 @@ fun CoilImageWithCrossfade(
                 // instance every time
                 val cf = ColorMatrixColorFilter(matrix)
                 Image(
-                    painter = AndroidColorMatrixImagePainter(asset, cf),
+                    painter = AndroidColorMatrixImagePainter(image, cf),
                     contentScale = contentScale,
-                    alignment = alignment
+                    alignment = alignment,
+                    modifier = modifier
                 )
             }
+            // TODO: should expose something to do when the image is loading, etc
         }
     }
 }
@@ -266,18 +269,18 @@ fun CoilImage(
                     .executeAsComposable()
         }
 
-        val resultDrawable = result?.drawable
-        if (resultDrawable != null) {
-            val painter = remember(resultDrawable) {
-                ImagePainter(resultDrawable.toBitmap().asImageAsset())
-            }
+        val image = result?.image
+        if (image != null) {
+            val painter = remember(result) { ImagePainter(image) }
             Image(
                 painter = painter,
                 contentScale = contentScale,
                 alignment = alignment,
-                colorFilter = colorFilter
+                colorFilter = colorFilter,
+                modifier = modifier
             )
         }
+        // TODO: should expose something to do when the image is loading, etc
     }
 }
 
@@ -309,6 +312,45 @@ private class AndroidColorMatrixImagePainter(
 }
 
 /**
+ * Represents the result of an image request.
+ */
+sealed class RequestResult {
+    abstract val image: ImageAsset?
+}
+
+/**
+ * Indicates that the request completed successfully.
+ *
+ * @param image The result image.
+ * @param source The data source that the image was loaded from.
+ */
+data class SuccessResult(
+    override val image: ImageAsset,
+    val source: DataSource
+) : RequestResult() {
+    internal constructor(result: coil.request.SuccessResult) : this(
+        image = result.drawable.toImageAsset(),
+        source = result.source
+    )
+}
+
+/**
+ * Indicates that an error occurred while executing the request.
+ *
+ * @param image The error image.
+ * @param throwable The error that failed the request.
+ */
+data class ErrorResult(
+    override val image: ImageAsset?,
+    val throwable: Throwable
+) : RequestResult() {
+    internal constructor(result: coil.request.ErrorResult) : this(
+        image = result.drawable?.toImageAsset(),
+        throwable = result.throwable
+    )
+}
+
+/**
  * This will execute the [GetRequest] within a composable, ensuring that the request is only
  * execute once and storing the result, and cancelling requests as required.
  *
@@ -316,14 +358,25 @@ private class AndroidColorMatrixImagePainter(
  */
 @Composable
 fun GetRequest.executeAsComposable(): RequestResult? {
-    var result by stateFor<RequestResult?>(this) { null }
-    val context = ContextAmbient.current
+    // GetRequest does not support object equality (as of v0.10.1) so we can not key off the
+    // request itself. For now we can just use the `data` parameter, but ideally this should use
+    // `this` to track changes in size, transformations, etc too.
+    // See https://github.com/coil-kt/coil/issues/405
+    val key = data
+
+    var result by stateFor<RequestResult?>(key) { null }
 
     // Launch and execute a new request when it changes
-    onCommit(this) {
+    onCommit(key) {
         val job = CoroutineScope(Dispatchers.Main).launch {
             // Start loading the image and await the result
-            result = Coil.imageLoader(context).execute(this@executeAsComposable)
+            result = Coil.imageLoader(context).execute(this@executeAsComposable).let {
+                // We map to our internal result entities
+                when (it) {
+                    is coil.request.SuccessResult -> SuccessResult(it)
+                    is coil.request.ErrorResult -> ErrorResult(it)
+                }
+            }
         }
 
         // Cancel the request if the input to onCommit changes or
@@ -332,4 +385,8 @@ fun GetRequest.executeAsComposable(): RequestResult? {
     }
 
     return result
+}
+
+private fun Drawable.toImageAsset(): ImageAsset {
+    return toBitmap().asImageAsset()
 }
