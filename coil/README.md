@@ -1,4 +1,4 @@
-# Jetpack Compose + Coil integration
+# Jetpack Compose + Coil
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/dev.chrisbanes.accompanist/accompanist-coil/badge.svg)](https://search.maven.org/search?q=g:dev.chrisbanes.accompanist)
 
