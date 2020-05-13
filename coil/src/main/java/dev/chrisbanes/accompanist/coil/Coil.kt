@@ -72,16 +72,16 @@ private val Constraints.requestWidth
 private val Constraints.requestHeight
     get() = if (hasFixedHeight || hasBoundedHeight) maxHeight else minHeight
 
+private const val defaultTransitionDuration = 1000
+
 /**
  * Creates a composable that will attempt to load the given [data] using [Coil], and then
  * display the result in an [Image], using a crossfade when first loaded.
  *
- * The crossfade used is an implementation of the Material Design 'loading images' pattern,
- * animating the image's saturation, alpha and exposure. More information on the pattern can be
- * seen [here](https://material.io/archive/guidelines/patterns/loading-images.html).
+ * The animation fades in the image's saturation, alpha and exposure. More information on the
+ * pattern can be seen [here](https://material.io/archive/guidelines/patterns/loading-images.html).
  *
  * @param data The data to load. See [GetRequestBuilder.data] for the types allowed.
- * @param requestBuilder Lambda which allows customization of the [GetRequestBuilder]
  * @param alignment Optional alignment parameter used to place the loaded [ImageAsset] in the
  * given bounds defined by the width and height.
  * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
@@ -93,14 +93,47 @@ private val Constraints.requestHeight
 @Composable
 fun CoilImageWithCrossfade(
     data: Any,
-    requestBuilder: ((GetRequestBuilder) -> GetRequestBuilder)? = null,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
-    crossfadeDuration: Int = 1000,
+    crossfadeDuration: Int = defaultTransitionDuration,
+    modifier: Modifier = Modifier
+) {
+    CoilImageWithCrossfade(
+        request = GetRequest.Builder(ContextAmbient.current).data(data).build(),
+        alignment = alignment,
+        contentScale = contentScale,
+        crossfadeDuration = crossfadeDuration,
+        modifier = modifier
+    )
+}
+
+/**
+ * Creates a composable that will attempt to load the given [request] using [Coil], and then
+ * display the result in an [Image], using a crossfade animation when first loaded.
+ *
+ * The animation fades in the image's saturation, alpha and exposure. More information on the
+ * pattern can be seen [here](https://material.io/archive/guidelines/patterns/loading-images.html).
+ *
+ * @param request The request to execute. If the request does not have a [GetRequest.sizeResolver]
+ * set, one will be set on the request using the layout constraints.
+ * @param alignment Optional alignment parameter used to place the loaded [ImageAsset] in the
+ * given bounds defined by the width and height.
+ * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
+ * used if the bounds are a different size from the intrinsic size of the loaded [ImageAsset].
+ * @param crossfadeDuration The duration of the crossfade animation in milliseconds.
+ * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
+ * background)
+ */
+@Composable
+fun CoilImageWithCrossfade(
+    request: GetRequest,
+    alignment: Alignment = Alignment.Center,
+    contentScale: ContentScale = ContentScale.Fit,
+    crossfadeDuration: Int = defaultTransitionDuration,
     modifier: Modifier = Modifier
 ) {
     WithConstraints(modifier) { constraints, _ ->
-        var imgLoadState by stateFor(data) { ImageLoadState.Empty }
+        var imgLoadState by stateFor(request) { ImageLoadState.Empty }
 
         val transitionDef = remember(crossfadeDuration) {
             transitionDefinition {
@@ -129,17 +162,18 @@ fun CoilImageWithCrossfade(
             }
         }
 
-        // A new GetRequest will be created on every composition, which allows the requestBuilder
-        // to work on every invocation. executeAsComposable() guards the actual execution so that
-        // the request is only run if the request changes.
-        val result = GetRequest.Builder(ContextAmbient.current)
-                .data(data)
-                .size(constraints.requestWidth.value, constraints.requestHeight.value)
-                .let {
-                    if (requestBuilder != null) requestBuilder(it) else it
-                }
-                .build()
-                .executeAsComposable()
+        // Execute the request using executeAsComposable(), which guards the actual execution
+        // so that the request is only run if the request changes.
+        val result = if (request.sizeResolver != null) {
+            // If the request has a sizeResolver set, we can execute it now
+            request.executeAsComposable()
+        } else {
+            // Otherwise we need to modify the request with some a request size
+            request.newBuilder()
+                    .size(constraints.requestWidth.value, constraints.requestHeight.value)
+                    .build()
+                    .executeAsComposable()
+        }
 
         if (result != null && imgLoadState == ImageLoadState.Empty) {
             imgLoadState = ImageLoadState.Loaded
@@ -173,7 +207,6 @@ fun CoilImageWithCrossfade(
  * display the result in an [Image].
  *
  * @param data The data to load. See [GetRequestBuilder.data] for the types allowed.
- * @param requestBuilder Lambda which allows customization of the [GetRequestBuilder]
  * @param alignment Optional alignment parameter used to place the loaded [ImageAsset] in the
  * given bounds defined by the width and height.
  * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
@@ -184,24 +217,54 @@ fun CoilImageWithCrossfade(
 @Composable
 fun CoilImage(
     data: Any,
-    requestBuilder: ((GetRequestBuilder) -> GetRequestBuilder)? = null,
+    alignment: Alignment = Alignment.Center,
+    contentScale: ContentScale = ContentScale.Fit,
+    colorFilter: ColorFilter? = null,
+    modifier: Modifier = Modifier
+) {
+    CoilImage(
+        request = GetRequest.Builder(ContextAmbient.current).data(data).build(),
+        alignment = alignment,
+        contentScale = contentScale,
+        colorFilter = colorFilter,
+        modifier = modifier
+    )
+}
+
+/**
+ * Creates a composable that will attempt to load the given [data] using [Coil], and then
+ * display the result in an [Image].
+ *
+ * @param request The request to execute. If the request does not have a [GetRequest.sizeResolver]
+ * set, one will be set on the request using the layout constraints.
+ * @param alignment Optional alignment parameter used to place the loaded [ImageAsset] in the
+ * given bounds defined by the width and height.
+ * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
+ * used if the bounds are a different size from the intrinsic size of the loaded [ImageAsset].
+ * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
+ * background)
+ */
+@Composable
+fun CoilImage(
+    request: GetRequest,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
     modifier: Modifier = Modifier
 ) {
     WithConstraints(modifier) { constraints, _ ->
-        // A new GetRequest will be created on every composition, which allows the requestBuilder
-        // to work on every invocation. executeAsComposable() guards the actual execution so that
-        // the request is only run if the request changes.
-        val result = GetRequest.Builder(ContextAmbient.current)
-                .data(data)
-                .size(constraints.requestWidth.value, constraints.requestHeight.value)
-                .let {
-                    if (requestBuilder != null) requestBuilder(it) else it
-                }
-                .build()
-                .executeAsComposable()
+        // Execute the request using executeAsComposable(), which guards the actual execution
+        // so that the request is only run if the request changes.
+        val result = if (request.sizeResolver != null) {
+            // If the request has a sizeResolver set, we can execute it now
+            request.executeAsComposable()
+        } else {
+            // Otherwise we need to modify the request with some a request size
+            request.newBuilder()
+                    .size(constraints.requestWidth.value, constraints.requestHeight.value)
+                    .build()
+                    .executeAsComposable()
+        }
 
         val resultDrawable = result?.drawable
         if (resultDrawable != null) {
