@@ -318,6 +318,17 @@ private fun textStyleFromTextAppearance(
 
         val density = DensityAmbient.current
 
+        // FYI, this only works with static font files in assets
+        val fontFamilyWeight = when {
+            a.hasValue(R.styleable.AccompanistMdcTextAppearance_android_fontFamily) -> {
+                a.getFontFamilyOrNull(R.styleable.AccompanistMdcTextAppearance_android_fontFamily)
+            }
+            a.hasValue(R.styleable.AccompanistMdcTextAppearance_fontFamily) -> {
+                a.getFontFamilyOrNull(R.styleable.AccompanistMdcTextAppearance_fontFamily)
+            }
+            else -> null
+        }
+
         TextStyle(
             color = if (useTextColor) {
                 a.getComposeColor(R.styleable.AccompanistMdcTextAppearance_android_textColor)
@@ -325,13 +336,7 @@ private fun textStyleFromTextAppearance(
             fontSize = a.getTextUnit(R.styleable.AccompanistMdcTextAppearance_android_textSize, density),
             lineHeight = a.getTextUnit(R.styleable.AccompanistMdcTextAppearance_android_lineHeight, density),
             fontFamily = when {
-                // FYI, this only works with static font files in assets
-                a.hasValue(R.styleable.AccompanistMdcTextAppearance_android_fontFamily) -> {
-                    a.getFontFamilyOrNull(R.styleable.AccompanistMdcTextAppearance_android_fontFamily)
-                }
-                a.hasValue(R.styleable.AccompanistMdcTextAppearance_fontFamily) -> {
-                    a.getFontFamilyOrNull(R.styleable.AccompanistMdcTextAppearance_fontFamily)
-                }
+                fontFamilyWeight != null -> fontFamilyWeight.fontFamily
                 // Values below are from frameworks/base attrs.xml
                 typeface == 1 -> FontFamily.SansSerif
                 typeface == 2 -> FontFamily.Serif
@@ -349,8 +354,10 @@ private fun textStyleFromTextAppearance(
                 textFontWeight in 650..749 -> FontWeight.W700
                 textFontWeight in 750..849 -> FontWeight.W800
                 textFontWeight in 850..999 -> FontWeight.W900
-                // else, check the text style
+                // Else, check the text style for bold
                 (textStyle and Typeface.BOLD) != 0 -> FontWeight.Bold
+                // Else, the font family might have an implicit weight (san-serif-light, etc)
+                fontFamilyWeight != null -> fontFamilyWeight.weight
                 else -> null
             },
             fontFeatureSettings = a.getString(R.styleable.AccompanistMdcTextAppearance_android_fontFeatureSettings),
@@ -449,33 +456,55 @@ private fun Typography.merge(
 
 private val tempTypedValue = ThreadLocal<TypedValue>()
 
-fun TypedArray.getComposeColor(
+private fun TypedArray.getComposeColor(
     index: Int,
     fallbackColor: Color = Color.Unset
 ): Color = if (hasValue(index)) Color(getColorOrThrow(index)) else fallbackColor
 
 /**
- * Returns the given index as a [FontFamily], or [fallback] if the value can not be coerced to a [FontFamily].
+ * Returns the given index as a [FontFamily] and [FontWeight],
+ * or [fallback] if the value can not be coerced to a [FontFamily].
  *
  * @param index index of attribute to retrieve.
  * @param fallback Value to return if the attribute is not defined or cannot be coerced to an [FontFamily].
  */
-fun TypedArray.getFontFamily(index: Int, fallback: FontFamily): FontFamily {
-    return getFontFamilyOrNull(index) ?: fallback
+private fun TypedArray.getFontFamily(index: Int, fallback: FontFamily): FontFamilyWeight {
+    return getFontFamilyOrNull(index) ?: FontFamilyWeight(fallback)
 }
 
 /**
- * Returns the given index as a [FontFamily], or `null` if the value can not be coerced to a [FontFamily].
+ * Returns the given index as a [FontFamily] and [FontWeight],
+ * or `null` if the value can not be coerced to a [FontFamily].
  *
  * @param index index of attribute to retrieve.
  */
-fun TypedArray.getFontFamilyOrNull(index: Int): FontFamily? {
+private fun TypedArray.getFontFamilyOrNull(index: Int): FontFamilyWeight? {
     val tv = tempTypedValue.getOrSet { TypedValue() }
     if (getValue(index, tv) && tv.type == TypedValue.TYPE_STRING) {
-        return font(tv.resourceId).asFontFamily()
+        if (tv.resourceId != 0) {
+            // If there's a resource ID, it's probably a @font resource
+            return FontFamilyWeight(font(tv.resourceId).asFontFamily())
+        }
+        return when (tv.string) {
+            "san-serif" -> FontFamilyWeight(FontFamily.SansSerif)
+            "sans-serif-thin" -> FontFamilyWeight(FontFamily.SansSerif, FontWeight.Thin)
+            "san-serif-light" -> FontFamilyWeight(FontFamily.SansSerif, FontWeight.Light)
+            "sans-serif-medium" -> FontFamilyWeight(FontFamily.SansSerif, FontWeight.Medium)
+            "sans-serif-black" -> FontFamilyWeight(FontFamily.SansSerif, FontWeight.Black)
+            "serif" -> FontFamilyWeight(FontFamily.Serif)
+            "cursive" -> FontFamilyWeight(FontFamily.Cursive)
+            "monospace" -> FontFamilyWeight(FontFamily.Monospace)
+            // TODO: Compose does not expose a FontFamily for "sans-serif-condensed" yet
+            else -> null
+        }
     }
     return null
 }
+
+private data class FontFamilyWeight(
+    val fontFamily: FontFamily,
+    val weight: FontWeight = FontWeight.Normal
+)
 
 /**
  * Returns the given index as a [TextUnit], or [fallback] if the value can not be coerced to a [TextUnit].
@@ -484,7 +513,7 @@ fun TypedArray.getFontFamilyOrNull(index: Int): FontFamily? {
  * @param density the current display density.
  * @param fallback Value to return if the attribute is not defined or cannot be coerced to an [TextUnit].
  */
-fun TypedArray.getTextUnit(
+private fun TypedArray.getTextUnit(
     index: Int,
     density: Density,
     fallback: TextUnit = TextUnit.Inherit
@@ -496,7 +525,7 @@ fun TypedArray.getTextUnit(
  * @param index index of attribute to retrieve.
  * @param density the current display density.
  */
-fun TypedArray.getTextUnitOrNull(
+private fun TypedArray.getTextUnitOrNull(
     index: Int,
     density: Density
 ): TextUnit? {
@@ -520,7 +549,7 @@ fun TypedArray.getTextUnitOrNull(
  *
  * @param index index of attribute to retrieve.
  */
-fun TypedArray.getCornerSizeOrNull(index: Int): CornerSize? {
+private fun TypedArray.getCornerSizeOrNull(index: Int): CornerSize? {
     val tv = tempTypedValue.getOrSet { TypedValue() }
     if (getValue(index, tv)) {
         return when (tv.type) {
@@ -546,7 +575,7 @@ fun TypedArray.getCornerSizeOrNull(index: Int): CornerSize? {
  * @param index index of attribute to retrieve.
  * @param fallback Value to return if the attribute is not defined or cannot be coerced to an [CornerSize].
  */
-fun TypedArray.getCornerSize(index: Int, fallback: CornerSize): CornerSize {
+private fun TypedArray.getCornerSize(index: Int, fallback: CornerSize): CornerSize {
     return getCornerSizeOrNull(index) ?: fallback
 }
 

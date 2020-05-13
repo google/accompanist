@@ -34,10 +34,26 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerVersion Libs.AndroidX.UI.kotlinCompilerVersion
+        kotlinCompilerExtensionVersion Libs.AndroidX.UI.version
+    }
 }
 
 dependencies {
     implementation project(':mdc-theme')
 
+    implementation Libs.AndroidX.UI.composeRuntime
+    implementation Libs.AndroidX.UI.material
+    implementation Libs.AndroidX.UI.foundation
+    implementation Libs.AndroidX.UI.layout
+
+    implementation Libs.AndroidX.coreKtx
+    implementation Libs.mdc
     implementation Libs.Kotlin.stdlib
 }

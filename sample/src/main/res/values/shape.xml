@@ -15,6 +15,18 @@
   -->
 
 <resources>
-    <string name="app_name">Accompanist Sample</string>
-    <string name="mdc_title">MDC Integration sample</string>
+    <style name="ShapeAppearance.AccompanistSample.SmallComponent"
+        parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">cut</item>
+    </style>
+
+    <style name="ShapeAppearance.AccompanistSample.MediumComponent"
+        parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">cut</item>
+    </style>
+
+    <style name="ShapeAppearance.AccompanistSample.LargeComponent"
+        parent="ShapeAppearance.MaterialComponents.LargeComponent">
+        <item name="cornerFamily">cut</item>
+    </style>
 </resources>
