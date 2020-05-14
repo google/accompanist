@@ -16,6 +16,7 @@
 
 package dev.chrisbanes.accompanist.coil
 
+import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.drawable.Drawable
 import androidx.animation.FloatPropKey
@@ -27,6 +28,7 @@ import androidx.compose.remember
 import androidx.compose.setValue
 import androidx.compose.stateFor
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.util.Pools
 import androidx.ui.animation.Transition
 import androidx.ui.core.Alignment
 import androidx.ui.core.Constraints
@@ -40,13 +42,15 @@ import androidx.ui.core.hasFixedHeight
 import androidx.ui.core.hasFixedWidth
 import androidx.ui.foundation.Image
 import androidx.ui.geometry.Offset
-import androidx.ui.graphics.Canvas
+import androidx.ui.geometry.Size
 import androidx.ui.graphics.ColorFilter
 import androidx.ui.graphics.ImageAsset
 import androidx.ui.graphics.Paint
 import androidx.ui.graphics.asImageAsset
+import androidx.ui.graphics.painter.CanvasScope
 import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.graphics.painter.Painter
+import androidx.ui.graphics.painter.drawCanvas
 import androidx.ui.unit.IntPx
 import androidx.ui.unit.PxSize
 import coil.Coil
@@ -133,8 +137,9 @@ fun CoilImageWithCrossfade(
     crossfadeDuration: Int = defaultTransitionDuration,
     modifier: Modifier = Modifier
 ) {
-    WithConstraints(modifier) { constraints, _ ->
-        var imgLoadState by stateFor(request) { ImageLoadState.Empty }
+    WithConstraints(modifier) {
+        // We key off the data, for the same reasons as executeAsComposable() below
+        var imgLoadState by stateFor(request.data) { ImageLoadState.Empty }
 
         val transitionDef = remember(crossfadeDuration) {
             transitionDefinition {
@@ -190,11 +195,8 @@ fun CoilImageWithCrossfade(
                 matrix.alphaFraction = transitionState[alpha]
                 matrix.brightnessFraction = transitionState[brightness]
 
-                // Unfortunately ColorMatrixColorFilter is not mutable so we have to create a new
-                // instance every time
-                val cf = ColorMatrixColorFilter(matrix)
                 Image(
-                    painter = AndroidColorMatrixImagePainter(image, cf),
+                    painter = ColorMatrixImagePainter(image, colorMatrix = matrix),
                     contentScale = contentScale,
                     alignment = alignment,
                     modifier = modifier
@@ -255,7 +257,7 @@ fun CoilImage(
     colorFilter: ColorFilter? = null,
     modifier: Modifier = Modifier
 ) {
-    WithConstraints(modifier) { constraints, _ ->
+    WithConstraints(modifier) {
         // Execute the request using executeAsComposable(), which guards the actual execution
         // so that the request is only run if the request changes.
         val result = if (request.sizeResolver != null) {
@@ -285,24 +287,32 @@ fun CoilImage(
 }
 
 /**
- * An [ImagePainter] which draws the image with the given Android framework
- * [android.graphics.ColorFilter].
+ * A pool which allows us to cache and re-use [Paint] instances, which are relatively expensive
+ * to create.
  */
-private class AndroidColorMatrixImagePainter(
+private val paintPool = Pools.SimplePool<Paint>(2)
+
+/**
+ * An [ImagePainter] which draws the image with the given Android framework
+ * [android.graphics.ColorMatrix].
+ */
+private class ColorMatrixImagePainter(
     private val image: ImageAsset,
-    colorFilter: android.graphics.ColorFilter
+    private val srcOffset: Offset = Offset.zero,
+    private val srcSize: Size = Size(image.width.toFloat(), image.height.toFloat()),
+    private val colorMatrix: ColorMatrix? = null
 ) : Painter() {
-    private val paint = Paint()
     private val size = PxSize(IntPx(image.width), IntPx(image.height))
 
-    init {
-        paint.asFrameworkPaint().colorFilter = colorFilter
-    }
+    override fun CanvasScope.onDraw() {
+        val paint = paintPool.acquire() ?: Paint()
+        paint.asFrameworkPaint().colorFilter = colorMatrix?.let(::ColorMatrixColorFilter)
 
-    override fun onDraw(canvas: Canvas, bounds: PxSize) {
-        // Always draw the image in the top left as we expect it to be translated and scaled
-        // in the appropriate position
-        canvas.drawImage(image, Offset.zero, paint)
+        drawCanvas { canvas, _ ->
+            canvas.drawImageRect(image, srcOffset, srcSize, Offset.zero, size, paint)
+        }
+
+        paintPool.release(paint)
     }
 
     /**
