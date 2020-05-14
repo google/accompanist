@@ -6,7 +6,7 @@ Accompanist is a group of libraries which contains some utilities which I've fou
  * 🖼️ [Coil image loading composables](./coil/README.md)
 
 [Jetpack Compose][compose] is a fast moving project and I'll be updating these libraries to match the
-latest tagged release as quickly as possible. Currently all of the libraries depend on [**`v0.1.0-dev10`**](https://developer.android.com/jetpack/androidx/releases/ui) of the Compose UI libraries.
+latest tagged release as quickly as possible. Each [release listing](https://github.com/chrisbanes/accompanist/releases) will outline what version of Compose and the UI libraries it depends on.
 
 ## Download
 
