@@ -46,12 +46,8 @@ subprojects {
         kotlin {
             target "**/*.kt"
             ktlint(Versions.ktlint)
-            licenseHeaderFile project.rootProject.file('spotless/copyright.txt')
-        }
-
-        java {
-            target "**/*.java"
-            googleJavaFormat()
+                    // Disable paren-spacing rule for NonParenthesizedAnnotationsOnFunctionalTypes
+                    .userData(["disabled_rules": "paren-spacing"])
             licenseHeaderFile project.rootProject.file('spotless/copyright.txt')
         }
 
@@ -68,6 +64,7 @@ subprojects {
         kotlinOptions {
             // Treat all Kotlin warnings as errors
             allWarningsAsErrors = true
+
             // Set JVM target to 1.8
             jvmTarget = "1.8"
 
@@ -77,6 +74,10 @@ subprojects {
             // use 1.4 if built with that library.
             // TODO: remove this once we move to Kotlin 1.4
             apiVersion = "1.3"
+
+            // Don't require parens on fun type annotations e.g. `@Composable~()~ () -> Unit`
+            // TODO: Remove when we move to Kotlin 1.4
+            freeCompilerArgs += "-XXLanguage:+NonParenthesizedAnnotationsOnFunctionalTypes"
         }
     }
 
