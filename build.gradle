@@ -38,6 +38,7 @@ plugins {
 subprojects {
     repositories {
         google()
+        // maven { url 'https://androidx.dev/snapshots/builds/6492492/artifacts/ui/repository' }
         jcenter()
     }
 

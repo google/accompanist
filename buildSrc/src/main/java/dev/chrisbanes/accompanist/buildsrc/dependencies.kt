@@ -46,19 +46,20 @@ object Libs {
 
         object UI {
             const val kotlinCompilerVersion = "1.3.70-dev-withExperimentalGoogleExtensions-20200424"
-            const val version = "0.1.0-dev10"
+            const val version = "0.1.0-dev11"
 
             const val composeRuntime = "androidx.compose:compose-runtime:$version"
-            const val framework = "androidx.ui:ui-framework:$version"
+
+            const val core = "androidx.ui:ui-core:$version"
+            const val foundation = "androidx.ui:ui-foundation:$version"
 
             const val layout = "androidx.ui:ui-layout:$version"
             const val material = "androidx.ui:ui-material:$version"
-            const val foundation = "androidx.ui:ui-foundation:$version"
+
             const val animation = "androidx.ui:ui-animation:$version"
             const val tooling = "androidx.ui:ui-tooling:$version"
             const val livedata = "androidx.ui:ui-livedata:$version"
 
-            const val platform = "androidx.ui:ui-platform:$version"
             const val test = "androidx.ui:ui-test:$version"
         }
 
