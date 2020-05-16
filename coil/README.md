@@ -55,7 +55,7 @@ dependencies {
 
 ## Limitations
 
-* Compose currently only supports static bitmap images, which means that we need to convert and resulting images to a `Bitmap`. This means that using things like Coil's [SVG support](https://coil-kt.github.io/coil/svgs/) will result in a rasterized bitmap, rather than displaying it as a vector.
+* Compose currently only supports static bitmap images, which means that we need to convert the resulting images to a `Bitmap`. This means that using things like Coil's [GIF support](https://coil-kt.github.io/coil/gifs/) will result in only the first frame being rendered, instead of animating.
 
 Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap]. These are updated on every commit.
 
