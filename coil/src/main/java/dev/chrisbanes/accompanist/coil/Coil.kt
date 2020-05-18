@@ -170,11 +170,16 @@ fun CoilImageWithCrossfade(
 
         // Execute the request using executeAsComposable(), which guards the actual execution
         // so that the request is only run if the request changes.
-        val result = if (request.sizeResolver != null) {
-            // If the request has a sizeResolver set, we can execute it now
+
+        val requestWidth = constraints.requestWidth.value
+        val requestHeight = constraints.requestHeight.value
+
+        val result = if (request.sizeResolver != null || requestWidth == 0 || requestHeight == 0) {
+            // If the request has a sizeResolver set, or we have a 0 width/height, we just execute
+            // the request as-is
             request.executeAsComposable()
         } else {
-            // Otherwise we need to modify the request with some a request size
+            // Otherwise we can modify the request to specify the target size
             request.newBuilder()
                     .size(constraints.requestWidth.value, constraints.requestHeight.value)
                     .build()
@@ -260,15 +265,20 @@ fun CoilImage(
     WithConstraints(modifier) {
         // Execute the request using executeAsComposable(), which guards the actual execution
         // so that the request is only run if the request changes.
-        val result = if (request.sizeResolver != null) {
-            // If the request has a sizeResolver set, we can execute it now
+
+        val requestWidth = constraints.requestWidth.value
+        val requestHeight = constraints.requestHeight.value
+
+        val result = if (request.sizeResolver != null || requestWidth == 0 || requestHeight == 0) {
+            // If the request has a sizeResolver set, or we have a 0 width/height, we just execute
+            // the request as-is
             request.executeAsComposable()
         } else {
-            // Otherwise we need to modify the request with some a request size
+            // Otherwise we can modify the request to specify the target size
             request.newBuilder()
-                    .size(constraints.requestWidth.value, constraints.requestHeight.value)
-                    .build()
-                    .executeAsComposable()
+                .size(constraints.requestWidth.value, constraints.requestHeight.value)
+                .build()
+                .executeAsComposable()
         }
 
         val image = result?.image
