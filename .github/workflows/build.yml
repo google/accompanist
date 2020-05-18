@@ -52,7 +52,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        api-level: [21, 23, 26, 29]
+        api-level: [23, 26, 29]
     env:
       JAVA_TOOL_OPTIONS: -Xmx3072m
       GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2 -Dkotlin.incremental=false -Dkotlin.compiler.execution.strategy=in-process
