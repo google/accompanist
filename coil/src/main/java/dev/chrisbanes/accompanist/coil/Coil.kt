@@ -174,16 +174,22 @@ fun CoilImageWithCrossfade(
         val requestWidth = constraints.requestWidth.value
         val requestHeight = constraints.requestHeight.value
 
-        val result = if (request.sizeResolver != null || requestWidth == 0 || requestHeight == 0) {
-            // If the request has a sizeResolver set, or we have a 0 width/height, we just execute
-            // the request as-is
-            request.executeAsComposable()
-        } else {
-            // Otherwise we can modify the request to specify the target size
-            request.newBuilder()
-                    .size(constraints.requestWidth.value, constraints.requestHeight.value)
+        val result = when {
+            request.sizeResolver != null -> {
+                // If the request has a sizeResolver set, we just execute the request as-is
+                request.executeAsComposable()
+            }
+            requestWidth > 0 && requestHeight > 0 -> {
+                // If we have a non-zero size we can modify the request to include the size
+                request.newBuilder()
+                    .size(requestWidth, requestHeight)
                     .build()
                     .executeAsComposable()
+            }
+            else -> {
+                // Otherwise we have a zero size, so no point executing a request
+                null
+            }
         }
 
         if (result != null && imgLoadState == ImageLoadState.Empty) {
@@ -269,16 +275,22 @@ fun CoilImage(
         val requestWidth = constraints.requestWidth.value
         val requestHeight = constraints.requestHeight.value
 
-        val result = if (request.sizeResolver != null || requestWidth == 0 || requestHeight == 0) {
-            // If the request has a sizeResolver set, or we have a 0 width/height, we just execute
-            // the request as-is
-            request.executeAsComposable()
-        } else {
-            // Otherwise we can modify the request to specify the target size
-            request.newBuilder()
-                .size(constraints.requestWidth.value, constraints.requestHeight.value)
-                .build()
-                .executeAsComposable()
+        val result = when {
+            request.sizeResolver != null -> {
+                // If the request has a sizeResolver set, we just execute the request as-is
+                request.executeAsComposable()
+            }
+            requestWidth > 0 && requestHeight > 0 -> {
+                // If we have a non-zero size, we can modify the request to include the size
+                request.newBuilder()
+                    .size(requestWidth, requestHeight)
+                    .build()
+                    .executeAsComposable()
+            }
+            else -> {
+                // Otherwise we have a zero size, so no point executing a request
+                null
+            }
         }
 
         val image = result?.image
