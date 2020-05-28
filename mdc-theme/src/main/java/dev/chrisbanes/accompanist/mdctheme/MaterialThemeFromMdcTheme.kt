@@ -55,7 +55,6 @@ import androidx.ui.unit.Density
 import androidx.ui.unit.TextUnit
 import androidx.ui.unit.dp
 import androidx.ui.unit.em
-import androidx.ui.unit.px
 import androidx.ui.unit.sp
 import java.lang.reflect.Method
 import kotlin.concurrent.getOrSet
@@ -367,7 +366,7 @@ private fun textStyleFromTextAppearance(
                     val dx = a.getFloat(R.styleable.AccompanistMdcTextAppearance_android_shadowDx, 0f)
                     val dy = a.getFloat(R.styleable.AccompanistMdcTextAppearance_android_shadowDy, 0f)
                     val rad = a.getFloat(R.styleable.AccompanistMdcTextAppearance_android_shadowRadius, 0f)
-                    Shadow(color = shadowColor, offset = Offset(dx, dy), blurRadius = rad.px)
+                    Shadow(color = shadowColor, offset = Offset(dx, dy), blurRadius = rad)
                 } else null
             },
             letterSpacing = when {
@@ -557,9 +556,9 @@ private fun TypedArray.getCornerSizeOrNull(index: Int): CornerSize? {
                 when (tv.complexUnitCompat) {
                     // For DIP and PX values, we convert the value to the equivalent
                     TypedValue.COMPLEX_UNIT_DIP -> CornerSize(TypedValue.complexToFloat(tv.data).dp)
-                    TypedValue.COMPLEX_UNIT_PX -> CornerSize(TypedValue.complexToFloat(tv.data).px)
+                    TypedValue.COMPLEX_UNIT_PX -> CornerSize(TypedValue.complexToFloat(tv.data))
                     // For another other dim types, we let the TypedArray flatten to a px value
-                    else -> CornerSize(getDimensionPixelSize(index, 0).px)
+                    else -> CornerSize(getDimensionPixelSize(index, 0))
                 }
             }
             TypedValue.TYPE_FRACTION -> CornerSize(tv.getFraction(1f, 1f))
