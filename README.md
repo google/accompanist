@@ -39,7 +39,7 @@ repositories {
 
 dependencies {
     // Check the latest SNAPSHOT version from the link above
-    classpath 'dev.chrisbanes.accompanist:accompanist-coil:vXXX-SNAPSHOT'
+    classpath 'dev.chrisbanes.accompanist:accompanist-mdc-theme:vXXX-SNAPSHOT'
     classpath 'dev.chrisbanes.accompanist:accompanist-coil:vXXX-SNAPSHOT'
 }
 ```
