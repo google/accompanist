@@ -47,12 +47,10 @@ import androidx.ui.graphics.ColorFilter
 import androidx.ui.graphics.ImageAsset
 import androidx.ui.graphics.Paint
 import androidx.ui.graphics.asImageAsset
-import androidx.ui.graphics.painter.CanvasScope
+import androidx.ui.graphics.drawscope.DrawScope
+import androidx.ui.graphics.drawscope.drawCanvas
 import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.graphics.painter.Painter
-import androidx.ui.graphics.painter.drawCanvas
-import androidx.ui.unit.IntPx
-import androidx.ui.unit.PxSize
 import coil.Coil
 import coil.decode.DataSource
 import coil.request.GetRequest
@@ -324,9 +322,7 @@ private class ColorMatrixImagePainter(
     private val srcSize: Size = Size(image.width.toFloat(), image.height.toFloat()),
     private val colorMatrix: ColorMatrix? = null
 ) : Painter() {
-    private val size = PxSize(IntPx(image.width), IntPx(image.height))
-
-    override fun CanvasScope.onDraw() {
+    override fun DrawScope.onDraw() {
         val paint = paintPool.acquire() ?: Paint()
         paint.asFrameworkPaint().colorFilter = colorMatrix?.let(::ColorMatrixColorFilter)
 
@@ -340,7 +336,7 @@ private class ColorMatrixImagePainter(
     /**
      * Return the dimension of the underlying [Image] as it's intrinsic width and height
      */
-    override val intrinsicSize: PxSize get() = size
+    override val intrinsicSize: Size get() = srcSize
 }
 
 /**

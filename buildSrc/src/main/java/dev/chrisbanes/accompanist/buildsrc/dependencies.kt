@@ -21,7 +21,7 @@ object Versions {
 }
 
 object Libs {
-    const val androidGradlePlugin = "com.android.tools.build:gradle:4.1.0-alpha09"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:4.1.0-alpha10"
 
     const val gradleMavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.11.1"
 
@@ -46,7 +46,7 @@ object Libs {
 
         object UI {
             const val kotlinCompilerVersion = "1.3.70-dev-withExperimentalGoogleExtensions-20200424"
-            const val version = "0.1.0-dev11"
+            const val version = "0.1.0-dev12"
 
             const val composeRuntime = "androidx.compose:compose-runtime:$version"
 
