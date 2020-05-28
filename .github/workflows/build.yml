@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       JAVA_TOOL_OPTIONS: -Xmx5120m
-      GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2 -Dkotlin.incremental=false -Dkotlin.compiler.execution.strategy=in-process
+      GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2 -Dkotlin.compiler.execution.strategy=in-process
       TERM: dumb
 
     steps:
@@ -55,7 +55,7 @@ jobs:
         api-level: [23, 26, 29]
     env:
       JAVA_TOOL_OPTIONS: -Xmx3072m
-      GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2 -Dkotlin.incremental=false -Dkotlin.compiler.execution.strategy=in-process
+      GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2 -Dkotlin.compiler.execution.strategy=in-process
       TERM: dumb
 
     steps:
@@ -105,7 +105,7 @@ jobs:
     needs: [build, test]
     env:
       JAVA_TOOL_OPTIONS: -Xmx5120m
-      GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2 -Dkotlin.incremental=false -Dkotlin.compiler.execution.strategy=in-process
+      GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2 -Dkotlin.compiler.execution.strategy=in-process
       TERM: dumb
 
     steps:
