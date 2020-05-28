@@ -21,7 +21,30 @@ dependencies {
 }
 ```
 
-Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap]. These are updated on every commit.
+
+### Snapshots
+
+Snapshots of the current development version are available, which track the latest commit.
+
+<details><summary>Snapshot repository instructions</summary>
+
+The snapshots are deployed to 
+[Sonatype's `snapshots` repository](https://oss.sonatype.org/content/repositories/snapshots/dev/chrisbanes/accompanist/):
+
+```groovy
+repositories {
+    // ...
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+}
+
+dependencies {
+    // Check the latest SNAPSHOT version from the link above
+    classpath 'dev.chrisbanes.accompanist:accompanist-coil:vXXX-SNAPSHOT'
+    classpath 'dev.chrisbanes.accompanist:accompanist-coil:vXXX-SNAPSHOT'
+}
+```
+
+</details>
 
 ---
 
