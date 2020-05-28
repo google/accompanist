@@ -28,12 +28,10 @@ import androidx.ui.text.font.asFontFamily
 import androidx.ui.text.font.font
 import androidx.ui.unit.Density
 import androidx.ui.unit.Dp
-import androidx.ui.unit.Px
 import androidx.ui.unit.PxSize
 import androidx.ui.unit.TextUnit
 import androidx.ui.unit.dp
 import androidx.ui.unit.em
-import androidx.ui.unit.px
 import androidx.ui.unit.sp
 import dev.chrisbanes.accompanist.mdctheme.test.R
 import org.junit.Assert.assertEquals
@@ -83,9 +81,9 @@ class MaterialThemeTest {
 
             shapes.small.run {
                 assertTrue(this is CutCornerShape)
-                assertEquals(4.px, topLeft.toPx(density))
+                assertEquals(4f, topLeft.toPx(density))
                 assertEquals(9.dp.scaleToPx(density), topRight.toPx(density))
-                assertEquals(5.px, bottomRight.toPx(density))
+                assertEquals(5f, bottomRight.toPx(density))
                 assertEquals(3.dp.scaleToPx(density), bottomLeft.toPx(density))
             }
             shapes.medium.run {
@@ -97,10 +95,10 @@ class MaterialThemeTest {
             }
             shapes.large.run {
                 assertTrue(this is CutCornerShape)
-                assertEquals(0.px, topLeft.toPx(density))
-                assertEquals(0.px, topRight.toPx(density))
-                assertEquals(0.px, bottomRight.toPx(density))
-                assertEquals(0.px, bottomLeft.toPx(density))
+                assertEquals(0f, topLeft.toPx(density))
+                assertEquals(0f, topRight.toPx(density))
+                assertEquals(0f, bottomRight.toPx(density))
+                assertEquals(0f, bottomLeft.toPx(density))
             }
         }
     }
@@ -126,7 +124,7 @@ class MaterialThemeTest {
                 assertEquals(colorResource(R.color.OliveDrab), color)
                 assertEquals(4.43f, offset.dx)
                 assertEquals(8.19f, offset.dy)
-                assertEquals(2.13.px, blurRadius)
+                assertEquals(2.13f, blurRadius)
             }
 
             typography.body1.run {
@@ -143,9 +141,9 @@ class MaterialThemeTest {
     }
 }
 
-private fun Dp.scaleToPx(density: Density): Px {
+private fun Dp.scaleToPx(density: Density): Float {
     val dp = this
-    return with(density) { dp.toPx() }
+    return with(density) { dp.toPx().value }
 }
 
 private fun assertTextUnitEquals(expected: TextUnit, actual: TextUnit, density: Density) {
