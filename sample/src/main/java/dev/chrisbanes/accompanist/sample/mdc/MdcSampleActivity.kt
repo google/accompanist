@@ -16,6 +16,7 @@
 
 package dev.chrisbanes.accompanist.sample.mdc
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
@@ -42,6 +43,7 @@ import androidx.ui.material.TopAppBar
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Favorite
 import androidx.ui.res.stringResource
+import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.dp
 import dev.chrisbanes.accompanist.mdctheme.MaterialThemeFromMdcTheme
 import dev.chrisbanes.accompanist.sample.R
@@ -153,5 +155,21 @@ fun MdcSample() {
                 )
             }
         }
+    }
+}
+
+@Preview
+@Composable
+fun PreviewLight() {
+    MaterialThemeFromMdcTheme {
+        MdcSample()
+    }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun PreviewDark() {
+    MaterialThemeFromMdcTheme {
+        MdcSample()
     }
 }
