@@ -20,6 +20,7 @@ import android.graphics.drawable.Drawable
 import androidx.compose.Composable
 import androidx.compose.getValue
 import androidx.compose.onCommit
+import androidx.compose.remember
 import androidx.compose.setValue
 import androidx.compose.stateFor
 import androidx.core.graphics.drawable.toBitmap
@@ -240,11 +241,17 @@ fun GetRequest.executeAsComposable(): RequestResult? {
     return result
 }
 
+@Composable
 internal fun defaultFailurePainterGetter(error: ErrorResult): Painter? {
-    return error.image?.let { ImagePainter(error.image) }
+    return error.image?.let { image ->
+        remember(image) { ImagePainter(image) }
+    }
 }
 
-internal fun defaultSuccessPainterGetter(result: SuccessResult): Painter = ImagePainter(result.image)
+@Composable
+internal fun defaultSuccessPainterGetter(result: SuccessResult): Painter {
+    return remember(result.image) { ImagePainter(result.image) }
+}
 
 internal val emptySuccessLambda: (RequestResult) -> Unit = {}
 

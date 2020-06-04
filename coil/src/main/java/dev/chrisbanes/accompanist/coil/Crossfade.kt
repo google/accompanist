@@ -30,7 +30,6 @@ import androidx.ui.animation.asDisposableClock
 import androidx.ui.core.Alignment
 import androidx.ui.core.AnimationClockAmbient
 import androidx.ui.core.ContentScale
-import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Image
 import androidx.ui.graphics.ImageAsset
@@ -59,25 +58,33 @@ private const val defaultTransitionDuration = 1000
  * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
  * background)
  */
+@Deprecated(
+    "Use CoilImage(getSuccessPainter = { crossfadePainter() })",
+    ReplaceWith(
+        """CoilImage(
+            data = data,
+            alignment = alignment,
+            contentScale = contentScale,
+            getSuccessPainter = { crossfadePainter(it, durationMs = crossfadeDuration) },
+            modifier = modifier
+         )""",
+        "dev.chrisbanes.accompanist.coil.crossfadePainter",
+        "dev.chrisbanes.accompanist.coil.CoilImage"
+    )
+)
 @Composable
 fun CoilImageWithCrossfade(
     data: Any,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     crossfadeDuration: Int = defaultTransitionDuration,
-    clock: AnimationClockObservable = AnimationClockAmbient.current.asDisposableClock(),
-    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda,
-    getFailurePainter: @Composable (ErrorResult) -> Painter? = { defaultFailurePainterGetter(it) },
     modifier: Modifier = Modifier
 ) {
-    CoilImageWithCrossfade(
-        request = GetRequest.Builder(ContextAmbient.current).data(data).build(),
+    CoilImage(
+        data = data,
         alignment = alignment,
         contentScale = contentScale,
-        crossfadeDuration = crossfadeDuration,
-        clock = clock,
-        getFailurePainter = getFailurePainter,
-        onRequestCompleted = onRequestCompleted,
+        getSuccessPainter = { crossfadePainter(it, durationMs = crossfadeDuration) },
         modifier = modifier
     )
 }
@@ -99,40 +106,72 @@ fun CoilImageWithCrossfade(
  * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
  * background)
  */
+@Deprecated(
+    "Use crossfadePainter() as a CoilImage(getSuccessPainter)",
+    ReplaceWith(
+        """CoilImage(
+            request = request,
+            alignment = alignment,
+            contentScale = contentScale,
+            getSuccessPainter = { crossfadePainter(it, durationMs = crossfadeDuration) },
+            modifier = modifier
+         )""",
+        "dev.chrisbanes.accompanist.coil.crossfadePainter",
+        "dev.chrisbanes.accompanist.coil.CoilImage"
+    )
+)
 @Composable
 fun CoilImageWithCrossfade(
     request: GetRequest,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     crossfadeDuration: Int = defaultTransitionDuration,
-    clock: AnimationClockObservable = AnimationClockAmbient.current.asDisposableClock(),
-    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda,
-    getFailurePainter: @Composable (ErrorResult) -> Painter? = { defaultFailurePainterGetter(it) },
     modifier: Modifier = Modifier
 ) {
     CoilImage(
         request = request,
         alignment = alignment,
         contentScale = contentScale,
-        getSuccessPainter = { result ->
-            when (result.source) {
-                DataSource.MEMORY, DataSource.MEMORY_CACHE -> {
-                    // If the image was loaded from memory, or the memory cache, we do not
-                    // need to run another animation on it
-                    defaultSuccessPainterGetter(result)
-                }
-                else -> {
-                    val observablePainter = remember {
-                        ObservableCrossfade(result, crossfadeDuration, clock).also { it.start() }
-                    }
-                    observablePainter.painter
-                }
-            }
-        },
-        getFailurePainter = getFailurePainter,
-        onRequestCompleted = onRequestCompleted,
+        getSuccessPainter = { crossfadePainter(it, durationMs = crossfadeDuration) },
         modifier = modifier
     )
+}
+
+/**
+ * A composable function which runs an fade animation on the given [result], returning the
+ * [Painter] which should be used to paint the [ImageAsset].
+ *
+ * The animation fades in the image's saturation, alpha and exposure. More information on the
+ * pattern can be seen [here](https://material.io/archive/guidelines/patterns/loading-images.html).
+ *
+ * @param result The result of a image fetch.
+ * @param skipFadeWhenLoadedFromMemory Whether the fade animation should be skipped when the result
+ * has been loaded from memory.
+ * @param durationMs The duration of the crossfade animation in milliseconds.
+ * @param clock The animation clock.
+ */
+@Composable
+fun crossfadePainter(
+    result: SuccessResult,
+    skipFadeWhenLoadedFromMemory: Boolean = true,
+    durationMs: Int = defaultTransitionDuration,
+    clock: AnimationClockObservable = AnimationClockAmbient.current.asDisposableClock()
+): Painter {
+    return if (skipFadeWhenLoadedFromMemory && result.isFromMemory) {
+        // If can skip the fade when loaded from memory, we do not need to run the animation on it
+        defaultSuccessPainterGetter(result)
+    } else {
+        val observablePainter = remember {
+            ObservableCrossfade(result, durationMs, clock).also { it.start() }
+        }
+        if (!observablePainter.isFinished) {
+            // If the animation is running, using it's painter
+            observablePainter.painter
+        } else {
+            // If the animation has finished, revert back to the default painter
+            defaultSuccessPainterGetter(result)
+        }
+    }
 }
 
 @Suppress("JoinDeclarationAndAssignment")
@@ -149,6 +188,9 @@ private class ObservableCrossfade(
             brightness = 0f
         )
     )
+
+    var isFinished by mutableStateOf(false)
+        private set
 
     private val animation: TransitionAnimation<CrossfadeTransition.State>
 
@@ -167,8 +209,7 @@ private class ObservableCrossfade(
 
         animation.onStateChangeFinished = {
             if (it == CrossfadeTransition.State.Loaded) {
-                // Once the transition has finished, we revert back to the default painter
-                painter = defaultSuccessPainterGetter(result)
+                isFinished = true
             }
         }
     }
@@ -227,3 +268,6 @@ private fun createCrossfadePainter(
     matrix.brightnessFraction = brightness
     return ColorMatrixImagePainter(image, colorMatrix = matrix)
 }
+
+private inline val SuccessResult.isFromMemory
+    get() = source == DataSource.MEMORY || source == DataSource.MEMORY_CACHE

@@ -36,7 +36,7 @@ import androidx.ui.unit.dp
 import coil.request.GetRequest
 import coil.transform.CircleCropTransformation
 import dev.chrisbanes.accompanist.coil.CoilImage
-import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
+import dev.chrisbanes.accompanist.coil.crossfadePainter
 import dev.chrisbanes.accompanist.mdctheme.MaterialThemeFromMdcTheme
 import dev.chrisbanes.accompanist.sample.R
 
@@ -84,18 +84,10 @@ fun CoilSample() {
                     modifier = Modifier.preferredSize(128.dp, 128.dp)
                 )
 
-                // CoilImageWithCrossfade with data parameter
-                CoilImageWithCrossfade(
+                // CoilImage with a crossfade painter
+                CoilImage(
                     data = "https://loremflickr.com/300/300",
-                    modifier = Modifier.preferredSize(128.dp, 128.dp)
-                )
-
-                // CoilImageWithCrossfade with GetRequest parameter
-                CoilImageWithCrossfade(
-                    request = GetRequest.Builder(ContextAmbient.current)
-                        .data("https://loremflickr.com/300/300")
-                        .transformations(CircleCropTransformation())
-                        .build(),
+                    getSuccessPainter = { crossfadePainter(it) },
                     modifier = Modifier.preferredSize(128.dp, 128.dp)
                 )
             }
