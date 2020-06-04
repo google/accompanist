@@ -40,7 +40,7 @@ import coil.request.GetRequest
 import coil.request.GetRequestBuilder
 import kotlin.math.roundToInt
 
-private const val defaultTransitionDuration = 1000
+private const val DefaultTransitionDuration = 1000
 
 /**
  * Creates a composable that will attempt to load the given [data] using [Coil], and then
@@ -63,15 +63,19 @@ fun CoilImageWithCrossfade(
     data: Any,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
-    crossfadeDuration: Int = defaultTransitionDuration,
-    modifier: Modifier = Modifier
+    crossfadeDuration: Int = DefaultTransitionDuration,
+    getFailurePainter: @Composable ((ErrorResult) -> Painter)? = null,
+    modifier: Modifier = Modifier,
+    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
     CoilImage(
         data = data,
         alignment = alignment,
         contentScale = contentScale,
         getSuccessPainter = { crossfadePainter(it, durationMs = crossfadeDuration) },
-        modifier = modifier
+        getFailurePainter = getFailurePainter,
+        modifier = modifier,
+        onRequestCompleted = onRequestCompleted
     )
 }
 
@@ -97,15 +101,19 @@ fun CoilImageWithCrossfade(
     request: GetRequest,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
-    crossfadeDuration: Int = defaultTransitionDuration,
-    modifier: Modifier = Modifier
+    crossfadeDuration: Int = DefaultTransitionDuration,
+    getFailurePainter: @Composable ((ErrorResult) -> Painter)? = null,
+    modifier: Modifier = Modifier,
+    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
     CoilImage(
         request = request,
         alignment = alignment,
         contentScale = contentScale,
         getSuccessPainter = { crossfadePainter(it, durationMs = crossfadeDuration) },
-        modifier = modifier
+        getFailurePainter = getFailurePainter,
+        modifier = modifier,
+        onRequestCompleted = onRequestCompleted
     )
 }
 
@@ -126,7 +134,7 @@ fun CoilImageWithCrossfade(
 private fun crossfadePainter(
     result: SuccessResult,
     skipFadeWhenLoadedFromMemory: Boolean = true,
-    durationMs: Int = defaultTransitionDuration,
+    durationMs: Int = DefaultTransitionDuration,
     clock: AnimationClockObservable = AnimationClockAmbient.current.asDisposableClock()
 ): Painter {
     return if (skipFadeWhenLoadedFromMemory && result.isFromMemory) {
