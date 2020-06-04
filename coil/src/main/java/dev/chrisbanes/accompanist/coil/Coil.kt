@@ -16,8 +16,6 @@
 
 package dev.chrisbanes.accompanist.coil
 
-import android.graphics.ColorMatrix
-import android.graphics.ColorMatrixColorFilter
 import android.graphics.drawable.Drawable
 import androidx.animation.FloatPropKey
 import androidx.animation.transitionDefinition
@@ -28,7 +26,6 @@ import androidx.compose.remember
 import androidx.compose.setValue
 import androidx.compose.stateFor
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.util.Pools
 import androidx.ui.animation.Transition
 import androidx.ui.core.Alignment
 import androidx.ui.core.Constraints
@@ -41,14 +38,9 @@ import androidx.ui.core.hasBoundedWidth
 import androidx.ui.core.hasFixedHeight
 import androidx.ui.core.hasFixedWidth
 import androidx.ui.foundation.Image
-import androidx.ui.geometry.Offset
-import androidx.ui.geometry.Size
 import androidx.ui.graphics.ColorFilter
 import androidx.ui.graphics.ImageAsset
-import androidx.ui.graphics.Paint
 import androidx.ui.graphics.asImageAsset
-import androidx.ui.graphics.drawscope.DrawScope
-import androidx.ui.graphics.drawscope.drawCanvas
 import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.graphics.painter.Painter
 import coil.Coil
@@ -234,6 +226,9 @@ fun CoilImage(
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
+    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda,
+    getSuccessPainter: (SuccessResult) -> Painter = ::defaultSuccessPainterGetter,
+    getFailurePainter: (ErrorResult) -> Painter? = ::defaultFailurePainterGetter,
     modifier: Modifier = Modifier
 ) {
     CoilImage(
@@ -241,6 +236,9 @@ fun CoilImage(
         alignment = alignment,
         contentScale = contentScale,
         colorFilter = colorFilter,
+        onRequestCompleted = onRequestCompleted,
+        getSuccessPainter = getSuccessPainter,
+        getFailurePainter = getFailurePainter,
         modifier = modifier
     )
 }
@@ -264,15 +262,17 @@ fun CoilImage(
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
+    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda,
+    getSuccessPainter: (SuccessResult) -> Painter = ::defaultSuccessPainterGetter,
+    getFailurePainter: (ErrorResult) -> Painter? = ::defaultFailurePainterGetter,
     modifier: Modifier = Modifier
 ) {
     WithConstraints(modifier) {
-        // Execute the request using executeAsComposable(), which guards the actual execution
-        // so that the request is only run if the request changes.
-
         val requestWidth = constraints.requestWidth.value
         val requestHeight = constraints.requestHeight.value
 
+        // Execute the request using executeAsComposable(), which guards the actual execution
+        // so that the request is only run if the request changes.
         val result = when {
             request.sizeResolver != null -> {
                 // If the request has a sizeResolver set, we just execute the request as-is
@@ -291,9 +291,22 @@ fun CoilImage(
             }
         }
 
-        val image = result?.image
-        if (image != null) {
-            val painter = remember(result) { ImagePainter(image) }
+        onCommit(result) {
+            if (result != null) {
+                onRequestCompleted(result)
+            }
+        }
+
+        val painter = when (result) {
+            is SuccessResult -> getSuccessPainter(result)
+            is ErrorResult -> getFailurePainter(result)
+            else -> null
+        }
+
+        // TODO: if we have an error but no painter, we should probably
+        //       log something
+
+        if (painter != null) {
             Image(
                 painter = painter,
                 contentScale = contentScale,
@@ -304,39 +317,6 @@ fun CoilImage(
         }
         // TODO: should expose something to do when the image is loading, etc
     }
-}
-
-/**
- * A pool which allows us to cache and re-use [Paint] instances, which are relatively expensive
- * to create.
- */
-private val paintPool = Pools.SimplePool<Paint>(2)
-
-/**
- * An [ImagePainter] which draws the image with the given Android framework
- * [android.graphics.ColorMatrix].
- */
-private class ColorMatrixImagePainter(
-    private val image: ImageAsset,
-    private val srcOffset: Offset = Offset.zero,
-    private val srcSize: Size = Size(image.width.toFloat(), image.height.toFloat()),
-    private val colorMatrix: ColorMatrix? = null
-) : Painter() {
-    override fun DrawScope.onDraw() {
-        val paint = paintPool.acquire() ?: Paint()
-        paint.asFrameworkPaint().colorFilter = colorMatrix?.let(::ColorMatrixColorFilter)
-
-        drawCanvas { canvas, _ ->
-            canvas.drawImageRect(image, srcOffset, srcSize, Offset.zero, size, paint)
-        }
-
-        paintPool.release(paint)
-    }
-
-    /**
-     * Return the dimension of the underlying [Image] as it's intrinsic width and height
-     */
-    override val intrinsicSize: Size get() = srcSize
 }
 
 /**
@@ -414,6 +394,14 @@ fun GetRequest.executeAsComposable(): RequestResult? {
 
     return result
 }
+
+private fun defaultFailurePainterGetter(error: ErrorResult): Painter? {
+    return error.image?.let { ImagePainter(error.image) }
+}
+
+private fun defaultSuccessPainterGetter(result: SuccessResult): Painter = ImagePainter(result.image)
+
+private val emptySuccessLambda: (RequestResult) -> Unit = {}
 
 private fun Drawable.toImageAsset(): ImageAsset {
     return toBitmap().asImageAsset()
