@@ -63,8 +63,14 @@ private val Constraints.requestHeight
  * given bounds defined by the width and height.
  * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
  * used if the bounds are a different size from the intrinsic size of the loaded [ImageAsset].
+ * @param colorFilter Optional colorFilter to apply for the [Painter] when it is rendered onscreen.
+ * @param getSuccessPainter Optional builder for the [Painter] to be used to draw the successful
+ * loading result. Passing in `null` will result in falling back to the default [Painter].
+ * @param getFailurePainter Optional builder for the [Painter] to be used to draw the failure
+ * loading result. Passing in `null` will result in falling back to the default [Painter].
  * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
  * background)
+ * @param onRequestCompleted Listener which will be called when the loading request has finished.
  */
 @Composable
 fun CoilImage(
@@ -72,10 +78,10 @@ fun CoilImage(
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
-    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda,
     getSuccessPainter: @Composable ((SuccessResult) -> Painter)? = null,
-    getFailurePainter: @Composable ((ErrorResult) -> Painter)? = null,
-    modifier: Modifier = Modifier
+    getFailurePainter: @Composable ((ErrorResult) -> Painter?)? = null,
+    modifier: Modifier = Modifier,
+    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
     CoilImage(
         request = GetRequest.Builder(ContextAmbient.current).data(data).build(),
@@ -99,8 +105,14 @@ fun CoilImage(
  * given bounds defined by the width and height.
  * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
  * used if the bounds are a different size from the intrinsic size of the loaded [ImageAsset].
+ * @param colorFilter Optional colorFilter to apply for the [Painter] when it is rendered onscreen.
+ * @param getSuccessPainter Optional builder for the [Painter] to be used to draw the successful
+ * loading result. Passing in `null` will result in falling back to the default [Painter].
+ * @param getFailurePainter Optional builder for the [Painter] to be used to draw the failure
+ * loading result. Passing in `null` will result in falling back to the default [Painter].
  * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
  * background)
+ * @param onRequestCompleted Listener which will be called when the loading request has finished.
  */
 @Composable
 fun CoilImage(
@@ -108,10 +120,10 @@ fun CoilImage(
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
-    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda,
     getSuccessPainter: @Composable ((SuccessResult) -> Painter)? = null,
-    getFailurePainter: @Composable ((ErrorResult) -> Painter)? = null,
-    modifier: Modifier = Modifier
+    getFailurePainter: @Composable ((ErrorResult) -> Painter?)? = null,
+    modifier: Modifier = Modifier,
+    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
     WithConstraints(modifier) {
         val requestWidth = constraints.requestWidth.value

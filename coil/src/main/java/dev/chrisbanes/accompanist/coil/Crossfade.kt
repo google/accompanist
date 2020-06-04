@@ -55,8 +55,11 @@ private const val DefaultTransitionDuration = 1000
  * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
  * used if the bounds are a different size from the intrinsic size of the loaded [ImageAsset].
  * @param crossfadeDuration The duration of the crossfade animation in milliseconds.
+ * @param getFailurePainter Optional builder for the [Painter] to be used to draw the failure
+ * loading result. Passing in `null` will result in falling back to the default [Painter].
  * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
  * background)
+ * @param onRequestCompleted Listener which will be called when the loading request has finished.
  */
 @Composable
 fun CoilImageWithCrossfade(
@@ -64,7 +67,7 @@ fun CoilImageWithCrossfade(
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     crossfadeDuration: Int = DefaultTransitionDuration,
-    getFailurePainter: @Composable ((ErrorResult) -> Painter)? = null,
+    getFailurePainter: @Composable ((ErrorResult) -> Painter?)? = null,
     modifier: Modifier = Modifier,
     onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
@@ -93,8 +96,11 @@ fun CoilImageWithCrossfade(
  * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
  * used if the bounds are a different size from the intrinsic size of the loaded [ImageAsset].
  * @param crossfadeDuration The duration of the crossfade animation in milliseconds.
+ * @param getFailurePainter Optional builder for the [Painter] to be used to draw the failure
+ * loading result. Passing in `null` will result in falling back to the default [Painter].
  * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
  * background)
+ * @param onRequestCompleted Listener which will be called when the loading request has finished.
  */
 @Composable
 fun CoilImageWithCrossfade(
@@ -102,7 +108,7 @@ fun CoilImageWithCrossfade(
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     crossfadeDuration: Int = DefaultTransitionDuration,
-    getFailurePainter: @Composable ((ErrorResult) -> Painter)? = null,
+    getFailurePainter: @Composable ((ErrorResult) -> Painter?)? = null,
     modifier: Modifier = Modifier,
     onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
