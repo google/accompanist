@@ -73,8 +73,8 @@ fun CoilImage(
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
     onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda,
-    getSuccessPainter: @Composable (SuccessResult) -> Painter = { defaultSuccessPainterGetter(it) },
-    getFailurePainter: @Composable (ErrorResult) -> Painter? = { defaultFailurePainterGetter(it) },
+    getSuccessPainter: @Composable ((SuccessResult) -> Painter)? = null,
+    getFailurePainter: @Composable ((ErrorResult) -> Painter)? = null,
     modifier: Modifier = Modifier
 ) {
     CoilImage(
@@ -109,8 +109,8 @@ fun CoilImage(
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
     onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda,
-    getSuccessPainter: @Composable (SuccessResult) -> Painter = { defaultSuccessPainterGetter(it) },
-    getFailurePainter: @Composable (ErrorResult) -> Painter? = { defaultFailurePainterGetter(it) },
+    getSuccessPainter: @Composable ((SuccessResult) -> Painter)? = null,
+    getFailurePainter: @Composable ((ErrorResult) -> Painter)? = null,
     modifier: Modifier = Modifier
 ) {
     WithConstraints(modifier) {
@@ -144,8 +144,20 @@ fun CoilImage(
         }
 
         val painter = when (result) {
-            is SuccessResult -> getSuccessPainter(result)
-            is ErrorResult -> getFailurePainter(result)
+            is SuccessResult -> {
+                if (getSuccessPainter != null) {
+                    getSuccessPainter(result)
+                } else {
+                    defaultSuccessPainterGetter(result)
+                }
+            }
+            is ErrorResult -> {
+                if (getFailurePainter != null) {
+                    getFailurePainter(result)
+                } else {
+                    defaultFailurePainterGetter(result)
+                }
+            }
             else -> null
         }
 

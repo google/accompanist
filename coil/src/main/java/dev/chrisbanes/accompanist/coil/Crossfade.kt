@@ -58,20 +58,6 @@ private const val defaultTransitionDuration = 1000
  * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
  * background)
  */
-@Deprecated(
-    "Use CoilImage(getSuccessPainter = { crossfadePainter() })",
-    ReplaceWith(
-        """CoilImage(
-            data = data,
-            alignment = alignment,
-            contentScale = contentScale,
-            getSuccessPainter = { crossfadePainter(it, durationMs = crossfadeDuration) },
-            modifier = modifier
-         )""",
-        "dev.chrisbanes.accompanist.coil.crossfadePainter",
-        "dev.chrisbanes.accompanist.coil.CoilImage"
-    )
-)
 @Composable
 fun CoilImageWithCrossfade(
     data: Any,
@@ -106,20 +92,6 @@ fun CoilImageWithCrossfade(
  * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
  * background)
  */
-@Deprecated(
-    "Use crossfadePainter() as a CoilImage(getSuccessPainter)",
-    ReplaceWith(
-        """CoilImage(
-            request = request,
-            alignment = alignment,
-            contentScale = contentScale,
-            getSuccessPainter = { crossfadePainter(it, durationMs = crossfadeDuration) },
-            modifier = modifier
-         )""",
-        "dev.chrisbanes.accompanist.coil.crossfadePainter",
-        "dev.chrisbanes.accompanist.coil.CoilImage"
-    )
-)
 @Composable
 fun CoilImageWithCrossfade(
     request: GetRequest,
@@ -151,7 +123,7 @@ fun CoilImageWithCrossfade(
  * @param clock The animation clock.
  */
 @Composable
-fun crossfadePainter(
+private fun crossfadePainter(
     result: SuccessResult,
     skipFadeWhenLoadedFromMemory: Boolean = true,
     durationMs: Int = defaultTransitionDuration,
