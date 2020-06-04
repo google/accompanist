@@ -40,6 +40,7 @@ import androidx.ui.core.hasBoundedHeight
 import androidx.ui.core.hasBoundedWidth
 import androidx.ui.core.hasFixedHeight
 import androidx.ui.core.hasFixedWidth
+import androidx.ui.foundation.Box
 import androidx.ui.foundation.Image
 import androidx.ui.geometry.Offset
 import androidx.ui.geometry.Size
@@ -90,6 +91,7 @@ private const val defaultTransitionDuration = 1000
  * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
  * used if the bounds are a different size from the intrinsic size of the loaded [ImageAsset].
  * @param crossfadeDuration The duration of the crossfade animation in milliseconds.
+ * @param loading Content to be displayed when the request is in progress.
  * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
  * background)
  */
@@ -99,6 +101,7 @@ fun CoilImageWithCrossfade(
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     crossfadeDuration: Int = defaultTransitionDuration,
+    loading: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     CoilImageWithCrossfade(
@@ -106,6 +109,7 @@ fun CoilImageWithCrossfade(
         alignment = alignment,
         contentScale = contentScale,
         crossfadeDuration = crossfadeDuration,
+        loading = loading,
         modifier = modifier
     )
 }
@@ -124,6 +128,7 @@ fun CoilImageWithCrossfade(
  * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
  * used if the bounds are a different size from the intrinsic size of the loaded [ImageAsset].
  * @param crossfadeDuration The duration of the crossfade animation in milliseconds.
+ * @param loading Content to be displayed when the request is in progress.
  * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
  * background)
  */
@@ -133,6 +138,7 @@ fun CoilImageWithCrossfade(
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     crossfadeDuration: Int = defaultTransitionDuration,
+    loading: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     WithConstraints(modifier) {
@@ -194,24 +200,32 @@ fun CoilImageWithCrossfade(
             imgLoadState = ImageLoadState.Loaded
         }
 
-        val image = result?.image
-
-        Transition(definition = transitionDef, toState = imgLoadState) { transitionState ->
-            if (image != null) {
-                // Create and update the ImageLoadingColorMatrix from the transition state
-                val matrix = remember(image) { ImageLoadingColorMatrix() }
-                matrix.saturationFraction = transitionState[saturation]
-                matrix.alphaFraction = transitionState[alpha]
-                matrix.brightnessFraction = transitionState[brightness]
-
-                Image(
-                    painter = ColorMatrixImagePainter(image, colorMatrix = matrix),
-                    contentScale = contentScale,
-                    alignment = alignment,
-                    modifier = modifier
-                )
+        if (result == null) {
+            Box(modifier) {
+                if (loading != null) loading()
             }
-            // TODO: should expose something to do when the image is loading, etc
+        } else {
+            val image = result.image
+
+            Transition(
+                definition = transitionDef,
+                toState = imgLoadState
+            ) { transitionState ->
+                if (image != null) {
+                    // Create and update the ImageLoadingColorMatrix from the transition state
+                    val matrix = remember(image) { ImageLoadingColorMatrix() }
+                    matrix.saturationFraction = transitionState[saturation]
+                    matrix.alphaFraction = transitionState[alpha]
+                    matrix.brightnessFraction = transitionState[brightness]
+
+                    Image(
+                        painter = ColorMatrixImagePainter(image, colorMatrix = matrix),
+                        contentScale = contentScale,
+                        alignment = alignment,
+                        modifier = modifier
+                    )
+                }
+            }
         }
     }
 }
@@ -225,6 +239,7 @@ fun CoilImageWithCrossfade(
  * given bounds defined by the width and height.
  * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
  * used if the bounds are a different size from the intrinsic size of the loaded [ImageAsset].
+ * @param loading Content to be displayed when the request is in progress.
  * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
  * background)
  */
@@ -234,6 +249,7 @@ fun CoilImage(
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
+    loading: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     CoilImage(
@@ -241,6 +257,7 @@ fun CoilImage(
         alignment = alignment,
         contentScale = contentScale,
         colorFilter = colorFilter,
+        loading = loading,
         modifier = modifier
     )
 }
@@ -255,6 +272,7 @@ fun CoilImage(
  * given bounds defined by the width and height.
  * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
  * used if the bounds are a different size from the intrinsic size of the loaded [ImageAsset].
+ * @param loading Content to be displayed when the request is in progress.
  * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
  * background)
  */
@@ -264,6 +282,7 @@ fun CoilImage(
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
+    loading: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     WithConstraints(modifier) {
@@ -291,18 +310,24 @@ fun CoilImage(
             }
         }
 
-        val image = result?.image
-        if (image != null) {
-            val painter = remember(result) { ImagePainter(image) }
-            Image(
-                painter = painter,
-                contentScale = contentScale,
-                alignment = alignment,
-                colorFilter = colorFilter,
-                modifier = modifier
-            )
+        if (result == null) {
+            Box(modifier) {
+                if (loading != null) loading()
+            }
+        } else {
+            val image = result.image
+
+            if (image != null) {
+                val painter = remember(result) { ImagePainter(image) }
+                Image(
+                    painter = painter,
+                    contentScale = contentScale,
+                    alignment = alignment,
+                    colorFilter = colorFilter,
+                    modifier = modifier
+                )
+            }
         }
-        // TODO: should expose something to do when the image is loading, etc
     }
 }
 
