@@ -75,6 +75,7 @@ dependencies {
     implementation Libs.Kotlin.stdlib
 
     androidTestImplementation Libs.junit
+    androidTestImplementation Libs.truth
     androidTestImplementation Libs.AndroidX.UI.test
     androidTestImplementation Libs.AndroidX.UI.core
     androidTestImplementation Libs.AndroidX.Test.rules

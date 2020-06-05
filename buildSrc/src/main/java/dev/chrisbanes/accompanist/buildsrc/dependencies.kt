@@ -70,4 +70,6 @@ object Libs {
     const val coil = "io.coil-kt:coil:0.10.1"
 
     const val mdc = "com.google.android.material:material:1.1.0"
+
+    const val truth = "com.google.truth:truth:1.0.1"
 }
