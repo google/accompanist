@@ -16,8 +16,6 @@
 
 package dev.chrisbanes.accompanist.coil
 
-// import kotlinx.coroutines.ExperimentalCoroutinesApi
-// import kotlinx.coroutines.test.TestCoroutineDispatcher
 import android.content.ContentResolver
 import android.net.Uri
 import androidx.annotation.RawRes
