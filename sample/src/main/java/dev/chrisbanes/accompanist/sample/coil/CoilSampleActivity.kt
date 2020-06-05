@@ -21,14 +21,18 @@ import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.Composable
 import androidx.compose.Recomposer
+import androidx.ui.core.Alignment
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
 import androidx.ui.core.setContent
 import androidx.ui.foundation.Text
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.FlowRow
+import androidx.ui.layout.Stack
+import androidx.ui.layout.fillMaxSize
 import androidx.ui.layout.padding
 import androidx.ui.layout.preferredSize
+import androidx.ui.material.CircularProgressIndicator
 import androidx.ui.material.Scaffold
 import androidx.ui.material.TopAppBar
 import androidx.ui.res.stringResource
@@ -84,6 +88,17 @@ fun CoilSample() {
                     modifier = Modifier.preferredSize(128.dp, 128.dp)
                 )
 
+                // CoilImage with loading slot
+                CoilImage(
+                    data = "https://loremflickr.com/300/300",
+                    loading = {
+                        Stack(Modifier.fillMaxSize()) {
+                            CircularProgressIndicator(Modifier.gravity(Alignment.Center))
+                        }
+                    },
+                    modifier = Modifier.preferredSize(128.dp, 128.dp)
+                )
+
                 // CoilImageWithCrossfade with data parameter
                 CoilImageWithCrossfade(
                     data = "https://loremflickr.com/300/300",
@@ -96,6 +111,17 @@ fun CoilSample() {
                         .data("https://loremflickr.com/300/300")
                         .transformations(CircleCropTransformation())
                         .build(),
+                    modifier = Modifier.preferredSize(128.dp, 128.dp)
+                )
+
+                // CoilImageWithCrossfade with loading slot
+                CoilImageWithCrossfade(
+                    data = "https://loremflickr.com/300/300",
+                    loading = {
+                        Stack(Modifier.fillMaxSize()) {
+                            CircularProgressIndicator(Modifier.gravity(Alignment.Center))
+                        }
+                    },
                     modifier = Modifier.preferredSize(128.dp, 128.dp)
                 )
             }

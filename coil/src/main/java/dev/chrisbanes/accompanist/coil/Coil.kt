@@ -34,6 +34,7 @@ import androidx.ui.core.hasBoundedHeight
 import androidx.ui.core.hasBoundedWidth
 import androidx.ui.core.hasFixedHeight
 import androidx.ui.core.hasFixedWidth
+import androidx.ui.foundation.Box
 import androidx.ui.foundation.Image
 import androidx.ui.graphics.ColorFilter
 import androidx.ui.graphics.ImageAsset
@@ -68,6 +69,7 @@ private val Constraints.requestHeight
  * loading result. Passing in `null` will result in falling back to the default [Painter].
  * @param getFailurePainter Optional builder for the [Painter] to be used to draw the failure
  * loading result. Passing in `null` will result in falling back to the default [Painter].
+ * @param loading Content to be displayed when the request is in progress.
  * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
  * background)
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
@@ -80,6 +82,7 @@ fun CoilImage(
     colorFilter: ColorFilter? = null,
     getSuccessPainter: @Composable ((SuccessResult) -> Painter)? = null,
     getFailurePainter: @Composable ((ErrorResult) -> Painter?)? = null,
+    loading: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier,
     onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
@@ -91,6 +94,7 @@ fun CoilImage(
         onRequestCompleted = onRequestCompleted,
         getSuccessPainter = getSuccessPainter,
         getFailurePainter = getFailurePainter,
+        loading = loading,
         modifier = modifier
     )
 }
@@ -110,6 +114,7 @@ fun CoilImage(
  * loading result. Passing in `null` will result in falling back to the default [Painter].
  * @param getFailurePainter Optional builder for the [Painter] to be used to draw the failure
  * loading result. Passing in `null` will result in falling back to the default [Painter].
+ * @param loading Content to be displayed when the request is in progress.
  * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
  * background)
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
@@ -122,6 +127,7 @@ fun CoilImage(
     colorFilter: ColorFilter? = null,
     getSuccessPainter: @Composable ((SuccessResult) -> Painter)? = null,
     getFailurePainter: @Composable ((ErrorResult) -> Painter?)? = null,
+    loading: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier,
     onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
@@ -173,10 +179,11 @@ fun CoilImage(
             else -> null
         }
 
-        // TODO: if we have an error but no painter, we should probably
-        // log something
-
-        if (painter != null) {
+        if (result == null) {
+            Box(modifier) {
+                if (loading != null) loading()
+            }
+        } else if (painter != null) {
             Image(
                 painter = painter,
                 contentScale = contentScale,
@@ -185,7 +192,6 @@ fun CoilImage(
                 modifier = modifier
             )
         }
-        // TODO: should expose something to do when the image is loading, etc
     }
 }
 
