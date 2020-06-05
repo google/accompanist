@@ -69,6 +69,9 @@ subprojects {
             // Set JVM target to 1.8
             jvmTarget = "1.8"
 
+            // Allow use of @OptIn
+            freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+
             // Compose is now based on the Kotlin 1.4 compiler, but we need to use the 1.3.x Kotlin
             // library due to library compatibility, etc. Therefore we explicit set our apiVersion
             // to 1.3 to fix any warnings. Binary dependencies (such as Compose) can continue to

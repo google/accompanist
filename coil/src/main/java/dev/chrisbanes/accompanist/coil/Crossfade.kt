@@ -68,6 +68,7 @@ fun CoilImageWithCrossfade(
     contentScale: ContentScale = ContentScale.Fit,
     crossfadeDuration: Int = DefaultTransitionDuration,
     getFailurePainter: @Composable ((ErrorResult) -> Painter?)? = null,
+    loading: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier,
     onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
@@ -77,6 +78,7 @@ fun CoilImageWithCrossfade(
         contentScale = contentScale,
         getSuccessPainter = { crossfadePainter(it, durationMs = crossfadeDuration) },
         getFailurePainter = getFailurePainter,
+        loading = loading,
         modifier = modifier,
         onRequestCompleted = onRequestCompleted
     )
@@ -109,6 +111,7 @@ fun CoilImageWithCrossfade(
     contentScale: ContentScale = ContentScale.Fit,
     crossfadeDuration: Int = DefaultTransitionDuration,
     getFailurePainter: @Composable ((ErrorResult) -> Painter?)? = null,
+    loading: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier,
     onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
@@ -118,6 +121,7 @@ fun CoilImageWithCrossfade(
         contentScale = contentScale,
         getSuccessPainter = { crossfadePainter(it, durationMs = crossfadeDuration) },
         getFailurePainter = getFailurePainter,
+        loading = loading,
         modifier = modifier,
         onRequestCompleted = onRequestCompleted
     )

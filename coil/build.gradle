@@ -56,6 +56,11 @@ android {
         // until we upgrade to an AGP version with a fix
         e.remove("/META-INF/*.kotlin_module")
         excludes = e
+
+        // Some of the Coil META-INF files conflict with coroutines-test. Exclude them to enable
+        // our test APK to build (has no effect on our AARs)
+        excludes += "/META-INF/AL2.0"
+        excludes += "/META-INF/LGPL2.1"
     }
 
     testOptions {
@@ -76,6 +81,9 @@ dependencies {
 
     androidTestImplementation Libs.junit
     androidTestImplementation Libs.truth
+
+    androidTestImplementation Libs.Coroutines.test
+
     androidTestImplementation Libs.AndroidX.UI.test
     androidTestImplementation Libs.AndroidX.UI.core
     androidTestImplementation Libs.AndroidX.Test.rules

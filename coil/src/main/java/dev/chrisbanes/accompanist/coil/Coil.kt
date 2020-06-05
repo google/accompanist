@@ -179,10 +179,8 @@ fun CoilImage(
             else -> null
         }
 
-        if (result == null) {
-            Box(modifier) {
-                if (loading != null) loading()
-            }
+        if (result == null && loading != null) {
+            Box(modifier, children = loading)
         } else if (painter != null) {
             Image(
                 painter = painter,
