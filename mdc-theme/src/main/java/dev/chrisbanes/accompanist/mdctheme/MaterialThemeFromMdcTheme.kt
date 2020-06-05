@@ -21,7 +21,6 @@ import android.content.res.Resources
 import android.content.res.TypedArray
 import android.graphics.Typeface
 import android.os.Build
-import android.util.Log
 import android.util.TypedValue
 import androidx.annotation.StyleRes
 import androidx.compose.Composable
@@ -594,17 +593,27 @@ private inline val TypedValue.complexUnitCompat
  * The cost of this reflective invoke is a lot cheaper than the full theme read which currently
  * happens on every re-composition.
  */
-@get:Suppress("PrivateApi")
 private inline val Resources.Theme.key: Any?
-    get() = try {
-        sThemeGetKeyMethod.invoke(this)
-    } catch (e: ReflectiveOperationException) {
-        Log.i("MaterialThemeFromMdc", "Failed to retrieve theme key", e)
+    get() {
+        if (!sThemeGetKeyMethodFetched) {
+            try {
+                @Suppress("PrivateApi")
+                sThemeGetKeyMethod = Resources.Theme::class.java.getDeclaredMethod("getKey")
+                    .apply { isAccessible = true }
+            } catch (e: ReflectiveOperationException) {
+                // Failed to retrieve Theme.getKey method
+            }
+            sThemeGetKeyMethodFetched = true
+        }
+        if (sThemeGetKeyMethod != null) {
+            return try {
+                sThemeGetKeyMethod?.invoke(this)
+            } catch (e: ReflectiveOperationException) {
+                // Failed to invoke Theme.getKey()
+            }
+        }
+        return null
     }
 
-@delegate:Suppress("PrivateApi")
-private val sThemeGetKeyMethod: Method by lazy {
-    Resources.Theme::class.java.getDeclaredMethod("getKey").apply {
-        isAccessible = true
-    }
-}
+private var sThemeGetKeyMethodFetched = false
+private var sThemeGetKeyMethod: Method? = null
