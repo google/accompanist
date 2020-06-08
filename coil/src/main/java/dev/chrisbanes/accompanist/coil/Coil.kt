@@ -60,6 +60,7 @@ private val Constraints.requestHeight
  * display the result in an [Image].
  *
  * @param data The data to load. See [GetRequestBuilder.data] for the types allowed.
+ * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
  * @param alignment Optional alignment parameter used to place the loaded [ImageAsset] in the
  * given bounds defined by the width and height.
  * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
@@ -70,24 +71,28 @@ private val Constraints.requestHeight
  * @param getFailurePainter Optional builder for the [Painter] to be used to draw the failure
  * loading result. Passing in `null` will result in falling back to the default [Painter].
  * @param loading Content to be displayed when the request is in progress.
- * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
- * background)
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
  */
 @Composable
 fun CoilImage(
     data: Any,
+    modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
     getSuccessPainter: @Composable ((SuccessResult) -> Painter)? = null,
     getFailurePainter: @Composable ((ErrorResult) -> Painter?)? = null,
     loading: @Composable (() -> Unit)? = null,
-    modifier: Modifier = Modifier,
     onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
     CoilImage(
-        request = GetRequest.Builder(ContextAmbient.current).data(data).build(),
+        request = when (data) {
+            // If the developer is accidentally using the wrong function (data vs request), just
+            // pass the request through
+            is GetRequest -> data
+            // Otherwise we construct a GetRequest using the data parameter
+            else -> GetRequest.Builder(ContextAmbient.current).data(data).build()
+        },
         alignment = alignment,
         contentScale = contentScale,
         colorFilter = colorFilter,
@@ -105,6 +110,7 @@ fun CoilImage(
  *
  * @param request The request to execute. If the request does not have a [GetRequest.sizeResolver]
  * set, one will be set on the request using the layout constraints.
+ * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
  * @param alignment Optional alignment parameter used to place the loaded [ImageAsset] in the
  * given bounds defined by the width and height.
  * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
@@ -115,20 +121,18 @@ fun CoilImage(
  * @param getFailurePainter Optional builder for the [Painter] to be used to draw the failure
  * loading result. Passing in `null` will result in falling back to the default [Painter].
  * @param loading Content to be displayed when the request is in progress.
- * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
- * background)
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
  */
 @Composable
 fun CoilImage(
     request: GetRequest,
+    modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
     getSuccessPainter: @Composable ((SuccessResult) -> Painter)? = null,
     getFailurePainter: @Composable ((ErrorResult) -> Painter?)? = null,
     loading: @Composable (() -> Unit)? = null,
-    modifier: Modifier = Modifier,
     onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
     WithConstraints(modifier) {

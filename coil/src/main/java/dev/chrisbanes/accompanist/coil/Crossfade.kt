@@ -16,23 +16,30 @@
 
 package dev.chrisbanes.accompanist.coil
 
+import android.graphics.ColorMatrixColorFilter
 import androidx.animation.AnimationClockObservable
 import androidx.animation.FloatPropKey
-import androidx.animation.TransitionAnimation
 import androidx.animation.createAnimation
 import androidx.animation.transitionDefinition
 import androidx.compose.Composable
+import androidx.compose.NeverEqual
 import androidx.compose.getValue
 import androidx.compose.mutableStateOf
 import androidx.compose.remember
 import androidx.compose.setValue
+import androidx.core.util.Pools
 import androidx.ui.animation.asDisposableClock
 import androidx.ui.core.Alignment
 import androidx.ui.core.AnimationClockAmbient
 import androidx.ui.core.ContentScale
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Image
+import androidx.ui.geometry.Offset
+import androidx.ui.geometry.Size
 import androidx.ui.graphics.ImageAsset
+import androidx.ui.graphics.Paint
+import androidx.ui.graphics.drawscope.DrawScope
+import androidx.ui.graphics.drawscope.drawCanvas
 import androidx.ui.graphics.painter.Painter
 import coil.Coil
 import coil.decode.DataSource
@@ -50,6 +57,7 @@ private const val DefaultTransitionDuration = 1000
  * pattern can be seen [here](https://material.io/archive/guidelines/patterns/loading-images.html).
  *
  * @param data The data to load. See [GetRequestBuilder.data] for the types allowed.
+ * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
  * @param alignment Optional alignment parameter used to place the loaded [ImageAsset] in the
  * given bounds defined by the width and height.
  * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
@@ -57,19 +65,17 @@ private const val DefaultTransitionDuration = 1000
  * @param crossfadeDuration The duration of the crossfade animation in milliseconds.
  * @param getFailurePainter Optional builder for the [Painter] to be used to draw the failure
  * loading result. Passing in `null` will result in falling back to the default [Painter].
- * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
- * background)
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
  */
 @Composable
 fun CoilImageWithCrossfade(
     data: Any,
+    modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     crossfadeDuration: Int = DefaultTransitionDuration,
     getFailurePainter: @Composable ((ErrorResult) -> Painter?)? = null,
     loading: @Composable (() -> Unit)? = null,
-    modifier: Modifier = Modifier,
     onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
     CoilImage(
@@ -93,6 +99,7 @@ fun CoilImageWithCrossfade(
  *
  * @param request The request to execute. If the request does not have a [GetRequest.sizeResolver]
  * set, one will be set on the request using the layout constraints.
+ * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
  * @param alignment Optional alignment parameter used to place the loaded [ImageAsset] in the
  * given bounds defined by the width and height.
  * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
@@ -100,19 +107,17 @@ fun CoilImageWithCrossfade(
  * @param crossfadeDuration The duration of the crossfade animation in milliseconds.
  * @param getFailurePainter Optional builder for the [Painter] to be used to draw the failure
  * loading result. Passing in `null` will result in falling back to the default [Painter].
- * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
- * background)
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
  */
 @Composable
 fun CoilImageWithCrossfade(
     request: GetRequest,
+    modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     crossfadeDuration: Int = DefaultTransitionDuration,
     getFailurePainter: @Composable ((ErrorResult) -> Painter?)? = null,
     loading: @Composable (() -> Unit)? = null,
-    modifier: Modifier = Modifier,
     onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
     CoilImage(
@@ -147,62 +152,73 @@ private fun crossfadePainter(
     durationMs: Int = DefaultTransitionDuration,
     clock: AnimationClockObservable = AnimationClockAmbient.current.asDisposableClock()
 ): Painter {
-    return if (skipFadeWhenLoadedFromMemory && result.isFromMemory) {
-        // If can skip the fade when loaded from memory, we do not need to run the animation on it
+    return if (skipFadeWhenLoadedFromMemory && result.isFromMemory()) {
+        // If can skip the fade when loaded from memory, we do not need to run an animation on it
         defaultSuccessPainterGetter(result)
     } else {
         val observablePainter = remember {
-            ObservableCrossfade(result, durationMs, clock).also { it.start() }
+            ObservableCrossfadeImagePainter(result.image, durationMs, clock).also { it.start() }
         }
-        if (!observablePainter.isFinished) {
-            // If the animation is running, using it's painter
-            observablePainter.painter
-        } else {
+        when {
+            // If the animation is running, return it as the painter
+            !observablePainter.isFinished -> observablePainter
             // If the animation has finished, revert back to the default painter
-            defaultSuccessPainterGetter(result)
+            else -> defaultSuccessPainterGetter(result)
         }
     }
 }
 
-@Suppress("JoinDeclarationAndAssignment")
-private class ObservableCrossfade(
-    result: SuccessResult,
-    crossfadeDuration: Int,
-    clock: AnimationClockObservable
-) {
-    var painter: Painter by mutableStateOf(
-        createCrossfadePainter(
-            image = result.image,
-            saturation = 0f,
-            alpha = 0f,
-            brightness = 0f
-        )
-    )
-
+private class ObservableCrossfadeImagePainter(
+    private val image: ImageAsset,
+    duration: Int,
+    clock: AnimationClockObservable,
+    private val srcOffset: Offset = Offset.zero,
+    private val srcSize: Size = Size(image.width.toFloat(), image.height.toFloat())
+) : Painter() {
     var isFinished by mutableStateOf(false)
         private set
 
-    private val animation: TransitionAnimation<CrossfadeTransition.State>
+    // Initial matrix is completely transparent. We use the NeverEqual equivalence check since this
+    // is a mutable entity.
+    private var matrix by mutableStateOf(ImageLoadingColorMatrix(0f, 0f, 0f), NeverEqual)
+
+    private val animation = CrossfadeTransition.definition(duration).createAnimation(clock)
 
     init {
-        animation = CrossfadeTransition.definition(crossfadeDuration).createAnimation(clock)
-
         animation.onUpdate = {
-            // Animation tick, so update the painter using the current transition property values
-            painter = createCrossfadePainter(
-                image = result.image,
-                saturation = animation[CrossfadeTransition.Saturation],
-                alpha = animation[CrossfadeTransition.Alpha],
-                brightness = animation[CrossfadeTransition.Brightness]
-            )
+            // Update the matrix state value with the new animated properties. This works since
+            // we're using the NeverEqual equivalence check
+            matrix = matrix.apply {
+                saturationFraction = animation[CrossfadeTransition.Saturation]
+                alphaFraction = animation[CrossfadeTransition.Alpha]
+                brightnessFraction = animation[CrossfadeTransition.Brightness]
+            }
         }
 
-        animation.onStateChangeFinished = {
-            if (it == CrossfadeTransition.State.Loaded) {
+        animation.onStateChangeFinished = { state ->
+            if (state == CrossfadeTransition.State.Loaded) {
                 isFinished = true
             }
         }
     }
+
+    override fun DrawScope.onDraw() {
+        val paint = paintPool.acquire() ?: Paint()
+        paint.asFrameworkPaint().colorFilter = ColorMatrixColorFilter(matrix)
+
+        drawCanvas { canvas, _ ->
+            canvas.drawImageRect(image, srcOffset, srcSize, Offset.zero, size, paint)
+        }
+
+        // Reset the Paint instance and release it back to the pool
+        paint.asFrameworkPaint().reset()
+        paintPool.release(paint)
+    }
+
+    /**
+     * Return the dimension of the underlying [Image] as its intrinsic width and height
+     */
+    override val intrinsicSize: Size get() = srcSize
 
     fun start() {
         // Start the animation by transitioning to the Loaded state
@@ -210,14 +226,20 @@ private class ObservableCrossfade(
     }
 }
 
+/**
+ * A pool which allows us to cache and re-use [Paint] instances, which are relatively expensive
+ * to create.
+ */
+private val paintPool = Pools.SimplePool<Paint>(2)
+
 private object CrossfadeTransition {
-    internal enum class State {
+    enum class State {
         Loaded, Empty
     }
 
-    internal val Alpha = FloatPropKey()
-    internal val Brightness = FloatPropKey()
-    internal val Saturation = FloatPropKey()
+    val Alpha = FloatPropKey()
+    val Brightness = FloatPropKey()
+    val Saturation = FloatPropKey()
 
     fun definition(durationMs: Int) = transitionDefinition {
         state(State.Empty) {
@@ -233,9 +255,11 @@ private object CrossfadeTransition {
 
         transition {
             Alpha using tween<Float> {
+                // Alpha animation runs over the first 50%
                 duration = durationMs / 2
             }
             Brightness using tween<Float> {
+                // Brightness animation runs over the first 75%
                 duration = (durationMs * 0.75f).roundToInt()
             }
             Saturation using tween<Float> {
@@ -245,19 +269,6 @@ private object CrossfadeTransition {
     }
 }
 
-private fun createCrossfadePainter(
-    image: ImageAsset,
-    saturation: Float = 1f,
-    alpha: Float = 1f,
-    brightness: Float = 1f
-): Painter {
-    // Create and update the ImageLoadingColorMatrix from the transition state
-    val matrix = ImageLoadingColorMatrix()
-    matrix.saturationFraction = saturation
-    matrix.alphaFraction = alpha
-    matrix.brightnessFraction = brightness
-    return ColorMatrixImagePainter(image, colorMatrix = matrix)
+private fun SuccessResult.isFromMemory(): Boolean {
+    return source == DataSource.MEMORY || source == DataSource.MEMORY_CACHE
 }
-
-private inline val SuccessResult.isFromMemory
-    get() = source == DataSource.MEMORY || source == DataSource.MEMORY_CACHE
