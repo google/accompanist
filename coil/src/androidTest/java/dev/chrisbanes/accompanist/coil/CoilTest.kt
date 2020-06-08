@@ -203,7 +203,7 @@ class CoilTest {
                 CoilImage(
                     data = "url_which_will_never_work",
                     getFailurePainter = {
-                        // Return a custom success painter which just draws green
+                        // Return a custom failure painter which just draws red
                         ColorPainter(Color.Red)
                     },
                     modifier = Modifier.preferredSize(128.dp, 128.dp),
