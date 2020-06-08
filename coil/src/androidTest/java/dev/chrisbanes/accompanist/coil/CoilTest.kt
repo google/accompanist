@@ -115,7 +115,7 @@ class CoilTest {
                 CoilImage(
                     data = rawUri(R.raw.sample),
                     getSuccessPainter = {
-                        // Return a custom success painter which just draws green
+                        // Return a custom success painter which just draws cyan
                         ColorPainter(Color.Cyan)
                     },
                     modifier = Modifier.preferredSize(128.dp, 128.dp),
@@ -151,7 +151,7 @@ class CoilTest {
         // Wait for the onRequestCompleted to release the latch
         latch.await(5, TimeUnit.SECONDS)
 
-        // Assert that the whole layout is drawn red
+        // Assert that the layout is in the tree and has the correct size
         findByTag(CoilTestTags.Image)
             .assertIsDisplayed()
             .assertSize(composeTestRule.density, 128.dp, 128.dp)
