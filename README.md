@@ -46,6 +46,36 @@ dependencies {
 
 </details>
 
+### Using AndroidX Snapshots
+
+If you're using [`SNAPSHOT`](https://androidx.dev) versions of the `androidx.ui`
+or `androidx.compose` libraries, you might run into issues with the Accompanist dependency forcing an older version of those libraries. See below for how to force your chosen version.
+
+<details><summary>Force version instructions</summary>
+
+This is because versioned releases of Accompanist will only depend on tagged versions of libraries (i.e. `v0.1.0-dev12`). Since you're using a newer `v0.x.x-SNAPSHOT`, you need to tell Gradle to force those dependency versions:
+
+``` groovy
+val composeVersion = 'v0.1.0-SNAPSHOT'
+
+configurations.all {
+    resolutionStrategy.eachDependency { details ->
+        switch (details.requested.group) {
+            case 'androidx.ui':
+                details.useVersion composeVersion
+                break
+            case 'androidx.compose':
+                details.useVersion composeVersion
+                break
+        }
+    }
+}
+```
+
+You can put that within a `subprojects { ... }` block in your root `build.gradle`.
+
+</details>
+
 ---
 
 #### Why the name?
