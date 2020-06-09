@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright 2020 The Android Open Source Project
   ~
@@ -14,17 +15,11 @@
   ~ limitations under the License.
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="dev.chrisbanes.accompanist.coil.test">
+<resources>
 
-    <uses-sdk android:targetSdkVersion="29" />
+    <style name="Theme.CoilTest" parent="@android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
 
-    <application>
-        <activity
-            android:name="androidx.activity.ComponentActivity"
-            android:theme="@style/Theme.CoilTest"
-            tools:replace="android:theme" />
-    </application>
-
-</manifest>
+</resources>

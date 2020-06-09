@@ -23,7 +23,11 @@ import android.graphics.ColorMatrix
  *
  * @see https://material.io/archive/guidelines/patterns/loading-images.html
  */
-class ImageLoadingColorMatrix : ColorMatrix() {
+class ImageLoadingColorMatrix(
+    saturation: Float = 1f,
+    alpha: Float = 1f,
+    brightness: Float = 1f
+) : ColorMatrix() {
     private val elements = FloatArray(20)
 
     var saturationFraction = 1f
@@ -78,4 +82,10 @@ class ImageLoadingColorMatrix : ColorMatrix() {
             }
             field = value
         }
+
+    init {
+        saturationFraction = saturation
+        alphaFraction = alpha
+        brightnessFraction = brightness
+    }
 }

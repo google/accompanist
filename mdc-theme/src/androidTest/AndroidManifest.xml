@@ -17,6 +17,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="dev.chrisbanes.accompanist.mdctheme">
 
+    <uses-sdk android:targetSdkVersion="29" />
+
     <application>
 
         <activity

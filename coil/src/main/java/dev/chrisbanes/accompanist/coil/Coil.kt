@@ -16,11 +16,7 @@
 
 package dev.chrisbanes.accompanist.coil
 
-import android.graphics.ColorMatrix
-import android.graphics.ColorMatrixColorFilter
 import android.graphics.drawable.Drawable
-import androidx.animation.FloatPropKey
-import androidx.animation.transitionDefinition
 import androidx.compose.Composable
 import androidx.compose.getValue
 import androidx.compose.onCommit
@@ -28,8 +24,6 @@ import androidx.compose.remember
 import androidx.compose.setValue
 import androidx.compose.stateFor
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.util.Pools
-import androidx.ui.animation.Transition
 import androidx.ui.core.Alignment
 import androidx.ui.core.Constraints
 import androidx.ui.core.ContentScale
@@ -42,33 +36,18 @@ import androidx.ui.core.hasFixedHeight
 import androidx.ui.core.hasFixedWidth
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.Image
-import androidx.ui.geometry.Offset
-import androidx.ui.geometry.Size
 import androidx.ui.graphics.ColorFilter
 import androidx.ui.graphics.ImageAsset
-import androidx.ui.graphics.Paint
 import androidx.ui.graphics.asImageAsset
-import androidx.ui.graphics.drawscope.DrawScope
-import androidx.ui.graphics.drawscope.drawCanvas
 import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.graphics.painter.Painter
 import coil.Coil
 import coil.decode.DataSource
 import coil.request.GetRequest
 import coil.request.GetRequestBuilder
-import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
-private enum class ImageLoadState {
-    Loaded,
-    Empty
-}
-
-private val alpha = FloatPropKey()
-private val brightness = FloatPropKey()
-private val saturation = FloatPropKey()
 
 private val Constraints.requestWidth
     get() = if (hasFixedWidth || hasBoundedWidth) maxWidth else minWidth
@@ -76,187 +55,50 @@ private val Constraints.requestWidth
 private val Constraints.requestHeight
     get() = if (hasFixedHeight || hasBoundedHeight) maxHeight else minHeight
 
-private const val defaultTransitionDuration = 1000
-
-/**
- * Creates a composable that will attempt to load the given [data] using [Coil], and then
- * display the result in an [Image], using a crossfade when first loaded.
- *
- * The animation fades in the image's saturation, alpha and exposure. More information on the
- * pattern can be seen [here](https://material.io/archive/guidelines/patterns/loading-images.html).
- *
- * @param data The data to load. See [GetRequestBuilder.data] for the types allowed.
- * @param alignment Optional alignment parameter used to place the loaded [ImageAsset] in the
- * given bounds defined by the width and height.
- * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
- * used if the bounds are a different size from the intrinsic size of the loaded [ImageAsset].
- * @param crossfadeDuration The duration of the crossfade animation in milliseconds.
- * @param loading Content to be displayed when the request is in progress.
- * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
- * background)
- */
-@Composable
-fun CoilImageWithCrossfade(
-    data: Any,
-    alignment: Alignment = Alignment.Center,
-    contentScale: ContentScale = ContentScale.Fit,
-    crossfadeDuration: Int = defaultTransitionDuration,
-    loading: @Composable (() -> Unit)? = null,
-    modifier: Modifier = Modifier
-) {
-    CoilImageWithCrossfade(
-        request = GetRequest.Builder(ContextAmbient.current).data(data).build(),
-        alignment = alignment,
-        contentScale = contentScale,
-        crossfadeDuration = crossfadeDuration,
-        loading = loading,
-        modifier = modifier
-    )
-}
-
-/**
- * Creates a composable that will attempt to load the given [request] using [Coil], and then
- * display the result in an [Image], using a crossfade animation when first loaded.
- *
- * The animation fades in the image's saturation, alpha and exposure. More information on the
- * pattern can be seen [here](https://material.io/archive/guidelines/patterns/loading-images.html).
- *
- * @param request The request to execute. If the request does not have a [GetRequest.sizeResolver]
- * set, one will be set on the request using the layout constraints.
- * @param alignment Optional alignment parameter used to place the loaded [ImageAsset] in the
- * given bounds defined by the width and height.
- * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
- * used if the bounds are a different size from the intrinsic size of the loaded [ImageAsset].
- * @param crossfadeDuration The duration of the crossfade animation in milliseconds.
- * @param loading Content to be displayed when the request is in progress.
- * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
- * background)
- */
-@Composable
-fun CoilImageWithCrossfade(
-    request: GetRequest,
-    alignment: Alignment = Alignment.Center,
-    contentScale: ContentScale = ContentScale.Fit,
-    crossfadeDuration: Int = defaultTransitionDuration,
-    loading: @Composable (() -> Unit)? = null,
-    modifier: Modifier = Modifier
-) {
-    WithConstraints(modifier) {
-        // We key off the data, for the same reasons as executeAsComposable() below
-        var imgLoadState by stateFor(request.data) { ImageLoadState.Empty }
-
-        val transitionDef = remember(crossfadeDuration) {
-            transitionDefinition {
-                state(ImageLoadState.Empty) {
-                    this[alpha] = 0f
-                    this[brightness] = 0.8f
-                    this[saturation] = 0f
-                }
-                state(ImageLoadState.Loaded) {
-                    this[alpha] = 1f
-                    this[brightness] = 1f
-                    this[saturation] = 1f
-                }
-
-                transition {
-                    alpha using tween {
-                        duration = crossfadeDuration / 2
-                    }
-                    brightness using tween {
-                        duration = (crossfadeDuration * 0.75f).roundToInt()
-                    }
-                    saturation using tween {
-                        duration = crossfadeDuration
-                    }
-                }
-            }
-        }
-
-        // Execute the request using executeAsComposable(), which guards the actual execution
-        // so that the request is only run if the request changes.
-
-        val requestWidth = constraints.requestWidth.value
-        val requestHeight = constraints.requestHeight.value
-
-        val result = when {
-            request.sizeResolver != null -> {
-                // If the request has a sizeResolver set, we just execute the request as-is
-                request.executeAsComposable()
-            }
-            requestWidth > 0 && requestHeight > 0 -> {
-                // If we have a non-zero size we can modify the request to include the size
-                request.newBuilder()
-                    .size(requestWidth, requestHeight)
-                    .build()
-                    .executeAsComposable()
-            }
-            else -> {
-                // Otherwise we have a zero size, so no point executing a request
-                null
-            }
-        }
-
-        if (result != null && imgLoadState == ImageLoadState.Empty) {
-            imgLoadState = ImageLoadState.Loaded
-        }
-
-        if (result == null) {
-            Box(modifier) {
-                if (loading != null) loading()
-            }
-        } else {
-            val image = result.image
-
-            Transition(
-                definition = transitionDef,
-                toState = imgLoadState
-            ) { transitionState ->
-                if (image != null) {
-                    // Create and update the ImageLoadingColorMatrix from the transition state
-                    val matrix = remember(image) { ImageLoadingColorMatrix() }
-                    matrix.saturationFraction = transitionState[saturation]
-                    matrix.alphaFraction = transitionState[alpha]
-                    matrix.brightnessFraction = transitionState[brightness]
-
-                    Image(
-                        painter = ColorMatrixImagePainter(image, colorMatrix = matrix),
-                        contentScale = contentScale,
-                        alignment = alignment,
-                        modifier = modifier
-                    )
-                }
-            }
-        }
-    }
-}
-
 /**
  * Creates a composable that will attempt to load the given [data] using [Coil], and then
  * display the result in an [Image].
  *
  * @param data The data to load. See [GetRequestBuilder.data] for the types allowed.
+ * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
  * @param alignment Optional alignment parameter used to place the loaded [ImageAsset] in the
  * given bounds defined by the width and height.
  * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
  * used if the bounds are a different size from the intrinsic size of the loaded [ImageAsset].
+ * @param colorFilter Optional colorFilter to apply for the [Painter] when it is rendered onscreen.
+ * @param getSuccessPainter Optional builder for the [Painter] to be used to draw the successful
+ * loading result. Passing in `null` will result in falling back to the default [Painter].
+ * @param getFailurePainter Optional builder for the [Painter] to be used to draw the failure
+ * loading result. Passing in `null` will result in falling back to the default [Painter].
  * @param loading Content to be displayed when the request is in progress.
- * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
- * background)
+ * @param onRequestCompleted Listener which will be called when the loading request has finished.
  */
 @Composable
 fun CoilImage(
     data: Any,
+    modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
+    getSuccessPainter: @Composable ((SuccessResult) -> Painter)? = null,
+    getFailurePainter: @Composable ((ErrorResult) -> Painter?)? = null,
     loading: @Composable (() -> Unit)? = null,
-    modifier: Modifier = Modifier
+    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
     CoilImage(
-        request = GetRequest.Builder(ContextAmbient.current).data(data).build(),
+        request = when (data) {
+            // If the developer is accidentally using the wrong function (data vs request), just
+            // pass the request through
+            is GetRequest -> data
+            // Otherwise we construct a GetRequest using the data parameter
+            else -> GetRequest.Builder(ContextAmbient.current).data(data).build()
+        },
         alignment = alignment,
         contentScale = contentScale,
         colorFilter = colorFilter,
+        onRequestCompleted = onRequestCompleted,
+        getSuccessPainter = getSuccessPainter,
+        getFailurePainter = getFailurePainter,
         loading = loading,
         modifier = modifier
     )
@@ -268,30 +110,37 @@ fun CoilImage(
  *
  * @param request The request to execute. If the request does not have a [GetRequest.sizeResolver]
  * set, one will be set on the request using the layout constraints.
+ * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
  * @param alignment Optional alignment parameter used to place the loaded [ImageAsset] in the
  * given bounds defined by the width and height.
  * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
  * used if the bounds are a different size from the intrinsic size of the loaded [ImageAsset].
+ * @param colorFilter Optional colorFilter to apply for the [Painter] when it is rendered onscreen.
+ * @param getSuccessPainter Optional builder for the [Painter] to be used to draw the successful
+ * loading result. Passing in `null` will result in falling back to the default [Painter].
+ * @param getFailurePainter Optional builder for the [Painter] to be used to draw the failure
+ * loading result. Passing in `null` will result in falling back to the default [Painter].
  * @param loading Content to be displayed when the request is in progress.
- * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
- * background)
+ * @param onRequestCompleted Listener which will be called when the loading request has finished.
  */
 @Composable
 fun CoilImage(
     request: GetRequest,
+    modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
+    getSuccessPainter: @Composable ((SuccessResult) -> Painter)? = null,
+    getFailurePainter: @Composable ((ErrorResult) -> Painter?)? = null,
     loading: @Composable (() -> Unit)? = null,
-    modifier: Modifier = Modifier
+    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
     WithConstraints(modifier) {
-        // Execute the request using executeAsComposable(), which guards the actual execution
-        // so that the request is only run if the request changes.
-
         val requestWidth = constraints.requestWidth.value
         val requestHeight = constraints.requestHeight.value
 
+        // Execute the request using executeAsComposable(), which guards the actual execution
+        // so that the request is only run if the request changes.
         val result = when {
             request.sizeResolver != null -> {
                 // If the request has a sizeResolver set, we just execute the request as-is
@@ -310,58 +159,42 @@ fun CoilImage(
             }
         }
 
-        if (result == null) {
-            Box(modifier) {
-                if (loading != null) loading()
-            }
-        } else {
-            val image = result.image
-
-            if (image != null) {
-                val painter = remember(result) { ImagePainter(image) }
-                Image(
-                    painter = painter,
-                    contentScale = contentScale,
-                    alignment = alignment,
-                    colorFilter = colorFilter,
-                    modifier = modifier
-                )
+        onCommit(result) {
+            if (result != null) {
+                onRequestCompleted(result)
             }
         }
-    }
-}
 
-/**
- * A pool which allows us to cache and re-use [Paint] instances, which are relatively expensive
- * to create.
- */
-private val paintPool = Pools.SimplePool<Paint>(2)
-
-/**
- * An [ImagePainter] which draws the image with the given Android framework
- * [android.graphics.ColorMatrix].
- */
-private class ColorMatrixImagePainter(
-    private val image: ImageAsset,
-    private val srcOffset: Offset = Offset.zero,
-    private val srcSize: Size = Size(image.width.toFloat(), image.height.toFloat()),
-    private val colorMatrix: ColorMatrix? = null
-) : Painter() {
-    override fun DrawScope.onDraw() {
-        val paint = paintPool.acquire() ?: Paint()
-        paint.asFrameworkPaint().colorFilter = colorMatrix?.let(::ColorMatrixColorFilter)
-
-        drawCanvas { canvas, _ ->
-            canvas.drawImageRect(image, srcOffset, srcSize, Offset.zero, size, paint)
+        val painter = when (result) {
+            is SuccessResult -> {
+                if (getSuccessPainter != null) {
+                    getSuccessPainter(result)
+                } else {
+                    defaultSuccessPainterGetter(result)
+                }
+            }
+            is ErrorResult -> {
+                if (getFailurePainter != null) {
+                    getFailurePainter(result)
+                } else {
+                    defaultFailurePainterGetter(result)
+                }
+            }
+            else -> null
         }
 
-        paintPool.release(paint)
+        if (result == null && loading != null) {
+            Box(modifier, children = loading)
+        } else if (painter != null) {
+            Image(
+                painter = painter,
+                contentScale = contentScale,
+                alignment = alignment,
+                colorFilter = colorFilter,
+                modifier = modifier
+            )
+        }
     }
-
-    /**
-     * Return the dimension of the underlying [Image] as it's intrinsic width and height
-     */
-    override val intrinsicSize: Size get() = srcSize
 }
 
 /**
@@ -440,6 +273,20 @@ fun GetRequest.executeAsComposable(): RequestResult? {
     return result
 }
 
-private fun Drawable.toImageAsset(): ImageAsset {
+@Composable
+internal fun defaultFailurePainterGetter(error: ErrorResult): Painter? {
+    return error.image?.let { image ->
+        remember(image) { ImagePainter(image) }
+    }
+}
+
+@Composable
+internal fun defaultSuccessPainterGetter(result: SuccessResult): Painter {
+    return remember(result.image) { ImagePainter(result.image) }
+}
+
+internal val emptySuccessLambda: (RequestResult) -> Unit = {}
+
+internal fun Drawable.toImageAsset(): ImageAsset {
     return toBitmap().asImageAsset()
 }

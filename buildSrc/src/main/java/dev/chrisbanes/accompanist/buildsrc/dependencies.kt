@@ -33,6 +33,12 @@ object Libs {
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
     }
 
+    object Coroutines {
+        private const val version = "1.3.7"
+        const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
+        const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version"
+    }
+
     object AndroidX {
         object Test {
             private const val version = "1.2.0"
@@ -70,4 +76,6 @@ object Libs {
     const val coil = "io.coil-kt:coil:0.10.1"
 
     const val mdc = "com.google.android.material:material:1.1.0"
+
+    const val truth = "com.google.truth:truth:1.0.1"
 }
