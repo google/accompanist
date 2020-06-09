@@ -14,7 +14,8 @@ captures
 .idea/tasks.xml
 .idea/modules.xml
 .idea/compiler.xml
-/.idea/jarRepositories.xml
+.idea/jarRepositories.xml
+.idea/misc.xml
 gradle.xml
 *.iml
 
