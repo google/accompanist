@@ -32,7 +32,7 @@ buildscript {
 }
 
 plugins {
-    id "com.diffplug.gradle.spotless" version "3.28.1"
+    id "com.diffplug.gradle.spotless" version "4.3.0"
 }
 
 subprojects {
@@ -47,14 +47,11 @@ subprojects {
         kotlin {
             target "**/*.kt"
             ktlint(Versions.ktlint)
-                    // Disable paren-spacing rule for NonParenthesizedAnnotationsOnFunctionalTypes
-                    .userData(["disabled_rules": "paren-spacing"])
             licenseHeaderFile project.rootProject.file('spotless/copyright.txt')
         }
 
         groovyGradle {
             target '**/*.gradle'
-            paddedCell()
             greclipse().configFile(project.rootProject.file('spotless/greclipse.properties'))
             licenseHeaderFile project.rootProject.file('spotless/copyright.txt'),
                               '(buildscript|apply|import)'
