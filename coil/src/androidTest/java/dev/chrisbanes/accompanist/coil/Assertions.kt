@@ -19,14 +19,14 @@ package dev.chrisbanes.accompanist.coil
 import androidx.ui.test.SemanticsNodeInteraction
 import androidx.ui.unit.Density
 import androidx.ui.unit.Dp
-import androidx.ui.unit.IntPxSize
+import androidx.ui.unit.IntSize
 import org.junit.Assert
 
 fun SemanticsNodeInteraction.assertSize(density: Density, width: Dp, height: Dp) {
-    assertSize(with(density) { IntPxSize(width.toIntPx(), height.toIntPx()) })
+    assertSize(with(density) { IntSize(width.toIntPx(), height.toIntPx()) })
 }
 
-fun SemanticsNodeInteraction.assertSize(expected: IntPxSize) {
+fun SemanticsNodeInteraction.assertSize(expected: IntSize) {
     val node = fetchSemanticsNode("Assert size")
     Assert.assertEquals(expected, node.size)
 }

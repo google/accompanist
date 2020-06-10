@@ -21,6 +21,7 @@ import androidx.ui.core.DensityAmbient
 import androidx.ui.foundation.shape.corner.CornerSize
 import androidx.ui.foundation.shape.corner.CutCornerShape
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
+import androidx.ui.geometry.Size
 import androidx.ui.material.MaterialTheme
 import androidx.ui.res.colorResource
 import androidx.ui.test.android.AndroidComposeTestRule
@@ -28,7 +29,6 @@ import androidx.ui.text.font.asFontFamily
 import androidx.ui.text.font.font
 import androidx.ui.unit.Density
 import androidx.ui.unit.Dp
-import androidx.ui.unit.PxSize
 import androidx.ui.unit.TextUnit
 import androidx.ui.unit.dp
 import androidx.ui.unit.em
@@ -122,8 +122,8 @@ class MaterialThemeTest {
             assertNotNull(typography.h2.shadow)
             typography.h2.shadow!!.run {
                 assertEquals(colorResource(R.color.OliveDrab), color)
-                assertEquals(4.43f, offset.dx)
-                assertEquals(8.19f, offset.dy)
+                assertEquals(4.43f, offset.x)
+                assertEquals(8.19f, offset.y)
                 assertEquals(2.13f, blurRadius)
             }
 
@@ -143,7 +143,7 @@ class MaterialThemeTest {
 
 private fun Dp.scaleToPx(density: Density): Float {
     val dp = this
-    return with(density) { dp.toPx().value }
+    return with(density) { dp.toPx() }
 }
 
 private fun assertTextUnitEquals(expected: TextUnit, actual: TextUnit, density: Density) {
@@ -154,8 +154,8 @@ private fun assertTextUnitEquals(expected: TextUnit, actual: TextUnit, density: 
     } else {
         // Otherwise we need to flatten to a px to compare the values. Again using a
         // delta to account for float inaccuracy
-        with(density) { assertEquals(expected.toPx().value, actual.toPx().value, 0.001f) }
+        with(density) { assertEquals(expected.toPx(), actual.toPx(), 0.001f) }
     }
 }
 
-private fun CornerSize.toPx(density: Density) = toPx(PxSize.Companion.UnspecifiedSize, density)
+private fun CornerSize.toPx(density: Density) = toPx(Size.UnspecifiedSize, density)

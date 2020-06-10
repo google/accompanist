@@ -30,8 +30,6 @@ import androidx.ui.core.ContentScale
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
 import androidx.ui.core.WithConstraints
-import androidx.ui.core.hasBoundedHeight
-import androidx.ui.core.hasBoundedWidth
 import androidx.ui.core.hasFixedHeight
 import androidx.ui.core.hasFixedWidth
 import androidx.ui.foundation.Box
@@ -136,8 +134,8 @@ fun CoilImage(
     onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
     WithConstraints(modifier) {
-        val requestWidth = constraints.requestWidth.value
-        val requestHeight = constraints.requestHeight.value
+        val requestWidth = constraints.requestWidth
+        val requestHeight = constraints.requestHeight
 
         // Execute the request using executeAsComposable(), which guards the actual execution
         // so that the request is only run if the request changes.
