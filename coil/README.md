@@ -64,5 +64,5 @@ Snapshots of the development version are available in [Sonatype's `snapshots` re
 Eventually the goal is to upstream all of this functionality back to [Coil][coil]. [Jetpack Compose][compose]'s development is currently moving very fast, which means that there are frequent API changes between releases. For now, it makes sense to keep this as a seperately released library to track the latest Compose release.
 
 [compose]: https://developer.android.com/jetpack/compose
-[snap]: https://oss.sonatype.org/content/repositories/snapshots/
+[snap]: https://oss.sonatype.org/content/repositories/snapshots/dev/chrisbanes/accompanist/accompanist-coil/
 [coil]: https://github.com/coil-kt/coil
