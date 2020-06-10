@@ -25,9 +25,9 @@ dependencies {
 
 Snapshots of the current development version of Accompanist are available, which track the latest commit.
 
-<details><summary>Snapshot repository instructions</summary>
+<details><summary><strong>Snapshot repository instructions</strong></summary>
 
-The snapshots are deployed to [Sonatype's `snapshots` repository][snap]:
+The snapshots are deployed to Sonatype's `snapshots` [repository][snap]:
 
 ```groovy
 repositories {
@@ -45,7 +45,7 @@ dependencies {
 You might see a number of different versioned snapshots. If we use an example:
 
 * `0.1.5-SNAPSHOT` is a build from the `master` branch, and depends on the latest tagged Jetpack Compose release.
-* `0.1.5.ui-6574163-SNAPSHOT` is a build from the `snapshot` branch. This depends on the [SNAPSHOT build](https://androidx.dev) of Jetpack Compose from build 6574163. You should only use these if you are using AndroidX Sanpshots (see below).
+* `0.1.5.ui-6574163-SNAPSHOT` is a build from the `snapshot` branch. This depends on the [SNAPSHOT build](https://androidx.dev) of Jetpack Compose from build 6574163. You should only use these if you are using Jetpack Compose snapshot versions (see below).
 
 </details>
 
@@ -54,9 +54,9 @@ You might see a number of different versioned snapshots. If we use an example:
 If you're using [`SNAPSHOT`](https://androidx.dev) versions of the `androidx.ui`
 or `androidx.compose` libraries, you might run into issues with the Accompanist dependency forcing an older version of those libraries.
 
-<details><summary>Jetpack Compose snapshot instructions</summary>
+<details><summary><strong>Jetpack Compose snapshot instructions</strong></summary>
 
-I do publish snapshot versions of Accompanist which depend on recent AndroidX SNAPSHOT repositories. To find a recent build, look through the [snapshot repository][snap] for any versions in the scheme `x.x.x.ui-YYYY-SNAPSHOT` (for example: `0.1.5.ui-6574163-SNAPSHOT`). The `YYYY` in the scheme is the snapshot build being used from [AndroidX](https://androidx.dev). You can then use the steps above to setup the Accompanist snapshot repositories.
+I do publish snapshot versions of Accompanist which depend on recent Jetpack Compose SNAPSHOT repositories. To find a recent build, look through the [snapshot repository][snap] for any versions in the scheme `x.x.x.ui-YYYY-SNAPSHOT` (for example: `0.1.5.ui-6574163-SNAPSHOT`). The `YYYY` in the scheme is the snapshot build being used from [AndroidX](https://androidx.dev). You can then use the steps above to setup the Accompanist snapshot repositories.
 
 I update these builds regularly, but there's no guarantee that I will create one for a given build number.
 
