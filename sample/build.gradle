@@ -45,7 +45,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerVersion Libs.AndroidX.UI.kotlinCompilerVersion
+        kotlinCompilerVersion Libs.AndroidX.Compose.kotlinCompilerVersion
         kotlinCompilerExtensionVersion Libs.AndroidX.UI.version
     }
 }
@@ -54,7 +54,7 @@ dependencies {
     implementation project(':mdc-theme')
     implementation project(':coil')
 
-    implementation Libs.AndroidX.UI.composeRuntime
+    implementation Libs.AndroidX.Compose.runtime
     implementation Libs.AndroidX.UI.material
     implementation Libs.AndroidX.UI.foundation
     implementation Libs.AndroidX.UI.layout

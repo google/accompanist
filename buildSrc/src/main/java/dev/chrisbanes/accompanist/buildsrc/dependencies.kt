@@ -51,10 +51,8 @@ object Libs {
         }
 
         object UI {
-            const val kotlinCompilerVersion = "1.3.70-dev-withExperimentalGoogleExtensions-20200424"
-            const val version = "0.1.0-dev12"
-
-            const val composeRuntime = "androidx.compose:compose-runtime:$version"
+            const val snapshot = "6572081"
+            const val version = "0.1.0-SNAPSHOT"
 
             const val core = "androidx.ui:ui-core:$version"
             const val foundation = "androidx.ui:ui-foundation:$version"
@@ -67,6 +65,12 @@ object Libs {
             const val livedata = "androidx.ui:ui-livedata:$version"
 
             const val test = "androidx.ui:ui-test:$version"
+        }
+
+        object Compose {
+            const val version = UI.version
+            const val kotlinCompilerVersion = "1.3.70-dev-withExperimentalGoogleExtensions-20200424"
+            const val runtime = "androidx.compose:compose-runtime:$version"
         }
 
         const val core = "androidx.core:core:1.2.0"
