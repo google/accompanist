@@ -52,7 +52,7 @@ object Libs {
 
         object UI {
             const val kotlinCompilerVersion = "1.3.70-dev-withExperimentalGoogleExtensions-20200424"
-            const val version = "0.1.0-dev12"
+            const val version = "0.1.0-dev13"
 
             const val composeRuntime = "androidx.compose:compose-runtime:$version"
 
