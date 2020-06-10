@@ -136,8 +136,8 @@ fun generateMaterialThemeFromMdcTheme(
 ): Triple<ColorPalette, Typography, Shapes> {
     return context.obtainStyledAttributes(R.styleable.AccompanistMdcTheme).use { ta ->
         require(ta.hasValue(R.styleable.AccompanistMdcTheme_colorPrimary)) {
-            "MaterialThemeUsingMdcTheme requires the host context's theme " +
-                    "to extend Theme.MaterialComponents"
+            "MaterialThemeUsingMdcTheme requires the host context's theme" +
+                " to extend Theme.MaterialComponents"
         }
 
         val colors: ColorPalette = if (readColors) {
@@ -386,15 +386,21 @@ private fun readShapeAppearance(
 ): CornerBasedShape {
     return context.obtainStyledAttributes(id, R.styleable.AccompanistMdcShapeAppearance).use { a ->
         val defaultCornerSize = a.getCornerSize(
-            R.styleable.AccompanistMdcShapeAppearance_cornerSize, fallbackSize)
+            R.styleable.AccompanistMdcShapeAppearance_cornerSize,
+            fallbackSize
+        )
         val cornerSizeTL = a.getCornerSizeOrNull(
-            R.styleable.AccompanistMdcShapeAppearance_cornerSizeTopLeft)
+            R.styleable.AccompanistMdcShapeAppearance_cornerSizeTopLeft
+        )
         val cornerSizeTR = a.getCornerSizeOrNull(
-            R.styleable.AccompanistMdcShapeAppearance_cornerSizeTopRight)
+            R.styleable.AccompanistMdcShapeAppearance_cornerSizeTopRight
+        )
         val cornerSizeBL = a.getCornerSizeOrNull(
-            R.styleable.AccompanistMdcShapeAppearance_cornerSizeBottomLeft)
+            R.styleable.AccompanistMdcShapeAppearance_cornerSizeBottomLeft
+        )
         val cornerSizeBR = a.getCornerSizeOrNull(
-            R.styleable.AccompanistMdcShapeAppearance_cornerSizeBottomRight)
+            R.styleable.AccompanistMdcShapeAppearance_cornerSizeBottomRight
+        )
 
         /**
          * We do not support the individual `cornerFamilyTopLeft`, etc, since Compose only supports
@@ -403,18 +409,18 @@ private fun readShapeAppearance(
         when (a.getInt(R.styleable.AccompanistMdcShapeAppearance_cornerFamily, 0)) {
             0 -> {
                 RoundedCornerShape(
-                        topLeft = cornerSizeTL ?: defaultCornerSize,
-                        topRight = cornerSizeTR ?: defaultCornerSize,
-                        bottomRight = cornerSizeBR ?: defaultCornerSize,
-                        bottomLeft = cornerSizeBL ?: defaultCornerSize
+                    topLeft = cornerSizeTL ?: defaultCornerSize,
+                    topRight = cornerSizeTR ?: defaultCornerSize,
+                    bottomRight = cornerSizeBR ?: defaultCornerSize,
+                    bottomLeft = cornerSizeBL ?: defaultCornerSize
                 )
             }
             1 -> {
                 CutCornerShape(
-                        topLeft = cornerSizeTL ?: defaultCornerSize,
-                        topRight = cornerSizeTR ?: defaultCornerSize,
-                        bottomRight = cornerSizeBR ?: defaultCornerSize,
-                        bottomLeft = cornerSizeBL ?: defaultCornerSize
+                    topLeft = cornerSizeTL ?: defaultCornerSize,
+                    topRight = cornerSizeTR ?: defaultCornerSize,
+                    bottomRight = cornerSizeBR ?: defaultCornerSize,
+                    bottomLeft = cornerSizeBL ?: defaultCornerSize
                 )
             }
             else -> throw IllegalArgumentException("Unknown cornerFamily set in ShapeAppearance")

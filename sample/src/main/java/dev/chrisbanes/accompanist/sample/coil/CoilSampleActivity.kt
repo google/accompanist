@@ -77,14 +77,14 @@ fun CoilSample() {
             ) {
                 // CoilImage with data parameter
                 CoilImage(
-                    data = "https://loremflickr.com/300/300",
+                    data = sampleImageUrl,
                     modifier = Modifier.preferredSize(128.dp, 128.dp)
                 )
 
                 // CoilImage with GetRequest parameter
                 CoilImage(
                     request = GetRequest.Builder(ContextAmbient.current)
-                        .data("https://loremflickr.com/300/300")
+                        .data(sampleImageUrl)
                         .transformations(CircleCropTransformation())
                         .build(),
                     modifier = Modifier.preferredSize(128.dp, 128.dp)
@@ -92,7 +92,7 @@ fun CoilSample() {
 
                 // CoilImage with loading slot
                 CoilImage(
-                    data = "https://loremflickr.com/300/300",
+                    data = sampleImageUrl,
                     loading = {
                         Stack(Modifier.fillMaxSize()) {
                             CircularProgressIndicator(Modifier.gravity(Alignment.Center))
@@ -103,14 +103,14 @@ fun CoilSample() {
 
                 // CoilImageWithCrossfade with data parameter
                 CoilImageWithCrossfade(
-                    data = "https://loremflickr.com/300/300",
+                    data = sampleImageUrl,
                     modifier = Modifier.preferredSize(128.dp, 128.dp)
                 )
 
                 // CoilImageWithCrossfade with GetRequest parameter
                 CoilImageWithCrossfade(
                     request = GetRequest.Builder(ContextAmbient.current)
-                        .data("https://loremflickr.com/300/300")
+                        .data(sampleImageUrl)
                         .transformations(CircleCropTransformation())
                         .build(),
                     modifier = Modifier.preferredSize(128.dp, 128.dp)
@@ -118,7 +118,7 @@ fun CoilSample() {
 
                 // CoilImageWithCrossfade with loading slot
                 CoilImageWithCrossfade(
-                    data = "https://loremflickr.com/300/300",
+                    data = sampleImageUrl,
                     loading = {
                         Stack(Modifier.fillMaxSize()) {
                             CircularProgressIndicator(Modifier.gravity(Alignment.Center))
@@ -130,3 +130,5 @@ fun CoilSample() {
         }
     }
 }
+
+private const val sampleImageUrl = "https://picsum.photos/300/300"
