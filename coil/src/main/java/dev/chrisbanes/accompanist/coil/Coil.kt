@@ -39,6 +39,7 @@ import androidx.ui.graphics.ImageAsset
 import androidx.ui.graphics.asImageAsset
 import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.graphics.painter.Painter
+import androidx.ui.layout.fillMaxSize
 import coil.Coil
 import coil.decode.DataSource
 import coil.request.GetRequest
@@ -182,14 +183,19 @@ fun CoilImage(
         }
 
         if (result == null && loading != null) {
-            Box(modifier, children = loading)
+            Box(
+                // We use fillMaxSize() because the WithConstraints handles the incoming modifier
+                modifier = Modifier.fillMaxSize(),
+                children = loading
+            )
         } else if (painter != null) {
             Image(
                 painter = painter,
                 contentScale = contentScale,
                 alignment = alignment,
                 colorFilter = colorFilter,
-                modifier = modifier
+                // We use fillMaxSize() because the WithConstraints handles the incoming modifier
+                modifier = Modifier.fillMaxSize()
             )
         }
     }
