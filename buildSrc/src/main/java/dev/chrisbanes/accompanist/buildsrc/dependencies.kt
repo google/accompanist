@@ -17,7 +17,7 @@
 package dev.chrisbanes.accompanist.buildsrc
 
 object Versions {
-    const val ktlint = "0.36.0"
+    const val ktlint = "0.37.0"
 }
 
 object Libs {
