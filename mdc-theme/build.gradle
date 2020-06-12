@@ -71,6 +71,8 @@ dependencies {
     implementation Libs.AndroidX.UI.material
 
     implementation Libs.mdc
+    // We need to force AppCompat v1.3.0-alpha01 for AppCompatActivity to work with Compose
+    implementation Libs.AndroidX.appcompat
 
     implementation Libs.Kotlin.stdlib
 
