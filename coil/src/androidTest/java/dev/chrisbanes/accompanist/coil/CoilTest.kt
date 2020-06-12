@@ -22,6 +22,7 @@ import androidx.annotation.RawRes
 import androidx.compose.Composable
 import androidx.core.net.toUri
 import androidx.test.filters.LargeTest
+import androidx.test.filters.SdkSuppress
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
 import androidx.ui.core.testTag
@@ -103,6 +104,7 @@ class CoilTest {
     }
 
     @Test
+    @SdkSuppress(minSdkVersion = 26) // captureToBitmap is SDK 26+
     fun customGetPainter() {
         val latch = CountDownLatch(1)
 
@@ -186,6 +188,7 @@ class CoilTest {
     }
 
     @Test
+    @SdkSuppress(minSdkVersion = 26) // captureToBitmap is SDK 26+
     fun customFailurePainter() {
         val latch = CountDownLatch(1)
 
