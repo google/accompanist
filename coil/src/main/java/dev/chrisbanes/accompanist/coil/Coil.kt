@@ -21,6 +21,7 @@ import androidx.compose.Composable
 import androidx.compose.getValue
 import androidx.compose.launchInComposition
 import androidx.compose.onCommit
+import androidx.compose.onDispose
 import androidx.compose.remember
 import androidx.compose.setValue
 import androidx.compose.state
@@ -122,28 +123,20 @@ fun CoilImage(
     loading: @Composable (() -> Unit)? = null,
     onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
-    var requestSize by state { IntPxSize.Zero }
     var result by state<RequestResult?> { null }
 
-    launchInComposition(requestSize) {
-        val requestWidth = requestSize.width.value
-        val requestHeight = requestSize.height.value
+    val requestActor = remember(request) {
+        CoilRequestActor(request) { result = it }
+    }
 
-        result = when {
-            request.sizeResolver != null -> {
-                // If the request has a sizeResolver set, we just execute the request as-is
-                request.execute()
-            }
-            requestWidth > 0 && requestHeight > 0 -> {
-                // If we have a non-zero size, we can modify the request to include the size
-                request.newBuilder()
-                    .size(requestWidth, requestHeight)
-                    .build()
-                    .execute()
-            }
-            // Otherwise we have a zero size, so no point executing a request
-            else -> null
-        }
+    launchInComposition(requestActor) {
+        // Launch the Actor
+        requestActor.run()
+    }
+
+    onDispose {
+        // When we leave the composition, close the Actor channel
+        requestActor.close()
     }
 
     onCommit(result) {
@@ -169,7 +162,10 @@ fun CoilImage(
         else -> null
     }
 
-    val mod = modifier.onSizeChanged { requestSize = it }
+    val mod = modifier.onSizeChanged { size ->
+        // When the size changes, send it to the request actor
+        requestActor.send(size)
+    }
 
     if (painter == null) {
         // If we don't have a result painter, we add a Box with our modifier
@@ -190,6 +186,32 @@ fun CoilImage(
         )
     }
 }
+
+private fun CoilRequestActor(
+    request: GetRequest,
+    onResult: (RequestResult?) -> Unit
+) = RequestActor<IntPxSize, RequestResult?>(
+    execute = { size ->
+        val requestWidth = size.width.value
+        val requestHeight = size.height.value
+        when {
+            request.sizeResolver != null -> {
+                // If the request has a sizeResolver set, we just execute the request as-is
+                request.execute()
+            }
+            requestWidth > 0 && requestHeight > 0 -> {
+                // If we have a non-zero size, we can modify the request to include the size
+                request.newBuilder()
+                    .size(requestWidth, requestHeight)
+                    .build()
+                    .execute()
+            }
+            // Otherwise we have a zero size, so no point executing a request
+            else -> null
+        }
+    },
+    onResult = onResult
+)
 
 /**
  * Represents the result of an image request.
