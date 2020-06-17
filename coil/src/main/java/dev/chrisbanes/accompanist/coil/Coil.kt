@@ -19,21 +19,16 @@ package dev.chrisbanes.accompanist.coil
 import android.graphics.drawable.Drawable
 import androidx.compose.Composable
 import androidx.compose.getValue
+import androidx.compose.launchInComposition
 import androidx.compose.onCommit
 import androidx.compose.remember
 import androidx.compose.setValue
-import androidx.compose.stateFor
+import androidx.compose.state
 import androidx.core.graphics.drawable.toBitmap
 import androidx.ui.core.Alignment
-import androidx.ui.core.Constraints
 import androidx.ui.core.ContentScale
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
-import androidx.ui.core.WithConstraints
-import androidx.ui.core.hasBoundedHeight
-import androidx.ui.core.hasBoundedWidth
-import androidx.ui.core.hasFixedHeight
-import androidx.ui.core.hasFixedWidth
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.Image
 import androidx.ui.graphics.ColorFilter
@@ -41,19 +36,11 @@ import androidx.ui.graphics.ImageAsset
 import androidx.ui.graphics.asImageAsset
 import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.graphics.painter.Painter
+import androidx.ui.unit.IntPxSize
 import coil.Coil
 import coil.decode.DataSource
 import coil.request.GetRequest
 import coil.request.GetRequestBuilder
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-
-private val Constraints.requestWidth
-    get() = if (hasFixedWidth || hasBoundedWidth) maxWidth else minWidth
-
-private val Constraints.requestHeight
-    get() = if (hasFixedHeight || hasBoundedHeight) maxHeight else minHeight
 
 /**
  * Creates a composable that will attempt to load the given [data] using [Coil], and then
@@ -135,65 +122,72 @@ fun CoilImage(
     loading: @Composable (() -> Unit)? = null,
     onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
-    WithConstraints(modifier) {
-        val requestWidth = constraints.requestWidth.value
-        val requestHeight = constraints.requestHeight.value
+    var requestSize by state { IntPxSize.Zero }
+    var result by state<RequestResult?> { null }
 
-        // Execute the request using executeAsComposable(), which guards the actual execution
-        // so that the request is only run if the request changes.
-        val result = when {
+    launchInComposition(requestSize) {
+        val requestWidth = requestSize.width.value
+        val requestHeight = requestSize.height.value
+
+        result = when {
             request.sizeResolver != null -> {
                 // If the request has a sizeResolver set, we just execute the request as-is
-                request.executeAsComposable()
+                request.execute()
             }
             requestWidth > 0 && requestHeight > 0 -> {
                 // If we have a non-zero size, we can modify the request to include the size
                 request.newBuilder()
                     .size(requestWidth, requestHeight)
                     .build()
-                    .executeAsComposable()
+                    .execute()
             }
-            else -> {
-                // Otherwise we have a zero size, so no point executing a request
-                null
-            }
-        }
-
-        onCommit(result) {
-            if (result != null) {
-                onRequestCompleted(result)
-            }
-        }
-
-        val painter = when (result) {
-            is SuccessResult -> {
-                if (getSuccessPainter != null) {
-                    getSuccessPainter(result)
-                } else {
-                    defaultSuccessPainterGetter(result)
-                }
-            }
-            is ErrorResult -> {
-                if (getFailurePainter != null) {
-                    getFailurePainter(result)
-                } else {
-                    defaultFailurePainterGetter(result)
-                }
-            }
+            // Otherwise we have a zero size, so no point executing a request
             else -> null
         }
+    }
 
-        if (result == null && loading != null) {
-            Box(modifier, children = loading)
-        } else if (painter != null) {
-            Image(
-                painter = painter,
-                contentScale = contentScale,
-                alignment = alignment,
-                colorFilter = colorFilter,
-                modifier = modifier
-            )
+    onCommit(result) {
+        // Execute the onRequestCompleted callback if we have a new result
+        result?.also { onRequestCompleted(it) }
+    }
+
+    val painter = when (val r = result) {
+        is SuccessResult -> {
+            if (getSuccessPainter != null) {
+                getSuccessPainter(r)
+            } else {
+                defaultSuccessPainterGetter(r)
+            }
         }
+        is ErrorResult -> {
+            if (getFailurePainter != null) {
+                getFailurePainter(r)
+            } else {
+                defaultFailurePainterGetter(r)
+            }
+        }
+        else -> null
+    }
+
+    val mod = modifier.onSizeChanged { requestSize = it }
+
+    if (painter == null) {
+        // If we don't have a result painter, we add a Box with our modifier
+        Box(mod) {
+            // If we don't have a result yet, we can show the loading content
+            // (if not null)
+            if (result == null && loading != null) {
+                loading()
+            }
+        }
+    } else {
+        Image(
+            painter = painter,
+            contentScale = contentScale,
+            alignment = alignment,
+            colorFilter = colorFilter,
+            modifier = mod
+        )
     }
 }
 
@@ -236,41 +230,15 @@ data class ErrorResult(
     )
 }
 
-/**
- * This will execute the [GetRequest] within a composable, ensuring that the request is only
- * execute once and storing the result, and cancelling requests as required.
- *
- * @return the result from the request execution, or `null` if the request has not finished yet.
- */
-@Composable
-fun GetRequest.executeAsComposable(): RequestResult? {
-    // GetRequest does not support object equality (as of v0.10.1) so we can not key off the
-    // request itself. For now we can just use the `data` parameter, but ideally this should use
-    // `this` to track changes in size, transformations, etc too.
-    // See https://github.com/coil-kt/coil/issues/405
-    val key = data
-
-    var result by stateFor<RequestResult?>(key) { null }
-
-    // Launch and execute a new request when it changes
-    onCommit(key) {
-        val job = CoroutineScope(Dispatchers.Main).launch {
-            // Start loading the image and await the result
-            result = Coil.imageLoader(context).execute(this@executeAsComposable).let {
-                // We map to our internal result entities
-                when (it) {
-                    is coil.request.SuccessResult -> SuccessResult(it)
-                    is coil.request.ErrorResult -> ErrorResult(it)
-                }
-            }
-        }
-
-        // Cancel the request if the input to onCommit changes or
-        // the Composition is removed from the composition tree.
-        onDispose { job.cancel() }
+private fun coil.request.RequestResult.toResult(): RequestResult {
+    return when (this) {
+        is coil.request.SuccessResult -> SuccessResult(this)
+        is coil.request.ErrorResult -> ErrorResult(this)
     }
+}
 
-    return result
+private suspend fun GetRequest.execute(): RequestResult {
+    return Coil.imageLoader(context).execute(this).let { it.toResult() }
 }
 
 @Composable
