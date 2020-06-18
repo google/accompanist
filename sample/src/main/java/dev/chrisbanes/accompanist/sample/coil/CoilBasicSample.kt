@@ -44,7 +44,7 @@ import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
 import dev.chrisbanes.accompanist.mdctheme.MaterialThemeFromMdcTheme
 import dev.chrisbanes.accompanist.sample.R
 
-class CoilSampleActivity : AppCompatActivity() {
+class CoilBasicSample : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -53,18 +53,18 @@ class CoilSampleActivity : AppCompatActivity() {
 
         contentView.setContent(Recomposer.current()) {
             MaterialThemeFromMdcTheme {
-                CoilSample()
+                Sample()
             }
         }
     }
 }
 
 @Composable
-fun CoilSample() {
+private fun Sample() {
     Scaffold(
         topAppBar = {
             TopAppBar(
-                title = { Text(text = stringResource(R.string.coil_title)) }
+                title = { Text(text = stringResource(R.string.coil_title_basic)) }
             )
         }
     ) {
@@ -75,58 +75,56 @@ fun CoilSample() {
             ) {
                 // CoilImage with data parameter
                 CoilImage(
-                    data = sampleImageUrl,
-                    modifier = Modifier.preferredSize(128.dp, 128.dp)
+                    data = randomSampleImageUrl(),
+                    modifier = Modifier.preferredSize(128.dp)
                 )
 
                 // CoilImage with GetRequest parameter
                 CoilImage(
                     request = GetRequest.Builder(ContextAmbient.current)
-                        .data(sampleImageUrl)
+                        .data(randomSampleImageUrl())
                         .transformations(CircleCropTransformation())
                         .build(),
-                    modifier = Modifier.preferredSize(128.dp, 128.dp)
+                    modifier = Modifier.preferredSize(128.dp)
                 )
 
                 // CoilImage with loading slot
                 CoilImage(
-                    data = sampleImageUrl,
+                    data = randomSampleImageUrl(),
                     loading = {
                         Stack(Modifier.fillMaxSize()) {
                             CircularProgressIndicator(Modifier.gravity(Alignment.Center))
                         }
                     },
-                    modifier = Modifier.preferredSize(128.dp, 128.dp)
+                    modifier = Modifier.preferredSize(128.dp)
                 )
 
                 // CoilImageWithCrossfade with data parameter
                 CoilImageWithCrossfade(
-                    data = sampleImageUrl,
-                    modifier = Modifier.preferredSize(128.dp, 128.dp)
+                    data = randomSampleImageUrl(),
+                    modifier = Modifier.preferredSize(128.dp)
                 )
 
                 // CoilImageWithCrossfade with GetRequest parameter
                 CoilImageWithCrossfade(
                     request = GetRequest.Builder(ContextAmbient.current)
-                        .data(sampleImageUrl)
+                        .data(randomSampleImageUrl())
                         .transformations(CircleCropTransformation())
                         .build(),
-                    modifier = Modifier.preferredSize(128.dp, 128.dp)
+                    modifier = Modifier.preferredSize(128.dp)
                 )
 
                 // CoilImageWithCrossfade with loading slot
                 CoilImageWithCrossfade(
-                    data = sampleImageUrl,
+                    data = randomSampleImageUrl(),
                     loading = {
                         Stack(Modifier.fillMaxSize()) {
                             CircularProgressIndicator(Modifier.gravity(Alignment.Center))
                         }
                     },
-                    modifier = Modifier.preferredSize(128.dp, 128.dp)
+                    modifier = Modifier.preferredSize(128.dp)
                 )
             }
         }
     }
 }
-
-private const val sampleImageUrl = "https://picsum.photos/300/300"
