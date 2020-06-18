@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2020 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,12 +21,13 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".SampleApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AccompanistSample">
+        android:theme="@style/Theme.AccompanistSample.NoActionBar">
 
         <activity
             android:name=".MainActivity"
@@ -41,8 +41,7 @@
 
         <activity
             android:name=".mdc.MdcSampleActivity"
-            android:label="@string/mdc_title"
-            android:theme="@style/Theme.AccompanistSample.NoActionBar">
+            android:label="@string/mdc_title">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
@@ -50,9 +49,17 @@
         </activity>
 
         <activity
-            android:name=".coil.CoilSampleActivity"
-            android:label="@string/coil_title"
-            android:theme="@style/Theme.AccompanistSample.NoActionBar">
+            android:name=".coil.CoilBasicSample"
+            android:label="@string/coil_title_basic">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".coil.CoilGridSample"
+            android:label="@string/coil_title_grid">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
