@@ -18,17 +18,16 @@ package dev.chrisbanes.accompanist.coil
 
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.receiveAsFlow
 
 internal class RequestActor<Param, Result>(
-    private val execute: suspend (Param) -> Result,
-    private val onResult: (Result) -> Unit
+    private val execute: suspend (Param) -> Result
 ) {
     private val channel = Channel<Param>(Channel.CONFLATED)
 
-    suspend fun run() {
-        channel.consumeAsFlow()
+    suspend fun run(onResult: (Result) -> Unit) {
+        channel.receiveAsFlow()
             .distinctUntilChanged()
             .collect { param -> onResult(execute(param)) }
     }

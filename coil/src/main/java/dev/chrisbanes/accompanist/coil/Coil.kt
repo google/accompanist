@@ -20,8 +20,7 @@ import android.graphics.drawable.Drawable
 import androidx.compose.Composable
 import androidx.compose.getValue
 import androidx.compose.launchInComposition
-import androidx.compose.onCommit
-import androidx.compose.onDispose
+import androidx.compose.mutableStateOf
 import androidx.compose.remember
 import androidx.compose.setValue
 import androidx.compose.state
@@ -93,7 +92,7 @@ fun CoilImage(
 }
 
 /**
- * Creates a composable that will attempt to load the given [data] using [Coil], and then
+ * Creates a composable that will attempt to load the given [request] using [Coil], and then
  * display the result in an [Image].
  *
  * @param request The request to execute. If the request does not have a [GetRequest.sizeResolver]
@@ -124,24 +123,21 @@ fun CoilImage(
     onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
     var result by state<RequestResult?> { null }
+    val callback = mutableStateOf(onRequestCompleted)
 
-    val requestActor = remember(request) {
-        CoilRequestActor(request) { result = it }
-    }
+    val requestActor = remember(request) { CoilRequestActor(request) }
 
     launchInComposition(requestActor) {
         // Launch the Actor
-        requestActor.run()
-    }
+        requestActor.run { actorResult ->
+            // Store the result
+            result = actorResult
 
-    onDispose {
-        // When we leave the composition, close the Actor channel
-        requestActor.close()
-    }
-
-    onCommit(result) {
-        // Execute the onRequestCompleted callback if we have a new result
-        result?.also { onRequestCompleted(it) }
+            if (actorResult != null) {
+                // Execute the onRequestCompleted callback if we have a new result
+                callback.value(actorResult)
+            }
+        }
     }
 
     val painter = when (val r = result) {
@@ -188,30 +184,30 @@ fun CoilImage(
 }
 
 private fun CoilRequestActor(
-    request: GetRequest,
-    onResult: (RequestResult?) -> Unit
-) = RequestActor<IntPxSize, RequestResult?>(
-    execute = { size ->
-        val requestWidth = size.width.value
-        val requestHeight = size.height.value
-        when {
-            request.sizeResolver != null -> {
-                // If the request has a sizeResolver set, we just execute the request as-is
-                request.execute()
-            }
-            requestWidth > 0 && requestHeight > 0 -> {
-                // If we have a non-zero size, we can modify the request to include the size
-                request.newBuilder()
-                    .size(requestWidth, requestHeight)
-                    .build()
-                    .execute()
-            }
-            // Otherwise we have a zero size, so no point executing a request
-            else -> null
+    request: GetRequest
+) = RequestActor<IntPxSize, RequestResult?> { size ->
+    when {
+        request.sizeResolver != null -> {
+            // If the request has a sizeResolver set, we just execute the request as-is
+            request
         }
-    },
-    onResult = onResult
-)
+        size != IntPxSize.Zero -> {
+            // If we have a non-zero size, we can modify the request to include the size
+            request.newBuilder()
+                .size(size.width.value, size.height.value)
+                .build()
+        }
+        else -> {
+            // Otherwise we have a zero size, so no point executing a request
+            null
+        }
+    }?.let { transformedRequest ->
+        // Now execute the request in Coil...
+        Coil.imageLoader(transformedRequest.context)
+            .execute(transformedRequest)
+            .toResult()
+    }
+}
 
 /**
  * Represents the result of an image request.
@@ -257,10 +253,6 @@ private fun coil.request.RequestResult.toResult(): RequestResult {
         is coil.request.SuccessResult -> SuccessResult(this)
         is coil.request.ErrorResult -> ErrorResult(this)
     }
-}
-
-private suspend fun GetRequest.execute(): RequestResult {
-    return Coil.imageLoader(context).execute(this).let { it.toResult() }
 }
 
 @Composable
