@@ -129,7 +129,7 @@ fun CoilImage(
 
     launchInComposition(requestActor) {
         // Launch the Actor
-        requestActor.run { actorResult ->
+        requestActor.run { _, actorResult ->
             // Store the result
             result = actorResult
 

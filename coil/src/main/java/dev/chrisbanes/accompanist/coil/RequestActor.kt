@@ -21,22 +21,61 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.receiveAsFlow
 
+/**
+ * RequestActor is a wrapper around a [Channel] to implement the actor pattern.
+ *
+ * You pass input parameters to the actor via [send], which will be processed. Then in a coroutine
+ * you should start the actor by calling [run], passing in a lambda to be notified of any results.
+ *
+ * When creating a [RequestActor] you just need to pass in a [execute] lambda which is
+ * executed on every distinct parameter passed in.
+ *
+ * As an example for use in Compose, you would typically do this:
+ *
+ * ```
+ * var text by state { "" }
+ *
+ * val requestActor = remember {
+ *     RequestActor<Int, String> { input ->
+ *         generateStringForInt(input)
+ *     }
+ * }
+ *
+ * launchInComposition(requestActor) {
+ *     requestActor.run { input, result ->
+ *         text = result
+ *     }
+ * }
+ *
+ * // Send the actor something to act on
+ * requestActor.send(439)
+ *
+ * // do something with text
+ * ```
+ */
 internal class RequestActor<Param, Result>(
     private val execute: suspend (Param) -> Result
 ) {
     private val channel = Channel<Param>(Channel.CONFLATED)
 
-    suspend fun run(onResult: (Result) -> Unit) {
+    /**
+     * Start and run this [RequestActor].
+     *
+     * This will invoke [execute] on any input values passed in via [send], and then callback
+     * with the result to [onResult].
+     *
+     * @param onResult A lambda which will be called with each input and the processed result.
+     */
+    suspend fun run(onResult: (Param, Result) -> Unit) {
         channel.receiveAsFlow()
             .distinctUntilChanged()
-            .collect { param -> onResult(execute(param)) }
+            .collect { input -> onResult(input, execute(input)) }
     }
 
-    fun send(param: Param) {
-        channel.offer(param)
-    }
-
-    fun close() {
-        channel.close()
+    /**
+     * Send an input for processing by the [RequestActor].
+     */
+    fun send(input: Param) {
+        channel.offer(input)
     }
 }
