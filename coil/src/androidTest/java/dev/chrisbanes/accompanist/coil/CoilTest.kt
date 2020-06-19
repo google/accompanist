@@ -41,6 +41,7 @@ import androidx.ui.unit.dp
 import coil.request.CachePolicy
 import coil.request.GetRequest
 import com.google.common.truth.Truth.assertThat
+import dev.chrisbanes.accompanist.coil.test.R
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
