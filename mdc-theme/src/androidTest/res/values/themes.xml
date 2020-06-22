@@ -53,4 +53,6 @@
         <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.MdcThemeTest.CutNoSize</item>
     </style>
 
+    <style name="Theme.MdcThemeTest.NotMdc" parent="Theme.AppCompat.DayNight" />
+
 </resources>
