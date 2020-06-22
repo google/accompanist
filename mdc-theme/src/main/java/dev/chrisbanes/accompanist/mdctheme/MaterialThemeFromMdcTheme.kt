@@ -135,7 +135,7 @@ fun generateMaterialThemeFromMdcTheme(
     useTextColors: Boolean = false
 ): Triple<ColorPalette, Typography, Shapes> {
     return context.obtainStyledAttributes(R.styleable.AccompanistMdcTheme).use { ta ->
-        require(ta.hasValue(R.styleable.AccompanistMdcTheme_colorPrimary)) {
+        require(ta.hasValue(R.styleable.AccompanistMdcTheme_isMaterialTheme)) {
             "MaterialThemeUsingMdcTheme requires the host context's theme" +
                 " to extend Theme.MaterialComponents"
         }

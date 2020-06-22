@@ -18,6 +18,8 @@
 <resources>
 
     <declare-styleable name="AccompanistMdcTheme">
+        <attr name="isMaterialTheme" />
+
         <attr name="colorPrimary" />
         <attr name="colorPrimaryVariant" />
         <attr name="colorOnPrimary" />

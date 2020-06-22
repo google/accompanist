@@ -49,6 +49,16 @@ class MaterialThemeTest {
     @get:Rule
     val composeTestRule = AndroidComposeTestRule<MdcActivity>()
 
+    @get:Rule
+    val notMdcComposeTestRule = AndroidComposeTestRule<NotMdcActivity>()
+
+    @Test(expected = IllegalArgumentException::class)
+    fun isNotMaterialTheme() = notMdcComposeTestRule.setContent {
+        MaterialThemeFromMdcTheme {
+            // Nothing to do here, exception should be thrown
+        }
+    }
+
     @Test
     fun colors() = composeTestRule.setContent {
         MaterialThemeFromMdcTheme {
