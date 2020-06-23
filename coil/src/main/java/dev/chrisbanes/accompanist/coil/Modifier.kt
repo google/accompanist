@@ -25,6 +25,10 @@ import androidx.ui.core.OnPositionedModifier
 import androidx.ui.core.composed
 import androidx.ui.unit.IntPxSize
 
+/**
+ * [Modifier] which will invoke [onSizeChanged] whenever the size of the element changes. This
+ * will be called after positioning, similar to `Modifier.onPositioned`.
+ */
 internal fun Modifier.onSizeChanged(
     onSizeChanged: (IntPxSize) -> Unit
 ) = composed {

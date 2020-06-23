@@ -147,7 +147,7 @@ fun CoilImage(
     launchInComposition(requestActor) {
         // Launch the Actor
         requestActor.run { _, actorResult ->
-            // Store the result
+            // Update the result state
             result = actorResult
 
             if (actorResult != null) {
