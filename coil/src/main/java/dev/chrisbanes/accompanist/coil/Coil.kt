@@ -20,7 +20,6 @@ import android.graphics.drawable.Drawable
 import androidx.compose.Composable
 import androidx.compose.getValue
 import androidx.compose.launchInComposition
-import androidx.compose.mutableStateOf
 import androidx.compose.remember
 import androidx.compose.setValue
 import androidx.compose.state
@@ -78,7 +77,9 @@ fun CoilImage(
             // pass the request through
             is GetRequest -> data
             // Otherwise we construct a GetRequest using the data parameter
-            else -> GetRequest.Builder(ContextAmbient.current).data(data).build()
+            else -> remember(data) {
+                GetRequest.Builder(ContextAmbient.current).data(data).build()
+            }
         },
         alignment = alignment,
         contentScale = contentScale,
@@ -123,9 +124,25 @@ fun CoilImage(
     onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
     var result by state<RequestResult?> { null }
-    val callback = mutableStateOf(onRequestCompleted)
 
-    val requestActor = remember(request) { CoilRequestActor(request) }
+    // This may look a little weird, but allows the launchInComposition callback to always
+    // invoke the last provided [onRequestCompleted].
+    //
+    // If a composition happens *after* launchInComposition has launched, the given
+    // [onRequestCompleted] might have changed. If the actor lambda below directly referenced
+    // [onRequestCompleted] it would have captured access to the initial onRequestCompleted
+    // value, not the latest.
+    //
+    // This `callback` state enables the actor lambda to only capture the remembered state
+    // reference, which we can update on each composition.
+    val callback = state { onRequestCompleted }
+    callback.value = onRequestCompleted
+
+    // GetRequest does not support object equality (as of Coil v0.10.1) so we can not key the
+    // remember() using the request itself. For now we just use the [data] field, but
+    // ideally this should use [request] to track changes in size, transformations, etc too.
+    // See: https://github.com/coil-kt/coil/issues/405
+    val requestActor = remember(request.data) { CoilRequestActor(request) }
 
     launchInComposition(requestActor) {
         // Launch the Actor
