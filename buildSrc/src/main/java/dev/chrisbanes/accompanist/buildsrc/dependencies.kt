@@ -73,7 +73,7 @@ object Libs {
         const val coreKtx = "androidx.core:core-ktx:1.2.0"
     }
 
-    const val coil = "io.coil-kt:coil:0.10.1"
+    const val coil = "io.coil-kt:coil:0.11.0"
 
     const val mdc = "com.google.android.material:material:1.1.0"
 
