@@ -25,6 +25,7 @@ import androidx.ui.core.Modifier
 import androidx.ui.core.setContent
 import androidx.ui.foundation.Text
 import androidx.ui.foundation.VerticalScroller
+import androidx.ui.layout.ExperimentalLayout
 import androidx.ui.layout.FlowRow
 import androidx.ui.layout.padding
 import androidx.ui.layout.preferredSize
@@ -53,10 +54,11 @@ class CoilGridSample : AppCompatActivity() {
 
 private const val NumberItems = 60
 
+@OptIn(ExperimentalLayout::class)
 @Composable
 private fun Sample() {
     Scaffold(
-        topAppBar = {
+        topBar = {
             TopAppBar(
                 title = { Text(text = stringResource(R.string.coil_title_grid)) }
             )

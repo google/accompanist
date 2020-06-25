@@ -64,7 +64,7 @@ class MdcSampleActivity : AppCompatActivity() {
 @Composable
 fun MdcSample() {
     Scaffold(
-        topAppBar = {
+        topBar = {
             TopAppBar(
                 title = { Text(text = stringResource(R.string.mdc_title)) }
             )

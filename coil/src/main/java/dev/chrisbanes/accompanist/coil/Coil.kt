@@ -35,7 +35,7 @@ import androidx.ui.graphics.ImageAsset
 import androidx.ui.graphics.asImageAsset
 import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.graphics.painter.Painter
-import androidx.ui.unit.IntPxSize
+import androidx.ui.unit.IntSize
 import coil.Coil
 import coil.decode.DataSource
 import coil.request.GetRequest
@@ -202,16 +202,16 @@ fun CoilImage(
 
 private fun CoilRequestActor(
     request: GetRequest
-) = RequestActor<IntPxSize, RequestResult?> { size ->
+) = RequestActor<IntSize, RequestResult?> { size ->
     when {
         request.sizeResolver != null -> {
             // If the request has a sizeResolver set, we just execute the request as-is
             request
         }
-        size != IntPxSize.Zero -> {
+        size != IntSize.Zero -> {
             // If we have a non-zero size, we can modify the request to include the size
             request.newBuilder()
-                .size(size.width.value, size.height.value)
+                .size(size.width, size.height)
                 .build()
         }
         else -> {

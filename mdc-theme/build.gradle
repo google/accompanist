@@ -39,8 +39,8 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerVersion Libs.AndroidX.UI.kotlinCompilerVersion
-        kotlinCompilerExtensionVersion Libs.AndroidX.UI.version
+        kotlinCompilerVersion Libs.AndroidX.Compose.kotlinCompilerVersion
+        kotlinCompilerExtensionVersion Libs.AndroidX.Compose.version
     }
 
     lintOptions {
@@ -67,9 +67,13 @@ android {
 
 dependencies {
     implementation Libs.AndroidX.coreKtx
-    implementation Libs.AndroidX.UI.composeRuntime
+    implementation Libs.AndroidX.Compose.runtime
     implementation Libs.AndroidX.UI.material
+
     implementation Libs.mdc
+    // We need to force AppCompat v1.3.0-alpha01 for AppCompatActivity to work with Compose
+    implementation Libs.AndroidX.appcompat
+
     implementation Libs.Kotlin.stdlib
 
     androidTestImplementation Libs.junit

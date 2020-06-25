@@ -34,13 +34,15 @@ import androidx.ui.core.AnimationClockAmbient
 import androidx.ui.core.ContentScale
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Image
-import androidx.ui.geometry.Offset
 import androidx.ui.geometry.Size
 import androidx.ui.graphics.ImageAsset
 import androidx.ui.graphics.Paint
 import androidx.ui.graphics.drawscope.DrawScope
 import androidx.ui.graphics.drawscope.drawCanvas
 import androidx.ui.graphics.painter.Painter
+import androidx.ui.unit.IntOffset
+import androidx.ui.unit.IntSize
+import androidx.ui.unit.toSize
 import coil.Coil
 import coil.decode.DataSource
 import coil.request.GetRequest
@@ -172,8 +174,8 @@ private class ObservableCrossfadeImagePainter(
     private val image: ImageAsset,
     duration: Int,
     clock: AnimationClockObservable,
-    private val srcOffset: Offset = Offset.zero,
-    private val srcSize: Size = Size(image.width.toFloat(), image.height.toFloat())
+    private val srcOffset: IntOffset = IntOffset.Origin,
+    private val srcSize: IntSize = IntSize(image.width, image.height)
 ) : Painter() {
     var isFinished by mutableStateOf(false)
         private set
@@ -207,7 +209,7 @@ private class ObservableCrossfadeImagePainter(
         paint.asFrameworkPaint().colorFilter = ColorMatrixColorFilter(matrix)
 
         drawCanvas { canvas, _ ->
-            canvas.drawImageRect(image, srcOffset, srcSize, Offset.zero, size, paint)
+            canvas.drawImageRect(image, srcOffset, srcSize, IntOffset.Origin, srcSize, paint)
         }
 
         // Reset the Paint instance and release it back to the pool
@@ -218,7 +220,7 @@ private class ObservableCrossfadeImagePainter(
     /**
      * Return the dimension of the underlying [Image] as its intrinsic width and height
      */
-    override val intrinsicSize: Size get() = srcSize
+    override val intrinsicSize: Size get() = srcSize.toSize()
 
     fun start() {
         // Start the animation by transitioning to the Loaded state

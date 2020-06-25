@@ -39,8 +39,8 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerVersion Libs.AndroidX.UI.kotlinCompilerVersion
-        kotlinCompilerExtensionVersion Libs.AndroidX.UI.version
+        kotlinCompilerVersion Libs.AndroidX.Compose.kotlinCompilerVersion
+        kotlinCompilerExtensionVersion Libs.AndroidX.Compose.version
     }
 
     lintOptions {
@@ -74,7 +74,7 @@ dependencies {
     api Libs.coil
 
     implementation Libs.AndroidX.coreKtx
-    implementation Libs.AndroidX.UI.composeRuntime
+    implementation Libs.AndroidX.Compose.runtime
     implementation Libs.AndroidX.UI.foundation
 
     implementation Libs.Kotlin.stdlib

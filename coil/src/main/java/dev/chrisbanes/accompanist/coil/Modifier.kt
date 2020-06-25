@@ -23,16 +23,16 @@ import androidx.ui.core.LayoutCoordinates
 import androidx.ui.core.Modifier
 import androidx.ui.core.OnPositionedModifier
 import androidx.ui.core.composed
-import androidx.ui.unit.IntPxSize
+import androidx.ui.unit.IntSize
 
 /**
  * [Modifier] which will invoke [onSizeChanged] whenever the size of the element changes. This
  * will be called after positioning, similar to `Modifier.onPositioned`.
  */
 internal fun Modifier.onSizeChanged(
-    onSizeChanged: (IntPxSize) -> Unit
+    onSizeChanged: (IntSize) -> Unit
 ) = composed {
-    var lastSize by state<IntPxSize?> { null }
+    var lastSize by state<IntSize?> { null }
 
     object : OnPositionedModifier {
         override fun onPositioned(coordinates: LayoutCoordinates) {

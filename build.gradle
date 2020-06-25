@@ -38,8 +38,14 @@ plugins {
 subprojects {
     repositories {
         google()
-        // maven { url 'https://androidx.dev/snapshots/builds/6492492/artifacts/ui/repository' }
+        mavenCentral()
         jcenter()
+
+        if (Libs.AndroidX.UI.version.endsWith("SNAPSHOT")) {
+            maven {
+                url "https://androidx.dev/snapshots/builds/${Libs.AndroidX.UI.snapshot}/artifacts/ui/repository/"
+            }
+        }
     }
 
     apply plugin: 'com.diffplug.gradle.spotless'
@@ -90,7 +96,7 @@ subprojects {
         localProperties.each { prop ->
             if (prop.key == "signing.secretKeyRingFile") {
                 // If this is the key ring, treat it as a relative path
-                project.ext.set(prop.key, this.rootProject.file(prop.value).absolutePath)
+                project.ext.set(prop.key, rootProject.file(prop.value).absolutePath)
             } else {
                 project.ext.set(prop.key, prop.value)
             }

@@ -14,19 +14,25 @@
  * limitations under the License.
  */
 
-package dev.chrisbanes.accompanist.coil
+package dev.chrisbanes.accompanist.mdctheme
 
-import androidx.ui.test.SemanticsNodeInteraction
-import androidx.ui.unit.Density
-import androidx.ui.unit.Dp
-import androidx.ui.unit.IntSize
-import org.junit.Assert
+import androidx.test.filters.MediumTest
+import androidx.ui.test.android.AndroidComposeTestRule
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 
-fun SemanticsNodeInteraction.assertSize(density: Density, width: Dp, height: Dp) {
-    assertSize(with(density) { IntSize(width.toIntPx(), height.toIntPx()) })
-}
+@MediumTest
+@RunWith(JUnit4::class)
+class NotMaterialThemeTest {
+    @get:Rule
+    val composeTestRule = AndroidComposeTestRule<NotMdcActivity>()
 
-fun SemanticsNodeInteraction.assertSize(expected: IntSize) {
-    val node = fetchSemanticsNode("Assert size")
-    Assert.assertEquals(expected, node.size)
+    @Test(expected = IllegalArgumentException::class)
+    fun isNotMaterialTheme() = composeTestRule.setContent {
+        MaterialThemeFromMdcTheme {
+            // Nothing to do here, exception should be thrown
+        }
+    }
 }

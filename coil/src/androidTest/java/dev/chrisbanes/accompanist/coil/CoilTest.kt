@@ -25,7 +25,7 @@ import androidx.test.filters.LargeTest
 import androidx.test.filters.SdkSuppress
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
-import androidx.ui.core.TestTag
+import androidx.ui.core.testTag
 import androidx.ui.foundation.Text
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.painter.ColorPainter
@@ -89,13 +89,11 @@ class CoilTest {
         val latch = CountDownLatch(1)
 
         composeTestRule.setContent {
-            TestTag(CoilTestTags.Image) {
-                CoilImage(
-                    data = rawUri(R.raw.sample),
-                    modifier = Modifier.preferredSize(128.dp, 128.dp),
-                    onRequestCompleted = { latch.countDown() }
-                )
-            }
+            CoilImage(
+                data = rawUri(R.raw.sample),
+                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
+                onRequestCompleted = { latch.countDown() }
+            )
         }
 
         // Wait for the onRequestCompleted to release the latch
@@ -112,17 +110,15 @@ class CoilTest {
         val latch = CountDownLatch(1)
 
         composeTestRule.setContent {
-            TestTag(CoilTestTags.Image) {
-                CoilImage(
-                    data = rawUri(R.raw.sample),
-                    getSuccessPainter = {
-                        // Return a custom success painter which just draws cyan
-                        ColorPainter(Color.Cyan)
-                    },
-                    modifier = Modifier.preferredSize(128.dp, 128.dp),
-                    onRequestCompleted = { latch.countDown() }
-                )
-            }
+            CoilImage(
+                data = rawUri(R.raw.sample),
+                getSuccessPainter = {
+                    // Return a custom success painter which just draws cyan
+                    ColorPainter(Color.Cyan)
+                },
+                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
+                onRequestCompleted = { latch.countDown() }
+            )
         }
 
         // Wait for the onRequestCompleted to release the latch
@@ -140,13 +136,11 @@ class CoilTest {
         val latch = CountDownLatch(1)
 
         composeTestRule.setContent {
-            TestTag(CoilTestTags.Image) {
-                CoilImage(
-                    data = "url_which_will_never_work",
-                    modifier = Modifier.preferredSize(128.dp, 128.dp),
-                    onRequestCompleted = { latch.countDown() }
-                )
-            }
+            CoilImage(
+                data = "url_which_will_never_work",
+                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
+                onRequestCompleted = { latch.countDown() }
+            )
         }
 
         // Wait for the onRequestCompleted to release the latch
@@ -200,17 +194,15 @@ class CoilTest {
         val latch = CountDownLatch(1)
 
         composeTestRule.setContent {
-            TestTag(CoilTestTags.Image) {
-                CoilImage(
-                    data = "url_which_will_never_work",
-                    getFailurePainter = {
-                        // Return a custom failure painter which just draws red
-                        ColorPainter(Color.Red)
-                    },
-                    modifier = Modifier.preferredSize(128.dp, 128.dp),
-                    onRequestCompleted = { latch.countDown() }
-                )
-            }
+            CoilImage(
+                data = "url_which_will_never_work",
+                getFailurePainter = {
+                    // Return a custom failure painter which just draws red
+                    ColorPainter(Color.Red)
+                },
+                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
+                onRequestCompleted = { latch.countDown() }
+            )
         }
 
         // Wait for the onRequestCompleted to release the latch
