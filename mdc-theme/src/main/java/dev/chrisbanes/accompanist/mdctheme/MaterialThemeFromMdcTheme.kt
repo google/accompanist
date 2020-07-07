@@ -17,6 +17,7 @@
 package dev.chrisbanes.accompanist.mdctheme
 
 import android.content.Context
+import android.content.res.Configuration
 import android.content.res.Resources
 import android.content.res.TypedArray
 import android.graphics.Typeface
@@ -29,8 +30,6 @@ import androidx.core.content.res.getColorOrThrow
 import androidx.core.content.res.getResourceIdOrThrow
 import androidx.core.content.res.use
 import androidx.ui.core.ContextAmbient
-import androidx.ui.core.DensityAmbient
-import androidx.ui.foundation.isSystemInDarkTheme
 import androidx.ui.foundation.shape.corner.CornerBasedShape
 import androidx.ui.foundation.shape.corner.CornerSize
 import androidx.ui.foundation.shape.corner.CutCornerShape
@@ -94,11 +93,11 @@ fun MaterialThemeFromMdcTheme(
 
     val (colors, type, shapes) = remember(key) {
         generateMaterialThemeFromMdcTheme(
-            context,
-            readColors,
-            readTypography,
-            readShapes,
-            useTextColors
+            context = context,
+            readColors = readColors,
+            readTypography = readTypography,
+            readShapes = readShapes,
+            useTextColors = useTextColors
         )
     }
 
@@ -111,7 +110,7 @@ fun MaterialThemeFromMdcTheme(
 }
 
 /**
- * This effect generates the components of an [androidx.ui.material.MaterialTheme], reading the
+ * This effect generates the components of a [androidx.ui.material.MaterialTheme], reading the
  * values from an Material Design Components Android theme.
  *
  * By default the text colors from any associated `TextAppearance`s from the theme are *not* read.
@@ -120,15 +119,16 @@ fun MaterialThemeFromMdcTheme(
  * You can customize this through the [useTextColors] parameter.
  *
  * @param context The context to read the theme from
+ * @param density The current density
  * @param readColors whether the read the MDC color palette from the context's theme
  * @param readTypography whether the read the MDC typography text appearances from the context's theme
  * @param readShapes whether the read the MDC shape appearances from the context's theme
  * @param useTextColors whether to read the colors from the `TextAppearance`s associated from the
  * theme. Defaults to `false`
  */
-@Composable
 fun generateMaterialThemeFromMdcTheme(
-    context: Context = ContextAmbient.current,
+    context: Context,
+    density: Density = Density(context),
     readColors: Boolean = true,
     readTypography: Boolean = true,
     readShapes: Boolean = true,
@@ -189,7 +189,12 @@ fun generateMaterialThemeFromMdcTheme(
             }
         } else {
             // Else we create an empty color palette based on the configuration's uiMode
-            if (isSystemInDarkTheme()) darkColorPalette() else lightColorPalette()
+            val uiMode = context.resources.configuration.uiMode
+            if ((uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES) {
+                darkColorPalette()
+            } else {
+                lightColorPalette()
+            }
         }
 
         /**
@@ -205,66 +210,79 @@ fun generateMaterialThemeFromMdcTheme(
             typography = typography.merge(
                 h1 = textStyleFromTextAppearance(
                     context,
+                    density,
                     ta.getResourceIdOrThrow(R.styleable.AccompanistMdcTheme_textAppearanceHeadline1),
                     useTextColors
                 ),
                 h2 = textStyleFromTextAppearance(
                     context,
+                    density,
                     ta.getResourceIdOrThrow(R.styleable.AccompanistMdcTheme_textAppearanceHeadline2),
                     useTextColors
                 ),
                 h3 = textStyleFromTextAppearance(
                     context,
+                    density,
                     ta.getResourceIdOrThrow(R.styleable.AccompanistMdcTheme_textAppearanceHeadline3),
                     useTextColors
                 ),
                 h4 = textStyleFromTextAppearance(
                     context,
+                    density,
                     ta.getResourceIdOrThrow(R.styleable.AccompanistMdcTheme_textAppearanceHeadline4),
                     useTextColors
                 ),
                 h5 = textStyleFromTextAppearance(
                     context,
+                    density,
                     ta.getResourceIdOrThrow(R.styleable.AccompanistMdcTheme_textAppearanceHeadline5),
                     useTextColors
                 ),
                 h6 = textStyleFromTextAppearance(
                     context,
+                    density,
                     ta.getResourceIdOrThrow(R.styleable.AccompanistMdcTheme_textAppearanceHeadline6),
                     useTextColors
                 ),
                 subtitle1 = textStyleFromTextAppearance(
                     context,
+                    density,
                     ta.getResourceIdOrThrow(R.styleable.AccompanistMdcTheme_textAppearanceSubtitle1),
                     useTextColors
                 ),
                 subtitle2 = textStyleFromTextAppearance(
                     context,
+                    density,
                     ta.getResourceIdOrThrow(R.styleable.AccompanistMdcTheme_textAppearanceSubtitle2),
                     useTextColors
                 ),
                 body1 = textStyleFromTextAppearance(
                     context,
+                    density,
                     ta.getResourceIdOrThrow(R.styleable.AccompanistMdcTheme_textAppearanceBody1),
                     useTextColors
                 ),
                 body2 = textStyleFromTextAppearance(
                     context,
+                    density,
                     ta.getResourceIdOrThrow(R.styleable.AccompanistMdcTheme_textAppearanceBody2),
                     useTextColors
                 ),
                 button = textStyleFromTextAppearance(
                     context,
+                    density,
                     ta.getResourceIdOrThrow(R.styleable.AccompanistMdcTheme_textAppearanceButton),
                     useTextColors
                 ),
                 caption = textStyleFromTextAppearance(
                     context,
+                    density,
                     ta.getResourceIdOrThrow(R.styleable.AccompanistMdcTheme_textAppearanceCaption),
                     useTextColors
                 ),
                 overline = textStyleFromTextAppearance(
                     context,
+                    density,
                     ta.getResourceIdOrThrow(R.styleable.AccompanistMdcTheme_textAppearanceOverline),
                     useTextColors
                 )
@@ -300,9 +318,9 @@ fun generateMaterialThemeFromMdcTheme(
     }
 }
 
-@Composable
 private fun textStyleFromTextAppearance(
     context: Context,
+    density: Density,
     @StyleRes id: Int,
     useTextColor: Boolean
 ): TextStyle {
@@ -313,8 +331,6 @@ private fun textStyleFromTextAppearance(
 
         // TODO read and expand android:fontVariationSettings.
         // Variable fonts are not supported in Compose yet
-
-        val density = DensityAmbient.current
 
         // FYI, this only works with static font files in assets
         val fontFamilyWeight = when {
@@ -378,7 +394,6 @@ private fun textStyleFromTextAppearance(
     }
 }
 
-@Composable
 private fun readShapeAppearance(
     context: Context,
     @StyleRes id: Int,

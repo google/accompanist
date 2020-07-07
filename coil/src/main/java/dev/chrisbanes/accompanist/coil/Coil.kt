@@ -78,8 +78,9 @@ fun CoilImage(
             // pass the request through
             is GetRequest -> data
             // Otherwise we construct a GetRequest using the data parameter
-            else -> remember(data) {
-                GetRequest.Builder(ContextAmbient.current).data(data).build()
+            else -> {
+                val context = ContextAmbient.current
+                remember(data) { GetRequest.Builder(context).data(data).build() }
             }
         },
         alignment = alignment,

@@ -21,10 +21,11 @@ import androidx.animation.AnimationClockObservable
 import androidx.animation.FloatPropKey
 import androidx.animation.createAnimation
 import androidx.animation.transitionDefinition
+import androidx.animation.tween
 import androidx.compose.Composable
-import androidx.compose.NeverEqual
 import androidx.compose.getValue
 import androidx.compose.mutableStateOf
+import androidx.compose.neverEqualPolicy
 import androidx.compose.remember
 import androidx.compose.setValue
 import androidx.core.util.Pools
@@ -47,7 +48,6 @@ import coil.Coil
 import coil.decode.DataSource
 import coil.request.GetRequest
 import coil.request.GetRequestBuilder
-import kotlin.math.roundToInt
 
 private const val DefaultTransitionDuration = 1000
 
@@ -182,7 +182,10 @@ private class ObservableCrossfadeImagePainter(
 
     // Initial matrix is completely transparent. We use the NeverEqual equivalence check since this
     // is a mutable entity.
-    private var matrix by mutableStateOf(ImageLoadingColorMatrix(0f, 0f, 0f), NeverEqual)
+    private var matrix by mutableStateOf(
+        value = ImageLoadingColorMatrix(0f, 0f, 0f),
+        policy = neverEqualPolicy()
+    )
 
     private val animation = CrossfadeTransition.definition(duration).createAnimation(clock)
 
@@ -256,17 +259,12 @@ private object CrossfadeTransition {
         }
 
         transition {
-            Alpha using tween<Float> {
-                // Alpha animation runs over the first 50%
-                duration = durationMs / 2
-            }
-            Brightness using tween<Float> {
-                // Brightness animation runs over the first 75%
-                duration = (durationMs * 0.75f).roundToInt()
-            }
-            Saturation using tween<Float> {
-                duration = durationMs
-            }
+            // Alpha animates over the first 50%
+            Alpha using tween(durationMillis = durationMs / 2)
+            // Brightness animates over the first 75%
+            Brightness using tween(durationMillis = durationMs * 3 / 4)
+            // Saturation animates over whole duration
+            Saturation using tween(durationMillis = durationMs)
         }
     }
 }
