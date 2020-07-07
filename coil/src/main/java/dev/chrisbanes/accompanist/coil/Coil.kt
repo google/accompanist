@@ -223,6 +223,12 @@ private fun CoilRequestActor(
         Coil.imageLoader(transformedRequest.context)
             .execute(transformedRequest)
             .toResult()
+            .also {
+                // Tell RenderThread to pre-upload this bitmap. Saves the GPU upload cost on the
+                // first draw. See https://github.com/square/picasso/issues/1620 for a explanation
+                // from @ChrisCraik
+                it.image?.prepareToDraw()
+            }
     }
 }
 
