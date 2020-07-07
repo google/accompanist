@@ -22,11 +22,18 @@ import androidx.ui.unit.Dp
 import androidx.ui.unit.IntSize
 import org.junit.Assert
 
-fun SemanticsNodeInteraction.assertSize(density: Density, width: Dp, height: Dp) {
-    assertSize(with(density) { IntSize(width.toIntPx(), height.toIntPx()) })
+fun SemanticsNodeInteraction.assertSize(
+    density: Density,
+    width: Dp,
+    height: Dp
+): SemanticsNodeInteraction {
+    return assertSize(with(density) { IntSize(width.toIntPx(), height.toIntPx()) })
 }
 
-fun SemanticsNodeInteraction.assertSize(expected: IntSize) {
+fun SemanticsNodeInteraction.assertSize(
+    expected: IntSize
+): SemanticsNodeInteraction {
     val node = fetchSemanticsNode("Assert size")
     Assert.assertEquals(expected, node.size)
+    return this
 }

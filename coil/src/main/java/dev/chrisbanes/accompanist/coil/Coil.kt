@@ -23,6 +23,7 @@ import androidx.compose.launchInComposition
 import androidx.compose.remember
 import androidx.compose.setValue
 import androidx.compose.state
+import androidx.compose.stateFor
 import androidx.core.graphics.drawable.toBitmap
 import androidx.ui.core.Alignment
 import androidx.ui.core.ContentScale
@@ -123,7 +124,7 @@ fun CoilImage(
     loading: @Composable (() -> Unit)? = null,
     onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
-    var result by state<RequestResult?> { null }
+    var result by stateFor<RequestResult?>(request.data) { null }
 
     // This may look a little weird, but allows the launchInComposition callback to always
     // invoke the last provided [onRequestCompleted].
@@ -222,7 +223,13 @@ private fun CoilRequestActor(
         // Now execute the request in Coil...
         Coil.imageLoader(transformedRequest.context)
             .execute(transformedRequest)
-            .toResult()
+            .toResult(size)
+            .also {
+                // Tell RenderThread to pre-upload this bitmap. Saves the GPU upload cost on the
+                // first draw. See https://github.com/square/picasso/issues/1620 for a explanation
+                // from @ChrisCraik
+                it.image?.prepareToDraw()
+            }
     }
 }
 
@@ -243,8 +250,8 @@ data class SuccessResult(
     override val image: ImageAsset,
     val source: DataSource
 ) : RequestResult() {
-    internal constructor(result: coil.request.SuccessResult) : this(
-        image = result.drawable.toImageAsset(),
+    internal constructor(result: coil.request.SuccessResult, fallbackSize: IntSize) : this(
+        image = result.drawable.toImageAsset(fallbackSize),
         source = result.source
     )
 }
@@ -259,16 +266,18 @@ data class ErrorResult(
     override val image: ImageAsset?,
     val throwable: Throwable
 ) : RequestResult() {
-    internal constructor(result: coil.request.ErrorResult) : this(
-        image = result.drawable?.toImageAsset(),
+    internal constructor(result: coil.request.ErrorResult, fallbackSize: IntSize) : this(
+        image = result.drawable?.toImageAsset(fallbackSize),
         throwable = result.throwable
     )
 }
 
-private fun coil.request.RequestResult.toResult(): RequestResult {
+private fun coil.request.RequestResult.toResult(
+    fallbackSize: IntSize = IntSize.Zero
+): RequestResult {
     return when (this) {
-        is coil.request.SuccessResult -> SuccessResult(this)
-        is coil.request.ErrorResult -> ErrorResult(this)
+        is coil.request.SuccessResult -> SuccessResult(this, fallbackSize)
+        is coil.request.ErrorResult -> ErrorResult(this, fallbackSize)
     }
 }
 
@@ -286,6 +295,9 @@ internal fun defaultSuccessPainterGetter(result: SuccessResult): Painter {
 
 internal val emptySuccessLambda: (RequestResult) -> Unit = {}
 
-internal fun Drawable.toImageAsset(): ImageAsset {
-    return toBitmap().asImageAsset()
+internal fun Drawable.toImageAsset(fallbackSize: IntSize = IntSize.Zero): ImageAsset {
+    return toBitmap(
+        width = if (intrinsicWidth > 0) intrinsicWidth else fallbackSize.width,
+        height = if (intrinsicHeight > 0) intrinsicHeight else fallbackSize.height
+    ).asImageAsset()
 }

@@ -18,8 +18,8 @@ package dev.chrisbanes.accompanist.coil
 
 import android.content.ContentResolver
 import android.net.Uri
-import androidx.annotation.RawRes
 import androidx.compose.Composable
+import androidx.compose.collectAsState
 import androidx.core.net.toUri
 import androidx.test.filters.LargeTest
 import androidx.test.filters.SdkSuppress
@@ -43,6 +43,9 @@ import coil.request.GetRequest
 import com.google.common.truth.Truth.assertThat
 import dev.chrisbanes.accompanist.coil.test.R
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Rule
@@ -66,7 +69,7 @@ class CoilTest {
         composeTestRule.setContent {
             CoilImage(
                 request = GetRequest.Builder(ContextAmbient.current)
-                    .data(rawUri(R.raw.sample))
+                    .data(resourceUri(R.raw.sample))
                     .listener { _, _ -> latch.countDown() }
                     .build(),
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
@@ -85,12 +88,12 @@ class CoilTest {
     }
 
     @Test
-    fun basicLoad() {
+    fun basicLoad_raw() {
         val latch = CountDownLatch(1)
 
         composeTestRule.setContent {
             CoilImage(
-                data = rawUri(R.raw.sample),
+                data = resourceUri(R.raw.sample),
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
@@ -106,12 +109,80 @@ class CoilTest {
 
     @Test
     @SdkSuppress(minSdkVersion = 26) // captureToBitmap is SDK 26+
+    fun basicLoad_drawable() {
+        val latch = CountDownLatch(1)
+
+        composeTestRule.setContent {
+            CoilImage(
+                data = resourceUri(R.drawable.red_rectangle),
+                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
+                onRequestCompleted = { latch.countDown() }
+            )
+        }
+
+        // Wait for the onRequestCompleted to release the latch
+        latch.await(5, TimeUnit.SECONDS)
+
+        findByTag(CoilTestTags.Image)
+            .assertSize(composeTestRule.density, 128.dp, 128.dp)
+            .assertIsDisplayed()
+            .captureToBitmap()
+            .assertPixels { Color.Red }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    @SdkSuppress(minSdkVersion = 26) // captureToBitmap is SDK 26+
+    fun basicLoad_switchData() {
+        val loadCompleteSignal = Channel<Unit>(Channel.UNLIMITED)
+        val drawableResId = MutableStateFlow(R.drawable.red_rectangle)
+
+        composeTestRule.setContent {
+            val resId = drawableResId.collectAsState()
+            CoilImage(
+                data = resourceUri(resId.value),
+                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
+                onRequestCompleted = { loadCompleteSignal.offer(Unit) }
+            )
+        }
+
+        // Await the first load
+        runBlocking {
+            loadCompleteSignal.receive()
+        }
+
+        // Assert that the content is completely Red
+        findByTag(CoilTestTags.Image)
+            .assertSize(composeTestRule.density, 128.dp, 128.dp)
+            .assertIsDisplayed()
+            .captureToBitmap()
+            .assertPixels { Color.Red }
+
+        // Now switch the data URI to the blue drawable
+        drawableResId.value = R.drawable.blue_rectangle
+
+        // Await the second load
+        runBlocking { loadCompleteSignal.receive() }
+
+        // Assert that the content is completely Blue
+        findByTag(CoilTestTags.Image)
+            .assertSize(composeTestRule.density, 128.dp, 128.dp)
+            .assertIsDisplayed()
+            .captureToBitmap()
+            .assertPixels { Color.Blue }
+
+        // Close the signal channel
+        loadCompleteSignal.close()
+    }
+
+    @Test
+    @SdkSuppress(minSdkVersion = 26) // captureToBitmap is SDK 26+
     fun customGetPainter() {
         val latch = CountDownLatch(1)
 
         composeTestRule.setContent {
             CoilImage(
-                data = rawUri(R.raw.sample),
+                data = resourceUri(R.raw.sample),
                 getSuccessPainter = {
                     // Return a custom success painter which just draws cyan
                     ColorPainter(Color.Cyan)
@@ -163,7 +234,7 @@ class CoilTest {
             composeTestRule.setContent {
                 CoilImage(
                     request = GetRequest.Builder(ContextAmbient.current)
-                        .data(rawUri(R.raw.sample))
+                        .data(resourceUri(R.raw.sample))
                         // Disable memory cache. If the item is in the cache, the fetch is
                         // synchronous and the dispatcher pause has no effect
                         .memoryCachePolicy(CachePolicy.DISABLED)
@@ -217,6 +288,6 @@ class CoilTest {
 }
 
 @Composable
-fun rawUri(@RawRes id: Int): Uri {
+fun resourceUri(id: Int): Uri {
     return "${ContentResolver.SCHEME_ANDROID_RESOURCE}://${ContextAmbient.current.packageName}/$id".toUri()
 }
