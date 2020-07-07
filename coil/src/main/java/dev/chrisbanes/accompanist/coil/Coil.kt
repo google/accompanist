@@ -230,7 +230,6 @@ private fun CoilRequestActor(
                 // from @ChrisCraik
                 it.image?.prepareToDraw()
             }
-            .toResult(size)
     }
 }
 

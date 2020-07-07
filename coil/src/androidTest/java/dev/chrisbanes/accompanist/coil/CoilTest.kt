@@ -108,6 +108,7 @@ class CoilTest {
     }
 
     @Test
+    @SdkSuppress(minSdkVersion = 26) // captureToBitmap is SDK 26+
     fun basicLoad_drawable() {
         val latch = CountDownLatch(1)
 
@@ -129,8 +130,9 @@ class CoilTest {
             .assertPixels { Color.Red }
     }
 
-    @ExperimentalCoroutinesApi
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
+    @SdkSuppress(minSdkVersion = 26) // captureToBitmap is SDK 26+
     fun basicLoad_switchData() {
         val loadCompleteSignal = Channel<Unit>(Channel.UNLIMITED)
         val drawableResId = MutableStateFlow(R.drawable.red_rectangle)
