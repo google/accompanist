@@ -46,7 +46,7 @@ android {
 
     composeOptions {
         kotlinCompilerVersion Libs.AndroidX.Compose.kotlinCompilerVersion
-        kotlinCompilerExtensionVersion Libs.AndroidX.UI.version
+        kotlinCompilerExtensionVersion Libs.AndroidX.Compose.version
     }
 }
 
@@ -55,9 +55,9 @@ dependencies {
     implementation project(':coil')
 
     implementation Libs.AndroidX.Compose.runtime
-    implementation Libs.AndroidX.UI.material
-    implementation Libs.AndroidX.UI.foundation
-    implementation Libs.AndroidX.UI.layout
+    implementation Libs.AndroidX.Compose.material
+    implementation Libs.AndroidX.Compose.foundation
+    implementation Libs.AndroidX.Compose.layout
 
     implementation Libs.AndroidX.coreKtx
 

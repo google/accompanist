@@ -50,27 +50,19 @@ object Libs {
             const val espressoCore = "androidx.test.espresso:espresso-core:3.2.0"
         }
 
-        object UI {
-            const val snapshot = "6602655"
-            const val version = "0.1.0-SNAPSHOT"
-
-            const val core = "androidx.ui:ui-core:$version"
-            const val foundation = "androidx.ui:ui-foundation:$version"
-
-            const val layout = "androidx.ui:ui-layout:$version"
-            const val material = "androidx.ui:ui-material:$version"
-
-            const val animation = "androidx.ui:ui-animation:$version"
-            const val tooling = "androidx.ui:ui-tooling:$version"
-            const val livedata = "androidx.ui:ui-livedata:$version"
-
-            const val test = "androidx.ui:ui-test:$version"
-        }
-
         object Compose {
-            const val version = UI.version
+            const val snapshot = "6658922"
+            const val version = "0.1.0-SNAPSHOT"
+            
             const val kotlinCompilerVersion = "1.3.70-dev-withExperimentalGoogleExtensions-20200424"
+            
             const val runtime = "androidx.compose:compose-runtime:$version"
+            const val core = "androidx.ui:ui-core:${version}"
+            const val foundation = "androidx.compose.foundation:foundation:${version}"
+            const val layout = "androidx.ui:ui-layout:${version}"
+            const val material = "androidx.compose.material:material:${version}"
+            const val tooling = "androidx.compose.tooling:tooling:${version}"
+            const val test = "androidx.compose.test:test-core:${version}"
         }
 
         const val core = "androidx.core:core:1.2.0"
