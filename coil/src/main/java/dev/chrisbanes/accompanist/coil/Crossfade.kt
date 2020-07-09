@@ -67,6 +67,8 @@ private const val DefaultTransitionDuration = 1000
  * @param crossfadeDuration The duration of the crossfade animation in milliseconds.
  * @param getFailurePainter Optional builder for the [Painter] to be used to draw the failure
  * loading result. Passing in `null` will result in falling back to the default [Painter].
+ * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
+ * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
  */
 @Composable
@@ -78,6 +80,7 @@ fun CoilImageWithCrossfade(
     crossfadeDuration: Int = DefaultTransitionDuration,
     getFailurePainter: @Composable ((ErrorResult) -> Painter?)? = null,
     loading: @Composable (() -> Unit)? = null,
+    shouldRefetchOnSizeChange: (currentResult: RequestResult, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
     CoilImage(
@@ -88,6 +91,7 @@ fun CoilImageWithCrossfade(
         getFailurePainter = getFailurePainter,
         loading = loading,
         modifier = modifier,
+        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         onRequestCompleted = onRequestCompleted
     )
 }
@@ -109,6 +113,8 @@ fun CoilImageWithCrossfade(
  * @param crossfadeDuration The duration of the crossfade animation in milliseconds.
  * @param getFailurePainter Optional builder for the [Painter] to be used to draw the failure
  * loading result. Passing in `null` will result in falling back to the default [Painter].
+ * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
+ * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
  */
 @Composable
@@ -120,6 +126,7 @@ fun CoilImageWithCrossfade(
     crossfadeDuration: Int = DefaultTransitionDuration,
     getFailurePainter: @Composable ((ErrorResult) -> Painter?)? = null,
     loading: @Composable (() -> Unit)? = null,
+    shouldRefetchOnSizeChange: (currentResult: RequestResult, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
     CoilImage(
@@ -129,6 +136,7 @@ fun CoilImageWithCrossfade(
         getSuccessPainter = { crossfadePainter(it, durationMs = crossfadeDuration) },
         getFailurePainter = getFailurePainter,
         loading = loading,
+        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         modifier = modifier,
         onRequestCompleted = onRequestCompleted
     )
