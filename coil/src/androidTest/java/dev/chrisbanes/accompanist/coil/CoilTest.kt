@@ -48,6 +48,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.withTimeoutOrNull
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -170,6 +171,39 @@ class CoilTest {
             .assertIsDisplayed()
             .captureToBitmap()
             .assertPixels { Color.Blue }
+
+        // Close the signal channel
+        loadCompleteSignal.close()
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun basicLoad_changeSize() {
+        val loadCompleteSignal = Channel<Unit>(Channel.UNLIMITED)
+        val sizeFlow = MutableStateFlow(128.dp)
+
+        composeTestRule.setContent {
+            val size = sizeFlow.collectAsState()
+            CoilImage(
+                data = resourceUri(R.drawable.blue_rectangle),
+                modifier = Modifier.preferredSize(size.value).testTag(CoilTestTags.Image),
+                onRequestCompleted = { loadCompleteSignal.offer(Unit) }
+            )
+        }
+
+        // Await the first load
+        runBlocking {
+            loadCompleteSignal.receive()
+        }
+
+        // Now change the size
+        sizeFlow.value = 256.dp
+
+        // Await the potential second load (which shouldn't come)
+        runBlocking {
+            val result = withTimeoutOrNull(3000) { loadCompleteSignal.receive() }
+            assertThat(result).isNull()
+        }
 
         // Close the signal channel
         loadCompleteSignal.close()
