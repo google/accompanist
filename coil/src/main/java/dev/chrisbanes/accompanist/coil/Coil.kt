@@ -58,6 +58,8 @@ import coil.request.GetRequestBuilder
  * @param getFailurePainter Optional builder for the [Painter] to be used to draw the failure
  * loading result. Passing in `null` will result in falling back to the default [Painter].
  * @param loading Content to be displayed when the request is in progress.
+ * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
+ * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
  */
 @Composable
@@ -70,6 +72,7 @@ fun CoilImage(
     getSuccessPainter: @Composable ((SuccessResult) -> Painter)? = null,
     getFailurePainter: @Composable ((ErrorResult) -> Painter?)? = null,
     loading: @Composable (() -> Unit)? = null,
+    shouldRefetchOnSizeChange: (currentResult: RequestResult, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
     CoilImage(
@@ -89,6 +92,7 @@ fun CoilImage(
         getSuccessPainter = getSuccessPainter,
         getFailurePainter = getFailurePainter,
         loading = loading,
+        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         modifier = modifier
     )
 }
@@ -110,6 +114,8 @@ fun CoilImage(
  * @param getFailurePainter Optional builder for the [Painter] to be used to draw the failure
  * loading result. Passing in `null` will result in falling back to the default [Painter].
  * @param loading Content to be displayed when the request is in progress.
+ * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
+ * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
  */
 @Composable
@@ -122,9 +128,16 @@ fun CoilImage(
     getSuccessPainter: @Composable ((SuccessResult) -> Painter)? = null,
     getFailurePainter: @Composable ((ErrorResult) -> Painter?)? = null,
     loading: @Composable (() -> Unit)? = null,
+    shouldRefetchOnSizeChange: (currentResult: RequestResult, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
-    var result by stateFor<RequestResult?>(request.data) { null }
+    // GetRequest does not support object equality (as of Coil v0.10.1) so we can not key any
+    // remember calls using the request itself. For now we just use the [data] field, but
+    // ideally this should use [request] to track changes in size, transformations, etc too.
+    // See: https://github.com/coil-kt/coil/issues/405
+    val requestKey = request.data ?: request
+
+    var result by stateFor<RequestResult?>(requestKey) { null }
 
     // This may look a little weird, but allows the launchInComposition callback to always
     // invoke the last provided [onRequestCompleted].
@@ -139,11 +152,7 @@ fun CoilImage(
     val callback = state { onRequestCompleted }
     callback.value = onRequestCompleted
 
-    // GetRequest does not support object equality (as of Coil v0.10.1) so we can not key the
-    // remember() using the request itself. For now we just use the [data] field, but
-    // ideally this should use [request] to track changes in size, transformations, etc too.
-    // See: https://github.com/coil-kt/coil/issues/405
-    val requestActor = remember(request.data) { CoilRequestActor(request) }
+    val requestActor = remember(requestKey) { CoilRequestActor(request) }
 
     launchInComposition(requestActor) {
         // Launch the Actor
@@ -176,9 +185,14 @@ fun CoilImage(
         else -> null
     }
 
+    // Update the modifier, so that we listen for size changes to invoke the actor
     val mod = modifier.onSizeChanged { size ->
-        // When the size changes, send it to the request actor
-        requestActor.send(size)
+        val r = result
+        if (r == null || shouldRefetchOnSizeChange(r, size)) {
+            // If we don't have a result yet, or the size has changed and we should re-fetch,
+            // send it to the request actor
+            requestActor.send(size)
+        }
     }
 
     if (painter == null) {
@@ -294,6 +308,8 @@ internal fun defaultSuccessPainterGetter(result: SuccessResult): Painter {
 }
 
 internal val emptySuccessLambda: (RequestResult) -> Unit = {}
+
+internal val defaultRefetchOnSizeChangeLambda: (RequestResult, IntSize) -> Boolean = { _, _ -> false }
 
 internal fun Drawable.toImageAsset(fallbackSize: IntSize = IntSize.Zero): ImageAsset {
     return toBitmap(
