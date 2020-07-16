@@ -21,6 +21,7 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap/' }
     }
 
     dependencies {
@@ -41,6 +42,8 @@ subprojects {
         mavenCentral()
         jcenter()
 
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap/' }
+
         if (Libs.AndroidX.Compose.version.endsWith("SNAPSHOT")) {
             maven {
                 url "https://androidx.dev/snapshots/builds/${Libs.AndroidX.Compose.snapshot}/artifacts/ui/repository/"
@@ -53,13 +56,13 @@ subprojects {
         kotlin {
             target "**/*.kt"
             ktlint(Versions.ktlint)
-            licenseHeaderFile project.rootProject.file('spotless/copyright.txt')
+            licenseHeaderFile rootProject.file('spotless/copyright.txt')
         }
 
         groovyGradle {
             target '**/*.gradle'
-            greclipse().configFile(project.rootProject.file('spotless/greclipse.properties'))
-            licenseHeaderFile project.rootProject.file('spotless/copyright.txt'),
+            greclipse().configFile(rootProject.file('spotless/greclipse.properties'))
+            licenseHeaderFile rootProject.file('spotless/copyright.txt'),
                               '(buildscript|apply|import)'
         }
     }
@@ -75,16 +78,11 @@ subprojects {
             // Allow use of @OptIn
             freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
 
-            // Compose is now based on the Kotlin 1.4 compiler, but we need to use the 1.3.x Kotlin
-            // library due to library compatibility, etc. Therefore we explicit set our apiVersion
-            // to 1.3 to fix any warnings. Binary dependencies (such as Compose) can continue to
-            // use 1.4 if built with that library.
-            // TODO: remove this once we move to Kotlin 1.4
-            apiVersion = "1.3"
+            freeCompilerArgs += "-Xallow-jvm-ir-dependencies"
 
-            // Don't require parens on fun type annotations e.g. `@Composable~()~ () -> Unit`
-            // TODO: Remove when we move to Kotlin 1.4
-            freeCompilerArgs += "-XXLanguage:+NonParenthesizedAnnotationsOnFunctionalTypes"
+            // Since we're using a pre-release version of the Kotlin compiler, we need
+            // to disable it's pre-release check
+            freeCompilerArgs += "-Xskip-prerelease-check"
         }
     }
 

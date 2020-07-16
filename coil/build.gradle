@@ -78,6 +78,7 @@ dependencies {
     implementation Libs.AndroidX.Compose.foundation
 
     implementation Libs.Kotlin.stdlib
+    implementation Libs.Coroutines.android
 
     androidTestImplementation Libs.junit
     androidTestImplementation Libs.truth
@@ -85,7 +86,7 @@ dependencies {
     androidTestImplementation Libs.Coroutines.test
 
     androidTestImplementation Libs.AndroidX.Compose.test
-    androidTestImplementation Libs.AndroidX.Compose.core
+    androidTestImplementation Libs.AndroidX.Compose.ui
     androidTestImplementation Libs.AndroidX.Test.rules
     androidTestImplementation Libs.AndroidX.Test.runner
 }
