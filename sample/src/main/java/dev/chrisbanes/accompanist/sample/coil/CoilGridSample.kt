@@ -23,8 +23,8 @@ import androidx.compose.Composable
 import androidx.compose.Recomposer
 import androidx.ui.core.Modifier
 import androidx.ui.core.setContent
+import androidx.ui.foundation.ScrollableColumn
 import androidx.ui.foundation.Text
-import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.ExperimentalLayout
 import androidx.ui.layout.FlowRow
 import androidx.ui.layout.padding
@@ -64,7 +64,7 @@ private fun Sample() {
             )
         }
     ) {
-        VerticalScroller(modifier = Modifier.padding(16.dp)) {
+        ScrollableColumn(modifier = Modifier.padding(16.dp)) {
             FlowRow(
                 mainAxisSpacing = 4.dp,
                 crossAxisSpacing = 4.dp

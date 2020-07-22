@@ -24,8 +24,8 @@ import androidx.compose.Recomposer
 import androidx.ui.core.Modifier
 import androidx.ui.core.setContent
 import androidx.ui.foundation.Icon
+import androidx.ui.foundation.ScrollableColumn
 import androidx.ui.foundation.Text
-import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.Column
 import androidx.ui.layout.Spacer
 import androidx.ui.layout.padding
@@ -70,7 +70,7 @@ fun MdcSample() {
             )
         }
     ) {
-        VerticalScroller {
+        ScrollableColumn {
             Column(Modifier.padding(16.dp)) {
                 CircularProgressIndicator()
                 Spacer(modifier = Modifier.preferredHeight(8.dp))
