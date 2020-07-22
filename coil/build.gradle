@@ -75,17 +75,18 @@ dependencies {
 
     implementation Libs.AndroidX.coreKtx
     implementation Libs.AndroidX.Compose.runtime
-    implementation Libs.AndroidX.UI.foundation
+    implementation Libs.AndroidX.Compose.foundation
 
     implementation Libs.Kotlin.stdlib
+    implementation Libs.Coroutines.android
 
     androidTestImplementation Libs.junit
     androidTestImplementation Libs.truth
 
     androidTestImplementation Libs.Coroutines.test
 
-    androidTestImplementation Libs.AndroidX.UI.test
-    androidTestImplementation Libs.AndroidX.UI.core
+    androidTestImplementation Libs.AndroidX.Compose.test
+    androidTestImplementation Libs.AndroidX.Compose.ui
     androidTestImplementation Libs.AndroidX.Test.rules
     androidTestImplementation Libs.AndroidX.Test.runner
 }
