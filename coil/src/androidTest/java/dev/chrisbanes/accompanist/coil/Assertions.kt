@@ -16,10 +16,10 @@
 
 package dev.chrisbanes.accompanist.coil
 
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntSize
 import androidx.ui.test.SemanticsNodeInteraction
-import androidx.ui.unit.Density
-import androidx.ui.unit.Dp
-import androidx.ui.unit.IntSize
 import org.junit.Assert
 
 fun SemanticsNodeInteraction.assertSize(

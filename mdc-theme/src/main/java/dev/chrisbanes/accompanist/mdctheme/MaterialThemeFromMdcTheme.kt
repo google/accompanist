@@ -25,35 +25,35 @@ import android.os.Build
 import android.util.TypedValue
 import androidx.annotation.StyleRes
 import androidx.compose.Composable
+import androidx.compose.foundation.shape.CornerBasedShape
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.CutCornerShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ColorPalette
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Shapes
+import androidx.compose.material.Typography
+import androidx.compose.material.darkColorPalette
+import androidx.compose.material.lightColorPalette
 import androidx.compose.remember
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.asFontFamily
+import androidx.compose.ui.text.font.font
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
 import androidx.core.content.res.getColorOrThrow
 import androidx.core.content.res.getResourceIdOrThrow
 import androidx.core.content.res.use
 import androidx.ui.core.ContextAmbient
-import androidx.ui.foundation.shape.corner.CornerBasedShape
-import androidx.ui.foundation.shape.corner.CornerSize
-import androidx.ui.foundation.shape.corner.CutCornerShape
-import androidx.ui.foundation.shape.corner.RoundedCornerShape
-import androidx.ui.geometry.Offset
-import androidx.ui.graphics.Color
-import androidx.ui.graphics.Shadow
-import androidx.ui.material.ColorPalette
-import androidx.ui.material.MaterialTheme
-import androidx.ui.material.Shapes
-import androidx.ui.material.Typography
-import androidx.ui.material.darkColorPalette
-import androidx.ui.material.lightColorPalette
-import androidx.ui.text.TextStyle
-import androidx.ui.text.font.FontFamily
-import androidx.ui.text.font.FontStyle
-import androidx.ui.text.font.FontWeight
-import androidx.ui.text.font.asFontFamily
-import androidx.ui.text.font.font
-import androidx.ui.unit.Density
-import androidx.ui.unit.TextUnit
-import androidx.ui.unit.dp
-import androidx.ui.unit.em
-import androidx.ui.unit.sp
 import java.lang.reflect.Method
 import kotlin.concurrent.getOrSet
 
@@ -63,7 +63,7 @@ import kotlin.concurrent.getOrSet
  *
  * By default the text colors from any associated `TextAppearance`s from the theme are *not* read.
  * This is because setting a fixed color in the resulting [TextStyle] breaks the usage of
- * [androidx.ui.material.Emphasis] through [androidx.ui.material.ProvideEmphasis].
+ * [androidx.compose.material.Emphasis] through [androidx.compose.material.ProvideEmphasis].
  * You can customize this through the [useTextColors] parameter.
  *
  * @param context The context to read the theme from
@@ -110,12 +110,12 @@ fun MaterialThemeFromMdcTheme(
 }
 
 /**
- * This effect generates the components of a [androidx.ui.material.MaterialTheme], reading the
+ * This effect generates the components of a [androidx.compose.material.MaterialTheme], reading the
  * values from an Material Design Components Android theme.
  *
  * By default the text colors from any associated `TextAppearance`s from the theme are *not* read.
  * This is because setting a fixed color in the resulting [TextStyle] breaks the usage of
- * [androidx.ui.material.Emphasis] through [androidx.ui.material.ProvideEmphasis].
+ * [androidx.compose.material.Emphasis] through [androidx.compose.material.ProvideEmphasis].
  * You can customize this through the [useTextColors] parameter.
  *
  * @param context The context to read the theme from
@@ -357,7 +357,10 @@ private fun textStyleFromTextAppearance(
                 typeface == 3 -> FontFamily.Monospace
                 else -> null
             },
-            fontStyle = if ((textStyle and Typeface.ITALIC) != 0) FontStyle.Italic else FontStyle.Normal,
+            fontStyle = when {
+                (textStyle and Typeface.ITALIC) != 0 -> FontStyle.Italic
+                else -> FontStyle.Normal
+            },
             fontWeight = when {
                 textFontWeight in 0..149 -> FontWeight.W100
                 textFontWeight in 150..249 -> FontWeight.W200
