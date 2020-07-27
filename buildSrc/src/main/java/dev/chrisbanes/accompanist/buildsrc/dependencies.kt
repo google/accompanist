@@ -17,11 +17,11 @@
 package dev.chrisbanes.accompanist.buildsrc
 
 object Versions {
-    const val ktlint = "0.37.0"
+    const val ktlint = "0.37.2"
 }
 
 object Libs {
-    const val androidGradlePlugin = "com.android.tools.build:gradle:4.2.0-alpha04"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:4.2.0-alpha05"
 
     const val gradleMavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.12.0"
 
