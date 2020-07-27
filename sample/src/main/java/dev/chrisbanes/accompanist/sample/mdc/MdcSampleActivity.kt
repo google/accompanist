@@ -19,8 +19,6 @@ package dev.chrisbanes.accompanist.sample.mdc
 import android.os.Bundle
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.Composable
-import androidx.compose.Recomposer
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.Text
@@ -39,10 +37,12 @@ import androidx.compose.material.TextButton
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Recomposer
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.setContent
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.ui.core.Modifier
-import androidx.ui.core.setContent
-import androidx.ui.res.stringResource
 import dev.chrisbanes.accompanist.mdctheme.MaterialThemeFromMdcTheme
 import dev.chrisbanes.accompanist.sample.R
 

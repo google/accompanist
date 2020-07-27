@@ -18,19 +18,19 @@ package dev.chrisbanes.accompanist.coil
 
 import android.content.ContentResolver
 import android.net.Uri
-import androidx.compose.Composable
-import androidx.compose.collectAsState
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.preferredSize
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.test.filters.LargeTest
 import androidx.test.filters.SdkSuppress
-import androidx.ui.core.ContextAmbient
-import androidx.ui.core.Modifier
-import androidx.ui.core.testTag
 import androidx.ui.test.assertIsDisplayed
 import androidx.ui.test.assertPixels
 import androidx.ui.test.captureToBitmap

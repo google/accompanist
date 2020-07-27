@@ -22,6 +22,8 @@ import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.platform.DensityAmbient
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.asFontFamily
 import androidx.compose.ui.text.font.font
 import androidx.compose.ui.unit.Density
@@ -31,8 +33,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.test.filters.MediumTest
-import androidx.ui.core.DensityAmbient
-import androidx.ui.res.colorResource
 import androidx.ui.test.android.createAndroidComposeRule
 import dev.chrisbanes.accompanist.mdctheme.test.R
 import org.junit.Assert.assertEquals

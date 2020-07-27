@@ -24,7 +24,6 @@ import android.graphics.Typeface
 import android.os.Build
 import android.util.TypedValue
 import androidx.annotation.StyleRes
-import androidx.compose.Composable
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.CutCornerShape
@@ -35,10 +34,12 @@ import androidx.compose.material.Shapes
 import androidx.compose.material.Typography
 import androidx.compose.material.darkColorPalette
 import androidx.compose.material.lightColorPalette
-import androidx.compose.remember
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -53,7 +54,6 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.res.getColorOrThrow
 import androidx.core.content.res.getResourceIdOrThrow
 import androidx.core.content.res.use
-import androidx.ui.core.ContextAmbient
 import java.lang.reflect.Method
 import kotlin.concurrent.getOrSet
 
