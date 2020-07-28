@@ -22,7 +22,6 @@ buildscript {
         google()
         jcenter()
         maven { url 'https://dl.bintray.com/kotlin/kotlin-eap/' }
-        maven { url 'https://dl.bintray.com/kotlin/kotlin-dev/' }
     }
 
     dependencies {
@@ -44,23 +43,10 @@ subprojects {
         jcenter()
 
         maven { url 'https://dl.bintray.com/kotlin/kotlin-eap/' }
-        maven { url 'https://dl.bintray.com/kotlin/kotlin-dev/' }
 
         if (Libs.AndroidX.Compose.version.endsWith("SNAPSHOT")) {
             maven {
                 url "https://androidx.dev/snapshots/builds/${Libs.AndroidX.Compose.snapshot}/artifacts/ui/repository/"
-            }
-        }
-    }
-
-    // Compose SNAPSHOTs currently depend on Kotlin 1.4.0 (which doesn't exist yet). We need to
-    // force a version which does exist.
-    configurations.configureEach {
-        resolutionStrategy {
-            eachDependency { DependencyResolveDetails details ->
-                if (details.requested.group == 'org.jetbrains.kotlin') {
-                    details.useVersion Libs.Kotlin.version
-                }
             }
         }
     }
