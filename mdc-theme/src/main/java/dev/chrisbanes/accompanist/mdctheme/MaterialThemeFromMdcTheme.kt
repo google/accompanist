@@ -28,12 +28,12 @@ import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ColorPalette
+import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Shapes
 import androidx.compose.material.Typography
-import androidx.compose.material.darkColorPalette
-import androidx.compose.material.lightColorPalette
+import androidx.compose.material.darkColors
+import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.geometry.Offset
@@ -133,14 +133,14 @@ fun generateMaterialThemeFromMdcTheme(
     readTypography: Boolean = true,
     readShapes: Boolean = true,
     useTextColors: Boolean = false
-): Triple<ColorPalette, Typography, Shapes> {
+): Triple<Colors, Typography, Shapes> {
     return context.obtainStyledAttributes(R.styleable.AccompanistMdcTheme).use { ta ->
         require(ta.hasValue(R.styleable.AccompanistMdcTheme_isMaterialTheme)) {
             "MaterialThemeUsingMdcTheme requires the host context's theme" +
                 " to extend Theme.MaterialComponents"
         }
 
-        val colors: ColorPalette = if (readColors) {
+        val colors: Colors = if (readColors) {
             /* First we'll read the Material color palette */
             val primary = ta.getComposeColor(R.styleable.AccompanistMdcTheme_colorPrimary)
             val primaryVariant = ta.getComposeColor(R.styleable.AccompanistMdcTheme_colorPrimaryVariant)
@@ -158,7 +158,7 @@ fun generateMaterialThemeFromMdcTheme(
             val isLightTheme = ta.getBoolean(R.styleable.AccompanistMdcTheme_isLightTheme, true)
 
             if (isLightTheme) {
-                lightColorPalette(
+                lightColors(
                     primary = primary,
                     primaryVariant = primaryVariant,
                     onPrimary = onPrimary,
@@ -173,7 +173,7 @@ fun generateMaterialThemeFromMdcTheme(
                     onError = onError
                 )
             } else {
-                darkColorPalette(
+                darkColors(
                     primary = primary,
                     primaryVariant = primaryVariant,
                     onPrimary = onPrimary,
@@ -191,9 +191,9 @@ fun generateMaterialThemeFromMdcTheme(
             // Else we create an empty color palette based on the configuration's uiMode
             val uiMode = context.resources.configuration.uiMode
             if ((uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES) {
-                darkColorPalette()
+                darkColors()
             } else {
-                lightColorPalette()
+                lightColors()
             }
         }
 
