@@ -181,7 +181,7 @@ private class ObservableCrossfadeImagePainter(
     private val image: ImageAsset,
     duration: Int,
     clock: AnimationClockObservable,
-    private val srcOffset: IntOffset = IntOffset.Origin,
+    private val srcOffset: IntOffset = IntOffset.Zero,
     private val srcSize: IntSize = IntSize(image.width, image.height)
 ) : Painter() {
     var isFinished by mutableStateOf(false)
@@ -219,7 +219,7 @@ private class ObservableCrossfadeImagePainter(
         paint.asFrameworkPaint().colorFilter = ColorMatrixColorFilter(matrix)
 
         drawCanvas { canvas, _ ->
-            canvas.drawImageRect(image, srcOffset, srcSize, IntOffset.Origin, srcSize, paint)
+            canvas.drawImageRect(image, srcOffset, srcSize, IntOffset.Zero, srcSize, paint)
         }
 
         // Reset the Paint instance and release it back to the pool

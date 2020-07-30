@@ -167,4 +167,4 @@ private fun assertTextUnitEquals(expected: TextUnit, actual: TextUnit, density: 
     }
 }
 
-private fun CornerSize.toPx(density: Density) = toPx(Size.UnspecifiedSize, density)
+private fun CornerSize.toPx(density: Density) = toPx(Size.Unspecified, density)
