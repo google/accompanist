@@ -67,7 +67,7 @@ subprojects {
         }
     }
 
-    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
         kotlinOptions {
             // Treat all Kotlin warnings as errors
             allWarningsAsErrors = true
@@ -79,10 +79,6 @@ subprojects {
             freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
 
             freeCompilerArgs += "-Xallow-jvm-ir-dependencies"
-
-            // Since we're using a pre-release version of the Kotlin compiler, we need
-            // to disable it's pre-release check
-            freeCompilerArgs += "-Xskip-prerelease-check"
         }
     }
 

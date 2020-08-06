@@ -66,6 +66,15 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".coil.CoilLazyColumnSample"
+            android:label="@string/coil_title_lazy_row">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

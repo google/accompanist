@@ -16,14 +16,13 @@
 
 package dev.chrisbanes.accompanist.coil
 
-import androidx.compose.getValue
-import androidx.compose.setValue
-import androidx.compose.state
-import androidx.ui.core.LayoutCoordinates
-import androidx.ui.core.Modifier
-import androidx.ui.core.OnPositionedModifier
-import androidx.ui.core.composed
-import androidx.ui.unit.IntSize
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.state
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
+import androidx.compose.ui.onPositioned
+import androidx.compose.ui.unit.IntSize
 
 /**
  * [Modifier] which will invoke [onSizeChanged] whenever the size of the element changes. This
@@ -33,13 +32,10 @@ internal fun Modifier.onSizeChanged(
     onSizeChanged: (IntSize) -> Unit
 ) = composed {
     var lastSize by state<IntSize?> { null }
-
-    object : OnPositionedModifier {
-        override fun onPositioned(coordinates: LayoutCoordinates) {
-            if (coordinates.size != lastSize) {
-                lastSize = coordinates.size
-                onSizeChanged(coordinates.size)
-            }
+    onPositioned { coordinates ->
+        if (coordinates.size != lastSize) {
+            lastSize = coordinates.size
+            onSizeChanged(coordinates.size)
         }
     }
 }

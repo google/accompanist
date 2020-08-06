@@ -19,16 +19,20 @@ package dev.chrisbanes.accompanist.sample.coil
 import android.os.Bundle
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.ExperimentalLayout
-import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredSize
+import androidx.compose.foundation.layout.preferredWidth
+import androidx.compose.foundation.lazy.LazyColumnFor
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Recomposer
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
@@ -37,7 +41,7 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 import dev.chrisbanes.accompanist.mdctheme.MaterialThemeFromMdcTheme
 import dev.chrisbanes.accompanist.sample.R
 
-class CoilGridSample : AppCompatActivity() {
+class CoilLazyColumnSample : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -54,7 +58,7 @@ class CoilGridSample : AppCompatActivity() {
 
 private const val NumberItems = 60
 
-@OptIn(ExperimentalLayout::class)
+@OptIn(ExperimentalLayout::class, ExperimentalStdlibApi::class)
 @Composable
 private fun Sample() {
     Scaffold(
@@ -64,17 +68,23 @@ private fun Sample() {
             )
         }
     ) {
-        ScrollableColumn(modifier = Modifier.padding(16.dp)) {
-            FlowRow(
-                mainAxisSpacing = 4.dp,
-                crossAxisSpacing = 4.dp
-            ) {
-                for (i in 0 until NumberItems) {
-                    CoilImage(
-                        data = randomSampleImageUrl(i),
-                        modifier = Modifier.preferredSize(112.dp)
-                    )
-                }
+        val items = buildList {
+            repeat(NumberItems) { add(randomSampleImageUrl(it)) }
+        }
+        LazyColumnFor(items, modifier = Modifier.padding(16.dp)) { imageUrl ->
+            Row(Modifier.padding(16.dp)) {
+                CoilImage(
+                    data = imageUrl,
+                    modifier = Modifier.preferredSize(64.dp)
+                )
+
+                Spacer(Modifier.preferredWidth(8.dp))
+
+                Text(
+                    text = "Text",
+                    style = MaterialTheme.typography.subtitle2,
+                    modifier = Modifier.weight(1f).gravity(Alignment.CenterVertically)
+                )
             }
         }
     }

@@ -24,36 +24,36 @@ import android.graphics.Typeface
 import android.os.Build
 import android.util.TypedValue
 import androidx.annotation.StyleRes
-import androidx.compose.Composable
-import androidx.compose.remember
+import androidx.compose.foundation.shape.CornerBasedShape
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.CutCornerShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Colors
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Shapes
+import androidx.compose.material.Typography
+import androidx.compose.material.darkColors
+import androidx.compose.material.lightColors
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.asFontFamily
+import androidx.compose.ui.text.font.font
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
 import androidx.core.content.res.getColorOrThrow
 import androidx.core.content.res.getResourceIdOrThrow
 import androidx.core.content.res.use
-import androidx.ui.core.ContextAmbient
-import androidx.ui.foundation.shape.corner.CornerBasedShape
-import androidx.ui.foundation.shape.corner.CornerSize
-import androidx.ui.foundation.shape.corner.CutCornerShape
-import androidx.ui.foundation.shape.corner.RoundedCornerShape
-import androidx.ui.geometry.Offset
-import androidx.ui.graphics.Color
-import androidx.ui.graphics.Shadow
-import androidx.ui.material.ColorPalette
-import androidx.ui.material.MaterialTheme
-import androidx.ui.material.Shapes
-import androidx.ui.material.Typography
-import androidx.ui.material.darkColorPalette
-import androidx.ui.material.lightColorPalette
-import androidx.ui.text.TextStyle
-import androidx.ui.text.font.FontFamily
-import androidx.ui.text.font.FontStyle
-import androidx.ui.text.font.FontWeight
-import androidx.ui.text.font.asFontFamily
-import androidx.ui.text.font.font
-import androidx.ui.unit.Density
-import androidx.ui.unit.TextUnit
-import androidx.ui.unit.dp
-import androidx.ui.unit.em
-import androidx.ui.unit.sp
 import java.lang.reflect.Method
 import kotlin.concurrent.getOrSet
 
@@ -63,7 +63,7 @@ import kotlin.concurrent.getOrSet
  *
  * By default the text colors from any associated `TextAppearance`s from the theme are *not* read.
  * This is because setting a fixed color in the resulting [TextStyle] breaks the usage of
- * [androidx.ui.material.Emphasis] through [androidx.ui.material.ProvideEmphasis].
+ * [androidx.compose.material.Emphasis] through [androidx.compose.material.ProvideEmphasis].
  * You can customize this through the [useTextColors] parameter.
  *
  * @param context The context to read the theme from
@@ -110,12 +110,12 @@ fun MaterialThemeFromMdcTheme(
 }
 
 /**
- * This effect generates the components of a [androidx.ui.material.MaterialTheme], reading the
+ * This effect generates the components of a [androidx.compose.material.MaterialTheme], reading the
  * values from an Material Design Components Android theme.
  *
  * By default the text colors from any associated `TextAppearance`s from the theme are *not* read.
  * This is because setting a fixed color in the resulting [TextStyle] breaks the usage of
- * [androidx.ui.material.Emphasis] through [androidx.ui.material.ProvideEmphasis].
+ * [androidx.compose.material.Emphasis] through [androidx.compose.material.ProvideEmphasis].
  * You can customize this through the [useTextColors] parameter.
  *
  * @param context The context to read the theme from
@@ -133,14 +133,14 @@ fun generateMaterialThemeFromMdcTheme(
     readTypography: Boolean = true,
     readShapes: Boolean = true,
     useTextColors: Boolean = false
-): Triple<ColorPalette, Typography, Shapes> {
+): Triple<Colors, Typography, Shapes> {
     return context.obtainStyledAttributes(R.styleable.AccompanistMdcTheme).use { ta ->
         require(ta.hasValue(R.styleable.AccompanistMdcTheme_isMaterialTheme)) {
             "MaterialThemeUsingMdcTheme requires the host context's theme" +
                 " to extend Theme.MaterialComponents"
         }
 
-        val colors: ColorPalette = if (readColors) {
+        val colors: Colors = if (readColors) {
             /* First we'll read the Material color palette */
             val primary = ta.getComposeColor(R.styleable.AccompanistMdcTheme_colorPrimary)
             val primaryVariant = ta.getComposeColor(R.styleable.AccompanistMdcTheme_colorPrimaryVariant)
@@ -158,7 +158,7 @@ fun generateMaterialThemeFromMdcTheme(
             val isLightTheme = ta.getBoolean(R.styleable.AccompanistMdcTheme_isLightTheme, true)
 
             if (isLightTheme) {
-                lightColorPalette(
+                lightColors(
                     primary = primary,
                     primaryVariant = primaryVariant,
                     onPrimary = onPrimary,
@@ -173,7 +173,7 @@ fun generateMaterialThemeFromMdcTheme(
                     onError = onError
                 )
             } else {
-                darkColorPalette(
+                darkColors(
                     primary = primary,
                     primaryVariant = primaryVariant,
                     onPrimary = onPrimary,
@@ -191,9 +191,9 @@ fun generateMaterialThemeFromMdcTheme(
             // Else we create an empty color palette based on the configuration's uiMode
             val uiMode = context.resources.configuration.uiMode
             if ((uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES) {
-                darkColorPalette()
+                darkColors()
             } else {
-                lightColorPalette()
+                lightColors()
             }
         }
 
@@ -357,7 +357,10 @@ private fun textStyleFromTextAppearance(
                 typeface == 3 -> FontFamily.Monospace
                 else -> null
             },
-            fontStyle = if ((textStyle and Typeface.ITALIC) != 0) FontStyle.Italic else FontStyle.Normal,
+            fontStyle = when {
+                (textStyle and Typeface.ITALIC) != 0 -> FontStyle.Italic
+                else -> FontStyle.Normal
+            },
             fontWeight = when {
                 textFontWeight in 0..149 -> FontWeight.W100
                 textFontWeight in 150..249 -> FontWeight.W200
