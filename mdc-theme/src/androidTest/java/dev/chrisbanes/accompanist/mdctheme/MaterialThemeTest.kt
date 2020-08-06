@@ -16,23 +16,23 @@
 
 package dev.chrisbanes.accompanist.mdctheme
 
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.CutCornerShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.platform.DensityAmbient
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.asFontFamily
+import androidx.compose.ui.text.font.font
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
 import androidx.test.filters.MediumTest
-import androidx.ui.core.DensityAmbient
-import androidx.ui.foundation.shape.corner.CornerSize
-import androidx.ui.foundation.shape.corner.CutCornerShape
-import androidx.ui.foundation.shape.corner.RoundedCornerShape
-import androidx.ui.geometry.Size
-import androidx.ui.material.MaterialTheme
-import androidx.ui.res.colorResource
-import androidx.ui.test.android.AndroidComposeTestRule
-import androidx.ui.text.font.asFontFamily
-import androidx.ui.text.font.font
-import androidx.ui.unit.Density
-import androidx.ui.unit.Dp
-import androidx.ui.unit.TextUnit
-import androidx.ui.unit.dp
-import androidx.ui.unit.em
-import androidx.ui.unit.sp
+import androidx.ui.test.android.createAndroidComposeRule
 import dev.chrisbanes.accompanist.mdctheme.test.R
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -47,7 +47,7 @@ import org.junit.runners.JUnit4
 @RunWith(JUnit4::class)
 class MaterialThemeTest {
     @get:Rule
-    val composeTestRule = AndroidComposeTestRule<MdcActivity>()
+    val composeTestRule = createAndroidComposeRule<MdcActivity>()
 
     @Test
     fun colors() = composeTestRule.setContent {
@@ -158,4 +158,4 @@ private fun assertTextUnitEquals(expected: TextUnit, actual: TextUnit, density: 
     }
 }
 
-private fun CornerSize.toPx(density: Density) = toPx(Size.UnspecifiedSize, density)
+private fun CornerSize.toPx(density: Density) = toPx(Size.Unspecified, density)

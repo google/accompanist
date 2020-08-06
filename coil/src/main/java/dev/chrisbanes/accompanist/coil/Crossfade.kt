@@ -17,33 +17,32 @@
 package dev.chrisbanes.accompanist.coil
 
 import android.graphics.ColorMatrixColorFilter
-import androidx.animation.AnimationClockObservable
-import androidx.animation.FloatPropKey
-import androidx.animation.createAnimation
-import androidx.animation.transitionDefinition
-import androidx.animation.tween
-import androidx.compose.Composable
-import androidx.compose.getValue
-import androidx.compose.mutableStateOf
-import androidx.compose.neverEqualPolicy
-import androidx.compose.remember
-import androidx.compose.setValue
+import androidx.compose.animation.asDisposableClock
+import androidx.compose.animation.core.AnimationClockObservable
+import androidx.compose.animation.core.FloatPropKey
+import androidx.compose.animation.core.createAnimation
+import androidx.compose.animation.core.transitionDefinition
+import androidx.compose.animation.core.tween
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.neverEqualPolicy
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.ImageAsset
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.drawCanvas
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.AnimationClockAmbient
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.toSize
 import androidx.core.util.Pools
-import androidx.ui.animation.asDisposableClock
-import androidx.ui.core.Alignment
-import androidx.ui.core.AnimationClockAmbient
-import androidx.ui.core.ContentScale
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Image
-import androidx.ui.geometry.Size
-import androidx.ui.graphics.ImageAsset
-import androidx.ui.graphics.Paint
-import androidx.ui.graphics.drawscope.DrawScope
-import androidx.ui.graphics.drawscope.drawCanvas
-import androidx.ui.graphics.painter.Painter
-import androidx.ui.unit.IntOffset
-import androidx.ui.unit.IntSize
-import androidx.ui.unit.toSize
 import coil.Coil
 import coil.decode.DataSource
 import coil.request.GetRequest
@@ -182,7 +181,7 @@ private class ObservableCrossfadeImagePainter(
     private val image: ImageAsset,
     duration: Int,
     clock: AnimationClockObservable,
-    private val srcOffset: IntOffset = IntOffset.Origin,
+    private val srcOffset: IntOffset = IntOffset.Zero,
     private val srcSize: IntSize = IntSize(image.width, image.height)
 ) : Painter() {
     var isFinished by mutableStateOf(false)
@@ -220,7 +219,7 @@ private class ObservableCrossfadeImagePainter(
         paint.asFrameworkPaint().colorFilter = ColorMatrixColorFilter(matrix)
 
         drawCanvas { canvas, _ ->
-            canvas.drawImageRect(image, srcOffset, srcSize, IntOffset.Origin, srcSize, paint)
+            canvas.drawImageRect(image, srcOffset, srcSize, IntOffset.Zero, srcSize, paint)
         }
 
         // Reset the Paint instance and release it back to the pool
@@ -254,7 +253,7 @@ private object CrossfadeTransition {
     val Brightness = FloatPropKey()
     val Saturation = FloatPropKey()
 
-    fun definition(durationMs: Int) = transitionDefinition {
+    fun definition(durationMs: Int) = transitionDefinition<State> {
         state(State.Empty) {
             this[Alpha] = 0f
             this[Brightness] = 0.8f

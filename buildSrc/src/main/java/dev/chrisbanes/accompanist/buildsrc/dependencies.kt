@@ -21,20 +21,20 @@ object Versions {
 }
 
 object Libs {
-    const val androidGradlePlugin = "com.android.tools.build:gradle:4.2.0-alpha05"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:4.2.0-alpha07"
 
     const val gradleMavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.12.0"
 
     const val junit = "junit:junit:4.13"
 
     object Kotlin {
-        const val version = "1.4-M3"
+        const val version = "1.4.0-rc"
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib:$version"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
     }
 
     object Coroutines {
-        private const val version = "1.3.7-1.4-M3"
+        private const val version = "1.3.8-1.4.0-rc"
         const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
         const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version"
     }
@@ -52,8 +52,8 @@ object Libs {
 
         object Compose {
             const val snapshot = ""
-            const val version = "0.1.0-dev15"
-            const val kotlinCompilerVersion = "1.4.0-dev-withExperimentalGoogleExtensions-20200720"
+            const val version = "0.1.0-dev16"
+            const val kotlinCompilerVersion = "1.4.0-rc"
             
             const val runtime = "androidx.compose.runtime:runtime:$version"
             const val foundation = "androidx.compose.foundation:foundation:${version}"
