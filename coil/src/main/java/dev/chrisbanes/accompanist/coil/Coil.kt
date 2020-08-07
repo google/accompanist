@@ -22,9 +22,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.launchInComposition
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.referentialEqualityPolicy
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.state
 import androidx.compose.runtime.stateFor
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -150,7 +151,7 @@ fun CoilImage(
     //
     // This `callback` state enables the actor lambda to only capture the remembered state
     // reference, which we can update on each composition.
-    val callback = state { onRequestCompleted }
+    val callback = remember { mutableStateOf(onRequestCompleted, referentialEqualityPolicy()) }
     callback.value = onRequestCompleted
 
     val requestActor = remember(requestKey) { CoilRequestActor(request) }

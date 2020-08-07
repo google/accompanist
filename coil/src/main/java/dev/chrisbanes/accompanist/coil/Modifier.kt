@@ -17,8 +17,9 @@
 package dev.chrisbanes.accompanist.coil
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.state
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.onPositioned
@@ -31,7 +32,7 @@ import androidx.compose.ui.unit.IntSize
 internal fun Modifier.onSizeChanged(
     onSizeChanged: (IntSize) -> Unit
 ) = composed {
-    var lastSize by state<IntSize?> { null }
+    var lastSize by remember { mutableStateOf<IntSize?>(null) }
     onPositioned { coordinates ->
         if (coordinates.size != lastSize) {
             lastSize = coordinates.size
