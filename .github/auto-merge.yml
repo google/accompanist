@@ -1,0 +1,7 @@
+# Config for github.com/bobvanderlinden/probot-auto-merge
+minApprovals:
+  COLLABORATOR: 1
+requiredLabels:
+  - automerge
+mergeMethod: merge
+reportStatus: true
