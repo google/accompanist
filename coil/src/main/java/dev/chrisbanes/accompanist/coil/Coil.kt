@@ -20,6 +20,7 @@ import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Box
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.launchInComposition
 import androidx.compose.runtime.remember
@@ -28,6 +29,7 @@ import androidx.compose.runtime.state
 import androidx.compose.runtime.stateFor
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.WithConstraints
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageAsset
 import androidx.compose.ui.graphics.asImageAsset
@@ -186,35 +188,44 @@ fun CoilImage(
         else -> null
     }
 
-    // Update the modifier, so that we listen for size changes to invoke the actor
-    val mod = modifier.onSizeChanged { size ->
-        val r = result
-        if (r == null || shouldRefetchOnSizeChange(r, size)) {
-            // If we don't have a result yet, or the size has changed and we should re-fetch,
-            // send it to the request actor
-            requestActor.send(size)
-        }
-    }
+    WithConstraints(modifier) {
+        val lastRequestedSize = remember(requestActor) { MutableRef(IntSize.Zero) }
 
-    if (painter == null) {
-        // If we don't have a result painter, we add a Box with our modifier
-        Box(mod) {
-            // If we don't have a result yet, we can show the loading content
-            // (if not null)
-            if (result == null && loading != null) {
-                loading()
-            }
-        }
-    } else {
-        Image(
-            painter = painter,
-            contentScale = contentScale,
-            alignment = alignment,
-            colorFilter = colorFilter,
-            modifier = mod
+        val requestSize = IntSize(
+            width = if (constraints.hasBoundedWidth) constraints.maxWidth else Int.MAX_VALUE,
+            height = if (constraints.hasBoundedHeight) constraints.maxHeight else Int.MAX_VALUE
         )
+
+        val r = result
+        if (lastRequestedSize.value != requestSize &&
+            (r == null || shouldRefetchOnSizeChange(r, requestSize))
+        ) {
+            requestActor.send(requestSize)
+            lastRequestedSize.value = requestSize
+        }
+
+        if (painter == null) {
+            // If we don't have a result painter, we add a Box with our modifier
+            Box {
+                // If we don't have a result yet, we can show the loading content
+                // (if not null)
+                if (result == null && loading != null) {
+                    loading()
+                }
+            }
+        } else {
+            Image(
+                painter = painter,
+                contentScale = contentScale,
+                alignment = alignment,
+                colorFilter = colorFilter,
+            )
+        }
     }
 }
+
+@Stable
+private data class MutableRef<T>(var value: T)
 
 private fun CoilRequestActor(
     request: GetRequest
@@ -222,6 +233,11 @@ private fun CoilRequestActor(
     when {
         request.sizeResolver != null -> {
             // If the request has a sizeResolver set, we just execute the request as-is
+            request
+        }
+        size.height == Int.MAX_VALUE || size.width == Int.MAX_VALUE -> {
+            // If the size contains an 'infinite' dimension, we don't specific a size in the Coil
+            // request
             request
         }
         size != IntSize.Zero -> {
