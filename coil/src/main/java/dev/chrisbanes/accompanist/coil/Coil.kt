@@ -192,8 +192,8 @@ fun CoilImage(
         val lastRequestedSize = remember(requestActor) { MutableRef(IntSize.Zero) }
 
         val requestSize = IntSize(
-            width = if (constraints.hasBoundedWidth) constraints.maxWidth else Int.MAX_VALUE,
-            height = if (constraints.hasBoundedHeight) constraints.maxHeight else Int.MAX_VALUE
+            width = if (constraints.hasBoundedWidth) constraints.maxWidth else UNSPECIFIED,
+            height = if (constraints.hasBoundedHeight) constraints.maxHeight else UNSPECIFIED
         )
 
         val r = result
@@ -224,6 +224,11 @@ fun CoilImage(
     }
 }
 
+/**
+ * Value for a [IntSize] dimension, where the dimension is not specified or is unknown.s
+ */
+private const val UNSPECIFIED = -1
+
 @Stable
 private data class MutableRef<T>(var value: T)
 
@@ -235,9 +240,9 @@ private fun CoilRequestActor(
             // If the request has a sizeResolver set, we just execute the request as-is
             request
         }
-        size.height == Int.MAX_VALUE || size.width == Int.MAX_VALUE -> {
-            // If the size contains an 'infinite' dimension, we don't specific a size in the Coil
-            // request
+        size.width == UNSPECIFIED || size.height == UNSPECIFIED -> {
+            // If the size contains an unspecified dimension, we don't specify a size
+            // in the Coil request
             request
         }
         size != IntSize.Zero -> {
