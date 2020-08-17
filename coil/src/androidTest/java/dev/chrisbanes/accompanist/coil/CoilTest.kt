@@ -31,8 +31,12 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.test.filters.LargeTest
 import androidx.test.filters.SdkSuppress
+import androidx.ui.test.assertHeightIsAtLeast
+import androidx.ui.test.assertHeightIsEqualTo
 import androidx.ui.test.assertIsDisplayed
 import androidx.ui.test.assertPixels
+import androidx.ui.test.assertWidthIsAtLeast
+import androidx.ui.test.assertWidthIsEqualTo
 import androidx.ui.test.captureToBitmap
 import androidx.ui.test.createComposeRule
 import androidx.ui.test.onNodeWithTag
@@ -105,7 +109,8 @@ class CoilTest {
 
         onNodeWithTag(CoilTestTags.Image)
             .assertIsDisplayed()
-            .assertSize(composeTestRule.density, 128.dp, 128.dp)
+            .assertWidthIsEqualTo(128.dp)
+            .assertHeightIsEqualTo(128.dp)
     }
 
     @Test
@@ -125,7 +130,8 @@ class CoilTest {
         latch.await(5, TimeUnit.SECONDS)
 
         onNodeWithTag(CoilTestTags.Image)
-            .assertSize(composeTestRule.density, 128.dp, 128.dp)
+            .assertWidthIsEqualTo(128.dp)
+            .assertHeightIsEqualTo(128.dp)
             .assertIsDisplayed()
             .captureToBitmap()
             .assertPixels { Color.Red }
@@ -154,7 +160,8 @@ class CoilTest {
 
         // Assert that the content is completely Red
         onNodeWithTag(CoilTestTags.Image)
-            .assertSize(composeTestRule.density, 128.dp, 128.dp)
+            .assertWidthIsEqualTo(128.dp)
+            .assertHeightIsEqualTo(128.dp)
             .assertIsDisplayed()
             .captureToBitmap()
             .assertPixels { Color.Red }
@@ -167,7 +174,8 @@ class CoilTest {
 
         // Assert that the content is completely Blue
         onNodeWithTag(CoilTestTags.Image)
-            .assertSize(composeTestRule.density, 128.dp, 128.dp)
+            .assertWidthIsEqualTo(128.dp)
+            .assertHeightIsEqualTo(128.dp)
             .assertIsDisplayed()
             .captureToBitmap()
             .assertPixels { Color.Blue }
@@ -207,6 +215,27 @@ class CoilTest {
 
         // Close the signal channel
         loadCompleteSignal.close()
+    }
+
+    @Test
+    fun basicLoad_nosize() {
+        val latch = CountDownLatch(1)
+
+        composeTestRule.setContent {
+            CoilImage(
+                data = resourceUri(R.raw.sample),
+                modifier = Modifier.testTag(CoilTestTags.Image),
+                onRequestCompleted = { latch.countDown() }
+            )
+        }
+
+        // Wait for the onRequestCompleted to release the latch
+        latch.await(5, TimeUnit.SECONDS)
+
+        onNodeWithTag(CoilTestTags.Image)
+            .assertWidthIsAtLeast(1.dp)
+            .assertHeightIsAtLeast(1.dp)
+            .assertIsDisplayed()
     }
 
     @Test
@@ -254,7 +283,8 @@ class CoilTest {
         // Assert that the layout is in the tree and has the correct size
         onNodeWithTag(CoilTestTags.Image)
             .assertIsDisplayed()
-            .assertSize(composeTestRule.density, 128.dp, 128.dp)
+            .assertWidthIsEqualTo(128.dp)
+            .assertHeightIsEqualTo(128.dp)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

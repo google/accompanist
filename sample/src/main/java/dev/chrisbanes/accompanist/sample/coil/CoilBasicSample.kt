@@ -126,6 +126,16 @@ private fun Sample() {
                     },
                     modifier = Modifier.preferredSize(128.dp)
                 )
+
+                // CoilImage with an implicit size
+                CoilImage(
+                    data = randomSampleImageUrl(),
+                    loading = {
+                        Stack(Modifier.fillMaxSize()) {
+                            CircularProgressIndicator(Modifier.gravity(Alignment.Center))
+                        }
+                    }
+                )
             }
         }
     }
