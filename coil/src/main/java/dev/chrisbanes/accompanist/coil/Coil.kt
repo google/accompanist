@@ -225,7 +225,7 @@ fun CoilImage(
 }
 
 /**
- * Value for a [IntSize] dimension, where the dimension is not specified or is unknown.s
+ * Value for a [IntSize] dimension, where the dimension is not specified or is unknown.
  */
 private const val UNSPECIFIED = -1
 
