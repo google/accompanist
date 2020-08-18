@@ -189,6 +189,9 @@ fun CoilImage(
     }
 
     WithConstraints(modifier) {
+        // We remember the last size in a MutableRef (below) rather than a MutableState.
+        // This is because we don't need value changes to trigger a re-composition, we are only
+        // using it to store the last value.
         val lastRequestedSize = remember(requestActor) { MutableRef(IntSize.Zero) }
 
         val requestSize = IntSize(
@@ -205,7 +208,7 @@ fun CoilImage(
         }
 
         if (painter == null) {
-            // If we don't have a result painter, we add a Box with our modifier
+            // If we don't have a result painter, we add a Box...
             Box {
                 // If we don't have a result yet, we can show the loading content
                 // (if not null)
