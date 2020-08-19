@@ -51,8 +51,8 @@ object Libs {
         }
 
         object Compose {
-            const val snapshot = "6759487"
-            const val version = "0.1.0-SNAPSHOT"
+            const val snapshot = ""
+            const val version = "0.1.0-dev17"
             
             const val runtime = "androidx.compose.runtime:runtime:$version"
             const val foundation = "androidx.compose.foundation:foundation:${version}"
