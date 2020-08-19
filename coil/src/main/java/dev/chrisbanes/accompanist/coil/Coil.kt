@@ -41,14 +41,15 @@ import androidx.compose.ui.unit.IntSize
 import androidx.core.graphics.drawable.toBitmap
 import coil.Coil
 import coil.decode.DataSource
-import coil.request.GetRequest
-import coil.request.GetRequestBuilder
+import coil.request.ImageRequest
+import coil.request.ImageResult
+import coil.size.DisplaySizeResolver
 
 /**
  * Creates a composable that will attempt to load the given [data] using [Coil], and then
  * display the result in an [Image].
  *
- * @param data The data to load. See [GetRequestBuilder.data] for the types allowed.
+ * @param data The data to load. See [ImageRequest.Builder.data] for the types allowed.
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
  * @param alignment Optional alignment parameter used to place the loaded [ImageAsset] in the
  * given bounds defined by the width and height.
@@ -81,11 +82,11 @@ fun CoilImage(
         request = when (data) {
             // If the developer is accidentally using the wrong function (data vs request), just
             // pass the request through
-            is GetRequest -> data
+            is ImageRequest -> data
             // Otherwise we construct a GetRequest using the data parameter
             else -> {
                 val context = ContextAmbient.current
-                remember(data) { GetRequest.Builder(context).data(data).build() }
+                remember(data) { ImageRequest.Builder(context).data(data).build() }
             }
         },
         alignment = alignment,
@@ -104,7 +105,7 @@ fun CoilImage(
  * Creates a composable that will attempt to load the given [request] using [Coil], and then
  * display the result in an [Image].
  *
- * @param request The request to execute. If the request does not have a [GetRequest.sizeResolver]
+ * @param request The request to execute. If the request does not have a [ImageRequest.sizeResolver]
  * set, one will be set on the request using the layout constraints.
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
  * @param alignment Optional alignment parameter used to place the loaded [ImageAsset] in the
@@ -123,7 +124,7 @@ fun CoilImage(
  */
 @Composable
 fun CoilImage(
-    request: GetRequest,
+    request: ImageRequest,
     modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
@@ -134,13 +135,7 @@ fun CoilImage(
     shouldRefetchOnSizeChange: (currentResult: RequestResult, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
-    // GetRequest does not support object equality (as of Coil v0.10.1) so we can not key any
-    // remember calls using the request itself. For now we just use the [data] field, but
-    // ideally this should use [request] to track changes in size, transformations, etc too.
-    // See: https://github.com/coil-kt/coil/issues/405
-    val requestKey = request.data ?: request
-
-    var result by stateFor<RequestResult?>(requestKey) { null }
+    var result by stateFor<RequestResult?>(request) { null }
 
     // This may look a little weird, but allows the launchInComposition callback to always
     // invoke the last provided [onRequestCompleted].
@@ -155,7 +150,7 @@ fun CoilImage(
     val callback = state { onRequestCompleted }
     callback.value = onRequestCompleted
 
-    val requestActor = remember(requestKey) { CoilRequestActor(request) }
+    val requestActor = remember(request) { CoilRequestActor(request) }
 
     launchInComposition(requestActor) {
         // Launch the Actor
@@ -236,11 +231,12 @@ private const val UNSPECIFIED = -1
 private data class MutableRef<T>(var value: T)
 
 private fun CoilRequestActor(
-    request: GetRequest
+    request: ImageRequest
 ) = RequestActor<IntSize, RequestResult?> { size ->
     when {
-        request.sizeResolver != null -> {
-            // If the request has a sizeResolver set, we just execute the request as-is
+        request.sizeResolver !is DisplaySizeResolver -> {
+            // If the request doesn't have a default DisplaySizeResolver set, it must have a real
+            // size resolver, so we just execute the request as-is
             request
         }
         size.width == UNSPECIFIED || size.height == UNSPECIFIED -> {
@@ -250,9 +246,7 @@ private fun CoilRequestActor(
         }
         size != IntSize.Zero -> {
             // If we have a non-zero size, we can modify the request to include the size
-            request.newBuilder()
-                .size(size.width, size.height)
-                .build()
+            request.newBuilder().size(size.width, size.height).build()
         }
         else -> {
             // Otherwise we have a zero size, so no point executing a request
@@ -291,7 +285,7 @@ data class SuccessResult(
 ) : RequestResult() {
     internal constructor(result: coil.request.SuccessResult, fallbackSize: IntSize) : this(
         image = result.drawable.toImageAsset(fallbackSize),
-        source = result.source
+        source = result.metadata.dataSource
     )
 }
 
@@ -311,13 +305,11 @@ data class ErrorResult(
     )
 }
 
-private fun coil.request.RequestResult.toResult(
+private fun ImageResult.toResult(
     fallbackSize: IntSize = IntSize.Zero
-): RequestResult {
-    return when (this) {
-        is coil.request.SuccessResult -> SuccessResult(this, fallbackSize)
-        is coil.request.ErrorResult -> ErrorResult(this, fallbackSize)
-    }
+): RequestResult = when (this) {
+    is coil.request.SuccessResult -> SuccessResult(this, fallbackSize)
+    is coil.request.ErrorResult -> ErrorResult(this, fallbackSize)
 }
 
 @Composable

@@ -38,7 +38,7 @@ import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import coil.request.GetRequest
+import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
 import dev.chrisbanes.accompanist.coil.CoilImage
 import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
@@ -81,9 +81,9 @@ private fun Sample() {
                     modifier = Modifier.preferredSize(128.dp)
                 )
 
-                // CoilImage with GetRequest parameter
+                // CoilImage with ImageRequest parameter
                 CoilImage(
-                    request = GetRequest.Builder(ContextAmbient.current)
+                    request = ImageRequest.Builder(ContextAmbient.current)
                         .data(randomSampleImageUrl())
                         .transformations(CircleCropTransformation())
                         .build(),
@@ -107,9 +107,9 @@ private fun Sample() {
                     modifier = Modifier.preferredSize(128.dp)
                 )
 
-                // CoilImageWithCrossfade with GetRequest parameter
+                // CoilImageWithCrossfade with ImageRequest parameter
                 CoilImageWithCrossfade(
-                    request = GetRequest.Builder(ContextAmbient.current)
+                    request = ImageRequest.Builder(ContextAmbient.current)
                         .data(randomSampleImageUrl())
                         .transformations(CircleCropTransformation())
                         .build(),
