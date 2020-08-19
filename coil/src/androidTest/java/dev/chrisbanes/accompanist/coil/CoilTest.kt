@@ -43,7 +43,7 @@ import androidx.ui.test.onNodeWithTag
 import androidx.ui.test.onNodeWithText
 import androidx.ui.test.runOnIdle
 import coil.request.CachePolicy
-import coil.request.GetRequest
+import coil.request.ImageRequest
 import com.google.common.truth.Truth.assertThat
 import dev.chrisbanes.accompanist.coil.test.R
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -73,7 +73,7 @@ class CoilTest {
 
         composeTestRule.setContent {
             CoilImage(
-                request = GetRequest.Builder(ContextAmbient.current)
+                request = ImageRequest.Builder(ContextAmbient.current)
                     .data(resourceUri(R.raw.sample))
                     .listener { _, _ -> latch.countDown() }
                     .build(),
@@ -291,13 +291,14 @@ class CoilTest {
     @Test
     fun loadingSlot() {
         val dispatcher = TestCoroutineDispatcher()
+        val loadLatch = CountDownLatch(1)
+
         dispatcher.runBlockingTest {
             pauseDispatcher()
-            val latch = CountDownLatch(1)
 
             composeTestRule.setContent {
                 CoilImage(
-                    request = GetRequest.Builder(ContextAmbient.current)
+                    request = ImageRequest.Builder(ContextAmbient.current)
                         .data(resourceUri(R.raw.sample))
                         // Disable memory cache. If the item is in the cache, the fetch is
                         // synchronous and the dispatcher pause has no effect
@@ -306,21 +307,22 @@ class CoilTest {
                         .build(),
                     modifier = Modifier.preferredSize(128.dp, 128.dp),
                     loading = { Text(text = "Loading") },
-                    onRequestCompleted = { latch.countDown() }
+                    onRequestCompleted = { loadLatch.countDown() }
                 )
             }
 
             // Assert that the loading component is displayed
             onNodeWithText("Loading").assertIsDisplayed()
 
-            // Now resume the dispatcher to start the Coil request, and wait for the
-            // request to complete
+            // Now resume the dispatcher to start the Coil request
             dispatcher.resumeDispatcher()
-            latch.await(5, TimeUnit.SECONDS)
-
-            // And assert that the loading component no longer exists
-            onNodeWithText("Loading").assertDoesNotExist()
         }
+
+        // We now wait for the request to complete
+        loadLatch.await(5, TimeUnit.SECONDS)
+
+        // And assert that the loading component no longer exists
+        onNodeWithText("Loading").assertDoesNotExist()
     }
 
     @Test

@@ -45,19 +45,19 @@ import androidx.compose.ui.unit.toSize
 import androidx.core.util.Pools
 import coil.Coil
 import coil.decode.DataSource
-import coil.request.GetRequest
-import coil.request.GetRequestBuilder
+import coil.request.ImageRequest
 
 private const val DefaultTransitionDuration = 1000
 
 /**
  * Creates a composable that will attempt to load the given [data] using [Coil], and then
- * display the result in an [Image], using a crossfade when first loaded.
+ * display the result in an [androidx.compose.foundation.Image], using a crossfade
+ * when first loaded.
  *
  * The animation fades in the image's saturation, alpha and exposure. More information on the
  * pattern can be seen [here](https://material.io/archive/guidelines/patterns/loading-images.html).
  *
- * @param data The data to load. See [GetRequestBuilder.data] for the types allowed.
+ * @param data The data to load. See [ImageRequest.Builder.data] for the types allowed.
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
  * @param alignment Optional alignment parameter used to place the loaded [ImageAsset] in the
  * given bounds defined by the width and height.
@@ -97,12 +97,13 @@ fun CoilImageWithCrossfade(
 
 /**
  * Creates a composable that will attempt to load the given [request] using [Coil], and then
- * display the result in an [Image], using a crossfade animation when first loaded.
+ * display the result in an [androidx.compose.foundation.Image], using a crossfade
+ * animation when first loaded.
  *
  * The animation fades in the image's saturation, alpha and exposure. More information on the
  * pattern can be seen [here](https://material.io/archive/guidelines/patterns/loading-images.html).
  *
- * @param request The request to execute. If the request does not have a [GetRequest.sizeResolver]
+ * @param request The request to execute. If the request does not have a [ImageRequest.sizeResolver]
  * set, one will be set on the request using the layout constraints.
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
  * @param alignment Optional alignment parameter used to place the loaded [ImageAsset] in the
@@ -118,7 +119,7 @@ fun CoilImageWithCrossfade(
  */
 @Composable
 fun CoilImageWithCrossfade(
-    request: GetRequest,
+    request: ImageRequest,
     modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
@@ -228,7 +229,7 @@ private class ObservableCrossfadeImagePainter(
     }
 
     /**
-     * Return the dimension of the underlying [Image] as its intrinsic width and height
+     * Return the dimension of the underlying [ImageAsset] as its intrinsic width and height
      */
     override val intrinsicSize: Size get() = srcSize.toSize()
 
