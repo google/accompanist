@@ -16,7 +16,6 @@
 
 <resources>
     <string name="app_name">Accompanist Sample</string>
-    <string name="mdc_title">MDC Integration sample</string>
     <string name="coil_title_basic">Coil sample: Basic</string>
     <string name="coil_title_grid">Coil sample: Grid</string>
     <string name="coil_title_lazy_row">Coil sample: Lazy row</string>
