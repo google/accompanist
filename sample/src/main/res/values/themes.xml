@@ -15,17 +15,10 @@
   -->
 
 <resources>
-    <style name="Theme.AccompanistSample" parent="Theme.MaterialComponents.DayNight">
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-
+    <style name="Theme.AccompanistSample" parent="Theme.AppCompat.DayNight">
         <item name="colorPrimary">@color/deep_orange_300</item>
-        <item name="colorPrimaryVariant">@color/deep_orange_600</item>
-        <item name="colorSecondary">@color/pink_a200</item>
-        <item name="colorSecondaryVariant">@color/pink_dark</item>
-
-        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.AccompanistSample.SmallComponent</item>
-        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.AccompanistSample.MediumComponent</item>
-        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.AccompanistSample.LargeComponent</item>
+        <item name="colorPrimaryDark">@color/deep_orange_600</item>
+        <item name="colorAccent">@color/pink_a200</item>
     </style>
 
     <style name="Theme.AccompanistSample.NoActionBar">

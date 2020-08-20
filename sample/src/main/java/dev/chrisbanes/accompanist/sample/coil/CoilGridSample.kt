@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.ExperimentalLayout
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredSize
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
@@ -34,7 +35,6 @@ import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.chrisbanes.accompanist.coil.CoilImage
-import dev.chrisbanes.accompanist.mdctheme.MaterialThemeFromMdcTheme
 import dev.chrisbanes.accompanist.sample.R
 
 class CoilGridSample : AppCompatActivity() {
@@ -45,7 +45,7 @@ class CoilGridSample : AppCompatActivity() {
         setContentView(contentView)
 
         contentView.setContent(Recomposer.current()) {
-            MaterialThemeFromMdcTheme {
+            MaterialTheme {
                 Sample()
             }
         }

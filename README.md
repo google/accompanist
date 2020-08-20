@@ -2,11 +2,10 @@
 
 Accompanist is a group of libraries which contains some utilities which I've found myself copying around projects which use [Jetpack Compose][compose]. Currently it contains:
 
- * 🎨 [Material Design Components theme integration](./mdc-theme/README.md)
  * 🖼️ [Coil image loading composables](./coil/README.md)
 
 [Jetpack Compose][compose] is a fast moving project and I'll be updating these libraries to match the
-latest tagged release as quickly as possible. Each [release listing](https://github.com/chrisbanes/accompanist/releases) will outline what version of Compose and the UI libraries it depends on.
+latest tagged release as quickly as possible. Each [release listing](https://github.com/chrisbanes/accompanist/releases) will outline what version of Compose libraries it depends on.
 
 ## Download
 
@@ -16,7 +15,6 @@ repositories {
 }
 
 dependencies {
-    implementation "dev.chrisbanes.accompanist:accompanist-mdc-theme:<version>"
     implementation "dev.chrisbanes.accompanist:accompanist-coil:<version>"
 }
 ```
