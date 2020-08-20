@@ -44,7 +44,6 @@ import coil.Coil
 import coil.decode.DataSource
 import coil.request.ImageRequest
 import coil.request.ImageResult
-import coil.size.DisplaySizeResolver
 
 /**
  * Creates a composable that will attempt to load the given [data] using [Coil], and then
@@ -235,9 +234,8 @@ private fun CoilRequestActor(
     request: ImageRequest
 ) = RequestActor<IntSize, RequestResult?> { size ->
     when {
-        request.sizeResolver !is DisplaySizeResolver -> {
-            // If the request doesn't have a default DisplaySizeResolver set, it must have a real
-            // size resolver, so we just execute the request as-is
+        request.defined.sizeResolver != null -> {
+            // If the request has a size resolver set we just execute the request as-is
             request
         }
         size.width == UNSPECIFIED || size.height == UNSPECIFIED -> {

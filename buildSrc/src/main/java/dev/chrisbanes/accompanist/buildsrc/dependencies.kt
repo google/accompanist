@@ -71,7 +71,7 @@ object Libs {
         const val appcompat = "androidx.appcompat:appcompat:1.3.0-alpha01"
     }
 
-    const val coil = "io.coil-kt:coil:0.12.0"
+    const val coil = "io.coil-kt:coil:1.0.0-rc1"
 
     const val mdc = "com.google.android.material:material:1.1.0"
 
