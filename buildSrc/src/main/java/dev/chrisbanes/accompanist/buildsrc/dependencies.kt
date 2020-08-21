@@ -68,12 +68,10 @@ object Libs {
         const val core = "androidx.core:core:1.2.0"
         const val coreKtx = "androidx.core:core-ktx:1.2.0"
 
-        const val appcompat = "androidx.appcompat:appcompat:1.3.0-alpha01"
+        const val appcompat = "androidx.appcompat:appcompat:1.3.0-alpha02"
     }
 
-    const val coil = "io.coil-kt:coil:0.12.0"
-
-    const val mdc = "com.google.android.material:material:1.1.0"
+    const val coil = "io.coil-kt:coil:1.0.0-rc1"
 
     const val truth = "com.google.truth:truth:1.0.1"
 }

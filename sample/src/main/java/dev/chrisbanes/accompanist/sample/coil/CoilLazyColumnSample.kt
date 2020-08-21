@@ -38,7 +38,6 @@ import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.chrisbanes.accompanist.coil.CoilImage
-import dev.chrisbanes.accompanist.mdctheme.MaterialThemeFromMdcTheme
 import dev.chrisbanes.accompanist.sample.R
 
 class CoilLazyColumnSample : AppCompatActivity() {
@@ -49,7 +48,7 @@ class CoilLazyColumnSample : AppCompatActivity() {
         setContentView(contentView)
 
         contentView.setContent(Recomposer.current()) {
-            MaterialThemeFromMdcTheme {
+            MaterialTheme {
                 Sample()
             }
         }

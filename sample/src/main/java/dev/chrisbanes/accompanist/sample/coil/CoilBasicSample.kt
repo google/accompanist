@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
@@ -42,7 +43,6 @@ import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
 import dev.chrisbanes.accompanist.coil.CoilImage
 import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
-import dev.chrisbanes.accompanist.mdctheme.MaterialThemeFromMdcTheme
 import dev.chrisbanes.accompanist.sample.R
 
 class CoilBasicSample : AppCompatActivity() {
@@ -53,7 +53,7 @@ class CoilBasicSample : AppCompatActivity() {
         setContentView(contentView)
 
         contentView.setContent(Recomposer.current()) {
-            MaterialThemeFromMdcTheme {
+            MaterialTheme {
                 Sample()
             }
         }

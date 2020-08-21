@@ -40,15 +40,6 @@
         </activity>
 
         <activity
-            android:name=".mdc.MdcSampleActivity"
-            android:label="@string/mdc_title">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
             android:name=".coil.CoilBasicSample"
             android:label="@string/coil_title_basic">
             <intent-filter>
