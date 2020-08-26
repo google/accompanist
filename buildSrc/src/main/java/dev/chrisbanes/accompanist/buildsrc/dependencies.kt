@@ -21,7 +21,7 @@ object Versions {
 }
 
 object Libs {
-    const val androidGradlePlugin = "com.android.tools.build:gradle:4.2.0-alpha07"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:4.2.0-alpha08"
 
     const val gradleMavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.12.0"
 
@@ -51,8 +51,8 @@ object Libs {
         }
 
         object Compose {
-            const val snapshot = "6765009"
-            const val version = "1.0.0-SNAPSHOT"
+            const val snapshot = ""
+            const val version = "1.0.0-alpha01"
             
             const val runtime = "androidx.compose.runtime:runtime:$version"
             const val foundation = "androidx.compose.foundation:foundation:${version}"
