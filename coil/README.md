@@ -20,7 +20,7 @@ There is also a version of this function which accepts a Coil [`GetRequest`](htt
 
 ```kotlin
 CoilImage(
-    request = GetRequest.Builder(ContextAmbient.current)
+    request = ImageRequest.Builder(ContextAmbient.current)
         .data("https://loremflickr.com/300/300")
         .transformations(CircleCropTransformation())
         .build()
