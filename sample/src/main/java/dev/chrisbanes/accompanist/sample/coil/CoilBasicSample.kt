@@ -95,7 +95,7 @@ private fun Sample() {
                     data = randomSampleImageUrl(),
                     loading = {
                         Stack(Modifier.fillMaxSize()) {
-                            CircularProgressIndicator(Modifier.gravity(Alignment.Center))
+                            CircularProgressIndicator(Modifier.align(Alignment.Center))
                         }
                     },
                     modifier = Modifier.preferredSize(128.dp)
@@ -121,7 +121,7 @@ private fun Sample() {
                     data = randomSampleImageUrl(),
                     loading = {
                         Stack(Modifier.fillMaxSize()) {
-                            CircularProgressIndicator(Modifier.gravity(Alignment.Center))
+                            CircularProgressIndicator(Modifier.align(Alignment.Center))
                         }
                     },
                     modifier = Modifier.preferredSize(128.dp)
@@ -132,7 +132,7 @@ private fun Sample() {
                     data = randomSampleImageUrl(),
                     loading = {
                         Stack(Modifier.fillMaxSize()) {
-                            CircularProgressIndicator(Modifier.gravity(Alignment.Center))
+                            CircularProgressIndicator(Modifier.align(Alignment.Center))
                         }
                     }
                 )
