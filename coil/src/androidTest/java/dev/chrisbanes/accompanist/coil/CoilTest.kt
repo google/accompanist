@@ -106,7 +106,7 @@ class CoilTest {
         // Wait for the onRequestCompleted to release the latch
         latch.await(5, TimeUnit.SECONDS)
 
-        composeTestRule.onNodeWithTag(CoilTestTags.Image, false)
+        composeTestRule.onNodeWithTag(CoilTestTags.Image)
             .assertIsDisplayed()
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
