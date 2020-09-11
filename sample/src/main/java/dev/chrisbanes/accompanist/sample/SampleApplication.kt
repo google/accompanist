@@ -28,16 +28,18 @@ class SampleApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        Coil.setImageLoader(object : ImageLoaderFactory {
-            override fun newImageLoader(): ImageLoader {
-                val coilOkHttpClient = OkHttpClient.Builder()
-                    .cache(CoilUtils.createDefaultCache(this@SampleApplication))
-                    .build()
+        Coil.setImageLoader(
+            object : ImageLoaderFactory {
+                override fun newImageLoader(): ImageLoader {
+                    val coilOkHttpClient = OkHttpClient.Builder()
+                        .cache(CoilUtils.createDefaultCache(this@SampleApplication))
+                        .build()
 
-                return ImageLoader.Builder(this@SampleApplication)
-                    .okHttpClient(coilOkHttpClient)
-                    .build()
+                    return ImageLoader.Builder(this@SampleApplication)
+                        .okHttpClient(coilOkHttpClient)
+                        .build()
+                }
             }
-        })
+        )
     }
 }
