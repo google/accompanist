@@ -31,3 +31,11 @@ release/*.gpg
 org.eclipse.buildship.core.prefs
 .classpath
 .project
+
+# Temporary API docs
+docs/api
+# These are generated from files in the root folder
+docs/index.md
+docs/contributing.md
+# Mkdocs temporary serving folder
+site

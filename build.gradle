@@ -21,7 +21,6 @@ buildscript {
     repositories {
         google()
         jcenter()
-        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap/' }
     }
 
     dependencies {
@@ -29,11 +28,20 @@ buildscript {
         classpath Libs.Kotlin.gradlePlugin
 
         classpath Libs.gradleMavenPublishPlugin
+
+        classpath Libs.Dokka.gradlePlugin
+        classpath Libs.Kotlin.binaryCompatibility
     }
 }
 
 plugins {
-    id "com.diffplug.gradle.spotless" version "4.3.0"
+    id "com.diffplug.spotless" version "5.1.1"
+}
+
+apply plugin: 'binary-compatibility-validator'
+apiValidation {
+    // Ignore the sample from API tracking/checking
+    ignoredProjects += ["sample"]
 }
 
 subprojects {
@@ -42,8 +50,6 @@ subprojects {
         mavenCentral()
         jcenter()
 
-        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap/' }
-
         if (!Libs.AndroidX.Compose.snapshot.isEmpty()) {
             maven {
                 url "https://androidx.dev/snapshots/builds/${Libs.AndroidX.Compose.snapshot}/artifacts/ui/repository/"
@@ -51,7 +57,7 @@ subprojects {
         }
     }
 
-    apply plugin: 'com.diffplug.gradle.spotless'
+    apply plugin: 'com.diffplug.spotless'
     spotless {
         kotlin {
             target "**/*.kt"
@@ -95,6 +101,29 @@ subprojects {
                 project.ext.set(prop.key, rootProject.file(prop.value).absolutePath)
             } else {
                 project.ext.set(prop.key, prop.value)
+            }
+        }
+    }
+
+    // Must be afterEvaluate or else com.vanniktech.maven.publish will overwrite our
+    // dokka configuration.
+    afterEvaluate {
+        tasks.withType(org.jetbrains.dokka.gradle.DokkaTask).configureEach {
+            configuration {
+                jdkVersion = 8
+                reportUndocumented = false
+                skipDeprecated = true
+                skipEmptyPackages = true
+
+                externalDocumentationLink {
+                    url = new URL("https://developer.android.com/reference/")
+                    packageListUrl = new URL("https://developer.android.com/reference/androidx/package-list")
+                }
+                externalDocumentationLink {
+                    url = new URL("https://developer.android.com/reference/kotlin/")
+                    packageListUrl = new URL("https://developer.android.com/reference/kotlin/androidx/ui/package-list")
+                }
+                // TODO: add Coil
             }
         }
     }

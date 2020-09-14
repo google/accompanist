@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+@file:JvmName("CoilImage")
+@file:JvmMultifileClass
+
 package dev.chrisbanes.accompanist.coil
 
 import android.graphics.ColorMatrixColorFilter

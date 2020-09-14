@@ -1,0 +1,46 @@
+# Project information
+site_name: 'Accompanist'
+site_description: 'A group of libraries to help write Jetpack Compose apps.'
+site_author: 'Chris Banes'
+site_url: 'https://chrisbanes.github.io/accompanist/'
+remote_branch: gh-pages
+
+# Repository
+repo_name: 'Accompanist'
+repo_url: 'https://github.com/chrisbanes/accompanist'
+
+# Navigation
+nav:
+  - 'Overview': index.md
+  - 'Coil API': api/coil/index.md
+  - 'Snapshots': using-snapshot-version.md
+  - 'Contributing': contributing.md
+
+# Configuration
+theme:
+  name: 'material'
+  language: 'en'
+  icon:
+    logo: material/music-clef-treble
+  palette:
+    primary: 'black'
+    accent: 'deep orange'
+  font:
+    text: 'IBM Plex Sans'
+    code: 'IBM Plex Mono'
+
+# Extensions
+markdown_extensions:
+  - admonition
+  - codehilite:
+      guess_lang: false
+  - footnotes
+  - toc:
+      permalink: true
+  - pymdownx.betterem
+  - pymdownx.superfences
+
+extra:
+  social:
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/chrisbanes

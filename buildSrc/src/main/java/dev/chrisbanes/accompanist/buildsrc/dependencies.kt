@@ -21,7 +21,7 @@ object Versions {
 }
 
 object Libs {
-    const val androidGradlePlugin = "com.android.tools.build:gradle:4.2.0-alpha09"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:4.2.0-alpha10"
 
     const val gradleMavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.12.0"
 
@@ -31,6 +31,12 @@ object Libs {
         const val version = "1.4.0"
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib:$version"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
+
+        const val binaryCompatibility = "org.jetbrains.kotlinx:binary-compatibility-validator:0.2.3"
+    }
+
+    object Dokka {
+        const val gradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:0.10.1"
     }
 
     object Coroutines {
