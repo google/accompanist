@@ -11,23 +11,23 @@
         <meta name="description" content="A group of libraries to help write Jetpack Compose apps.">
       
       
-        <link rel="canonical" href="https://chrisbanes.github.io/accompanist/api/coil/dev.chrisbanes.accompanist.coil/-image-loading-color-matrix/alpha-fraction/">
+        <link rel="canonical" href="https://chrisbanes.github.io/accompanist/coil/">
       
       
         <meta name="author" content="Chris Banes">
       
-      <link rel="shortcut icon" href="../../../../../assets/images/favicon.png">
+      <link rel="shortcut icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.5.12">
     
     
       
-        <title>Alpha fraction - Accompanist</title>
+        <title>Coil - Accompanist</title>
       
     
     
-      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.4dd2dd8d.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.4dd2dd8d.min.css">
       
-        <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.6a5ad368.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.6a5ad368.min.css">
       
       
         
@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#alphafraction" class="md-skip">
+        <a href="#jetpack-compose-coil" class="md-skip">
           Skip to content
         </a>
       
@@ -92,7 +92,7 @@
           </span>
           <span class="md-header-nav__topic md-ellipsis">
             
-              Alpha fraction
+              Coil
             
           </span>
         </div>
@@ -192,7 +192,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../../.." title="Overview" class="md-nav__link">
+    <a href=".." title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -202,11 +202,83 @@
       
       
 
+  
 
-  <li class="md-nav__item">
-    <a href="../../../../../coil/" title="Coil" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Coil
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" title="Coil" class="md-nav__link md-nav__link--active">
       Coil
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#coilimage" class="md-nav__link">
+    CoilImage()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coilimagewithcrossfade" class="md-nav__link">
+    CoilImageWithCrossfade()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#download" class="md-nav__link">
+    Download
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limitations" class="md-nav__link">
+    Limitations
+  </a>
+  
+    <nav class="md-nav" aria-label="Limitations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#whats-the-goal-of-the-library" class="md-nav__link">
+    What's the goal of the library?
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
     
@@ -237,7 +309,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../" title="Coil" class="md-nav__link">
+    <a href="../api/coil/" title="Coil" class="md-nav__link">
       Coil
     </a>
   </li>
@@ -254,7 +326,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../../../using-snapshot-version/" title="Snapshots" class="md-nav__link">
+    <a href="../using-snapshot-version/" title="Snapshots" class="md-nav__link">
       Snapshots
     </a>
   </li>
@@ -266,7 +338,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../../../contributing/" title="Contributing" class="md-nav__link">
+    <a href="../contributing/" title="Contributing" class="md-nav__link">
       Contributing
     </a>
   </li>
@@ -289,6 +361,55 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#coilimage" class="md-nav__link">
+    CoilImage()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coilimagewithcrossfade" class="md-nav__link">
+    CoilImageWithCrossfade()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#download" class="md-nav__link">
+    Download
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limitations" class="md-nav__link">
+    Limitations
+  </a>
+  
+    <nav class="md-nav" aria-label="Limitations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#whats-the-goal-of-the-library" class="md-nav__link">
+    What's the goal of the library?
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -299,7 +420,7 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/chrisbanes/accompanist/edit/master/docs/api/coil/dev.chrisbanes.accompanist.coil/-image-loading-color-matrix/alpha-fraction.md" title="Edit this page" class="md-content__button md-icon">
+                  <a href="https://github.com/chrisbanes/accompanist/edit/master/docs/coil.md" title="Edit this page" class="md-content__button md-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
                   </a>
                 
@@ -307,9 +428,52 @@
                   
                 
                 
-                <p><a href="../../../">coil</a> / <a href="../../">dev.chrisbanes.accompanist.coil</a> / <a href="../">ImageLoadingColorMatrix</a> / <a href="./">alphaFraction</a></p>
-<h1 id="alphafraction">alphaFraction<a class="headerlink" href="#alphafraction" title="Permanent link">&para;</a></h1>
-<p><code>var alphaFraction:</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html"><code>Float</code></a></p>
+                <h1 id="jetpack-compose-coil">Jetpack Compose + Coil<a class="headerlink" href="#jetpack-compose-coil" title="Permanent link">&para;</a></h1>
+<p><a href="https://search.maven.org/search?q=g:dev.chrisbanes.accompanist"><img alt="Maven Central" src="https://maven-badges.herokuapp.com/maven-central/dev.chrisbanes.accompanist/accompanist-coil/badge.svg" /></a></p>
+<p>This library brings easy-to-use composable which can fetch and display images from external sources, such as network, using the <a href="https://github.com/coil-kt/coil">Coil</a> image loading library.</p>
+<p>There are currently two composables:</p>
+<h3 id="coilimage"><code>CoilImage()</code><a class="headerlink" href="#coilimage" title="Permanent link">&para;</a></h3>
+<p>This loads the <code>data</code> passed in with <a href="https://github.com/coil-kt/coil">Coil</a>, and then displays the resulting image using the standard <code>Image</code> composable.</p>
+<div class="highlight"><pre><span></span><code><span class="n">CoilImage</span><span class="p">(</span>
+    <span class="k">data</span> <span class="p">=</span> <span class="s">&quot;https://loremflickr.com/300/300&quot;</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>There is also a version of this function which accepts a Coil <a href="https://coil-kt.github.io/coil/api/coil-base/coil.request/-get-request/"><code>GetRequest</code></a>, allowing full customization of the request. This allows usage of things like (but not limited to) transformations:</p>
+<div class="highlight"><pre><span></span><code><span class="n">CoilImage</span><span class="p">(</span>
+    <span class="n">request</span> <span class="p">=</span> <span class="n">GetRequest</span><span class="p">.</span><span class="n">Builder</span><span class="p">(</span><span class="n">ContextAmbient</span><span class="p">.</span><span class="n">current</span><span class="p">)</span>
+        <span class="p">.</span><span class="k">data</span><span class="p">(</span><span class="s">&quot;https://loremflickr.com/300/300&quot;</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">transformations</span><span class="p">(</span><span class="n">CircleCropTransformation</span><span class="p">())</span>
+        <span class="p">.</span><span class="n">build</span><span class="p">()</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<h3 id="coilimagewithcrossfade"><code>CoilImageWithCrossfade()</code><a class="headerlink" href="#coilimagewithcrossfade" title="Permanent link">&para;</a></h3>
+<p>Very similar to <code>CoilImage</code>, but this will run a crossfade transition when the image is first loaded.</p>
+<p><img alt="" src="./crossfade.gif" /></p>
+<div class="highlight"><pre><span></span><code><span class="n">CoilImageWithCrossfade</span><span class="p">(</span>
+    <span class="k">data</span> <span class="p">=</span> <span class="s">&quot;https://loremflickr.com/300/300&quot;</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>Similarly to <code>CoilImage</code>, there is a version of this function which accepts a <a href="https://coil-kt.github.io/coil/api/coil-base/coil.request/-get-request/"><code>GetRequest</code></a> instead of a <code>data</code>.</p>
+<h2 id="download">Download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">repositories</span> <span class="o">{</span>
+    <span class="n">mavenCentral</span><span class="o">()</span>
+<span class="o">}</span>
+
+<span class="n">dependencies</span> <span class="o">{</span>
+    <span class="n">implementation</span> <span class="s2">&quot;dev.chrisbanes.accompanist:accompanist-coil:&lt;version&gt;&quot;</span>
+<span class="o">}</span>
+</code></pre></div>
+
+<h2 id="limitations">Limitations<a class="headerlink" href="#limitations" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Compose currently only supports static bitmap images, which means that we need to convert the resulting images to a <code>Bitmap</code>. This means that using things like Coil's <a href="https://coil-kt.github.io/coil/gifs/">GIF support</a> will result in only the first frame being rendered, instead of animating.</li>
+</ul>
+<p>Snapshots of the development version are available in <a href="https://oss.sonatype.org/content/repositories/snapshots/dev/chrisbanes/accompanist/accompanist-coil/">Sonatype's <code>snapshots</code> repository</a>. These are updated on every commit.</p>
+<h3 id="whats-the-goal-of-the-library">What's the goal of the library?<a class="headerlink" href="#whats-the-goal-of-the-library" title="Permanent link">&para;</a></h3>
+<p>Eventually the goal is to upstream all of this functionality back to <a href="https://github.com/coil-kt/coil">Coil</a>. <a href="https://developer.android.com/jetpack/compose">Jetpack Compose</a>'s development is currently moving very fast, which means that there are frequent API changes between releases. For now, it makes sense to keep this as a seperately released library to track the latest Compose release.</p>
                 
               
               
@@ -324,6 +488,41 @@
       
         
 <footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href=".." title="Overview" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Overview
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../api/coil/" title="Coil" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Coil
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -354,15 +553,15 @@
       
     </div>
     
-      <script src="../../../../../assets/javascripts/vendor.3636a4ec.min.js"></script>
-      <script src="../../../../../assets/javascripts/bundle.e9fe3281.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      <script src="../assets/javascripts/vendor.3636a4ec.min.js"></script>
+      <script src="../assets/javascripts/bundle.e9fe3281.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
       
       <script>
         app = initialize({
-          base: "../../../../..",
+          base: "..",
           features: [],
           search: Object.assign({
-            worker: "../../../../../assets/javascripts/worker/search.5eca75d3.min.js"
+            worker: "../assets/javascripts/worker/search.5eca75d3.min.js"
           }, typeof search !== "undefined" && search)
         })
       </script>
