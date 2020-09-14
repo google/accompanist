@@ -12,6 +12,7 @@ repo_url: 'https://github.com/chrisbanes/accompanist'
 # Navigation
 nav:
   - 'Overview': index.md
+  - 'Coil': coil.md
   - 'API':
     - 'Coil': api/coil/index.md
   - 'Snapshots': using-snapshot-version.md

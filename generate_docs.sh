@@ -13,8 +13,15 @@ cp README.md docs/index.md
 cp CONTRIBUTING.md docs/contributing.md
 cp images/social.png docs/header.png
 
-sed -i '' 's/CONTRIBUTING.md/\/contributing/' docs/index.md
-sed -i '' 's/images\/social.png/\/header.png/' docs/index.md
+sed -i '' 's/CONTRIBUTING.md/contributing/' docs/index.md
+sed -i '' 's/coil\/README.md/coil/' docs/index.md
+sed -i '' 's/images\/social.png/header.png/' docs/index.md
+
+cp coil/README.md docs/coil.md
+mkdir -p docs/coil
+cp coil/images/crossfade.gif docs/coil/crossfade.gif
+
+sed -i '' 's/images\/crossfade.gif/crossfade.gif/' docs/coil.md
 
 # Convert docs/xxx.md links to just xxx/
 sed -i '' 's/docs\/\([a-zA-Z-]*\).md/\1/' docs/index.md
