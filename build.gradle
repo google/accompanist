@@ -123,9 +123,11 @@ subprojects {
                     url = new URL("https://developer.android.com/reference/kotlin/")
                     packageListUrl = new URL("https://developer.android.com/reference/kotlin/androidx/ui/package-list")
                 }
-                externalDocumentationLink {
-                    url = new URL("https://coil-kt.github.io/coil/api/coil-base/")
-                    packageListUrl = new URL("file://$rootDir/package-list-coil-base")
+                if (rootProject.file('package-list-coil-base').exists()) {
+                    externalDocumentationLink {
+                        url = new URL("https://coil-kt.github.io/coil/api/coil-base/")
+                        packageListUrl = new URL("file://$rootDir/package-list-coil-base")
+                    }
                 }
             }
         }
