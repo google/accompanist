@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+@file:JvmName("CoilImage")
+@file:JvmMultifileClass
+
 package dev.chrisbanes.accompanist.coil
 
 import android.graphics.drawable.Drawable
@@ -327,7 +330,7 @@ internal val emptySuccessLambda: (RequestResult) -> Unit = {}
 
 internal val defaultRefetchOnSizeChangeLambda: (RequestResult, IntSize) -> Boolean = { _, _ -> false }
 
-internal fun Drawable.toImageAsset(fallbackSize: IntSize = IntSize.Zero): ImageAsset {
+internal fun Drawable.toImageAsset(fallbackSize: IntSize): ImageAsset {
     return toBitmap(
         width = if (intrinsicWidth > 0) intrinsicWidth else fallbackSize.width,
         height = if (intrinsicHeight > 0) intrinsicHeight else fallbackSize.height

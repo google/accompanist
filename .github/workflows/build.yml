@@ -1,4 +1,4 @@
-name: CI
+name: Build & test
 
 on:
   push:
@@ -42,7 +42,7 @@ jobs:
           key: gradle-${{ hashFiles('checksum.txt') }}
 
       - name: Build, lint and spotless
-        run: ./gradlew spotlessCheck assemble assembleAndroidTest lintDebug --scan
+        run: ./gradlew spotlessCheck assemble assembleAndroidTest lintDebug apiCheck --scan
 
       - name: Clean secrets
         if: always()

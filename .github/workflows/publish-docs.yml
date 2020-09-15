@@ -1,0 +1,45 @@
+name: Publish docs
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  deploy_docs:
+    runs-on: ubuntu-latest
+    env:
+      JAVA_TOOL_OPTIONS: -Xmx5120m
+      GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2 -Dkotlin.compiler.execution.strategy=in-process
+      TERM: dumb
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup JDK 8 (1.8)
+        uses: actions/setup-java@v1
+        with:
+          java-version: 8
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install mkdocs
+          python3 -m pip install mkdocs-material
+
+      - name: Generate docs
+        run: ./generate_docs.sh
+
+      - name: Build site
+        run: mkdocs build
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site

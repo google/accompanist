@@ -1,4 +1,4 @@
-name: Release Management
+name: Update release
 
 on:
   push:

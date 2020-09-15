@@ -16,9 +16,11 @@
 
 import dev.chrisbanes.accompanist.buildsrc.Libs
 
-apply plugin: 'com.android.library'
-
-apply plugin: 'kotlin-android'
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'org.jetbrains.dokka'
+}
 
 android {
     compileSdkVersion 30
@@ -67,6 +69,13 @@ android {
         unitTests {
             includeAndroidResources = true
         }
+    }
+}
+
+afterEvaluate {
+    tasks.withType(org.jetbrains.dokka.gradle.DokkaTask).configureEach {
+        outputDirectory = "$rootDir/docs/api"
+        outputFormat = "gfm"
     }
 }
 
