@@ -41,3 +41,4 @@ docs/coil.md
 docs/coil/
 # Mkdocs temporary serving folder
 site
+*.bak
