@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION") // ListActivity
+
 package dev.chrisbanes.accompanist.sample
 
-import android.R
+import android.annotation.SuppressLint
 import android.app.ListActivity
 import android.content.Intent
 import android.os.Bundle
@@ -40,9 +42,9 @@ class MainActivity : ListActivity() {
         listAdapter = SimpleAdapter(
             this,
             getData(intent.getStringExtra(EXTRA_PATH)),
-            R.layout.simple_list_item_1,
+            android.R.layout.simple_list_item_1,
             arrayOf("title"),
-            intArrayOf(R.id.text1)
+            intArrayOf(android.R.id.text1)
         )
 
         listView.isTextFilterEnabled = true
@@ -54,7 +56,8 @@ class MainActivity : ListActivity() {
         val mainIntent = Intent(Intent.ACTION_MAIN, null)
         mainIntent.addCategory("dev.chrisbanes.accompanist.sample.SAMPLE_CODE")
 
-        val list = packageManager.queryIntentActivities(mainIntent, 0) ?: return myData
+        @SuppressLint("QueryPermissionsNeeded") // Only querying our own Activities
+        val list = packageManager.queryIntentActivities(mainIntent, 0)
 
         val prefixPath: Array<String>?
         var prefixWithSlash = prefix
