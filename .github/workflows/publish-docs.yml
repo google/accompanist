@@ -1,7 +1,6 @@
 name: Publish docs
 
 on:
-  push: # TODO remove this
   release:
     types:
       - published
