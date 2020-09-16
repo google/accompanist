@@ -91,7 +91,7 @@ class CoilTest {
         // Wait for the Coil request listener to release the latch
         latch.await(5, TimeUnit.SECONDS)
 
-        runOnIdle {
+        composeTestRule.runOnIdle {
             // And assert that we got a single successful result
             assertThat(results).hasSize(1)
             assertThat(results[0]).isInstanceOf(SuccessResult::class.java)
@@ -113,7 +113,7 @@ class CoilTest {
         // Wait for the onRequestCompleted to release the latch
         latch.await(5, TimeUnit.SECONDS)
 
-        onNodeWithTag(CoilTestTags.Image)
+        composeTestRule.onNodeWithTag(CoilTestTags.Image)
             .assertIsDisplayed()
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
@@ -135,7 +135,7 @@ class CoilTest {
         // Wait for the onRequestCompleted to release the latch
         latch.await(5, TimeUnit.SECONDS)
 
-        onNodeWithTag(CoilTestTags.Image)
+        composeTestRule.onNodeWithTag(CoilTestTags.Image)
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
             .assertIsDisplayed()
@@ -194,7 +194,7 @@ class CoilTest {
         }
 
         // Assert that the content is completely Red
-        onNodeWithTag(CoilTestTags.Image)
+        composeTestRule.onNodeWithTag(CoilTestTags.Image)
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
             .assertIsDisplayed()
@@ -208,7 +208,7 @@ class CoilTest {
         runBlocking { loadCompleteSignal.receive() }
 
         // Assert that the content is completely Blue
-        onNodeWithTag(CoilTestTags.Image)
+        composeTestRule.onNodeWithTag(CoilTestTags.Image)
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
             .assertIsDisplayed()
@@ -267,7 +267,7 @@ class CoilTest {
         // Wait for the onRequestCompleted to release the latch
         latch.await(5, TimeUnit.SECONDS)
 
-        onNodeWithTag(CoilTestTags.Image)
+        composeTestRule.onNodeWithTag(CoilTestTags.Image)
             .assertWidthIsAtLeast(1.dp)
             .assertHeightIsAtLeast(1.dp)
             .assertIsDisplayed()
@@ -294,7 +294,7 @@ class CoilTest {
         latch.await(5, TimeUnit.SECONDS)
 
         // Assert that the whole layout is drawn cyan
-        onNodeWithTag(CoilTestTags.Image)
+        composeTestRule.onNodeWithTag(CoilTestTags.Image)
             .assertIsDisplayed()
             .captureToBitmap()
             .assertPixels { Color.Cyan }
@@ -316,7 +316,7 @@ class CoilTest {
         latch.await(5, TimeUnit.SECONDS)
 
         // Assert that the layout is in the tree and has the correct size
-        onNodeWithTag(CoilTestTags.Image)
+        composeTestRule.onNodeWithTag(CoilTestTags.Image)
             .assertIsDisplayed()
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
@@ -347,7 +347,7 @@ class CoilTest {
             }
 
             // Assert that the loading component is displayed
-            onNodeWithText("Loading").assertIsDisplayed()
+            composeTestRule.onNodeWithText("Loading").assertIsDisplayed()
 
             // Now resume the dispatcher to start the Coil request
             dispatcher.resumeDispatcher()
@@ -357,7 +357,7 @@ class CoilTest {
         loadLatch.await(5, TimeUnit.SECONDS)
 
         // And assert that the loading component no longer exists
-        onNodeWithText("Loading").assertDoesNotExist()
+        composeTestRule.onNodeWithText("Loading").assertDoesNotExist()
     }
 
     @Test
@@ -381,7 +381,7 @@ class CoilTest {
         latch.await(5, TimeUnit.SECONDS)
 
         // Assert that the whole layout is drawn red
-        onNodeWithTag(CoilTestTags.Image)
+        composeTestRule.onNodeWithTag(CoilTestTags.Image)
             .assertIsDisplayed()
             .captureToBitmap()
             .assertPixels { Color.Red }
