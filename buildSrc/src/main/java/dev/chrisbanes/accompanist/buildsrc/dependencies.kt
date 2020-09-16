@@ -80,4 +80,5 @@ object Libs {
     const val coil = "io.coil-kt:coil:1.0.0-rc1"
 
     const val truth = "com.google.truth:truth:1.0.1"
+    const val mockk = "io.mockk:mockk-android:1.10.0"
 }

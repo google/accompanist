@@ -44,6 +44,7 @@ import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.unit.IntSize
 import androidx.core.graphics.drawable.toBitmap
 import coil.Coil
+import coil.ImageLoader
 import coil.decode.DataSource
 import coil.request.ImageRequest
 import coil.request.ImageResult
@@ -64,6 +65,8 @@ import coil.request.ImageResult
  * @param getFailurePainter Optional builder for the [Painter] to be used to draw the failure
  * loading result. Passing in `null` will result in falling back to the default [Painter].
  * @param loading Content to be displayed when the request is in progress.
+ * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to [Coil]'s
+ * default image loader.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
@@ -78,6 +81,7 @@ fun CoilImage(
     getSuccessPainter: @Composable ((SuccessResult) -> Painter)? = null,
     getFailurePainter: @Composable ((ErrorResult) -> Painter?)? = null,
     loading: @Composable (() -> Unit)? = null,
+    imageLoader: ImageLoader = Coil.imageLoader(ContextAmbient.current),
     shouldRefetchOnSizeChange: (currentResult: RequestResult, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
@@ -99,6 +103,7 @@ fun CoilImage(
         getSuccessPainter = getSuccessPainter,
         getFailurePainter = getFailurePainter,
         loading = loading,
+        imageLoader = imageLoader,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         modifier = modifier
     )
@@ -121,6 +126,8 @@ fun CoilImage(
  * @param getFailurePainter Optional builder for the [Painter] to be used to draw the failure
  * loading result. Passing in `null` will result in falling back to the default [Painter].
  * @param loading Content to be displayed when the request is in progress.
+ * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to [Coil]'s
+ * default image loader.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
@@ -135,6 +142,7 @@ fun CoilImage(
     getSuccessPainter: @Composable ((SuccessResult) -> Painter)? = null,
     getFailurePainter: @Composable ((ErrorResult) -> Painter?)? = null,
     loading: @Composable (() -> Unit)? = null,
+    imageLoader: ImageLoader = Coil.imageLoader(ContextAmbient.current),
     shouldRefetchOnSizeChange: (currentResult: RequestResult, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
@@ -153,7 +161,9 @@ fun CoilImage(
     val callback = remember { mutableStateOf(onRequestCompleted, referentialEqualityPolicy()) }
     callback.value = onRequestCompleted
 
-    val requestActor = remember(request) { CoilRequestActor(request) }
+    val requestActor = remember(imageLoader, request) {
+        CoilRequestActor(imageLoader, request)
+    }
 
     launchInComposition(requestActor) {
         // Launch the Actor
@@ -234,6 +244,7 @@ private const val UNSPECIFIED = -1
 private data class MutableRef<T>(var value: T)
 
 private fun CoilRequestActor(
+    imageLoader: ImageLoader,
     request: ImageRequest
 ) = RequestActor<IntSize, RequestResult?> { size ->
     when {
@@ -256,7 +267,7 @@ private fun CoilRequestActor(
         }
     }?.let { transformedRequest ->
         // Now execute the request in Coil...
-        Coil.imageLoader(transformedRequest.context)
+        imageLoader
             .execute(transformedRequest)
             .toResult(size)
             .also {
