@@ -42,11 +42,13 @@ import androidx.compose.ui.graphics.drawscope.drawCanvas
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.AnimationClockAmbient
+import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.toSize
 import androidx.core.util.Pools
 import coil.Coil
+import coil.ImageLoader
 import coil.decode.DataSource
 import coil.request.ImageRequest
 
@@ -69,6 +71,8 @@ private const val DefaultTransitionDuration = 1000
  * @param crossfadeDuration The duration of the crossfade animation in milliseconds.
  * @param getFailurePainter Optional builder for the [Painter] to be used to draw the failure
  * loading result. Passing in `null` will result in falling back to the default [Painter].
+ * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to [Coil]'s
+ * default image loader.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
@@ -82,6 +86,7 @@ fun CoilImageWithCrossfade(
     crossfadeDuration: Int = DefaultTransitionDuration,
     getFailurePainter: @Composable ((ErrorResult) -> Painter?)? = null,
     loading: @Composable (() -> Unit)? = null,
+    imageLoader: ImageLoader = Coil.imageLoader(ContextAmbient.current),
     shouldRefetchOnSizeChange: (currentResult: RequestResult, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
@@ -93,6 +98,7 @@ fun CoilImageWithCrossfade(
         getFailurePainter = getFailurePainter,
         loading = loading,
         modifier = modifier,
+        imageLoader = imageLoader,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         onRequestCompleted = onRequestCompleted
     )
@@ -116,6 +122,8 @@ fun CoilImageWithCrossfade(
  * @param crossfadeDuration The duration of the crossfade animation in milliseconds.
  * @param getFailurePainter Optional builder for the [Painter] to be used to draw the failure
  * loading result. Passing in `null` will result in falling back to the default [Painter].
+ * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to [Coil]'s
+ * default image loader.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
@@ -129,6 +137,7 @@ fun CoilImageWithCrossfade(
     crossfadeDuration: Int = DefaultTransitionDuration,
     getFailurePainter: @Composable ((ErrorResult) -> Painter?)? = null,
     loading: @Composable (() -> Unit)? = null,
+    imageLoader: ImageLoader = Coil.imageLoader(ContextAmbient.current),
     shouldRefetchOnSizeChange: (currentResult: RequestResult, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
 ) {
@@ -139,6 +148,7 @@ fun CoilImageWithCrossfade(
         getSuccessPainter = { crossfadePainter(it, durationMs = crossfadeDuration) },
         getFailurePainter = getFailurePainter,
         loading = loading,
+        imageLoader = imageLoader,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         modifier = modifier,
         onRequestCompleted = onRequestCompleted

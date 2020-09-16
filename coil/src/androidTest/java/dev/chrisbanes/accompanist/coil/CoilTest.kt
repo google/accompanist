@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.test.filters.LargeTest
 import androidx.test.filters.SdkSuppress
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.ui.test.assertHeightIsAtLeast
 import androidx.ui.test.assertHeightIsEqualTo
 import androidx.ui.test.assertIsDisplayed
@@ -42,10 +43,15 @@ import androidx.ui.test.createComposeRule
 import androidx.ui.test.onNodeWithTag
 import androidx.ui.test.onNodeWithText
 import androidx.ui.test.runOnIdle
+import coil.EventListener
+import coil.ImageLoader
+import coil.annotation.ExperimentalCoilApi
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.google.common.truth.Truth.assertThat
 import dev.chrisbanes.accompanist.coil.test.R
+import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -135,6 +141,35 @@ class CoilTest {
             .assertIsDisplayed()
             .captureToBitmap()
             .assertPixels { Color.Red }
+    }
+
+    @OptIn(ExperimentalCoilApi::class)
+    @Test
+    fun basicLoad_customImageLoader() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val latch = CountDownLatch(1)
+
+        // Build a custom ImageLoader with a mocked EventListener
+        val eventListener = mockk<EventListener>(relaxed = true)
+        val imageLoader = ImageLoader.Builder(context)
+            .eventListener(eventListener)
+            .build()
+
+        composeTestRule.setContent {
+            CoilImage(
+                data = resourceUri(R.drawable.red_rectangle),
+                modifier = Modifier.preferredSize(128.dp, 128.dp),
+                imageLoader = imageLoader,
+                onRequestCompleted = { latch.countDown() }
+            )
+        }
+
+        // Wait for the onRequestCompleted to release the latch
+        latch.await(5, TimeUnit.SECONDS)
+
+        // Verify that our eventListener was invoked
+        verify(atLeast = 1) { eventListener.fetchStart(any(), any(), any()) }
+        verify(atLeast = 1) { eventListener.fetchEnd(any(), any(), any(), any()) }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

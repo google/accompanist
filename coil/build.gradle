@@ -91,6 +91,7 @@ dependencies {
 
     androidTestImplementation Libs.junit
     androidTestImplementation Libs.truth
+    androidTestImplementation Libs.mockk
 
     androidTestImplementation Libs.Coroutines.test
 
