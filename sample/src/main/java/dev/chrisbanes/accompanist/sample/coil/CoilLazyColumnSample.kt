@@ -82,7 +82,7 @@ private fun Sample() {
                 Text(
                     text = "Text",
                     style = MaterialTheme.typography.subtitle2,
-                    modifier = Modifier.weight(1f).gravity(Alignment.CenterVertically)
+                    modifier = Modifier.weight(1f).align(Alignment.CenterVertically)
                 )
             }
         }
