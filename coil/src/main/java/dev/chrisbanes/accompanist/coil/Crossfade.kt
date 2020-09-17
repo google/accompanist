@@ -26,6 +26,7 @@ import androidx.compose.animation.core.FloatPropKey
 import androidx.compose.animation.core.createAnimation
 import androidx.compose.animation.core.transitionDefinition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,6 +40,7 @@ import androidx.compose.ui.graphics.ImageAsset
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawCanvas
+import androidx.compose.ui.graphics.painter.ImagePainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.AnimationClockAmbient
@@ -69,13 +71,13 @@ private const val DefaultTransitionDuration = 1000
  * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
  * used if the bounds are a different size from the intrinsic size of the loaded [ImageAsset].
  * @param crossfadeDuration The duration of the crossfade animation in milliseconds.
- * @param getFailurePainter Optional builder for the [Painter] to be used to draw the failure
- * loading result. Passing in `null` will result in falling back to the default [Painter].
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to [Coil]'s
  * default image loader.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
+ * @param error Content to be displayed when the request failed.
+ * @param loading Content to be displayed when the request is in progress.
  */
 @Composable
 fun CoilImageWithCrossfade(
@@ -84,24 +86,27 @@ fun CoilImageWithCrossfade(
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     crossfadeDuration: Int = DefaultTransitionDuration,
-    getFailurePainter: @Composable ((ErrorResult) -> Painter?)? = null,
-    loading: @Composable (() -> Unit)? = null,
     imageLoader: ImageLoader = Coil.imageLoader(ContextAmbient.current),
     shouldRefetchOnSizeChange: (currentResult: RequestResult, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
-    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
+    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda,
+    error: @Composable ((ErrorResult) -> Unit)? = null,
+    loading: @Composable (() -> Unit)? = null
 ) {
     CoilImage(
         data = data,
-        alignment = alignment,
-        contentScale = contentScale,
-        getSuccessPainter = { crossfadePainter(it, durationMs = crossfadeDuration) },
-        getFailurePainter = getFailurePainter,
-        loading = loading,
         modifier = modifier,
         imageLoader = imageLoader,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
-        onRequestCompleted = onRequestCompleted
-    )
+        onRequestCompleted = onRequestCompleted,
+        error = error,
+        loading = loading
+    ) { result ->
+        Image(
+            painter = crossfadePainter(result, durationMs = crossfadeDuration),
+            alignment = alignment,
+            contentScale = contentScale
+        )
+    }
 }
 
 /**
@@ -120,13 +125,13 @@ fun CoilImageWithCrossfade(
  * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
  * used if the bounds are a different size from the intrinsic size of the loaded [ImageAsset].
  * @param crossfadeDuration The duration of the crossfade animation in milliseconds.
- * @param getFailurePainter Optional builder for the [Painter] to be used to draw the failure
- * loading result. Passing in `null` will result in falling back to the default [Painter].
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to [Coil]'s
  * default image loader.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
+ * @param error Content to be displayed when the request failed.
+ * @param loading Content to be displayed when the request is in progress.
  */
 @Composable
 fun CoilImageWithCrossfade(
@@ -135,24 +140,27 @@ fun CoilImageWithCrossfade(
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     crossfadeDuration: Int = DefaultTransitionDuration,
-    getFailurePainter: @Composable ((ErrorResult) -> Painter?)? = null,
-    loading: @Composable (() -> Unit)? = null,
     imageLoader: ImageLoader = Coil.imageLoader(ContextAmbient.current),
     shouldRefetchOnSizeChange: (currentResult: RequestResult, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
-    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
+    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda,
+    error: @Composable ((ErrorResult) -> Unit)? = null,
+    loading: @Composable (() -> Unit)? = null
 ) {
     CoilImage(
         request = request,
-        alignment = alignment,
-        contentScale = contentScale,
-        getSuccessPainter = { crossfadePainter(it, durationMs = crossfadeDuration) },
-        getFailurePainter = getFailurePainter,
         loading = loading,
         imageLoader = imageLoader,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         modifier = modifier,
-        onRequestCompleted = onRequestCompleted
-    )
+        onRequestCompleted = onRequestCompleted,
+        error = error,
+    ) { result ->
+        Image(
+            painter = crossfadePainter(result, durationMs = crossfadeDuration),
+            alignment = alignment,
+            contentScale = contentScale
+        )
+    }
 }
 
 /**
@@ -177,16 +185,16 @@ private fun crossfadePainter(
 ): Painter {
     return if (skipFadeWhenLoadedFromMemory && result.isFromMemory()) {
         // If can skip the fade when loaded from memory, we do not need to run an animation on it
-        defaultSuccessPainterGetter(result)
+        ImagePainter(result.image)
     } else {
-        val observablePainter = remember {
+        val observablePainter = remember(result) {
             ObservableCrossfadeImagePainter(result.image, durationMs, clock).also { it.start() }
         }
         when {
             // If the animation is running, return it as the painter
             !observablePainter.isFinished -> observablePainter
             // If the animation has finished, revert back to the default painter
-            else -> defaultSuccessPainterGetter(result)
+            else -> ImagePainter(result.image)
         }
     }
 }
