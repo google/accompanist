@@ -17,6 +17,8 @@ nav:
     - 'Coil': api/coil/index.md
   - 'Snapshots': using-snapshot-version.md
   - 'Contributing': contributing.md
+  - 'Maintainers':
+      - 'Update guide': updating.md
 
 # Configuration
 theme:
