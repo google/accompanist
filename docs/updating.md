@@ -35,7 +35,7 @@ git checkout -b update_snapshot
 
 Now edit the project to depend on the new Compose SNAPSHOT version:
 
-Edit [dependencies.kt](../buildSrc/src/main/java/dev/chrisbanes/accompanist/buildsrc/dependencies.kt):
+Edit [dependencies.kt](https://github.com/chrisbanes/accompanist/blob/main/buildSrc/src/main/java/dev/chrisbanes/accompanist/buildsrc/dependencies.kt):
 
 1. Update the `Libs.AndroidX.Compose.snapshot` property to be the snapshot number
 2. Ensure that the `Libs.AndroidX.Compose.version` property is correct
@@ -70,7 +70,7 @@ git merge snapshot
 
 ### #2: Update dependencies
 
-Edit [dependencies.kt](../buildSrc/src/main/java/dev/chrisbanes/accompanist/buildsrc/dependencies.kt):
+Edit [dependencies.kt](https://github.com/chrisbanes/accompanist/blob/main/buildSrc/src/main/java/dev/chrisbanes/accompanist/buildsrc/dependencies.kt):
 1) Update the `Libs.AndroidX.Compose.snapshot` property to be an empty string (`val snapshot = ""`)
 2) Update the `Libs.AndroidX.Compose.version` property to the new Compose version (`1.0.0-alpha03` for example).
 
@@ -83,7 +83,7 @@ Commit the changes.
 
 ### #3: Bump the version number
 
-Edit [gradle.properties](../gradle.properties):
+Edit [gradle.properties](https://github.com/chrisbanes/accompanist/blob/main/gradle.properties):
 
  * Update the `VERSION_NAME` property and remove the `-SNAPSHOT` suffix.
 
@@ -108,7 +108,7 @@ At this point the release is published. This will trigger the docs action to run
 
 The current release is now finished, but we need to update the version for the next development version:
 
-Edit [gradle.properties](../gradle.properties):
+Edit [gradle.properties](https://github.com/chrisbanes/accompanist/blob/main/gradle.properties):
 
  * Update the `VERSION_NAME` property, by increasing the version number, and adding the `-SNAPSHOT` suffix.
  * Example: released version: `0.3.0`. Update to `0.3.1-SNAPSHOT`
