@@ -186,8 +186,7 @@ fun CoilImage(
  * Creates a composable that will attempt to load the given [data] using [Coil], and then
  * display the result in an [Image].
  *
- * @param request The request to execute. If the request does not have a [ImageRequest.sizeResolver]
- * set, one will be set on the request using the layout constraints.
+ * @param data The data to load. See [ImageRequest.Builder.data] for the types allowed.
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
  * @param alignment Optional alignment parameter used to place the loaded [ImageAsset] in the
  * given bounds defined by the width and height.
