@@ -590,7 +590,7 @@ git checkout -b update_snapshot
 </code></pre></div>
 
 <p>Now edit the project to depend on the new Compose SNAPSHOT version:</p>
-<p>Edit <a href="../buildSrc/src/main/java/dev/chrisbanes/accompanist/buildsrc/dependencies.kt">dependencies.kt</a>:</p>
+<p>Edit <a href="https://github.com/chrisbanes/accompanist/blob/main/buildSrc/src/main/java/dev/chrisbanes/accompanist/buildsrc/dependencies.kt">dependencies.kt</a>:</p>
 <ol>
 <li>Update the <code>Libs.AndroidX.Compose.snapshot</code> property to be the snapshot number</li>
 <li>Ensure that the <code>Libs.AndroidX.Compose.version</code> property is correct</li>
@@ -615,7 +615,7 @@ git merge snapshot
 </code></pre></div>
 
 <h3 id="2-update-dependencies">#2: Update dependencies<a class="headerlink" href="#2-update-dependencies" title="Permanent link">&para;</a></h3>
-<p>Edit <a href="../buildSrc/src/main/java/dev/chrisbanes/accompanist/buildsrc/dependencies.kt">dependencies.kt</a>:
+<p>Edit <a href="https://github.com/chrisbanes/accompanist/blob/main/buildSrc/src/main/java/dev/chrisbanes/accompanist/buildsrc/dependencies.kt">dependencies.kt</a>:
 1) Update the <code>Libs.AndroidX.Compose.snapshot</code> property to be an empty string (<code>val snapshot = ""</code>)
 2) Update the <code>Libs.AndroidX.Compose.version</code> property to the new Compose version (<code>1.0.0-alpha03</code> for example).</p>
 <p>Make sure the project builds and test pass:
@@ -623,7 +623,7 @@ git merge snapshot
 </code></pre></div></p>
 <p>Commit the changes.</p>
 <h3 id="3-bump-the-version-number">#3: Bump the version number<a class="headerlink" href="#3-bump-the-version-number" title="Permanent link">&para;</a></h3>
-<p>Edit <a href="../gradle.properties">gradle.properties</a>:</p>
+<p>Edit <a href="https://github.com/chrisbanes/accompanist/blob/main/gradle.properties">gradle.properties</a>:</p>
 <ul>
 <li>Update the <code>VERSION_NAME</code> property and remove the <code>-SNAPSHOT</code> suffix.</li>
 </ul>
@@ -641,7 +641,7 @@ git merge snapshot
 <p>At this point the release is published. This will trigger the docs action to run, which will auto-deploy a new version of the <a href="https://chrisbanes.github.io/accompanist/">website</a>.</p>
 <h3 id="6-prepare-the-next-development-version">#6: Prepare the next development version<a class="headerlink" href="#6-prepare-the-next-development-version" title="Permanent link">&para;</a></h3>
 <p>The current release is now finished, but we need to update the version for the next development version:</p>
-<p>Edit <a href="../gradle.properties">gradle.properties</a>:</p>
+<p>Edit <a href="https://github.com/chrisbanes/accompanist/blob/main/gradle.properties">gradle.properties</a>:</p>
 <ul>
 <li>Update the <code>VERSION_NAME</code> property, by increasing the version number, and adding the <code>-SNAPSHOT</code> suffix.</li>
 <li>Example: released version: <code>0.3.0</code>. Update to <code>0.3.1-SNAPSHOT</code></li>
