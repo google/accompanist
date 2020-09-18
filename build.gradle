@@ -51,9 +51,22 @@ subprojects {
         jcenter()
 
         if (!Libs.AndroidX.Compose.snapshot.isEmpty()) {
-            maven {
-                url "https://androidx.dev/snapshots/builds/${Libs.AndroidX.Compose.snapshot}/artifacts/ui/repository/"
-            }
+            maven { url Libs.AndroidX.Compose.snapshotUrl }
+        }
+    }
+
+    if (!Libs.AndroidX.Compose.snapshot.isEmpty()) {
+        // We're depending on a Jetpack Compose snapshot, update the library version name
+        // to indicate it's from a Compose snapshot
+        def versionName = project.properties.get('VERSION_NAME')
+        if (versionName.contains("SNAPSHOT")) {
+            version = versionName.replace(
+                    '-SNAPSHOT',
+                    ".compose-${Libs.AndroidX.Compose.snapshot}-SNAPSHOT"
+            )
+        } else {
+            throw new IllegalArgumentException("Using Jetpack Compose SNAPSHOT repository" +
+                    " but library version name is not set to SNAPSHOT")
         }
     }
 

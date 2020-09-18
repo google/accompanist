@@ -60,6 +60,15 @@ object Libs {
             const val snapshot = ""
             const val version = "1.0.0-alpha03"
 
+            @JvmStatic
+            val snapshotUrl: String
+                get() = when {
+                    snapshot.isNotEmpty() -> {
+                        "https://androidx.dev/snapshots/builds/$snapshot/artifacts/ui/repository/"
+                    }
+                    else -> throw IllegalArgumentException("Snapshot version not set")
+                }
+
             const val runtime = "androidx.compose.runtime:runtime:$version"
             const val foundation = "androidx.compose.foundation:foundation:${version}"
             const val layout = "androidx.compose.foundation:foundation-layout:${version}"
