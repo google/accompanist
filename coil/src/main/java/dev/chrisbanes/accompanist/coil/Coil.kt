@@ -20,7 +20,6 @@
 package dev.chrisbanes.accompanist.coil
 
 import android.graphics.drawable.Drawable
-import androidx.compose.foundation.Box
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
