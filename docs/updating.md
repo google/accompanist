@@ -3,9 +3,9 @@
 This doc is mostly for maintainers.
 
 ## New features & bugfixes
-All new features should be submitted and merged into the `main` branch. 
+All new features should be uploaded as PRs against the `main` branch. 
 
-Once merged there, they should then be merged into the `snapshot` branch:
+Once merged into `main`, they should be merged into the `snapshot` branch:
 
 ``` sh
 git checkout main && git pull
@@ -17,7 +17,6 @@ git checkout -b snapshot_main_merge
 git merge main
 
 # Push to GitHub
-
 ```
 
 ## Jetpack Compose Snapshots
@@ -37,8 +36,9 @@ git checkout -b update_snapshot
 Now edit the project to depend on the new Compose SNAPSHOT version:
 
 Edit [dependencies.kt](../buildSrc/src/main/java/dev/chrisbanes/accompanist/buildsrc/dependencies.kt):
-1) Update the `Libs.AndroidX.Compose.snapshot` property to be the snapshot number
-2) Ensure that the `Libs.AndroidX.Compose.version` property is correct
+
+1. Update the `Libs.AndroidX.Compose.snapshot` property to be the snapshot number
+2. Ensure that the `Libs.AndroidX.Compose.version` property is correct
 
 Make sure the project builds and test pass:
 ```
