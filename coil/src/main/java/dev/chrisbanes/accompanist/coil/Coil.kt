@@ -176,14 +176,8 @@ fun CoilImage(
         when (r) {
             is SuccessResult -> image(r)
             is ErrorResult -> if (error != null) error(r)
-            null -> {
-                // If we don't have a result painter, we add a Box...
-                Box {
-                    // If we don't have a result yet, we can show the loading content
-                    // (if not null)
-                    if (loading != null) loading()
-                }
-            }
+            // If we don't have a result yet, show the loading content
+            null -> if (loading != null) loading()
         }
     }
 }
