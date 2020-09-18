@@ -17,7 +17,7 @@
         <meta name="author" content="Chris Banes">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.5.12">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.5.6">
     
     
       
@@ -25,14 +25,14 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.4dd2dd8d.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.63b94e9e.min.css">
       
-        <link rel="stylesheet" href="../assets/stylesheets/palette.6a5ad368.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.7f672a1f.min.css">
       
       
         
         
-        <meta name="theme-color" content="#000000">
+        <meta name="theme-color" content="">
       
     
     
@@ -221,11 +221,15 @@
     
     <label class="md-nav__link" for="nav-3">
       API
-      <span class="md-nav__icon md-icon"></span>
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
     </label>
     <nav class="md-nav" aria-label="API" data-md-level="1">
       <label class="md-nav__title" for="nav-3">
-        <span class="md-nav__icon md-icon"></span>
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
         API
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -264,7 +268,9 @@
     
       <label class="md-nav__link md-nav__link--active" for="__toc">
         Snapshots
-        <span class="md-nav__icon md-icon"></span>
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"/></svg>
+        </span>
       </label>
     
     <a href="./" title="Snapshots" class="md-nav__link md-nav__link--active">
@@ -279,7 +285,9 @@
   
   
     <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-scrollfix>
@@ -310,6 +318,48 @@
   </li>
 
     
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+    
+    <label class="md-nav__link" for="nav-6">
+      Maintainers
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Maintainers" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Maintainers
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../updating/" title="Update guide" class="md-nav__link">
+      Update guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
   </ul>
 </nav>
                   </div>
@@ -328,7 +378,9 @@
   
   
     <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-scrollfix>
@@ -378,12 +430,12 @@ library, you can use the <a href="https://oss.sonatype.org/content/repositories/
 
 <p>You might see a number of different versioned snapshots. If we use an example:</p>
 <ul>
-<li><code>0.1.5-SNAPSHOT</code> is a build from the <code>main</code> branch, and depends on the latest tagged Jetpack Compose release (i.e. <a href="https://developer.android.com/jetpack/androidx/releases/ui#0.1.0-dev12">dev12</a>).</li>
-<li><code>0.1.5.ui-6574163-SNAPSHOT</code> is a build from the <code>snapshot</code> branch. This depends on the <a href="https://androidx.dev">SNAPSHOT build</a> of Jetpack Compose from build 6574163. You should only use these if you are using Jetpack Compose snapshot versions (see below).</li>
+<li><code>0.3.0-SNAPSHOT</code> is a build from the <code>main</code> branch, and depends on the latest tagged Jetpack Compose release (i.e. <a href="https://developer.android.com/jetpack/androidx/releases/compose#1.0.0-alpha03">alpha03</a>).</li>
+<li><code>0.3.0.compose-6574163-SNAPSHOT</code> is a build from the <code>snapshot</code> branch. This depends on the <a href="https://androidx.dev">SNAPSHOT build</a> of Jetpack Compose from build <code>6574163</code>. You should only use these if you are using Jetpack Compose snapshot versions (see below).</li>
 </ul>
 <h3 id="using-jetpack-compose-snapshots">Using Jetpack Compose Snapshots<a class="headerlink" href="#using-jetpack-compose-snapshots" title="Permanent link">&para;</a></h3>
 <p>If you're using <a href="https://androidx.dev"><code>SNAPSHOT</code></a> versions of the <code>androidx.compose</code> libraries, you might run into issues with the current stable Accompanist release forcing an older version of those libraries.</p>
-<p>We publish snapshot versions of Accompanist which depend on recent Jetpack Compose SNAPSHOT repositories. To find a recent build, look through the <a href="https://oss.sonatype.org/content/repositories/snapshots/dev/chrisbanes/accompanist/">snapshot repository</a> for any versions in the scheme <code>x.x.x.ui-YYYY-SNAPSHOT</code> (for example: <code>0.1.5.ui-6574163-SNAPSHOT</code>). The <code>YYYY</code> in the scheme is the snapshot build being used from <a href="https://androidx.dev">AndroidX</a> (from the example: build <a href="https://androidx.dev/snapshots/builds/6574163/artifacts"><code>6574163</code></a>). You can then use it like so:</p>
+<p>We publish snapshot versions of Accompanist which depend on recent Jetpack Compose SNAPSHOT repositories. To find a recent build, look through the <a href="https://oss.sonatype.org/content/repositories/snapshots/dev/chrisbanes/accompanist/">snapshot repository</a> for any versions in the scheme <code>x.x.x.compose-YYYY-SNAPSHOT</code> (for example: <code>0.3.0.compose-6574163-SNAPSHOT</code>). The <code>YYYY</code> in the scheme is the snapshot build being used from <a href="https://androidx.dev">AndroidX</a> (from the example: build <a href="https://androidx.dev/snapshots/builds/6574163/artifacts"><code>6574163</code></a>). You can then use it like so:</p>
 <div class="highlight"><pre><span></span><code><span class="n">repositories</span> <span class="o">{</span>
     <span class="c1">// ...</span>
     <span class="n">maven</span> <span class="o">{</span> <span class="n">url</span> <span class="s1">&#39;https://oss.sonatype.org/content/repositories/snapshots&#39;</span> <span class="o">}</span>
@@ -391,11 +443,12 @@ library, you can use the <a href="https://oss.sonatype.org/content/repositories/
 
 <span class="n">dependencies</span> <span class="o">{</span>
     <span class="c1">// Check the latest SNAPSHOT version from the link above</span>
-    <span class="n">classpath</span> <span class="s1">&#39;dev.chrisbanes.accompanist:accompanist-coil:XXXX.ui-YYYYY-SNAPSHOT&#39;</span>
+    <span class="n">classpath</span> <span class="s1">&#39;dev.chrisbanes.accompanist:accompanist-coil:XXXX.compose-YYYYY-SNAPSHOT&#39;</span>
 <span class="o">}</span>
 </code></pre></div>
 
-<p>These builds are updated regularly, but there's no guarantee that I will create one for a given snapshot number.</p>
+<p>These builds are updated regularly, but there's no guarantee that we will create one for a given snapshot number.</p>
+<p><em>Note:</em> you might also see versions in the scheme <code>x.x.x.ui-YYYY-SNAPSHOT</code>. These are the same, just using an older suffix.</p>
                 
               
               
@@ -475,15 +528,15 @@ library, you can use the <a href="https://oss.sonatype.org/content/repositories/
       
     </div>
     
-      <script src="../assets/javascripts/vendor.3636a4ec.min.js"></script>
-      <script src="../assets/javascripts/bundle.e9fe3281.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      <script src="../assets/javascripts/vendor.d1f5a259.min.js"></script>
+      <script src="../assets/javascripts/bundle.d5fec882.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
       
       <script>
         app = initialize({
           base: "..",
           features: [],
           search: Object.assign({
-            worker: "../assets/javascripts/worker/search.5eca75d3.min.js"
+            worker: "../assets/javascripts/worker/search.fae956e7.min.js"
           }, typeof search !== "undefined" && search)
         })
       </script>
