@@ -20,7 +20,6 @@
 package dev.chrisbanes.accompanist.coil
 
 import android.graphics.drawable.Drawable
-import androidx.compose.foundation.Box
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
@@ -37,7 +36,6 @@ import androidx.compose.ui.WithConstraints
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageAsset
 import androidx.compose.ui.graphics.asImageAsset
-import androidx.compose.ui.graphics.painter.ImagePainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ContextAmbient
@@ -51,39 +49,29 @@ import coil.request.ImageResult
 
 /**
  * Creates a composable that will attempt to load the given [data] using [Coil], and then
- * display the result in an [Image].
+ * display the result in the provided [image] content.
  *
  * @param data The data to load. See [ImageRequest.Builder.data] for the types allowed.
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
- * @param alignment Optional alignment parameter used to place the loaded [ImageAsset] in the
- * given bounds defined by the width and height.
- * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
- * used if the bounds are a different size from the intrinsic size of the loaded [ImageAsset].
- * @param colorFilter Optional colorFilter to apply for the [Painter] when it is rendered onscreen.
- * @param getSuccessPainter Optional builder for the [Painter] to be used to draw the successful
- * loading result. Passing in `null` will result in falling back to the default [Painter].
- * @param getFailurePainter Optional builder for the [Painter] to be used to draw the failure
- * loading result. Passing in `null` will result in falling back to the default [Painter].
- * @param loading Content to be displayed when the request is in progress.
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to [Coil]'s
  * default image loader.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
+ * @param error Content to be displayed when the request failed.
+ * @param loading Content to be displayed when the request is in progress.
+ * @param image Content to be displayed when the request is successful.
  */
 @Composable
 fun CoilImage(
     data: Any,
     modifier: Modifier = Modifier,
-    alignment: Alignment = Alignment.Center,
-    contentScale: ContentScale = ContentScale.Fit,
-    colorFilter: ColorFilter? = null,
-    getSuccessPainter: @Composable ((SuccessResult) -> Painter)? = null,
-    getFailurePainter: @Composable ((ErrorResult) -> Painter?)? = null,
-    loading: @Composable (() -> Unit)? = null,
     imageLoader: ImageLoader = Coil.imageLoader(ContextAmbient.current),
     shouldRefetchOnSizeChange: (currentResult: RequestResult, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
-    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
+    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda,
+    error: @Composable ((ErrorResult) -> Unit)? = null,
+    loading: @Composable (() -> Unit)? = null,
+    image: @Composable (SuccessResult) -> Unit
 ) {
     CoilImage(
         request = when (data) {
@@ -96,55 +84,42 @@ fun CoilImage(
                 remember(data) { ImageRequest.Builder(context).data(data).build() }
             }
         },
-        alignment = alignment,
-        contentScale = contentScale,
-        colorFilter = colorFilter,
-        onRequestCompleted = onRequestCompleted,
-        getSuccessPainter = getSuccessPainter,
-        getFailurePainter = getFailurePainter,
-        loading = loading,
+        modifier = modifier,
         imageLoader = imageLoader,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
-        modifier = modifier
+        onRequestCompleted = onRequestCompleted,
+        error = error,
+        loading = loading,
+        image = image,
     )
 }
 
 /**
  * Creates a composable that will attempt to load the given [request] using [Coil], and then
- * display the result in an [Image].
+ * display the result in the provided [image] content.
  *
  * @param request The request to execute. If the request does not have a [ImageRequest.sizeResolver]
  * set, one will be set on the request using the layout constraints.
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
- * @param alignment Optional alignment parameter used to place the loaded [ImageAsset] in the
- * given bounds defined by the width and height.
- * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
- * used if the bounds are a different size from the intrinsic size of the loaded [ImageAsset].
- * @param colorFilter Optional colorFilter to apply for the [Painter] when it is rendered onscreen.
- * @param getSuccessPainter Optional builder for the [Painter] to be used to draw the successful
- * loading result. Passing in `null` will result in falling back to the default [Painter].
- * @param getFailurePainter Optional builder for the [Painter] to be used to draw the failure
- * loading result. Passing in `null` will result in falling back to the default [Painter].
- * @param loading Content to be displayed when the request is in progress.
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to [Coil]'s
  * default image loader.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
+ * @param error Content to be displayed when the request failed.
+ * @param loading Content to be displayed when the request is in progress.
+ * @param image Content to be displayed when the request is successful.
  */
 @Composable
 fun CoilImage(
     request: ImageRequest,
     modifier: Modifier = Modifier,
-    alignment: Alignment = Alignment.Center,
-    contentScale: ContentScale = ContentScale.Fit,
-    colorFilter: ColorFilter? = null,
-    getSuccessPainter: @Composable ((SuccessResult) -> Painter)? = null,
-    getFailurePainter: @Composable ((ErrorResult) -> Painter?)? = null,
-    loading: @Composable (() -> Unit)? = null,
     imageLoader: ImageLoader = Coil.imageLoader(ContextAmbient.current),
     shouldRefetchOnSizeChange: (currentResult: RequestResult, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
-    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
+    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda,
+    error: @Composable ((ErrorResult) -> Unit)? = null,
+    loading: @Composable (() -> Unit)? = null,
+    image: @Composable (SuccessResult) -> Unit
 ) {
     var result by stateFor<RequestResult?>(request) { null }
 
@@ -178,24 +153,6 @@ fun CoilImage(
         }
     }
 
-    val painter = when (val r = result) {
-        is SuccessResult -> {
-            if (getSuccessPainter != null) {
-                getSuccessPainter(r)
-            } else {
-                defaultSuccessPainterGetter(r)
-            }
-        }
-        is ErrorResult -> {
-            if (getFailurePainter != null) {
-                getFailurePainter(r)
-            } else {
-                defaultFailurePainterGetter(r)
-            }
-        }
-        else -> null
-    }
-
     WithConstraints(modifier) {
         // We remember the last size in a MutableRef (below) rather than a MutableState.
         // This is because we don't need value changes to trigger a re-composition, we are only
@@ -215,23 +172,113 @@ fun CoilImage(
             lastRequestedSize.value = requestSize
         }
 
-        if (painter == null) {
-            // If we don't have a result painter, we add a Box...
-            Box {
-                // If we don't have a result yet, we can show the loading content
-                // (if not null)
-                if (result == null && loading != null) {
-                    loading()
-                }
-            }
-        } else {
-            Image(
-                painter = painter,
-                contentScale = contentScale,
-                alignment = alignment,
-                colorFilter = colorFilter,
-            )
+        when (r) {
+            is SuccessResult -> image(r)
+            is ErrorResult -> if (error != null) error(r)
+            // If we don't have a result yet, show the loading content
+            null -> if (loading != null) loading()
         }
+    }
+}
+
+/**
+ * Creates a composable that will attempt to load the given [data] using [Coil], and then
+ * display the result in an [Image].
+ *
+ * @param data The data to load. See [ImageRequest.Builder.data] for the types allowed.
+ * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
+ * @param alignment Optional alignment parameter used to place the loaded [ImageAsset] in the
+ * given bounds defined by the width and height.
+ * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
+ * used if the bounds are a different size from the intrinsic size of the loaded [ImageAsset].
+ * @param colorFilter Optional colorFilter to apply for the [Painter] when it is rendered onscreen.
+ * @param error Content to be displayed when the request failed.
+ * @param loading Content to be displayed when the request is in progress.
+ * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to [Coil]'s
+ * default image loader.
+ * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
+ * optional re-fetching of the image. Return true to re-fetch the image.
+ * @param onRequestCompleted Listener which will be called when the loading request has finished.
+ */
+@Composable
+fun CoilImage(
+    data: Any,
+    modifier: Modifier = Modifier,
+    alignment: Alignment = Alignment.Center,
+    contentScale: ContentScale = ContentScale.Fit,
+    colorFilter: ColorFilter? = null,
+    error: @Composable ((ErrorResult) -> Unit)? = null,
+    loading: @Composable (() -> Unit)? = null,
+    imageLoader: ImageLoader = Coil.imageLoader(ContextAmbient.current),
+    shouldRefetchOnSizeChange: (currentResult: RequestResult, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
+    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
+) {
+    CoilImage(
+        data = data,
+        modifier = modifier,
+        error = error,
+        loading = loading,
+        imageLoader = imageLoader,
+        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
+        onRequestCompleted = onRequestCompleted,
+    ) { result ->
+        Image(
+            asset = result.image,
+            alignment = alignment,
+            contentScale = contentScale,
+            colorFilter = colorFilter
+        )
+    }
+}
+
+/**
+ * Creates a composable that will attempt to load the given [request] using [Coil], and then
+ * display the result in an [Image].
+ *
+ * @param request The request to execute. If the request does not have a [ImageRequest.sizeResolver]
+ * set, one will be set on the request using the layout constraints.
+ * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
+ * @param alignment Optional alignment parameter used to place the loaded [ImageAsset] in the
+ * given bounds defined by the width and height.
+ * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
+ * used if the bounds are a different size from the intrinsic size of the loaded [ImageAsset].
+ * @param colorFilter Optional colorFilter to apply for the [Painter] when it is rendered onscreen.
+ * @param error Content to be displayed when the request failed.
+ * @param loading Content to be displayed when the request is in progress.
+ * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to [Coil]'s
+ * default image loader.
+ * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
+ * optional re-fetching of the image. Return true to re-fetch the image.
+ * @param onRequestCompleted Listener which will be called when the loading request has finished.
+ */
+@Composable
+fun CoilImage(
+    request: ImageRequest,
+    modifier: Modifier = Modifier,
+    alignment: Alignment = Alignment.Center,
+    contentScale: ContentScale = ContentScale.Fit,
+    colorFilter: ColorFilter? = null,
+    error: @Composable ((ErrorResult) -> Unit)? = null,
+    loading: @Composable (() -> Unit)? = null,
+    imageLoader: ImageLoader = Coil.imageLoader(ContextAmbient.current),
+    shouldRefetchOnSizeChange: (currentResult: RequestResult, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
+    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
+) {
+    CoilImage(
+        request = request,
+        modifier = modifier,
+        error = error,
+        loading = loading,
+        imageLoader = imageLoader,
+        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
+        onRequestCompleted = onRequestCompleted,
+    ) { result ->
+        Image(
+            asset = result.image,
+            alignment = alignment,
+            contentScale = contentScale,
+            colorFilter = colorFilter
+        )
     }
 }
 
@@ -323,18 +370,6 @@ private fun ImageResult.toResult(
 ): RequestResult = when (this) {
     is coil.request.SuccessResult -> SuccessResult(this, fallbackSize)
     is coil.request.ErrorResult -> ErrorResult(this, fallbackSize)
-}
-
-@Composable
-internal fun defaultFailurePainterGetter(error: ErrorResult): Painter? {
-    return error.image?.let { image ->
-        remember(image) { ImagePainter(image) }
-    }
-}
-
-@Composable
-internal fun defaultSuccessPainterGetter(result: SuccessResult): Painter {
-    return remember(result.image) { ImagePainter(result.image) }
 }
 
 internal val emptySuccessLambda: (RequestResult) -> Unit = {}
