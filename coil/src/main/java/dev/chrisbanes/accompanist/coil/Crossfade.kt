@@ -36,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageAsset
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.DrawScope
@@ -57,28 +58,29 @@ import coil.request.ImageRequest
 private const val DefaultTransitionDuration = 1000
 
 /**
- * Creates a composable that will attempt to load the given [data] using [Coil], and then
- * display the result in an [androidx.compose.foundation.Image], using a crossfade
- * when first loaded.
- *
- * The animation fades in the image's saturation, alpha and exposure. More information on the
- * pattern can be seen [here](https://material.io/archive/guidelines/patterns/loading-images.html).
- *
- * @param data The data to load. See [ImageRequest.Builder.data] for the types allowed.
- * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
- * @param alignment Optional alignment parameter used to place the loaded [ImageAsset] in the
- * given bounds defined by the width and height.
- * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
- * used if the bounds are a different size from the intrinsic size of the loaded [ImageAsset].
- * @param crossfadeDuration The duration of the crossfade animation in milliseconds.
- * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to [Coil]'s
- * default image loader.
- * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
- * optional re-fetching of the image. Return true to re-fetch the image.
- * @param onRequestCompleted Listener which will be called when the loading request has finished.
- * @param error Content to be displayed when the request failed.
- * @param loading Content to be displayed when the request is in progress.
+ * TODO
  */
+@Deprecated(
+    "Use new CrossfadeImage or crossfade = true",
+    ReplaceWith(
+        """CoilImage(
+    data = data,
+    modifier = modifier,
+    imageLoader = imageLoader,
+    shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
+    onRequestCompleted = onRequestCompleted,
+    error = error,
+    loading = loading
+) { result ->
+    CrossfadeImage(
+        result = result,
+        alignment = alignment,
+        contentScale = contentScale,
+        crossfadeDurationMs = crossfadeDuration
+    )
+}"""
+    )
+)
 @Composable
 fun CoilImageWithCrossfade(
     data: Any,
@@ -101,38 +103,39 @@ fun CoilImageWithCrossfade(
         error = error,
         loading = loading
     ) { result ->
-        Image(
-            painter = crossfadePainter(result, durationMs = crossfadeDuration),
+        CrossfadeImage(
+            result = result,
             alignment = alignment,
-            contentScale = contentScale
+            contentScale = contentScale,
+            crossfadeDurationMs = crossfadeDuration
         )
     }
 }
 
 /**
- * Creates a composable that will attempt to load the given [request] using [Coil], and then
- * display the result in an [androidx.compose.foundation.Image], using a crossfade
- * animation when first loaded.
- *
- * The animation fades in the image's saturation, alpha and exposure. More information on the
- * pattern can be seen [here](https://material.io/archive/guidelines/patterns/loading-images.html).
- *
- * @param request The request to execute. If the request does not have a [ImageRequest.sizeResolver]
- * set, one will be set on the request using the layout constraints.
- * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
- * @param alignment Optional alignment parameter used to place the loaded [ImageAsset] in the
- * given bounds defined by the width and height.
- * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
- * used if the bounds are a different size from the intrinsic size of the loaded [ImageAsset].
- * @param crossfadeDuration The duration of the crossfade animation in milliseconds.
- * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to [Coil]'s
- * default image loader.
- * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
- * optional re-fetching of the image. Return true to re-fetch the image.
- * @param onRequestCompleted Listener which will be called when the loading request has finished.
- * @param error Content to be displayed when the request failed.
- * @param loading Content to be displayed when the request is in progress.
+ * TODO
  */
+@Deprecated(
+    "Use new CrossfadeImage or crossfade = true",
+    ReplaceWith(
+        """CoilImage(
+    request = request,
+    modifier = modifier,
+    imageLoader = imageLoader,
+    shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
+    onRequestCompleted = onRequestCompleted,
+    error = error,
+    loading = loading
+) { result ->
+    CrossfadeImage(
+        result = result,
+        alignment = alignment,
+        contentScale = contentScale,
+        crossfadeDurationMs = crossfadeDuration
+    )
+}"""
+    )
+)
 @Composable
 fun CoilImageWithCrossfade(
     request: ImageRequest,
@@ -155,48 +158,89 @@ fun CoilImageWithCrossfade(
         onRequestCompleted = onRequestCompleted,
         error = error,
     ) { result ->
-        Image(
-            painter = crossfadePainter(result, durationMs = crossfadeDuration),
+        CrossfadeImage(
+            result = result,
             alignment = alignment,
-            contentScale = contentScale
+            contentScale = contentScale,
+            crossfadeDurationMs = crossfadeDuration
         )
     }
 }
 
 /**
- * A composable function which runs an fade animation on the given [result], returning the
- * [Painter] which should be used to paint the [ImageAsset].
+ * TODO
  *
- * The animation fades in the image's saturation, alpha and exposure. More information on the
- * pattern can be seen [here](https://material.io/archive/guidelines/patterns/loading-images.html).
- *
- * @param result The result of a image fetch.
  * @param skipFadeWhenLoadedFromMemory Whether the fade animation should be skipped when the result
  * has been loaded from memory.
- * @param durationMs The duration of the crossfade animation in milliseconds.
- * @param clock The animation clock.
+ * @param crossfadeDurationMs The duration of the crossfade animation in milliseconds.
  */
 @Composable
-private fun crossfadePainter(
-    result: SuccessResult,
-    skipFadeWhenLoadedFromMemory: Boolean = true,
-    durationMs: Int = DefaultTransitionDuration,
-    clock: AnimationClockObservable = AnimationClockAmbient.current.asDisposableClock()
-): Painter {
-    return if (skipFadeWhenLoadedFromMemory && result.isFromMemory()) {
-        // If can skip the fade when loaded from memory, we do not need to run an animation on it
-        ImagePainter(result.image)
-    } else {
-        val observablePainter = remember(result) {
-            ObservableCrossfadeImagePainter(result.image, durationMs, clock).also { it.start() }
+fun CrossfadeImage(
+    asset: ImageAsset,
+    modifier: Modifier = Modifier,
+    alignment: Alignment = Alignment.Center,
+    contentScale: ContentScale = ContentScale.Fit,
+    colorFilter: ColorFilter? = null,
+    clock: AnimationClockObservable = AnimationClockAmbient.current.asDisposableClock(),
+    crossfadeEnabled: Boolean = true,
+    crossfadeDurationMs: Int = DefaultTransitionDuration
+) {
+    // Default painter for the image
+    val imagePainter = remember(asset) { ImagePainter(asset) }
+
+    val painter = if (crossfadeEnabled) {
+        val observablePainter = remember(asset) {
+            ObservableCrossfadeImagePainter(asset, crossfadeDurationMs, clock).also { it.start() }
         }
         when {
             // If the animation is running, return it as the painter
             !observablePainter.isFinished -> observablePainter
             // If the animation has finished, revert back to the default painter
-            else -> ImagePainter(result.image)
+            else -> imagePainter
         }
+    } else {
+        // If the fade is disabled, just use the standard ImagePainter
+        imagePainter
     }
+
+    Image(
+        painter = painter,
+        alignment = alignment,
+        contentScale = contentScale,
+        colorFilter = colorFilter,
+        modifier = modifier,
+    )
+}
+
+/**
+ * TODO
+ *
+ * @param skipFadeWhenLoadedFromMemory Whether the fade animation should be skipped when the result
+ * has been loaded from memory.
+ * @param crossfadeDurationMs The duration of the crossfade animation in milliseconds.
+ */
+@Composable
+fun CrossfadeImage(
+    result: SuccessResult,
+    modifier: Modifier = Modifier,
+    alignment: Alignment = Alignment.Center,
+    contentScale: ContentScale = ContentScale.Fit,
+    colorFilter: ColorFilter? = null,
+    clock: AnimationClockObservable = AnimationClockAmbient.current.asDisposableClock(),
+    skipFadeWhenLoadedFromMemory: Boolean = true,
+    crossfadeEnabled: Boolean = true,
+    crossfadeDurationMs: Int = DefaultTransitionDuration
+) {
+    CrossfadeImage(
+        asset = result.image,
+        alignment = alignment,
+        contentScale = contentScale,
+        colorFilter = colorFilter,
+        modifier = modifier,
+        crossfadeEnabled = crossfadeEnabled && !(skipFadeWhenLoadedFromMemory && result.isFromMemory()),
+        crossfadeDurationMs = crossfadeDurationMs,
+        clock = clock,
+    )
 }
 
 private class ObservableCrossfadeImagePainter(
@@ -238,15 +282,18 @@ private class ObservableCrossfadeImagePainter(
 
     override fun DrawScope.onDraw() {
         val paint = paintPool.acquire() ?: Paint()
-        paint.asFrameworkPaint().colorFilter = ColorMatrixColorFilter(matrix)
 
-        drawCanvas { canvas, _ ->
-            canvas.drawImageRect(image, srcOffset, srcSize, IntOffset.Zero, srcSize, paint)
+        try {
+            paint.asFrameworkPaint().colorFilter = ColorMatrixColorFilter(matrix)
+
+            drawCanvas { canvas, _ ->
+                canvas.drawImageRect(image, srcOffset, srcSize, IntOffset.Zero, srcSize, paint)
+            }
+        } finally {
+            // Reset the Paint instance and release it back to the pool
+            paint.asFrameworkPaint().reset()
+            paintPool.release(paint)
         }
-
-        // Reset the Paint instance and release it back to the pool
-        paint.asFrameworkPaint().reset()
-        paintPool.release(paint)
     }
 
     /**
