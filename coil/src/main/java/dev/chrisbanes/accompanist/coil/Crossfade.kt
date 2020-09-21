@@ -57,11 +57,8 @@ import coil.request.ImageRequest
 
 private const val DefaultTransitionDuration = 1000
 
-/**
- * TODO
- */
 @Deprecated(
-    "Use new CrossfadeImage or crossfade = true",
+    "Use new `CrossfadeImage` or `CoilImage(fadeIn = true)`",
     ReplaceWith(
         """CoilImage(
     data = data,
@@ -114,11 +111,8 @@ fun CoilImageWithCrossfade(
     }
 }
 
-/**
- * TODO
- */
 @Deprecated(
-    "Use new CrossfadeImage or crossfade = true",
+    "Use new `CrossfadeImage` or `CoilImage(fadeIn = true)`",
     ReplaceWith(
         """CoilImage(
     request = request,
