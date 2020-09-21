@@ -100,7 +100,7 @@ private fun Sample() {
                     modifier = Modifier.preferredSize(128.dp)
                 )
 
-                // CoilImageWithCrossfade with data parameter
+                // CoilImage with crossfade and data parameter
                 CoilImage(
                     data = randomSampleImageUrl(),
                     crossfade = true,
