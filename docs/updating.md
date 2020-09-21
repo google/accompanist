@@ -71,8 +71,9 @@ git merge snapshot
 ### #2: Update dependencies
 
 Edit [dependencies.kt](https://github.com/chrisbanes/accompanist/blob/main/buildSrc/src/main/java/dev/chrisbanes/accompanist/buildsrc/dependencies.kt):
-1) Update the `Libs.AndroidX.Compose.snapshot` property to be an empty string (`val snapshot = ""`)
-2) Update the `Libs.AndroidX.Compose.version` property to the new Compose version (`1.0.0-alpha03` for example).
+
+1. Update the `Libs.AndroidX.Compose.snapshot` property to be an empty string (`val snapshot = ""`)
+2. Update the `Libs.AndroidX.Compose.version` property to the new Compose version (`1.0.0-alpha03` for example).
 
 Make sure the project builds and test pass:
 ```
