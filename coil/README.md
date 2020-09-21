@@ -4,11 +4,12 @@
 
 This library brings easy-to-use composable which can fetch and display images from external sources, such as network, using the [Coil][coil] image loading library.
 
-There are currently two composables:
 
-### `CoilImage()`
+## `CoilImage()`
 
-This loads the `data` passed in with [Coil][coil], and then displays the resulting image using the standard `Image` composable.
+The primary API is via the `CoilImage()` functions. There are a number of function versions available.
+
+The simplest usage is like so:
 
 ```kotlin 
 CoilImage(
@@ -16,7 +17,9 @@ CoilImage(
 )
 ```
 
-There is also a version of this function which accepts a Coil [`GetRequest`](https://coil-kt.github.io/coil/api/coil-base/coil.request/-get-request/), allowing full customization of the request. This allows usage of things like (but not limited to) transformations:
+This loads the `data` passed in with [Coil][coil], and then displays the resulting image using the standard `Image` composable.
+
+There is also a version of this function which accepts a Coil [`ImageRequest`](https://coil-kt.github.io/coil/image_requests/), allowing full customization of the request. This allows usage of things like (but not limited to) transformations:
 
 ```kotlin
 CoilImage(
@@ -27,19 +30,39 @@ CoilImage(
 )
 ```
 
-### `CoilImageWithCrossfade()`
+## Fade-in animation
 
-Very similar to `CoilImage`, but this will run a crossfade transition when the image is first loaded.
+This library has built-in support for animating loaded images in, using a [fade-in animation](https://material.io/archive/guidelines/patterns/loading-images.html).
 
 ![](./images/crossfade.gif)
 
-```kotlin 
-CoilImageWithCrossfade(
-    data = "https://loremflickr.com/300/300"
+There are two ways to enable the animation:
+
+### `fadeIn` parameter
+
+A `fadeIn: Boolean` parameter has been added to `CoilImage`. When enabled, a default fade-in animation will be used when the image is successfully loaded:
+
+``` kotlin
+CoilImage(
+    data = "https://random.image",
+    fadeIn = true,
 )
 ```
 
-Similarly to `CoilImage`, there is a version of this function which accepts a [`GetRequest`](https://coil-kt.github.io/coil/api/coil-base/coil.request/-get-request/) instead of a `data`.
+### Custom layout
+
+If you need more control over the animation, you can use the `image` content composable lambda on `CoilImage` to display the result in a `MaterialLoadingImage`:
+
+``` kotlin
+CoilImage(
+    data = "https://random.image",
+) { result ->
+    MaterialLoadingImage(
+        result = result,
+        fadeInDurationMs = 600,
+    )
+}
+```
 
 ## Download
 
