@@ -122,24 +122,26 @@ subprojects {
     // dokka configuration.
     afterEvaluate {
         tasks.withType(org.jetbrains.dokka.gradle.DokkaTask).configureEach {
-            configuration {
-                jdkVersion = 8
-                reportUndocumented = false
-                skipDeprecated = true
-                skipEmptyPackages = true
+            sourceSets {
+                configureEach {
+                    reportUndocumented.set(true)
+                    skipEmptyPackages.set(true)
+                    skipDeprecated.set(true)
+                    jdkVersion.set(8)
+                    // Add Android SDK packages
+                    noAndroidSdkLink.set(false)
 
-                externalDocumentationLink {
-                    url = new URL("https://developer.android.com/reference/")
-                    packageListUrl = new URL("https://developer.android.com/reference/androidx/package-list")
-                }
-                externalDocumentationLink {
-                    url = new URL("https://developer.android.com/reference/kotlin/")
-                    packageListUrl = new URL("https://developer.android.com/reference/kotlin/androidx/ui/package-list")
-                }
-                if (rootProject.file('package-list-coil-base').exists()) {
+                    // Link Compose docs
                     externalDocumentationLink {
-                        url = new URL("https://coil-kt.github.io/coil/api/coil-base/")
-                        packageListUrl = new URL("file://$rootDir/package-list-coil-base")
+                        url.set(new URL("https://developer.android.com/reference/kotlin/"))
+                        packageListUrl.set(new URL("https://developer.android.com/reference/kotlin/androidx/ui/package-list"))
+                    }
+                    // Link Coil docs
+                    if (rootProject.file('package-list-coil-base').exists()) {
+                        externalDocumentationLink {
+                            url.set(new URL("https://coil-kt.github.io/coil/api/coil-base/"))
+                            packageListUrl.set(new URL("file://$rootDir/package-list-coil-base"))
+                        }
                     }
                 }
             }

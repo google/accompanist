@@ -74,8 +74,7 @@ android {
 
 afterEvaluate {
     tasks.withType(org.jetbrains.dokka.gradle.DokkaTask).configureEach {
-        outputDirectory = "$rootDir/docs/api"
-        outputFormat = "gfm"
+        outputDirectory.set(rootProject.file('docs/api'))
     }
 }
 
