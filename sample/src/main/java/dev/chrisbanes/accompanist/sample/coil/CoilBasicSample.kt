@@ -103,7 +103,7 @@ private fun Sample() {
                 // CoilImage with crossfade and data parameter
                 CoilImage(
                     data = randomSampleImageUrl(),
-                    crossfade = true,
+                    fadeIn = true,
                     modifier = Modifier.preferredSize(128.dp)
                 )
 
@@ -113,14 +113,14 @@ private fun Sample() {
                         .data(randomSampleImageUrl())
                         .transformations(CircleCropTransformation())
                         .build(),
-                    crossfade = true,
+                    fadeIn = true,
                     modifier = Modifier.preferredSize(128.dp)
                 )
 
                 // CoilImage with crossfade and loading slot
                 CoilImage(
                     data = randomSampleImageUrl(),
-                    crossfade = true,
+                    fadeIn = true,
                     loading = {
                         Stack(Modifier.fillMaxSize()) {
                             CircularProgressIndicator(Modifier.align(Alignment.Center))

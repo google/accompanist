@@ -216,7 +216,7 @@ fun CoilImage(
  * @param colorFilter Optional colorFilter to apply for the [Painter] when it is rendered onscreen.
  * @param error Content to be displayed when the request failed.
  * @param loading Content to be displayed when the request is in progress.
- * @param crossfade Whether to run a fade animation when images are successfully loaded.
+ * @param fadeIn Whether to run a fade-in animation when images are successfully loaded.
  * Default: `false`.
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to [Coil]'s
  * default image loader.
@@ -231,7 +231,7 @@ fun CoilImage(
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
-    crossfade: Boolean = false,
+    fadeIn: Boolean = false,
     imageLoader: ImageLoader = Coil.imageLoader(ContextAmbient.current),
     shouldRefetchOnSizeChange: (currentResult: RequestResult, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda,
@@ -247,9 +247,9 @@ fun CoilImage(
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         onRequestCompleted = onRequestCompleted,
     ) { result ->
-        CrossfadeImage(
+        MaterialLoadingImage(
             result = result,
-            crossfadeEnabled = crossfade,
+            fadeInEnabled = fadeIn,
             alignment = alignment,
             contentScale = contentScale,
             colorFilter = colorFilter
@@ -271,7 +271,7 @@ fun CoilImage(
  * @param colorFilter Optional colorFilter to apply for the [Painter] when it is rendered onscreen.
  * @param error Content to be displayed when the request failed.
  * @param loading Content to be displayed when the request is in progress.
- * @param crossfade Whether to run a fade animation when images are successfully loaded. Default: `false`.
+ * @param fadeIn Whether to run a fade-in animation when images are successfully loaded. Default: `false`.
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to [Coil]'s
  * default image loader.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
@@ -285,7 +285,7 @@ fun CoilImage(
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
-    crossfade: Boolean = false,
+    fadeIn: Boolean = false,
     imageLoader: ImageLoader = Coil.imageLoader(ContextAmbient.current),
     shouldRefetchOnSizeChange: (currentResult: RequestResult, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda,
@@ -301,9 +301,9 @@ fun CoilImage(
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         onRequestCompleted = onRequestCompleted,
     ) { result ->
-        CrossfadeImage(
+        MaterialLoadingImage(
             result = result,
-            crossfadeEnabled = crossfade,
+            fadeInEnabled = fadeIn,
             alignment = alignment,
             contentScale = contentScale,
             colorFilter = colorFilter

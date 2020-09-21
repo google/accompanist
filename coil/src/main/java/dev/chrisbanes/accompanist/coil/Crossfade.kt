@@ -72,13 +72,15 @@ private const val DefaultTransitionDuration = 1000
     error = error,
     loading = loading
 ) { result ->
-    CrossfadeImage(
+    MaterialLoadingImage(
         result = result,
         alignment = alignment,
         contentScale = contentScale,
-        crossfadeDurationMs = crossfadeDuration
+        fadeInDurationMs = crossfadeDuration
     )
-}"""
+}""",
+        "dev.chrisbanes.accompanist.coil.CoilImage",
+        "dev.chrisbanes.accompanist.coil.MaterialLoadingImage"
     )
 )
 @Composable
@@ -103,11 +105,11 @@ fun CoilImageWithCrossfade(
         error = error,
         loading = loading
     ) { result ->
-        CrossfadeImage(
+        MaterialLoadingImage(
             result = result,
             alignment = alignment,
             contentScale = contentScale,
-            crossfadeDurationMs = crossfadeDuration
+            fadeInDurationMs = crossfadeDuration
         )
     }
 }
@@ -127,13 +129,15 @@ fun CoilImageWithCrossfade(
     error = error,
     loading = loading
 ) { result ->
-    CrossfadeImage(
+    MaterialLoadingImage(
         result = result,
         alignment = alignment,
         contentScale = contentScale,
-        crossfadeDurationMs = crossfadeDuration
+        fadeInDurationMs = crossfadeDuration
     )
-}"""
+}""",
+        "dev.chrisbanes.accompanist.coil.CoilImage",
+        "dev.chrisbanes.accompanist.coil.MaterialLoadingImage"
     )
 )
 @Composable
@@ -158,39 +162,50 @@ fun CoilImageWithCrossfade(
         onRequestCompleted = onRequestCompleted,
         error = error,
     ) { result ->
-        CrossfadeImage(
+        MaterialLoadingImage(
             result = result,
             alignment = alignment,
             contentScale = contentScale,
-            crossfadeDurationMs = crossfadeDuration
+            fadeInDurationMs = crossfadeDuration
         )
     }
 }
 
 /**
- * TODO
+ * A wrapper around [Image] which implements the
+ * [Material Image Loading](https://material.io/archive/guidelines/patterns/loading-images.html)
+ * pattern.
  *
- * @param skipFadeWhenLoadedFromMemory Whether the fade animation should be skipped when the result
- * has been loaded from memory.
- * @param crossfadeDurationMs The duration of the crossfade animation in milliseconds.
+ * @param asset The [ImageAsset] to draw.
+ * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
+ * background)
+ * @param alignment Optional alignment parameter used to place the [ImageAsset] in the given
+ * bounds defined by the width and height.
+ * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be used
+ * if the bounds are a different size from the intrinsic size of the [ImageAsset].
+ * @param colorFilter Optional ColorFilter to apply for the [ImageAsset] when it is rendered
+ * onscreen
+ * @param clock The [AnimationClockObservable] to use for running animations.
+ * @param fadeInEnabled Whether the fade-in animation should be used or not.
+ * @param fadeInDurationMs The duration of the fade-in animation in milliseconds.
  */
 @Composable
-fun CrossfadeImage(
+fun MaterialLoadingImage(
     asset: ImageAsset,
     modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
     clock: AnimationClockObservable = AnimationClockAmbient.current.asDisposableClock(),
-    crossfadeEnabled: Boolean = true,
-    crossfadeDurationMs: Int = DefaultTransitionDuration
+    fadeInEnabled: Boolean = true,
+    fadeInDurationMs: Int = DefaultTransitionDuration
 ) {
     // Default painter for the image
     val imagePainter = remember(asset) { ImagePainter(asset) }
 
-    val painter = if (crossfadeEnabled) {
+    val painter = if (fadeInEnabled) {
         val observablePainter = remember(asset) {
-            ObservableCrossfadeImagePainter(asset, crossfadeDurationMs, clock).also { it.start() }
+            ObservableFadeInImagePainter(asset, fadeInDurationMs, clock).also { it.start() }
         }
         when {
             // If the animation is running, return it as the painter
@@ -213,14 +228,27 @@ fun CrossfadeImage(
 }
 
 /**
- * TODO
+ * A wrapper around [Image] which implements the
+ * [Material Image Loading](https://material.io/archive/guidelines/patterns/loading-images.html)
+ * pattern.
  *
+ * @param result The [SuccessResult] instance provided by [CoilImage].
+ * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
+ * background)
+ * @param alignment Optional alignment parameter used to place the [ImageAsset] in the given
+ * bounds defined by the width and height.
+ * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be used
+ * if the bounds are a different size from the intrinsic size of the [ImageAsset].
+ * @param colorFilter Optional ColorFilter to apply for the [ImageAsset] when it is rendered
+ * onscreen
+ * @param clock The [AnimationClockObservable] to use for running animations.
  * @param skipFadeWhenLoadedFromMemory Whether the fade animation should be skipped when the result
  * has been loaded from memory.
- * @param crossfadeDurationMs The duration of the crossfade animation in milliseconds.
+ * @param fadeInEnabled Whether the fade-in animation should be used or not.
+ * @param fadeInDurationMs The duration of the fade-in animation in milliseconds.
  */
 @Composable
-fun CrossfadeImage(
+fun MaterialLoadingImage(
     result: SuccessResult,
     modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
@@ -228,22 +256,22 @@ fun CrossfadeImage(
     colorFilter: ColorFilter? = null,
     clock: AnimationClockObservable = AnimationClockAmbient.current.asDisposableClock(),
     skipFadeWhenLoadedFromMemory: Boolean = true,
-    crossfadeEnabled: Boolean = true,
-    crossfadeDurationMs: Int = DefaultTransitionDuration
+    fadeInEnabled: Boolean = true,
+    fadeInDurationMs: Int = DefaultTransitionDuration
 ) {
-    CrossfadeImage(
+    MaterialLoadingImage(
         asset = result.image,
         alignment = alignment,
         contentScale = contentScale,
         colorFilter = colorFilter,
         modifier = modifier,
-        crossfadeEnabled = crossfadeEnabled && !(skipFadeWhenLoadedFromMemory && result.isFromMemory()),
-        crossfadeDurationMs = crossfadeDurationMs,
+        fadeInEnabled = fadeInEnabled && !(skipFadeWhenLoadedFromMemory && result.isFromMemory()),
+        fadeInDurationMs = fadeInDurationMs,
         clock = clock,
     )
 }
 
-private class ObservableCrossfadeImagePainter(
+private class ObservableFadeInImagePainter(
     private val image: ImageAsset,
     duration: Int,
     clock: AnimationClockObservable,
