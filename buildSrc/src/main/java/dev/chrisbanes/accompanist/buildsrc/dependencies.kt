@@ -23,7 +23,7 @@ object Versions {
 object Libs {
     const val androidGradlePlugin = "com.android.tools.build:gradle:4.2.0-alpha11"
 
-    const val gradleMavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.12.0"
+    const val gradleMavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.13.0"
 
     const val junit = "junit:junit:4.13"
 
@@ -36,7 +36,7 @@ object Libs {
     }
 
     object Dokka {
-        const val gradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:0.10.1"
+        const val gradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:${Kotlin.version}"
     }
 
     object Coroutines {
