@@ -51,6 +51,17 @@ import coil.request.ImageResult
  * Creates a composable that will attempt to load the given [data] using [Coil], and then
  * display the result in the provided [image] content.
  *
+ * This version of the function allows complete control over how the loaded image is displayed,
+ * by being able to provide custom layout:
+ *
+ * ```
+ * CoilImage(
+ *   data = resourceUri(R.raw.sample),
+ * ) { result ->
+ *   FancyImage(asset = result.image)
+ * }
+ * ```
+ *
  * @param data The data to load. See [ImageRequest.Builder.data] for the types allowed.
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to [Coil]'s
@@ -97,6 +108,17 @@ fun CoilImage(
 /**
  * Creates a composable that will attempt to load the given [request] using [Coil], and then
  * display the result in the provided [image] content.
+ *
+ * This version of the function allows complete control over how the loaded image is displayed,
+ * by being able to provide custom layout:
+ *
+ * ```
+ * CoilImage(
+ *   data = resourceUri(R.raw.sample),
+ * ) { result ->
+ *   FancyImage(asset = result.image)
+ * }
+ * ```
  *
  * @param request The request to execute. If the request does not have a [ImageRequest.sizeResolver]
  * set, one will be set on the request using the layout constraints.
@@ -194,6 +216,8 @@ fun CoilImage(
  * @param colorFilter Optional colorFilter to apply for the [Painter] when it is rendered onscreen.
  * @param error Content to be displayed when the request failed.
  * @param loading Content to be displayed when the request is in progress.
+ * @param fadeIn Whether to run a fade-in animation when images are successfully loaded.
+ * Default: `false`.
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to [Coil]'s
  * default image loader.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
@@ -207,11 +231,12 @@ fun CoilImage(
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
-    error: @Composable ((ErrorResult) -> Unit)? = null,
-    loading: @Composable (() -> Unit)? = null,
+    fadeIn: Boolean = false,
     imageLoader: ImageLoader = Coil.imageLoader(ContextAmbient.current),
     shouldRefetchOnSizeChange: (currentResult: RequestResult, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
-    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
+    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda,
+    error: @Composable ((ErrorResult) -> Unit)? = null,
+    loading: @Composable (() -> Unit)? = null,
 ) {
     CoilImage(
         data = data,
@@ -222,8 +247,9 @@ fun CoilImage(
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         onRequestCompleted = onRequestCompleted,
     ) { result ->
-        Image(
-            asset = result.image,
+        MaterialLoadingImage(
+            result = result,
+            fadeInEnabled = fadeIn,
             alignment = alignment,
             contentScale = contentScale,
             colorFilter = colorFilter
@@ -245,6 +271,7 @@ fun CoilImage(
  * @param colorFilter Optional colorFilter to apply for the [Painter] when it is rendered onscreen.
  * @param error Content to be displayed when the request failed.
  * @param loading Content to be displayed when the request is in progress.
+ * @param fadeIn Whether to run a fade-in animation when images are successfully loaded. Default: `false`.
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to [Coil]'s
  * default image loader.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
@@ -258,11 +285,12 @@ fun CoilImage(
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
-    error: @Composable ((ErrorResult) -> Unit)? = null,
-    loading: @Composable (() -> Unit)? = null,
+    fadeIn: Boolean = false,
     imageLoader: ImageLoader = Coil.imageLoader(ContextAmbient.current),
     shouldRefetchOnSizeChange: (currentResult: RequestResult, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
-    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda
+    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda,
+    error: @Composable ((ErrorResult) -> Unit)? = null,
+    loading: @Composable (() -> Unit)? = null,
 ) {
     CoilImage(
         request = request,
@@ -273,8 +301,9 @@ fun CoilImage(
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         onRequestCompleted = onRequestCompleted,
     ) { result ->
-        Image(
-            asset = result.image,
+        MaterialLoadingImage(
+            result = result,
+            fadeInEnabled = fadeIn,
             alignment = alignment,
             contentScale = contentScale,
             colorFilter = colorFilter
