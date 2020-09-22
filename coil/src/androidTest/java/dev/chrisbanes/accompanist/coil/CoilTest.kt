@@ -78,7 +78,8 @@ class CoilTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private val server = coilTestWebServer()
+    // Our MockWebServer. We use a response delay to simulate real-world conditions
+    private val server = coilTestWebServer(responseDelayMs = 200)
 
     @Before
     fun setup() {
@@ -485,7 +486,7 @@ private fun resourceUri(id: Int): Uri {
  * [MockWebServer] which returns a valid at the path `/image` and a 404 for anything else.
  * We add a small delay to simulate 'real-world' network conditions.
  */
-private fun coilTestWebServer(): MockWebServer {
+private fun coilTestWebServer(responseDelayMs: Long = 0): MockWebServer {
     val dispatcher = object : Dispatcher() {
         override fun dispatch(request: RecordedRequest): MockResponse = when (request.path) {
             "/image" -> {
@@ -497,10 +498,14 @@ private fun coilTestWebServer(): MockWebServer {
                 }
 
                 MockResponse()
+                    .setHeadersDelay(responseDelayMs, TimeUnit.MILLISECONDS)
                     .addHeader("Content-Type", "image/jpeg")
                     .setBody(imageBuffer)
             }
-            else -> MockResponse().setResponseCode(404)
+            else ->
+                MockResponse()
+                    .setHeadersDelay(responseDelayMs, TimeUnit.MILLISECONDS)
+                    .setResponseCode(404)
         }
     }
 
