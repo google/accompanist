@@ -30,6 +30,22 @@ CoilImage(
 )
 ```
 
+It also provides optional content 'slots', allowing you to provide custom content to be displayed when the request is loading, and/or if the image request failed:
+
+``` kotlin
+CoilImage(
+    data = "https://loremflickr.com/300/300",
+    loading = {
+        Box(Modifier.matchParentSize()) {
+            CircularProgressIndicator(Modifier.align(Alignment.Center))
+        }
+    },
+    error = {
+        Image(asset = imageResource(R.drawable.ic_error))
+    }
+)
+```
+
 ## Fade-in animation
 
 This library has built-in support for animating loaded images in, using a [fade-in animation](https://material.io/archive/guidelines/patterns/loading-images.html).
@@ -44,23 +60,31 @@ A `fadeIn: Boolean` parameter has been added to `CoilImage` (default: `false`). 
 
 ``` kotlin
 CoilImage(
-    data = "https://random.image",
-    fadeIn = true,
+    data = "https://picsum.photos/300/300",
+    fadeIn = true
 )
 ```
 
 ### Custom layout
 
-If you need more control over the animation, you can use the `image` content composable lambda on `CoilImage` to display the result in a `MaterialLoadingImage`:
+If you need more control over the animation, you can use the `content` composable version of `CoilImage`, to display the result in a `MaterialLoadingImage`:
 
 ``` kotlin
 CoilImage(
     data = "https://random.image",
-) { result ->
-    MaterialLoadingImage(
-        result = result,
-        fadeInDurationMs = 600,
-    )
+) { imageState ->
+    when (imageState) {
+        is CoilImageState.Success -> {
+            MaterialLoadingImage(
+                result = imageState,
+                fadeInEnabled = true,
+                fadeInDurationMs = 600,
+            )
+        }
+        is CoilImageState.Error -> /* TODO */
+        CoilImageState.Loading -> /* TODO */
+        CoilImageState.Empty -> /* TODO */
+    }
 }
 ```
 
