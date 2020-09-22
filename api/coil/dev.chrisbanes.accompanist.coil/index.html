@@ -11,23 +11,23 @@
         <meta name="description" content="A group of libraries to help write Jetpack Compose apps.">
       
       
-        <link rel="canonical" href="https://chrisbanes.github.io/accompanist/updating/">
+        <link rel="canonical" href="https://chrisbanes.github.io/accompanist/api/coil/dev.chrisbanes.accompanist.coil/">
       
       
         <meta name="author" content="Chris Banes">
       
-      <link rel="shortcut icon" href="../assets/images/favicon.png">
+      <link rel="shortcut icon" href="../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.5.6">
     
     
       
-        <title>Update guide - Accompanist</title>
+        <title>Index - Accompanist</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.63b94e9e.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.63b94e9e.min.css">
       
-        <link rel="stylesheet" href="../assets/stylesheets/palette.7f672a1f.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.7f672a1f.min.css">
       
       
         
@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#updating-releasing-accompanist" class="md-skip">
+        <a href="#package-devchrisbanesaccompanistcoil" class="md-skip">
           Skip to content
         </a>
       
@@ -92,7 +92,7 @@
           </span>
           <span class="md-header-nav__topic md-ellipsis">
             
-              Update guide
+              Index
             
           </span>
         </div>
@@ -192,7 +192,7 @@
 
 
   <li class="md-nav__item">
-    <a href=".." title="Overview" class="md-nav__link">
+    <a href="../../.." title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -204,7 +204,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../coil/" title="Coil" class="md-nav__link">
+    <a href="../../../coil/" title="Coil" class="md-nav__link">
       Coil
     </a>
   </li>
@@ -241,7 +241,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../api/coil/" title="Coil" class="md-nav__link">
+    <a href="../" title="Coil" class="md-nav__link">
       Coil
     </a>
   </li>
@@ -258,7 +258,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../using-snapshot-version/" title="Snapshots" class="md-nav__link">
+    <a href="../../../using-snapshot-version/" title="Snapshots" class="md-nav__link">
       Snapshots
     </a>
   </li>
@@ -270,7 +270,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../contributing/" title="Contributing" class="md-nav__link">
+    <a href="../../../contributing/" title="Contributing" class="md-nav__link">
       Contributing
     </a>
   </li>
@@ -280,12 +280,10 @@
       
       
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6" checked>
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
     
     <label class="md-nav__link" for="nav-6">
       Maintainers
@@ -307,128 +305,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-      
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="__toc">
-        Update guide
-        <span class="md-nav__icon md-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"/></svg>
-        </span>
-      </label>
-    
-    <a href="./" title="Update guide" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../../../updating/" title="Update guide" class="md-nav__link">
       Update guide
     </a>
-    
-      
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
-      </span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#new-features-bugfixes" class="md-nav__link">
-    New features &amp; bugfixes
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#jetpack-compose-snapshots" class="md-nav__link">
-    Jetpack Compose Snapshots
-  </a>
-  
-    <nav class="md-nav" aria-label="Jetpack Compose Snapshots">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#updating-to-a-newer-compose-snapshot" class="md-nav__link">
-    Updating to a newer Compose snapshot
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#releasing" class="md-nav__link">
-    Releasing
-  </a>
-  
-    <nav class="md-nav" aria-label="Releasing">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-merge-snapshot-into-main" class="md-nav__link">
-    #1: Merge snapshot into main
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-update-dependencies" class="md-nav__link">
-    #2: Update dependencies
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-bump-the-version-number" class="md-nav__link">
-    #3: Bump the version number
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-push-to-github" class="md-nav__link">
-    #4: Push to GitHub
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#5-create-release" class="md-nav__link">
-    #5: Create release
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#6-prepare-the-next-development-version" class="md-nav__link">
-    #6: Prepare the next development version
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-    
   </li>
 
         
@@ -463,84 +344,16 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#new-features-bugfixes" class="md-nav__link">
-    New features &amp; bugfixes
+  <a href="#types" class="md-nav__link">
+    Types
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#jetpack-compose-snapshots" class="md-nav__link">
-    Jetpack Compose Snapshots
+  <a href="#functions" class="md-nav__link">
+    Functions
   </a>
-  
-    <nav class="md-nav" aria-label="Jetpack Compose Snapshots">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#updating-to-a-newer-compose-snapshot" class="md-nav__link">
-    Updating to a newer Compose snapshot
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#releasing" class="md-nav__link">
-    Releasing
-  </a>
-  
-    <nav class="md-nav" aria-label="Releasing">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-merge-snapshot-into-main" class="md-nav__link">
-    #1: Merge snapshot into main
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-update-dependencies" class="md-nav__link">
-    #2: Update dependencies
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-bump-the-version-number" class="md-nav__link">
-    #3: Bump the version number
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-push-to-github" class="md-nav__link">
-    #4: Push to GitHub
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#5-create-release" class="md-nav__link">
-    #5: Create release
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#6-prepare-the-next-development-version" class="md-nav__link">
-    #6: Prepare the next development version
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -556,7 +369,7 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/chrisbanes/accompanist/edit/master/docs/updating.md" title="Edit this page" class="md-content__button md-icon">
+                  <a href="https://github.com/chrisbanes/accompanist/edit/master/docs/api/coil/dev.chrisbanes.accompanist.coil/index.md" title="Edit this page" class="md-content__button md-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
                   </a>
                 
@@ -564,96 +377,58 @@
                   
                 
                 
-                <h1 id="updating-releasing-accompanist">Updating &amp; releasing Accompanist<a class="headerlink" href="#updating-releasing-accompanist" title="Permanent link">&para;</a></h1>
-<p>This doc is mostly for maintainers.</p>
-<h2 id="new-features-bugfixes">New features &amp; bugfixes<a class="headerlink" href="#new-features-bugfixes" title="Permanent link">&para;</a></h2>
-<p>All new features should be uploaded as PRs against the <code>main</code> branch. </p>
-<p>Once merged into <code>main</code>, they should be merged into the <code>snapshot</code> branch:</p>
-<div class="highlight"><pre><span></span><code>git checkout main <span class="o">&amp;&amp;</span> git pull
-git checkout snapshot <span class="o">&amp;&amp;</span> git pull
-
-<span class="c1"># Create branch for PR</span>
-git checkout -b snapshot_main_merge
-<span class="c1"># Merge in the main branch</span>
-git merge main
-
-<span class="c1"># Push to GitHub</span>
-</code></pre></div>
-
-<h2 id="jetpack-compose-snapshots">Jetpack Compose Snapshots<a class="headerlink" href="#jetpack-compose-snapshots" title="Permanent link">&para;</a></h2>
-<p>We publish snapshot versions of Accompanist, which depend on a <code>SNAPSHOT</code> versions of Jetpack Compose. These are built from the <code>snapshot</code> branch.</p>
-<h3 id="updating-to-a-newer-compose-snapshot">Updating to a newer Compose snapshot<a class="headerlink" href="#updating-to-a-newer-compose-snapshot" title="Permanent link">&para;</a></h3>
-<p>As mentioned above, updating to a new Compose snapshot is done by submitting a new PR against the <code>snapshot</code> branch:</p>
-<div class="highlight"><pre><span></span><code>git checkout snapshot <span class="o">&amp;&amp;</span> git pull
-<span class="c1"># Create branch for PR</span>
-git checkout -b update_snapshot
-</code></pre></div>
-
-<p>Now edit the project to depend on the new Compose SNAPSHOT version:</p>
-<p>Edit <a href="https://github.com/chrisbanes/accompanist/blob/main/buildSrc/src/main/java/dev/chrisbanes/accompanist/buildsrc/dependencies.kt">dependencies.kt</a>:</p>
-<ol>
-<li>Update the <code>Libs.AndroidX.Compose.snapshot</code> property to be the snapshot number</li>
-<li>Ensure that the <code>Libs.AndroidX.Compose.version</code> property is correct</li>
-</ol>
-<p>Make sure the project builds and test pass:
-<div class="highlight"><pre><span></span><code>./gradlew check
-</code></pre></div></p>
-<p>Now <code>git commit</code> the changes and push to GitHub.</p>
-<p>Finally create a PR (with the base branch as <code>snapshot</code>) and send for review.</p>
-<h2 id="releasing">Releasing<a class="headerlink" href="#releasing" title="Permanent link">&para;</a></h2>
-<p>Once the next Jetpack Compose version is out, we're ready to push a new release:</p>
-<h3 id="1-merge-snapshot-into-main">#1: Merge <code>snapshot</code> into <code>main</code><a class="headerlink" href="#1-merge-snapshot-into-main" title="Permanent link">&para;</a></h3>
-<p>First we merge the <code>snapshot</code> branch into <code>main</code>:</p>
-<div class="highlight"><pre><span></span><code>git checkout snapshot <span class="o">&amp;&amp;</span> git pull
-git checkout main <span class="o">&amp;&amp;</span> git pull
-
-<span class="c1"># Create branch for PR</span>
-git checkout -b main_snapshot_merge
-
-<span class="c1"># Merge in the snapshot branch</span>
-git merge snapshot
-</code></pre></div>
-
-<h3 id="2-update-dependencies">#2: Update dependencies<a class="headerlink" href="#2-update-dependencies" title="Permanent link">&para;</a></h3>
-<p>Edit <a href="https://github.com/chrisbanes/accompanist/blob/main/buildSrc/src/main/java/dev/chrisbanes/accompanist/buildsrc/dependencies.kt">dependencies.kt</a>:</p>
-<ol>
-<li>Update the <code>Libs.AndroidX.Compose.snapshot</code> property to be an empty string (<code>val snapshot = ""</code>)</li>
-<li>Update the <code>Libs.AndroidX.Compose.version</code> property to the new Compose version (<code>1.0.0-alpha03</code> for example).</li>
-</ol>
-<p>Make sure the project builds and test pass:
-<div class="highlight"><pre><span></span><code>./gradlew check
-</code></pre></div></p>
-<p>Commit the changes.</p>
-<h3 id="3-bump-the-version-number">#3: Bump the version number<a class="headerlink" href="#3-bump-the-version-number" title="Permanent link">&para;</a></h3>
-<p>Edit <a href="https://github.com/chrisbanes/accompanist/blob/main/gradle.properties">gradle.properties</a>:</p>
-<ul>
-<li>Update the <code>VERSION_NAME</code> property and remove the <code>-SNAPSHOT</code> suffix.</li>
-</ul>
-<p>Commit the changes, using the commit message containing the new version name.</p>
-<h3 id="4-push-to-github">#4: Push to GitHub<a class="headerlink" href="#4-push-to-github" title="Permanent link">&para;</a></h3>
-<p>Push the branch to GitHub and create a PR against the <code>main</code> branch, and send for review. Once approved and merged, it will be automatically deployed to Maven Central.</p>
-<h3 id="5-create-release">#5: Create release<a class="headerlink" href="#5-create-release" title="Permanent link">&para;</a></h3>
-<p>Once the above PR has been approved and merged, we need to create the GitHub release:</p>
-<ul>
-<li>Open up the <a href="https://github.com/chrisbanes/accompanist/releases">Releases</a> page.</li>
-<li>At the top you should see a 'Draft' release, auto populated with any PRs since the last release. Click 'Edit'.</li>
-<li>Make sure that the version number matches what we released (the tool guesses but is not always correct).</li>
-<li>Double check everything, then press 'Publish release'.</li>
-</ul>
-<p>At this point the release is published. This will trigger the docs action to run, which will auto-deploy a new version of the <a href="https://chrisbanes.github.io/accompanist/">website</a>.</p>
-<h3 id="6-prepare-the-next-development-version">#6: Prepare the next development version<a class="headerlink" href="#6-prepare-the-next-development-version" title="Permanent link">&para;</a></h3>
-<p>The current release is now finished, but we need to update the version for the next development version:</p>
-<p>Edit <a href="https://github.com/chrisbanes/accompanist/blob/main/gradle.properties">gradle.properties</a>:</p>
-<ul>
-<li>Update the <code>VERSION_NAME</code> property, by increasing the version number, and adding the <code>-SNAPSHOT</code> suffix.</li>
-<li>Example: released version: <code>0.3.0</code>. Update to <code>0.3.1-SNAPSHOT</code></li>
-</ul>
-<p><code>git commit</code> and push to <code>main</code>.</p>
-<p>Finally, merge all of these changes back to <code>snapshot</code>:</p>
-<div class="highlight"><pre><span></span><code>git checkout snapshot &amp;&amp; git pull
-git merge main
-git push
-</code></pre></div>
+                <p>//<a href="../">coil</a>/<a href="./">dev.chrisbanes.accompanist.coil</a></p>
+<h1 id="package-devchrisbanesaccompanistcoil">Package dev.chrisbanes.accompanist.coil<a class="headerlink" href="#package-devchrisbanesaccompanistcoil" title="Permanent link">&para;</a></h1>
+<h2 id="types">Types<a class="headerlink" href="#types" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Summary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="-error-result/">ErrorResult</a></td>
+<td><br>  <br>Indicates that an error occurred while executing the request.  <br>Content  <br>data class <a href="-error-result/">ErrorResult</a>(<strong>image</strong>: ImageAsset?, <strong>throwable</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html">Throwable</a>) : <a href="-request-result/">RequestResult</a>  <br></td>
+</tr>
+<tr>
+<td><a href="-image-loading-color-matrix/">ImageLoadingColorMatrix</a></td>
+<td><br>  <br>An extension to <a href="https://developer.android.com/reference/kotlin/android/graphics/ColorMatrix.html">ColorMatrix</a> which implements the Material Design image loading pattern.  <br>Content  <br>class <a href="-image-loading-color-matrix/">ImageLoadingColorMatrix</a>(<strong>saturation</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html">Float</a>, <strong>alpha</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html">Float</a>, <strong>brightness</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html">Float</a>) : <a href="https://developer.android.com/reference/kotlin/android/graphics/ColorMatrix.html">ColorMatrix</a>  <br></td>
+</tr>
+<tr>
+<td><a href="-request-result/">RequestResult</a></td>
+<td><br>  <br>Represents the result of an image request.  <br>Content  <br>sealed class <a href="-request-result/">RequestResult</a>  <br></td>
+</tr>
+<tr>
+<td><a href="-success-result/">SuccessResult</a></td>
+<td><br>  <br>Indicates that the request completed successfully.  <br>Content  <br>data class <a href="-success-result/">SuccessResult</a>(<strong>image</strong>: ImageAsset, <strong>source</strong>: DataSource) : <a href="-request-result/">RequestResult</a>  <br></td>
+</tr>
+</tbody>
+</table>
+<h2 id="functions">Functions<a class="headerlink" href="#functions" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Summary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="-coil-image/">CoilImage</a></td>
+<td><br>  <br>Creates a composable that will attempt to load the given request using Coil, and then display the result in the provided image content.This version of the function allows complete control over how the loaded image is displayed, by being able to provide custom layout:CoilImage(  <br>  data = resourceUri(R.raw.sample),  <br>) { result -&gt;  <br>  FancyImage(asset = result.image)  <br>}  <br>Content  <br>@Composable()  <br>  <br>fun <a href="-coil-image/">CoilImage</a>(request: ImageRequest, modifier: Modifier, imageLoader: ImageLoader, shouldRefetchOnSizeChange: (<a href="-request-result/">RequestResult</a>, IntSize) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, onRequestCompleted: (<a href="-request-result/">RequestResult</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>, error: (<a href="-error-result/">ErrorResult</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?, loading: () -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?, image: (<a href="-success-result/">SuccessResult</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>)  <br>  <br>  <br>Creates a composable that will attempt to load the given data using Coil, and then display the result in the provided image content.This version of the function allows complete control over how the loaded image is displayed, by being able to provide custom layout:CoilImage(  <br>  data = resourceUri(R.raw.sample),  <br>) { result -&gt;  <br>  FancyImage(asset = result.image)  <br>}  <br>Content  <br>@Composable()  <br>  <br>fun <a href="-coil-image/">CoilImage</a>(data: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>, modifier: Modifier, imageLoader: ImageLoader, shouldRefetchOnSizeChange: (<a href="-request-result/">RequestResult</a>, IntSize) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, onRequestCompleted: (<a href="-request-result/">RequestResult</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>, error: (<a href="-error-result/">ErrorResult</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?, loading: () -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?, image: (<a href="-success-result/">SuccessResult</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>)  <br>  <br>  <br>Creates a composable that will attempt to load the given request using Coil, and then display the result in an Image.  <br>Content  <br>@Composable()  <br>  <br>fun <a href="-coil-image/">CoilImage</a>(request: ImageRequest, modifier: Modifier, alignment: Alignment, contentScale: ContentScale, colorFilter: ColorFilter?, fadeIn: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, imageLoader: ImageLoader, shouldRefetchOnSizeChange: (<a href="-request-result/">RequestResult</a>, IntSize) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, onRequestCompleted: (<a href="-request-result/">RequestResult</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>, error: (<a href="-error-result/">ErrorResult</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?, loading: () -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?)  <br>  <br>  <br>Creates a composable that will attempt to load the given data using Coil, and then display the result in an Image.  <br>Content  <br>@Composable()  <br>  <br>fun <a href="-coil-image/">CoilImage</a>(data: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>, modifier: Modifier, alignment: Alignment, contentScale: ContentScale, colorFilter: ColorFilter?, fadeIn: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, imageLoader: ImageLoader, shouldRefetchOnSizeChange: (<a href="-request-result/">RequestResult</a>, IntSize) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, onRequestCompleted: (<a href="-request-result/">RequestResult</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>, error: (<a href="-error-result/">ErrorResult</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?, loading: () -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?)  <br></td>
+</tr>
+<tr>
+<td><a href="-coil-image-with-crossfade/">CoilImageWithCrossfade</a></td>
+<td><br>Content  <br>@Composable()  <br>  <br>~~fun~~ <a href="-coil-image-with-crossfade/">~~CoilImageWithCrossfade~~</a>~~(~~~~request~~~~:~~ ImageRequest~~,~~ ~~modifier~~~~:~~ Modifier~~,~~ ~~alignment~~~~:~~ Alignment~~,~~ ~~contentScale~~~~:~~ ContentScale~~,~~ ~~crossfadeDuration~~~~:~~ <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>~~,~~ ~~imageLoader~~~~:~~ ImageLoader~~,~~ ~~shouldRefetchOnSizeChange~~~~:~~ (<a href="-request-result/">RequestResult</a>, IntSize) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>~~,~~ ~~onRequestCompleted~~~~:~~ (<a href="-request-result/">RequestResult</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>~~,~~ ~~error~~~~:~~ (<a href="-error-result/">ErrorResult</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?~~,~~ ~~loading~~~~:~~ () -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?~~)~~  <br>@Composable()  <br>  <br>~~fun~~ <a href="-coil-image-with-crossfade/">~~CoilImageWithCrossfade~~</a>~~(~~~~data~~~~:~~ <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>~~,~~ ~~modifier~~~~:~~ Modifier~~,~~ ~~alignment~~~~:~~ Alignment~~,~~ ~~contentScale~~~~:~~ ContentScale~~,~~ ~~crossfadeDuration~~~~:~~ <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>~~,~~ ~~imageLoader~~~~:~~ ImageLoader~~,~~ ~~shouldRefetchOnSizeChange~~~~:~~ (<a href="-request-result/">RequestResult</a>, IntSize) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>~~,~~ ~~onRequestCompleted~~~~:~~ (<a href="-request-result/">RequestResult</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>~~,~~ ~~error~~~~:~~ (<a href="-error-result/">ErrorResult</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?~~,~~ ~~loading~~~~:~~ () -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?~~)~~  <br></td>
+</tr>
+<tr>
+<td><a href="-material-loading-image/">MaterialLoadingImage</a></td>
+<td><br>  <br>A wrapper around Image which implements the <a href="https://material.io/archive/guidelines/patterns/loading-images.html">Material Image Loading</a> pattern.  <br>Content  <br>@Composable()  <br>  <br>fun <a href="-material-loading-image/">MaterialLoadingImage</a>(asset: ImageAsset, modifier: Modifier, alignment: Alignment, contentScale: ContentScale, colorFilter: ColorFilter?, clock: AnimationClockObservable, fadeInEnabled: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, fadeInDurationMs: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>)  <br>@Composable()  <br>  <br>fun <a href="-material-loading-image/">MaterialLoadingImage</a>(result: <a href="-success-result/">SuccessResult</a>, modifier: Modifier, alignment: Alignment, contentScale: ContentScale, colorFilter: ColorFilter?, clock: AnimationClockObservable, skipFadeWhenLoadedFromMemory: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, fadeInEnabled: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, fadeInDurationMs: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>)  <br></td>
+</tr>
+</tbody>
+</table>
                 
               
               
@@ -668,27 +443,6 @@ git push
       
         
 <footer class="md-footer">
-  
-    <div class="md-footer-nav">
-      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
-        
-          <a href="../contributing/" title="Contributing" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
-            <div class="md-footer-nav__button md-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
-            </div>
-            <div class="md-footer-nav__title">
-              <div class="md-ellipsis">
-                <span class="md-footer-nav__direction">
-                  Previous
-                </span>
-                Contributing
-              </div>
-            </div>
-          </a>
-        
-        
-      </nav>
-    </div>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -719,15 +473,15 @@ git push
       
     </div>
     
-      <script src="../assets/javascripts/vendor.d1f5a259.min.js"></script>
-      <script src="../assets/javascripts/bundle.d5fec882.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      <script src="../../../assets/javascripts/vendor.d1f5a259.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d5fec882.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
       
       <script>
         app = initialize({
-          base: "..",
+          base: "../../..",
           features: [],
           search: Object.assign({
-            worker: "../assets/javascripts/worker/search.fae956e7.min.js"
+            worker: "../../../assets/javascripts/worker/search.fae956e7.min.js"
           }, typeof search !== "undefined" && search)
         })
       </script>

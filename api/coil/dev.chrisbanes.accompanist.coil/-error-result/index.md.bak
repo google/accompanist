@@ -1,0 +1,49 @@
+//[coil](../../index.md)/[dev.chrisbanes.accompanist.coil](../index.md)/[ErrorResult](index.md)
+
+
+
+# ErrorResult  
+  
+
+Indicates that an error occurred while executing the request.
+
+data class [ErrorResult](index.md)(**image**: ImageAsset?, **throwable**: [Throwable](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html)) : [RequestResult](../-request-result/index.md)   
+
+
+## Parameters  
+  
+  
+  
+|  Name|  Summary| 
+|---|---|
+| image| The error image.
+| throwable| The error that failed the request.
+  
+
+
+## Constructors  
+  
+|  Name|  Summary| 
+|---|---|
+| [ErrorResult](-error-result.md)|   The error image.fun [ErrorResult](-error-result.md)(image: ImageAsset?, throwable: [Throwable](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html))   <br>
+
+
+## Functions  
+  
+|  Name|  Summary| 
+|---|---|
+| [component1](component1.md)|   <br>Content  <br>operator fun [component1](component1.md)(): ImageAsset?  <br>
+| [component2](component2.md)|   <br>Content  <br>operator fun [component2](component2.md)(): [Throwable](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html)  <br>
+| [copy](copy.md)|   <br>Content  <br>fun [copy](copy.md)(image: ImageAsset?, throwable: [Throwable](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html)): [ErrorResult](index.md)  <br>
+| [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)|   <br>Content  <br>open operator override fun [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)(other: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br>
+| [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)|   <br>Content  <br>open override fun [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br>
+| [toString](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/to-string.html)|   <br>Content  <br>open override fun [toString](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/to-string.html)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br>
+
+
+## Properties  
+  
+|  Name|  Summary| 
+|---|---|
+| [image](index.md#dev.chrisbanes.accompanist.coil/ErrorResult/image/#/PointingToDeclaration/)|   The error image.open override val [image](index.md#dev.chrisbanes.accompanist.coil/ErrorResult/image/#/PointingToDeclaration/): ImageAsset?   <br>
+| [throwable](index.md#dev.chrisbanes.accompanist.coil/ErrorResult/throwable/#/PointingToDeclaration/)|   The error that failed the request.val [throwable](index.md#dev.chrisbanes.accompanist.coil/ErrorResult/throwable/#/PointingToDeclaration/): [Throwable](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html)   <br>
+

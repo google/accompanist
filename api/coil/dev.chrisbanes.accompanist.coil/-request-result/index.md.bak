@@ -1,0 +1,35 @@
+//[coil](../../index.md)/[dev.chrisbanes.accompanist.coil](../index.md)/[RequestResult](index.md)
+
+
+
+# RequestResult  
+  
+
+Represents the result of an image request.
+
+sealed class [RequestResult](index.md)   
+
+
+## Functions  
+  
+|  Name|  Summary| 
+|---|---|
+| [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)|   <br>Content  <br>open operator override fun [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)(other: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br>
+| [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)|   <br>Content  <br>open override fun [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br>
+| [toString](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/to-string.html)|   <br>Content  <br>open override fun [toString](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/to-string.html)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br>
+
+
+## Properties  
+  
+|  Name|  Summary| 
+|---|---|
+| [image](index.md#dev.chrisbanes.accompanist.coil/RequestResult/image/#/PointingToDeclaration/)|   abstract val [image](index.md#dev.chrisbanes.accompanist.coil/RequestResult/image/#/PointingToDeclaration/): ImageAsset?   <br>
+
+
+## Inheritors  
+  
+|  Name| 
+|---|
+| [SuccessResult](../-success-result/index.md)
+| [ErrorResult](../-error-result/index.md)
+

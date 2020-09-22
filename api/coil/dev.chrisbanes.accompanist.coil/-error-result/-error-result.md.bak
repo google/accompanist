@@ -1,0 +1,24 @@
+//[coil](../../index.md)/[dev.chrisbanes.accompanist.coil](../index.md)/[ErrorResult](index.md)/[ErrorResult](-error-result.md)
+
+
+
+# ErrorResult  
+  
+Brief description  
+
+
+## Parameters  
+  
+  
+  
+|  Name|  Summary| 
+|---|---|
+| image| The error image.
+| throwable| The error that failed the request.
+  
+  
+Content  
+fun [ErrorResult](-error-result.md)(image: ImageAsset?, throwable: [Throwable](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html))  
+
+
+

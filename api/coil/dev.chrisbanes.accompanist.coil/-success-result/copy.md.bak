@@ -1,0 +1,11 @@
+//[coil](../../index.md)/[dev.chrisbanes.accompanist.coil](../index.md)/[SuccessResult](index.md)/[copy](copy.md)
+
+
+
+# copy  
+  
+Content  
+fun [copy](copy.md)(image: ImageAsset, source: DataSource): [SuccessResult](index.md)  
+
+
+

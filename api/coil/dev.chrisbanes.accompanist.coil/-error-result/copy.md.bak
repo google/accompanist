@@ -1,0 +1,11 @@
+//[coil](../../index.md)/[dev.chrisbanes.accompanist.coil](../index.md)/[ErrorResult](index.md)/[copy](copy.md)
+
+
+
+# copy  
+  
+Content  
+fun [copy](copy.md)(image: ImageAsset?, throwable: [Throwable](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html)): [ErrorResult](index.md)  
+
+
+
