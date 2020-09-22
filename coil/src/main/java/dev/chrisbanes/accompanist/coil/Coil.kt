@@ -44,6 +44,7 @@ import androidx.core.graphics.drawable.toBitmap
 import coil.Coil
 import coil.ImageLoader
 import coil.decode.DataSource
+import coil.imageLoader
 import coil.request.ImageRequest
 import coil.request.ImageResult
 
@@ -77,7 +78,7 @@ import coil.request.ImageResult
 fun CoilImage(
     data: Any,
     modifier: Modifier = Modifier,
-    imageLoader: ImageLoader = Coil.imageLoader(ContextAmbient.current),
+    imageLoader: ImageLoader = ContextAmbient.current.imageLoader,
     shouldRefetchOnSizeChange: (currentResult: CoilImageState, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (CoilImageState) -> Unit = emptySuccessLambda,
     content: @Composable (imageState: CoilImageState) -> Unit
@@ -123,7 +124,7 @@ fun CoilImage(
 fun CoilImage(
     request: ImageRequest,
     modifier: Modifier = Modifier,
-    imageLoader: ImageLoader = Coil.imageLoader(ContextAmbient.current),
+    imageLoader: ImageLoader = ContextAmbient.current.imageLoader,
     shouldRefetchOnSizeChange: (currentResult: CoilImageState, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (CoilImageState) -> Unit = emptySuccessLambda,
     content: @Composable (imageState: CoilImageState) -> Unit
@@ -231,7 +232,7 @@ fun CoilImage(
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
     fadeIn: Boolean = false,
-    imageLoader: ImageLoader = Coil.imageLoader(ContextAmbient.current),
+    imageLoader: ImageLoader = ContextAmbient.current.imageLoader,
     shouldRefetchOnSizeChange: (currentResult: CoilImageState, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (CoilImageState) -> Unit = emptySuccessLambda,
     error: @Composable ((CoilImageState.Error) -> Unit)? = null,
@@ -301,7 +302,7 @@ fun CoilImage(
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
     fadeIn: Boolean = false,
-    imageLoader: ImageLoader = Coil.imageLoader(ContextAmbient.current),
+    imageLoader: ImageLoader = ContextAmbient.current.imageLoader,
     shouldRefetchOnSizeChange: (currentResult: CoilImageState, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (CoilImageState) -> Unit = emptySuccessLambda,
     error: @Composable ((CoilImageState.Error) -> Unit)? = null,
