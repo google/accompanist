@@ -54,8 +54,8 @@ import coil.request.ImageResult
  * ```
  * CoilImage(
  *   data = "https://www.image.url",
- * ) { state ->
- *   when (state) {
+ * ) { imageState ->
+ *   when (imageState) {
  *     is CoilImageState.Success -> // TODO
  *     is CoilImageState.Error -> // TODO
  *     CoilImageState.Loading -> // TODO
@@ -80,7 +80,7 @@ fun CoilImage(
     imageLoader: ImageLoader = Coil.imageLoader(ContextAmbient.current),
     shouldRefetchOnSizeChange: (currentResult: CoilImageState, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (CoilImageState) -> Unit = emptySuccessLambda,
-    content: @Composable (state: CoilImageState) -> Unit
+    content: @Composable (imageState: CoilImageState) -> Unit
 ) {
     CoilImage(
         request = data.toImageRequest(),
@@ -99,8 +99,8 @@ fun CoilImage(
  * ```
  * CoilImage(
  *   request = ImageRequest.Builder(context).data(...).build(),
- * ) { state ->
- *   when (state) {
+ * ) { imageState ->
+ *   when (imageState) {
  *     is CoilImageState.Success -> // TODO
  *     is CoilImageState.Error -> // TODO
  *     CoilImageState.Loading -> // TODO
@@ -126,7 +126,7 @@ fun CoilImage(
     imageLoader: ImageLoader = Coil.imageLoader(ContextAmbient.current),
     shouldRefetchOnSizeChange: (currentResult: CoilImageState, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (CoilImageState) -> Unit = emptySuccessLambda,
-    content: @Composable (state: CoilImageState) -> Unit
+    content: @Composable (imageState: CoilImageState) -> Unit
 ) {
     var state by stateFor<CoilImageState>(request) { CoilImageState.Empty }
 
@@ -313,18 +313,18 @@ fun CoilImage(
         imageLoader = imageLoader,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         onRequestCompleted = onRequestCompleted,
-    ) { state ->
-        when (state) {
+    ) { imageState ->
+        when (imageState) {
             is CoilImageState.Success -> {
                 MaterialLoadingImage(
-                    result = state,
+                    result = imageState,
                     fadeInEnabled = fadeIn,
                     alignment = alignment,
                     contentScale = contentScale,
                     colorFilter = colorFilter
                 )
             }
-            is CoilImageState.Error -> if (error != null) error(state)
+            is CoilImageState.Error -> if (error != null) error(imageState)
             CoilImageState.Loading -> if (loading != null) loading()
             CoilImageState.Empty -> Unit
         }
@@ -363,13 +363,13 @@ private fun CoilRequestActor(
         imageLoader
             .execute(transformedRequest)
             .toResult(size)
-            .also { state ->
+            .also { imageState ->
                 // Tell RenderThread to pre-upload this bitmap. Saves the GPU upload cost on the
                 // first draw. See https://github.com/square/picasso/issues/1620 for a explanation
                 // from @ChrisCraik
-                when (state) {
-                    is CoilImageState.Success -> state.image.prepareToDraw()
-                    is CoilImageState.Error -> state.image?.prepareToDraw()
+                when (imageState) {
+                    is CoilImageState.Success -> imageState.image.prepareToDraw()
+                    is CoilImageState.Error -> imageState.image?.prepareToDraw()
                 }
             }
             .also { state ->

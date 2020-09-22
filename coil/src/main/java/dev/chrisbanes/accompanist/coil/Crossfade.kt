@@ -150,18 +150,18 @@ fun CoilImageWithCrossfade(
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         modifier = modifier,
         onRequestCompleted = onRequestCompleted,
-    ) { state ->
-        when (state) {
+    ) { imageState ->
+        when (imageState) {
             is CoilImageState.Success -> {
                 MaterialLoadingImage(
-                    result = state,
+                    result = imageState,
                     fadeInEnabled = true,
                     fadeInDurationMs = crossfadeDuration,
                     alignment = alignment,
                     contentScale = contentScale,
                 )
             }
-            is CoilImageState.Error -> if (error != null) error(state)
+            is CoilImageState.Error -> if (error != null) error(imageState)
             CoilImageState.Loading -> if (loading != null) loading()
             CoilImageState.Empty -> Unit
         }

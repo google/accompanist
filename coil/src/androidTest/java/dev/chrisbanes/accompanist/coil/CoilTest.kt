@@ -483,7 +483,7 @@ private fun resourceUri(id: Int): Uri {
 }
 
 /**
- * [MockWebServer] which returns a valid at the path `/image` and a 404 for anything else.
+ * [MockWebServer] which returns a valid response at the path `/image`, and a 404 for anything else.
  * We add a small delay to simulate 'real-world' network conditions.
  */
 private fun coilTestWebServer(responseDelayMs: Long = 0): MockWebServer {
