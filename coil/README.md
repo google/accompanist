@@ -40,7 +40,7 @@ There are two ways to enable the animation:
 
 ### `fadeIn` parameter
 
-A `fadeIn: Boolean` parameter has been added to `CoilImage`. When enabled, a default fade-in animation will be used when the image is successfully loaded:
+A `fadeIn: Boolean` parameter has been added to `CoilImage` (default: `false`). When enabled, a default fade-in animation will be used when the image is successfully loaded:
 
 ``` kotlin
 CoilImage(
