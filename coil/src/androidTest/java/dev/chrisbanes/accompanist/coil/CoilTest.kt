@@ -18,6 +18,7 @@ package dev.chrisbanes.accompanist.coil
 
 import android.content.ContentResolver
 import android.net.Uri
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.runtime.Composable
@@ -42,7 +43,6 @@ import androidx.ui.test.captureToBitmap
 import androidx.ui.test.createComposeRule
 import androidx.ui.test.onNodeWithTag
 import androidx.ui.test.onNodeWithText
-import androidx.ui.test.runOnIdle
 import coil.EventListener
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
@@ -281,9 +281,9 @@ class CoilTest {
         composeTestRule.setContent {
             CoilImage(
                 data = resourceUri(R.raw.sample),
-                getSuccessPainter = {
-                    // Return a custom success painter which just draws cyan
-                    ColorPainter(Color.Cyan)
+                image = {
+                    // Return an Image which just draws cyan
+                    Image(painter = ColorPainter(Color.Cyan))
                 },
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
@@ -368,9 +368,9 @@ class CoilTest {
         composeTestRule.setContent {
             CoilImage(
                 data = "url_which_will_never_work",
-                getFailurePainter = {
-                    // Return a custom failure painter which just draws red
-                    ColorPainter(Color.Red)
+                error = {
+                    // Return failure content which just draws red
+                    Image(painter = ColorPainter(Color.Red))
                 },
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
                 onRequestCompleted = { latch.countDown() }

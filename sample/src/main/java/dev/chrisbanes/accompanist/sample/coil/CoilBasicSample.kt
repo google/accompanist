@@ -42,7 +42,6 @@ import androidx.compose.ui.unit.dp
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
 import dev.chrisbanes.accompanist.coil.CoilImage
-import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
 import dev.chrisbanes.accompanist.sample.R
 
 class CoilBasicSample : AppCompatActivity() {
@@ -101,24 +100,27 @@ private fun Sample() {
                     modifier = Modifier.preferredSize(128.dp)
                 )
 
-                // CoilImageWithCrossfade with data parameter
-                CoilImageWithCrossfade(
+                // CoilImage with crossfade and data parameter
+                CoilImage(
                     data = randomSampleImageUrl(),
+                    fadeIn = true,
                     modifier = Modifier.preferredSize(128.dp)
                 )
 
-                // CoilImageWithCrossfade with ImageRequest parameter
-                CoilImageWithCrossfade(
+                // CoilImage with crossfade and ImageRequest parameter
+                CoilImage(
                     request = ImageRequest.Builder(ContextAmbient.current)
                         .data(randomSampleImageUrl())
                         .transformations(CircleCropTransformation())
                         .build(),
+                    fadeIn = true,
                     modifier = Modifier.preferredSize(128.dp)
                 )
 
-                // CoilImageWithCrossfade with loading slot
-                CoilImageWithCrossfade(
+                // CoilImage with crossfade and loading slot
+                CoilImage(
                     data = randomSampleImageUrl(),
+                    fadeIn = true,
                     loading = {
                         Stack(Modifier.fillMaxSize()) {
                             CircularProgressIndicator(Modifier.align(Alignment.Center))

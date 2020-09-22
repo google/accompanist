@@ -21,9 +21,9 @@ object Versions {
 }
 
 object Libs {
-    const val androidGradlePlugin = "com.android.tools.build:gradle:4.2.0-alpha10"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:4.2.0-alpha11"
 
-    const val gradleMavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.12.0"
+    const val gradleMavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.13.0"
 
     const val junit = "junit:junit:4.13"
 
@@ -36,7 +36,7 @@ object Libs {
     }
 
     object Dokka {
-        const val gradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:0.10.1"
+        const val gradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:${Kotlin.version}"
     }
 
     object Coroutines {
@@ -60,6 +60,15 @@ object Libs {
             const val snapshot = "6838769"
             const val version = "1.0.0-SNAPSHOT"
 
+            @JvmStatic
+            val snapshotUrl: String
+                get() = when {
+                    snapshot.isNotEmpty() -> {
+                        "https://androidx.dev/snapshots/builds/$snapshot/artifacts/ui/repository/"
+                    }
+                    else -> throw IllegalArgumentException("Snapshot version not set")
+                }
+
             const val runtime = "androidx.compose.runtime:runtime:$version"
             const val foundation = "androidx.compose.foundation:foundation:${version}"
             const val layout = "androidx.compose.foundation:foundation-layout:${version}"
@@ -77,7 +86,7 @@ object Libs {
         const val appcompat = "androidx.appcompat:appcompat:1.3.0-alpha02"
     }
 
-    const val coil = "io.coil-kt:coil:1.0.0-rc1"
+    const val coil = "io.coil-kt:coil:1.0.0-rc2"
 
     const val truth = "com.google.truth:truth:1.0.1"
     const val mockk = "io.mockk:mockk-android:1.10.0"
