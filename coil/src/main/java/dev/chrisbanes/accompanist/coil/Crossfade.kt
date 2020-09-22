@@ -50,9 +50,9 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.toSize
 import androidx.core.util.Pools
-import coil.Coil
 import coil.ImageLoader
 import coil.decode.DataSource
+import coil.imageLoader
 import coil.request.ImageRequest
 
 private const val DefaultTransitionDuration = 1000
@@ -87,7 +87,7 @@ fun CoilImageWithCrossfade(
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     crossfadeDuration: Int = DefaultTransitionDuration,
-    imageLoader: ImageLoader = Coil.imageLoader(ContextAmbient.current),
+    imageLoader: ImageLoader = ContextAmbient.current.imageLoader,
     shouldRefetchOnSizeChange: (currentResult: CoilImageState, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (CoilImageState) -> Unit = emptySuccessLambda,
     error: @Composable ((CoilImageState.Error) -> Unit)? = null,
@@ -138,7 +138,7 @@ fun CoilImageWithCrossfade(
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     crossfadeDuration: Int = DefaultTransitionDuration,
-    imageLoader: ImageLoader = Coil.imageLoader(ContextAmbient.current),
+    imageLoader: ImageLoader = ContextAmbient.current.imageLoader,
     shouldRefetchOnSizeChange: (currentResult: CoilImageState, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (CoilImageState) -> Unit = emptySuccessLambda,
     error: @Composable ((CoilImageState.Error) -> Unit)? = null,
