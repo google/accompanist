@@ -88,27 +88,24 @@ fun CoilImageWithCrossfade(
     contentScale: ContentScale = ContentScale.Fit,
     crossfadeDuration: Int = DefaultTransitionDuration,
     imageLoader: ImageLoader = Coil.imageLoader(ContextAmbient.current),
-    shouldRefetchOnSizeChange: (currentResult: RequestResult, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
-    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda,
-    error: @Composable ((ErrorResult) -> Unit)? = null,
+    shouldRefetchOnSizeChange: (currentResult: CoilImageState, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
+    onRequestCompleted: (CoilImageState) -> Unit = emptySuccessLambda,
+    error: @Composable ((CoilImageState.Error) -> Unit)? = null,
     loading: @Composable (() -> Unit)? = null
 ) {
-    CoilImage(
-        data = data,
+    @Suppress("DEPRECATION")
+    CoilImageWithCrossfade(
+        request = data.toImageRequest(),
         modifier = modifier,
+        alignment = alignment,
+        contentScale = contentScale,
+        crossfadeDuration = crossfadeDuration,
         imageLoader = imageLoader,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         onRequestCompleted = onRequestCompleted,
         error = error,
         loading = loading
-    ) { result ->
-        MaterialLoadingImage(
-            result = result,
-            alignment = alignment,
-            contentScale = contentScale,
-            fadeInDurationMs = crossfadeDuration
-        )
-    }
+    )
 }
 
 @Deprecated(
@@ -142,26 +139,32 @@ fun CoilImageWithCrossfade(
     contentScale: ContentScale = ContentScale.Fit,
     crossfadeDuration: Int = DefaultTransitionDuration,
     imageLoader: ImageLoader = Coil.imageLoader(ContextAmbient.current),
-    shouldRefetchOnSizeChange: (currentResult: RequestResult, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
-    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda,
-    error: @Composable ((ErrorResult) -> Unit)? = null,
+    shouldRefetchOnSizeChange: (currentResult: CoilImageState, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
+    onRequestCompleted: (CoilImageState) -> Unit = emptySuccessLambda,
+    error: @Composable ((CoilImageState.Error) -> Unit)? = null,
     loading: @Composable (() -> Unit)? = null
 ) {
     CoilImage(
         request = request,
-        loading = loading,
         imageLoader = imageLoader,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         modifier = modifier,
         onRequestCompleted = onRequestCompleted,
-        error = error,
-    ) { result ->
-        MaterialLoadingImage(
-            result = result,
-            alignment = alignment,
-            contentScale = contentScale,
-            fadeInDurationMs = crossfadeDuration
-        )
+    ) { state ->
+        when (state) {
+            is CoilImageState.Success -> {
+                MaterialLoadingImage(
+                    result = state,
+                    fadeInEnabled = true,
+                    fadeInDurationMs = crossfadeDuration,
+                    alignment = alignment,
+                    contentScale = contentScale,
+                )
+            }
+            is CoilImageState.Error -> if (error != null) error(state)
+            CoilImageState.Loading -> if (loading != null) loading()
+            CoilImageState.Empty -> Unit
+        }
     }
 }
 
@@ -226,7 +229,7 @@ fun MaterialLoadingImage(
  * [Material Image Loading](https://material.io/archive/guidelines/patterns/loading-images.html)
  * pattern.
  *
- * @param result The [SuccessResult] instance provided by [CoilImage].
+ * @param result The [CoilImageState.Success] instance provided by [CoilImage].
  * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
  * background)
  * @param alignment Optional alignment parameter used to place the [ImageAsset] in the given
@@ -243,7 +246,7 @@ fun MaterialLoadingImage(
  */
 @Composable
 fun MaterialLoadingImage(
-    result: SuccessResult,
+    result: CoilImageState.Success,
     modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
@@ -367,6 +370,6 @@ private object CrossfadeTransition {
     }
 }
 
-private fun SuccessResult.isFromMemory(): Boolean {
+private fun CoilImageState.Success.isFromMemory(): Boolean {
     return source == DataSource.MEMORY || source == DataSource.MEMORY_CACHE
 }

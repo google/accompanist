@@ -54,7 +54,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
  * ```
  */
 internal class RequestActor<Param, Result>(
-    private val execute: suspend (Param) -> Result
+    private val execute: suspend (Param, onResult: (Result) -> Unit) -> Unit
 ) {
     private val channel = Channel<Param>(Channel.CONFLATED)
 
@@ -69,7 +69,9 @@ internal class RequestActor<Param, Result>(
     suspend fun run(onResult: (Param, Result) -> Unit) {
         channel.receiveAsFlow()
             .distinctUntilChanged()
-            .collect { input -> onResult(input, execute(input)) }
+            .collect { input ->
+                execute(input) { result -> onResult(input, result) }
+            }
     }
 
     /**

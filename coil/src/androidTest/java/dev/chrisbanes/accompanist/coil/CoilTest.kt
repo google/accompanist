@@ -74,7 +74,7 @@ class CoilTest {
 
     @Test
     fun onRequestCompleted() {
-        val results = ArrayList<RequestResult>()
+        val results = ArrayList<CoilImageState>()
         val latch = CountDownLatch(1)
 
         composeTestRule.setContent {
@@ -94,7 +94,7 @@ class CoilTest {
         composeTestRule.runOnIdle {
             // And assert that we got a single successful result
             assertThat(results).hasSize(1)
-            assertThat(results[0]).isInstanceOf(SuccessResult::class.java)
+            assertThat(results[0]).isInstanceOf(CoilImageState.Success::class.java)
         }
     }
 
@@ -281,13 +281,12 @@ class CoilTest {
         composeTestRule.setContent {
             CoilImage(
                 data = resourceUri(R.raw.sample),
-                image = {
-                    // Return an Image which just draws cyan
-                    Image(painter = ColorPainter(Color.Cyan))
-                },
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
-            )
+            ) { _ ->
+                // Return an Image which just draws cyan
+                Image(painter = ColorPainter(Color.Cyan))
+            }
         }
 
         // Wait for the onRequestCompleted to release the latch

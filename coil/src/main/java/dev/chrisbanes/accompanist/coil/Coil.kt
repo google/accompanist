@@ -48,17 +48,19 @@ import coil.request.ImageRequest
 import coil.request.ImageResult
 
 /**
- * Creates a composable that will attempt to load the given [data] using [Coil], and then
- * display the result in the provided [image] content.
- *
- * This version of the function allows complete control over how the loaded image is displayed,
- * by being able to provide custom layout:
+ * Creates a composable that will attempt to load the given [data] using [Coil], and provides
+ * complete content of how the current state is displayed:
  *
  * ```
  * CoilImage(
- *   data = resourceUri(R.raw.sample),
- * ) { result ->
- *   FancyImage(asset = result.image)
+ *   data = "https://www.image.url",
+ * ) { state ->
+ *   when (state) {
+ *     is CoilImageState.Success -> // TODO
+ *     is CoilImageState.Error -> // TODO
+ *     CoilImageState.Loading -> // TODO
+ *     CoilImageState.Empty -> // TODO
+ *   }
  * }
  * ```
  *
@@ -69,54 +71,41 @@ import coil.request.ImageResult
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
- * @param error Content to be displayed when the request failed.
- * @param loading Content to be displayed when the request is in progress.
- * @param image Content to be displayed when the request is successful.
+ * @param content Content to be displayed for the given state.
  */
 @Composable
 fun CoilImage(
     data: Any,
     modifier: Modifier = Modifier,
     imageLoader: ImageLoader = Coil.imageLoader(ContextAmbient.current),
-    shouldRefetchOnSizeChange: (currentResult: RequestResult, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
-    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda,
-    error: @Composable ((ErrorResult) -> Unit)? = null,
-    loading: @Composable (() -> Unit)? = null,
-    image: @Composable (SuccessResult) -> Unit
+    shouldRefetchOnSizeChange: (currentResult: CoilImageState, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
+    onRequestCompleted: (CoilImageState) -> Unit = emptySuccessLambda,
+    content: @Composable (state: CoilImageState) -> Unit
 ) {
     CoilImage(
-        request = when (data) {
-            // If the developer is accidentally using the wrong function (data vs request), just
-            // pass the request through
-            is ImageRequest -> data
-            // Otherwise we construct a GetRequest using the data parameter
-            else -> {
-                val context = ContextAmbient.current
-                remember(data) { ImageRequest.Builder(context).data(data).build() }
-            }
-        },
+        request = data.toImageRequest(),
         modifier = modifier,
         imageLoader = imageLoader,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         onRequestCompleted = onRequestCompleted,
-        error = error,
-        loading = loading,
-        image = image,
+        content = content
     )
 }
 
 /**
- * Creates a composable that will attempt to load the given [request] using [Coil], and then
- * display the result in the provided [image] content.
- *
- * This version of the function allows complete control over how the loaded image is displayed,
- * by being able to provide custom layout:
+ * Creates a composable that will attempt to load the given [request] using [Coil], and provides
+ * complete content of how the current state is displayed:
  *
  * ```
  * CoilImage(
- *   data = resourceUri(R.raw.sample),
- * ) { result ->
- *   FancyImage(asset = result.image)
+ *   request = ImageRequest.Builder(context).data(...).build(),
+ * ) { state ->
+ *   when (state) {
+ *     is CoilImageState.Success -> // TODO
+ *     is CoilImageState.Error -> // TODO
+ *     CoilImageState.Loading -> // TODO
+ *     CoilImageState.Empty -> // TODO
+ *   }
  * }
  * ```
  *
@@ -128,22 +117,18 @@ fun CoilImage(
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
- * @param error Content to be displayed when the request failed.
- * @param loading Content to be displayed when the request is in progress.
- * @param image Content to be displayed when the request is successful.
+ * @param content Content to be displayed for the given state.
  */
 @Composable
 fun CoilImage(
     request: ImageRequest,
     modifier: Modifier = Modifier,
     imageLoader: ImageLoader = Coil.imageLoader(ContextAmbient.current),
-    shouldRefetchOnSizeChange: (currentResult: RequestResult, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
-    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda,
-    error: @Composable ((ErrorResult) -> Unit)? = null,
-    loading: @Composable (() -> Unit)? = null,
-    image: @Composable (SuccessResult) -> Unit
+    shouldRefetchOnSizeChange: (currentResult: CoilImageState, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
+    onRequestCompleted: (CoilImageState) -> Unit = emptySuccessLambda,
+    content: @Composable (state: CoilImageState) -> Unit
 ) {
-    var result by stateFor<RequestResult?>(request) { null }
+    var state by stateFor<CoilImageState>(request) { CoilImageState.Empty }
 
     // This may look a little weird, but allows the launchInComposition callback to always
     // invoke the last provided [onRequestCompleted].
@@ -164,13 +149,12 @@ fun CoilImage(
 
     launchInComposition(requestActor) {
         // Launch the Actor
-        requestActor.run { _, actorResult ->
+        requestActor.run { _, newState ->
             // Update the result state
-            result = actorResult
+            state = newState
 
-            if (actorResult != null) {
-                // Execute the onRequestCompleted callback if we have a new result
-                callback.value(actorResult)
+            if (newState is CoilImageState.Success || newState is CoilImageState.Error) {
+                callback.value(newState)
             }
         }
     }
@@ -179,33 +163,48 @@ fun CoilImage(
         // We remember the last size in a MutableRef (below) rather than a MutableState.
         // This is because we don't need value changes to trigger a re-composition, we are only
         // using it to store the last value.
-        val lastRequestedSize = remember(requestActor) { MutableRef(IntSize.Zero) }
+        val lastRequestedSize = remember(requestActor) { MutableRef<IntSize?>(null) }
 
         val requestSize = IntSize(
             width = if (constraints.hasBoundedWidth) constraints.maxWidth else UNSPECIFIED,
             height = if (constraints.hasBoundedHeight) constraints.maxHeight else UNSPECIFIED
         )
 
-        val r = result
-        if (lastRequestedSize.value != requestSize &&
-            (r == null || shouldRefetchOnSizeChange(r, requestSize))
+        val lastSize = lastRequestedSize.value
+        if (lastSize == null ||
+            (lastSize != requestSize && shouldRefetchOnSizeChange(state, requestSize))
         ) {
             requestActor.send(requestSize)
             lastRequestedSize.value = requestSize
         }
 
-        when (r) {
-            is SuccessResult -> image(r)
-            is ErrorResult -> if (error != null) error(r)
-            // If we don't have a result yet, show the loading content
-            null -> if (loading != null) loading()
-        }
+        content(state)
     }
 }
 
 /**
  * Creates a composable that will attempt to load the given [data] using [Coil], and then
  * display the result in an [Image].
+ *
+ * This version of the function is more opinionated, providing:
+ *
+ * - Support for displaying alternative content while the request is 'loading'.
+ *   See the [loading] parameter.
+ * - Support for displaying alternative content if the request was unsuccessful.
+ *   See the [error] parameter.
+ * - Support for automatically fading-in the image once loaded. See the [fadeIn] parameter.
+ *
+ * ```
+ * CoilImage(
+ *   data = "https://www.image.url",
+ *   fadeIn = true,
+ *   loading = {
+ *     Stack(Modifier.fillMaxSize()) {
+ *       CircularProgressIndicator(Modifier.align(Alignment.Center))
+ *     }
+ *   }
+ * )
+ * ```
  *
  * @param data The data to load. See [ImageRequest.Builder.data] for the types allowed.
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
@@ -233,33 +232,49 @@ fun CoilImage(
     colorFilter: ColorFilter? = null,
     fadeIn: Boolean = false,
     imageLoader: ImageLoader = Coil.imageLoader(ContextAmbient.current),
-    shouldRefetchOnSizeChange: (currentResult: RequestResult, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
-    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda,
-    error: @Composable ((ErrorResult) -> Unit)? = null,
+    shouldRefetchOnSizeChange: (currentResult: CoilImageState, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
+    onRequestCompleted: (CoilImageState) -> Unit = emptySuccessLambda,
+    error: @Composable ((CoilImageState.Error) -> Unit)? = null,
     loading: @Composable (() -> Unit)? = null,
 ) {
     CoilImage(
-        data = data,
+        request = data.toImageRequest(),
         modifier = modifier,
-        error = error,
-        loading = loading,
+        alignment = alignment,
+        contentScale = contentScale,
+        colorFilter = colorFilter,
+        fadeIn = fadeIn,
         imageLoader = imageLoader,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         onRequestCompleted = onRequestCompleted,
-    ) { result ->
-        MaterialLoadingImage(
-            result = result,
-            fadeInEnabled = fadeIn,
-            alignment = alignment,
-            contentScale = contentScale,
-            colorFilter = colorFilter
-        )
-    }
+        error = error,
+        loading = loading
+    )
 }
 
 /**
  * Creates a composable that will attempt to load the given [request] using [Coil], and then
  * display the result in an [Image].
+ *
+ * This version of the function is more opinionated, providing:
+ *
+ * - Support for displaying alternative content while the request is 'loading'.
+ *   See the [loading] parameter.
+ * - Support for displaying alternative content if the request was unsuccessful.
+ *   See the [error] parameter.
+ * - Support for automatically fading-in the image once loaded. See the [fadeIn] parameter.
+ *
+ * ```
+ * CoilImage(
+ *   request = ImageRequest.Builder(context).data(...).build(),
+ *   fadeIn = true,
+ *   loading = {
+ *     Stack(Modifier.fillMaxSize()) {
+ *       CircularProgressIndicator(Modifier.align(Alignment.Center))
+ *     }
+ *   }
+ * )
+ * ```
  *
  * @param request The request to execute. If the request does not have a [ImageRequest.sizeResolver]
  * set, one will be set on the request using the layout constraints.
@@ -287,27 +302,32 @@ fun CoilImage(
     colorFilter: ColorFilter? = null,
     fadeIn: Boolean = false,
     imageLoader: ImageLoader = Coil.imageLoader(ContextAmbient.current),
-    shouldRefetchOnSizeChange: (currentResult: RequestResult, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
-    onRequestCompleted: (RequestResult) -> Unit = emptySuccessLambda,
-    error: @Composable ((ErrorResult) -> Unit)? = null,
+    shouldRefetchOnSizeChange: (currentResult: CoilImageState, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
+    onRequestCompleted: (CoilImageState) -> Unit = emptySuccessLambda,
+    error: @Composable ((CoilImageState.Error) -> Unit)? = null,
     loading: @Composable (() -> Unit)? = null,
 ) {
     CoilImage(
         request = request,
         modifier = modifier,
-        error = error,
-        loading = loading,
         imageLoader = imageLoader,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         onRequestCompleted = onRequestCompleted,
-    ) { result ->
-        MaterialLoadingImage(
-            result = result,
-            fadeInEnabled = fadeIn,
-            alignment = alignment,
-            contentScale = contentScale,
-            colorFilter = colorFilter
-        )
+    ) { state ->
+        when (state) {
+            is CoilImageState.Success -> {
+                MaterialLoadingImage(
+                    result = state,
+                    fadeInEnabled = fadeIn,
+                    alignment = alignment,
+                    contentScale = contentScale,
+                    colorFilter = colorFilter
+                )
+            }
+            is CoilImageState.Error -> if (error != null) error(state)
+            CoilImageState.Loading -> if (loading != null) loading()
+            CoilImageState.Empty -> Unit
+        }
     }
 }
 
@@ -322,88 +342,141 @@ private data class MutableRef<T>(var value: T)
 private fun CoilRequestActor(
     imageLoader: ImageLoader,
     request: ImageRequest
-) = RequestActor<IntSize, RequestResult?> { size ->
-    when {
-        request.defined.sizeResolver != null -> {
-            // If the request has a size resolver set we just execute the request as-is
-            request
-        }
-        size.width == UNSPECIFIED || size.height == UNSPECIFIED -> {
-            // If the size contains an unspecified dimension, we don't specify a size
-            // in the Coil request
-            request
-        }
-        size != IntSize.Zero -> {
-            // If we have a non-zero size, we can modify the request to include the size
-            request.newBuilder().size(size.width, size.height).build()
-        }
-        else -> {
-            // Otherwise we have a zero size, so no point executing a request
-            null
-        }
-    }?.let { transformedRequest ->
+) = RequestActor<IntSize, CoilImageState> { size, onResult ->
+    // First, send the loading state
+    onResult(CoilImageState.Loading)
+
+    val transformedRequest = when {
+        // If the request has a size resolver set we just execute the request as-is
+        request.defined.sizeResolver != null -> request
+        // If the size contains an unspecified dimension, we don't specify a size
+        // in the Coil request
+        size.width == UNSPECIFIED || size.height == UNSPECIFIED -> request
+        // If we have a non-zero size, we can modify the request to include the size
+        size != IntSize.Zero -> request.newBuilder().size(size.width, size.height).build()
+        // Otherwise we have a zero size, so no point executing a request
+        else -> null
+    }
+
+    if (transformedRequest != null) {
         // Now execute the request in Coil...
         imageLoader
             .execute(transformedRequest)
             .toResult(size)
-            .also {
+            .also { state ->
                 // Tell RenderThread to pre-upload this bitmap. Saves the GPU upload cost on the
                 // first draw. See https://github.com/square/picasso/issues/1620 for a explanation
                 // from @ChrisCraik
-                it.image?.prepareToDraw()
+                when (state) {
+                    is CoilImageState.Success -> state.image.prepareToDraw()
+                    is CoilImageState.Error -> state.image?.prepareToDraw()
+                }
             }
+            .also { state ->
+                // Send the result
+                onResult(state)
+            }
+    } else {
+        // If we don't have a request to execute, send empty
+        onResult(CoilImageState.Empty)
     }
 }
 
-/**
- * Represents the result of an image request.
- */
-sealed class RequestResult {
-    abstract val image: ImageAsset?
-}
+@Deprecated(
+    message = "Use RequestState",
+    replaceWith = ReplaceWith("RequestState", "dev.chrisbanes.accompanist.coil.LoadState")
+)
+@Suppress("unused")
+typealias RequestResult = CoilImageState
+
+@Deprecated(
+    message = "Use CoilImageState.Success",
+    replaceWith = ReplaceWith(
+        "LoadState.Success",
+        "dev.chrisbanes.accompanist.coil.CoilImageState.Success"
+    )
+)
+@Suppress("unused")
+typealias SuccessResult = CoilImageState.Success
+
+@Deprecated(
+    message = "Use CoilImageState.Error",
+    replaceWith = ReplaceWith(
+        "LoadState.Error",
+        "dev.chrisbanes.accompanist.coil.CoilImageState.Error"
+    )
+)
+@Suppress("unused")
+typealias ErrorResult = CoilImageState.Error
 
 /**
- * Indicates that the request completed successfully.
- *
- * @param image The result image.
- * @param source The data source that the image was loaded from.
+ * Represents the state of a [CoilImage]
  */
-data class SuccessResult(
-    override val image: ImageAsset,
-    val source: DataSource
-) : RequestResult() {
-    internal constructor(result: coil.request.SuccessResult, fallbackSize: IntSize) : this(
-        image = result.drawable.toImageAsset(fallbackSize),
-        source = result.metadata.dataSource
-    )
-}
+sealed class CoilImageState {
+    /**
+     * Indicates that a request is not in progress.
+     */
+    object Empty : CoilImageState()
 
-/**
- * Indicates that an error occurred while executing the request.
- *
- * @param image The error image.
- * @param throwable The error that failed the request.
- */
-data class ErrorResult(
-    override val image: ImageAsset?,
-    val throwable: Throwable
-) : RequestResult() {
-    internal constructor(result: coil.request.ErrorResult, fallbackSize: IntSize) : this(
-        image = result.drawable?.toImageAsset(fallbackSize),
-        throwable = result.throwable
-    )
+    /**
+     * Indicates that the request is currently in progress.
+     */
+    object Loading : CoilImageState()
+
+    /**
+     * Indicates that the request completed successfully.
+     *
+     * @param image The result image.
+     * @param source The data source that the image was loaded from.
+     */
+    data class Success(
+        val image: ImageAsset,
+        val source: DataSource
+    ) : CoilImageState() {
+        internal constructor(result: coil.request.SuccessResult, fallbackSize: IntSize) : this(
+            image = result.drawable.toImageAsset(fallbackSize),
+            source = result.metadata.dataSource
+        )
+    }
+
+    /**
+     * Indicates that an error occurred while executing the request.
+     *
+     * @param image The error image.
+     * @param throwable The error that failed the request.
+     */
+    data class Error(
+        val image: ImageAsset?,
+        val throwable: Throwable
+    ) : CoilImageState() {
+        internal constructor(result: coil.request.ErrorResult, fallbackSize: IntSize) : this(
+            image = result.drawable?.toImageAsset(fallbackSize),
+            throwable = result.throwable
+        )
+    }
 }
 
 private fun ImageResult.toResult(
     fallbackSize: IntSize = IntSize.Zero
-): RequestResult = when (this) {
-    is coil.request.SuccessResult -> SuccessResult(this, fallbackSize)
-    is coil.request.ErrorResult -> ErrorResult(this, fallbackSize)
+): CoilImageState = when (this) {
+    is coil.request.SuccessResult -> CoilImageState.Success(this, fallbackSize)
+    is coil.request.ErrorResult -> CoilImageState.Error(this, fallbackSize)
 }
 
-internal val emptySuccessLambda: (RequestResult) -> Unit = {}
+@Composable
+internal fun Any.toImageRequest(): ImageRequest {
+    // If the developer is accidentally using the wrong function (data vs request), just
+    // pass the request through
+    return if (this is ImageRequest) this else {
+        // Otherwise we construct a GetRequest using the data parameter
+        val context = ContextAmbient.current
+        remember(this) { ImageRequest.Builder(context).data(this).build() }
+    }
+}
 
-internal val defaultRefetchOnSizeChangeLambda: (RequestResult, IntSize) -> Boolean = { _, _ -> false }
+internal val emptySuccessLambda: (CoilImageState) -> Unit = {}
+
+internal val defaultRefetchOnSizeChangeLambda: (CoilImageState, IntSize) -> Boolean = { _, _ -> false }
 
 internal fun Drawable.toImageAsset(fallbackSize: IntSize): ImageAsset {
     return toBitmap(
