@@ -92,12 +92,12 @@ private fun Sample() {
                 // CoilImage with loading slot
                 CoilImage(
                     data = randomSampleImageUrl(),
-                    fadeIn = true,
                     loading = {
                         Stack(Modifier.fillMaxSize()) {
                             CircularProgressIndicator(Modifier.align(Alignment.Center))
                         }
-                    }
+                    },
+                    modifier = Modifier.preferredSize(128.dp)
                 )
 
                 // CoilImage with crossfade and data parameter
