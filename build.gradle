@@ -55,21 +55,6 @@ subprojects {
         }
     }
 
-    if (!Libs.AndroidX.Compose.snapshot.isEmpty()) {
-        // We're depending on a Jetpack Compose snapshot, update the library version name
-        // to indicate it's from a Compose snapshot
-        def versionName = project.properties.get('VERSION_NAME')
-        if (versionName.contains("SNAPSHOT")) {
-            version = versionName.replace(
-                    '-SNAPSHOT',
-                    ".compose-${Libs.AndroidX.Compose.snapshot}-SNAPSHOT"
-            )
-        } else {
-            throw new IllegalArgumentException("Using Jetpack Compose SNAPSHOT repository" +
-                    " but library version name is not set to SNAPSHOT")
-        }
-    }
-
     apply plugin: 'com.diffplug.spotless'
     spotless {
         kotlin {
@@ -136,7 +121,7 @@ subprojects {
     }
 
     // Must be afterEvaluate or else com.vanniktech.maven.publish will overwrite our
-    // dokka configuration.
+    // dokka and version configuration.
     afterEvaluate {
         tasks.withType(org.jetbrains.dokka.gradle.DokkaTask).configureEach {
             sourceSets {
@@ -161,6 +146,21 @@ subprojects {
                         }
                     }
                 }
+            }
+        }
+
+        if (!Libs.AndroidX.Compose.snapshot.isEmpty()) {
+            // We're depending on a Jetpack Compose snapshot, update the library version name
+            // to indicate it's from a Compose snapshot
+            def versionName = project.properties.get('VERSION_NAME')
+            if (versionName.contains("SNAPSHOT")) {
+                version = versionName.replace(
+                        '-SNAPSHOT',
+                        ".compose-${Libs.AndroidX.Compose.snapshot}-SNAPSHOT"
+                )
+            } else {
+                throw new IllegalArgumentException("Using Jetpack Compose SNAPSHOT repository" +
+                        " but library version name is not set to SNAPSHOT")
             }
         }
     }
