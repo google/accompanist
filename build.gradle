@@ -89,8 +89,6 @@ subprojects {
             freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
 
             freeCompilerArgs += "-Xallow-jvm-ir-dependencies"
-            // Turn on JVM default methods
-            freeCompilerArgs += "-Xjvm-default=all"
         }
 
         compile.dependsOn(compilerPluginConfig)
