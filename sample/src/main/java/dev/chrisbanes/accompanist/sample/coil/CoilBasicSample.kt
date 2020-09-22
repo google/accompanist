@@ -21,9 +21,9 @@ import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.Text
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayout
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Stack
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredSize
@@ -93,7 +93,7 @@ private fun Sample() {
                 CoilImage(
                     data = randomSampleImageUrl(),
                     loading = {
-                        Stack(Modifier.fillMaxSize()) {
+                        Box(Modifier.fillMaxSize()) {
                             CircularProgressIndicator(Modifier.align(Alignment.Center))
                         }
                     },
@@ -122,7 +122,7 @@ private fun Sample() {
                     data = randomSampleImageUrl(),
                     fadeIn = true,
                     loading = {
-                        Stack(Modifier.fillMaxSize()) {
+                        Box(Modifier.fillMaxSize()) {
                             CircularProgressIndicator(Modifier.align(Alignment.Center))
                         }
                     },
@@ -133,7 +133,7 @@ private fun Sample() {
                 CoilImage(
                     data = randomSampleImageUrl(),
                     loading = {
-                        Stack(Modifier.fillMaxSize()) {
+                        Box(Modifier.fillMaxSize()) {
                             CircularProgressIndicator(Modifier.align(Alignment.Center))
                         }
                     }
