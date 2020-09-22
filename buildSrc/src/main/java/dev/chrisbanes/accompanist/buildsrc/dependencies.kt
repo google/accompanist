@@ -90,4 +90,6 @@ object Libs {
 
     const val truth = "com.google.truth:truth:1.0.1"
     const val mockk = "io.mockk:mockk-android:1.10.0"
+
+    const val mockWebServer = "com.squareup.okhttp3:mockwebserver:3.12.2"
 }

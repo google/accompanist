@@ -21,7 +21,6 @@ import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.preferredSize
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -59,6 +58,13 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.withTimeoutOrNull
+import okhttp3.mockwebserver.Dispatcher
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
+import okhttp3.mockwebserver.RecordedRequest
+import okio.Buffer
+import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -72,9 +78,24 @@ class CoilTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
+    // Our MockWebServer. We use a response delay to simulate real-world conditions
+    private val server = coilTestWebServer(responseDelayMs = 200)
+
+    @Before
+    fun setup() {
+        // Start our mock web server
+        server.start()
+    }
+
+    @After
+    fun teardown() {
+        // Shutdown our mock web server
+        server.shutdown()
+    }
+
     @Test
     fun onRequestCompleted() {
-        val results = ArrayList<RequestResult>()
+        val results = ArrayList<CoilImageState>()
         val latch = CountDownLatch(1)
 
         composeTestRule.setContent {
@@ -94,17 +115,17 @@ class CoilTest {
         composeTestRule.runOnIdle {
             // And assert that we got a single successful result
             assertThat(results).hasSize(1)
-            assertThat(results[0]).isInstanceOf(SuccessResult::class.java)
+            assertThat(results[0]).isInstanceOf(CoilImageState.Success::class.java)
         }
     }
 
     @Test
-    fun basicLoad_raw() {
+    fun basicLoad_http() {
         val latch = CountDownLatch(1)
 
         composeTestRule.setContent {
             CoilImage(
-                data = resourceUri(R.raw.sample),
+                data = server.url("/image"),
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
@@ -274,39 +295,12 @@ class CoilTest {
     }
 
     @Test
-    @SdkSuppress(minSdkVersion = 26) // captureToBitmap is SDK 26+
-    fun customGetPainter() {
-        val latch = CountDownLatch(1)
-
-        composeTestRule.setContent {
-            CoilImage(
-                data = resourceUri(R.raw.sample),
-                image = {
-                    // Return an Image which just draws cyan
-                    Image(painter = ColorPainter(Color.Cyan))
-                },
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
-                onRequestCompleted = { latch.countDown() }
-            )
-        }
-
-        // Wait for the onRequestCompleted to release the latch
-        latch.await(5, TimeUnit.SECONDS)
-
-        // Assert that the whole layout is drawn cyan
-        composeTestRule.onNodeWithTag(CoilTestTags.Image)
-            .assertIsDisplayed()
-            .captureToBitmap()
-            .assertPixels { Color.Cyan }
-    }
-
-    @Test
     fun errorStillHasSize() {
         val latch = CountDownLatch(1)
 
         composeTestRule.setContent {
             CoilImage(
-                data = "url_which_will_never_work",
+                data = server.url("/noimage"),
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
@@ -322,9 +316,93 @@ class CoilTest {
             .assertHeightIsEqualTo(128.dp)
     }
 
+    @Test
+    fun content_error() {
+        val latch = CountDownLatch(1)
+        val states = ArrayList<CoilImageState>()
+
+        composeTestRule.setContent {
+            CoilImage(
+                data = server.url("/noimage"),
+                modifier = Modifier.preferredSize(128.dp, 128.dp),
+                // Disable any caches. If the item is in the cache, the fetch is
+                // synchronous which means the Loading state is skipped
+                imageLoader = noCacheImageLoader(),
+                onRequestCompleted = { latch.countDown() }
+            ) { state ->
+                states.add(state)
+            }
+        }
+
+        // Wait for the onRequestCompleted to release the latch
+        latch.await(5, TimeUnit.SECONDS)
+
+        composeTestRule.runOnIdle {
+            assertThat(states).hasSize(3)
+            assertThat(states[0]).isEqualTo(CoilImageState.Empty)
+            assertThat(states[1]).isEqualTo(CoilImageState.Loading)
+            assertThat(states[2]).isInstanceOf(CoilImageState.Error::class.java)
+        }
+    }
+
+    @Test
+    fun content_success() {
+        val latch = CountDownLatch(1)
+        val states = ArrayList<CoilImageState>()
+
+        composeTestRule.setContent {
+            CoilImage(
+                data = server.url("/image"),
+                modifier = Modifier.preferredSize(128.dp, 128.dp),
+                // Disable any caches. If the item is in the cache, the fetch is
+                // synchronous which means the Loading state is skipped
+                imageLoader = noCacheImageLoader(),
+                onRequestCompleted = { latch.countDown() }
+            ) { state ->
+                states.add(state)
+            }
+        }
+
+        // Wait for the onRequestCompleted to release the latch
+        latch.await(5, TimeUnit.SECONDS)
+
+        composeTestRule.runOnIdle {
+            assertThat(states).hasSize(3)
+            assertThat(states[0]).isEqualTo(CoilImageState.Empty)
+            assertThat(states[1]).isEqualTo(CoilImageState.Loading)
+            assertThat(states[2]).isInstanceOf(CoilImageState.Success::class.java)
+        }
+    }
+
+    @Test
+    @SdkSuppress(minSdkVersion = 26) // captureToBitmap is SDK 26+
+    fun content_custom() {
+        val latch = CountDownLatch(1)
+
+        composeTestRule.setContent {
+            CoilImage(
+                data = resourceUri(R.raw.sample),
+                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
+                onRequestCompleted = { latch.countDown() }
+            ) { _ ->
+                // Return an Image which just draws cyan
+                Image(painter = ColorPainter(Color.Cyan))
+            }
+        }
+
+        // Wait for the onRequestCompleted to release the latch
+        latch.await(5, TimeUnit.SECONDS)
+
+        // Assert that the whole layout is drawn cyan
+        composeTestRule.onNodeWithTag(CoilTestTags.Image)
+            .assertIsDisplayed()
+            .captureToBitmap()
+            .assertPixels { Color.Cyan }
+    }
+
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun loadingSlot() {
+    fun loading_slot() {
         val dispatcher = TestCoroutineDispatcher()
         val loadLatch = CountDownLatch(1)
 
@@ -334,13 +412,13 @@ class CoilTest {
             composeTestRule.setContent {
                 CoilImage(
                     request = ImageRequest.Builder(ContextAmbient.current)
-                        .data(resourceUri(R.raw.sample))
-                        // Disable memory cache. If the item is in the cache, the fetch is
-                        // synchronous and the dispatcher pause has no effect
-                        .memoryCachePolicy(CachePolicy.DISABLED)
+                        .data(server.url("/image"))
                         .dispatcher(dispatcher)
                         .build(),
                     modifier = Modifier.preferredSize(128.dp, 128.dp),
+                    // Disable memory cache. If the item is in the cache, the fetch is
+                    // synchronous and the dispatcher pause has no effect
+                    imageLoader = noCacheImageLoader(),
                     loading = { Text(text = "Loading") },
                     onRequestCompleted = { loadLatch.countDown() }
                 )
@@ -362,12 +440,12 @@ class CoilTest {
 
     @Test
     @SdkSuppress(minSdkVersion = 26) // captureToBitmap is SDK 26+
-    fun customFailurePainter() {
+    fun error_slot() {
         val latch = CountDownLatch(1)
 
         composeTestRule.setContent {
             CoilImage(
-                data = "url_which_will_never_work",
+                data = server.url("/noimage"),
                 error = {
                     // Return failure content which just draws red
                     Image(painter = ColorPainter(Color.Red))
@@ -388,7 +466,50 @@ class CoilTest {
     }
 }
 
-@Composable
-fun resourceUri(id: Int): Uri {
-    return "${ContentResolver.SCHEME_ANDROID_RESOURCE}://${ContextAmbient.current.packageName}/$id".toUri()
+/**
+ * [ImageLoader] which disables all caching
+ */
+private fun noCacheImageLoader(): ImageLoader {
+    val ctx = InstrumentationRegistry.getInstrumentation().targetContext
+    return ImageLoader.Builder(ctx)
+        .memoryCachePolicy(CachePolicy.DISABLED)
+        .diskCachePolicy(CachePolicy.DISABLED)
+        .build()
+}
+
+private fun resourceUri(id: Int): Uri {
+    val packageName = InstrumentationRegistry.getInstrumentation().targetContext.packageName
+    return "${ContentResolver.SCHEME_ANDROID_RESOURCE}://$packageName/$id".toUri()
+}
+
+/**
+ * [MockWebServer] which returns a valid response at the path `/image`, and a 404 for anything else.
+ * We add a small delay to simulate 'real-world' network conditions.
+ */
+private fun coilTestWebServer(responseDelayMs: Long = 0): MockWebServer {
+    val dispatcher = object : Dispatcher() {
+        override fun dispatch(request: RecordedRequest): MockResponse = when (request.path) {
+            "/image" -> {
+                val res = InstrumentationRegistry.getInstrumentation().targetContext.resources
+
+                // Load the image into a Buffer
+                val imageBuffer = Buffer().apply {
+                    readFrom(res.openRawResource(R.raw.sample))
+                }
+
+                MockResponse()
+                    .setHeadersDelay(responseDelayMs, TimeUnit.MILLISECONDS)
+                    .addHeader("Content-Type", "image/jpeg")
+                    .setBody(imageBuffer)
+            }
+            else ->
+                MockResponse()
+                    .setHeadersDelay(responseDelayMs, TimeUnit.MILLISECONDS)
+                    .setResponseCode(404)
+        }
+    }
+
+    return MockWebServer().apply {
+        setDispatcher(dispatcher)
+    }
 }

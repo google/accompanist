@@ -92,6 +92,8 @@ dependencies {
     androidTestImplementation Libs.truth
     androidTestImplementation Libs.mockk
 
+    androidTestImplementation Libs.mockWebServer
+
     androidTestImplementation Libs.Coroutines.test
 
     androidTestImplementation Libs.AndroidX.Compose.test

@@ -20,7 +20,13 @@
 
     <uses-sdk android:targetSdkVersion="29" />
 
-    <application>
+    <!-- Needed for MockWebServer -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- usesCleartextTraffic=true because we use MockWebServer -->
+    <application
+        android:name="dev.chrisbanes.accompanist.coil.CoilTestApplication"
+        android:usesCleartextTraffic="true">
         <activity
             android:name="androidx.activity.ComponentActivity"
             android:theme="@style/Theme.CoilTest"
