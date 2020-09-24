@@ -94,7 +94,7 @@ class CoilTest {
     }
 
     @Test
-    fun onRequestCompleted() {
+    fun onRequestCompleted_fromImageRequest() {
         val results = ArrayList<ImageLoadState>()
         val latch = CountDownLatch(1)
 
@@ -104,6 +104,32 @@ class CoilTest {
                     .data(resourceUri(R.raw.sample))
                     .listener { _, _ -> latch.countDown() }
                     .build(),
+                modifier = Modifier.preferredSize(128.dp, 128.dp),
+                onRequestCompleted = { results += it }
+            )
+        }
+
+        // Wait for the Coil request listener to release the latch
+        latch.await(5, TimeUnit.SECONDS)
+
+        composeTestRule.runOnIdle {
+            // And assert that we got a single successful result
+            assertThat(results).hasSize(1)
+            assertThat(results[0]).isInstanceOf(ImageLoadState.Success::class.java)
+        }
+    }
+
+    @Test
+    fun onRequestCompleted_fromBuilder() {
+        val results = ArrayList<ImageLoadState>()
+        val latch = CountDownLatch(1)
+
+        composeTestRule.setContent {
+            CoilImage(
+                data = resourceUri(R.raw.sample),
+                requestBuilder = {
+                    listener { _, _ -> latch.countDown() }
+                },
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
                 onRequestCompleted = { results += it }
             )

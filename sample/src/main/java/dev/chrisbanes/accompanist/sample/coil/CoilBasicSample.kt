@@ -89,6 +89,15 @@ private fun Sample() {
                     modifier = Modifier.preferredSize(128.dp)
                 )
 
+                // CoilImage with ImageRequest builder parameter
+                CoilImage(
+                    data = randomSampleImageUrl(),
+                    requestBuilder = {
+                        transformations(CircleCropTransformation())
+                    },
+                    modifier = Modifier.preferredSize(128.dp)
+                )
+
                 // CoilImage with loading slot
                 CoilImage(
                     data = randomSampleImageUrl(),

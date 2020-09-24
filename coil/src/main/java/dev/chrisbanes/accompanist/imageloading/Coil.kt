@@ -55,6 +55,7 @@ import coil.request.ImageResult
  *
  * @param data The data to load. See [ImageRequest.Builder.data] for the types allowed.
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
+ * @param requestBuilder Optional builder for the [ImageRequest].
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to [Coil]'s
  * default image loader.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
@@ -66,6 +67,7 @@ import coil.request.ImageResult
 fun CoilImage(
     data: Any,
     modifier: Modifier = Modifier,
+    requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
     imageLoader: ImageLoader = ContextAmbient.current.imageLoader,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = emptySuccessLambda,
@@ -74,6 +76,7 @@ fun CoilImage(
     CoilImage(
         request = data.toImageRequest(),
         modifier = modifier,
+        requestBuilder = requestBuilder,
         imageLoader = imageLoader,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         onRequestCompleted = onRequestCompleted,
@@ -101,6 +104,7 @@ fun CoilImage(
  * @param request The request to execute. If the request does not have a [ImageRequest.sizeResolver]
  * set, one will be set on the request using the layout constraints.
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
+ * @param requestBuilder Optional builder for the [ImageRequest].
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to [Coil]'s
  * default image loader.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
@@ -112,6 +116,7 @@ fun CoilImage(
 fun CoilImage(
     request: ImageRequest,
     modifier: Modifier = Modifier,
+    requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
     imageLoader: ImageLoader = ContextAmbient.current.imageLoader,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = emptySuccessLambda,
@@ -121,7 +126,7 @@ fun CoilImage(
         request = request,
         executeRequest = { imageLoader.execute(it).toResult() },
         transformRequestForSize = { r, size ->
-            when {
+            val sizedRequest = when {
                 // If the request has a size resolver set we just execute the request as-is
                 r.defined.sizeResolver != null -> r
                 // If the size contains an unspecified sized dimension, we don't specify a size
@@ -131,6 +136,14 @@ fun CoilImage(
                 size != IntSize.Zero -> r.newBuilder().size(size.width, size.height).build()
                 // Otherwise we have a zero size, so no point executing a request
                 else -> null
+            }
+
+            if (sizedRequest != null && requestBuilder != null) {
+                // If we have a transformed request and builder, let it run
+                requestBuilder(sizedRequest.newBuilder(), size).build()
+            } else {
+                // Otherwise we just return the sizedRequest
+                sizedRequest
             }
         },
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
@@ -175,6 +188,7 @@ fun CoilImage(
  * @param loading Content to be displayed when the request is in progress.
  * @param fadeIn Whether to run a fade-in animation when images are successfully loaded.
  * Default: `false`.
+ * @param requestBuilder Optional builder for the [ImageRequest].
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to [Coil]'s
  * default image loader.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
@@ -189,6 +203,7 @@ fun CoilImage(
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
     fadeIn: Boolean = false,
+    requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
     imageLoader: ImageLoader = ContextAmbient.current.imageLoader,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = emptySuccessLambda,
@@ -202,6 +217,7 @@ fun CoilImage(
         contentScale = contentScale,
         colorFilter = colorFilter,
         fadeIn = fadeIn,
+        requestBuilder = requestBuilder,
         imageLoader = imageLoader,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         onRequestCompleted = onRequestCompleted,
@@ -245,6 +261,7 @@ fun CoilImage(
  * @param error Content to be displayed when the request failed.
  * @param loading Content to be displayed when the request is in progress.
  * @param fadeIn Whether to run a fade-in animation when images are successfully loaded. Default: `false`.
+ * @param requestBuilder Optional builder for the [ImageRequest].
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to [Coil]'s
  * default image loader.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
@@ -259,6 +276,7 @@ fun CoilImage(
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
     fadeIn: Boolean = false,
+    requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
     imageLoader: ImageLoader = ContextAmbient.current.imageLoader,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = emptySuccessLambda,
@@ -268,6 +286,7 @@ fun CoilImage(
     CoilImage(
         request = request,
         modifier = modifier,
+        requestBuilder = requestBuilder,
         imageLoader = imageLoader,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         onRequestCompleted = onRequestCompleted,
