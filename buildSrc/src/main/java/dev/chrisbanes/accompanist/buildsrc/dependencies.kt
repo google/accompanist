@@ -92,6 +92,8 @@ object Libs {
         const val gif = "io.coil-kt:coil-gif:$version"
     }
 
+    const val picasso = "com.squareup.picasso:picasso:2.8"
+
     const val truth = "com.google.truth:truth:1.0.1"
 
     const val mockWebServer = "com.squareup.okhttp3:mockwebserver:3.12.2"
