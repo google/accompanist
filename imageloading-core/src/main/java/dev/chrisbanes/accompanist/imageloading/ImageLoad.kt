@@ -19,9 +19,6 @@
 
 package dev.chrisbanes.accompanist.imageloading
 
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -33,11 +30,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.stateFor
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.WithConstraints
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageAsset
-import androidx.compose.ui.graphics.painter.ColorPainter
-import androidx.compose.ui.graphics.painter.ImagePainter
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.IntSize
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -79,7 +71,7 @@ fun <T> ImageLoad(
     val callback = remember { mutableStateOf(onRequestCompleted, referentialEqualityPolicy()) }
     callback.value = onRequestCompleted
 
-    val requestActor = remember(request, executeRequest) {
+    val requestActor = remember(request) {
         ImageLoadRequestActor(executeRequest)
     }
 
@@ -143,12 +135,3 @@ private fun <T> ImageLoadRequestActor(
 internal val emptySuccessLambda: (ImageLoadState) -> Unit = {}
 
 internal val defaultRefetchOnSizeChangeLambda: (ImageLoadState, IntSize) -> Boolean = { _, _ -> false }
-
-fun Drawable.toPainter(): Painter {
-    if (this is BitmapDrawable) {
-        return ImagePainter(bitmap.asImageAsset())
-    } else if (this is ColorDrawable) {
-        return ColorPainter(Color(color))
-    }
-    throw IllegalArgumentException("Drawable type ${this::class.java} not supported")
-}
