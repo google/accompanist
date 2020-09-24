@@ -17,7 +17,7 @@
 @file:JvmName("CoilImage")
 @file:JvmMultifileClass
 
-package dev.chrisbanes.accompanist.imageloading
+package dev.chrisbanes.accompanist.coil
 
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
@@ -35,6 +35,11 @@ import coil.ImageLoader
 import coil.imageLoader
 import coil.request.ImageRequest
 import coil.request.ImageResult
+import dev.chrisbanes.accompanist.imageloading.DataSource
+import dev.chrisbanes.accompanist.imageloading.ImageLoad
+import dev.chrisbanes.accompanist.imageloading.ImageLoadState
+import dev.chrisbanes.accompanist.imageloading.MaterialLoadingImage
+import dev.chrisbanes.accompanist.imageloading.toPainter
 
 /**
  * Creates a composable that will attempt to load the given [data] using [Coil], and provides
@@ -309,27 +314,27 @@ fun CoilImage(
 }
 
 @Deprecated(
-    message = "Use RequestState",
-    replaceWith = ReplaceWith("RequestState", "dev.chrisbanes.accompanist.coil.LoadState")
+    message = "Use ImageLoadState",
+    replaceWith = ReplaceWith("ImageLoadState", "dev.chrisbanes.accompanist.imageloading.ImageLoadState")
 )
 @Suppress("unused")
 typealias RequestResult = ImageLoadState
 
 @Deprecated(
-    message = "Use CoilImageState.Success",
+    message = "Use ImageLoadState.Success",
     replaceWith = ReplaceWith(
-        "LoadState.Success",
-        "dev.chrisbanes.accompanist.coil.CoilImageState.Success"
+        "ImageLoadState.Success",
+        "dev.chrisbanes.accompanist.imageloading.ImageLoadState.Success"
     )
 )
 @Suppress("unused")
 typealias SuccessResult = ImageLoadState.Success
 
 @Deprecated(
-    message = "Use CoilImageState.Error",
+    message = "Use ImageLoadState.Error",
     replaceWith = ReplaceWith(
-        "LoadState.Error",
-        "dev.chrisbanes.accompanist.coil.CoilImageState.Error"
+        "ImageLoadState.Error",
+        "dev.chrisbanes.accompanist.imageloading.ImageLoadState.Error"
     )
 )
 @Suppress("unused")

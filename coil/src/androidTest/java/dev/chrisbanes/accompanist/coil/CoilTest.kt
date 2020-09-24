@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package dev.chrisbanes.accompanist.imageloading
+package dev.chrisbanes.accompanist.coil
 
 import android.content.ContentResolver
 import android.net.Uri
@@ -48,7 +48,8 @@ import coil.annotation.ExperimentalCoilApi
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.google.common.truth.Truth.assertThat
-import dev.chrisbanes.accompanist.imageloading.test.R
+import dev.chrisbanes.accompanist.coil.test.R
+import dev.chrisbanes.accompanist.imageloading.ImageLoadState
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi

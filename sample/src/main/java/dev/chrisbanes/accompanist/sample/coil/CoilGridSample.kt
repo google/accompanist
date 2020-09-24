@@ -34,7 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import dev.chrisbanes.accompanist.imageloading.CoilImage
+import dev.chrisbanes.accompanist.coil.CoilImage
 import dev.chrisbanes.accompanist.sample.R
 
 class CoilGridSample : AppCompatActivity() {

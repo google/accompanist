@@ -16,7 +16,7 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="dev.chrisbanes.accompanist.imageloading.test">
+    package="dev.chrisbanes.accompanist.coil.test">
 
     <uses-sdk android:targetSdkVersion="29" />
 
@@ -25,7 +25,7 @@
 
     <!-- usesCleartextTraffic=true because we use MockWebServer -->
     <application
-        android:name="dev.chrisbanes.accompanist.imageloading.CoilTestApplication"
+        android:name="dev.chrisbanes.accompanist.coil.CoilTestApplication"
         android:usesCleartextTraffic="true">
         <activity
             android:name="androidx.activity.ComponentActivity"

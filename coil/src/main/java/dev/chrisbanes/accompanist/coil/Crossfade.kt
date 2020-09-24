@@ -17,7 +17,7 @@
 @file:JvmName("CoilImage")
 @file:JvmMultifileClass
 
-package dev.chrisbanes.accompanist.imageloading
+package dev.chrisbanes.accompanist.coil
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,6 +28,8 @@ import androidx.compose.ui.unit.IntSize
 import coil.ImageLoader
 import coil.imageLoader
 import coil.request.ImageRequest
+import dev.chrisbanes.accompanist.imageloading.ImageLoadState
+import dev.chrisbanes.accompanist.imageloading.MaterialLoadingImage
 
 private const val DefaultTransitionDuration = 1000
 
@@ -51,7 +53,7 @@ private const val DefaultTransitionDuration = 1000
     )
 }""",
         "dev.chrisbanes.accompanist.coil.CoilImage",
-        "dev.chrisbanes.accompanist.coil.MaterialLoadingImage"
+        "dev.chrisbanes.accompanist.imageloading.MaterialLoadingImage"
     )
 )
 @Composable
@@ -102,7 +104,7 @@ fun CoilImageWithCrossfade(
     )
 }""",
         "dev.chrisbanes.accompanist.coil.CoilImage",
-        "dev.chrisbanes.accompanist.coil.MaterialLoadingImage"
+        "dev.chrisbanes.accompanist.imageloading.MaterialLoadingImage"
     )
 )
 @Composable
