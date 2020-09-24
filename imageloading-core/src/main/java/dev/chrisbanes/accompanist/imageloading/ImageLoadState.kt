@@ -16,7 +16,7 @@
 
 package dev.chrisbanes.accompanist.imageloading
 
-import androidx.compose.ui.graphics.ImageAsset
+import androidx.compose.ui.graphics.painter.Painter
 
 /**
  * Represents the state of a [ImageLoad]
@@ -39,7 +39,7 @@ sealed class ImageLoadState {
      * @param source The data source that the image was loaded from.
      */
     data class Success(
-        val image: ImageAsset,
+        val painter: Painter,
         val source: DataSource
     ) : ImageLoadState()
 
@@ -50,7 +50,7 @@ sealed class ImageLoadState {
      * @param throwable The error that failed the request.
      */
     data class Error(
-        val image: ImageAsset?,
+        val painter: Painter?,
         val throwable: Throwable
     ) : ImageLoadState()
 }

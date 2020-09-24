@@ -316,18 +316,16 @@ typealias SuccessResult = ImageLoadState.Success
 @Suppress("unused")
 typealias ErrorResult = ImageLoadState.Error
 
-private fun ImageResult.toResult(
-    fallbackSize: IntSize = IntSize.Zero
-): ImageLoadState = when (this) {
+private fun ImageResult.toResult(): ImageLoadState = when (this) {
     is coil.request.SuccessResult -> {
         ImageLoadState.Success(
-            image = drawable.toImageAsset(fallbackSize),
+            painter = drawable.toPainter(),
             source = metadata.dataSource.toDataSource()
         )
     }
     is coil.request.ErrorResult -> {
         ImageLoadState.Error(
-            image = drawable?.toImageAsset(fallbackSize),
+            painter = drawable?.toPainter(),
             throwable = throwable
         )
     }

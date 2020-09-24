@@ -35,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.geometry.toRect
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageAsset
 import androidx.compose.ui.graphics.Paint
@@ -44,9 +45,6 @@ import androidx.compose.ui.graphics.painter.ImagePainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.AnimationClockAmbient
-import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.toSize
 import androidx.core.util.Pools
 
 private const val DefaultTransitionDuration = 1000
@@ -80,26 +78,58 @@ fun MaterialLoadingImage(
     fadeInEnabled: Boolean = true,
     fadeInDurationMs: Int = DefaultTransitionDuration
 ) {
-    // Default painter for the image
-    val imagePainter = remember(asset) { ImagePainter(asset) }
+    MaterialLoadingImage(
+        painter = ImagePainter(asset),
+        modifier = modifier,
+        alignment = alignment,
+        contentScale = contentScale,
+        colorFilter = colorFilter,
+        clock = clock,
+        fadeInEnabled = fadeInEnabled,
+        fadeInDurationMs = fadeInDurationMs
+    )
+}
 
-    val painter = if (fadeInEnabled) {
-        val observablePainter = remember(asset) {
-            ObservableFadeInImagePainter(asset, fadeInDurationMs, clock).also { it.start() }
-        }
-        when {
-            // If the animation is running, return it as the painter
-            !observablePainter.isFinished -> observablePainter
-            // If the animation has finished, revert back to the default painter
-            else -> imagePainter
-        }
-    } else {
-        // If the fade is disabled, just use the standard ImagePainter
-        imagePainter
-    }
-
+/**
+ * A wrapper around [Image] which implements the
+ * [Material Image Loading](https://material.io/archive/guidelines/patterns/loading-images.html)
+ * pattern.
+ *
+ * @param painter The [Painter] to draw.
+ * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
+ * background)
+ * @param alignment Optional alignment parameter used to place the [painter] in the given
+ * bounds defined by the width and height.
+ * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be used
+ * if the bounds are a different size from the intrinsic size of the [ImageAsset].
+ * @param colorFilter Optional ColorFilter to apply for the [ImageAsset] when it is rendered
+ * onscreen
+ * @param clock The [AnimationClockObservable] to use for running animations.
+ * @param fadeInEnabled Whether the fade-in animation should be used or not.
+ * @param fadeInDurationMs The duration of the fade-in animation in milliseconds.
+ */
+@Composable
+fun MaterialLoadingImage(
+    painter: Painter,
+    modifier: Modifier = Modifier,
+    alignment: Alignment = Alignment.Center,
+    contentScale: ContentScale = ContentScale.Fit,
+    colorFilter: ColorFilter? = null,
+    clock: AnimationClockObservable = AnimationClockAmbient.current.asDisposableClock(),
+    fadeInEnabled: Boolean = true,
+    fadeInDurationMs: Int = DefaultTransitionDuration
+) {
     Image(
-        painter = painter,
+        painter = if (fadeInEnabled) {
+            val animatedPainer = remember(painter) {
+                MateriaLoadingPainterWrapper(painter, fadeInDurationMs, clock).also { it.start() }
+            }
+            // If the animation painter is running, return use it, else use to the painter
+            if (!animatedPainer.isFinished) animatedPainer else painter
+        } else {
+            // If the fade is disabled, just use the standard ImagePainter
+            painter
+        },
         alignment = alignment,
         contentScale = contentScale,
         colorFilter = colorFilter,
@@ -140,7 +170,7 @@ fun MaterialLoadingImage(
     fadeInDurationMs: Int = DefaultTransitionDuration
 ) {
     MaterialLoadingImage(
-        asset = result.image,
+        painter = result.painter,
         alignment = alignment,
         contentScale = contentScale,
         colorFilter = colorFilter,
@@ -151,12 +181,10 @@ fun MaterialLoadingImage(
     )
 }
 
-private class ObservableFadeInImagePainter(
-    private val image: ImageAsset,
+private class MateriaLoadingPainterWrapper(
+    private val painter: Painter,
     duration: Int,
-    clock: AnimationClockObservable,
-    private val srcOffset: IntOffset = IntOffset.Zero,
-    private val srcSize: IntSize = IntSize(image.width, image.height)
+    clock: AnimationClockObservable
 ) : Painter() {
     var isFinished by mutableStateOf(false)
         private set
@@ -194,8 +222,14 @@ private class ObservableFadeInImagePainter(
         try {
             paint.asFrameworkPaint().colorFilter = ColorMatrixColorFilter(matrix)
 
-            drawCanvas { canvas, _ ->
-                canvas.drawImageRect(image, srcOffset, srcSize, IntOffset.Zero, srcSize, paint)
+            drawCanvas { canvas, size ->
+                canvas.saveLayer(size.toRect(), paint)
+
+                with(painter) {
+                    draw(size)
+                }
+
+                canvas.restore()
             }
         } finally {
             // Reset the Paint instance and release it back to the pool
@@ -207,7 +241,7 @@ private class ObservableFadeInImagePainter(
     /**
      * Return the dimension of the underlying [ImageAsset] as its intrinsic width and height
      */
-    override val intrinsicSize: Size get() = srcSize.toSize()
+    override val intrinsicSize: Size get() = painter.intrinsicSize
 
     fun start() {
         // Start the animation by transitioning to the Loaded state

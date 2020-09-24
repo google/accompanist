@@ -19,6 +19,8 @@
 
 package dev.chrisbanes.accompanist.imageloading
 
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
@@ -31,10 +33,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.stateFor
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.WithConstraints
-import androidx.compose.ui.graphics.ImageAsset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageAsset
+import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.graphics.painter.ImagePainter
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.IntSize
-import androidx.core.graphics.drawable.toBitmap
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 
 /**
@@ -128,18 +133,10 @@ private fun <T> ImageLoadRequestActor(
     flow {
         // First, send the loading state
         emit(ImageLoadState.Loading)
-
         // Now execute the request in Coil...
-        execute(request)
-            .also { imageState ->
-                // Tell RenderThread to pre-upload this bitmap. Saves the GPU upload cost on the
-                // first draw. See https://github.com/square/picasso/issues/1620 for a explanation
-                // from @ChrisCraik
-                when (imageState) {
-                    is ImageLoadState.Success -> imageState.image.prepareToDraw()
-                    is ImageLoadState.Error -> imageState.image?.prepareToDraw()
-                }
-            }.also { state -> emit(state) }
+        emit(execute(request))
+    }.catch { throwable ->
+        emit(ImageLoadState.Error(painter = null, throwable = throwable))
     }
 }
 
@@ -147,9 +144,11 @@ internal val emptySuccessLambda: (ImageLoadState) -> Unit = {}
 
 internal val defaultRefetchOnSizeChangeLambda: (ImageLoadState, IntSize) -> Boolean = { _, _ -> false }
 
-fun Drawable.toImageAsset(fallbackSize: IntSize): ImageAsset {
-    return toBitmap(
-        width = if (intrinsicWidth > 0) intrinsicWidth else fallbackSize.width,
-        height = if (intrinsicHeight > 0) intrinsicHeight else fallbackSize.height
-    ).asImageAsset()
+fun Drawable.toPainter(): Painter {
+    if (this is BitmapDrawable) {
+        return ImagePainter(bitmap.asImageAsset())
+    } else if (this is ColorDrawable) {
+        return ColorPainter(Color(color))
+    }
+    throw IllegalArgumentException("Drawable type ${this::class.java} not supported")
 }
