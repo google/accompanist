@@ -17,11 +17,11 @@
 package dev.chrisbanes.accompanist.buildsrc
 
 object Versions {
-    const val ktlint = "0.38.1"
+    const val ktlint = "0.39.0"
 }
 
 object Libs {
-    const val androidGradlePlugin = "com.android.tools.build:gradle:4.2.0-alpha11"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:4.2.0-alpha12"
 
     const val gradleMavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.13.0"
 
@@ -57,7 +57,7 @@ object Libs {
         }
 
         object Compose {
-            const val snapshot = "6854728"
+            const val snapshot = "6860046"
             const val version = "1.0.0-SNAPSHOT"
 
             @JvmStatic
