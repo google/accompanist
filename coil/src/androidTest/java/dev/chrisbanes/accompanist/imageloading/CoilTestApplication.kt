@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package dev.chrisbanes.accompanist.coil
+package dev.chrisbanes.accompanist.imageloading
 
 import android.app.Activity
 import android.app.Application

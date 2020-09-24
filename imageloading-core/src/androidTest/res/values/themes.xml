@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright 2020 The Android Open Source Project
   ~
@@ -14,5 +15,11 @@
   ~ limitations under the License.
   -->
 
-<manifest package="dev.chrisbanes.accompanist.imageloading">
-</manifest>
+<resources>
+
+    <style name="Theme.CoilTest" parent="@android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+</resources>

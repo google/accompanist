@@ -41,7 +41,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
-import dev.chrisbanes.accompanist.coil.CoilImage
+import dev.chrisbanes.accompanist.imageloading.CoilImage
 import dev.chrisbanes.accompanist.sample.R
 
 class CoilBasicSample : AppCompatActivity() {

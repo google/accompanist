@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
-include ':coil'
-include ':imageloading-core'
-include ':sample'
+package dev.chrisbanes.accompanist.imageloading
+
+object CoilTestTags {
+    const val Image = "image"
+}

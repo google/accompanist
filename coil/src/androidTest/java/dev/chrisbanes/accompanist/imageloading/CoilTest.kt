@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package dev.chrisbanes.accompanist.coil
+package dev.chrisbanes.accompanist.imageloading
 
 import android.content.ContentResolver
 import android.net.Uri
@@ -48,7 +48,7 @@ import coil.annotation.ExperimentalCoilApi
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.google.common.truth.Truth.assertThat
-import dev.chrisbanes.accompanist.coil.test.R
+import dev.chrisbanes.accompanist.imageloading.test.R
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -95,7 +95,7 @@ class CoilTest {
 
     @Test
     fun onRequestCompleted() {
-        val results = ArrayList<CoilImageState>()
+        val results = ArrayList<ImageLoadState>()
         val latch = CountDownLatch(1)
 
         composeTestRule.setContent {
@@ -115,7 +115,7 @@ class CoilTest {
         composeTestRule.runOnIdle {
             // And assert that we got a single successful result
             assertThat(results).hasSize(1)
-            assertThat(results[0]).isInstanceOf(CoilImageState.Success::class.java)
+            assertThat(results[0]).isInstanceOf(ImageLoadState.Success::class.java)
         }
     }
 
@@ -319,7 +319,7 @@ class CoilTest {
     @Test
     fun content_error() {
         val latch = CountDownLatch(1)
-        val states = ArrayList<CoilImageState>()
+        val states = ArrayList<ImageLoadState>()
 
         composeTestRule.setContent {
             CoilImage(
@@ -339,16 +339,16 @@ class CoilTest {
 
         composeTestRule.runOnIdle {
             assertThat(states).hasSize(3)
-            assertThat(states[0]).isEqualTo(CoilImageState.Empty)
-            assertThat(states[1]).isEqualTo(CoilImageState.Loading)
-            assertThat(states[2]).isInstanceOf(CoilImageState.Error::class.java)
+            assertThat(states[0]).isEqualTo(ImageLoadState.Empty)
+            assertThat(states[1]).isEqualTo(ImageLoadState.Loading)
+            assertThat(states[2]).isInstanceOf(ImageLoadState.Error::class.java)
         }
     }
 
     @Test
     fun content_success() {
         val latch = CountDownLatch(1)
-        val states = ArrayList<CoilImageState>()
+        val states = ArrayList<ImageLoadState>()
 
         composeTestRule.setContent {
             CoilImage(
@@ -368,9 +368,9 @@ class CoilTest {
 
         composeTestRule.runOnIdle {
             assertThat(states).hasSize(3)
-            assertThat(states[0]).isEqualTo(CoilImageState.Empty)
-            assertThat(states[1]).isEqualTo(CoilImageState.Loading)
-            assertThat(states[2]).isInstanceOf(CoilImageState.Success::class.java)
+            assertThat(states[0]).isEqualTo(ImageLoadState.Empty)
+            assertThat(states[1]).isEqualTo(ImageLoadState.Loading)
+            assertThat(states[2]).isInstanceOf(ImageLoadState.Success::class.java)
         }
     }
 

@@ -1,0 +1,155 @@
+/*
+ * Copyright 2020 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@file:JvmName("ImageLoad")
+@file:JvmMultifileClass
+
+package dev.chrisbanes.accompanist.imageloading
+
+import android.graphics.drawable.Drawable
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.launchInComposition
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.referentialEqualityPolicy
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.stateFor
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.WithConstraints
+import androidx.compose.ui.graphics.ImageAsset
+import androidx.compose.ui.graphics.asImageAsset
+import androidx.compose.ui.unit.IntSize
+import androidx.core.graphics.drawable.toBitmap
+import kotlinx.coroutines.flow.flow
+
+/**
+ * TODO
+ *
+ * @param request The request to execute.
+ * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
+ * @param executeRequest TODO
+ * @param transformRequestForSize Optionally transform [request] for the given [IntSize].
+ * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
+ * optional re-fetching of the image. Return true to re-fetch the image.
+ * @param onRequestCompleted Listener which will be called when the loading request has finished.
+ * @param content Content to be displayed for the given state.
+ */
+@Composable
+fun <T> ImageLoad(
+    request: T,
+    modifier: Modifier = Modifier,
+    executeRequest: suspend (T) -> ImageLoadState,
+    transformRequestForSize: (T, IntSize) -> T? = { r, _ -> r },
+    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
+    onRequestCompleted: (ImageLoadState) -> Unit = emptySuccessLambda,
+    content: @Composable (imageLoadState: ImageLoadState) -> Unit
+) {
+    var state by stateFor<ImageLoadState>(request) { ImageLoadState.Empty }
+
+    // This may look a little weird, but allows the launchInComposition callback to always
+    // invoke the last provided [onRequestCompleted].
+    //
+    // If a composition happens *after* launchInComposition has launched, the given
+    // [onRequestCompleted] might have changed. If the actor lambda below directly referenced
+    // [onRequestCompleted] it would have captured access to the initial onRequestCompleted
+    // value, not the latest.
+    //
+    // This `callback` state enables the actor lambda to only capture the remembered state
+    // reference, which we can update on each composition.
+    val callback = remember { mutableStateOf(onRequestCompleted, referentialEqualityPolicy()) }
+    callback.value = onRequestCompleted
+
+    val requestActor = remember(request, executeRequest) {
+        ImageLoadRequestActor(executeRequest)
+    }
+
+    launchInComposition(requestActor) {
+        // Launch the Actor
+        requestActor.run { _, newState ->
+            // Update the result state
+            state = newState
+
+            if (newState is ImageLoadState.Success || newState is ImageLoadState.Error) {
+                callback.value(newState)
+            }
+        }
+    }
+
+    WithConstraints(modifier) {
+        // We remember the last size in a MutableRef (below) rather than a MutableState.
+        // This is because we don't need value changes to trigger a re-composition, we are only
+        // using it to store the last value.
+        val lastRequestedSize = remember(requestActor) { MutableRef<IntSize?>(null) }
+
+        val requestSize = IntSize(
+            width = if (constraints.hasBoundedWidth) constraints.maxWidth else -1,
+            height = if (constraints.hasBoundedHeight) constraints.maxHeight else -1
+        )
+
+        val lastSize = lastRequestedSize.value
+        if (lastSize == null ||
+            (lastSize != requestSize && shouldRefetchOnSizeChange(state, requestSize))
+        ) {
+            val transformedRequest = transformRequestForSize(request, requestSize)
+            if (transformedRequest != null) {
+                requestActor.send(transformedRequest)
+                lastRequestedSize.value = requestSize
+            } else {
+                // If the transform request is null, set our state to empty
+                state = ImageLoadState.Empty
+            }
+        }
+
+        content(state)
+    }
+}
+
+@Stable
+private data class MutableRef<T>(var value: T)
+
+private fun <T> ImageLoadRequestActor(
+    execute: suspend (T) -> ImageLoadState
+) = RequestActor<T, ImageLoadState> { request ->
+    flow {
+        // First, send the loading state
+        emit(ImageLoadState.Loading)
+
+        // Now execute the request in Coil...
+        execute(request)
+            .also { imageState ->
+                // Tell RenderThread to pre-upload this bitmap. Saves the GPU upload cost on the
+                // first draw. See https://github.com/square/picasso/issues/1620 for a explanation
+                // from @ChrisCraik
+                when (imageState) {
+                    is ImageLoadState.Success -> imageState.image.prepareToDraw()
+                    is ImageLoadState.Error -> imageState.image?.prepareToDraw()
+                }
+            }.also { state -> emit(state) }
+    }
+}
+
+internal val emptySuccessLambda: (ImageLoadState) -> Unit = {}
+
+internal val defaultRefetchOnSizeChangeLambda: (ImageLoadState, IntSize) -> Boolean = { _, _ -> false }
+
+fun Drawable.toImageAsset(fallbackSize: IntSize): ImageAsset {
+    return toBitmap(
+        width = if (intrinsicWidth > 0) intrinsicWidth else fallbackSize.width,
+        height = if (intrinsicHeight > 0) intrinsicHeight else fallbackSize.height
+    ).asImageAsset()
+}

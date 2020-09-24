@@ -1,0 +1,68 @@
+public final class dev/chrisbanes/accompanist/coil/DataSource : java/lang/Enum {
+	public static final field DISK Ldev/chrisbanes/accompanist/coil/DataSource;
+	public static final field MEMORY Ldev/chrisbanes/accompanist/coil/DataSource;
+	public static final field MEMORY_CACHE Ldev/chrisbanes/accompanist/coil/DataSource;
+	public static final field NETWORK Ldev/chrisbanes/accompanist/coil/DataSource;
+	public static final fun valueOf (Ljava/lang/String;)Ldev/chrisbanes/accompanist/coil/DataSource;
+	public static final fun values ()[Ldev/chrisbanes/accompanist/coil/DataSource;
+}
+
+public final class dev/chrisbanes/accompanist/coil/ImageLoad {
+	public static final fun ImageLoad (Ljava/lang/Object;Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+	public static final fun toImageAsset-n8ctkPM (Landroid/graphics/drawable/Drawable;J)Landroidx/compose/ui/graphics/ImageAsset;
+}
+
+public abstract class dev/chrisbanes/accompanist/coil/ImageLoadState {
+}
+
+public final class dev/chrisbanes/accompanist/coil/ImageLoadState$Empty : dev/chrisbanes/accompanist/coil/ImageLoadState {
+	public static final field INSTANCE Ldev/chrisbanes/accompanist/coil/ImageLoadState$Empty;
+}
+
+public final class dev/chrisbanes/accompanist/coil/ImageLoadState$Error : dev/chrisbanes/accompanist/coil/ImageLoadState {
+	public fun <init> (Landroidx/compose/ui/graphics/ImageAsset;Ljava/lang/Throwable;)V
+	public final fun component1 ()Landroidx/compose/ui/graphics/ImageAsset;
+	public final fun component2 ()Ljava/lang/Throwable;
+	public final fun copy (Landroidx/compose/ui/graphics/ImageAsset;Ljava/lang/Throwable;)Ldev/chrisbanes/accompanist/coil/ImageLoadState$Error;
+	public static synthetic fun copy$default (Ldev/chrisbanes/accompanist/coil/ImageLoadState$Error;Landroidx/compose/ui/graphics/ImageAsset;Ljava/lang/Throwable;ILjava/lang/Object;)Ldev/chrisbanes/accompanist/coil/ImageLoadState$Error;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getImage ()Landroidx/compose/ui/graphics/ImageAsset;
+	public final fun getThrowable ()Ljava/lang/Throwable;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chrisbanes/accompanist/coil/ImageLoadState$Loading : dev/chrisbanes/accompanist/coil/ImageLoadState {
+	public static final field INSTANCE Ldev/chrisbanes/accompanist/coil/ImageLoadState$Loading;
+}
+
+public final class dev/chrisbanes/accompanist/coil/ImageLoadState$Success : dev/chrisbanes/accompanist/coil/ImageLoadState {
+	public fun <init> (Landroidx/compose/ui/graphics/ImageAsset;Ldev/chrisbanes/accompanist/coil/DataSource;)V
+	public final fun component1 ()Landroidx/compose/ui/graphics/ImageAsset;
+	public final fun component2 ()Ldev/chrisbanes/accompanist/coil/DataSource;
+	public final fun copy (Landroidx/compose/ui/graphics/ImageAsset;Ldev/chrisbanes/accompanist/coil/DataSource;)Ldev/chrisbanes/accompanist/coil/ImageLoadState$Success;
+	public static synthetic fun copy$default (Ldev/chrisbanes/accompanist/coil/ImageLoadState$Success;Landroidx/compose/ui/graphics/ImageAsset;Ldev/chrisbanes/accompanist/coil/DataSource;ILjava/lang/Object;)Ldev/chrisbanes/accompanist/coil/ImageLoadState$Success;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getImage ()Landroidx/compose/ui/graphics/ImageAsset;
+	public final fun getSource ()Ldev/chrisbanes/accompanist/coil/DataSource;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chrisbanes/accompanist/coil/ImageLoadingColorMatrix : android/graphics/ColorMatrix {
+	public fun <init> ()V
+	public fun <init> (FFF)V
+	public synthetic fun <init> (FFFILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getAlphaFraction ()F
+	public final fun getBrightnessFraction ()F
+	public final fun getSaturationFraction ()F
+	public final fun setAlphaFraction (F)V
+	public final fun setBrightnessFraction (F)V
+	public final fun setSaturationFraction (F)V
+}
+
+public final class dev/chrisbanes/accompanist/coil/MaterialLoadingImage {
+	public static final fun MaterialLoadingImage (Landroidx/compose/ui/graphics/ImageAsset;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;Landroidx/compose/animation/core/AnimationClockObservable;ZILandroidx/compose/runtime/Composer;II)V
+	public static final fun MaterialLoadingImage (Ldev/chrisbanes/accompanist/coil/ImageLoadState$Success;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;Landroidx/compose/animation/core/AnimationClockObservable;ZZILandroidx/compose/runtime/Composer;II)V
+}
+
