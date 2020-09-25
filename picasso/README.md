@@ -64,9 +64,9 @@ PicassoImage(
 )
 ```
 
-### Custom layout
+## Custom content
 
-If you need more control over the animation, you can use the `content` composable version of `PicassoImage`, to display the result in a `MaterialLoadingImage`:
+If you need more control over the animation, or you want to provide custom layout for the loaded image, you can use the `content` composable version of `PicassoImage`:
 
 ``` kotlin
 PicassoImage(
