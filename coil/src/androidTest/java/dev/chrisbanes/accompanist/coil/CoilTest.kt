@@ -45,13 +45,13 @@ import androidx.ui.test.onNodeWithText
 import coil.EventListener
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
+import coil.decode.Options
+import coil.fetch.Fetcher
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.google.common.truth.Truth.assertThat
 import dev.chrisbanes.accompanist.coil.test.R
 import dev.chrisbanes.accompanist.imageloading.ImageLoadState
-import io.mockk.mockk
-import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -197,8 +197,15 @@ class CoilTest {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val latch = CountDownLatch(1)
 
-        // Build a custom ImageLoader with a mocked EventListener
-        val eventListener = mockk<EventListener>(relaxed = true)
+        // Build a custom ImageLoader with a fake EventListener
+        val eventListener = object : EventListener {
+            var startCalled = 0
+                private set
+
+            override fun fetchStart(request: ImageRequest, fetcher: Fetcher<*>, options: Options) {
+                startCalled++
+            }
+        }
         val imageLoader = ImageLoader.Builder(context)
             .eventListener(eventListener)
             .build()
@@ -216,8 +223,7 @@ class CoilTest {
         latch.await(5, TimeUnit.SECONDS)
 
         // Verify that our eventListener was invoked
-        verify(atLeast = 1) { eventListener.fetchStart(any(), any(), any()) }
-        verify(atLeast = 1) { eventListener.fetchEnd(any(), any(), any(), any()) }
+        assertThat(eventListener.startCalled).isAtLeast(1)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
