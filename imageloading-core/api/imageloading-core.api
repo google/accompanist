@@ -17,6 +17,8 @@ public final class dev/chrisbanes/accompanist/imageloading/DataSource : java/lan
 
 public final class dev/chrisbanes/accompanist/imageloading/ImageLoad {
 	public static final fun ImageLoad (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;Landroidx/compose/ui/Modifier;Ljava/lang/Object;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+	public static final fun getDefaultRefetchOnSizeChangeLambda ()Lkotlin/jvm/functions/Function2;
+	public static final fun getEmptyRequestCompleteLambda ()Lkotlin/jvm/functions/Function1;
 }
 
 public abstract class dev/chrisbanes/accompanist/imageloading/ImageLoadState {

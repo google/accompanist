@@ -18,7 +18,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="dev.chrisbanes.accompanist.picasso.test">
 
-    <uses-sdk android:targetSdkVersion="29" />
+    <uses-sdk android:targetSdkVersion="30" />
 
     <!-- Needed for MockWebServer -->
     <uses-permission android:name="android.permission.INTERNET" />

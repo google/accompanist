@@ -36,6 +36,8 @@ import androidx.compose.ui.unit.IntSize
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.RequestCreator
 import dev.chrisbanes.accompanist.imageloading.DataSource
+import dev.chrisbanes.accompanist.imageloading.DefaultRefetchOnSizeChangeLambda
+import dev.chrisbanes.accompanist.imageloading.EmptyRequestCompleteLambda
 import dev.chrisbanes.accompanist.imageloading.ImageLoad
 import dev.chrisbanes.accompanist.imageloading.ImageLoadState
 import dev.chrisbanes.accompanist.imageloading.MaterialLoadingImage
@@ -76,8 +78,8 @@ fun PicassoImage(
     modifier: Modifier = Modifier,
     picasso: Picasso = Picasso.get(),
     requestBuilder: (RequestCreator.(size: IntSize) -> RequestCreator)? = null,
-    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
-    onRequestCompleted: (ImageLoadState) -> Unit = emptySuccessLambda,
+    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
+    onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
     content: @Composable (imageLoadState: ImageLoadState) -> Unit
 ) {
     ImageLoad(
@@ -195,8 +197,8 @@ fun PicassoImage(
     fadeIn: Boolean = false,
     picasso: Picasso = Picasso.get(),
     requestBuilder: (RequestCreator.(size: IntSize) -> RequestCreator)? = null,
-    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
-    onRequestCompleted: (ImageLoadState) -> Unit = emptySuccessLambda,
+    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
+    onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
     error: @Composable ((ImageLoadState.Error) -> Unit)? = null,
     loading: @Composable (() -> Unit)? = null,
 ) {
@@ -240,7 +242,3 @@ internal fun Any.toRequestCreator(picasso: Picasso): RequestCreator = when (this
     is HttpUrl -> picasso.load(Uri.parse(toString()))
     else -> throw IllegalArgumentException("Data is not of a type which Picasso supports: ${this::class.java}")
 }
-
-internal val emptySuccessLambda: (ImageLoadState) -> Unit = {}
-
-internal val defaultRefetchOnSizeChangeLambda: (ImageLoadState, IntSize) -> Boolean = { _, _ -> false }

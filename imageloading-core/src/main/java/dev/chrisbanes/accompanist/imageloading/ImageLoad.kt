@@ -62,8 +62,8 @@ fun <T : Any> ImageLoad(
     modifier: Modifier = Modifier,
     requestKey: Any = request,
     transformRequestForSize: (T, IntSize) -> T? = { r, _ -> r },
-    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
-    onRequestCompleted: (ImageLoadState) -> Unit = emptySuccessLambda,
+    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
+    onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
     content: @Composable (imageLoadState: ImageLoadState) -> Unit
 ) {
     var state by stateFor<ImageLoadState>(requestKey) { ImageLoadState.Empty }
@@ -146,6 +146,12 @@ private fun <T> ImageLoadRequestActor(
     }
 }
 
-internal val emptySuccessLambda: (ImageLoadState) -> Unit = {}
+/**
+ * Empty lamdba for use in the `onRequestCompleted` parameter.
+ */
+val EmptyRequestCompleteLambda: (ImageLoadState) -> Unit = {}
 
-internal val defaultRefetchOnSizeChangeLambda: (ImageLoadState, IntSize) -> Boolean = { _, _ -> false }
+/**
+ * Default lamdba for use in the `shouldRefetchOnSizeChange` parameter.
+ */
+val DefaultRefetchOnSizeChangeLambda: (ImageLoadState, IntSize) -> Boolean = { _, _ -> false }
