@@ -86,7 +86,11 @@ object Libs {
         const val appcompat = "androidx.appcompat:appcompat:1.3.0-alpha02"
     }
 
-    const val coil = "io.coil-kt:coil:1.0.0-rc3"
+    object Coil {
+        private const val version = "1.0.0-rc3"
+        const val coil = "io.coil-kt:coil:$version"
+        const val gif = "io.coil-kt:coil-gif:$version"
+    }
 
     const val truth = "com.google.truth:truth:1.0.1"
     const val mockk = "io.mockk:mockk-android:1.10.0"

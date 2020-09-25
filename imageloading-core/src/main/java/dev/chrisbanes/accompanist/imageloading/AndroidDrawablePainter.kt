@@ -17,6 +17,7 @@
 package dev.chrisbanes.accompanist.imageloading
 
 import android.graphics.PorterDuff
+import android.graphics.drawable.Animatable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
@@ -43,7 +44,7 @@ import androidx.core.graphics.drawable.DrawableCompat
 import kotlin.math.roundToInt
 
 /**
- * A [Painter] which draws an Android [Drawable]. Supports animating drawables.
+ * A [Painter] which draws an Android [Drawable]. Supports [Animatable] drawables.
  */
 class AndroidDrawablePainter(
     private val drawable: Drawable
@@ -54,6 +55,7 @@ class AndroidDrawablePainter(
     )
 
     private var invalidateTick by mutableStateOf(0)
+    private var startedAnimatable = drawable is Animatable && drawable.isRunning
 
     private val handler by lazy { Handler(Looper.getMainLooper()) }
 
@@ -124,6 +126,12 @@ class AndroidDrawablePainter(
     override val intrinsicSize: Size get() = drawableSize
 
     override fun DrawScope.onDraw() {
+        if (!startedAnimatable && drawable is Animatable && !drawable.isRunning) {
+            // If the drawable is Animatable, start it on the first draw
+            drawable.start()
+            startedAnimatable = true
+        }
+
         drawCanvas { canvas, size ->
             // Reading this ensures that we invalidate when invalidateDrawable() is called
             invalidateTick

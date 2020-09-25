@@ -75,7 +75,7 @@ afterEvaluate {
 dependencies {
     implementation project(':imageloading-core')
 
-    api Libs.coil
+    api Libs.Coil.coil
 
     implementation Libs.AndroidX.coreKtx
     implementation Libs.AndroidX.Compose.runtime
