@@ -77,6 +77,8 @@ dependencies {
 
     api Libs.picasso
 
+    implementation Libs.OkHttp.okhttp
+
     implementation Libs.AndroidX.coreKtx
     implementation Libs.AndroidX.Compose.runtime
     implementation Libs.AndroidX.Compose.foundation
@@ -88,7 +90,7 @@ dependencies {
     androidTestImplementation Libs.truth
     androidTestImplementation Libs.mockk
 
-    androidTestImplementation Libs.mockWebServer
+    androidTestImplementation Libs.OkHttp.mockWebServer
 
     androidTestImplementation Libs.Coroutines.test
 

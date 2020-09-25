@@ -82,6 +82,7 @@ fun PicassoImage(
 ) {
     ImageLoad(
         request = data.toRequestCreator(picasso),
+        requestKey = data, // Picasso RequestCreator doesn't support equality so we use the data
         executeRequest = { r ->
             @OptIn(ExperimentalCoroutinesApi::class)
             suspendCancellableCoroutine { cont ->

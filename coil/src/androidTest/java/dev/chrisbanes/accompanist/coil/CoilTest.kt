@@ -58,6 +58,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.withTimeoutOrNull
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
@@ -244,7 +245,9 @@ class CoilTest {
 
         // Await the first load
         runBlocking {
-            loadCompleteSignal.receive()
+            withTimeout(5000) {
+                loadCompleteSignal.receive()
+            }
         }
 
         // Assert that the content is completely Red
@@ -259,7 +262,11 @@ class CoilTest {
         drawableResId.value = R.drawable.blue_rectangle
 
         // Await the second load
-        runBlocking { loadCompleteSignal.receive() }
+        runBlocking {
+            withTimeout(5000) {
+                loadCompleteSignal.receive()
+            }
+        }
 
         // Assert that the content is completely Blue
         composeTestRule.onNodeWithTag(CoilTestTags.Image)
@@ -282,7 +289,7 @@ class CoilTest {
         composeTestRule.setContent {
             val size = sizeFlow.collectAsState()
             CoilImage(
-                data = resourceUri(R.drawable.blue_rectangle),
+                data = resourceUri(R.drawable.red_rectangle),
                 modifier = Modifier.preferredSize(size.value).testTag(CoilTestTags.Image),
                 onRequestCompleted = { loadCompleteSignal.offer(Unit) }
             )

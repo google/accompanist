@@ -48,6 +48,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.withTimeoutOrNull
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
@@ -147,7 +148,9 @@ class PicassoTest {
 
         // Await the first load
         runBlocking {
-            loadCompleteSignal.receive()
+            withTimeout(5000) {
+                loadCompleteSignal.receive()
+            }
         }
 
         // Assert that the content is completely Red
@@ -162,7 +165,11 @@ class PicassoTest {
         drawableResId.value = R.drawable.blue_rectangle
 
         // Await the second load
-        runBlocking { loadCompleteSignal.receive() }
+        runBlocking {
+            withTimeout(5000) {
+                loadCompleteSignal.receive()
+            }
+        }
 
         // Assert that the content is completely Blue
         composeTestRule.onNodeWithTag(TestTags.Image)
@@ -179,21 +186,29 @@ class PicassoTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun basicLoad_changeSize() {
-        val loadCompleteSignal = Channel<Unit>(Channel.UNLIMITED)
+        val loadCompleteSignal = Channel<ImageLoadState>(Channel.UNLIMITED)
         val sizeFlow = MutableStateFlow(128.dp)
 
         composeTestRule.setContent {
             val size = sizeFlow.collectAsState()
             PicassoImage(
-                data = R.drawable.blue_rectangle,
+                data = R.drawable.red_rectangle,
                 modifier = Modifier.preferredSize(size.value).testTag(TestTags.Image),
-                onRequestCompleted = { loadCompleteSignal.offer(Unit) }
+                onRequestCompleted = { loadCompleteSignal.offer(it) }
             )
         }
 
         // Await the first load
         runBlocking {
-            loadCompleteSignal.receive()
+
+            val result = loadCompleteSignal.receive()
+
+            if (result is ImageLoadState.Error) {
+                throw result.throwable
+            }
+
+            assertThat(result)
+                .isInstanceOf(ImageLoadState.Success::class.java)
         }
 
         // Now change the size
