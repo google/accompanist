@@ -35,11 +35,17 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 
 /**
- * TODO
+ * A generic image loading composable, which provides hooks for image loading libraries to use.
+ * Apps shouldn't generally use this function, instead preferring one of the extension libraries
+ * which build upon this, such as the Coil library.
+ *
+ * The [executeRequest] parameters allows providing of a lambda to execute the 'image load'.
+ * The [T] type and [request] parameter should be whatever primitive the library uses to
+ * model a request.
  *
  * @param request The request to execute.
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
- * @param executeRequest TODO
+ * @param executeRequest Suspending lambda to execute an image loading request.
  * @param transformRequestForSize Optionally transform [request] for the given [IntSize].
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.

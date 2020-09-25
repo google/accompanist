@@ -10,7 +10,6 @@ public final class dev/chrisbanes/accompanist/imageloading/AndroidDrawablePainte
 public final class dev/chrisbanes/accompanist/imageloading/DataSource : java/lang/Enum {
 	public static final field DISK Ldev/chrisbanes/accompanist/imageloading/DataSource;
 	public static final field MEMORY Ldev/chrisbanes/accompanist/imageloading/DataSource;
-	public static final field MEMORY_CACHE Ldev/chrisbanes/accompanist/imageloading/DataSource;
 	public static final field NETWORK Ldev/chrisbanes/accompanist/imageloading/DataSource;
 	public static final fun valueOf (Ljava/lang/String;)Ldev/chrisbanes/accompanist/imageloading/DataSource;
 	public static final fun values ()[Ldev/chrisbanes/accompanist/imageloading/DataSource;

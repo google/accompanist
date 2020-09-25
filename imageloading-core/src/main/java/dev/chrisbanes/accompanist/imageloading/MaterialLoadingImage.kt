@@ -122,7 +122,7 @@ fun MaterialLoadingImage(
     Image(
         painter = if (fadeInEnabled) {
             val animatedPainer = remember(painter) {
-                MateriaLoadingPainterWrapper(painter, fadeInDurationMs, clock).also { it.start() }
+                MaterialLoadingPainterWrapper(painter, fadeInDurationMs, clock).also { it.start() }
             }
             // If the animation painter is running, return use it, else use to the painter
             if (!animatedPainer.isFinished) animatedPainer else painter
@@ -142,7 +142,7 @@ fun MaterialLoadingImage(
  * [Material Image Loading](https://material.io/archive/guidelines/patterns/loading-images.html)
  * pattern.
  *
- * @param result The [ImageLoadState.Success] instance provided by [CoilImage].
+ * @param result A [ImageLoadState.Success] instance.
  * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
  * background)
  * @param alignment Optional alignment parameter used to place the [ImageAsset] in the given
@@ -181,7 +181,7 @@ fun MaterialLoadingImage(
     )
 }
 
-private class MateriaLoadingPainterWrapper(
+private class MaterialLoadingPainterWrapper(
     private val painter: Painter,
     duration: Int,
     clock: AnimationClockObservable
@@ -226,7 +226,9 @@ private class MateriaLoadingPainterWrapper(
                 canvas.saveLayer(size.toRect(), paint)
 
                 with(painter) {
-                    draw(size)
+                    // Need to explicitly set alpha.
+                    // See https://issuetracker.google.com/169379346
+                    draw(size, alpha = 1f)
                 }
 
                 canvas.restore()
@@ -287,6 +289,4 @@ private object CrossfadeTransition {
     }
 }
 
-private fun ImageLoadState.Success.isFromMemory(): Boolean {
-    return source == DataSource.MEMORY || source == DataSource.MEMORY_CACHE
-}
+private fun ImageLoadState.Success.isFromMemory(): Boolean = source == DataSource.MEMORY

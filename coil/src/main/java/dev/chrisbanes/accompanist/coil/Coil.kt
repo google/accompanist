@@ -50,10 +50,10 @@ import dev.chrisbanes.accompanist.imageloading.toPainter
  *   data = "https://www.image.url",
  * ) { imageState ->
  *   when (imageState) {
- *     is CoilImageState.Success -> // TODO
- *     is CoilImageState.Error -> // TODO
- *     CoilImageState.Loading -> // TODO
- *     CoilImageState.Empty -> // TODO
+ *     is ImageLoadState.Success -> // TODO
+ *     is ImageLoadState.Error -> // TODO
+ *     ImageLoadState.Loading -> // TODO
+ *     ImageLoadState.Empty -> // TODO
  *   }
  * }
  * ```
@@ -98,10 +98,10 @@ fun CoilImage(
  *   request = ImageRequest.Builder(context).data(...).build(),
  * ) { imageState ->
  *   when (imageState) {
- *     is CoilImageState.Success -> // TODO
- *     is CoilImageState.Error -> // TODO
- *     CoilImageState.Loading -> // TODO
- *     CoilImageState.Empty -> // TODO
+ *     is ImageLoadState.Success -> // TODO
+ *     is ImageLoadState.Error -> // TODO
+ *     ImageLoadState.Loading -> // TODO
+ *     ImageLoadState.Empty -> // TODO
  *   }
  * }
  * ```
@@ -358,7 +358,7 @@ private fun ImageResult.toResult(): ImageLoadState = when (this) {
 private fun coil.decode.DataSource.toDataSource(): DataSource = when (this) {
     coil.decode.DataSource.NETWORK -> DataSource.NETWORK
     coil.decode.DataSource.MEMORY -> DataSource.MEMORY
-    coil.decode.DataSource.MEMORY_CACHE -> DataSource.MEMORY_CACHE
+    coil.decode.DataSource.MEMORY_CACHE -> DataSource.MEMORY
     coil.decode.DataSource.DISK -> DataSource.DISK
 }
 

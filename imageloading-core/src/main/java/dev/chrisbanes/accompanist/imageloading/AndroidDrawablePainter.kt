@@ -16,14 +16,20 @@
 
 package dev.chrisbanes.accompanist.imageloading
 
+import android.graphics.PorterDuff
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.os.Handler
+import android.os.Looper
+import android.view.View
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.asImageAsset
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawCanvas
@@ -31,7 +37,14 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.painter.ImagePainter
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.core.graphics.drawable.DrawableCompat
+import kotlin.math.roundToInt
 
+/**
+ * A [Painter] which draws an Android [Drawable]. Supports animating drawables.
+ */
 class AndroidDrawablePainter(
     private val drawable: Drawable
 ) : Painter() {
@@ -42,6 +55,8 @@ class AndroidDrawablePainter(
 
     private var invalidateTick by mutableStateOf(0)
 
+    private val handler by lazy { Handler(Looper.getMainLooper()) }
+
     init {
         drawable.callback = object : Drawable.Callback {
             override fun invalidateDrawable(d: Drawable) {
@@ -50,17 +65,63 @@ class AndroidDrawablePainter(
             }
 
             override fun scheduleDrawable(d: Drawable, what: Runnable, time: Long) {
-                // TODO
+                handler.postAtTime(what, time)
             }
 
             override fun unscheduleDrawable(d: Drawable, what: Runnable) {
-                // TODO
+                handler.removeCallbacks(what)
             }
         }
     }
 
-    override val intrinsicSize: Size
-        get() = drawableSize
+    override fun applyAlpha(alpha: Float): Boolean {
+        drawable.alpha = (alpha * 255).roundToInt().coerceIn(0, 255)
+        return true
+    }
+
+    override fun applyColorFilter(colorFilter: ColorFilter?): Boolean {
+        if (colorFilter != null) {
+            drawable.setTint(colorFilter.color.toArgb())
+            drawable.setTintMode(
+                when (colorFilter.blendMode) {
+                    BlendMode.Clear -> PorterDuff.Mode.CLEAR
+                    BlendMode.Src -> PorterDuff.Mode.SRC
+                    BlendMode.Dst -> PorterDuff.Mode.DST
+                    BlendMode.SrcOver -> PorterDuff.Mode.SRC_OVER
+                    BlendMode.DstOver -> PorterDuff.Mode.DST_OVER
+                    BlendMode.SrcIn -> PorterDuff.Mode.SRC_IN
+                    BlendMode.DstIn -> PorterDuff.Mode.DST_IN
+                    BlendMode.SrcOut -> PorterDuff.Mode.SRC_OUT
+                    BlendMode.DstOut -> PorterDuff.Mode.DST_OUT
+                    BlendMode.SrcAtop -> PorterDuff.Mode.SRC_ATOP
+                    BlendMode.DstAtop -> PorterDuff.Mode.DST_ATOP
+                    BlendMode.Xor -> PorterDuff.Mode.XOR
+                    BlendMode.Screen -> PorterDuff.Mode.SCREEN
+                    BlendMode.Overlay -> PorterDuff.Mode.OVERLAY
+                    BlendMode.Darken -> PorterDuff.Mode.DARKEN
+                    BlendMode.Lighten -> PorterDuff.Mode.LIGHTEN
+                    BlendMode.Multiply -> PorterDuff.Mode.MULTIPLY
+                    else -> error("BlendMode not supported by Drawable")
+                }
+            )
+        } else {
+            drawable.setTintList(null)
+            drawable.setTintMode(null)
+        }
+        return true
+    }
+
+    override fun applyLayoutDirection(layoutDirection: LayoutDirection): Boolean {
+        return DrawableCompat.setLayoutDirection(
+            drawable,
+            when (layoutDirection) {
+                LayoutDirection.Ltr -> View.LAYOUT_DIRECTION_LTR
+                LayoutDirection.Rtl -> View.LAYOUT_DIRECTION_RTL
+            }
+        )
+    }
+
+    override val intrinsicSize: Size get() = drawableSize
 
     override fun DrawScope.onDraw() {
         drawCanvas { canvas, size ->
@@ -73,6 +134,10 @@ class AndroidDrawablePainter(
     }
 }
 
+/**
+ * Allows wrapping of a [Drawable] into a [Painter], attempting to un-wrap the drawable contents
+ * and use Compose primitives where possible.
+ */
 fun Drawable.toPainter(): Painter = when (this) {
     is BitmapDrawable -> ImagePainter(bitmap.asImageAsset())
     is ColorDrawable -> ColorPainter(Color(color))

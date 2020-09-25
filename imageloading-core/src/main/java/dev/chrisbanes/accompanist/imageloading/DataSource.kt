@@ -22,17 +22,8 @@ import java.io.File
 import java.nio.ByteBuffer
 
 enum class DataSource {
-
     /**
-     * Represents a memory cache.
-     *
-     * This is a special data source as it means the request was
-     * short circuited and skipped the full image pipeline.
-     */
-    MEMORY_CACHE,
-
-    /**
-     * Represents an in-memory data source (e.g. [Bitmap], [ByteBuffer]).
+     * Represents an in-memory data source or cache (e.g. [Bitmap], [ByteBuffer]).
      */
     MEMORY,
 
