@@ -35,7 +35,7 @@ sealed class ImageLoadState {
     /**
      * Indicates that the request completed successfully.
      *
-     * @param image The result image.
+     * @param painter The result image.
      * @param source The data source that the image was loaded from.
      */
     data class Success(
