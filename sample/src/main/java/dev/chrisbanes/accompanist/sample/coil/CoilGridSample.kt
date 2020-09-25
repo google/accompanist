@@ -36,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.chrisbanes.accompanist.coil.CoilImage
 import dev.chrisbanes.accompanist.sample.R
+import dev.chrisbanes.accompanist.sample.randomSampleImageUrl
 
 class CoilGridSample : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

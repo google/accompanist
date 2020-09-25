@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package dev.chrisbanes.accompanist.sample.coil
+package dev.chrisbanes.accompanist.sample
 
 private val rangeForRandom = (0..100000)
 

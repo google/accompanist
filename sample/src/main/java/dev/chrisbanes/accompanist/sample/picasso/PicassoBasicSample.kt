@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package dev.chrisbanes.accompanist.sample.coil
+package dev.chrisbanes.accompanist.sample.picasso
 
-import android.content.Context
-import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
@@ -37,20 +35,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Recomposer
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import coil.ImageLoader
-import coil.decode.GifDecoder
-import coil.decode.ImageDecoderDecoder
-import coil.request.ImageRequest
-import coil.transform.CircleCropTransformation
-import dev.chrisbanes.accompanist.coil.CoilImage
+import dev.chrisbanes.accompanist.picasso.PicassoImage
 import dev.chrisbanes.accompanist.sample.R
 import dev.chrisbanes.accompanist.sample.randomSampleImageUrl
 
-class CoilBasicSample : AppCompatActivity() {
+class PicassoBasicSample : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -80,39 +72,23 @@ private fun Sample() {
                 mainAxisSpacing = 4.dp,
                 crossAxisSpacing = 4.dp
             ) {
-                // CoilImage with data parameter
-                CoilImage(
+                // PicassoImage with data parameter
+                PicassoImage(
                     data = randomSampleImageUrl(),
                     modifier = Modifier.preferredSize(128.dp)
                 )
 
-                // CoilImage with GIF
-                CoilImage(
-                    data = "https://cataas.com/cat/gif",
-                    imageLoader = GifImageLoader(ContextAmbient.current),
-                    modifier = Modifier.preferredSize(128.dp)
-                )
-
-                // CoilImage with ImageRequest parameter
-                CoilImage(
-                    request = ImageRequest.Builder(ContextAmbient.current)
-                        .data(randomSampleImageUrl())
-                        .transformations(CircleCropTransformation())
-                        .build(),
-                    modifier = Modifier.preferredSize(128.dp)
-                )
-
-                // CoilImage with ImageRequest builder parameter
-                CoilImage(
+                // PicassoImage with ImageRequest builder parameter
+                PicassoImage(
                     data = randomSampleImageUrl(),
                     requestBuilder = {
-                        transformations(CircleCropTransformation())
+                        rotate(90f)
                     },
                     modifier = Modifier.preferredSize(128.dp)
                 )
 
-                // CoilImage with loading slot
-                CoilImage(
+                // PicassoImage with loading slot
+                PicassoImage(
                     data = randomSampleImageUrl(),
                     loading = {
                         Stack(Modifier.fillMaxSize()) {
@@ -122,25 +98,15 @@ private fun Sample() {
                     modifier = Modifier.preferredSize(128.dp)
                 )
 
-                // CoilImage with crossfade and data parameter
-                CoilImage(
+                // PicassoImage with crossfade and data parameter
+                PicassoImage(
                     data = randomSampleImageUrl(),
                     fadeIn = true,
                     modifier = Modifier.preferredSize(128.dp)
                 )
 
-                // CoilImage with crossfade and ImageRequest parameter
-                CoilImage(
-                    request = ImageRequest.Builder(ContextAmbient.current)
-                        .data(randomSampleImageUrl())
-                        .transformations(CircleCropTransformation())
-                        .build(),
-                    fadeIn = true,
-                    modifier = Modifier.preferredSize(128.dp)
-                )
-
-                // CoilImage with crossfade and loading slot
-                CoilImage(
+                // PicassoImage with crossfade and loading slot
+                PicassoImage(
                     data = randomSampleImageUrl(),
                     fadeIn = true,
                     loading = {
@@ -151,8 +117,8 @@ private fun Sample() {
                     modifier = Modifier.preferredSize(128.dp)
                 )
 
-                // CoilImage with an implicit size
-                CoilImage(
+                // PicassoImage with an implicit size
+                PicassoImage(
                     data = randomSampleImageUrl(),
                     loading = {
                         Stack(Modifier.fillMaxSize()) {
@@ -164,9 +130,3 @@ private fun Sample() {
         }
     }
 }
-
-fun GifImageLoader(context: Context): ImageLoader = ImageLoader.Builder(context)
-    .componentRegistry {
-        if (SDK_INT >= 28) add(ImageDecoderDecoder()) else add(GifDecoder())
-    }
-    .build()

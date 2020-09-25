@@ -67,6 +67,33 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".picasso.PicassoBasicSample"
+            android:label="@string/picasso_title_basic">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".picasso.PicassoGridSample"
+            android:label="@string/picasso_title_grid">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".picasso.PicassoLazyColumnSample"
+            android:label="@string/picasso_title_lazy_row">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

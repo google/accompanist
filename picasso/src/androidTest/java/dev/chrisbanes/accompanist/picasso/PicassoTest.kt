@@ -16,8 +16,6 @@
 
 package dev.chrisbanes.accompanist.picasso
 
-import android.content.ContentResolver
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.preferredSize
@@ -25,11 +23,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import androidx.test.filters.LargeTest
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
@@ -45,7 +40,6 @@ import androidx.ui.test.onNodeWithTag
 import androidx.ui.test.onNodeWithText
 import com.google.common.truth.Truth.assertThat
 import com.squareup.picasso.MemoryPolicy
-import com.squareup.picasso.Picasso
 import dev.chrisbanes.accompanist.imageloading.ImageLoadState
 import dev.chrisbanes.accompanist.picasso.test.R
 import kotlinx.coroutines.ExperimentalCoroutinesApi

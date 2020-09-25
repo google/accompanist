@@ -83,18 +83,16 @@ fun PicassoImage(
     ImageLoad(
         request = data.toRequestCreator(picasso),
         executeRequest = { r ->
-            lateinit var target: com.squareup.picasso.Target
-
             @OptIn(ExperimentalCoroutinesApi::class)
             suspendCancellableCoroutine { cont ->
-                target = object : com.squareup.picasso.Target {
+                val target = object : com.squareup.picasso.Target {
                     override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
                         val state = ImageLoadState.Success(
                             painter = ImagePainter(bitmap.asImageAsset()),
                             source = from.toDataSource()
                         )
                         cont.resume(state) {
-                            // Ignore this
+                            // Not much we can do here. Ignore this
                         }
                     }
 
@@ -104,17 +102,19 @@ fun PicassoImage(
                             painter = errorDrawable?.toPainter(),
                         )
                         cont.resume(state) {
-                            // Ignore this
+                            // Not much we can do here. Ignore this
                         }
                     }
 
-                    override fun onPrepareLoad(palceholder: Drawable?) = Unit
+                    override fun onPrepareLoad(placeholder: Drawable?) = Unit
                 }
 
                 cont.invokeOnCancellation {
+                    // If the coroutine is cancelled, cancel the request
                     picasso.cancelRequest(target)
                 }
 
+                // Now kick off the image load into our target
                 r.into(target)
             }
         },
