@@ -46,7 +46,7 @@ sealed class ImageLoadState {
     /**
      * Indicates that an error occurred while executing the request.
      *
-     * @param image The error image.
+     * @param painter The error image.
      * @param throwable The error that failed the request.
      */
     data class Error(
