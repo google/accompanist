@@ -84,28 +84,7 @@ class AndroidDrawablePainter(
     override fun applyColorFilter(colorFilter: ColorFilter?): Boolean {
         if (colorFilter != null) {
             drawable.setTint(colorFilter.color.toArgb())
-            drawable.setTintMode(
-                when (colorFilter.blendMode) {
-                    BlendMode.Clear -> PorterDuff.Mode.CLEAR
-                    BlendMode.Src -> PorterDuff.Mode.SRC
-                    BlendMode.Dst -> PorterDuff.Mode.DST
-                    BlendMode.SrcOver -> PorterDuff.Mode.SRC_OVER
-                    BlendMode.DstOver -> PorterDuff.Mode.DST_OVER
-                    BlendMode.SrcIn -> PorterDuff.Mode.SRC_IN
-                    BlendMode.DstIn -> PorterDuff.Mode.DST_IN
-                    BlendMode.SrcOut -> PorterDuff.Mode.SRC_OUT
-                    BlendMode.DstOut -> PorterDuff.Mode.DST_OUT
-                    BlendMode.SrcAtop -> PorterDuff.Mode.SRC_ATOP
-                    BlendMode.DstAtop -> PorterDuff.Mode.DST_ATOP
-                    BlendMode.Xor -> PorterDuff.Mode.XOR
-                    BlendMode.Screen -> PorterDuff.Mode.SCREEN
-                    BlendMode.Overlay -> PorterDuff.Mode.OVERLAY
-                    BlendMode.Darken -> PorterDuff.Mode.DARKEN
-                    BlendMode.Lighten -> PorterDuff.Mode.LIGHTEN
-                    BlendMode.Multiply -> PorterDuff.Mode.MULTIPLY
-                    else -> error("BlendMode not supported by Drawable")
-                }
-            )
+            drawable.setTintMode(colorFilter.blendMode.toPorterDuffMode())
         } else {
             drawable.setTintList(null)
             drawable.setTintMode(null)
@@ -140,6 +119,35 @@ class AndroidDrawablePainter(
             drawable.draw(canvas.nativeCanvas)
         }
     }
+}
+
+/**
+ * Copied from AndroidBlendMode.kt in ui-graphics
+ */
+private fun BlendMode.toPorterDuffMode(): PorterDuff.Mode = when (this) {
+    BlendMode.Clear -> PorterDuff.Mode.CLEAR
+    BlendMode.Src -> PorterDuff.Mode.SRC
+    BlendMode.Dst -> PorterDuff.Mode.DST
+    BlendMode.SrcOver -> PorterDuff.Mode.SRC_OVER
+    BlendMode.DstOver -> PorterDuff.Mode.DST_OVER
+    BlendMode.SrcIn -> PorterDuff.Mode.SRC_IN
+    BlendMode.DstIn -> PorterDuff.Mode.DST_IN
+    BlendMode.SrcOut -> PorterDuff.Mode.SRC_OUT
+    BlendMode.DstOut -> PorterDuff.Mode.DST_OUT
+    BlendMode.SrcAtop -> PorterDuff.Mode.SRC_ATOP
+    BlendMode.DstAtop -> PorterDuff.Mode.DST_ATOP
+    BlendMode.Xor -> PorterDuff.Mode.XOR
+    BlendMode.Plus -> PorterDuff.Mode.ADD
+    BlendMode.Screen -> PorterDuff.Mode.SCREEN
+    BlendMode.Overlay -> PorterDuff.Mode.OVERLAY
+    BlendMode.Darken -> PorterDuff.Mode.DARKEN
+    BlendMode.Lighten -> PorterDuff.Mode.LIGHTEN
+    BlendMode.Modulate -> {
+        // b/73224934 Android PorterDuff Multiply maps to Skia Modulate
+        PorterDuff.Mode.MULTIPLY
+    }
+    // Always return SRC_OVER as the default if there is no valid alternative
+    else -> PorterDuff.Mode.SRC_OVER
 }
 
 /**
