@@ -17,7 +17,6 @@
 package dev.chrisbanes.accompanist.sample.picasso
 
 import android.os.Bundle
-import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.Text
@@ -29,7 +28,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Recomposer
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
@@ -42,10 +40,7 @@ class PicassoGridSample : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val contentView = FrameLayout(this)
-        setContentView(contentView)
-
-        contentView.setContent(Recomposer.current()) {
+        setContent {
             MaterialTheme {
                 Sample()
             }
