@@ -44,8 +44,8 @@ import kotlinx.coroutines.flow.flow
  * model a request.
  *
  * @param request The request to execute.
- * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
  * @param executeRequest Suspending lambda to execute an image loading request.
+ * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
  * @param transformRequestForSize Optionally transform [request] for the given [IntSize].
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
@@ -55,8 +55,8 @@ import kotlinx.coroutines.flow.flow
 @Composable
 fun <T> ImageLoad(
     request: T,
-    modifier: Modifier = Modifier,
     executeRequest: suspend (T) -> ImageLoadState,
+    modifier: Modifier = Modifier,
     transformRequestForSize: (T, IntSize) -> T? = { r, _ -> r },
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = emptySuccessLambda,
