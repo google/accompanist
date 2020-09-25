@@ -122,6 +122,10 @@ fun <T> ImageLoad(
     }
 }
 
+/**
+ * A simple mutable reference holder. Used as a replacement for [MutableState] when you don't need
+ * the recomposition triggers.
+ */
 @Stable
 private data class MutableRef<T>(var value: T)
 
