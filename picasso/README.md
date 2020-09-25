@@ -1,39 +1,38 @@
-# Jetpack Compose + Coil
+# Jetpack Compose + Picasso
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/dev.chrisbanes.accompanist/accompanist-coil/badge.svg)](https://search.maven.org/search?q=g:dev.chrisbanes.accompanist)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/dev.chrisbanes.accompanist/accompanist-picasso/badge.svg)](https://search.maven.org/search?q=g:dev.chrisbanes.accompanist)
 
-This library brings easy-to-use composable which can fetch and display images from external sources, such as network, using the [Coil][coil] image loading library.
+This library brings easy-to-use composable which can fetch and display images from external sources, such as network, using the [Picasso][picasso] image loading library.
 
+## `PicassoImage()`
 
-## `CoilImage()`
-
-The primary API is via the `CoilImage()` functions. There are a number of function versions available.
+The primary API is via the `PicassoImage()` functions. There are a 2 function versions available.
 
 The simplest usage is like so:
 
 ```kotlin 
-CoilImage(
+PicassoImage(
     data = "https://loremflickr.com/300/300"
 )
 ```
 
-This loads the `data` passed in with [Coil][coil], and then displays the resulting image using the standard `Image` composable.
+This loads the `data` passed in with [Picasso][Picasso], and then displays the resulting image using the standard `Image` composable.
 
-There is also a version of this function which accepts a Coil [`ImageRequest`](https://coil-kt.github.io/coil/image_requests/), allowing full customization of the request. This allows usage of things like (but not limited to) transformations:
+There is also a version of this function which accepts a Picasso [`ImageRequest`](https://Picasso-kt.github.io/Picasso/image_requests/), allowing full customization of the request. This allows usage of things like (but not limited to) transformations:
 
 ```kotlin
-CoilImage(
-    request = GetRequest.Builder(ContextAmbient.current)
-        .data("https://loremflickr.com/300/300")
-        .transformations(CircleCropTransformation())
-        .build()
+PicassoImage(
+    data = "https://loremflickr.com/300/300",
+    requestBuilder = {
+        rotate(90f)
+    }
 )
 ```
 
 It also provides optional content 'slots', allowing you to provide custom content to be displayed when the request is loading, and/or if the image request failed:
 
 ``` kotlin
-CoilImage(
+PicassoImage(
     data = "https://loremflickr.com/300/300",
     loading = {
         Box(Modifier.matchParentSize()) {
@@ -56,10 +55,10 @@ There are two ways to enable the animation:
 
 ### `fadeIn` parameter
 
-A `fadeIn: Boolean` parameter has been added to `CoilImage` (default: `false`). When enabled, a default fade-in animation will be used when the image is successfully loaded:
+A `fadeIn: Boolean` parameter is available on `PicassoImage` (default: `false`). When enabled, a default fade-in animation will be used when the image is successfully loaded:
 
 ``` kotlin
-CoilImage(
+PicassoImage(
     data = "https://picsum.photos/300/300",
     fadeIn = true
 )
@@ -67,23 +66,23 @@ CoilImage(
 
 ### Custom layout
 
-If you need more control over the animation, you can use the `content` composable version of `CoilImage`, to display the result in a `MaterialLoadingImage`:
+If you need more control over the animation, you can use the `content` composable version of `PicassoImage`, to display the result in a `MaterialLoadingImage`:
 
 ``` kotlin
-CoilImage(
+PicassoImage(
     data = "https://random.image",
 ) { imageState ->
     when (imageState) {
-        is CoilImageState.Success -> {
+        is ImageLoadState.Success -> {
             MaterialLoadingImage(
                 result = imageState,
                 fadeInEnabled = true,
                 fadeInDurationMs = 600,
             )
         }
-        is CoilImageState.Error -> /* TODO */
-        CoilImageState.Loading -> /* TODO */
-        CoilImageState.Empty -> /* TODO */
+        is ImageLoadState.Error -> /* TODO */
+        ImageLoadState.Loading -> /* TODO */
+        ImageLoadState.Empty -> /* TODO */
     }
 }
 ```
@@ -96,20 +95,12 @@ repositories {
 }
 
 dependencies {
-    implementation "dev.chrisbanes.accompanist:accompanist-coil:<version>"
+    implementation "dev.chrisbanes.accompanist:accompanist-picasso:<version>"
 }
 ```
 
-## Limitations
-
-* Compose currently only supports static bitmap images, which means that we need to convert the resulting images to a `Bitmap`. This means that using things like Coil's [GIF support](https://coil-kt.github.io/coil/gifs/) will result in only the first frame being rendered, instead of animating.
-
 Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap]. These are updated on every commit.
 
-### What's the goal of the library?
-
-Eventually the goal is to upstream all of this functionality back to [Coil][coil]. [Jetpack Compose][compose]'s development is currently moving very fast, which means that there are frequent API changes between releases. For now, it makes sense to keep this as a seperately released library to track the latest Compose release.
-
 [compose]: https://developer.android.com/jetpack/compose
-[snap]: https://oss.sonatype.org/content/repositories/snapshots/dev/chrisbanes/accompanist/accompanist-coil/
-[coil]: https://github.com/coil-kt/coil
+[snap]: https://oss.sonatype.org/content/repositories/snapshots/dev/chrisbanes/accompanist/accompanist-picasso/
+[picasso]: https://square.github.io/picasso/

@@ -13,12 +13,15 @@ repo_url: 'https://github.com/chrisbanes/accompanist'
 nav:
   - 'Overview': index.md
   - 'Coil': coil.md
+  - 'Picasso': picasso.md
   - 'API':
     - 'Coil': api/coil/index.md
+    - 'Picasso': api/picasso/index.md
+    - 'Image Loading Core': api/imageloading-core/index.md
   - 'Snapshots': using-snapshot-version.md
   - 'Contributing': contributing.md
   - 'Maintainers':
-      - 'Update guide': updating.md
+    - 'Update guide': updating.md
 
 # Configuration
 theme:

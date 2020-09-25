@@ -39,6 +39,8 @@ docs/index.md
 docs/contributing.md
 docs/coil.md
 docs/coil/
+docs/picasso.md
+docs/picasso/
 # Mkdocs temporary serving folder
 site
 *.bak

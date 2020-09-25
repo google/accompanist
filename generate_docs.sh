@@ -22,8 +22,12 @@ sed -i.bak 's/images\/social.png/header.png/' docs/index.md
 cp coil/README.md docs/coil.md
 mkdir -p docs/coil
 cp coil/images/crossfade.gif docs/coil/crossfade.gif
-
 sed -i.bak 's/images\/crossfade.gif/crossfade.gif/' docs/coil.md
+
+cp picasso/README.md docs/picasso.md
+mkdir -p docs/picasso
+cp picasso/images/crossfade.gif docs/picasso/crossfade.gif
+sed -i.bak 's/images\/crossfade.gif/crossfade.gif/' docs/picasso.md
 
 # Convert docs/xxx.md links to just xxx/
 sed -i.bak 's/docs\/\([a-zA-Z-]*\).md/\1/' docs/index.md
