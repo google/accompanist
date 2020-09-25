@@ -55,6 +55,8 @@ jobs:
     runs-on: macOS-latest
     needs: build
     strategy:
+      # Allow tests to continue on other devices if they fail on one device.
+      fail-fast: false
       matrix:
         api-level: [23, 26, 29]
     env:

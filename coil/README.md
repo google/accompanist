@@ -23,7 +23,7 @@ There is also a version of this function which accepts a Coil [`ImageRequest`](h
 
 ```kotlin
 CoilImage(
-    request = GetRequest.Builder(ContextAmbient.current)
+    request = ImageRequest.Builder(ContextAmbient.current)
         .data("https://loremflickr.com/300/300")
         .transformations(CircleCropTransformation())
         .build()
@@ -74,19 +74,23 @@ CoilImage(
     data = "https://random.image",
 ) { imageState ->
     when (imageState) {
-        is CoilImageState.Success -> {
+        is ImageLoadState.Success -> {
             MaterialLoadingImage(
                 result = imageState,
                 fadeInEnabled = true,
                 fadeInDurationMs = 600,
             )
         }
-        is CoilImageState.Error -> /* TODO */
-        CoilImageState.Loading -> /* TODO */
-        CoilImageState.Empty -> /* TODO */
+        is ImageLoadState.Error -> /* TODO */
+        ImageLoadState.Loading -> /* TODO */
+        ImageLoadState.Empty -> /* TODO */
     }
 }
 ```
+
+## GIFs
+
+Accompanist Coil supports GIFs through Coil's own GIF support. Follow the [setup instructions](https://coil-kt.github.io/coil/gifs/) and it should just work.
 
 ## Download
 
@@ -99,10 +103,6 @@ dependencies {
     implementation "dev.chrisbanes.accompanist:accompanist-coil:<version>"
 }
 ```
-
-## Limitations
-
-* Compose currently only supports static bitmap images, which means that we need to convert the resulting images to a `Bitmap`. This means that using things like Coil's [GIF support](https://coil-kt.github.io/coil/gifs/) will result in only the first frame being rendered, instead of animating.
 
 Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap]. These are updated on every commit.
 

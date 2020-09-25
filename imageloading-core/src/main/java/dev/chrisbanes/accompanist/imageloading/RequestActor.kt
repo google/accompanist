@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 
-package dev.chrisbanes.accompanist.coil
+package dev.chrisbanes.accompanist.imageloading
 
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 
 /**
@@ -54,7 +58,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
  * ```
  */
 internal class RequestActor<Param, Result>(
-    private val execute: suspend (Param, onResult: (Result) -> Unit) -> Unit
+    private val execute: (Param) -> Flow<Result>
 ) {
     private val channel = Channel<Param>(Channel.CONFLATED)
 
@@ -66,11 +70,15 @@ internal class RequestActor<Param, Result>(
      *
      * @param onResult A lambda which will be called with each input and the processed result.
      */
+    @OptIn(ExperimentalCoroutinesApi::class)
     suspend fun run(onResult: (Param, Result) -> Unit) {
         channel.receiveAsFlow()
             .distinctUntilChanged()
-            .collect { input ->
-                execute(input) { result -> onResult(input, result) }
+            .flatMapLatest { param ->
+                execute(param).map { param to it }
+            }
+            .collect { (param, result) ->
+                onResult(param, result)
             }
     }
 
