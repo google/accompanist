@@ -73,7 +73,7 @@ afterEvaluate {
 }
 
 dependencies {
-    implementation project(':imageloading-core')
+    api project(':imageloading-core')
 
     api Libs.Coil.coil
 
