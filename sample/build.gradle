@@ -56,7 +56,10 @@ android {
 }
 
 dependencies {
+    implementation project(':picasso')
     implementation project(':coil')
+
+    implementation Libs.Coil.gif
 
     // Temporary workaround (see above)
     kotlinCompilerPlugin Libs.AndroidX.Compose.compiler

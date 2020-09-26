@@ -60,12 +60,6 @@ android {
     }
 
     packagingOptions {
-        def e = excludes
-        // AGP 4.1.0-alpha06 added an exclude which breaks Kotlin libraries. Remove the exclude
-        // until we upgrade to an AGP version with a fix
-        e.remove("/META-INF/*.kotlin_module")
-        excludes = e
-
         // Some of the Coil META-INF files conflict with coroutines-test. Exclude them to enable
         // our test APK to build (has no effect on our AARs)
         excludes += "/META-INF/AL2.0"
@@ -86,7 +80,8 @@ afterEvaluate {
 }
 
 dependencies {
-    api Libs.coil
+    api project(':imageloading-core')
+    api Libs.Coil.coil
 
     // Temporary workaround (see above)
     kotlinCompilerPlugin Libs.AndroidX.Compose.compiler
@@ -100,9 +95,8 @@ dependencies {
 
     androidTestImplementation Libs.junit
     androidTestImplementation Libs.truth
-    androidTestImplementation Libs.mockk
 
-    androidTestImplementation Libs.mockWebServer
+    androidTestImplementation Libs.OkHttp.mockWebServer
 
     androidTestImplementation Libs.Coroutines.test
 

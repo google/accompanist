@@ -16,7 +16,12 @@
 
 <resources>
     <string name="app_name">Accompanist Sample</string>
-    <string name="coil_title_basic">Coil sample: Basic</string>
-    <string name="coil_title_grid">Coil sample: Grid</string>
-    <string name="coil_title_lazy_row">Coil sample: Lazy row</string>
+
+    <string name="coil_title_basic">Coil: Basic</string>
+    <string name="coil_title_grid">Coil: Grid</string>
+    <string name="coil_title_lazy_row">Coil: Lazy row</string>
+
+    <string name="picasso_title_basic">Picasso: Basic</string>
+    <string name="picasso_title_grid">Picasso: Grid</string>
+    <string name="picasso_title_lazy_row">Picasso: Lazy row</string>
 </resources>

@@ -45,18 +45,20 @@ import androidx.ui.test.onNodeWithText
 import coil.EventListener
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
+import coil.decode.Options
+import coil.fetch.Fetcher
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.google.common.truth.Truth.assertThat
 import dev.chrisbanes.accompanist.coil.test.R
-import io.mockk.mockk
-import io.mockk.verify
+import dev.chrisbanes.accompanist.imageloading.ImageLoadState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.withTimeoutOrNull
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
@@ -94,8 +96,8 @@ class CoilTest {
     }
 
     @Test
-    fun onRequestCompleted() {
-        val results = ArrayList<CoilImageState>()
+    fun onRequestCompleted_fromImageRequest() {
+        val results = ArrayList<ImageLoadState>()
         val latch = CountDownLatch(1)
 
         composeTestRule.setContent {
@@ -115,7 +117,33 @@ class CoilTest {
         composeTestRule.runOnIdle {
             // And assert that we got a single successful result
             assertThat(results).hasSize(1)
-            assertThat(results[0]).isInstanceOf(CoilImageState.Success::class.java)
+            assertThat(results[0]).isInstanceOf(ImageLoadState.Success::class.java)
+        }
+    }
+
+    @Test
+    fun onRequestCompleted_fromBuilder() {
+        val results = ArrayList<ImageLoadState>()
+        val latch = CountDownLatch(1)
+
+        composeTestRule.setContent {
+            CoilImage(
+                data = resourceUri(R.raw.sample),
+                requestBuilder = {
+                    listener { _, _ -> latch.countDown() }
+                },
+                modifier = Modifier.preferredSize(128.dp, 128.dp),
+                onRequestCompleted = { results += it }
+            )
+        }
+
+        // Wait for the Coil request listener to release the latch
+        latch.await(5, TimeUnit.SECONDS)
+
+        composeTestRule.runOnIdle {
+            // And assert that we got a single successful result
+            assertThat(results).hasSize(1)
+            assertThat(results[0]).isInstanceOf(ImageLoadState.Success::class.java)
         }
     }
 
@@ -170,8 +198,15 @@ class CoilTest {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val latch = CountDownLatch(1)
 
-        // Build a custom ImageLoader with a mocked EventListener
-        val eventListener = mockk<EventListener>(relaxed = true)
+        // Build a custom ImageLoader with a fake EventListener
+        val eventListener = object : EventListener {
+            var startCalled = 0
+                private set
+
+            override fun fetchStart(request: ImageRequest, fetcher: Fetcher<*>, options: Options) {
+                startCalled++
+            }
+        }
         val imageLoader = ImageLoader.Builder(context)
             .eventListener(eventListener)
             .build()
@@ -189,8 +224,7 @@ class CoilTest {
         latch.await(5, TimeUnit.SECONDS)
 
         // Verify that our eventListener was invoked
-        verify(atLeast = 1) { eventListener.fetchStart(any(), any(), any()) }
-        verify(atLeast = 1) { eventListener.fetchEnd(any(), any(), any(), any()) }
+        assertThat(eventListener.startCalled).isAtLeast(1)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -211,7 +245,9 @@ class CoilTest {
 
         // Await the first load
         runBlocking {
-            loadCompleteSignal.receive()
+            withTimeout(5000) {
+                loadCompleteSignal.receive()
+            }
         }
 
         // Assert that the content is completely Red
@@ -226,7 +262,11 @@ class CoilTest {
         drawableResId.value = R.drawable.blue_rectangle
 
         // Await the second load
-        runBlocking { loadCompleteSignal.receive() }
+        runBlocking {
+            withTimeout(5000) {
+                loadCompleteSignal.receive()
+            }
+        }
 
         // Assert that the content is completely Blue
         composeTestRule.onNodeWithTag(CoilTestTags.Image)
@@ -249,7 +289,7 @@ class CoilTest {
         composeTestRule.setContent {
             val size = sizeFlow.collectAsState()
             CoilImage(
-                data = resourceUri(R.drawable.blue_rectangle),
+                data = resourceUri(R.drawable.red_rectangle),
                 modifier = Modifier.preferredSize(size.value).testTag(CoilTestTags.Image),
                 onRequestCompleted = { loadCompleteSignal.offer(Unit) }
             )
@@ -319,7 +359,7 @@ class CoilTest {
     @Test
     fun content_error() {
         val latch = CountDownLatch(1)
-        val states = ArrayList<CoilImageState>()
+        val states = ArrayList<ImageLoadState>()
 
         composeTestRule.setContent {
             CoilImage(
@@ -339,16 +379,16 @@ class CoilTest {
 
         composeTestRule.runOnIdle {
             assertThat(states).hasSize(3)
-            assertThat(states[0]).isEqualTo(CoilImageState.Empty)
-            assertThat(states[1]).isEqualTo(CoilImageState.Loading)
-            assertThat(states[2]).isInstanceOf(CoilImageState.Error::class.java)
+            assertThat(states[0]).isEqualTo(ImageLoadState.Empty)
+            assertThat(states[1]).isEqualTo(ImageLoadState.Loading)
+            assertThat(states[2]).isInstanceOf(ImageLoadState.Error::class.java)
         }
     }
 
     @Test
     fun content_success() {
         val latch = CountDownLatch(1)
-        val states = ArrayList<CoilImageState>()
+        val states = ArrayList<ImageLoadState>()
 
         composeTestRule.setContent {
             CoilImage(
@@ -368,9 +408,9 @@ class CoilTest {
 
         composeTestRule.runOnIdle {
             assertThat(states).hasSize(3)
-            assertThat(states[0]).isEqualTo(CoilImageState.Empty)
-            assertThat(states[1]).isEqualTo(CoilImageState.Loading)
-            assertThat(states[2]).isInstanceOf(CoilImageState.Success::class.java)
+            assertThat(states[0]).isEqualTo(ImageLoadState.Empty)
+            assertThat(states[1]).isEqualTo(ImageLoadState.Loading)
+            assertThat(states[2]).isInstanceOf(ImageLoadState.Success::class.java)
         }
     }
 

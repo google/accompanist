@@ -15,4 +15,6 @@
  */
 
 include ':coil'
+include ':picasso'
+include ':imageloading-core'
 include ':sample'
