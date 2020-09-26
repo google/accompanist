@@ -141,6 +141,10 @@ subprojects {
                             packageListUrl.set(new URL("file://$rootDir/package-list-coil-base"))
                         }
                     }
+                    externalDocumentationLink {
+                        url.set(new URL("https://square.github.io/picasso/2.x/picasso/"))
+                        packageListUrl.set(new URL("https://square.github.io/picasso/2.x/picasso/package-list"))
+                    }
                 }
             }
         }

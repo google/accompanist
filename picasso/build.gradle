@@ -53,7 +53,7 @@ android {
     }
 
     packagingOptions {
-        // Some of the Coil META-INF files conflict with coroutines-test. Exclude them to enable
+        // Certain libraries include licence files in their JARs. Exclude them to enable
         // our test APK to build (has no effect on our AARs)
         excludes += "/META-INF/AL2.0"
         excludes += "/META-INF/LGPL2.1"
@@ -75,7 +75,9 @@ afterEvaluate {
 dependencies {
     api project(':imageloading-core')
 
-    api Libs.Coil.coil
+    api Libs.picasso
+
+    implementation Libs.OkHttp.okhttp
 
     implementation Libs.AndroidX.coreKtx
     implementation Libs.AndroidX.Compose.runtime

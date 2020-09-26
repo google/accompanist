@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright 2020 The Android Open Source Project
   ~
@@ -15,13 +16,10 @@
   -->
 
 <resources>
-    <string name="app_name">Accompanist Sample</string>
 
-    <string name="coil_title_basic">Coil: Basic</string>
-    <string name="coil_title_grid">Coil: Grid</string>
-    <string name="coil_title_lazy_row">Coil: Lazy row</string>
+    <style name="Theme.PicassoTest" parent="@android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
 
-    <string name="picasso_title_basic">Picasso: Basic</string>
-    <string name="picasso_title_grid">Picasso: Grid</string>
-    <string name="picasso_title_lazy_row">Picasso: Lazy row</string>
 </resources>

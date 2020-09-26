@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package dev.chrisbanes.accompanist.sample.coil
+package dev.chrisbanes.accompanist.picasso
 
-private val rangeForRandom = (0..100000)
-
-fun randomSampleImageUrl(seed: Int = rangeForRandom.random()): String {
-    return "https://picsum.photos/seed/$seed/300/300"
+object TestTags {
+    const val Image = "image"
 }

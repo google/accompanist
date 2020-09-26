@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package dev.chrisbanes.accompanist.coil
+package dev.chrisbanes.accompanist.picasso
 
-import android.content.ContentResolver
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.preferredSize
@@ -25,10 +23,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
-import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import androidx.test.filters.LargeTest
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
@@ -42,16 +38,10 @@ import androidx.ui.test.captureToBitmap
 import androidx.ui.test.createComposeRule
 import androidx.ui.test.onNodeWithTag
 import androidx.ui.test.onNodeWithText
-import coil.EventListener
-import coil.ImageLoader
-import coil.annotation.ExperimentalCoilApi
-import coil.decode.Options
-import coil.fetch.Fetcher
-import coil.request.CachePolicy
-import coil.request.ImageRequest
 import com.google.common.truth.Truth.assertThat
-import dev.chrisbanes.accompanist.coil.test.R
+import com.squareup.picasso.MemoryPolicy
 import dev.chrisbanes.accompanist.imageloading.ImageLoadState
+import dev.chrisbanes.accompanist.picasso.test.R
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -76,12 +66,12 @@ import java.util.concurrent.TimeUnit
 
 @LargeTest
 @RunWith(JUnit4::class)
-class CoilTest {
+class PicassoTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
     // Our MockWebServer. We use a response delay to simulate real-world conditions
-    private val server = coilTestWebServer(responseDelayMs = 200)
+    private val server = testWebServer(responseDelayMs = 200)
 
     @Before
     fun setup() {
@@ -96,65 +86,13 @@ class CoilTest {
     }
 
     @Test
-    fun onRequestCompleted_fromImageRequest() {
-        val results = ArrayList<ImageLoadState>()
-        val latch = CountDownLatch(1)
-
-        composeTestRule.setContent {
-            CoilImage(
-                request = ImageRequest.Builder(ContextAmbient.current)
-                    .data(resourceUri(R.raw.sample))
-                    .listener { _, _ -> latch.countDown() }
-                    .build(),
-                modifier = Modifier.preferredSize(128.dp, 128.dp),
-                onRequestCompleted = { results += it }
-            )
-        }
-
-        // Wait for the Coil request listener to release the latch
-        latch.await(5, TimeUnit.SECONDS)
-
-        composeTestRule.runOnIdle {
-            // And assert that we got a single successful result
-            assertThat(results).hasSize(1)
-            assertThat(results[0]).isInstanceOf(ImageLoadState.Success::class.java)
-        }
-    }
-
-    @Test
-    fun onRequestCompleted_fromBuilder() {
-        val results = ArrayList<ImageLoadState>()
-        val latch = CountDownLatch(1)
-
-        composeTestRule.setContent {
-            CoilImage(
-                data = resourceUri(R.raw.sample),
-                requestBuilder = {
-                    listener { _, _ -> latch.countDown() }
-                },
-                modifier = Modifier.preferredSize(128.dp, 128.dp),
-                onRequestCompleted = { results += it }
-            )
-        }
-
-        // Wait for the Coil request listener to release the latch
-        latch.await(5, TimeUnit.SECONDS)
-
-        composeTestRule.runOnIdle {
-            // And assert that we got a single successful result
-            assertThat(results).hasSize(1)
-            assertThat(results[0]).isInstanceOf(ImageLoadState.Success::class.java)
-        }
-    }
-
-    @Test
     fun basicLoad_http() {
         val latch = CountDownLatch(1)
 
         composeTestRule.setContent {
-            CoilImage(
+            PicassoImage(
                 data = server.url("/image"),
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
+                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(TestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
         }
@@ -162,7 +100,7 @@ class CoilTest {
         // Wait for the onRequestCompleted to release the latch
         latch.await(5, TimeUnit.SECONDS)
 
-        composeTestRule.onNodeWithTag(CoilTestTags.Image)
+        composeTestRule.onNodeWithTag(TestTags.Image)
             .assertIsDisplayed()
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
@@ -174,9 +112,9 @@ class CoilTest {
         val latch = CountDownLatch(1)
 
         composeTestRule.setContent {
-            CoilImage(
-                data = resourceUri(R.drawable.red_rectangle),
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
+            PicassoImage(
+                data = R.drawable.red_rectangle,
+                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(TestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
         }
@@ -184,47 +122,12 @@ class CoilTest {
         // Wait for the onRequestCompleted to release the latch
         latch.await(5, TimeUnit.SECONDS)
 
-        composeTestRule.onNodeWithTag(CoilTestTags.Image)
+        composeTestRule.onNodeWithTag(TestTags.Image)
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
             .assertIsDisplayed()
             .captureToBitmap()
             .assertPixels { Color.Red }
-    }
-
-    @OptIn(ExperimentalCoilApi::class)
-    @Test
-    fun basicLoad_customImageLoader() {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-        val latch = CountDownLatch(1)
-
-        // Build a custom ImageLoader with a fake EventListener
-        val eventListener = object : EventListener {
-            var startCalled = 0
-                private set
-
-            override fun fetchStart(request: ImageRequest, fetcher: Fetcher<*>, options: Options) {
-                startCalled++
-            }
-        }
-        val imageLoader = ImageLoader.Builder(context)
-            .eventListener(eventListener)
-            .build()
-
-        composeTestRule.setContent {
-            CoilImage(
-                data = resourceUri(R.drawable.red_rectangle),
-                modifier = Modifier.preferredSize(128.dp, 128.dp),
-                imageLoader = imageLoader,
-                onRequestCompleted = { latch.countDown() }
-            )
-        }
-
-        // Wait for the onRequestCompleted to release the latch
-        latch.await(5, TimeUnit.SECONDS)
-
-        // Verify that our eventListener was invoked
-        assertThat(eventListener.startCalled).isAtLeast(1)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -236,9 +139,9 @@ class CoilTest {
 
         composeTestRule.setContent {
             val resId = drawableResId.collectAsState()
-            CoilImage(
-                data = resourceUri(resId.value),
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
+            PicassoImage(
+                data = resId.value,
+                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(TestTags.Image),
                 onRequestCompleted = { loadCompleteSignal.offer(Unit) }
             )
         }
@@ -251,7 +154,7 @@ class CoilTest {
         }
 
         // Assert that the content is completely Red
-        composeTestRule.onNodeWithTag(CoilTestTags.Image)
+        composeTestRule.onNodeWithTag(TestTags.Image)
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
             .assertIsDisplayed()
@@ -269,7 +172,7 @@ class CoilTest {
         }
 
         // Assert that the content is completely Blue
-        composeTestRule.onNodeWithTag(CoilTestTags.Image)
+        composeTestRule.onNodeWithTag(TestTags.Image)
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
             .assertIsDisplayed()
@@ -283,21 +186,29 @@ class CoilTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun basicLoad_changeSize() {
-        val loadCompleteSignal = Channel<Unit>(Channel.UNLIMITED)
+        val loadCompleteSignal = Channel<ImageLoadState>(Channel.UNLIMITED)
         val sizeFlow = MutableStateFlow(128.dp)
 
         composeTestRule.setContent {
             val size = sizeFlow.collectAsState()
-            CoilImage(
-                data = resourceUri(R.drawable.red_rectangle),
-                modifier = Modifier.preferredSize(size.value).testTag(CoilTestTags.Image),
-                onRequestCompleted = { loadCompleteSignal.offer(Unit) }
+            PicassoImage(
+                data = R.drawable.red_rectangle,
+                modifier = Modifier.preferredSize(size.value).testTag(TestTags.Image),
+                onRequestCompleted = { loadCompleteSignal.offer(it) }
             )
         }
 
         // Await the first load
         runBlocking {
-            loadCompleteSignal.receive()
+
+            val result = loadCompleteSignal.receive()
+
+            if (result is ImageLoadState.Error) {
+                throw result.throwable
+            }
+
+            assertThat(result)
+                .isInstanceOf(ImageLoadState.Success::class.java)
         }
 
         // Now change the size
@@ -318,9 +229,9 @@ class CoilTest {
         val latch = CountDownLatch(1)
 
         composeTestRule.setContent {
-            CoilImage(
-                data = resourceUri(R.raw.sample),
-                modifier = Modifier.testTag(CoilTestTags.Image),
+            PicassoImage(
+                data = R.raw.sample,
+                modifier = Modifier.testTag(TestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
         }
@@ -328,7 +239,7 @@ class CoilTest {
         // Wait for the onRequestCompleted to release the latch
         latch.await(5, TimeUnit.SECONDS)
 
-        composeTestRule.onNodeWithTag(CoilTestTags.Image)
+        composeTestRule.onNodeWithTag(TestTags.Image)
             .assertWidthIsAtLeast(1.dp)
             .assertHeightIsAtLeast(1.dp)
             .assertIsDisplayed()
@@ -339,9 +250,9 @@ class CoilTest {
         val latch = CountDownLatch(1)
 
         composeTestRule.setContent {
-            CoilImage(
+            PicassoImage(
                 data = server.url("/noimage"),
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
+                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(TestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
         }
@@ -350,7 +261,7 @@ class CoilTest {
         latch.await(5, TimeUnit.SECONDS)
 
         // Assert that the layout is in the tree and has the correct size
-        composeTestRule.onNodeWithTag(CoilTestTags.Image)
+        composeTestRule.onNodeWithTag(TestTags.Image)
             .assertIsDisplayed()
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
@@ -362,12 +273,14 @@ class CoilTest {
         val states = ArrayList<ImageLoadState>()
 
         composeTestRule.setContent {
-            CoilImage(
+            PicassoImage(
                 data = server.url("/noimage"),
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
                 // Disable any caches. If the item is in the cache, the fetch is
                 // synchronous which means the Loading state is skipped
-                imageLoader = noCacheImageLoader(),
+                requestBuilder = {
+                    memoryPolicy(MemoryPolicy.NO_CACHE)
+                },
                 onRequestCompleted = { latch.countDown() }
             ) { state ->
                 states.add(state)
@@ -391,12 +304,14 @@ class CoilTest {
         val states = ArrayList<ImageLoadState>()
 
         composeTestRule.setContent {
-            CoilImage(
+            PicassoImage(
                 data = server.url("/image"),
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
                 // Disable any caches. If the item is in the cache, the fetch is
                 // synchronous which means the Loading state is skipped
-                imageLoader = noCacheImageLoader(),
+                requestBuilder = {
+                    memoryPolicy(MemoryPolicy.NO_CACHE)
+                },
                 onRequestCompleted = { latch.countDown() }
             ) { state ->
                 states.add(state)
@@ -420,9 +335,9 @@ class CoilTest {
         val latch = CountDownLatch(1)
 
         composeTestRule.setContent {
-            CoilImage(
-                data = resourceUri(R.raw.sample),
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
+            PicassoImage(
+                data = R.raw.sample,
+                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(TestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             ) { _ ->
                 // Return an Image which just draws cyan
@@ -434,7 +349,7 @@ class CoilTest {
         latch.await(5, TimeUnit.SECONDS)
 
         // Assert that the whole layout is drawn cyan
-        composeTestRule.onNodeWithTag(CoilTestTags.Image)
+        composeTestRule.onNodeWithTag(TestTags.Image)
             .assertIsDisplayed()
             .captureToBitmap()
             .assertPixels { Color.Cyan }
@@ -450,15 +365,14 @@ class CoilTest {
             pauseDispatcher()
 
             composeTestRule.setContent {
-                CoilImage(
-                    request = ImageRequest.Builder(ContextAmbient.current)
-                        .data(server.url("/image"))
-                        .dispatcher(dispatcher)
-                        .build(),
+                PicassoImage(
+                    data = server.url("/image"),
                     modifier = Modifier.preferredSize(128.dp, 128.dp),
-                    // Disable memory cache. If the item is in the cache, the fetch is
-                    // synchronous and the dispatcher pause has no effect
-                    imageLoader = noCacheImageLoader(),
+                    // Disable any caches. If the item is in the cache, the fetch is
+                    // synchronous which means the Loading state is skipped
+                    requestBuilder = {
+                        memoryPolicy(MemoryPolicy.NO_CACHE)
+                    },
                     loading = { Text(text = "Loading") },
                     onRequestCompleted = { loadLatch.countDown() }
                 )
@@ -484,13 +398,13 @@ class CoilTest {
         val latch = CountDownLatch(1)
 
         composeTestRule.setContent {
-            CoilImage(
+            PicassoImage(
                 data = server.url("/noimage"),
                 error = {
                     // Return failure content which just draws red
                     Image(painter = ColorPainter(Color.Red))
                 },
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
+                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(TestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
         }
@@ -499,7 +413,7 @@ class CoilTest {
         latch.await(5, TimeUnit.SECONDS)
 
         // Assert that the whole layout is drawn red
-        composeTestRule.onNodeWithTag(CoilTestTags.Image)
+        composeTestRule.onNodeWithTag(TestTags.Image)
             .assertIsDisplayed()
             .captureToBitmap()
             .assertPixels { Color.Red }
@@ -507,26 +421,10 @@ class CoilTest {
 }
 
 /**
- * [ImageLoader] which disables all caching
- */
-private fun noCacheImageLoader(): ImageLoader {
-    val ctx = InstrumentationRegistry.getInstrumentation().targetContext
-    return ImageLoader.Builder(ctx)
-        .memoryCachePolicy(CachePolicy.DISABLED)
-        .diskCachePolicy(CachePolicy.DISABLED)
-        .build()
-}
-
-private fun resourceUri(id: Int): Uri {
-    val packageName = InstrumentationRegistry.getInstrumentation().targetContext.packageName
-    return "${ContentResolver.SCHEME_ANDROID_RESOURCE}://$packageName/$id".toUri()
-}
-
-/**
  * [MockWebServer] which returns a valid response at the path `/image`, and a 404 for anything else.
  * We add a small delay to simulate 'real-world' network conditions.
  */
-private fun coilTestWebServer(responseDelayMs: Long = 0): MockWebServer {
+private fun testWebServer(responseDelayMs: Long = 0): MockWebServer {
     val dispatcher = object : Dispatcher() {
         override fun dispatch(request: RecordedRequest): MockResponse = when (request.path) {
             "/image" -> {

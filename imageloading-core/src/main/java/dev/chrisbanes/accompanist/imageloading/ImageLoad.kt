@@ -46,6 +46,9 @@ import kotlinx.coroutines.flow.flow
  * @param request The request to execute.
  * @param executeRequest Suspending lambda to execute an image loading request.
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
+ * @param requestKey The object to key this request on. If the request type supports equality then
+ * the default value will work. Otherwise pass in the `data` value.
+ * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
  * @param transformRequestForSize Optionally transform [request] for the given [IntSize].
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
@@ -53,16 +56,17 @@ import kotlinx.coroutines.flow.flow
  * @param content Content to be displayed for the given state.
  */
 @Composable
-fun <T> ImageLoad(
+fun <T : Any> ImageLoad(
     request: T,
     executeRequest: suspend (T) -> ImageLoadState,
     modifier: Modifier = Modifier,
+    requestKey: Any = request,
     transformRequestForSize: (T, IntSize) -> T? = { r, _ -> r },
-    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = defaultRefetchOnSizeChangeLambda,
-    onRequestCompleted: (ImageLoadState) -> Unit = emptySuccessLambda,
+    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
+    onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
     content: @Composable (imageLoadState: ImageLoadState) -> Unit
 ) {
-    var state by stateFor<ImageLoadState>(request) { ImageLoadState.Empty }
+    var state by stateFor<ImageLoadState>(requestKey) { ImageLoadState.Empty }
 
     // This may look a little weird, but allows the launchInComposition callback to always
     // invoke the last provided [onRequestCompleted].
@@ -77,7 +81,7 @@ fun <T> ImageLoad(
     val callback = remember { mutableStateOf(onRequestCompleted, referentialEqualityPolicy()) }
     callback.value = onRequestCompleted
 
-    val requestActor = remember(request) {
+    val requestActor = remember(requestKey) {
         ImageLoadRequestActor(executeRequest)
     }
 
@@ -142,6 +146,12 @@ private fun <T> ImageLoadRequestActor(
     }
 }
 
-internal val emptySuccessLambda: (ImageLoadState) -> Unit = {}
+/**
+ * Empty lamdba for use in the `onRequestCompleted` parameter.
+ */
+val EmptyRequestCompleteLambda: (ImageLoadState) -> Unit = {}
 
-internal val defaultRefetchOnSizeChangeLambda: (ImageLoadState, IntSize) -> Boolean = { _, _ -> false }
+/**
+ * Default lamdba for use in the `shouldRefetchOnSizeChange` parameter.
+ */
+val DefaultRefetchOnSizeChangeLambda: (ImageLoadState, IntSize) -> Boolean = { _, _ -> false }

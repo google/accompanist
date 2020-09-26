@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package dev.chrisbanes.accompanist.sample.coil
+package dev.chrisbanes.accompanist.sample.picasso
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -35,11 +35,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import dev.chrisbanes.accompanist.coil.CoilImage
+import dev.chrisbanes.accompanist.picasso.PicassoImage
 import dev.chrisbanes.accompanist.sample.R
 import dev.chrisbanes.accompanist.sample.randomSampleImageUrl
 
-class CoilLazyColumnSample : AppCompatActivity() {
+class PicassoLazyColumnSample : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -68,7 +68,7 @@ private fun Sample() {
         }
         LazyColumnFor(items, modifier = Modifier.padding(16.dp)) { imageUrl ->
             Row(Modifier.padding(16.dp)) {
-                CoilImage(
+                PicassoImage(
                     data = imageUrl,
                     modifier = Modifier.preferredSize(64.dp)
                 )
