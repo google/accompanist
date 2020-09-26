@@ -233,8 +233,7 @@ private fun Picasso.LoadedFrom.toDataSource(): DataSource = when (this) {
     Picasso.LoadedFrom.NETWORK -> DataSource.NETWORK
 }
 
-@Composable
-internal fun Any.toRequestCreator(picasso: Picasso): RequestCreator = when (this) {
+private fun Any.toRequestCreator(picasso: Picasso): RequestCreator = when (this) {
     is String -> picasso.load(this)
     is Uri -> picasso.load(this)
     is File -> picasso.load(this)
