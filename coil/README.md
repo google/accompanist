@@ -86,6 +86,7 @@ CoilImage(
         ImageLoadState.Empty -> /* TODO */
     }
 }
+```
 
 ## GIFs
 
