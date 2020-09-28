@@ -6,23 +6,23 @@ This library brings easy-to-use composable which can fetch and display images fr
 
 ## `PicassoImage()`
 
-The primary API is via the `PicassoImage()` functions. There are a 2 function versions available.
+The primary API is via the `PicassoImage()` functions. There are multiple function versions available.
 
 The simplest usage is like so:
 
 ```kotlin 
 PicassoImage(
-    data = "https://loremflickr.com/300/300"
+    data = "https://picsum.photos/300/300"
 )
 ```
 
 This loads the `data` passed in with [Picasso][Picasso], and then displays the resulting image using the standard `Image` composable.
 
-There is also a version of this function which accepts a Picasso [`ImageRequest`](https://Picasso-kt.github.io/Picasso/image_requests/), allowing full customization of the request. This allows usage of things like (but not limited to) transformations:
+You can also customize the Coil Picasso [`RequestCreator`](https://square.github.io/picasso/2.x/picasso/com/squareup/picasso/RequestCreator.html) through the `requestBuilder` parameter. This allows usage of things like (but not limited to) transformations:
 
 ```kotlin
 PicassoImage(
-    data = "https://loremflickr.com/300/300",
+    data = "https://picsum.photos/300/300",
     requestBuilder = {
         rotate(90f)
     }
@@ -33,7 +33,7 @@ It also provides optional content 'slots', allowing you to provide custom conten
 
 ``` kotlin
 PicassoImage(
-    data = "https://loremflickr.com/300/300",
+    data = "https://picsum.photos/300/300",
     loading = {
         Box(Modifier.matchParentSize()) {
             CircularProgressIndicator(Modifier.align(Alignment.Center))
@@ -70,7 +70,7 @@ If you need more control over the animation, or you want to provide custom layou
 
 ``` kotlin
 PicassoImage(
-    data = "https://random.image",
+    data = "https://picsum.photos/300/300",
 ) { imageState ->
     when (imageState) {
         is ImageLoadState.Success -> {

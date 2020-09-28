@@ -4,7 +4,6 @@
 
 This library brings easy-to-use composable which can fetch and display images from external sources, such as network, using the [Coil][coil] image loading library.
 
-
 ## `CoilImage()`
 
 The primary API is via the `CoilImage()` functions. There are a number of function versions available.
@@ -13,20 +12,20 @@ The simplest usage is like so:
 
 ```kotlin 
 CoilImage(
-    data = "https://loremflickr.com/300/300"
+    data = "https://picsum.photos/300/300"
 )
 ```
 
 This loads the `data` passed in with [Coil][coil], and then displays the resulting image using the standard `Image` composable.
 
-There is also a version of this function which accepts a Coil [`ImageRequest`](https://coil-kt.github.io/coil/image_requests/), allowing full customization of the request. This allows usage of things like (but not limited to) transformations:
+You can also customize the Coil [`ImageRequest`](https://coil-kt.github.io/coil/image_requests/) through the `requestBuilder` parameter. This allows usage of things like (but not limited to) transformations:
 
 ```kotlin
 CoilImage(
-    request = ImageRequest.Builder(ContextAmbient.current)
-        .data("https://loremflickr.com/300/300")
-        .transformations(CircleCropTransformation())
-        .build()
+    data = "https://picsum.photos/300/300",
+    requestBuilder = {
+        transformations(CircleCropTransformation())
+    },
 )
 ```
 
@@ -34,7 +33,7 @@ It also provides optional content 'slots', allowing you to provide custom conten
 
 ``` kotlin
 CoilImage(
-    data = "https://loremflickr.com/300/300",
+    data = "https://picsum.photos/300/300",
     loading = {
         Box(Modifier.matchParentSize()) {
             CircularProgressIndicator(Modifier.align(Alignment.Center))
@@ -71,7 +70,7 @@ If you need more control over the animation, or you want to provide custom layou
 
 ``` kotlin
 CoilImage(
-    data = "https://random.image",
+    data = "https://picsum.photos/300/300",
 ) { imageState ->
     when (imageState) {
         is ImageLoadState.Success -> {
