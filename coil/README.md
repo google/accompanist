@@ -4,6 +4,8 @@
 
 This library brings easy-to-use composable which can fetch and display images from external sources, such as network, using the [Coil][coil] image loading library.
 
+<img src="https://coil-kt.github.io/coil/logo.svg" width="480" alt="Coil logo">
+
 ## `CoilImage()`
 
 The primary API is via the `CoilImage()` functions. There are a number of function versions available.

@@ -4,6 +4,8 @@
 
 This library brings easy-to-use composable which can fetch and display images from external sources, such as network, using the [Picasso][picasso] image loading library.
 
+<img src="https://raw.githubusercontent.com/square/picasso/master/website/static/sample.png" width="400" alt="Picasso sample screenshot">
+
 ## `PicassoImage()`
 
 The primary API is via the `PicassoImage()` functions. There are multiple function versions available.
