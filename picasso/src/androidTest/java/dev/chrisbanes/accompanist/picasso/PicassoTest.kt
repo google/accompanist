@@ -58,6 +58,7 @@ import okhttp3.mockwebserver.RecordedRequest
 import okio.Buffer
 import org.junit.After
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -360,6 +361,7 @@ class PicassoTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
+    @Ignore("Flakey: https://github.com/chrisbanes/accompanist/issues/105")
     fun loading_slot() {
         val dispatcher = TestCoroutineDispatcher()
         val loadLatch = CountDownLatch(1)
