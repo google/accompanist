@@ -2,8 +2,8 @@
 
 Accompanist is a group of libraries that contains some utilities which I've found myself copying around projects which use [Jetpack Compose][compose]. Currently, it contains:
 
-🖼️ [Coil image loading composables](./coil/README.md)
-🖼️ [Picasso image loading composables](./picasso/README.md)
+ - 🖼️ [Coil image loading composables](./coil/README.md)
+ - 🖼️ [Picasso image loading composables](./picasso/README.md)
 
 [Jetpack Compose][compose] is a fast-moving project and I'll be updating these libraries to match the
 latest tagged release as quickly as possible. Each [release listing](https://github.com/chrisbanes/accompanist/releases) will outline what version of Compose libraries it depends on.

@@ -5,6 +5,8 @@ site_author: 'Chris Banes'
 site_url: 'https://chrisbanes.github.io/accompanist/'
 remote_branch: gh-pages
 
+docs_dir: docs-gen
+
 # Repository
 repo_name: 'Accompanist'
 repo_url: 'https://github.com/chrisbanes/accompanist'

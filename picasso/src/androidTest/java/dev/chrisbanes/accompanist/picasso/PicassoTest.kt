@@ -40,6 +40,7 @@ import androidx.ui.test.onNodeWithTag
 import androidx.ui.test.onNodeWithText
 import com.google.common.truth.Truth.assertThat
 import com.squareup.picasso.MemoryPolicy
+import com.squareup.picasso.NetworkPolicy
 import dev.chrisbanes.accompanist.imageloading.ImageLoadState
 import dev.chrisbanes.accompanist.picasso.test.R
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -279,6 +280,7 @@ class PicassoTest {
                 // Disable any caches. If the item is in the cache, the fetch is
                 // synchronous which means the Loading state is skipped
                 requestBuilder = {
+                    networkPolicy(NetworkPolicy.NO_CACHE)
                     memoryPolicy(MemoryPolicy.NO_CACHE)
                 },
                 onRequestCompleted = { latch.countDown() }
@@ -310,6 +312,7 @@ class PicassoTest {
                 // Disable any caches. If the item is in the cache, the fetch is
                 // synchronous which means the Loading state is skipped
                 requestBuilder = {
+                    networkPolicy(NetworkPolicy.NO_CACHE)
                     memoryPolicy(MemoryPolicy.NO_CACHE)
                 },
                 onRequestCompleted = { latch.countDown() }
@@ -371,6 +374,7 @@ class PicassoTest {
                     // Disable any caches. If the item is in the cache, the fetch is
                     // synchronous which means the Loading state is skipped
                     requestBuilder = {
+                        networkPolicy(NetworkPolicy.NO_CACHE)
                         memoryPolicy(MemoryPolicy.NO_CACHE)
                     },
                     loading = { Text(text = "Loading") },
