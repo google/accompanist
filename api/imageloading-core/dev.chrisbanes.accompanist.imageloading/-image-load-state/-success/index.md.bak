@@ -1,0 +1,49 @@
+//[imageloading-core](../../../index.md)/[dev.chrisbanes.accompanist.imageloading](../../index.md)/[ImageLoadState](../index.md)/[Success](index.md)
+
+
+
+# Success  
+  
+
+Indicates that the request completed successfully.
+
+data class [Success](index.md)(**painter**: Painter, **source**: [DataSource](../../-data-source/index.md)) : [ImageLoadState](../index.md)   
+
+
+## Parameters  
+  
+  
+  
+|  Name|  Summary| 
+|---|---|
+| painter| The result image.
+| source| The data source that the image was loaded from.
+  
+
+
+## Constructors  
+  
+|  Name|  Summary| 
+|---|---|
+| [Success](-success.md)|   The result image.fun [Success](-success.md)(painter: Painter, source: [DataSource](../../-data-source/index.md))   <br>
+
+
+## Functions  
+  
+|  Name|  Summary| 
+|---|---|
+| [component1](component1.md)|   <br>Content  <br>operator fun [component1](component1.md)(): Painter  <br>
+| [component2](component2.md)|   <br>Content  <br>operator fun [component2](component2.md)(): [DataSource](../../-data-source/index.md)  <br>
+| [copy](copy.md)|   <br>Content  <br>fun [copy](copy.md)(painter: Painter, source: [DataSource](../../-data-source/index.md)): [ImageLoadState.Success](index.md)  <br>
+| [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)|   <br>Content  <br>open operator override fun [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)(other: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br>
+| [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)|   <br>Content  <br>open override fun [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br>
+| [toString](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/to-string.html)|   <br>Content  <br>open override fun [toString](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/to-string.html)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br>
+
+
+## Properties  
+  
+|  Name|  Summary| 
+|---|---|
+| [painter](index.md#dev.chrisbanes.accompanist.imageloading/ImageLoadState.Success/painter/#/PointingToDeclaration/)|   The result image.val [painter](index.md#dev.chrisbanes.accompanist.imageloading/ImageLoadState.Success/painter/#/PointingToDeclaration/): Painter   <br>
+| [source](index.md#dev.chrisbanes.accompanist.imageloading/ImageLoadState.Success/source/#/PointingToDeclaration/)|   The data source that the image was loaded from.val [source](index.md#dev.chrisbanes.accompanist.imageloading/ImageLoadState.Success/source/#/PointingToDeclaration/): [DataSource](../../-data-source/index.md)   <br>
+

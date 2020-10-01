@@ -1,0 +1,24 @@
+//[imageloading-core](../../../index.md)/[dev.chrisbanes.accompanist.imageloading](../../index.md)/[ImageLoadState](../index.md)/[Success](index.md)/[Success](-success.md)
+
+
+
+# Success  
+  
+  
+
+
+## Parameters  
+  
+  
+  
+|  Name|  Summary| 
+|---|---|
+| painter| The result image.
+| source| The data source that the image was loaded from.
+  
+  
+Content  
+fun [Success](-success.md)(painter: Painter, source: [DataSource](../../-data-source/index.md))  
+
+
+

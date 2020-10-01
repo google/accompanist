@@ -215,18 +215,30 @@
       
 
 
+  <li class="md-nav__item">
+    <a href="../../../picasso/" title="Picasso" class="md-nav__link">
+      Picasso
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
     
-    <label class="md-nav__link" for="nav-3">
+    <label class="md-nav__link" for="nav-4">
       API
       <span class="md-nav__icon md-icon">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
       </span>
     </label>
     <nav class="md-nav" aria-label="API" data-md-level="1">
-      <label class="md-nav__title" for="nav-3">
+      <label class="md-nav__title" for="nav-4">
         <span class="md-nav__icon md-icon">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
         </span>
@@ -243,6 +255,30 @@
   <li class="md-nav__item">
     <a href="../" title="Coil" class="md-nav__link">
       Coil
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../picasso/" title="Picasso" class="md-nav__link">
+      Picasso
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../imageloading-core/" title="Image Loading Core" class="md-nav__link">
+      Image Loading Core
     </a>
   </li>
 
@@ -283,16 +319,16 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
     
-    <label class="md-nav__link" for="nav-6">
+    <label class="md-nav__link" for="nav-7">
       Maintainers
       <span class="md-nav__icon md-icon">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
       </span>
     </label>
     <nav class="md-nav" aria-label="Maintainers" data-md-level="1">
-      <label class="md-nav__title" for="nav-6">
+      <label class="md-nav__title" for="nav-7">
         <span class="md-nav__icon md-icon">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
         </span>
@@ -389,20 +425,16 @@
 </thead>
 <tbody>
 <tr>
-<td><a href="-error-result/">ErrorResult</a></td>
-<td><br>  <br>Indicates that an error occurred while executing the request.  <br>Content  <br>data class <a href="-error-result/">ErrorResult</a>(<strong>image</strong>: ImageAsset?, <strong>throwable</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html">Throwable</a>) : <a href="-request-result/">RequestResult</a>  <br></td>
+<td>ErrorResult</td>
+<td><br>Content  <br>typealias ErrorResult = dev.chrisbanes.accompanist.imageloading.ImageLoadState.Error  <br></td>
 </tr>
 <tr>
-<td><a href="-image-loading-color-matrix/">ImageLoadingColorMatrix</a></td>
-<td><br>  <br>An extension to <a href="https://developer.android.com/reference/kotlin/android/graphics/ColorMatrix.html">ColorMatrix</a> which implements the Material Design image loading pattern.  <br>Content  <br>class <a href="-image-loading-color-matrix/">ImageLoadingColorMatrix</a>(<strong>saturation</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html">Float</a>, <strong>alpha</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html">Float</a>, <strong>brightness</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html">Float</a>) : <a href="https://developer.android.com/reference/kotlin/android/graphics/ColorMatrix.html">ColorMatrix</a>  <br></td>
+<td>RequestResult</td>
+<td><br>Content  <br>typealias RequestResult = dev.chrisbanes.accompanist.imageloading.ImageLoadState  <br></td>
 </tr>
 <tr>
-<td><a href="-request-result/">RequestResult</a></td>
-<td><br>  <br>Represents the result of an image request.  <br>Content  <br>sealed class <a href="-request-result/">RequestResult</a>  <br></td>
-</tr>
-<tr>
-<td><a href="-success-result/">SuccessResult</a></td>
-<td><br>  <br>Indicates that the request completed successfully.  <br>Content  <br>data class <a href="-success-result/">SuccessResult</a>(<strong>image</strong>: ImageAsset, <strong>source</strong>: DataSource) : <a href="-request-result/">RequestResult</a>  <br></td>
+<td>SuccessResult</td>
+<td><br>Content  <br>typealias SuccessResult = dev.chrisbanes.accompanist.imageloading.ImageLoadState.Success  <br></td>
 </tr>
 </tbody>
 </table>
@@ -417,15 +449,11 @@
 <tbody>
 <tr>
 <td><a href="-coil-image/">CoilImage</a></td>
-<td><br>  <br>Creates a composable that will attempt to load the given request using Coil, and then display the result in the provided image content.This version of the function allows complete control over how the loaded image is displayed, by being able to provide custom layout:CoilImage(  <br>  data = resourceUri(R.raw.sample),  <br>) { result -&gt;  <br>  FancyImage(asset = result.image)  <br>}  <br>Content  <br>@Composable()  <br>  <br>fun <a href="-coil-image/">CoilImage</a>(request: ImageRequest, modifier: Modifier, imageLoader: ImageLoader, shouldRefetchOnSizeChange: (<a href="-request-result/">RequestResult</a>, IntSize) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, onRequestCompleted: (<a href="-request-result/">RequestResult</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>, error: (<a href="-error-result/">ErrorResult</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?, loading: () -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?, image: (<a href="-success-result/">SuccessResult</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>)  <br>  <br>  <br>Creates a composable that will attempt to load the given data using Coil, and then display the result in the provided image content.This version of the function allows complete control over how the loaded image is displayed, by being able to provide custom layout:CoilImage(  <br>  data = resourceUri(R.raw.sample),  <br>) { result -&gt;  <br>  FancyImage(asset = result.image)  <br>}  <br>Content  <br>@Composable()  <br>  <br>fun <a href="-coil-image/">CoilImage</a>(data: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>, modifier: Modifier, imageLoader: ImageLoader, shouldRefetchOnSizeChange: (<a href="-request-result/">RequestResult</a>, IntSize) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, onRequestCompleted: (<a href="-request-result/">RequestResult</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>, error: (<a href="-error-result/">ErrorResult</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?, loading: () -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?, image: (<a href="-success-result/">SuccessResult</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>)  <br>  <br>  <br>Creates a composable that will attempt to load the given request using Coil, and then display the result in an Image.  <br>Content  <br>@Composable()  <br>  <br>fun <a href="-coil-image/">CoilImage</a>(request: ImageRequest, modifier: Modifier, alignment: Alignment, contentScale: ContentScale, colorFilter: ColorFilter?, fadeIn: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, imageLoader: ImageLoader, shouldRefetchOnSizeChange: (<a href="-request-result/">RequestResult</a>, IntSize) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, onRequestCompleted: (<a href="-request-result/">RequestResult</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>, error: (<a href="-error-result/">ErrorResult</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?, loading: () -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?)  <br>  <br>  <br>Creates a composable that will attempt to load the given data using Coil, and then display the result in an Image.  <br>Content  <br>@Composable()  <br>  <br>fun <a href="-coil-image/">CoilImage</a>(data: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>, modifier: Modifier, alignment: Alignment, contentScale: ContentScale, colorFilter: ColorFilter?, fadeIn: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, imageLoader: ImageLoader, shouldRefetchOnSizeChange: (<a href="-request-result/">RequestResult</a>, IntSize) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, onRequestCompleted: (<a href="-request-result/">RequestResult</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>, error: (<a href="-error-result/">ErrorResult</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?, loading: () -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?)  <br></td>
+<td><br>  <br>Creates a composable that will attempt to load the given request using Coil, and provides complete content of how the current state is displayed:CoilImage(  <br>  request = ImageRequest.Builder(context).data(...).build(),  <br>) { imageState -&gt;  <br>  when (imageState) {  <br>    is ImageLoadState.Success -&gt; // TODO  <br>    is ImageLoadState.Error -&gt; // TODO  <br>    ImageLoadState.Loading -&gt; // TODO  <br>    ImageLoadState.Empty -&gt; // TODO  <br>  }  <br>}  <br>Content  <br>@Composable()  <br>  <br>fun <a href="-coil-image/">CoilImage</a>(request: ImageRequest, modifier: Modifier, requestBuilder: ImageRequest.Builder.(IntSize) -&gt; ImageRequest.Builder?, imageLoader: ImageLoader, shouldRefetchOnSizeChange: (ImageLoadState, IntSize) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, onRequestCompleted: (ImageLoadState) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>, content: (ImageLoadState) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>)  <br>  <br>  <br>Creates a composable that will attempt to load the given data using Coil, and provides complete content of how the current state is displayed:CoilImage(  <br>  data = "https://www.image.url",  <br>) { imageState -&gt;  <br>  when (imageState) {  <br>    is ImageLoadState.Success -&gt; // TODO  <br>    is ImageLoadState.Error -&gt; // TODO  <br>    ImageLoadState.Loading -&gt; // TODO  <br>    ImageLoadState.Empty -&gt; // TODO  <br>  }  <br>}  <br>Content  <br>@Composable()  <br>  <br>fun <a href="-coil-image/">CoilImage</a>(data: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>, modifier: Modifier, requestBuilder: ImageRequest.Builder.(IntSize) -&gt; ImageRequest.Builder?, imageLoader: ImageLoader, shouldRefetchOnSizeChange: (ImageLoadState, IntSize) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, onRequestCompleted: (ImageLoadState) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>, content: (ImageLoadState) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>)  <br>  <br>  <br>Creates a composable that will attempt to load the given request using Coil, and then display the result in an Image.This version of the function is more opinionated, providing:<ul><li>Support for displaying alternative content while the request is 'loading'. See the loading parameter.</li><li>Support for displaying alternative content if the request was unsuccessful. See the error parameter.</li><li>Support for automatically fading-in the image once loaded. See the fadeIn parameter.</li></ul>CoilImage(  <br>  request = ImageRequest.Builder(context).data(...).build(),  <br>  fadeIn = true,  <br>  loading = {  <br>    Stack(Modifier.fillMaxSize()) {  <br>      CircularProgressIndicator(Modifier.align(Alignment.Center))  <br>    }  <br>  }  <br>)  <br>Content  <br>@Composable()  <br>  <br>fun <a href="-coil-image/">CoilImage</a>(request: ImageRequest, modifier: Modifier, alignment: Alignment, contentScale: ContentScale, colorFilter: ColorFilter?, fadeIn: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, requestBuilder: ImageRequest.Builder.(IntSize) -&gt; ImageRequest.Builder?, imageLoader: ImageLoader, shouldRefetchOnSizeChange: (ImageLoadState, IntSize) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, onRequestCompleted: (ImageLoadState) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>, error: (ImageLoadState.Error) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?, loading: () -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?)  <br>  <br>  <br>Creates a composable that will attempt to load the given data using Coil, and then display the result in an Image.This version of the function is more opinionated, providing:<ul><li>Support for displaying alternative content while the request is 'loading'. See the loading parameter.</li><li>Support for displaying alternative content if the request was unsuccessful. See the error parameter.</li><li>Support for automatically fading-in the image once loaded. See the fadeIn parameter.</li></ul>CoilImage(  <br>  data = "https://www.image.url",  <br>  fadeIn = true,  <br>  loading = {  <br>    Stack(Modifier.fillMaxSize()) {  <br>      CircularProgressIndicator(Modifier.align(Alignment.Center))  <br>    }  <br>  }  <br>)  <br>Content  <br>@Composable()  <br>  <br>fun <a href="-coil-image/">CoilImage</a>(data: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>, modifier: Modifier, alignment: Alignment, contentScale: ContentScale, colorFilter: ColorFilter?, fadeIn: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, requestBuilder: ImageRequest.Builder.(IntSize) -&gt; ImageRequest.Builder?, imageLoader: ImageLoader, shouldRefetchOnSizeChange: (ImageLoadState, IntSize) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, onRequestCompleted: (ImageLoadState) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>, error: (ImageLoadState.Error) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?, loading: () -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?)  <br></td>
 </tr>
 <tr>
 <td><a href="-coil-image-with-crossfade/">CoilImageWithCrossfade</a></td>
-<td><br>Content  <br>@Composable()  <br>  <br>~~fun~~ <a href="-coil-image-with-crossfade/">~~CoilImageWithCrossfade~~</a>~~(~~~~request~~~~:~~ ImageRequest~~,~~ ~~modifier~~~~:~~ Modifier~~,~~ ~~alignment~~~~:~~ Alignment~~,~~ ~~contentScale~~~~:~~ ContentScale~~,~~ ~~crossfadeDuration~~~~:~~ <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>~~,~~ ~~imageLoader~~~~:~~ ImageLoader~~,~~ ~~shouldRefetchOnSizeChange~~~~:~~ (<a href="-request-result/">RequestResult</a>, IntSize) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>~~,~~ ~~onRequestCompleted~~~~:~~ (<a href="-request-result/">RequestResult</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>~~,~~ ~~error~~~~:~~ (<a href="-error-result/">ErrorResult</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?~~,~~ ~~loading~~~~:~~ () -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?~~)~~  <br>@Composable()  <br>  <br>~~fun~~ <a href="-coil-image-with-crossfade/">~~CoilImageWithCrossfade~~</a>~~(~~~~data~~~~:~~ <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>~~,~~ ~~modifier~~~~:~~ Modifier~~,~~ ~~alignment~~~~:~~ Alignment~~,~~ ~~contentScale~~~~:~~ ContentScale~~,~~ ~~crossfadeDuration~~~~:~~ <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>~~,~~ ~~imageLoader~~~~:~~ ImageLoader~~,~~ ~~shouldRefetchOnSizeChange~~~~:~~ (<a href="-request-result/">RequestResult</a>, IntSize) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>~~,~~ ~~onRequestCompleted~~~~:~~ (<a href="-request-result/">RequestResult</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>~~,~~ ~~error~~~~:~~ (<a href="-error-result/">ErrorResult</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?~~,~~ ~~loading~~~~:~~ () -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?~~)~~  <br></td>
-</tr>
-<tr>
-<td><a href="-material-loading-image/">MaterialLoadingImage</a></td>
-<td><br>  <br>A wrapper around Image which implements the <a href="https://material.io/archive/guidelines/patterns/loading-images.html">Material Image Loading</a> pattern.  <br>Content  <br>@Composable()  <br>  <br>fun <a href="-material-loading-image/">MaterialLoadingImage</a>(asset: ImageAsset, modifier: Modifier, alignment: Alignment, contentScale: ContentScale, colorFilter: ColorFilter?, clock: AnimationClockObservable, fadeInEnabled: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, fadeInDurationMs: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>)  <br>@Composable()  <br>  <br>fun <a href="-material-loading-image/">MaterialLoadingImage</a>(result: <a href="-success-result/">SuccessResult</a>, modifier: Modifier, alignment: Alignment, contentScale: ContentScale, colorFilter: ColorFilter?, clock: AnimationClockObservable, skipFadeWhenLoadedFromMemory: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, fadeInEnabled: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, fadeInDurationMs: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>)  <br></td>
+<td><br>Content  <br>@Composable()  <br>  <br>~~fun~~ <a href="-coil-image-with-crossfade/">~~CoilImageWithCrossfade~~</a>~~(~~~~request~~~~:~~ ImageRequest~~,~~ ~~modifier~~~~:~~ Modifier~~,~~ ~~alignment~~~~:~~ Alignment~~,~~ ~~contentScale~~~~:~~ ContentScale~~,~~ ~~crossfadeDuration~~~~:~~ <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>~~,~~ ~~imageLoader~~~~:~~ ImageLoader~~,~~ ~~shouldRefetchOnSizeChange~~~~:~~ (ImageLoadState, IntSize) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>~~,~~ ~~onRequestCompleted~~~~:~~ (ImageLoadState) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>~~,~~ ~~error~~~~:~~ (ImageLoadState.Error) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?~~,~~ ~~loading~~~~:~~ () -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?~~)~~  <br>@Composable()  <br>  <br>~~fun~~ <a href="-coil-image-with-crossfade/">~~CoilImageWithCrossfade~~</a>~~(~~~~data~~~~:~~ <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>~~,~~ ~~modifier~~~~:~~ Modifier~~,~~ ~~alignment~~~~:~~ Alignment~~,~~ ~~contentScale~~~~:~~ ContentScale~~,~~ ~~crossfadeDuration~~~~:~~ <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>~~,~~ ~~imageLoader~~~~:~~ ImageLoader~~,~~ ~~shouldRefetchOnSizeChange~~~~:~~ (ImageLoadState, IntSize) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>~~,~~ ~~onRequestCompleted~~~~:~~ (ImageLoadState) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>~~,~~ ~~error~~~~:~~ (ImageLoadState.Error) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?~~,~~ ~~loading~~~~:~~ () -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>?~~)~~  <br></td>
 </tr>
 </tbody>
 </table>

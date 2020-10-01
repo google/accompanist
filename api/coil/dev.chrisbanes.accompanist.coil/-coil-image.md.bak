@@ -4,21 +4,22 @@
 
 # CoilImage  
   
-Brief description  
+  
 
 
 
 
-Creates a composable that will attempt to load the given data using Coil, and then display the result in the provided image content.
-
-
-
-This version of the function allows complete control over how the loaded image is displayed, by being able to provide custom layout:
+Creates a composable that will attempt to load the given data using Coil, and provides complete content of how the current state is displayed:
 
 CoilImage(  
-  data = resourceUri(R.raw.sample),  
-) { result ->  
-  FancyImage(asset = result.image)  
+  data = "https://www.image.url",  
+) { imageState ->  
+  when (imageState) {  
+    is ImageLoadState.Success -> // TODO  
+    is ImageLoadState.Error -> // TODO  
+    ImageLoadState.Loading -> // TODO  
+    ImageLoadState.Empty -> // TODO  
+  }  
 }
 
 
@@ -29,38 +30,38 @@ CoilImage(
   
 |  Name|  Summary| 
 |---|---|
+| content| Content to be displayed for the given state.
 | data| The data to load. See ImageRequest.Builder.data for the types allowed.
-| error| Content to be displayed when the request failed.
-| image| Content to be displayed when the request is successful.
 | imageLoader| The ImageLoader to use when requesting the image. Defaults to Coil's default image loader.
-| loading| Content to be displayed when the request is in progress.
 | modifier| Modifier used to adjust the layout algorithm or draw decoration content.
 | onRequestCompleted| Listener which will be called when the loading request has finished.
+| requestBuilder| Optional builder for the ImageRequest.
 | shouldRefetchOnSizeChange| Lambda which will be invoked when the size changes, allowing optional re-fetching of the image. Return true to re-fetch the image.
   
   
 Content  
 @Composable()  
   
-fun [CoilImage](-coil-image.md)(data: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html), modifier: Modifier, imageLoader: ImageLoader, shouldRefetchOnSizeChange: ([RequestResult](-request-result/index.md), IntSize) -> [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html), onRequestCompleted: ([RequestResult](-request-result/index.md)) -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html), error: ([ErrorResult](-error-result/index.md)) -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)?, loading: () -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)?, image: ([SuccessResult](-success-result/index.md)) -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html))  
+fun [CoilImage](-coil-image.md)(data: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html), modifier: Modifier, requestBuilder: ImageRequest.Builder.(IntSize) -> ImageRequest.Builder?, imageLoader: ImageLoader, shouldRefetchOnSizeChange: (ImageLoadState, IntSize) -> [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html), onRequestCompleted: (ImageLoadState) -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html), content: (ImageLoadState) -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html))  
 
 
   
-Brief description  
+  
 
 
 
 
-Creates a composable that will attempt to load the given request using Coil, and then display the result in the provided image content.
-
-
-
-This version of the function allows complete control over how the loaded image is displayed, by being able to provide custom layout:
+Creates a composable that will attempt to load the given request using Coil, and provides complete content of how the current state is displayed:
 
 CoilImage(  
-  data = resourceUri(R.raw.sample),  
-) { result ->  
-  FancyImage(asset = result.image)  
+  request = ImageRequest.Builder(context).data(...).build(),  
+) { imageState ->  
+  when (imageState) {  
+    is ImageLoadState.Success -> // TODO  
+    is ImageLoadState.Error -> // TODO  
+    ImageLoadState.Loading -> // TODO  
+    ImageLoadState.Empty -> // TODO  
+  }  
 }
 
 
@@ -71,30 +72,45 @@ CoilImage(
   
 |  Name|  Summary| 
 |---|---|
-| error| Content to be displayed when the request failed.
-| image| Content to be displayed when the request is successful.
+| content| Content to be displayed for the given state.
 | imageLoader| The ImageLoader to use when requesting the image. Defaults to Coil's default image loader.
-| loading| Content to be displayed when the request is in progress.
 | modifier| Modifier used to adjust the layout algorithm or draw decoration content.
 | onRequestCompleted| Listener which will be called when the loading request has finished.
 | request| The request to execute. If the request does not have a ImageRequest.sizeResolver set, one will be set on the request using the layout constraints.
+| requestBuilder| Optional builder for the ImageRequest.
 | shouldRefetchOnSizeChange| Lambda which will be invoked when the size changes, allowing optional re-fetching of the image. Return true to re-fetch the image.
   
   
 Content  
 @Composable()  
   
-fun [CoilImage](-coil-image.md)(request: ImageRequest, modifier: Modifier, imageLoader: ImageLoader, shouldRefetchOnSizeChange: ([RequestResult](-request-result/index.md), IntSize) -> [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html), onRequestCompleted: ([RequestResult](-request-result/index.md)) -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html), error: ([ErrorResult](-error-result/index.md)) -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)?, loading: () -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)?, image: ([SuccessResult](-success-result/index.md)) -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html))  
+fun [CoilImage](-coil-image.md)(request: ImageRequest, modifier: Modifier, requestBuilder: ImageRequest.Builder.(IntSize) -> ImageRequest.Builder?, imageLoader: ImageLoader, shouldRefetchOnSizeChange: (ImageLoadState, IntSize) -> [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html), onRequestCompleted: (ImageLoadState) -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html), content: (ImageLoadState) -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html))  
 
 
   
-Brief description  
+  
+
+
 
 
 Creates a composable that will attempt to load the given data using Coil, and then display the result in an Image.
 
 
 
+This version of the function is more opinionated, providing:
+
+<ul><li>Support for displaying alternative content while the request is 'loading'. See the loading parameter.</li><li>Support for displaying alternative content if the request was unsuccessful. See the error parameter.</li><li>Support for automatically fading-in the image once loaded. See the fadeIn parameter.</li></ul>CoilImage(  
+  data = "https://www.image.url",  
+  fadeIn = true,  
+  loading = {  
+    Stack(Modifier.fillMaxSize()) {  
+      CircularProgressIndicator(Modifier.align(Alignment.Center))  
+    }  
+  }  
+)
+
+
+
 ## Parameters  
   
   
@@ -111,20 +127,37 @@ Creates a composable that will attempt to load the given data using Coil, and th
 | loading| Content to be displayed when the request is in progress.
 | modifier| Modifier used to adjust the layout algorithm or draw decoration content.
 | onRequestCompleted| Listener which will be called when the loading request has finished.
+| requestBuilder| Optional builder for the ImageRequest.
 | shouldRefetchOnSizeChange| Lambda which will be invoked when the size changes, allowing optional re-fetching of the image. Return true to re-fetch the image.
   
   
 Content  
 @Composable()  
   
-fun [CoilImage](-coil-image.md)(data: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html), modifier: Modifier, alignment: Alignment, contentScale: ContentScale, colorFilter: ColorFilter?, fadeIn: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html), imageLoader: ImageLoader, shouldRefetchOnSizeChange: ([RequestResult](-request-result/index.md), IntSize) -> [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html), onRequestCompleted: ([RequestResult](-request-result/index.md)) -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html), error: ([ErrorResult](-error-result/index.md)) -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)?, loading: () -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)?)  
+fun [CoilImage](-coil-image.md)(data: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html), modifier: Modifier, alignment: Alignment, contentScale: ContentScale, colorFilter: ColorFilter?, fadeIn: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html), requestBuilder: ImageRequest.Builder.(IntSize) -> ImageRequest.Builder?, imageLoader: ImageLoader, shouldRefetchOnSizeChange: (ImageLoadState, IntSize) -> [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html), onRequestCompleted: (ImageLoadState) -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html), error: (ImageLoadState.Error) -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)?, loading: () -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)?)  
 
 
   
-Brief description  
+  
+
+
 
 
 Creates a composable that will attempt to load the given request using Coil, and then display the result in an Image.
+
+
+
+This version of the function is more opinionated, providing:
+
+<ul><li>Support for displaying alternative content while the request is 'loading'. See the loading parameter.</li><li>Support for displaying alternative content if the request was unsuccessful. See the error parameter.</li><li>Support for automatically fading-in the image once loaded. See the fadeIn parameter.</li></ul>CoilImage(  
+  request = ImageRequest.Builder(context).data(...).build(),  
+  fadeIn = true,  
+  loading = {  
+    Stack(Modifier.fillMaxSize()) {  
+      CircularProgressIndicator(Modifier.align(Alignment.Center))  
+    }  
+  }  
+)
 
 
 
@@ -144,13 +177,14 @@ Creates a composable that will attempt to load the given request using Coil, and
 | modifier| Modifier used to adjust the layout algorithm or draw decoration content.
 | onRequestCompleted| Listener which will be called when the loading request has finished.
 | request| The request to execute. If the request does not have a ImageRequest.sizeResolver set, one will be set on the request using the layout constraints.
+| requestBuilder| Optional builder for the ImageRequest.
 | shouldRefetchOnSizeChange| Lambda which will be invoked when the size changes, allowing optional re-fetching of the image. Return true to re-fetch the image.
   
   
 Content  
 @Composable()  
   
-fun [CoilImage](-coil-image.md)(request: ImageRequest, modifier: Modifier, alignment: Alignment, contentScale: ContentScale, colorFilter: ColorFilter?, fadeIn: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html), imageLoader: ImageLoader, shouldRefetchOnSizeChange: ([RequestResult](-request-result/index.md), IntSize) -> [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html), onRequestCompleted: ([RequestResult](-request-result/index.md)) -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html), error: ([ErrorResult](-error-result/index.md)) -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)?, loading: () -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)?)  
+fun [CoilImage](-coil-image.md)(request: ImageRequest, modifier: Modifier, alignment: Alignment, contentScale: ContentScale, colorFilter: ColorFilter?, fadeIn: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html), requestBuilder: ImageRequest.Builder.(IntSize) -> ImageRequest.Builder?, imageLoader: ImageLoader, shouldRefetchOnSizeChange: (ImageLoadState, IntSize) -> [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html), onRequestCompleted: (ImageLoadState) -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html), error: (ImageLoadState.Error) -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)?, loading: () -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)?)  
 
 
 

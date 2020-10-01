@@ -1,0 +1,49 @@
+//[imageloading-core](../../../index.md)/[dev.chrisbanes.accompanist.imageloading](../../index.md)/[ImageLoadState](../index.md)/[Error](index.md)
+
+
+
+# Error  
+  
+
+Indicates that an error occurred while executing the request.
+
+data class [Error](index.md)(**painter**: Painter?, **throwable**: [Throwable](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html)) : [ImageLoadState](../index.md)   
+
+
+## Parameters  
+  
+  
+  
+|  Name|  Summary| 
+|---|---|
+| painter| The error image.
+| throwable| The error that failed the request.
+  
+
+
+## Constructors  
+  
+|  Name|  Summary| 
+|---|---|
+| [Error](-error.md)|   The error image.fun [Error](-error.md)(painter: Painter?, throwable: [Throwable](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html))   <br>
+
+
+## Functions  
+  
+|  Name|  Summary| 
+|---|---|
+| [component1](component1.md)|   <br>Content  <br>operator fun [component1](component1.md)(): Painter?  <br>
+| [component2](component2.md)|   <br>Content  <br>operator fun [component2](component2.md)(): [Throwable](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html)  <br>
+| [copy](copy.md)|   <br>Content  <br>fun [copy](copy.md)(painter: Painter?, throwable: [Throwable](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html)): [ImageLoadState.Error](index.md)  <br>
+| [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)|   <br>Content  <br>open operator override fun [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)(other: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br>
+| [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)|   <br>Content  <br>open override fun [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br>
+| [toString](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/to-string.html)|   <br>Content  <br>open override fun [toString](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/to-string.html)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br>
+
+
+## Properties  
+  
+|  Name|  Summary| 
+|---|---|
+| [painter](index.md#dev.chrisbanes.accompanist.imageloading/ImageLoadState.Error/painter/#/PointingToDeclaration/)|   The error image.val [painter](index.md#dev.chrisbanes.accompanist.imageloading/ImageLoadState.Error/painter/#/PointingToDeclaration/): Painter?   <br>
+| [throwable](index.md#dev.chrisbanes.accompanist.imageloading/ImageLoadState.Error/throwable/#/PointingToDeclaration/)|   The error that failed the request.val [throwable](index.md#dev.chrisbanes.accompanist.imageloading/ImageLoadState.Error/throwable/#/PointingToDeclaration/): [Throwable](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html)   <br>
+

@@ -1,0 +1,34 @@
+//[imageloading-core](../../../index.md)/[dev.chrisbanes.accompanist.imageloading](../../index.md)/[DataSource](../index.md)/[NETWORK](index.md)
+
+
+
+# NETWORK  
+  
+
+Represents a network-based data source.
+
+[NETWORK](index.md)()  
+  
+   
+
+
+## Functions  
+  
+|  Name|  Summary| 
+|---|---|
+| [clone](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/clone.html)|   <br>Content  <br>protected override fun [clone](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/clone.html)(): [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)  <br>
+| [compareTo](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/compare-to.html)|   <br>Content  <br>operator override fun [compareTo](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/compare-to.html)(other: [DataSource](../index.md)): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br>
+| [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/equals.html)|   <br>Content  <br>operator override fun [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/equals.html)(other: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br>
+| [finalize](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/finalize.html)|   <br>Content  <br>override fun [finalize](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/finalize.html)()  <br>
+| [getDeclaringClass](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/get-declaring-class.html)|   <br>Content  <br>override fun [getDeclaringClass](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/get-declaring-class.html)(): [Class](https://developer.android.com/reference/kotlin/java/lang/Class.html)<[DataSource](../index.md)>  <br>
+| [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/hash-code.html)|   <br>Content  <br>override fun [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/hash-code.html)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br>
+| [toString](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/to-string.html)|   <br>Content  <br>open override fun [toString](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/to-string.html)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br>
+
+
+## Properties  
+  
+|  Name|  Summary| 
+|---|---|
+| [name](index.md#dev.chrisbanes.accompanist.imageloading/DataSource.NETWORK/name/#/PointingToDeclaration/)|   override val [name](index.md#dev.chrisbanes.accompanist.imageloading/DataSource.NETWORK/name/#/PointingToDeclaration/): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)   <br>
+| [ordinal](index.md#dev.chrisbanes.accompanist.imageloading/DataSource.NETWORK/ordinal/#/PointingToDeclaration/)|   override val [ordinal](index.md#dev.chrisbanes.accompanist.imageloading/DataSource.NETWORK/ordinal/#/PointingToDeclaration/): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)   <br>
+

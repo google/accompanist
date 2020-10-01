@@ -1,0 +1,11 @@
+//[imageloading-core](../../index.md)/[dev.chrisbanes.accompanist.imageloading](../index.md)/[ImageLoadingColorMatrix](index.md)/[ImageLoadingColorMatrix](-image-loading-color-matrix.md)
+
+
+
+# ImageLoadingColorMatrix  
+  
+Content  
+fun [ImageLoadingColorMatrix](-image-loading-color-matrix.md)(saturation: [Float](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html), alpha: [Float](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html), brightness: [Float](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html))  
+
+
+

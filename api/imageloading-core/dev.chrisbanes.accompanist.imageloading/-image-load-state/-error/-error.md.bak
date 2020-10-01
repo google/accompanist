@@ -1,0 +1,24 @@
+//[imageloading-core](../../../index.md)/[dev.chrisbanes.accompanist.imageloading](../../index.md)/[ImageLoadState](../index.md)/[Error](index.md)/[Error](-error.md)
+
+
+
+# Error  
+  
+  
+
+
+## Parameters  
+  
+  
+  
+|  Name|  Summary| 
+|---|---|
+| painter| The error image.
+| throwable| The error that failed the request.
+  
+  
+Content  
+fun [Error](-error.md)(painter: Painter?, throwable: [Throwable](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html))  
+
+
+
