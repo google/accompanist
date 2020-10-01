@@ -9,7 +9,7 @@ wget -O package-list-coil-base https://coil-kt.github.io/coil/api/coil-base/pack
 sed -i.bak 's/$dokka.linkExtension:md/$dokka.linkExtension:html/g' package-list-coil-base
 
 # Clear out the old API docs
-rm -r docs/api
+[ -d docs/api ] && rm -r docs/api
 # Build the docs with dokka
 ./gradlew clean dokkaGfm
 
