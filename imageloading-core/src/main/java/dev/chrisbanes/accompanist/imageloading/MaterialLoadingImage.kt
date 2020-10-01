@@ -40,7 +40,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageAsset
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.drawscope.drawCanvas
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.painter.ImagePainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
@@ -222,7 +222,7 @@ private class MaterialLoadingPainterWrapper(
         try {
             paint.asFrameworkPaint().colorFilter = ColorMatrixColorFilter(matrix)
 
-            drawCanvas { canvas, size ->
+            drawIntoCanvas { canvas ->
                 canvas.saveLayer(size.toRect(), paint)
 
                 with(painter) {

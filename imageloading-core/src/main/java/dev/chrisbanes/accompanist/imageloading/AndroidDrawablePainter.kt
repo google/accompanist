@@ -33,7 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.asImageAsset
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.drawscope.drawCanvas
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.painter.ImagePainter
@@ -111,7 +111,7 @@ class AndroidDrawablePainter(
             startedAnimatable = true
         }
 
-        drawCanvas { canvas, size ->
+        drawIntoCanvas { canvas ->
             // Reading this ensures that we invalidate when invalidateDrawable() is called
             invalidateTick
 

@@ -55,21 +55,6 @@ subprojects {
         }
     }
 
-    if (!Libs.AndroidX.Compose.snapshot.isEmpty()) {
-        // We're depending on a Jetpack Compose snapshot, update the library version name
-        // to indicate it's from a Compose snapshot
-        def versionName = project.properties.get('VERSION_NAME')
-        if (versionName.contains("SNAPSHOT")) {
-            version = versionName.replace(
-                    '-SNAPSHOT',
-                    ".compose-${Libs.AndroidX.Compose.snapshot}-SNAPSHOT"
-            )
-        } else {
-            throw new IllegalArgumentException("Using Jetpack Compose SNAPSHOT repository" +
-                    " but library version name is not set to SNAPSHOT")
-        }
-    }
-
     apply plugin: 'com.diffplug.spotless'
     spotless {
         kotlin {
@@ -86,7 +71,13 @@ subprojects {
         }
     }
 
-    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    // Create a configuration which allows us to intercept the JARs, and add them to
+    // Kotlin Compiler freeCompilerArgs. This is needed because we can't currently use the
+    // built-in `compose` feature in AGP, since it depends on the old Compose Compiler artifacts.
+    // TODO: Remove this once AGP uses the new Compose Compiler artifact name
+    def compilerPluginConfig = project.configurations.create("kotlinCompilerPlugin")
+
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach { compile ->
         kotlinOptions {
             // Treat all Kotlin warnings as errors
             allWarningsAsErrors = true
@@ -98,6 +89,17 @@ subprojects {
             freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
 
             freeCompilerArgs += "-Xallow-jvm-ir-dependencies"
+        }
+
+        compile.dependsOn(compilerPluginConfig)
+        compile.doFirst {
+            if (!compilerPluginConfig.isEmpty()) {
+                // Add the compiler plugin JARs using the -Xplugin flag
+                compile.kotlinOptions.freeCompilerArgs +=
+                        "-Xplugin=${compilerPluginConfig.files.first()}"
+                // Need to turn on the IR compiler too
+                compile.kotlinOptions.useIR = true
+            }
         }
     }
 
@@ -117,7 +119,7 @@ subprojects {
     }
 
     // Must be afterEvaluate or else com.vanniktech.maven.publish will overwrite our
-    // dokka configuration.
+    // dokka and version configuration.
     afterEvaluate {
         tasks.withType(org.jetbrains.dokka.gradle.DokkaTask).configureEach {
             sourceSets {
@@ -146,6 +148,21 @@ subprojects {
                         packageListUrl.set(new URL("https://square.github.io/picasso/2.x/picasso/package-list"))
                     }
                 }
+            }
+        }
+
+        if (!Libs.AndroidX.Compose.snapshot.isEmpty()) {
+            // We're depending on a Jetpack Compose snapshot, update the library version name
+            // to indicate it's from a Compose snapshot
+            def versionName = project.properties.get('VERSION_NAME')
+            if (versionName.contains("SNAPSHOT")) {
+                version = versionName.replace(
+                        '-SNAPSHOT',
+                        ".compose-${Libs.AndroidX.Compose.snapshot}-SNAPSHOT"
+                )
+            } else {
+                throw new IllegalArgumentException("Using Jetpack Compose SNAPSHOT repository" +
+                        " but library version name is not set to SNAPSHOT")
             }
         }
     }

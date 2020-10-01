@@ -17,7 +17,7 @@
 package dev.chrisbanes.accompanist.buildsrc
 
 object Versions {
-    const val ktlint = "0.38.1"
+    const val ktlint = "0.39.0"
 }
 
 object Libs {
@@ -57,8 +57,8 @@ object Libs {
         }
 
         object Compose {
-            const val snapshot = ""
-            const val version = "1.0.0-alpha03"
+            const val snapshot = "6860046"
+            const val version = "1.0.0-SNAPSHOT"
 
             @JvmStatic
             val snapshotUrl: String
@@ -68,6 +68,8 @@ object Libs {
                     }
                     else -> throw IllegalArgumentException("Snapshot version not set")
                 }
+
+            const val compiler = "androidx.compose.compiler:compiler:$version"
 
             const val runtime = "androidx.compose.runtime:runtime:$version"
             const val foundation = "androidx.compose.foundation:foundation:${version}"
