@@ -157,5 +157,5 @@ private fun BlendMode.toPorterDuffMode(): PorterDuff.Mode = when (this) {
 fun Drawable.toPainter(): Painter = when (this) {
     is BitmapDrawable -> ImagePainter(bitmap.asImageAsset())
     is ColorDrawable -> ColorPainter(Color(color))
-    else -> AndroidDrawablePainter(this)
+    else -> AndroidDrawablePainter(mutate())
 }
