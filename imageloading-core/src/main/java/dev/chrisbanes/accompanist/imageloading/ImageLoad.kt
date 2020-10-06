@@ -20,9 +20,9 @@
 package dev.chrisbanes.accompanist.imageloading
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedTask
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.launchInComposition
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.referentialEqualityPolicy
 import androidx.compose.runtime.remember
@@ -85,7 +85,7 @@ fun <T : Any> ImageLoad(
         ImageLoadRequestActor(executeRequest)
     }
 
-    launchInComposition(requestActor) {
+    LaunchedTask(requestActor) {
         // Launch the Actor
         requestActor.run { _, newState ->
             // Update the result state
