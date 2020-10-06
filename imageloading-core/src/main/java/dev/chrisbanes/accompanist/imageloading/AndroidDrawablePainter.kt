@@ -39,21 +39,19 @@ import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.painter.ImagePainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.graphics.withSave
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.core.graphics.drawable.DrawableCompat
 import kotlin.math.roundToInt
 
 /**
  * A [Painter] which draws an Android [Drawable]. Supports [Animatable] drawables.
+ *
+ * Taken from https://goo.gle/compose-drawable-painter
  */
 class AndroidDrawablePainter(
     private val drawable: Drawable
 ) : Painter() {
-    private val drawableSize = Size(
-        drawable.intrinsicWidth.toFloat(),
-        drawable.intrinsicWidth.toFloat()
-    )
-
     private var invalidateTick by mutableStateOf(0)
     private var startedAnimatable = drawable is Animatable && drawable.isRunning
 
@@ -102,7 +100,11 @@ class AndroidDrawablePainter(
         )
     }
 
-    override val intrinsicSize: Size get() = drawableSize
+    override val intrinsicSize: Size
+        get() = Size(
+            drawable.intrinsicWidth.toFloat(),
+            drawable.intrinsicHeight.toFloat()
+        )
 
     override fun DrawScope.onDraw() {
         if (!startedAnimatable && drawable is Animatable && !drawable.isRunning) {
@@ -116,7 +118,17 @@ class AndroidDrawablePainter(
             invalidateTick
 
             drawable.setBounds(0, 0, size.width.toInt(), size.height.toInt())
-            drawable.draw(canvas.nativeCanvas)
+
+            canvas.withSave {
+                // Painters are responsible for scaling content to meet the canvas size
+                if (drawable.intrinsicWidth > 0 && drawable.intrinsicHeight > 0) {
+                    canvas.scale(
+                        sx = size.width / drawable.intrinsicWidth,
+                        sy = size.height / drawable.intrinsicHeight
+                    )
+                }
+                drawable.draw(canvas.nativeCanvas)
+            }
         }
     }
 }

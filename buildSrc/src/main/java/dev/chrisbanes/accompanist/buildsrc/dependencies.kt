@@ -28,7 +28,7 @@ object Libs {
     const val junit = "junit:junit:4.13"
 
     object Kotlin {
-        const val version = "1.4.0"
+        const val version = "1.4.10"
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib:$version"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
 
