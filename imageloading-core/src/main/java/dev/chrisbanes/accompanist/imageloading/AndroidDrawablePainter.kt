@@ -121,10 +121,12 @@ class AndroidDrawablePainter(
 
             canvas.withSave {
                 // Painters are responsible for scaling content to meet the canvas size
-                canvas.scale(
-                    sx = size.width / drawable.intrinsicWidth,
-                    sy = size.height / drawable.intrinsicHeight
-                )
+                if (drawable.intrinsicWidth > 0 && drawable.intrinsicHeight > 0) {
+                    canvas.scale(
+                        sx = size.width / drawable.intrinsicWidth,
+                        sy = size.height / drawable.intrinsicHeight
+                    )
+                }
                 drawable.draw(canvas.nativeCanvas)
             }
         }
