@@ -52,6 +52,7 @@ android {
 dependencies {
     implementation project(':picasso')
     implementation project(':coil')
+    implementation project(':glide')
 
     implementation Libs.Coil.gif
 

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-include ':coil'
-include ':picasso'
-include ':glide'
-include ':imageloading-core'
-include ':sample'
+package dev.chrisbanes.accompanist.coil
+
+object CoilTestTags {
+    const val Image = "image"
+}
