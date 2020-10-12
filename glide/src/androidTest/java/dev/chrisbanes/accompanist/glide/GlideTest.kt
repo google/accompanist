@@ -17,6 +17,7 @@
 package dev.chrisbanes.accompanist.glide
 
 import android.content.ContentResolver
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
@@ -42,15 +43,12 @@ import androidx.ui.test.captureToBitmap
 import androidx.ui.test.createComposeRule
 import androidx.ui.test.onNodeWithTag
 import androidx.ui.test.onNodeWithText
-import coil.EventListener
-import coil.ImageLoader
-import coil.annotation.ExperimentalCoilApi
-import coil.decode.Options
-import coil.fetch.Fetcher
-import coil.request.CachePolicy
-import coil.request.ImageRequest
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.google.common.truth.Truth.assertThat
-import dev.chrisbanes.accompanist.coil.test.R
+import dev.chrisbanes.accompanist.glide.test.R
 import dev.chrisbanes.accompanist.imageloading.ImageLoadState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -97,41 +95,25 @@ class CoilTest {
     }
 
     @Test
-    fun onRequestCompleted_fromImageRequest() {
-        val results = ArrayList<ImageLoadState>()
-        val latch = CountDownLatch(1)
-
-        composeTestRule.setContent {
-            CoilImage(
-                request = ImageRequest.Builder(ContextAmbient.current)
-                    .data(resourceUri(R.raw.sample))
-                    .listener { _, _ -> latch.countDown() }
-                    .build(),
-                modifier = Modifier.preferredSize(128.dp, 128.dp),
-                onRequestCompleted = { results += it }
-            )
-        }
-
-        // Wait for the Coil request listener to release the latch
-        latch.await(5, TimeUnit.SECONDS)
-
-        composeTestRule.runOnIdle {
-            // And assert that we got a single successful result
-            assertThat(results).hasSize(1)
-            assertThat(results[0]).isInstanceOf(ImageLoadState.Success::class.java)
-        }
-    }
-
-    @Test
     fun onRequestCompleted_fromBuilder() {
         val results = ArrayList<ImageLoadState>()
         val latch = CountDownLatch(1)
 
         composeTestRule.setContent {
-            CoilImage(
+            GlideImage(
                 data = resourceUri(R.raw.sample),
                 requestBuilder = {
-                    listener { _, _ -> latch.countDown() }
+                    this.listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(p0: GlideException?, p1: Any?, p2: Target<Drawable>?, p3: Boolean): Boolean {
+                            latch.countDown()
+                            return true
+                        }
+
+                        override fun onResourceReady(p0: Drawable?, p1: Any?, p2: Target<Drawable>?, p3: DataSource?, p4: Boolean): Boolean {
+                            latch.countDown()
+                            return true
+                        }
+                    })
                 },
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
                 onRequestCompleted = { results += it }
@@ -153,9 +135,9 @@ class CoilTest {
         val latch = CountDownLatch(1)
 
         composeTestRule.setContent {
-            CoilImage(
+            GlideImage(
                 data = server.url("/image"),
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
+                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(GlideTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
         }
@@ -163,7 +145,7 @@ class CoilTest {
         // Wait for the onRequestCompleted to release the latch
         latch.await(5, TimeUnit.SECONDS)
 
-        composeTestRule.onNodeWithTag(CoilTestTags.Image)
+        composeTestRule.onNodeWithTag(GlideTestTags.Image)
             .assertIsDisplayed()
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
@@ -175,9 +157,9 @@ class CoilTest {
         val latch = CountDownLatch(1)
 
         composeTestRule.setContent {
-            CoilImage(
+            GlideImage(
                 data = resourceUri(R.drawable.red_rectangle),
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
+                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(GlideTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
         }
@@ -185,47 +167,12 @@ class CoilTest {
         // Wait for the onRequestCompleted to release the latch
         latch.await(5, TimeUnit.SECONDS)
 
-        composeTestRule.onNodeWithTag(CoilTestTags.Image)
+        composeTestRule.onNodeWithTag(GlideTestTags.Image)
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
             .assertIsDisplayed()
             .captureToBitmap()
             .assertPixels { Color.Red }
-    }
-
-    @OptIn(ExperimentalCoilApi::class)
-    @Test
-    fun basicLoad_customImageLoader() {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-        val latch = CountDownLatch(1)
-
-        // Build a custom ImageLoader with a fake EventListener
-        val eventListener = object : EventListener {
-            var startCalled = 0
-                private set
-
-            override fun fetchStart(request: ImageRequest, fetcher: Fetcher<*>, options: Options) {
-                startCalled++
-            }
-        }
-        val imageLoader = ImageLoader.Builder(context)
-            .eventListener(eventListener)
-            .build()
-
-        composeTestRule.setContent {
-            CoilImage(
-                data = resourceUri(R.drawable.red_rectangle),
-                modifier = Modifier.preferredSize(128.dp, 128.dp),
-                imageLoader = imageLoader,
-                onRequestCompleted = { latch.countDown() }
-            )
-        }
-
-        // Wait for the onRequestCompleted to release the latch
-        latch.await(5, TimeUnit.SECONDS)
-
-        // Verify that our eventListener was invoked
-        assertThat(eventListener.startCalled).isAtLeast(1)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -237,9 +184,9 @@ class CoilTest {
 
         composeTestRule.setContent {
             val resId = drawableResId.collectAsState()
-            CoilImage(
+            GlideImage(
                 data = resourceUri(resId.value),
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
+                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(GlideTestTags.Image),
                 onRequestCompleted = { loadCompleteSignal.offer(Unit) }
             )
         }
@@ -252,7 +199,7 @@ class CoilTest {
         }
 
         // Assert that the content is completely Red
-        composeTestRule.onNodeWithTag(CoilTestTags.Image)
+        composeTestRule.onNodeWithTag(GlideTestTags.Image)
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
             .assertIsDisplayed()
@@ -270,7 +217,7 @@ class CoilTest {
         }
 
         // Assert that the content is completely Blue
-        composeTestRule.onNodeWithTag(CoilTestTags.Image)
+        composeTestRule.onNodeWithTag(GlideTestTags.Image)
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
             .assertIsDisplayed()
@@ -289,9 +236,9 @@ class CoilTest {
 
         composeTestRule.setContent {
             val size = sizeFlow.collectAsState()
-            CoilImage(
+            GlideImage(
                 data = resourceUri(R.drawable.red_rectangle),
-                modifier = Modifier.preferredSize(size.value).testTag(CoilTestTags.Image),
+                modifier = Modifier.preferredSize(size.value).testTag(GlideTestTags.Image),
                 onRequestCompleted = { loadCompleteSignal.offer(Unit) }
             )
         }
@@ -319,9 +266,9 @@ class CoilTest {
         val latch = CountDownLatch(1)
 
         composeTestRule.setContent {
-            CoilImage(
+            GlideImage(
                 data = resourceUri(R.raw.sample),
-                modifier = Modifier.testTag(CoilTestTags.Image),
+                modifier = Modifier.testTag(GlideTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
         }
@@ -329,7 +276,7 @@ class CoilTest {
         // Wait for the onRequestCompleted to release the latch
         latch.await(5, TimeUnit.SECONDS)
 
-        composeTestRule.onNodeWithTag(CoilTestTags.Image)
+        composeTestRule.onNodeWithTag(GlideTestTags.Image)
             .assertWidthIsAtLeast(1.dp)
             .assertHeightIsAtLeast(1.dp)
             .assertIsDisplayed()
@@ -340,9 +287,9 @@ class CoilTest {
         val latch = CountDownLatch(1)
 
         composeTestRule.setContent {
-            CoilImage(
+            GlideImage(
                 data = server.url("/noimage"),
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
+                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(GlideTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
         }
@@ -351,7 +298,7 @@ class CoilTest {
         latch.await(5, TimeUnit.SECONDS)
 
         // Assert that the layout is in the tree and has the correct size
-        composeTestRule.onNodeWithTag(CoilTestTags.Image)
+        composeTestRule.onNodeWithTag(GlideTestTags.Image)
             .assertIsDisplayed()
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
@@ -363,7 +310,7 @@ class CoilTest {
         val states = ArrayList<ImageLoadState>()
 
         composeTestRule.setContent {
-            CoilImage(
+            GlideImage(
                 data = server.url("/noimage"),
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
                 // Disable any caches. If the item is in the cache, the fetch is
@@ -392,7 +339,7 @@ class CoilTest {
         val states = ArrayList<ImageLoadState>()
 
         composeTestRule.setContent {
-            CoilImage(
+            GlideImage(
                 data = server.url("/image"),
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
                 // Disable any caches. If the item is in the cache, the fetch is
@@ -421,9 +368,9 @@ class CoilTest {
         val latch = CountDownLatch(1)
 
         composeTestRule.setContent {
-            CoilImage(
+            GlideImage(
                 data = resourceUri(R.raw.sample),
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
+                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(GlideTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             ) { _ ->
                 // Return an Image which just draws cyan
@@ -435,7 +382,7 @@ class CoilTest {
         latch.await(5, TimeUnit.SECONDS)
 
         // Assert that the whole layout is drawn cyan
-        composeTestRule.onNodeWithTag(CoilTestTags.Image)
+        composeTestRule.onNodeWithTag(GlideTestTags.Image)
             .assertIsDisplayed()
             .captureToBitmap()
             .assertPixels { Color.Cyan }
@@ -452,7 +399,7 @@ class CoilTest {
             pauseDispatcher()
 
             composeTestRule.setContent {
-                CoilImage(
+                GlideImage(
                     request = ImageRequest.Builder(ContextAmbient.current)
                         .data(server.url("/image"))
                         .dispatcher(dispatcher)
@@ -486,13 +433,13 @@ class CoilTest {
         val latch = CountDownLatch(1)
 
         composeTestRule.setContent {
-            CoilImage(
+            GlideImage(
                 data = server.url("/noimage"),
                 error = {
                     // Return failure content which just draws red
                     Image(painter = ColorPainter(Color.Red))
                 },
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
+                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(GlideTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
         }
@@ -501,7 +448,7 @@ class CoilTest {
         latch.await(5, TimeUnit.SECONDS)
 
         // Assert that the whole layout is drawn red
-        composeTestRule.onNodeWithTag(CoilTestTags.Image)
+        composeTestRule.onNodeWithTag(GlideTestTags.Image)
             .assertIsDisplayed()
             .captureToBitmap()
             .assertPixels { Color.Red }

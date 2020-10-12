@@ -81,8 +81,6 @@ afterEvaluate {
 
 dependencies {
     api project(':imageloading-core')
-    api Libs.Coil.coil
-
     api Libs.glide
 
     // Temporary workaround (see above)

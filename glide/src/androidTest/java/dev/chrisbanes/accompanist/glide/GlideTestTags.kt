@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package dev.chrisbanes.accompanist.coil
+package dev.chrisbanes.accompanist.glide
 
-object CoilTestTags {
+object GlideTestTags {
     const val Image = "image"
 }

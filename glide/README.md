@@ -1,29 +1,29 @@
-# Jetpack Compose + Coil
+# Jetpack Compose + Glide
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/dev.chrisbanes.accompanist/accompanist-coil/badge.svg)](https://search.maven.org/search?q=g:dev.chrisbanes.accompanist)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/dev.chrisbanes.accompanist/accompanist-glide/badge.svg)](https://search.maven.org/search?q=g:dev.chrisbanes.accompanist)
 
-This library brings easy-to-use composable which can fetch and display images from external sources, such as network, using the [Coil][coil] image loading library.
+This library brings easy-to-use composable which can fetch and display images from external sources, such as network, using the [Glide][glide] image loading library.
 
-<img src="https://coil-kt.github.io/coil/logo.svg" width="480" alt="Coil logo">
+<img src="https://glide-kt.github.io/glide/logo.svg" width="480" alt="Glide logo">
 
-## `CoilImage()`
+## `GlideImage()`
 
-The primary API is via the `CoilImage()` functions. There are a number of function versions available.
+The primary API is via the `GlideImage()` functions. There are a number of function versions available.
 
 The simplest usage is like so:
 
 ```kotlin 
-CoilImage(
+GlideImage(
     data = "https://picsum.photos/300/300"
 )
 ```
 
-This loads the `data` passed in with [Coil][coil], and then displays the resulting image using the standard `Image` composable.
+This loads the `data` passed in with [Glide][glide], and then displays the resulting image using the standard `Image` composable.
 
-You can also customize the Coil [`ImageRequest`](https://coil-kt.github.io/coil/image_requests/) through the `requestBuilder` parameter. This allows usage of things like (but not limited to) transformations:
+You can also customize the Glide [`ImageRequest`](https://glide-kt.github.io/glide/image_requests/) through the `requestBuilder` parameter. This allows usage of things like (but not limited to) transformations:
 
 ```kotlin
-CoilImage(
+GlideImage(
     data = "https://picsum.photos/300/300",
     requestBuilder = {
         transformations(CircleCropTransformation())
@@ -34,7 +34,7 @@ CoilImage(
 It also provides optional content 'slots', allowing you to provide custom content to be displayed when the request is loading, and/or if the image request failed:
 
 ``` kotlin
-CoilImage(
+GlideImage(
     data = "https://picsum.photos/300/300",
     loading = {
         Box(Modifier.matchParentSize()) {
@@ -57,10 +57,10 @@ There are two ways to enable the animation:
 
 ### `fadeIn` parameter
 
-A `fadeIn: Boolean` parameter has been added to `CoilImage` (default: `false`). When enabled, a default fade-in animation will be used when the image is successfully loaded:
+A `fadeIn: Boolean` parameter has been added to `GlideImage` (default: `false`). When enabled, a default fade-in animation will be used when the image is successfully loaded:
 
 ``` kotlin
-CoilImage(
+GlideImage(
     data = "https://picsum.photos/300/300",
     fadeIn = true
 )
@@ -68,10 +68,10 @@ CoilImage(
 
 ## Custom content
 
-If you need more control over the animation, or you want to provide custom layout for the loaded image, you can use the `content` composable version of `CoilImage`:
+If you need more control over the animation, or you want to provide custom layout for the loaded image, you can use the `content` composable version of `GlideImage`:
 
 ``` kotlin
-CoilImage(
+GlideImage(
     data = "https://picsum.photos/300/300",
 ) { imageState ->
     when (imageState) {
@@ -91,7 +91,7 @@ CoilImage(
 
 ## GIFs
 
-Accompanist Coil supports GIFs through Coil's own GIF support. Follow the [setup instructions](https://coil-kt.github.io/coil/gifs/) and it should just work.
+Accompanist Glide supports GIFs through Glide's own GIF support. Follow the [setup instructions](https://glide-kt.github.io/glide/gifs/) and it should just work.
 
 ## Download
 
@@ -101,7 +101,7 @@ repositories {
 }
 
 dependencies {
-    implementation "dev.chrisbanes.accompanist:accompanist-coil:<version>"
+    implementation "dev.chrisbanes.accompanist:accompanist-glide:<version>"
 }
 ```
 
@@ -109,8 +109,8 @@ Snapshots of the development version are available in [Sonatype's `snapshots` re
 
 ### What's the goal of the library?
 
-Eventually the goal is to upstream all of this functionality back to [Coil][coil]. [Jetpack Compose][compose]'s development is currently moving very fast, which means that there are frequent API changes between releases. For now, it makes sense to keep this as a seperately released library to track the latest Compose release.
+Eventually the goal is to upstream all of this functionality back to [Glide][glide]. [Jetpack Compose][compose]'s development is currently moving very fast, which means that there are frequent API changes between releases. For now, it makes sense to keep this as a seperately released library to track the latest Compose release.
 
 [compose]: https://developer.android.com/jetpack/compose
-[snap]: https://oss.sonatype.org/content/repositories/snapshots/dev/chrisbanes/accompanist/accompanist-coil/
-[coil]: https://github.com/coil-kt/coil
+[snap]: https://oss.sonatype.org/content/repositories/snapshots/dev/chrisbanes/accompanist/accompanist-glide/
+[glide]: https://github.com/glide-kt/glide
