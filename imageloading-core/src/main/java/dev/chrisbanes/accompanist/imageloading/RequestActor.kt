@@ -85,7 +85,7 @@ internal class RequestActor<Param, Result>(
     /**
      * Send an input for processing by the [RequestActor].
      */
-    fun send(input: Param) {
+    fun send(input: Any?) {
         channel.offer(input)
     }
 }

@@ -40,7 +40,7 @@ import kotlinx.coroutines.flow.flow
  * which build upon this, such as the Coil library.
  *
  * The [executeRequest] parameters allows providing of a lambda to execute the 'image load'.
- * The [T] type and [request] parameter should be whatever primitive the library uses to
+ * The [R] type and [request] parameter should be whatever primitive the library uses to
  * model a request.
  *
  * @param request The request to execute.
@@ -56,12 +56,12 @@ import kotlinx.coroutines.flow.flow
  * @param content Content to be displayed for the given state.
  */
 @Composable
-fun <T : Any> ImageLoad(
-    request: T,
-    executeRequest: suspend (T) -> ImageLoadState,
+fun <R : Any, TR : Any> ImageLoad(
+    request: R,
+    executeRequest: suspend (TR) -> ImageLoadState,
     modifier: Modifier = Modifier,
     requestKey: Any = request,
-    transformRequestForSize: (T, IntSize) -> T? = { r, _ -> r },
+    transformRequestForSize: (R, IntSize) -> TR?,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
     content: @Composable (imageLoadState: ImageLoadState) -> Unit
