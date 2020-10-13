@@ -22,6 +22,10 @@ plugins {
     id 'org.jetbrains.dokka'
 }
 
+kotlin {
+    explicitApi()
+}
+
 android {
     compileSdkVersion 30
 
@@ -37,14 +41,7 @@ android {
 
     buildFeatures {
         buildConfig false
-
-        // We turn off the Compose feature for now, due to using Compose SNAPSHOTs where the
-        // Compose compiler artifact has changed artifact group/name.
-        // Instead we add the compiler manually below in the dependencies {}. Also see
-        // the root build.gradle for info on how to apply the plugin.
-        // TODO: remove this once we upgrade to an AGP version which uses the new artifact details
-
-        // compose true
+        compose true
     }
 
     composeOptions {
@@ -82,9 +79,6 @@ afterEvaluate {
 dependencies {
     api project(':imageloading-core')
     api Libs.Coil.coil
-
-    // Temporary workaround (see above)
-    kotlinCompilerPlugin Libs.AndroidX.Compose.compiler
 
     implementation Libs.AndroidX.coreKtx
     implementation Libs.AndroidX.Compose.runtime
