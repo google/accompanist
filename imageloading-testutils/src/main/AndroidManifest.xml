@@ -15,6 +15,22 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="dev.chrisbanes.accompanist.coil.test">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="dev.chrisbanes.accompanist.imageloading.test">
+
+    <uses-sdk android:targetSdkVersion="30" />
+
+    <!-- Needed for MockWebServer -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- usesCleartextTraffic=true because we use MockWebServer -->
+    <application
+        android:name=".TestApplication"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name="androidx.activity.ComponentActivity"
+            android:theme="@style/Theme.Test"
+            tools:replace="android:theme" />
+    </application>
 
 </manifest>

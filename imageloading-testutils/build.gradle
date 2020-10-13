@@ -22,10 +22,6 @@ plugins {
     id 'org.jetbrains.dokka'
 }
 
-kotlin {
-    explicitApi()
-}
-
 android {
     compileSdkVersion 30
 
@@ -57,7 +53,7 @@ android {
     }
 
     packagingOptions {
-        // Some of the Coil META-INF files conflict with coroutines-test. Exclude them to enable
+        // Certain libraries include licence files in their JARs. Exclude them to enable
         // our test APK to build (has no effect on our AARs)
         excludes += "/META-INF/AL2.0"
         excludes += "/META-INF/LGPL2.1"
@@ -70,15 +66,10 @@ android {
     }
 }
 
-afterEvaluate {
-    tasks.withType(org.jetbrains.dokka.gradle.DokkaTask).configureEach {
-        outputDirectory.set(rootProject.file('docs/api'))
-    }
-}
-
 dependencies {
-    api project(':imageloading-core')
-    api Libs.Coil.coil
+    implementation project(':imageloading-core')
+
+    implementation Libs.OkHttp.okhttp
 
     implementation Libs.AndroidX.coreKtx
     implementation Libs.AndroidX.Compose.runtime
@@ -87,23 +78,14 @@ dependencies {
     implementation Libs.Kotlin.stdlib
     implementation Libs.Coroutines.android
 
-    // ======================
-    // Test dependencies
-    // ======================
+    implementation Libs.junit
+    implementation Libs.truth
 
-    androidTestImplementation project(':imageloading-testutils')
+    api Libs.OkHttp.mockWebServer
+    implementation Libs.Coroutines.test
 
-    androidTestImplementation Libs.junit
-    androidTestImplementation Libs.truth
-
-    androidTestImplementation Libs.OkHttp.mockWebServer
-
-    androidTestImplementation Libs.Coroutines.test
-
-    androidTestImplementation Libs.AndroidX.Compose.test
-    androidTestImplementation Libs.AndroidX.Compose.ui
-    androidTestImplementation Libs.AndroidX.Test.rules
-    androidTestImplementation Libs.AndroidX.Test.runner
+    implementation Libs.AndroidX.Compose.test
+    implementation Libs.AndroidX.Compose.ui
+    implementation Libs.AndroidX.Test.rules
+    implementation Libs.AndroidX.Test.runner
 }
-
-apply plugin: "com.vanniktech.maven.publish"

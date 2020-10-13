@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package dev.chrisbanes.accompanist.coil
+package dev.chrisbanes.accompanist.imageloading.test
 
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import android.os.StrictMode
 
-class CoilTestApplication : Application() {
+class TestApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 

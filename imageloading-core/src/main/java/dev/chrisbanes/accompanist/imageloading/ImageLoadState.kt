@@ -51,6 +51,6 @@ sealed class ImageLoadState {
      */
     data class Error(
         val painter: Painter? = null,
-        val throwable: Throwable? = null
+        val throwable: Throwable
     ) : ImageLoadState()
 }

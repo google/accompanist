@@ -27,7 +27,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.test.filters.LargeTest
 import androidx.test.filters.SdkSuppress
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.ui.test.assertHeightIsAtLeast
 import androidx.ui.test.assertHeightIsEqualTo
 import androidx.ui.test.assertIsDisplayed
@@ -43,6 +42,7 @@ import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import dev.chrisbanes.accompanist.imageloading.ImageLoadState
+import dev.chrisbanes.accompanist.imageloading.test.ImageMockWebServer
 import dev.chrisbanes.accompanist.picasso.test.R
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -50,11 +50,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.withTimeoutOrNull
-import okhttp3.mockwebserver.Dispatcher
-import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
-import okhttp3.mockwebserver.RecordedRequest
-import okio.Buffer
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -71,7 +66,7 @@ class PicassoTest {
     val composeTestRule = createComposeRule()
 
     // Our MockWebServer. We use a response delay to simulate real-world conditions
-    private val server = testWebServer(responseDelayMs = 200)
+    private val server = ImageMockWebServer(responseDelayMs = 200)
 
     @Before
     fun setup() {
@@ -421,37 +416,5 @@ class PicassoTest {
             .assertIsDisplayed()
             .captureToBitmap()
             .assertPixels { Color.Red }
-    }
-}
-
-/**
- * [MockWebServer] which returns a valid response at the path `/image`, and a 404 for anything else.
- * We add a small delay to simulate 'real-world' network conditions.
- */
-private fun testWebServer(responseDelayMs: Long = 0): MockWebServer {
-    val dispatcher = object : Dispatcher() {
-        override fun dispatch(request: RecordedRequest): MockResponse = when (request.path) {
-            "/image" -> {
-                val res = InstrumentationRegistry.getInstrumentation().targetContext.resources
-
-                // Load the image into a Buffer
-                val imageBuffer = Buffer().apply {
-                    readFrom(res.openRawResource(R.raw.sample))
-                }
-
-                MockResponse()
-                    .setHeadersDelay(responseDelayMs, TimeUnit.MILLISECONDS)
-                    .addHeader("Content-Type", "image/jpeg")
-                    .setBody(imageBuffer)
-            }
-            else ->
-                MockResponse()
-                    .setHeadersDelay(responseDelayMs, TimeUnit.MILLISECONDS)
-                    .setResponseCode(404)
-        }
-    }
-
-    return MockWebServer().apply {
-        setDispatcher(dispatcher)
     }
 }

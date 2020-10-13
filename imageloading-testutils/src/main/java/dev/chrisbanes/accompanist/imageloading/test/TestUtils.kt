@@ -14,9 +14,14 @@
  * limitations under the License.
  */
 
-include ':coil'
-include ':picasso'
-include ':glide'
-include ':imageloading-core'
-include ':imageloading-testutils'
-include ':sample'
+package dev.chrisbanes.accompanist.imageloading.test
+
+import android.content.ContentResolver
+import android.net.Uri
+import androidx.core.net.toUri
+import androidx.test.platform.app.InstrumentationRegistry
+
+fun resourceUri(id: Int): Uri {
+    val packageName = InstrumentationRegistry.getInstrumentation().targetContext.packageName
+    return "${ContentResolver.SCHEME_ANDROID_RESOURCE}://$packageName/$id".toUri()
+}

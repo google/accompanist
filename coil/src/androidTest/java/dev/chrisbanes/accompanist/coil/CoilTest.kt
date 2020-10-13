@@ -16,8 +16,6 @@
 
 package dev.chrisbanes.accompanist.coil
 
-import android.content.ContentResolver
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.preferredSize
@@ -28,7 +26,6 @@ import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import androidx.test.filters.LargeTest
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
@@ -52,6 +49,8 @@ import coil.request.ImageRequest
 import com.google.common.truth.Truth.assertThat
 import dev.chrisbanes.accompanist.coil.test.R
 import dev.chrisbanes.accompanist.imageloading.ImageLoadState
+import dev.chrisbanes.accompanist.imageloading.test.ImageMockWebServer
+import dev.chrisbanes.accompanist.imageloading.test.resourceUri
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -59,11 +58,6 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.withTimeoutOrNull
-import okhttp3.mockwebserver.Dispatcher
-import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
-import okhttp3.mockwebserver.RecordedRequest
-import okio.Buffer
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -80,7 +74,7 @@ class CoilTest {
     val composeTestRule = createComposeRule()
 
     // Our MockWebServer. We use a response delay to simulate real-world conditions
-    private val server = coilTestWebServer(responseDelayMs = 200)
+    private val server = ImageMockWebServer(responseDelayMs = 200)
 
     @Before
     fun setup() {
@@ -519,41 +513,4 @@ private fun noCacheImageLoader(): ImageLoader {
         .memoryCachePolicy(CachePolicy.DISABLED)
         .diskCachePolicy(CachePolicy.DISABLED)
         .build()
-}
-
-private fun resourceUri(id: Int): Uri {
-    val packageName = InstrumentationRegistry.getInstrumentation().targetContext.packageName
-    return "${ContentResolver.SCHEME_ANDROID_RESOURCE}://$packageName/$id".toUri()
-}
-
-/**
- * [MockWebServer] which returns a valid response at the path `/image`, and a 404 for anything else.
- * We add a small delay to simulate 'real-world' network conditions.
- */
-private fun coilTestWebServer(responseDelayMs: Long = 0): MockWebServer {
-    val dispatcher = object : Dispatcher() {
-        override fun dispatch(request: RecordedRequest): MockResponse = when (request.path) {
-            "/image" -> {
-                val res = InstrumentationRegistry.getInstrumentation().targetContext.resources
-
-                // Load the image into a Buffer
-                val imageBuffer = Buffer().apply {
-                    readFrom(res.openRawResource(R.raw.sample))
-                }
-
-                MockResponse()
-                    .setHeadersDelay(responseDelayMs, TimeUnit.MILLISECONDS)
-                    .addHeader("Content-Type", "image/jpeg")
-                    .setBody(imageBuffer)
-            }
-            else ->
-                MockResponse()
-                    .setHeadersDelay(responseDelayMs, TimeUnit.MILLISECONDS)
-                    .setResponseCode(404)
-        }
-    }
-
-    return MockWebServer().apply {
-        setDispatcher(dispatcher)
-    }
 }

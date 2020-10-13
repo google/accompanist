@@ -455,17 +455,6 @@ class CoilTest {
     }
 }
 
-/**
- * [ImageLoader] which disables all caching
- */
-private fun noCacheImageLoader(): ImageLoader {
-    val ctx = InstrumentationRegistry.getInstrumentation().targetContext
-    return ImageLoader.Builder(ctx)
-        .memoryCachePolicy(CachePolicy.DISABLED)
-        .diskCachePolicy(CachePolicy.DISABLED)
-        .build()
-}
-
 private fun resourceUri(id: Int): Uri {
     val packageName = InstrumentationRegistry.getInstrumentation().targetContext.packageName
     return "${ContentResolver.SCHEME_ANDROID_RESOURCE}://$packageName/$id".toUri()
