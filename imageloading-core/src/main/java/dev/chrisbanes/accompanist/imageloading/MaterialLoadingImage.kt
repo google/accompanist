@@ -121,11 +121,11 @@ fun MaterialLoadingImage(
 ) {
     Image(
         painter = if (fadeInEnabled) {
-            val animatedPainer = remember(painter) {
+            val animatedPainter = remember(painter) {
                 MaterialLoadingPainterWrapper(painter, fadeInDurationMs, clock).also { it.start() }
             }
             // If the animation painter is running, return use it, else use to the painter
-            if (!animatedPainer.isFinished) animatedPainer else painter
+            if (!animatedPainter.isFinished) animatedPainter else painter
         } else {
             // If the fade is disabled, just use the standard ImagePainter
             painter
