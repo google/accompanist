@@ -127,7 +127,16 @@ fun PicassoImage(
                 // in the Coil request
                 size.width < 0 || size.height < 0 -> r
                 // If we have a non-zero size, we can modify the request to include the size
-                size != IntSize.Zero -> r.resize(size.width, size.height).onlyScaleDown()
+                size != IntSize.Zero -> {
+                    // We use centerInside() here, otherwise Picasso will resize the image ignoring
+                    // aspect ratio. centerInside() isn't great, since it means that the image
+                    // could be loaded smaller than the composable, only to be scaled up again by
+                    // the chosen ContentScale. Unfortunately there's not much else we can do.
+                    // See https://github.com/chrisbanes/accompanist/issues/118
+                    r.resize(size.width, size.height)
+                        .centerInside()
+                        .onlyScaleDown()
+                }
                 // Otherwise we have a zero size, so no point executing a request
                 else -> null
             }
