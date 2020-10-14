@@ -2,6 +2,7 @@
 
 DOCS_ROOT=docs-gen
 
+[ -d $DOCS_ROOT ] && rm -r $DOCS_ROOT
 mkdir $DOCS_ROOT
 
 # Work around Dokka failing to link against external links generated from 'gfm' sources.
@@ -17,7 +18,7 @@ sed -i.bak 's/$dokka.linkExtension:md/$dokka.linkExtension:html/g' package-list-
 rm package-list-coil-base
 
 # Copy over any static + API docs to our $DOCS_ROOT
-cp -r docs/ $DOCS_ROOT/
+cp -R docs/* $DOCS_ROOT
 
 cp README.md $DOCS_ROOT/index.md
 cp CONTRIBUTING.md $DOCS_ROOT/contributing.md
