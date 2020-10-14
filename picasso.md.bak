@@ -20,7 +20,7 @@ PicassoImage(
 
 This loads the `data` passed in with [Picasso][Picasso], and then displays the resulting image using the standard `Image` composable.
 
-You can also customize the Coil Picasso [`RequestCreator`](https://square.github.io/picasso/2.x/picasso/com/squareup/picasso/RequestCreator.html) through the `requestBuilder` parameter. This allows usage of things like (but not limited to) transformations:
+You can also customize the Picasso [`RequestCreator`](https://square.github.io/picasso/2.x/picasso/com/squareup/picasso/RequestCreator.html) through the `requestBuilder` parameter. This allows usage of things like (but not limited to) transformations:
 
 ```kotlin
 PicassoImage(

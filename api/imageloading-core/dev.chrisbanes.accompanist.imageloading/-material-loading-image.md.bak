@@ -4,7 +4,7 @@
 
 # MaterialLoadingImage  
   
-  
+Brief description  
 
 
 A wrapper around Image which implements the [Material Image Loading](https://material.io/archive/guidelines/patterns/loading-images.html) pattern.
@@ -34,7 +34,7 @@ fun [MaterialLoadingImage](-material-loading-image.md)(asset: ImageAsset, modifi
 
 
   
-  
+Brief description  
 
 
 A wrapper around Image which implements the [Material Image Loading](https://material.io/archive/guidelines/patterns/loading-images.html) pattern.
@@ -64,7 +64,7 @@ fun [MaterialLoadingImage](-material-loading-image.md)(painter: Painter, modifie
 
 
   
-  
+Brief description  
 
 
 A wrapper around Image which implements the [Material Image Loading](https://material.io/archive/guidelines/patterns/loading-images.html) pattern.

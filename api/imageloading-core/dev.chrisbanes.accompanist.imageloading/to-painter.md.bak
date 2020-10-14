@@ -4,7 +4,7 @@
 
 # toPainter  
   
-  
+Brief description  
 
 
 Allows wrapping of a [Drawable](https://developer.android.com/reference/kotlin/android/graphics/drawable/Drawable.html) into a Painter, attempting to un-wrap the drawable contents and use Compose primitives where possible.
