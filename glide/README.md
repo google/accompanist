@@ -4,7 +4,7 @@
 
 This library brings easy-to-use composable which can fetch and display images from external sources, such as network, using the [Glide][glide] image loading library.
 
-<img src="https://glide-kt.github.io/glide/logo.svg" width="480" alt="Glide logo">
+<img src="https://github.com/bumptech/glide/blob/master/static/glide_logo.png?raw=true" width="480" alt="Glide logo">
 
 ## `GlideImage()`
 
@@ -20,13 +20,16 @@ GlideImage(
 
 This loads the `data` passed in with [Glide][glide], and then displays the resulting image using the standard `Image` composable.
 
-You can also customize the Glide [`ImageRequest`](https://glide-kt.github.io/glide/image_requests/) through the `requestBuilder` parameter. This allows usage of things like (but not limited to) transformations:
+You can also customize the Glide [`RequestBuilder`](https://bumptech.github.io/glide/javadocs/4110/com/bumptech/glide/RequestBuilder.html) through the `requestBuilder` parameter. This allows usage of things like (but not limited to) transformations:
 
 ```kotlin
 GlideImage(
     data = "https://picsum.photos/300/300",
     requestBuilder = {
-        transformations(CircleCropTransformation())
+        val options = RequestOptions()
+        options.centerCrop()
+
+        apply(options)
     },
 )
 ```
@@ -91,7 +94,7 @@ GlideImage(
 
 ## GIFs
 
-Accompanist Glide supports GIFs through Glide's own GIF support. Follow the [setup instructions](https://glide-kt.github.io/glide/gifs/) and it should just work.
+Accompanist Glide supports GIFs through Glide's own GIF support. There's nothing you need to do, it should just work.
 
 ## Download
 
@@ -107,10 +110,6 @@ dependencies {
 
 Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap]. These are updated on every commit.
 
-### What's the goal of the library?
-
-Eventually the goal is to upstream all of this functionality back to [Glide][glide]. [Jetpack Compose][compose]'s development is currently moving very fast, which means that there are frequent API changes between releases. For now, it makes sense to keep this as a seperately released library to track the latest Compose release.
-
 [compose]: https://developer.android.com/jetpack/compose
 [snap]: https://oss.sonatype.org/content/repositories/snapshots/dev/chrisbanes/accompanist/accompanist-glide/
-[glide]: https://github.com/glide-kt/glide
+[glide]: https://bumptech.github.io/glide/
