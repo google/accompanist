@@ -33,8 +33,9 @@ import androidx.compose.ui.unit.IntSize
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.RequestManager
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import dev.chrisbanes.accompanist.imageloading.DataSource
 import dev.chrisbanes.accompanist.imageloading.DefaultRefetchOnSizeChangeLambda
 import dev.chrisbanes.accompanist.imageloading.EmptyRequestCompleteLambda
@@ -44,7 +45,6 @@ import dev.chrisbanes.accompanist.imageloading.MaterialLoadingImage
 import dev.chrisbanes.accompanist.imageloading.toPainter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlin.IllegalArgumentException
 
 /**
  * Creates a composable that will attempt to load the given [data] using [Glide], and provides
@@ -86,49 +86,7 @@ fun GlideImage(
     ImageLoad(
         request = requestManager.load(data),
         requestKey = data, // Glide RequestBuilder doesn't support equality so we use the data
-        executeRequest = { (r, size) ->
-            suspendCancellableCoroutine { cont ->
-                val target = object : CustomTarget<Drawable>(size.width, size.height) {
-                    override fun onResourceReady(
-                        drawable: Drawable,
-                        transition: Transition<in Drawable>?
-                    ) {
-                        val result = ImageLoadState.Success(
-                            painter = drawable.toPainter(),
-                            // TODO: Work out how Glide reports this
-                            source = DataSource.NETWORK
-                        )
-
-                        cont.resume(result) {
-                            // TODO
-                        }
-                    }
-
-                    override fun onLoadFailed(errorDrawable: Drawable?) {
-                        val result = ImageLoadState.Error(
-                            painter = errorDrawable?.toPainter(),
-                            throwable = IllegalArgumentException("Error while loading $data")
-                        )
-
-                        cont.resume(result) {
-                            // TODO
-                        }
-                    }
-
-                    override fun onLoadCleared(drawable: Drawable?) {
-                        // TODO
-                    }
-                }
-
-                // Start the image request into the target
-                r.into(target)
-
-                // If we're cancelled, clear the request fron Glide
-                cont.invokeOnCancellation {
-                    requestManager.clear(target)
-                }
-            }
-        },
+        executeRequest = { (r, size) -> requestManager.execute(r, size) },
         transformRequestForSize = { r, size ->
             Pair(requestBuilder?.invoke(r, size) ?: r, size)
         },
@@ -220,24 +178,81 @@ fun GlideImage(
     }
 }
 
-// private fun ImageResult.toResult(): ImageLoadState = when (this) {
-//    is coil.request.SuccessResult -> {
-//        ImageLoadState.Success(
-//            painter = drawable.toPainter(),
-//            source = metadata.dataSource.toDataSource()
-//        )
-//    }
-//    is coil.request.ErrorResult -> {
-//        ImageLoadState.Error(
-//            painter = drawable?.toPainter(),
-//            throwable = throwable
-//        )
-//    }
-// }
-//
-// private fun coil.decode.DataSource.toDataSource(): DataSource = when (this) {
-//    coil.decode.DataSource.NETWORK -> DataSource.NETWORK
-//    coil.decode.DataSource.MEMORY -> DataSource.MEMORY
-//    coil.decode.DataSource.MEMORY_CACHE -> DataSource.MEMORY
-//    coil.decode.DataSource.DISK -> DataSource.DISK
-// }
+/**
+ * A Coroutines wrapper around [Glide]
+ */
+@OptIn(ExperimentalCoroutinesApi::class)
+private suspend fun RequestManager.execute(
+    request: RequestBuilder<Drawable>,
+    size: IntSize
+): ImageLoadState = suspendCancellableCoroutine { cont ->
+    var failException: Throwable? = null
+
+    val target = object : EmptyCustomTarget(size.width, size.height) {
+        override fun onLoadFailed(errorDrawable: Drawable?) {
+            val result = ImageLoadState.Error(
+                painter = errorDrawable?.toPainter(),
+                throwable = failException
+                    ?: IllegalArgumentException("Error while loading $request")
+            )
+
+            cont.resume(result) {
+                // Clear any resources from the target if cancelled
+                clear(this)
+            }
+        }
+    }
+
+    val listener = object : RequestListener<Drawable> {
+        override fun onResourceReady(
+            drawable: Drawable,
+            model: Any,
+            target: Target<Drawable>,
+            dataSource: com.bumptech.glide.load.DataSource,
+            isFirstResource: Boolean
+        ): Boolean {
+            val result = ImageLoadState.Success(
+                painter = drawable.toPainter(),
+                source = dataSource.toDataSource()
+            )
+
+            cont.resume(result) {
+                // Clear any resources from the target if cancelled
+                clear(target)
+            }
+
+            // Return true so that the target doesn't receive the drawable
+            return true
+        }
+
+        override fun onLoadFailed(
+            e: GlideException?,
+            model: Any,
+            target: Target<Drawable>,
+            isFirstResource: Boolean
+        ): Boolean {
+            // Glide only passes the exception to the listener, so we store it
+            // for the target to use
+            failException = e
+            // Return false, allowing the target to receive it's onLoadFailed.
+            // This is needed so we can use any errorDrawable
+            return false
+        }
+    }
+
+    // Start the image request into the target
+    request.addListener(listener).into(target)
+
+    // If we're cancelled, clear the request from Glide
+    cont.invokeOnCancellation {
+        clear(target)
+    }
+}
+
+private fun com.bumptech.glide.load.DataSource.toDataSource(): DataSource = when (this) {
+    com.bumptech.glide.load.DataSource.LOCAL -> DataSource.DISK
+    com.bumptech.glide.load.DataSource.REMOTE -> DataSource.NETWORK
+    com.bumptech.glide.load.DataSource.DATA_DISK_CACHE -> DataSource.DISK
+    com.bumptech.glide.load.DataSource.RESOURCE_DISK_CACHE -> DataSource.DISK
+    com.bumptech.glide.load.DataSource.MEMORY_CACHE -> DataSource.MEMORY
+}
