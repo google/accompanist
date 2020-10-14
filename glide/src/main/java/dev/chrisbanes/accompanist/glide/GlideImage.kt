@@ -85,6 +85,7 @@ fun GlideImage(
     @OptIn(ExperimentalCoroutinesApi::class)
     ImageLoad(
         request = requestManager.load(data),
+        requestKey = data, // Glide RequestBuilder doesn't support equality so we use the data
         executeRequest = { (r, size) ->
             suspendCancellableCoroutine { cont ->
                 val target = object : CustomTarget<Drawable>(size.width, size.height) {

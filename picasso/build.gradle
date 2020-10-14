@@ -99,8 +99,6 @@ dependencies {
     androidTestImplementation Libs.junit
     androidTestImplementation Libs.truth
 
-    androidTestImplementation Libs.OkHttp.mockWebServer
-
     androidTestImplementation Libs.AndroidX.Compose.test
     androidTestImplementation Libs.AndroidX.Compose.ui
     androidTestImplementation Libs.AndroidX.Test.rules

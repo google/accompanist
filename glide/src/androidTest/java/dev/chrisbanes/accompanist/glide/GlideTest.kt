@@ -16,9 +16,7 @@
 
 package dev.chrisbanes.accompanist.glide
 
-import android.content.ContentResolver
 import android.graphics.drawable.Drawable
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.preferredSize
@@ -26,10 +24,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
-import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import androidx.test.filters.LargeTest
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
@@ -43,6 +39,7 @@ import androidx.ui.test.captureToBitmap
 import androidx.ui.test.createComposeRule
 import androidx.ui.test.onNodeWithTag
 import androidx.ui.test.onNodeWithText
+import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
@@ -50,22 +47,16 @@ import com.bumptech.glide.request.target.Target
 import com.google.common.truth.Truth.assertThat
 import dev.chrisbanes.accompanist.glide.test.R
 import dev.chrisbanes.accompanist.imageloading.ImageLoadState
+import dev.chrisbanes.accompanist.imageloading.test.ImageMockWebServer
+import dev.chrisbanes.accompanist.imageloading.test.resourceUri
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.withTimeoutOrNull
-import okhttp3.mockwebserver.Dispatcher
-import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
-import okhttp3.mockwebserver.RecordedRequest
-import okio.Buffer
 import org.junit.After
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -75,12 +66,12 @@ import java.util.concurrent.TimeUnit
 
 @LargeTest
 @RunWith(JUnit4::class)
-class CoilTest {
+class GlideTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
     // Our MockWebServer. We use a response delay to simulate real-world conditions
-    private val server = coilTestWebServer(responseDelayMs = 200)
+    private val server = ImageMockWebServer(responseDelayMs = 200)
 
     @Before
     fun setup() {
@@ -95,23 +86,36 @@ class CoilTest {
     }
 
     @Test
-    fun onRequestCompleted_fromBuilder() {
+    fun onRequestCompleted() {
         val results = ArrayList<ImageLoadState>()
         val latch = CountDownLatch(1)
 
         composeTestRule.setContent {
             GlideImage(
-                data = resourceUri(R.raw.sample),
+                data = server.url("/image").toString(),
                 requestBuilder = {
-                    this.listener(object : RequestListener<Drawable> {
-                        override fun onLoadFailed(p0: GlideException?, p1: Any?, p2: Target<Drawable>?, p3: Boolean): Boolean {
+                    listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(
+                            exception: GlideException?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            isFirstResource: Boolean
+                        ): Boolean {
                             latch.countDown()
-                            return true
+                            // False so that Glide still invokes the Target
+                            return false
                         }
 
-                        override fun onResourceReady(p0: Drawable?, p1: Any?, p2: Target<Drawable>?, p3: DataSource?, p4: Boolean): Boolean {
+                        override fun onResourceReady(
+                            resource: Drawable?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            source: DataSource?,
+                            isFirstResource: Boolean
+                        ): Boolean {
                             latch.countDown()
-                            return true
+                            // False so that Glide still invokes the Target
+                            return false
                         }
                     })
                 },
@@ -120,7 +124,7 @@ class CoilTest {
             )
         }
 
-        // Wait for the Coil request listener to release the latch
+        // Wait for the Glide request listener to release the latch
         latch.await(5, TimeUnit.SECONDS)
 
         composeTestRule.runOnIdle {
@@ -136,7 +140,7 @@ class CoilTest {
 
         composeTestRule.setContent {
             GlideImage(
-                data = server.url("/image"),
+                data = server.url("/image").toString(),
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(GlideTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
@@ -180,12 +184,12 @@ class CoilTest {
     @SdkSuppress(minSdkVersion = 26) // captureToBitmap is SDK 26+
     fun basicLoad_switchData() {
         val loadCompleteSignal = Channel<Unit>(Channel.UNLIMITED)
-        val drawableResId = MutableStateFlow(R.drawable.red_rectangle)
+        val data = MutableStateFlow(server.url("/red"))
 
         composeTestRule.setContent {
-            val resId = drawableResId.collectAsState()
+            val resId = data.collectAsState()
             GlideImage(
-                data = resourceUri(resId.value),
+                data = resId.value.toString(),
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(GlideTestTags.Image),
                 onRequestCompleted = { loadCompleteSignal.offer(Unit) }
             )
@@ -207,7 +211,7 @@ class CoilTest {
             .assertPixels { Color.Red }
 
         // Now switch the data URI to the blue drawable
-        drawableResId.value = R.drawable.blue_rectangle
+        data.value = server.url("/blue")
 
         // Await the second load
         runBlocking {
@@ -231,21 +235,22 @@ class CoilTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun basicLoad_changeSize() {
-        val loadCompleteSignal = Channel<Unit>(Channel.UNLIMITED)
+        val loadCompleteSignal = Channel<ImageLoadState>(Channel.UNLIMITED)
         val sizeFlow = MutableStateFlow(128.dp)
 
         composeTestRule.setContent {
             val size = sizeFlow.collectAsState()
             GlideImage(
-                data = resourceUri(R.drawable.red_rectangle),
+                data = server.url("/red").toString(),
                 modifier = Modifier.preferredSize(size.value).testTag(GlideTestTags.Image),
-                onRequestCompleted = { loadCompleteSignal.offer(Unit) }
+                onRequestCompleted = { loadCompleteSignal.offer(it) }
             )
         }
 
         // Await the first load
         runBlocking {
-            loadCompleteSignal.receive()
+            assertThat(loadCompleteSignal.receive())
+                .isInstanceOf(ImageLoadState.Success::class.java)
         }
 
         // Now change the size
@@ -267,7 +272,7 @@ class CoilTest {
 
         composeTestRule.setContent {
             GlideImage(
-                data = resourceUri(R.raw.sample),
+                data = server.url("/image").toString(),
                 modifier = Modifier.testTag(GlideTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
@@ -288,7 +293,7 @@ class CoilTest {
 
         composeTestRule.setContent {
             GlideImage(
-                data = server.url("/noimage"),
+                data = server.url("/noimage").toString(),
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(GlideTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
@@ -311,11 +316,13 @@ class CoilTest {
 
         composeTestRule.setContent {
             GlideImage(
-                data = server.url("/noimage"),
+                data = server.url("/noimage").toString(),
+                requestBuilder = {
+                    // Disable memory cache. If the item is in the cache, the fetch is
+                    // synchronous and the dispatcher pause has no effect
+                    skipMemoryCache(true)
+                },
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
-                // Disable any caches. If the item is in the cache, the fetch is
-                // synchronous which means the Loading state is skipped
-                imageLoader = noCacheImageLoader(),
                 onRequestCompleted = { latch.countDown() }
             ) { state ->
                 states.add(state)
@@ -340,11 +347,13 @@ class CoilTest {
 
         composeTestRule.setContent {
             GlideImage(
-                data = server.url("/image"),
+                data = server.url("/image").toString(),
+                requestBuilder = {
+                    // Disable memory cache. If the item is in the cache, the fetch is
+                    // synchronous and the dispatcher pause has no effect
+                    skipMemoryCache(true)
+                },
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
-                // Disable any caches. If the item is in the cache, the fetch is
-                // synchronous which means the Loading state is skipped
-                imageLoader = noCacheImageLoader(),
                 onRequestCompleted = { latch.countDown() }
             ) { state ->
                 states.add(state)
@@ -369,7 +378,7 @@ class CoilTest {
 
         composeTestRule.setContent {
             GlideImage(
-                data = resourceUri(R.raw.sample),
+                data = server.url("/image").toString(),
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(GlideTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             ) { _ ->
@@ -388,37 +397,35 @@ class CoilTest {
             .assertPixels { Color.Cyan }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    @Ignore("Flakey: https://github.com/chrisbanes/accompanist/issues/105")
     fun loading_slot() {
-        val dispatcher = TestCoroutineDispatcher()
         val loadLatch = CountDownLatch(1)
 
-        dispatcher.runBlockingTest {
-            pauseDispatcher()
+        val glide = Glide.with(InstrumentationRegistry.getInstrumentation().targetContext)
 
-            composeTestRule.setContent {
-                GlideImage(
-                    request = ImageRequest.Builder(ContextAmbient.current)
-                        .data(server.url("/image"))
-                        .dispatcher(dispatcher)
-                        .build(),
-                    modifier = Modifier.preferredSize(128.dp, 128.dp),
+        // Pause all requests so that the request doesn't complete
+        glide.pauseAllRequests()
+
+        composeTestRule.setContent {
+            GlideImage(
+                data = server.url("/image").toString(),
+                requestManager = glide,
+                requestBuilder = {
                     // Disable memory cache. If the item is in the cache, the fetch is
                     // synchronous and the dispatcher pause has no effect
-                    imageLoader = noCacheImageLoader(),
-                    loading = { Text(text = "Loading") },
-                    onRequestCompleted = { loadLatch.countDown() }
-                )
-            }
-
-            // Assert that the loading component is displayed
-            composeTestRule.onNodeWithText("Loading").assertIsDisplayed()
-
-            // Now resume the dispatcher to start the Coil request
-            dispatcher.resumeDispatcher()
+                    skipMemoryCache(true)
+                },
+                modifier = Modifier.preferredSize(128.dp, 128.dp),
+                loading = { Text(text = "Loading") },
+                onRequestCompleted = { loadLatch.countDown() }
+            )
         }
+
+        // Assert that the loading component is displayed
+        composeTestRule.onNodeWithText("Loading").assertIsDisplayed()
+
+        // Now resume all requests
+        glide.resumeRequests()
 
         // We now wait for the request to complete
         loadLatch.await(5, TimeUnit.SECONDS)
@@ -434,7 +441,7 @@ class CoilTest {
 
         composeTestRule.setContent {
             GlideImage(
-                data = server.url("/noimage"),
+                data = server.url("/noimage").toString(),
                 error = {
                     // Return failure content which just draws red
                     Image(painter = ColorPainter(Color.Red))
@@ -452,42 +459,5 @@ class CoilTest {
             .assertIsDisplayed()
             .captureToBitmap()
             .assertPixels { Color.Red }
-    }
-}
-
-private fun resourceUri(id: Int): Uri {
-    val packageName = InstrumentationRegistry.getInstrumentation().targetContext.packageName
-    return "${ContentResolver.SCHEME_ANDROID_RESOURCE}://$packageName/$id".toUri()
-}
-
-/**
- * [MockWebServer] which returns a valid response at the path `/image`, and a 404 for anything else.
- * We add a small delay to simulate 'real-world' network conditions.
- */
-private fun coilTestWebServer(responseDelayMs: Long = 0): MockWebServer {
-    val dispatcher = object : Dispatcher() {
-        override fun dispatch(request: RecordedRequest): MockResponse = when (request.path) {
-            "/image" -> {
-                val res = InstrumentationRegistry.getInstrumentation().targetContext.resources
-
-                // Load the image into a Buffer
-                val imageBuffer = Buffer().apply {
-                    readFrom(res.openRawResource(R.raw.sample))
-                }
-
-                MockResponse()
-                    .setHeadersDelay(responseDelayMs, TimeUnit.MILLISECONDS)
-                    .addHeader("Content-Type", "image/jpeg")
-                    .setBody(imageBuffer)
-            }
-            else ->
-                MockResponse()
-                    .setHeadersDelay(responseDelayMs, TimeUnit.MILLISECONDS)
-                    .setResponseCode(404)
-        }
-    }
-
-    return MockWebServer().apply {
-        setDispatcher(dispatcher)
     }
 }

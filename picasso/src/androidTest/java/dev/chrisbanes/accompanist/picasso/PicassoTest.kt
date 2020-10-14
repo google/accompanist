@@ -130,10 +130,10 @@ class PicassoTest {
     @SdkSuppress(minSdkVersion = 26) // captureToBitmap is SDK 26+
     fun basicLoad_switchData() {
         val loadCompleteSignal = Channel<Unit>(Channel.UNLIMITED)
-        val drawableResId = MutableStateFlow(R.drawable.red_rectangle)
+        val data = MutableStateFlow(server.url("/red"))
 
         composeTestRule.setContent {
-            val resId = drawableResId.collectAsState()
+            val resId = data.collectAsState()
             PicassoImage(
                 data = resId.value,
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(TestTags.Image),
@@ -157,7 +157,7 @@ class PicassoTest {
             .assertPixels { Color.Red }
 
         // Now switch the data URI to the blue drawable
-        drawableResId.value = R.drawable.blue_rectangle
+        data.value = server.url("/blue")
 
         // Await the second load
         runBlocking {
@@ -187,7 +187,7 @@ class PicassoTest {
         composeTestRule.setContent {
             val size = sizeFlow.collectAsState()
             PicassoImage(
-                data = R.drawable.red_rectangle,
+                data = server.url("/red"),
                 modifier = Modifier.preferredSize(size.value).testTag(TestTags.Image),
                 onRequestCompleted = { loadCompleteSignal.offer(it) }
             )
@@ -195,14 +195,7 @@ class PicassoTest {
 
         // Await the first load
         runBlocking {
-
-            val result = loadCompleteSignal.receive()
-
-            if (result is ImageLoadState.Error) {
-                throw result.throwable
-            }
-
-            assertThat(result)
+            assertThat(loadCompleteSignal.receive())
                 .isInstanceOf(ImageLoadState.Success::class.java)
         }
 
@@ -225,7 +218,7 @@ class PicassoTest {
 
         composeTestRule.setContent {
             PicassoImage(
-                data = R.raw.sample,
+                data = server.url("/image"),
                 modifier = Modifier.testTag(TestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
@@ -333,7 +326,7 @@ class PicassoTest {
 
         composeTestRule.setContent {
             PicassoImage(
-                data = R.raw.sample,
+                data = server.url("/image"),
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(TestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             ) { _ ->

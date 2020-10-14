@@ -96,7 +96,7 @@ class CoilTest {
         composeTestRule.setContent {
             CoilImage(
                 request = ImageRequest.Builder(ContextAmbient.current)
-                    .data(resourceUri(R.raw.sample))
+                    .data(server.url("/image"))
                     .listener { _, _ -> latch.countDown() }
                     .build(),
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
@@ -121,7 +121,7 @@ class CoilTest {
 
         composeTestRule.setContent {
             CoilImage(
-                data = resourceUri(R.raw.sample),
+                data = server.url("/image"),
                 requestBuilder = {
                     listener { _, _ -> latch.countDown() }
                 },
@@ -206,7 +206,7 @@ class CoilTest {
 
         composeTestRule.setContent {
             CoilImage(
-                data = resourceUri(R.drawable.red_rectangle),
+                data = server.url("/image"),
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
                 imageLoader = imageLoader,
                 onRequestCompleted = { latch.countDown() }
@@ -225,12 +225,12 @@ class CoilTest {
     @SdkSuppress(minSdkVersion = 26) // captureToBitmap is SDK 26+
     fun basicLoad_switchData() {
         val loadCompleteSignal = Channel<Unit>(Channel.UNLIMITED)
-        val drawableResId = MutableStateFlow(R.drawable.red_rectangle)
+        val data = MutableStateFlow(server.url("/red"))
 
         composeTestRule.setContent {
-            val resId = drawableResId.collectAsState()
+            val resId = data.collectAsState()
             CoilImage(
-                data = resourceUri(resId.value),
+                data = resId.value,
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
                 onRequestCompleted = { loadCompleteSignal.offer(Unit) }
             )
@@ -252,7 +252,7 @@ class CoilTest {
             .assertPixels { Color.Red }
 
         // Now switch the data URI to the blue drawable
-        drawableResId.value = R.drawable.blue_rectangle
+        data.value = server.url("/blue")
 
         // Await the second load
         runBlocking {
@@ -276,21 +276,22 @@ class CoilTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun basicLoad_changeSize() {
-        val loadCompleteSignal = Channel<Unit>(Channel.UNLIMITED)
+        val loadCompleteSignal = Channel<ImageLoadState>(Channel.UNLIMITED)
         val sizeFlow = MutableStateFlow(128.dp)
 
         composeTestRule.setContent {
             val size = sizeFlow.collectAsState()
             CoilImage(
-                data = resourceUri(R.drawable.red_rectangle),
+                data = server.url("/red"),
                 modifier = Modifier.preferredSize(size.value).testTag(CoilTestTags.Image),
-                onRequestCompleted = { loadCompleteSignal.offer(Unit) }
+                onRequestCompleted = { loadCompleteSignal.offer(it) }
             )
         }
 
         // Await the first load
         runBlocking {
-            loadCompleteSignal.receive()
+            assertThat(loadCompleteSignal.receive())
+                .isInstanceOf(ImageLoadState.Success::class.java)
         }
 
         // Now change the size
@@ -312,7 +313,7 @@ class CoilTest {
 
         composeTestRule.setContent {
             CoilImage(
-                data = resourceUri(R.raw.sample),
+                data = server.url("/image"),
                 modifier = Modifier.testTag(CoilTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
@@ -414,7 +415,7 @@ class CoilTest {
 
         composeTestRule.setContent {
             CoilImage(
-                data = resourceUri(R.raw.sample),
+                data = server.url("/image"),
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             ) { _ ->
