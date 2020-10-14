@@ -57,8 +57,8 @@ object Libs {
         }
 
         object Compose {
-            const val snapshot = "6901934"
-            const val version = "1.0.0-SNAPSHOT"
+            const val snapshot = ""
+            const val version = "1.0.0-alpha05"
 
             @JvmStatic
             val snapshotUrl: String
