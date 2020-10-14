@@ -27,6 +27,12 @@ object Libs {
 
     const val junit = "junit:junit:4.13"
 
+    object Shot {
+        const val version = "5.5.0"
+        const val plugin = "com.karumi:shot:$version"
+        const val library = "com.karumi:shot-android:$version"
+    }
+
     object Kotlin {
         private const val version = "1.4.21-2"
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib:$version"

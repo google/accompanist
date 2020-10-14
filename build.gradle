@@ -32,6 +32,8 @@ buildscript {
 
         classpath Libs.Dokka.gradlePlugin
         classpath Libs.Kotlin.binaryCompatibility
+
+        classpath Libs.Shot.plugin
     }
 }
 

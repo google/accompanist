@@ -20,6 +20,8 @@
 
     <!-- Needed for MockWebServer -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Needed for screenshot testing -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <!-- usesCleartextTraffic=true because we use MockWebServer -->
     <application
