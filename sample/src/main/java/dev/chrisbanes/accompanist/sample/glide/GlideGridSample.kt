@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package dev.chrisbanes.accompanist.sample.picasso
+package dev.chrisbanes.accompanist.sample.glide
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -32,11 +32,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import dev.chrisbanes.accompanist.picasso.PicassoImage
+import dev.chrisbanes.accompanist.glide.GlideImage
 import dev.chrisbanes.accompanist.sample.R
 import dev.chrisbanes.accompanist.sample.randomSampleImageUrl
 
-class PicassoGridSample : AppCompatActivity() {
+class GlideGridSample : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -56,7 +56,7 @@ private fun Sample() {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(R.string.picasso_title_grid)) }
+                title = { Text(text = stringResource(R.string.glide_title_grid)) }
             )
         }
     ) {
@@ -66,7 +66,7 @@ private fun Sample() {
                 crossAxisSpacing = 4.dp
             ) {
                 for (i in 0 until NumberItems) {
-                    PicassoImage(
+                    GlideImage(
                         data = randomSampleImageUrl(i),
                         modifier = Modifier.preferredSize(112.dp)
                     )

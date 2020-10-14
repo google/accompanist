@@ -18,8 +18,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="dev.chrisbanes.accompanist.imageloading.test">
 
-    <uses-sdk android:targetSdkVersion="30" />
-
     <!-- Needed for MockWebServer -->
     <uses-permission android:name="android.permission.INTERNET" />
 

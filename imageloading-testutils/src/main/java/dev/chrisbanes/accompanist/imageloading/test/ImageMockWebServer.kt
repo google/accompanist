@@ -40,14 +40,14 @@ fun ImageMockWebServer(responseDelayMs: Long = 0): MockWebServer {
                 }
 
                 MockResponse()
-                        .setHeadersDelay(responseDelayMs, TimeUnit.MILLISECONDS)
-                        .addHeader("Content-Type", "image/jpeg")
-                        .setBody(imageBuffer)
+                    .setHeadersDelay(responseDelayMs, TimeUnit.MILLISECONDS)
+                    .addHeader("Content-Type", "image/jpeg")
+                    .setBody(imageBuffer)
             }
             else ->
                 MockResponse()
-                        .setHeadersDelay(responseDelayMs, TimeUnit.MILLISECONDS)
-                        .setResponseCode(404)
+                    .setHeadersDelay(responseDelayMs, TimeUnit.MILLISECONDS)
+                    .setResponseCode(404)
         }
     }
 

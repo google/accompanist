@@ -44,6 +44,7 @@ import dev.chrisbanes.accompanist.imageloading.MaterialLoadingImage
 import dev.chrisbanes.accompanist.imageloading.toPainter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.IllegalArgumentException
 
 /**
  * Creates a composable that will attempt to load the given [data] using [Glide], and provides
@@ -103,7 +104,10 @@ fun GlideImage(
                     }
 
                     override fun onLoadFailed(errorDrawable: Drawable?) {
-                        val result = ImageLoadState.Error(painter = errorDrawable?.toPainter())
+                        val result = ImageLoadState.Error(
+                            painter = errorDrawable?.toPainter(),
+                            throwable = IllegalArgumentException("Error while loading $data")
+                        )
 
                         cont.resume(result) {
                             // TODO

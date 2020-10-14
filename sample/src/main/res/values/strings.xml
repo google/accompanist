@@ -24,4 +24,8 @@
     <string name="picasso_title_basic">Picasso: Basic</string>
     <string name="picasso_title_grid">Picasso: Grid</string>
     <string name="picasso_title_lazy_row">Picasso: Lazy row</string>
+
+    <string name="glide_title_basic">Glide: Basic</string>
+    <string name="glide_title_grid">Glide: Grid</string>
+    <string name="glide_title_lazy_row">Glide: Lazy row</string>
 </resources>

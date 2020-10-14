@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package dev.chrisbanes.accompanist.sample.picasso
+package dev.chrisbanes.accompanist.sample.glide
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -23,11 +23,9 @@ import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayout
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredSize
-import androidx.compose.foundation.layout.preferredWidth
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -35,15 +33,14 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import dev.chrisbanes.accompanist.picasso.PicassoImage
+import dev.chrisbanes.accompanist.glide.GlideImage
 import dev.chrisbanes.accompanist.sample.R
 import dev.chrisbanes.accompanist.sample.randomSampleImageUrl
 
-class PicassoBasicSample : AppCompatActivity() {
+class GlideBasicSample : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -61,7 +58,7 @@ private fun Sample() {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(R.string.picasso_title_basic)) }
+                title = { Text(text = stringResource(R.string.glide_title_basic)) }
             )
         }
     ) {
@@ -70,23 +67,14 @@ private fun Sample() {
                 mainAxisSpacing = 4.dp,
                 crossAxisSpacing = 4.dp
             ) {
-                // PicassoImage with data parameter
-                PicassoImage(
+                // GlideImage with data parameter
+                GlideImage(
                     data = randomSampleImageUrl(),
                     modifier = Modifier.preferredSize(128.dp)
                 )
 
-                // PicassoImage with ImageRequest builder parameter
-                PicassoImage(
-                    data = randomSampleImageUrl(),
-                    requestBuilder = {
-                        rotate(90f)
-                    },
-                    modifier = Modifier.preferredSize(128.dp)
-                )
-
-                // PicassoImage with loading slot
-                PicassoImage(
+                // GlideImage with loading slot
+                GlideImage(
                     data = randomSampleImageUrl(),
                     loading = {
                         Box(Modifier.fillMaxSize()) {
@@ -96,15 +84,15 @@ private fun Sample() {
                     modifier = Modifier.preferredSize(128.dp)
                 )
 
-                // PicassoImage with crossfade and data parameter
-                PicassoImage(
+                // GlideImage with crossfade and data parameter
+                GlideImage(
                     data = randomSampleImageUrl(),
                     fadeIn = true,
                     modifier = Modifier.preferredSize(128.dp)
                 )
 
-                // PicassoImage with crossfade and loading slot
-                PicassoImage(
+                // GlideImage with crossfade and loading slot
+                GlideImage(
                     data = randomSampleImageUrl(),
                     fadeIn = true,
                     loading = {
@@ -115,22 +103,14 @@ private fun Sample() {
                     modifier = Modifier.preferredSize(128.dp)
                 )
 
-                // PicassoImage with an implicit size and loading slot
-                PicassoImage(
+                // GlideImage with an implicit size
+                GlideImage(
                     data = randomSampleImageUrl(),
                     loading = {
                         Box(Modifier.fillMaxSize()) {
                             CircularProgressIndicator(Modifier.align(Alignment.Center))
                         }
                     }
-                )
-
-                // PicassoImage with an aspect ratio
-                PicassoImage(
-                    data = randomSampleImageUrl(),
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.preferredWidth(256.dp)
-                        .aspectRatio(16 / 9f)
                 )
             }
         }
