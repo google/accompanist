@@ -21,6 +21,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.onCommit
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
@@ -403,18 +404,16 @@ class GlideTest {
 
         val glide = Glide.with(InstrumentationRegistry.getInstrumentation().targetContext)
 
-        // Pause all requests so that the request doesn't complete
-        glide.pauseAllRequests()
-
         composeTestRule.setContent {
+            onCommit {
+                // Pause all requests so that the request doesn't complete. This needs to be done
+                // inside our content because Glide automatically resumeRequests() in onStart
+                glide.pauseAllRequests()
+            }
+
             GlideImage(
                 data = server.url("/image").toString(),
                 requestManager = glide,
-                requestBuilder = {
-                    // Disable memory cache. If the item is in the cache, the fetch is
-                    // synchronous and the dispatcher pause has no effect
-                    skipMemoryCache(true)
-                },
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
                 loading = { Text(text = "Loading") },
                 onRequestCompleted = { loadLatch.countDown() }
