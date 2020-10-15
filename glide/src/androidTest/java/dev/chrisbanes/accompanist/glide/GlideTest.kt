@@ -73,7 +73,7 @@ class GlideTest {
     val composeTestRule = createComposeRule()
 
     // Our MockWebServer. We use a response delay to simulate real-world conditions
-    private val server = ImageMockWebServer(responseDelayMs = 200)
+    private val server = ImageMockWebServer()
 
     @Before
     fun setup() {

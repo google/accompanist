@@ -26,10 +26,13 @@ import okio.Buffer
 import java.util.concurrent.TimeUnit
 
 /**
- * [MockWebServer] which returns a valid response at the path `/image`, and a 404 for anything else.
- * We add a small delay to simulate 'real-world' network conditions.
+ * A [MockWebServer] which returns a valid image responses at various paths, and a 404
+ * for anything else.
+ *
+ * @param responseDelayMs Allows the setting of a response delay to simulate 'real-world'
+ * network conditions. Defaults to 200ms.
  */
-fun ImageMockWebServer(responseDelayMs: Long = 0): MockWebServer {
+fun ImageMockWebServer(responseDelayMs: Long = 200): MockWebServer {
     val dispatcher = object : Dispatcher() {
         override fun dispatch(request: RecordedRequest): MockResponse = when (request.path) {
             "/image" -> {
