@@ -57,7 +57,6 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.withTimeoutOrNull
 import okhttp3.mockwebserver.Dispatcher
@@ -67,7 +66,6 @@ import okhttp3.mockwebserver.RecordedRequest
 import okio.Buffer
 import org.junit.After
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -443,41 +441,45 @@ class CoilTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    @Ignore("Flakey: https://github.com/chrisbanes/accompanist/issues/105")
     fun loading_slot() {
-        val dispatcher = TestCoroutineDispatcher()
         val loadLatch = CountDownLatch(1)
 
-        dispatcher.runBlockingTest {
-            pauseDispatcher()
+        // Create a test dispatcher and immediately pause it
+        val dispatcher = TestCoroutineDispatcher()
+        dispatcher.pauseDispatcher()
 
-            composeTestRule.setContent {
-                CoilImage(
-                    request = ImageRequest.Builder(ContextAmbient.current)
-                        .data(server.url("/image"))
-                        .dispatcher(dispatcher)
-                        .build(),
-                    modifier = Modifier.preferredSize(128.dp, 128.dp),
-                    // Disable memory cache. If the item is in the cache, the fetch is
-                    // synchronous and the dispatcher pause has no effect
-                    imageLoader = noCacheImageLoader(),
-                    loading = { Text(text = "Loading") },
-                    onRequestCompleted = { loadLatch.countDown() }
-                )
-            }
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val imageLoader = ImageLoader.Builder(context)
+            // Load on our test dispatcher
+            .dispatcher(dispatcher)
+            // Disable memory cache. If the item is in the cache, the fetch is
+            // synchronous and the dispatcher pause has no effect
+            .memoryCachePolicy(CachePolicy.DISABLED)
+            .build()
 
-            // Assert that the loading component is displayed
-            composeTestRule.onNodeWithText("Loading").assertIsDisplayed()
-
-            // Now resume the dispatcher to start the Coil request
-            dispatcher.resumeDispatcher()
+        composeTestRule.setContent {
+            CoilImage(
+                data = server.url("/image"),
+                imageLoader = imageLoader,
+                modifier = Modifier.preferredSize(128.dp, 128.dp),
+                loading = { Text(text = "Loading") },
+                onRequestCompleted = { loadLatch.countDown() }
+            )
         }
+
+        // Assert that the loading component is displayed
+        composeTestRule.onNodeWithText("Loading").assertIsDisplayed()
+
+        // Now resume the dispatcher to start the Coil request
+        dispatcher.resumeDispatcher()
 
         // We now wait for the request to complete
         loadLatch.await(5, TimeUnit.SECONDS)
 
         // And assert that the loading component no longer exists
         composeTestRule.onNodeWithText("Loading").assertDoesNotExist()
+
+        dispatcher.cleanupTestCoroutines()
     }
 
     @Test
