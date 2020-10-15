@@ -16,8 +16,6 @@
 
 package dev.chrisbanes.accompanist.coil
 
-import android.content.ContentResolver
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.preferredSize
@@ -28,7 +26,6 @@ import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import androidx.test.filters.LargeTest
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
@@ -52,18 +49,16 @@ import coil.request.ImageRequest
 import com.google.common.truth.Truth.assertThat
 import dev.chrisbanes.accompanist.coil.test.R
 import dev.chrisbanes.accompanist.imageloading.ImageLoadState
+import dev.chrisbanes.accompanist.imageloading.test.ImageMockWebServer
+import dev.chrisbanes.accompanist.imageloading.test.awaitNext
+import dev.chrisbanes.accompanist.imageloading.test.receiveBlocking
+import dev.chrisbanes.accompanist.imageloading.test.resourceUri
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.withTimeoutOrNull
-import okhttp3.mockwebserver.Dispatcher
-import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
-import okhttp3.mockwebserver.RecordedRequest
-import okio.Buffer
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -80,7 +75,7 @@ class CoilTest {
     val composeTestRule = createComposeRule()
 
     // Our MockWebServer. We use a response delay to simulate real-world conditions
-    private val server = coilTestWebServer(responseDelayMs = 200)
+    private val server = ImageMockWebServer()
 
     @Before
     fun setup() {
@@ -102,7 +97,7 @@ class CoilTest {
         composeTestRule.setContent {
             CoilImage(
                 request = ImageRequest.Builder(ContextAmbient.current)
-                    .data(resourceUri(R.raw.sample))
+                    .data(server.url("/image"))
                     .listener { _, _ -> latch.countDown() }
                     .build(),
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
@@ -127,7 +122,7 @@ class CoilTest {
 
         composeTestRule.setContent {
             CoilImage(
-                data = resourceUri(R.raw.sample),
+                data = server.url("/image"),
                 requestBuilder = {
                     listener { _, _ -> latch.countDown() }
                 },
@@ -212,7 +207,7 @@ class CoilTest {
 
         composeTestRule.setContent {
             CoilImage(
-                data = resourceUri(R.drawable.red_rectangle),
+                data = server.url("/image"),
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
                 imageLoader = imageLoader,
                 onRequestCompleted = { latch.countDown() }
@@ -231,23 +226,19 @@ class CoilTest {
     @SdkSuppress(minSdkVersion = 26) // captureToBitmap is SDK 26+
     fun basicLoad_switchData() {
         val loadCompleteSignal = Channel<Unit>(Channel.UNLIMITED)
-        val drawableResId = MutableStateFlow(R.drawable.red_rectangle)
+        val data = MutableStateFlow(server.url("/red"))
 
         composeTestRule.setContent {
-            val resId = drawableResId.collectAsState()
+            val resId = data.collectAsState()
             CoilImage(
-                data = resourceUri(resId.value),
+                data = resId.value,
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
                 onRequestCompleted = { loadCompleteSignal.offer(Unit) }
             )
         }
 
         // Await the first load
-        runBlocking {
-            withTimeout(5000) {
-                loadCompleteSignal.receive()
-            }
-        }
+        loadCompleteSignal.awaitNext(5, TimeUnit.SECONDS)
 
         // Assert that the content is completely Red
         composeTestRule.onNodeWithTag(CoilTestTags.Image)
@@ -258,14 +249,10 @@ class CoilTest {
             .assertPixels { Color.Red }
 
         // Now switch the data URI to the blue drawable
-        drawableResId.value = R.drawable.blue_rectangle
+        data.value = server.url("/blue")
 
         // Await the second load
-        runBlocking {
-            withTimeout(5000) {
-                loadCompleteSignal.receive()
-            }
-        }
+        loadCompleteSignal.awaitNext(5, TimeUnit.SECONDS)
 
         // Assert that the content is completely Blue
         composeTestRule.onNodeWithTag(CoilTestTags.Image)
@@ -282,22 +269,21 @@ class CoilTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun basicLoad_changeSize() {
-        val loadCompleteSignal = Channel<Unit>(Channel.UNLIMITED)
+        val loadCompleteSignal = Channel<ImageLoadState>(Channel.UNLIMITED)
         val sizeFlow = MutableStateFlow(128.dp)
 
         composeTestRule.setContent {
             val size = sizeFlow.collectAsState()
             CoilImage(
-                data = resourceUri(R.drawable.red_rectangle),
+                data = server.url("/red"),
                 modifier = Modifier.preferredSize(size.value).testTag(CoilTestTags.Image),
-                onRequestCompleted = { loadCompleteSignal.offer(Unit) }
+                onRequestCompleted = { loadCompleteSignal.offer(it) }
             )
         }
 
         // Await the first load
-        runBlocking {
-            loadCompleteSignal.receive()
-        }
+        assertThat(loadCompleteSignal.receiveBlocking())
+            .isInstanceOf(ImageLoadState.Success::class.java)
 
         // Now change the size
         sizeFlow.value = 256.dp
@@ -318,7 +304,7 @@ class CoilTest {
 
         composeTestRule.setContent {
             CoilImage(
-                data = resourceUri(R.raw.sample),
+                data = server.url("/image"),
                 modifier = Modifier.testTag(CoilTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
@@ -420,7 +406,7 @@ class CoilTest {
 
         composeTestRule.setContent {
             CoilImage(
-                data = resourceUri(R.raw.sample),
+                data = server.url("/image"),
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             ) { _ ->
@@ -519,41 +505,4 @@ private fun noCacheImageLoader(): ImageLoader {
         .memoryCachePolicy(CachePolicy.DISABLED)
         .diskCachePolicy(CachePolicy.DISABLED)
         .build()
-}
-
-private fun resourceUri(id: Int): Uri {
-    val packageName = InstrumentationRegistry.getInstrumentation().targetContext.packageName
-    return "${ContentResolver.SCHEME_ANDROID_RESOURCE}://$packageName/$id".toUri()
-}
-
-/**
- * [MockWebServer] which returns a valid response at the path `/image`, and a 404 for anything else.
- * We add a small delay to simulate 'real-world' network conditions.
- */
-private fun coilTestWebServer(responseDelayMs: Long = 0): MockWebServer {
-    val dispatcher = object : Dispatcher() {
-        override fun dispatch(request: RecordedRequest): MockResponse = when (request.path) {
-            "/image" -> {
-                val res = InstrumentationRegistry.getInstrumentation().targetContext.resources
-
-                // Load the image into a Buffer
-                val imageBuffer = Buffer().apply {
-                    readFrom(res.openRawResource(R.raw.sample))
-                }
-
-                MockResponse()
-                    .setHeadersDelay(responseDelayMs, TimeUnit.MILLISECONDS)
-                    .addHeader("Content-Type", "image/jpeg")
-                    .setBody(imageBuffer)
-            }
-            else ->
-                MockResponse()
-                    .setHeadersDelay(responseDelayMs, TimeUnit.MILLISECONDS)
-                    .setResponseCode(404)
-        }
-    }
-
-    return MockWebServer().apply {
-        setDispatcher(dispatcher)
-    }
 }

@@ -41,7 +41,7 @@ plugins {
 apply plugin: 'binary-compatibility-validator'
 apiValidation {
     // Ignore the sample from API tracking/checking
-    ignoredProjects += ["sample"]
+    ignoredProjects += ["sample", "imageloading-testutils"]
 }
 
 subprojects {

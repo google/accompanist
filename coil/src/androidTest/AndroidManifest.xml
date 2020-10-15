@@ -15,22 +15,8 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="dev.chrisbanes.accompanist.coil.test">
 
     <uses-sdk android:targetSdkVersion="30" />
-
-    <!-- Needed for MockWebServer -->
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <!-- usesCleartextTraffic=true because we use MockWebServer -->
-    <application
-        android:name="dev.chrisbanes.accompanist.coil.CoilTestApplication"
-        android:usesCleartextTraffic="true">
-        <activity
-            android:name="androidx.activity.ComponentActivity"
-            android:theme="@style/Theme.CoilTest"
-            tools:replace="android:theme" />
-    </application>
 
 </manifest>

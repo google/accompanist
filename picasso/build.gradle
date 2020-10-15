@@ -90,10 +90,14 @@ dependencies {
     implementation Libs.Kotlin.stdlib
     implementation Libs.Coroutines.android
 
+    // ======================
+    // Test dependencies
+    // ======================
+
+    androidTestImplementation project(':imageloading-testutils')
+
     androidTestImplementation Libs.junit
     androidTestImplementation Libs.truth
-
-    androidTestImplementation Libs.OkHttp.mockWebServer
 
     androidTestImplementation Libs.AndroidX.Compose.test
     androidTestImplementation Libs.AndroidX.Compose.ui

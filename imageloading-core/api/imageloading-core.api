@@ -30,6 +30,7 @@ public final class dev/chrisbanes/accompanist/imageloading/ImageLoadState$Empty 
 
 public final class dev/chrisbanes/accompanist/imageloading/ImageLoadState$Error : dev/chrisbanes/accompanist/imageloading/ImageLoadState {
 	public fun <init> (Landroidx/compose/ui/graphics/painter/Painter;Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Landroidx/compose/ui/graphics/painter/Painter;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Landroidx/compose/ui/graphics/painter/Painter;
 	public final fun component2 ()Ljava/lang/Throwable;
 	public final fun copy (Landroidx/compose/ui/graphics/painter/Painter;Ljava/lang/Throwable;)Ldev/chrisbanes/accompanist/imageloading/ImageLoadState$Error;
