@@ -96,6 +96,8 @@ GlideImage(
 
 Accompanist Glide supports GIFs through Glide's own GIF support. There's nothing you need to do, it should just work.
 
+![Example GIF](https://media.giphy.com/media/6oMKugqovQnjW/giphy.gif)
+
 ## Download
 
 ```groovy
