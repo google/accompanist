@@ -17,4 +17,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="dev.chrisbanes.accompanist.coil.test">
 
+    <uses-sdk android:targetSdkVersion="30" />
+
 </manifest>
