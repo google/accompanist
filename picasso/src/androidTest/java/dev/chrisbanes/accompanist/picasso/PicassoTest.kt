@@ -41,14 +41,13 @@ import androidx.ui.test.onNodeWithText
 import com.google.common.truth.Truth.assertThat
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.NetworkPolicy
+import com.squareup.picasso.Picasso
 import dev.chrisbanes.accompanist.imageloading.ImageLoadState
 import dev.chrisbanes.accompanist.picasso.test.R
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.withTimeoutOrNull
 import okhttp3.mockwebserver.Dispatcher
@@ -58,7 +57,6 @@ import okhttp3.mockwebserver.RecordedRequest
 import okio.Buffer
 import org.junit.After
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -359,37 +357,37 @@ class PicassoTest {
             .assertPixels { Color.Cyan }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    @Ignore("Flakey: https://github.com/chrisbanes/accompanist/issues/105")
     fun loading_slot() {
-        val dispatcher = TestCoroutineDispatcher()
         val loadLatch = CountDownLatch(1)
 
-        dispatcher.runBlockingTest {
-            pauseDispatcher()
+        // Create an executor which is paused, and build a Picasso instance which uses it
+        val executor = SingleThreadPausableExecutor(paused = true)
+        val picasso = Picasso.Builder(InstrumentationRegistry.getInstrumentation().targetContext)
+            .executor(executor)
+            .build()
 
-            composeTestRule.setContent {
-                PicassoImage(
-                    data = server.url("/image"),
-                    modifier = Modifier.preferredSize(128.dp, 128.dp),
-                    // Disable any caches. If the item is in the cache, the fetch is
-                    // synchronous which means the Loading state is skipped
-                    requestBuilder = {
-                        networkPolicy(NetworkPolicy.NO_CACHE)
-                        memoryPolicy(MemoryPolicy.NO_CACHE)
-                    },
-                    loading = { Text(text = "Loading") },
-                    onRequestCompleted = { loadLatch.countDown() }
-                )
-            }
-
-            // Assert that the loading component is displayed
-            composeTestRule.onNodeWithText("Loading").assertIsDisplayed()
-
-            // Now resume the dispatcher to start the Coil request
-            dispatcher.resumeDispatcher()
+        composeTestRule.setContent {
+            PicassoImage(
+                data = server.url("/image"),
+                picasso = picasso,
+                modifier = Modifier.preferredSize(128.dp, 128.dp),
+                // Disable any caches. If the item is in the cache, the fetch is
+                // synchronous which means the Loading state is skipped
+                requestBuilder = {
+                    networkPolicy(NetworkPolicy.NO_CACHE)
+                    memoryPolicy(MemoryPolicy.NO_CACHE)
+                },
+                loading = { Text(text = "Loading") },
+                onRequestCompleted = { loadLatch.countDown() }
+            )
         }
+
+        // Assert that the loading component is displayed
+        composeTestRule.onNodeWithText("Loading").assertIsDisplayed()
+
+        // Now resume the executor and let the Picasso request run
+        executor.resume()
 
         // We now wait for the request to complete
         loadLatch.await(5, TimeUnit.SECONDS)
