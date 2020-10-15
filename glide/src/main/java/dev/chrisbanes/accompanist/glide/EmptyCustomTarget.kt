@@ -20,6 +20,9 @@ import android.graphics.drawable.Drawable
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 
+/**
+ * A [CustomTarget] which contains empty no-op implementations for the abstract functions.
+ */
 internal open class EmptyCustomTarget(
     width: Int,
     height: Int
