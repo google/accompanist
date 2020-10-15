@@ -41,7 +41,8 @@ import kotlinx.coroutines.flow.flow
  *
  * The [executeRequest] parameters allows providing of a lambda to execute the 'image load'.
  * The [R] type and [request] parameter should be whatever primitive the library uses to
- * model a request.
+ * model a request. The [TR] type would normally be the same as [R], but allows transforming of
+ * the request for execution (say to wrap with extra information).
  *
  * @param request The request to execute.
  * @param executeRequest Suspending lambda to execute an image loading request.
