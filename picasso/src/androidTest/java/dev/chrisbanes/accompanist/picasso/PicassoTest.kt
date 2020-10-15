@@ -27,6 +27,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.test.filters.LargeTest
 import androidx.test.filters.SdkSuppress
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.ui.test.assertHeightIsAtLeast
 import androidx.ui.test.assertHeightIsEqualTo
 import androidx.ui.test.assertIsDisplayed
@@ -43,12 +44,12 @@ import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import dev.chrisbanes.accompanist.imageloading.ImageLoadState
 import dev.chrisbanes.accompanist.imageloading.test.ImageMockWebServer
+import dev.chrisbanes.accompanist.imageloading.test.awaitNext
 import dev.chrisbanes.accompanist.picasso.test.R
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.withTimeoutOrNull
 import org.junit.After
 import org.junit.Before
@@ -142,11 +143,7 @@ class PicassoTest {
         }
 
         // Await the first load
-        runBlocking {
-            withTimeout(5000) {
-                loadCompleteSignal.receive()
-            }
-        }
+        loadCompleteSignal.awaitNext(5, TimeUnit.SECONDS)
 
         // Assert that the content is completely Red
         composeTestRule.onNodeWithTag(TestTags.Image)
@@ -160,11 +157,7 @@ class PicassoTest {
         data.value = server.url("/blue")
 
         // Await the second load
-        runBlocking {
-            withTimeout(5000) {
-                loadCompleteSignal.receive()
-            }
-        }
+        loadCompleteSignal.awaitNext(5, TimeUnit.SECONDS)
 
         // Assert that the content is completely Blue
         composeTestRule.onNodeWithTag(TestTags.Image)
@@ -194,10 +187,7 @@ class PicassoTest {
         }
 
         // Await the first load
-        runBlocking {
-            assertThat(loadCompleteSignal.receive())
-                .isInstanceOf(ImageLoadState.Success::class.java)
-        }
+        loadCompleteSignal.awaitNext(5, TimeUnit.SECONDS)
 
         // Now change the size
         sizeFlow.value = 256.dp

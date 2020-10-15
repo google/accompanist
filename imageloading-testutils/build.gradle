@@ -69,23 +69,21 @@ android {
 dependencies {
     implementation project(':imageloading-core')
 
-    implementation Libs.OkHttp.okhttp
-
     implementation Libs.AndroidX.coreKtx
+
     implementation Libs.AndroidX.Compose.runtime
     implementation Libs.AndroidX.Compose.foundation
+    implementation Libs.AndroidX.Compose.ui
 
     implementation Libs.Kotlin.stdlib
     implementation Libs.Coroutines.android
 
-    implementation Libs.junit
-    implementation Libs.truth
-
     api Libs.OkHttp.mockWebServer
+    implementation Libs.OkHttp.okhttp
+
     implementation Libs.Coroutines.test
 
     implementation Libs.AndroidX.Compose.test
-    implementation Libs.AndroidX.Compose.ui
     implementation Libs.AndroidX.Test.rules
     implementation Libs.AndroidX.Test.runner
 }
