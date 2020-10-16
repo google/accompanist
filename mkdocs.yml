@@ -15,9 +15,11 @@ repo_url: 'https://github.com/chrisbanes/accompanist'
 nav:
   - 'Overview': index.md
   - 'Coil': coil.md
+  - 'Glide': glide.md
   - 'Picasso': picasso.md
   - 'API':
     - 'Coil': api/coil/index.md
+    - 'Glide': api/glide/index.md
     - 'Picasso': api/picasso/index.md
     - 'Image Loading Core': api/imageloading-core/index.md
   - 'Snapshots': using-snapshot-version.md

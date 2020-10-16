@@ -38,6 +38,11 @@ mkdir -p $DOCS_ROOT/picasso
 cp picasso/images/crossfade.gif $DOCS_ROOT/picasso/crossfade.gif
 sed -i.bak 's/images\/crossfade.gif/crossfade.gif/' $DOCS_ROOT/picasso.md
 
+cp glide/README.md $DOCS_ROOT/glide.md
+mkdir -p $DOCS_ROOT/glide
+cp glide/images/crossfade.gif $DOCS_ROOT/glide/crossfade.gif
+sed -i.bak 's/images\/crossfade.gif/crossfade.gif/' $DOCS_ROOT/glide.md
+
 # Convert docs/xxx.md links to just xxx/
 sed -i.bak 's/docs\/\([a-zA-Z-]*\).md/\1/' $DOCS_ROOT/index.md
 

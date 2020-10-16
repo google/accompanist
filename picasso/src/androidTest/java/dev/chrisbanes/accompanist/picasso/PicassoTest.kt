@@ -41,24 +41,18 @@ import androidx.ui.test.onNodeWithText
 import com.google.common.truth.Truth.assertThat
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.NetworkPolicy
+import com.squareup.picasso.Picasso
 import dev.chrisbanes.accompanist.imageloading.ImageLoadState
+import dev.chrisbanes.accompanist.imageloading.test.ImageMockWebServer
+import dev.chrisbanes.accompanist.imageloading.test.awaitNext
 import dev.chrisbanes.accompanist.picasso.test.R
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.runBlockingTest
-import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.withTimeoutOrNull
-import okhttp3.mockwebserver.Dispatcher
-import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
-import okhttp3.mockwebserver.RecordedRequest
-import okio.Buffer
 import org.junit.After
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -73,7 +67,7 @@ class PicassoTest {
     val composeTestRule = createComposeRule()
 
     // Our MockWebServer. We use a response delay to simulate real-world conditions
-    private val server = testWebServer(responseDelayMs = 200)
+    private val server = ImageMockWebServer()
 
     @Before
     fun setup() {
@@ -137,10 +131,10 @@ class PicassoTest {
     @SdkSuppress(minSdkVersion = 26) // captureToBitmap is SDK 26+
     fun basicLoad_switchData() {
         val loadCompleteSignal = Channel<Unit>(Channel.UNLIMITED)
-        val drawableResId = MutableStateFlow(R.drawable.red_rectangle)
+        val data = MutableStateFlow(server.url("/red"))
 
         composeTestRule.setContent {
-            val resId = drawableResId.collectAsState()
+            val resId = data.collectAsState()
             PicassoImage(
                 data = resId.value,
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(TestTags.Image),
@@ -149,11 +143,7 @@ class PicassoTest {
         }
 
         // Await the first load
-        runBlocking {
-            withTimeout(5000) {
-                loadCompleteSignal.receive()
-            }
-        }
+        loadCompleteSignal.awaitNext(5, TimeUnit.SECONDS)
 
         // Assert that the content is completely Red
         composeTestRule.onNodeWithTag(TestTags.Image)
@@ -164,14 +154,10 @@ class PicassoTest {
             .assertPixels { Color.Red }
 
         // Now switch the data URI to the blue drawable
-        drawableResId.value = R.drawable.blue_rectangle
+        data.value = server.url("/blue")
 
         // Await the second load
-        runBlocking {
-            withTimeout(5000) {
-                loadCompleteSignal.receive()
-            }
-        }
+        loadCompleteSignal.awaitNext(5, TimeUnit.SECONDS)
 
         // Assert that the content is completely Blue
         composeTestRule.onNodeWithTag(TestTags.Image)
@@ -194,24 +180,14 @@ class PicassoTest {
         composeTestRule.setContent {
             val size = sizeFlow.collectAsState()
             PicassoImage(
-                data = R.drawable.red_rectangle,
+                data = server.url("/red"),
                 modifier = Modifier.preferredSize(size.value).testTag(TestTags.Image),
                 onRequestCompleted = { loadCompleteSignal.offer(it) }
             )
         }
 
         // Await the first load
-        runBlocking {
-
-            val result = loadCompleteSignal.receive()
-
-            if (result is ImageLoadState.Error) {
-                throw result.throwable
-            }
-
-            assertThat(result)
-                .isInstanceOf(ImageLoadState.Success::class.java)
-        }
+        loadCompleteSignal.awaitNext(5, TimeUnit.SECONDS)
 
         // Now change the size
         sizeFlow.value = 256.dp
@@ -232,7 +208,7 @@ class PicassoTest {
 
         composeTestRule.setContent {
             PicassoImage(
-                data = R.raw.sample,
+                data = server.url("/image"),
                 modifier = Modifier.testTag(TestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
@@ -340,7 +316,7 @@ class PicassoTest {
 
         composeTestRule.setContent {
             PicassoImage(
-                data = R.raw.sample,
+                data = server.url("/image"),
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(TestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             ) { _ ->
@@ -359,37 +335,37 @@ class PicassoTest {
             .assertPixels { Color.Cyan }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    @Ignore("Flakey: https://github.com/chrisbanes/accompanist/issues/105")
     fun loading_slot() {
-        val dispatcher = TestCoroutineDispatcher()
         val loadLatch = CountDownLatch(1)
 
-        dispatcher.runBlockingTest {
-            pauseDispatcher()
+        // Create an executor which is paused, and build a Picasso instance which uses it
+        val executor = SingleThreadPausableExecutor(paused = true)
+        val picasso = Picasso.Builder(InstrumentationRegistry.getInstrumentation().targetContext)
+            .executor(executor)
+            .build()
 
-            composeTestRule.setContent {
-                PicassoImage(
-                    data = server.url("/image"),
-                    modifier = Modifier.preferredSize(128.dp, 128.dp),
-                    // Disable any caches. If the item is in the cache, the fetch is
-                    // synchronous which means the Loading state is skipped
-                    requestBuilder = {
-                        networkPolicy(NetworkPolicy.NO_CACHE)
-                        memoryPolicy(MemoryPolicy.NO_CACHE)
-                    },
-                    loading = { Text(text = "Loading") },
-                    onRequestCompleted = { loadLatch.countDown() }
-                )
-            }
-
-            // Assert that the loading component is displayed
-            composeTestRule.onNodeWithText("Loading").assertIsDisplayed()
-
-            // Now resume the dispatcher to start the Coil request
-            dispatcher.resumeDispatcher()
+        composeTestRule.setContent {
+            PicassoImage(
+                data = server.url("/image"),
+                picasso = picasso,
+                modifier = Modifier.preferredSize(128.dp, 128.dp),
+                // Disable any caches. If the item is in the cache, the fetch is
+                // synchronous which means the Loading state is skipped
+                requestBuilder = {
+                    networkPolicy(NetworkPolicy.NO_CACHE)
+                    memoryPolicy(MemoryPolicy.NO_CACHE)
+                },
+                loading = { Text(text = "Loading") },
+                onRequestCompleted = { loadLatch.countDown() }
+            )
         }
+
+        // Assert that the loading component is displayed
+        composeTestRule.onNodeWithText("Loading").assertIsDisplayed()
+
+        // Now resume the executor and let the Picasso request run
+        executor.resume()
 
         // We now wait for the request to complete
         loadLatch.await(5, TimeUnit.SECONDS)
@@ -423,37 +399,5 @@ class PicassoTest {
             .assertIsDisplayed()
             .captureToBitmap()
             .assertPixels { Color.Red }
-    }
-}
-
-/**
- * [MockWebServer] which returns a valid response at the path `/image`, and a 404 for anything else.
- * We add a small delay to simulate 'real-world' network conditions.
- */
-private fun testWebServer(responseDelayMs: Long = 0): MockWebServer {
-    val dispatcher = object : Dispatcher() {
-        override fun dispatch(request: RecordedRequest): MockResponse = when (request.path) {
-            "/image" -> {
-                val res = InstrumentationRegistry.getInstrumentation().targetContext.resources
-
-                // Load the image into a Buffer
-                val imageBuffer = Buffer().apply {
-                    readFrom(res.openRawResource(R.raw.sample))
-                }
-
-                MockResponse()
-                    .setHeadersDelay(responseDelayMs, TimeUnit.MILLISECONDS)
-                    .addHeader("Content-Type", "image/jpeg")
-                    .setBody(imageBuffer)
-            }
-            else ->
-                MockResponse()
-                    .setHeadersDelay(responseDelayMs, TimeUnit.MILLISECONDS)
-                    .setResponseCode(404)
-        }
-    }
-
-    return MockWebServer().apply {
-        setDispatcher(dispatcher)
     }
 }

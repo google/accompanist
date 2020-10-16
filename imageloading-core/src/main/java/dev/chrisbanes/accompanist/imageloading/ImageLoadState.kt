@@ -47,10 +47,10 @@ sealed class ImageLoadState {
      * Indicates that an error occurred while executing the request.
      *
      * @param painter The error image.
-     * @param throwable The error that failed the request.
+     * @param throwable The optional throwable that caused the request failure.
      */
     data class Error(
-        val painter: Painter?,
+        val painter: Painter? = null,
         val throwable: Throwable
     ) : ImageLoadState()
 }

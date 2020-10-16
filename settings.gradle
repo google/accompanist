@@ -16,5 +16,7 @@
 
 include ':coil'
 include ':picasso'
+include ':glide'
 include ':imageloading-core'
+include ':imageloading-testutils'
 include ':sample'
