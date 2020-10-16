@@ -57,14 +57,14 @@ object Libs {
         }
 
         object Compose {
-            const val snapshot = "6901934"
+            const val snapshot = "6909907"
             const val version = "1.0.0-SNAPSHOT"
 
             @JvmStatic
             val snapshotUrl: String
                 get() = when {
                     snapshot.isNotEmpty() -> {
-                        "https://androidx.dev/snapshots/builds/$snapshot/artifacts/ui/repository/"
+                        "https://androidx.dev/snapshots/builds/$snapshot/artifacts/repository/"
                     }
                     else -> throw IllegalArgumentException("Snapshot version not set")
                 }
