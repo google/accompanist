@@ -20,6 +20,7 @@ import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.preferredSize
+import androidx.compose.runtime.Providers
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.onCommit
 import androidx.compose.ui.Modifier
@@ -277,6 +278,59 @@ class GlideTest {
             .assertWidthIsAtLeast(1.dp)
             .assertHeightIsAtLeast(1.dp)
             .assertIsDisplayed()
+    }
+
+    @SdkSuppress(minSdkVersion = 26) // captureToBitmap
+    @Test
+    fun customPicasso_param() {
+        val latch = CountDownLatch(1)
+        val loaded = mutableListOf<Any>()
+
+        // Create a RequestManager with a listener which updates our loaded list
+        val glide = Glide.with(InstrumentationRegistry.getInstrumentation().targetContext)
+            .addDefaultRequestListener(SimpleRequestListener { model -> loaded += model })
+
+        composeTestRule.setContent {
+            GlideImage(
+                data = server.url("/image").toString(),
+                requestManager = glide,
+                modifier = Modifier.preferredSize(128.dp, 128.dp),
+                onRequestCompleted = { latch.countDown() }
+            )
+        }
+
+        // Wait for the onRequestCompleted to release the latch
+        latch.await(5, TimeUnit.SECONDS)
+
+        // Assert that the listener was called
+        assertThat(loaded).hasSize(1)
+    }
+
+    @SdkSuppress(minSdkVersion = 26) // captureToBitmap
+    @Test
+    fun customPicasso_ambient() {
+        val latch = CountDownLatch(1)
+        val loaded = mutableListOf<Any>()
+
+        // Create a RequestManager with a listener which updates our loaded list
+        val glide = Glide.with(InstrumentationRegistry.getInstrumentation().targetContext)
+            .addDefaultRequestListener(SimpleRequestListener { model -> loaded += model })
+
+        composeTestRule.setContent {
+            Providers(AmbientRequestManager provides glide) {
+                GlideImage(
+                    data = server.url("/image").toString(),
+                    modifier = Modifier.preferredSize(128.dp, 128.dp),
+                    onRequestCompleted = { latch.countDown() }
+                )
+            }
+        }
+
+        // Wait for the onRequestCompleted to release the latch
+        latch.await(5, TimeUnit.SECONDS)
+
+        // Assert that the listener was called
+        assertThat(loaded).hasSize(1)
     }
 
     @Test
