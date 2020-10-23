@@ -93,6 +93,25 @@ CoilImage(
 
 Accompanist Coil supports GIFs through Coil's own GIF support. Follow the [setup instructions](https://coil-kt.github.io/coil/gifs/) and it should just work.
 
+## Custom ImageLoader
+
+If you wish to provide a default [`ImageLoader`](...) to use across all of your `CoilImage`
+calls, we provide the `AmbientImageLoader` ambient. You can see it like so:
+
+``` kotlin
+val imageLoader = ImageLoader.Builder(context)
+    // customize the ImageLoader as needed
+    .build()
+
+Providers(AmbientImageLoader provides imageLoader) {
+    // This will automatically use the value of AmbientImageLoader
+    CoilImage(
+        data = ...,
+        onRequestCompleted = { latch.countDown() }
+    )
+}
+```
+
 ## Download
 
 ```groovy
