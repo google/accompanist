@@ -238,7 +238,6 @@ class CoilTest {
         }
         val imageLoader = ImageLoader.Builder(context)
             .eventListener(eventListener)
-                .
             .build()
 
         composeTestRule.setContent {
