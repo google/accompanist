@@ -19,12 +19,14 @@ package dev.chrisbanes.accompanist.picasso
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.preferredSize
+import androidx.compose.runtime.Providers
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.test.filters.LargeTest
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
@@ -221,6 +223,73 @@ class PicassoTest {
             .assertWidthIsAtLeast(1.dp)
             .assertHeightIsAtLeast(1.dp)
             .assertIsDisplayed()
+    }
+
+    @SdkSuppress(minSdkVersion = 26) // captureToBitmap
+    @Test
+    fun customPicasso_param() {
+        val latch = CountDownLatch(1)
+
+        val picasso = Picasso.Builder(InstrumentationRegistry.getInstrumentation().targetContext)
+            .requestTransformer { request ->
+                // Transform any request so that it points to a valid red image uri instead
+                request.buildUpon()
+                    .setUri(server.url("/red").toString().toUri())
+                    .build()
+            }
+            .build()
+
+        composeTestRule.setContent {
+            PicassoImage(
+                data = server.url("/noimage"),
+                picasso = picasso,
+                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(TestTags.Image),
+                onRequestCompleted = { latch.countDown() }
+            )
+        }
+
+        // Wait for the onRequestCompleted to release the latch
+        latch.await(5, TimeUnit.SECONDS)
+
+        // Assert that the layout is displayed and that we're showing the red image
+        composeTestRule.onNodeWithTag(TestTags.Image)
+            .assertIsDisplayed()
+            .captureToBitmap()
+            .assertPixels { Color.Red }
+    }
+
+    @SdkSuppress(minSdkVersion = 26) // captureToBitmap
+    @Test
+    fun customPicasso_ambient() {
+        val latch = CountDownLatch(1)
+
+        val picasso = Picasso.Builder(InstrumentationRegistry.getInstrumentation().targetContext)
+            .requestTransformer { request ->
+                // Transform any request so that it points to a valid red image uri instead
+                request.buildUpon()
+                    .setUri(server.url("/red").toString().toUri())
+                    .build()
+            }
+            .build()
+
+        composeTestRule.setContent {
+            Providers(AmbientPicasso provides picasso) {
+                PicassoImage(
+                    data = server.url("/noimage"),
+                    modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(TestTags.Image),
+                    onRequestCompleted = { latch.countDown() }
+                )
+            }
+        }
+
+        // Wait for the onRequestCompleted to release the latch
+        latch.await(5, TimeUnit.SECONDS)
+
+        // Assert that the layout is displayed and that we're showing the red image
+        composeTestRule.onNodeWithTag(TestTags.Image)
+            .assertIsDisplayed()
+            .captureToBitmap()
+            .assertPixels { Color.Red }
     }
 
     @Test
