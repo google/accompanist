@@ -106,8 +106,7 @@ val imageLoader = ImageLoader.Builder(context)
 Providers(AmbientImageLoader provides imageLoader) {
     // This will automatically use the value of AmbientImageLoader
     CoilImage(
-        data = ...,
-        onRequestCompleted = { latch.countDown() }
+        data = ...
     )
 }
 ```
