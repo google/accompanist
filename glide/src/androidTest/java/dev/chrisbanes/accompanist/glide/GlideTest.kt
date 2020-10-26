@@ -20,11 +20,13 @@ import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.preferredSize
+import androidx.compose.runtime.Providers
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.onCommit
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.platform.ViewAmbient
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.test.filters.LargeTest
@@ -277,6 +279,57 @@ class GlideTest {
             .assertWidthIsAtLeast(1.dp)
             .assertHeightIsAtLeast(1.dp)
             .assertIsDisplayed()
+    }
+
+    @Test
+    fun customRequestManager_param() {
+        val latch = CountDownLatch(1)
+        val loaded = mutableListOf<Any>()
+
+        composeTestRule.setContent {
+            // Create a RequestManager with a listener which updates our loaded list
+            val glide = Glide.with(ViewAmbient.current)
+                .addDefaultRequestListener(SimpleRequestListener { model -> loaded += model })
+
+            GlideImage(
+                data = server.url("/image").toString(),
+                requestManager = glide,
+                modifier = Modifier.preferredSize(128.dp, 128.dp),
+                onRequestCompleted = { latch.countDown() }
+            )
+        }
+
+        // Wait for the onRequestCompleted to release the latch
+        latch.await(5, TimeUnit.SECONDS)
+
+        // Assert that the listener was called
+        assertThat(loaded).hasSize(1)
+    }
+
+    @Test
+    fun customRequestManager_ambient() {
+        val latch = CountDownLatch(1)
+        val loaded = mutableListOf<Any>()
+
+        composeTestRule.setContent {
+            // Create a RequestManager with a listener which updates our loaded list
+            val glide = Glide.with(ViewAmbient.current)
+                .addDefaultRequestListener(SimpleRequestListener { model -> loaded += model })
+
+            Providers(AmbientRequestManager provides glide) {
+                GlideImage(
+                    data = server.url("/image").toString(),
+                    modifier = Modifier.preferredSize(128.dp, 128.dp),
+                    onRequestCompleted = { latch.countDown() }
+                )
+            }
+        }
+
+        // Wait for the onRequestCompleted to release the latch
+        latch.await(5, TimeUnit.SECONDS)
+
+        // Assert that the listener was called
+        assertThat(loaded).hasSize(1)
     }
 
     @Test

@@ -22,6 +22,7 @@ package dev.chrisbanes.accompanist.glide
 import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.staticAmbientOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -47,6 +48,22 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 
 /**
+ * Ambient containing the preferred [RequestManager] to use in [GlideImage].
+ */
+val AmbientRequestManager = staticAmbientOf<RequestManager?> { null }
+
+object GlideImageConstants {
+    /**
+     * Returns the default [RequestManager] value for the `requestManager` parameter
+     * in [GlideImage].
+     */
+    @Composable
+    fun defaultRequestManager(): RequestManager {
+        return AmbientRequestManager.current ?: Glide.with(ViewAmbient.current)
+    }
+}
+
+/**
  * Creates a composable that will attempt to load the given [data] using [Glide], and provides
  * complete content of how the current state is displayed:
  *
@@ -66,7 +83,8 @@ import kotlinx.coroutines.suspendCancellableCoroutine
  * @param data The data to load.
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
  * @param requestBuilder Optional builder for the [RequestBuilder].
- * @param requestManager The [RequestManager] to use when requesting the image. Defaults to `Glide.with(view)`
+ * @param requestManager The [RequestManager] to use when requesting the image. Defaults to the
+ * current value of [AmbientRequestManager].
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
@@ -77,7 +95,7 @@ fun GlideImage(
     data: Any,
     modifier: Modifier = Modifier,
     requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)? = null,
-    requestManager: RequestManager = Glide.with(ViewAmbient.current),
+    requestManager: RequestManager = GlideImageConstants.defaultRequestManager(),
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
     content: @Composable (imageLoadState: ImageLoadState) -> Unit
@@ -133,7 +151,8 @@ fun GlideImage(
  * @param fadeIn Whether to run a fade-in animation when images are successfully loaded.
  * Default: `false`.
  * @param requestBuilder Optional builder for the [RequestBuilder].
- * @param requestManager The [RequestManager] to use when requesting the image. Defaults to `Glide.with(view)`
+ * @param requestManager The [RequestManager] to use when requesting the image. Defaults to the
+ * current value of [AmbientRequestManager].
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
@@ -147,7 +166,7 @@ fun GlideImage(
     colorFilter: ColorFilter? = null,
     fadeIn: Boolean = false,
     requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)? = null,
-    requestManager: RequestManager = Glide.with(ViewAmbient.current),
+    requestManager: RequestManager = GlideImageConstants.defaultRequestManager(),
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
     error: @Composable ((ImageLoadState.Error) -> Unit)? = null,
