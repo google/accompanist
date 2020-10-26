@@ -307,7 +307,7 @@ class GlideTest {
     }
 
     @Test
-    fun customPicasso_ambient() {
+    fun customRequestManager_ambient() {
         val latch = CountDownLatch(1)
         val loaded = mutableListOf<Any>()
 
