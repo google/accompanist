@@ -282,7 +282,7 @@ class GlideTest {
     }
 
     @Test
-    fun customPicasso_param() {
+    fun customRequestManager_param() {
         val latch = CountDownLatch(1)
         val loaded = mutableListOf<Any>()
 
