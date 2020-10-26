@@ -89,6 +89,25 @@ PicassoImage(
 }
 ```
 
+## Custom Picasso
+
+If you wish to provide a default `Picasso` to use across all of your `PicassoImage`
+calls, we provide the `AmbientPicasso` ambient. You can see it like so:
+
+``` kotlin
+val picasso = Picasso.Builder(...)
+    // Customize as required
+    .build()
+
+Providers(AmbientPicasso provides picasso) {
+    // This will automatically use the value of AmbientPicasso
+    PicasoImage(
+        data = ...
+    )
+}
+```
+
+
 ## Download
 
 ```groovy

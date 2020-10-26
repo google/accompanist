@@ -24,6 +24,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.staticAmbientOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -48,6 +49,11 @@ import okhttp3.HttpUrl
 import java.io.File
 
 /**
+ * Ambient containing the preferred [Picasso] to use in [PicassoImage]. Defaults to [Picasso.get].
+ */
+val AmbientPicasso = staticAmbientOf { Picasso.get() }
+
+/**
  * Creates a composable that will attempt to load the given [data] using [Picasso], and provides
  * complete content of how the current state is displayed:
  *
@@ -66,6 +72,8 @@ import java.io.File
  *
  * @param data The data to load. See [RequestCreator.data] for the types allowed.
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
+ * @param picasso The [Picasso] instance to use for requests. Defaults to the current value of
+ * [AmbientPicasso].
  * @param requestBuilder Optional builder for the [RequestCreator].
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
@@ -76,7 +84,7 @@ import java.io.File
 fun PicassoImage(
     data: Any,
     modifier: Modifier = Modifier,
-    picasso: Picasso = Picasso.get(),
+    picasso: Picasso = AmbientPicasso.current,
     requestBuilder: (RequestCreator.(size: IntSize) -> RequestCreator)? = null,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
@@ -191,6 +199,8 @@ fun PicassoImage(
  * @param loading Content to be displayed when the request is in progress.
  * @param fadeIn Whether to run a fade-in animation when images are successfully loaded.
  * Default: `false`.
+ * @param picasso The [Picasso] instance to use for requests. Defaults to the current value
+ * of [AmbientPicasso].
  * @param requestBuilder Optional builder for the [RequestCreator].
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
@@ -204,7 +214,7 @@ fun PicassoImage(
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
     fadeIn: Boolean = false,
-    picasso: Picasso = Picasso.get(),
+    picasso: Picasso = AmbientPicasso.current,
     requestBuilder: (RequestCreator.(size: IntSize) -> RequestCreator)? = null,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
