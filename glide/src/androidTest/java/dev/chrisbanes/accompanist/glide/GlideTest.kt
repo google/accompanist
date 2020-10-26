@@ -281,7 +281,6 @@ class GlideTest {
             .assertIsDisplayed()
     }
 
-    @SdkSuppress(minSdkVersion = 26) // captureToBitmap
     @Test
     fun customPicasso_param() {
         val latch = CountDownLatch(1)
@@ -307,7 +306,6 @@ class GlideTest {
         assertThat(loaded).hasSize(1)
     }
 
-    @SdkSuppress(minSdkVersion = 26) // captureToBitmap
     @Test
     fun customPicasso_ambient() {
         val latch = CountDownLatch(1)
