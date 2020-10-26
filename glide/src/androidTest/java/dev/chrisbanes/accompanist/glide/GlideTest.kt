@@ -26,6 +26,7 @@ import androidx.compose.runtime.onCommit
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.platform.ViewAmbient
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.test.filters.LargeTest
@@ -286,11 +287,11 @@ class GlideTest {
         val latch = CountDownLatch(1)
         val loaded = mutableListOf<Any>()
 
-        // Create a RequestManager with a listener which updates our loaded list
-        val glide = Glide.with(InstrumentationRegistry.getInstrumentation().targetContext)
-            .addDefaultRequestListener(SimpleRequestListener { model -> loaded += model })
-
         composeTestRule.setContent {
+            // Create a RequestManager with a listener which updates our loaded list
+            val glide = Glide.with(ViewAmbient.current)
+                .addDefaultRequestListener(SimpleRequestListener { model -> loaded += model })
+
             GlideImage(
                 data = server.url("/image").toString(),
                 requestManager = glide,
@@ -312,11 +313,11 @@ class GlideTest {
         val latch = CountDownLatch(1)
         val loaded = mutableListOf<Any>()
 
-        // Create a RequestManager with a listener which updates our loaded list
-        val glide = Glide.with(InstrumentationRegistry.getInstrumentation().targetContext)
-            .addDefaultRequestListener(SimpleRequestListener { model -> loaded += model })
-
         composeTestRule.setContent {
+            // Create a RequestManager with a listener which updates our loaded list
+            val glide = Glide.with(ViewAmbient.current)
+                .addDefaultRequestListener(SimpleRequestListener { model -> loaded += model })
+
             Providers(AmbientRequestManager provides glide) {
                 GlideImage(
                     data = server.url("/image").toString(),
