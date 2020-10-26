@@ -8,5 +8,11 @@ public final class dev/chrisbanes/accompanist/coil/CoilImage {
 	public static fun ErrorResult$annotations ()V
 	public static fun RequestResult$annotations ()V
 	public static fun SuccessResult$annotations ()V
+	public static final fun getAmbientImageLoader ()Landroidx/compose/runtime/ProvidableAmbient;
+}
+
+public final class dev/chrisbanes/accompanist/coil/CoilImageConstants {
+	public static final field INSTANCE Ldev/chrisbanes/accompanist/coil/CoilImageConstants;
+	public final fun defaultImageLoader (Landroidx/compose/runtime/Composer;I)Lcoil/ImageLoader;
 }
 

@@ -19,6 +19,7 @@ package dev.chrisbanes.accompanist.coil
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.preferredSize
+import androidx.compose.runtime.Providers
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -67,6 +68,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicInteger
 
 @LargeTest
 @RunWith(JUnit4::class)
@@ -194,11 +196,10 @@ class CoilTest {
 
         // Build a custom ImageLoader with a fake EventListener
         val eventListener = object : EventListener {
-            var startCalled = 0
-                private set
+            val startCalled = AtomicInteger()
 
             override fun fetchStart(request: ImageRequest, fetcher: Fetcher<*>, options: Options) {
-                startCalled++
+                startCalled.incrementAndGet()
             }
         }
         val imageLoader = ImageLoader.Builder(context)
@@ -218,7 +219,42 @@ class CoilTest {
         latch.await(5, TimeUnit.SECONDS)
 
         // Verify that our eventListener was invoked
-        assertThat(eventListener.startCalled).isAtLeast(1)
+        assertThat(eventListener.startCalled.get()).isAtLeast(1)
+    }
+
+    @OptIn(ExperimentalCoilApi::class)
+    @Test
+    fun basicLoad_customImageLoader_ambient() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val latch = CountDownLatch(1)
+
+        // Build a custom ImageLoader with a fake EventListener
+        val eventListener = object : EventListener {
+            val startCalled = AtomicInteger()
+
+            override fun fetchStart(request: ImageRequest, fetcher: Fetcher<*>, options: Options) {
+                startCalled.incrementAndGet()
+            }
+        }
+        val imageLoader = ImageLoader.Builder(context)
+            .eventListener(eventListener)
+            .build()
+
+        composeTestRule.setContent {
+            Providers(AmbientImageLoader provides imageLoader) {
+                CoilImage(
+                    data = server.url("/image"),
+                    modifier = Modifier.preferredSize(128.dp, 128.dp),
+                    onRequestCompleted = { latch.countDown() }
+                )
+            }
+        }
+
+        // Wait for the onRequestCompleted to release the latch
+        latch.await(5, TimeUnit.SECONDS)
+
+        // Verify that our eventListener was invoked
+        assertThat(eventListener.startCalled.get()).isAtLeast(1)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
