@@ -90,7 +90,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          script: ./gradlew connectedCheck
+          script: ./gradlew connectedCheck --scan
 
       - name: Clean secrets
         if: always()
