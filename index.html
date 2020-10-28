@@ -1,4 +1,6 @@
 
+
+
 <!doctype html>
 <html lang="en" class="no-js">
   <head>
@@ -15,7 +17,7 @@
         <meta name="author" content="Chris Banes">
       
       <link rel="shortcut icon" href="assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.1.0">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.5.6">
     
     
       
@@ -23,21 +25,19 @@
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.bc7e593a.min.css">
+      <link rel="stylesheet" href="assets/stylesheets/main.63b94e9e.min.css">
+      
+        <link rel="stylesheet" href="assets/stylesheets/palette.7f672a1f.min.css">
+      
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.ab28b872.min.css">
         
-          
-          
-          <meta name="theme-color" content="#000000">
-        
+        <meta name="theme-color" content="">
       
     
     
     
       
-        
         <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:300,400,400i,700%7CIBM+Plex+Mono&display=fallback">
         <style>body,input{font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"IBM Plex Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
@@ -55,11 +55,9 @@
     
     
     
-    
-    
     <body dir="ltr" data-md-color-scheme="" data-md-color-primary="black" data-md-color-accent="deep-orange">
-      
   
+    
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
@@ -75,9 +73,7 @@
       
     </div>
     
-      
-
-<header class="md-header" data-md-component="header">
+      <header class="md-header" data-md-component="header">
   <nav class="md-header-nav md-grid" aria-label="Header">
     <a href="https://chrisbanes.github.io/accompanist/" title="Accompanist" class="md-header-nav__button md-logo" aria-label="Accompanist">
       
@@ -152,6 +148,8 @@
     
     <div class="md-container" data-md-component="container">
       
+        
+      
       
         
       
@@ -162,9 +160,7 @@
               <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
-                    
-
-<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
     <a href="https://chrisbanes.github.io/accompanist/" title="Accompanist" class="md-nav__button md-logo" aria-label="Accompanist">
       
@@ -204,10 +200,12 @@
     
       <label class="md-nav__link md-nav__link--active" for="__toc">
         Overview
-        <span class="md-nav__icon md-icon"></span>
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"/></svg>
+        </span>
       </label>
     
-    <a href="." class="md-nav__link md-nav__link--active">
+    <a href="." title="Overview" class="md-nav__link md-nav__link--active">
       Overview
     </a>
     
@@ -217,7 +215,9 @@
   
   
     <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-scrollfix>
@@ -269,7 +269,7 @@
 
 
   <li class="md-nav__item">
-    <a href="coil/" class="md-nav__link">
+    <a href="coil/" title="Coil" class="md-nav__link">
       Coil
     </a>
   </li>
@@ -281,7 +281,7 @@
 
 
   <li class="md-nav__item">
-    <a href="glide/" class="md-nav__link">
+    <a href="glide/" title="Glide" class="md-nav__link">
       Glide
     </a>
   </li>
@@ -293,7 +293,7 @@
 
 
   <li class="md-nav__item">
-    <a href="picasso/" class="md-nav__link">
+    <a href="picasso/" title="Picasso" class="md-nav__link">
       Picasso
     </a>
   </li>
@@ -310,11 +310,15 @@
     
     <label class="md-nav__link" for="nav-5">
       API
-      <span class="md-nav__icon md-icon"></span>
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
     </label>
     <nav class="md-nav" aria-label="API" data-md-level="1">
       <label class="md-nav__title" for="nav-5">
-        <span class="md-nav__icon md-icon"></span>
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
         API
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -326,7 +330,7 @@
 
 
   <li class="md-nav__item">
-    <a href="api/coil/" class="md-nav__link">
+    <a href="api/coil/" title="Coil" class="md-nav__link">
       Coil
     </a>
   </li>
@@ -338,7 +342,7 @@
 
 
   <li class="md-nav__item">
-    <a href="api/glide/" class="md-nav__link">
+    <a href="api/glide/" title="Glide" class="md-nav__link">
       Glide
     </a>
   </li>
@@ -350,7 +354,7 @@
 
 
   <li class="md-nav__item">
-    <a href="api/picasso/" class="md-nav__link">
+    <a href="api/picasso/" title="Picasso" class="md-nav__link">
       Picasso
     </a>
   </li>
@@ -362,7 +366,7 @@
 
 
   <li class="md-nav__item">
-    <a href="api/imageloading-core/" class="md-nav__link">
+    <a href="api/imageloading-core/" title="Image Loading Core" class="md-nav__link">
       Image Loading Core
     </a>
   </li>
@@ -379,7 +383,7 @@
 
 
   <li class="md-nav__item">
-    <a href="using-snapshot-version/" class="md-nav__link">
+    <a href="using-snapshot-version/" title="Snapshots" class="md-nav__link">
       Snapshots
     </a>
   </li>
@@ -391,7 +395,7 @@
 
 
   <li class="md-nav__item">
-    <a href="contributing/" class="md-nav__link">
+    <a href="contributing/" title="Contributing" class="md-nav__link">
       Contributing
     </a>
   </li>
@@ -408,11 +412,15 @@
     
     <label class="md-nav__link" for="nav-8">
       Maintainers
-      <span class="md-nav__icon md-icon"></span>
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
     </label>
     <nav class="md-nav" aria-label="Maintainers" data-md-level="1">
       <label class="md-nav__title" for="nav-8">
-        <span class="md-nav__icon md-icon"></span>
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
         Maintainers
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -424,7 +432,7 @@
 
 
   <li class="md-nav__item">
-    <a href="updating/" class="md-nav__link">
+    <a href="updating/" title="Update guide" class="md-nav__link">
       Update guide
     </a>
   </li>
@@ -451,7 +459,9 @@
   
   
     <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-scrollfix>
@@ -507,14 +517,17 @@
                   </a>
                 
                 
+                  
+                
+                
                   <h1>Overview</h1>
                 
                 <p><img alt="Accompanist logo" src="header.png" /></p>
 <p>Accompanist is a group of libraries that contains some utilities which I've found myself copying around projects which use <a href="https://developer.android.com/jetpack/compose">Jetpack Compose</a>. Currently, it contains:</p>
 <ul>
-<li>🖼️ <a href="./coil">Coil image loading composables</a></li>
-<li>🖼️ <a href="./picasso/README.md">Picasso image loading composables</a></li>
-<li>🖼️ <a href="./glide/README.md">Glide image loading composables</a></li>
+<li>🖼️ <a href="./glide">Coil image loading composables</a></li>
+<li>🖼️ <a href="./picasso">Picasso image loading composables</a></li>
+<li>🖼️ <a href="./coil">Glide image loading composables</a></li>
 </ul>
 <p><a href="https://developer.android.com/jetpack/compose">Jetpack Compose</a> is a fast-moving project and I'll be updating these libraries to match the
 latest tagged release as quickly as possible. Each <a href="https://github.com/chrisbanes/accompanist/releases">release listing</a> will outline what version of Compose libraries it depends on.</p>
@@ -561,7 +574,7 @@ limitations under the License.
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
         
-          <a href="coil/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="coil/" title="Coil" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
@@ -607,15 +620,15 @@ limitations under the License.
       
     </div>
     
-      <script src="assets/javascripts/vendor.6a3d08fc.min.js"></script>
-      <script src="assets/javascripts/bundle.71201edf.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      <script src="assets/javascripts/vendor.d1f5a259.min.js"></script>
+      <script src="assets/javascripts/bundle.d5fec882.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
       
       <script>
         app = initialize({
           base: ".",
           features: [],
           search: Object.assign({
-            worker: "assets/javascripts/worker/search.4ac00218.min.js"
+            worker: "assets/javascripts/worker/search.fae956e7.min.js"
           }, typeof search !== "undefined" && search)
         })
       </script>
