@@ -25,7 +25,9 @@ cp CONTRIBUTING.md $DOCS_ROOT/contributing.md
 cp images/social.png $DOCS_ROOT/header.png
 
 sed -i.bak 's/CONTRIBUTING.md/contributing/' $DOCS_ROOT/index.md
-sed -i.bak 's/coil\/README.md/coil/' $DOCS_ROOT/index.md
+sed -i.bak 's/coil\/README.md/glide/' $DOCS_ROOT/index.md
+sed -i.bak 's/glide\/README.md/coil/' $DOCS_ROOT/index.md
+sed -i.bak 's/picasso\/README.md/picasso/' $DOCS_ROOT/index.md
 sed -i.bak 's/images\/social.png/header.png/' $DOCS_ROOT/index.md
 
 cp coil/README.md $DOCS_ROOT/coil.md
