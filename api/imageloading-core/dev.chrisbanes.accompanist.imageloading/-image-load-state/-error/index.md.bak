@@ -17,7 +17,7 @@ data class [Error](index.md)(**painter**: Painter?, **throwable**: [Throwable](h
 |  Name|  Summary| 
 |---|---|
 | painter| The error image.
-| throwable| The error that failed the request.
+| throwable| The optional throwable that caused the request failure.
   
 
 
@@ -45,5 +45,5 @@ data class [Error](index.md)(**painter**: Painter?, **throwable**: [Throwable](h
 |  Name|  Summary| 
 |---|---|
 | [painter](index.md#dev.chrisbanes.accompanist.imageloading/ImageLoadState.Error/painter/#/PointingToDeclaration/)|   The error image.val [painter](index.md#dev.chrisbanes.accompanist.imageloading/ImageLoadState.Error/painter/#/PointingToDeclaration/): Painter?   <br>
-| [throwable](index.md#dev.chrisbanes.accompanist.imageloading/ImageLoadState.Error/throwable/#/PointingToDeclaration/)|   The error that failed the request.val [throwable](index.md#dev.chrisbanes.accompanist.imageloading/ImageLoadState.Error/throwable/#/PointingToDeclaration/): [Throwable](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html)   <br>
+| [throwable](index.md#dev.chrisbanes.accompanist.imageloading/ImageLoadState.Error/throwable/#/PointingToDeclaration/)|   The optional throwable that caused the request failure.val [throwable](index.md#dev.chrisbanes.accompanist.imageloading/ImageLoadState.Error/throwable/#/PointingToDeclaration/): [Throwable](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html)   <br>
 

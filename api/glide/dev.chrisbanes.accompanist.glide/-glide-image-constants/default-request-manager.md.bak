@@ -1,0 +1,19 @@
+//[glide](../../index.md)/[dev.chrisbanes.accompanist.glide](../index.md)/[GlideImageConstants](index.md)/[defaultRequestManager](default-request-manager.md)
+
+
+
+# defaultRequestManager  
+  
+Brief description  
+
+
+Returns the default RequestManager value for the requestManager parameter in [GlideImage](../-glide-image.md).
+
+  
+Content  
+@Composable()  
+  
+fun [defaultRequestManager](default-request-manager.md)(): RequestManager  
+
+
+

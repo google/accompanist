@@ -32,7 +32,7 @@ CoilImage(
 |---|---|
 | content| Content to be displayed for the given state.
 | data| The data to load. See ImageRequest.Builder.data for the types allowed.
-| imageLoader| The ImageLoader to use when requesting the image. Defaults to Coil's default image loader.
+| imageLoader| The ImageLoader to use when requesting the image. Defaults to [CoilImageConstants.defaultImageLoader](-coil-image-constants/default-image-loader.md).
 | modifier| Modifier used to adjust the layout algorithm or draw decoration content.
 | onRequestCompleted| Listener which will be called when the loading request has finished.
 | requestBuilder| Optional builder for the ImageRequest.
@@ -73,7 +73,7 @@ CoilImage(
 |  Name|  Summary| 
 |---|---|
 | content| Content to be displayed for the given state.
-| imageLoader| The ImageLoader to use when requesting the image. Defaults to Coil's default image loader.
+| imageLoader| The ImageLoader to use when requesting the image. Defaults to [CoilImageConstants.defaultImageLoader](-coil-image-constants/default-image-loader.md).
 | modifier| Modifier used to adjust the layout algorithm or draw decoration content.
 | onRequestCompleted| Listener which will be called when the loading request has finished.
 | request| The request to execute. If the request does not have a ImageRequest.sizeResolver set, one will be set on the request using the layout constraints.
@@ -123,7 +123,7 @@ This version of the function is more opinionated, providing:
 | data| The data to load. See ImageRequest.Builder.data for the types allowed.
 | error| Content to be displayed when the request failed.
 | fadeIn| Whether to run a fade-in animation when images are successfully loaded. Default: false.
-| imageLoader| The ImageLoader to use when requesting the image. Defaults to Coil's default image loader.
+| imageLoader| The ImageLoader to use when requesting the image. Defaults to [CoilImageConstants.defaultImageLoader](-coil-image-constants/default-image-loader.md).
 | loading| Content to be displayed when the request is in progress.
 | modifier| Modifier used to adjust the layout algorithm or draw decoration content.
 | onRequestCompleted| Listener which will be called when the loading request has finished.
@@ -172,7 +172,7 @@ This version of the function is more opinionated, providing:
 | contentScale| Optional scale parameter used to determine the aspect ratio scaling to be used if the bounds are a different size from the intrinsic size of the loaded ImageAsset.
 | error| Content to be displayed when the request failed.
 | fadeIn| Whether to run a fade-in animation when images are successfully loaded. Default: false.
-| imageLoader| The ImageLoader to use when requesting the image. Defaults to Coil's default image loader.
+| imageLoader| The ImageLoader to use when requesting the image. Defaults to [CoilImageConstants.defaultImageLoader](-coil-image-constants/default-image-loader.md).
 | loading| Content to be displayed when the request is in progress.
 | modifier| Modifier used to adjust the layout algorithm or draw decoration content.
 | onRequestCompleted| Listener which will be called when the loading request has finished.

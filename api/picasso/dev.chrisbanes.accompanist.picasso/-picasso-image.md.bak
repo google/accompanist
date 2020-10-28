@@ -34,6 +34,7 @@ PicassoImage(
 | data| The data to load. See RequestCreator.data for the types allowed.
 | modifier| Modifier used to adjust the layout algorithm or draw decoration content.
 | onRequestCompleted| Listener which will be called when the loading request has finished.
+| picasso| The Picasso instance to use for requests. Defaults to the current value of [AmbientPicasso](index.md#dev.chrisbanes.accompanist.picasso//AmbientPicasso/#/PointingToDeclaration/).
 | requestBuilder| Optional builder for the RequestCreator.
 | shouldRefetchOnSizeChange| Lambda which will be invoked when the size changes, allowing optional re-fetching of the image. Return true to re-fetch the image.
   
@@ -83,6 +84,7 @@ This version of the function is more opinionated, providing:
 | loading| Content to be displayed when the request is in progress.
 | modifier| Modifier used to adjust the layout algorithm or draw decoration content.
 | onRequestCompleted| Listener which will be called when the loading request has finished.
+| picasso| The Picasso instance to use for requests. Defaults to the current value of [AmbientPicasso](index.md#dev.chrisbanes.accompanist.picasso//AmbientPicasso/#/PointingToDeclaration/).
 | requestBuilder| Optional builder for the RequestCreator.
 | shouldRefetchOnSizeChange| Lambda which will be invoked when the size changes, allowing optional re-fetching of the image. Return true to re-fetch the image.
   
