@@ -16,10 +16,10 @@
 
 @file:Suppress("NOTHING_TO_INLINE", "unused")
 
-@file:JvmName("Insetter")
+@file:JvmName("ComposeInsets")
 @file:JvmMultifileClass
 
-package dev.chrisbanes.accompanist.insetter
+package dev.chrisbanes.accompanist.insets
 
 import android.view.View
 import androidx.compose.runtime.Composable
@@ -40,7 +40,7 @@ import androidx.core.view.WindowInsetsCompat.Type
  * Main holder of our inset values.
  */
 @Stable
-class DisplayInsets {
+class WindowInsets {
     /**
      * Inset values which match [WindowInsetsCompat.Type.systemBars]
      */
@@ -100,35 +100,35 @@ class Insets {
         internal set
 }
 
-val AmbientInsets = staticAmbientOf<DisplayInsets> {
-    error("AmbientInsets value not available. Are you using ProvideDisplayInsets?")
+val AmbientWindowInsets = staticAmbientOf<WindowInsets> {
+    error("AmbientInsets value not available. Are you using ProvideWindowInsets?")
 }
 
 /**
- * Applies any [WindowInsetsCompat] values to [AmbientInsets], which are then available
+ * Applies any [WindowInsetsCompat] values to [AmbientWindowInsets], which are then available
  * within [content].
  *
  * @param consumeWindowInsets Whether to consume any [WindowInsetsCompat]s which are dispatched to
  * the host view. Defaults to `true`.
  */
 @Composable
-fun ProvideDisplayInsets(
+fun ProvideWindowInsets(
     consumeWindowInsets: Boolean = true,
     content: @Composable () -> Unit
 ) {
     val view = ViewAmbient.current
 
-    val displayInsets = remember { DisplayInsets() }
+    val windowInsets = remember { WindowInsets() }
 
     onCommit(view) {
-        ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsets ->
-            displayInsets.systemBars.updateFrom(windowInsets, Type.systemBars())
-            displayInsets.systemGestures.updateFrom(windowInsets, Type.systemGestures())
-            displayInsets.statusBars.updateFrom(windowInsets, Type.statusBars())
-            displayInsets.navigationBars.updateFrom(windowInsets, Type.navigationBars())
-            displayInsets.ime.updateFrom(windowInsets, Type.ime())
+        ViewCompat.setOnApplyWindowInsetsListener(view) { _, wic ->
+            windowInsets.systemBars.updateFrom(wic, Type.systemBars())
+            windowInsets.systemGestures.updateFrom(wic, Type.systemGestures())
+            windowInsets.statusBars.updateFrom(wic, Type.statusBars())
+            windowInsets.navigationBars.updateFrom(wic, Type.navigationBars())
+            windowInsets.ime.updateFrom(wic, Type.ime())
 
-            if (consumeWindowInsets) WindowInsetsCompat.CONSUMED else windowInsets
+            if (consumeWindowInsets) WindowInsetsCompat.CONSUMED else wic
         }
 
         // Add an OnAttachStateChangeListener to request an inset pass each time we're attached
@@ -149,7 +149,7 @@ fun ProvideDisplayInsets(
         }
     }
 
-    Providers(AmbientInsets provides displayInsets) {
+    Providers(AmbientWindowInsets provides windowInsets) {
         content()
     }
 }

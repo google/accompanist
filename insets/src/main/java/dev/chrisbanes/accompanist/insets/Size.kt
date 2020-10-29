@@ -16,10 +16,10 @@
 
 @file:Suppress("NOTHING_TO_INLINE", "unused")
 
-@file:JvmName("Insetter")
+@file:JvmName("ComposeInsets")
 @file:JvmMultifileClass
 
-package dev.chrisbanes.accompanist.insetter
+package dev.chrisbanes.accompanist.insets
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
@@ -66,7 +66,7 @@ import androidx.compose.ui.unit.dp
  */
 fun Modifier.statusBarsHeight(additional: Dp = 0.dp) = composed {
     InsetsSizeModifier(
-        insets = AmbientInsets.current.statusBars,
+        insets = AmbientWindowInsets.current.statusBars,
         heightSide = VerticalSide.Top,
         additionalHeight = additional
     )
@@ -118,7 +118,7 @@ inline fun Modifier.statusBarsHeight() = statusBarsHeightPlus(0.dp)
  */
 fun Modifier.statusBarsHeightPlus(additional: Dp) = composed {
     InsetsSizeModifier(
-        insets = AmbientInsets.current.statusBars,
+        insets = AmbientWindowInsets.current.statusBars,
         heightSide = VerticalSide.Top,
         additionalHeight = additional
     )
@@ -170,7 +170,7 @@ inline fun Modifier.navigationBarsHeight() = navigationBarsHeightPlus(0.dp)
  */
 fun Modifier.navigationBarsHeightPlus(additional: Dp) = composed {
     InsetsSizeModifier(
-        insets = AmbientInsets.current.navigationBars,
+        insets = AmbientWindowInsets.current.navigationBars,
         heightSide = VerticalSide.Bottom,
         additionalHeight = additional
     )
@@ -221,7 +221,7 @@ fun Modifier.navigationBarsWidthPlus(
     additional: Dp
 ) = composed {
     InsetsSizeModifier(
-        insets = AmbientInsets.current.navigationBars,
+        insets = AmbientWindowInsets.current.navigationBars,
         widthSide = side,
         additionalWidth = additional
     )

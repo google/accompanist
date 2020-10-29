@@ -46,8 +46,8 @@ mkdir -p $DOCS_ROOT/glide
 cp glide/images/crossfade.gif $DOCS_ROOT/glide/crossfade.gif
 sed -i.bak 's/images\/crossfade.gif/crossfade.gif/' $DOCS_ROOT/glide.md
 
-cp insetter/README.md $DOCS_ROOT/insetter.md
-mkdir -p $DOCS_ROOT/insetter
+cp insets/README.md $DOCS_ROOT/insets.md
+mkdir -p $DOCS_ROOT/insets
 
 #########################
 # Tidy up Dokka output

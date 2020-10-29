@@ -9,7 +9,7 @@ A number of libraries which aim to integrate some popular image loading librarie
  - 🖼️ [Picasso image loading composables](./picasso/)
  - 🖼️ [Glide image loading composables](./glide/)
 
-### 📐 [Insetter](./insetter/)
+### 📐 [Insets](./insets/)
 TODO
 
 ---

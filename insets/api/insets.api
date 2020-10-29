@@ -1,0 +1,51 @@
+public final class dev/chrisbanes/accompanist/insets/ComposeInsets {
+	public static final fun ProvideWindowInsets (ZLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun getAmbientWindowInsets ()Landroidx/compose/runtime/ProvidableAmbient;
+	public static final fun navigationBarWidth (Landroidx/compose/ui/Modifier;Ldev/chrisbanes/accompanist/insets/HorizontalSide;)Landroidx/compose/ui/Modifier;
+	public static final fun navigationBarsHeight (Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
+	public static final fun navigationBarsHeightPlus-wxomhCo (Landroidx/compose/ui/Modifier;F)Landroidx/compose/ui/Modifier;
+	public static final fun navigationBarsPadding (Landroidx/compose/ui/Modifier;ZZZ)Landroidx/compose/ui/Modifier;
+	public static final fun navigationBarsPadding$default (Landroidx/compose/ui/Modifier;ZZZILjava/lang/Object;)Landroidx/compose/ui/Modifier;
+	public static final fun navigationBarsWidthPlus-UTaBBDU (Landroidx/compose/ui/Modifier;Ldev/chrisbanes/accompanist/insets/HorizontalSide;F)Landroidx/compose/ui/Modifier;
+	public static final fun statusBarsHeight (Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
+	public static final fun statusBarsHeight-wxomhCo (Landroidx/compose/ui/Modifier;F)Landroidx/compose/ui/Modifier;
+	public static final fun statusBarsHeight-wxomhCo$default (Landroidx/compose/ui/Modifier;FILjava/lang/Object;)Landroidx/compose/ui/Modifier;
+	public static final fun statusBarsHeightPlus-wxomhCo (Landroidx/compose/ui/Modifier;F)Landroidx/compose/ui/Modifier;
+	public static final fun statusBarsPadding (Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
+	public static final fun systemBarsPadding (Landroidx/compose/ui/Modifier;Z)Landroidx/compose/ui/Modifier;
+	public static final fun systemBarsPadding$default (Landroidx/compose/ui/Modifier;ZILjava/lang/Object;)Landroidx/compose/ui/Modifier;
+	public static final fun toPaddingValues (Ldev/chrisbanes/accompanist/insets/Insets;ZZZZLandroidx/compose/runtime/Composer;II)Landroidx/compose/foundation/layout/PaddingValues;
+}
+
+public final class dev/chrisbanes/accompanist/insets/HorizontalSide : java/lang/Enum {
+	public static final field Left Ldev/chrisbanes/accompanist/insets/HorizontalSide;
+	public static final field Right Ldev/chrisbanes/accompanist/insets/HorizontalSide;
+	public static final fun valueOf (Ljava/lang/String;)Ldev/chrisbanes/accompanist/insets/HorizontalSide;
+	public static final fun values ()[Ldev/chrisbanes/accompanist/insets/HorizontalSide;
+}
+
+public final class dev/chrisbanes/accompanist/insets/Insets {
+	public fun <init> ()V
+	public final fun getBottom ()I
+	public final fun getLeft ()I
+	public final fun getRight ()I
+	public final fun getTop ()I
+	public final fun isVisible ()Z
+}
+
+public final class dev/chrisbanes/accompanist/insets/VerticalSide : java/lang/Enum {
+	public static final field Bottom Ldev/chrisbanes/accompanist/insets/VerticalSide;
+	public static final field Top Ldev/chrisbanes/accompanist/insets/VerticalSide;
+	public static final fun valueOf (Ljava/lang/String;)Ldev/chrisbanes/accompanist/insets/VerticalSide;
+	public static final fun values ()[Ldev/chrisbanes/accompanist/insets/VerticalSide;
+}
+
+public final class dev/chrisbanes/accompanist/insets/WindowInsets {
+	public fun <init> ()V
+	public final fun getIme ()Ldev/chrisbanes/accompanist/insets/Insets;
+	public final fun getNavigationBars ()Ldev/chrisbanes/accompanist/insets/Insets;
+	public final fun getStatusBars ()Ldev/chrisbanes/accompanist/insets/Insets;
+	public final fun getSystemBars ()Ldev/chrisbanes/accompanist/insets/Insets;
+	public final fun getSystemGestures ()Ldev/chrisbanes/accompanist/insets/Insets;
+}
+

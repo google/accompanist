@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package dev.chrisbanes.accompanist.insetter
+package dev.chrisbanes.accompanist.insets
 
 import androidx.test.filters.LargeTest
 import androidx.ui.test.createComposeRule
@@ -24,7 +24,7 @@ import org.junit.runners.JUnit4
 
 @LargeTest
 @RunWith(JUnit4::class)
-class InsetterTest {
+class InsetsTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 }

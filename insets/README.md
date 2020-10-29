@@ -1,33 +1,33 @@
-# Insetter for Jetpack Compose
+# Insets for Jetpack Compose
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/dev.chrisbanes.accompanist/accompanist-insetter/badge.svg)](https://search.maven.org/search?q=g:dev.chrisbanes.accompanist)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/dev.chrisbanes.accompanist/accompanist-insets/badge.svg)](https://search.maven.org/search?q=g:dev.chrisbanes.accompanist)
 
-Insetter for Jetpack Compose takes a lot of the ideas which drove [Insetter][insetter-view] for views, and applies them for use in composables.
+Insets for Jetpack Compose takes a lot of the ideas which drove [Insetter][insetter-view] for views, and applies them for use in composables.
 
 ## Usage
-To setup Insetter in your composables, you need to call the `ProvideDisplayInsets` function and
+To setup Insets in your composables, you need to call the `ProvideWindowInsets` function and
 wrap your content. This would typically be done near the top level of your composable hierarchy:
 
 ``` kotlin
 setContent {
   MaterialTheme {
-    ProvideDisplayInsets {
+    ProvideWindowInsets {
       // your content
     }
   }
 }
 ```
 
-> Note: Whether `ProvideDisplayInsets` is called outside or within `MaterialTheme` doesn't particularly matter.
+> Note: Whether `ProvideWindowInsets` is called outside or within `MaterialTheme` doesn't particularly matter.
 
-`ProvideDisplayInsets` allows Insetter to set an [`OnApplyWindowInsetsListener`][insetslistener] on your content's host view. That listener is used to update the value of an ambient bundled in this library: `AmbientInsetter`.
+`ProvideWindowInsets` allows the library to set an [`OnApplyWindowInsetsListener`][insetslistener] on your content's host view. That listener is used to update the value of an ambient bundled in this library: `AmbientWindowInsets`.
 
-`AmbientInsetter` holds an instance of `DisplayInsets` which contains the value of various [WindowInsets][insets] [types][insettypes]. You can use the values manually like so:
+`AmbientWindowInsets` holds an instance of `WindowInsets` which contains the value of various [WindowInsets][insets] [types][insettypes]. You can use the values manually like so:
 
 ``` kotlin
 @Composable
 fun ImeAvoidingBox() {
-  val insets = AmbientInsetter.current
+  val insets = AmbientWindowInsets.current
 
   Box(Modifier.padding(bottom = insets.ime.bottom))
 }
@@ -48,7 +48,7 @@ repositories {
 }
 
 dependencies {
-    implementation "dev.chrisbanes.accompanist:accompanist-insetter:<version>"
+    implementation "dev.chrisbanes.accompanist:accompanist-insets:<version>"
 }
 ```
 

@@ -16,10 +16,10 @@
 
 @file:Suppress("NOTHING_TO_INLINE", "unused")
 
-@file:JvmName("Insetter")
+@file:JvmName("ComposeInsets")
 @file:JvmMultifileClass
 
-package dev.chrisbanes.accompanist.insetter
+package dev.chrisbanes.accompanist.insets
 
 import androidx.compose.ui.LayoutModifier
 import androidx.compose.ui.Measurable
@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.offset
  */
 fun Modifier.systemBarsPadding(enabled: Boolean = true) = composed {
     insetsPadding(
-        insets = AmbientInsets.current.systemBars,
+        insets = AmbientWindowInsets.current.systemBars,
         left = enabled,
         top = enabled,
         right = enabled,
@@ -51,7 +51,7 @@ fun Modifier.systemBarsPadding(enabled: Boolean = true) = composed {
  * of the content.
  */
 fun Modifier.statusBarsPadding() = composed {
-    insetsPadding(insets = AmbientInsets.current.statusBars, top = true)
+    insetsPadding(insets = AmbientWindowInsets.current.statusBars, top = true)
 }
 
 /**
@@ -72,7 +72,7 @@ fun Modifier.navigationBarsPadding(
     right: Boolean = true
 ) = composed {
     insetsPadding(
-        insets = AmbientInsets.current.navigationBars,
+        insets = AmbientWindowInsets.current.navigationBars,
         left = left,
         right = right,
         bottom = bottom

@@ -14,9 +14,5 @@
   ~ limitations under the License.
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="dev.chrisbanes.accompanist.insetter.test">
-
-    <uses-sdk android:targetSdkVersion="30" />
-
+<manifest package="dev.chrisbanes.accompanist.insets">
 </manifest>
