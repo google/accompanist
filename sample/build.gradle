@@ -60,10 +60,6 @@ dependencies {
     implementation Libs.AndroidX.Compose.material
     implementation Libs.AndroidX.Compose.foundation
     implementation Libs.AndroidX.Compose.layout
-    implementation Libs.AndroidX.Compose.material
-
-    implementation Libs.AndroidX.coreKtx
-    implementation Libs.AndroidX.appcompat
 
     implementation Libs.Kotlin.stdlib
 }

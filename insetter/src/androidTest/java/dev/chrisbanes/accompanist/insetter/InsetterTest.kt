@@ -27,6 +27,4 @@ import org.junit.runners.JUnit4
 class InsetterTest {
     @get:Rule
     val composeTestRule = createComposeRule()
-
-
 }
