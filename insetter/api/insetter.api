@@ -23,22 +23,22 @@ public final class dev/chrisbanes/accompanist/insetter/Insets {
 	public final fun isVisible ()Z
 }
 
-public final class dev/chrisbanes/accompanist/insetter/InsetterKt {
+public final class dev/chrisbanes/accompanist/insetter/Insetter {
 	public static final fun ProvideDisplayInsets (ZLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 	public static final fun getAmbientInsets ()Landroidx/compose/runtime/ProvidableAmbient;
 	public static final fun navigationBarWidth (Landroidx/compose/ui/Modifier;Ldev/chrisbanes/accompanist/insetter/HorizontalSide;)Landroidx/compose/ui/Modifier;
 	public static final fun navigationBarsHeight (Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
 	public static final fun navigationBarsHeightPlus-wxomhCo (Landroidx/compose/ui/Modifier;F)Landroidx/compose/ui/Modifier;
 	public static final fun navigationBarsPadding (Landroidx/compose/ui/Modifier;ZZZ)Landroidx/compose/ui/Modifier;
-	public static synthetic fun navigationBarsPadding$default (Landroidx/compose/ui/Modifier;ZZZILjava/lang/Object;)Landroidx/compose/ui/Modifier;
+	public static final fun navigationBarsPadding$default (Landroidx/compose/ui/Modifier;ZZZILjava/lang/Object;)Landroidx/compose/ui/Modifier;
 	public static final fun navigationBarsWidthPlus-gYsdZ8Q (Landroidx/compose/ui/Modifier;Ldev/chrisbanes/accompanist/insetter/HorizontalSide;F)Landroidx/compose/ui/Modifier;
 	public static final fun statusBarsHeight (Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
 	public static final fun statusBarsHeight-wxomhCo (Landroidx/compose/ui/Modifier;F)Landroidx/compose/ui/Modifier;
-	public static synthetic fun statusBarsHeight-wxomhCo$default (Landroidx/compose/ui/Modifier;FILjava/lang/Object;)Landroidx/compose/ui/Modifier;
+	public static final fun statusBarsHeight-wxomhCo$default (Landroidx/compose/ui/Modifier;FILjava/lang/Object;)Landroidx/compose/ui/Modifier;
 	public static final fun statusBarsHeightPlus-wxomhCo (Landroidx/compose/ui/Modifier;F)Landroidx/compose/ui/Modifier;
 	public static final fun statusBarsPadding (Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
 	public static final fun systemBarsPadding (Landroidx/compose/ui/Modifier;Z)Landroidx/compose/ui/Modifier;
-	public static synthetic fun systemBarsPadding$default (Landroidx/compose/ui/Modifier;ZILjava/lang/Object;)Landroidx/compose/ui/Modifier;
+	public static final fun systemBarsPadding$default (Landroidx/compose/ui/Modifier;ZILjava/lang/Object;)Landroidx/compose/ui/Modifier;
 	public static final fun toPaddingValues (Ldev/chrisbanes/accompanist/insetter/Insets;ZZZZLandroidx/compose/runtime/Composer;II)Landroidx/compose/foundation/layout/PaddingValues;
 }
 
