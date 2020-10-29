@@ -14,21 +14,19 @@
  * limitations under the License.
  */
 
-plugins {
-    id 'com.gradle.enterprise' version '3.5'
-}
+package dev.chrisbanes.accompanist.insetter
 
-gradleEnterprise {
-    buildScan {
-        termsOfServiceUrl = 'https://gradle.com/terms-of-service'
-        termsOfServiceAgree = 'yes'
-    }
-}
+import androidx.test.filters.LargeTest
+import androidx.ui.test.createComposeRule
+import org.junit.Rule
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 
-include ':coil'
-include ':picasso'
-include ':glide'
-include ':imageloading-core'
-include ':imageloading-testutils'
-include ':insetter'
-include ':sample'
+@LargeTest
+@RunWith(JUnit4::class)
+class InsetterTest {
+    @get:Rule
+    val composeTestRule = createComposeRule()
+
+
+}
