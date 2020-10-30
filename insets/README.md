@@ -87,7 +87,11 @@ LazyColumn(
 )
 ```
 
-For a more complex example, see the [`EdgeToEdgeLazyColumn`](./sample/src/main/java/dev/chrisbanes/accompanist/sample/insets/EdgeToEdgeLazyColumn.kt) example.
+For a more complex example, see the [`EdgeToEdgeLazyColumn`](./sample/src/main/java/dev/chrisbanes/accompanist/sample/insets/EdgeToEdgeLazyColumn.kt) example:
+
+<a href="images/edge-to-edge-list.jpg">
+<img src="images/edge-to-edge-list.jpg" width=300>
+</a>
 
 ## Download
 
