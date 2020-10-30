@@ -36,7 +36,9 @@ import androidx.compose.ui.unit.offset
  * @param enabled Whether to apply padding using the system bars dimensions on the respective edges.
  * Defaults to `true`.
  */
-fun Modifier.systemBarsPadding(enabled: Boolean = true) = composed {
+fun Modifier.systemBarsPadding(
+    enabled: Boolean = true
+): Modifier = composed {
     insetsPadding(
         insets = AmbientWindowInsets.current.systemBars,
         left = enabled,
@@ -50,7 +52,7 @@ fun Modifier.systemBarsPadding(enabled: Boolean = true) = composed {
  * Apply additional space which matches the height of the status bars height along the top edge
  * of the content.
  */
-fun Modifier.statusBarsPadding() = composed {
+fun Modifier.statusBarsPadding(): Modifier = composed {
     insetsPadding(insets = AmbientWindowInsets.current.statusBars, top = true)
 }
 
@@ -70,7 +72,7 @@ fun Modifier.navigationBarsPadding(
     bottom: Boolean = true,
     left: Boolean = true,
     right: Boolean = true
-) = composed {
+): Modifier = composed {
     insetsPadding(
         insets = AmbientWindowInsets.current.navigationBars,
         left = left,
@@ -88,7 +90,7 @@ private inline fun Modifier.insetsPadding(
     top: Boolean = false,
     right: Boolean = false,
     bottom: Boolean = false,
-) = this then InsetsPaddingModifier(insets, left, top, right, bottom)
+): Modifier = this then InsetsPaddingModifier(insets, left, top, right, bottom)
 
 private data class InsetsPaddingModifier(
     private val insets: Insets,

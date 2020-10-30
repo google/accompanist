@@ -64,59 +64,9 @@ import androidx.compose.ui.unit.dp
  *
  * @param additional Any additional height to add to the status bars size.
  */
-fun Modifier.statusBarsHeight(additional: Dp = 0.dp) = composed {
-    InsetsSizeModifier(
-        insets = AmbientWindowInsets.current.statusBars,
-        heightSide = VerticalSide.Top,
-        additionalHeight = additional
-    )
-}
-
-/**
- * Declare the height of the content to match the height of the status bars exactly.
- *
- * This is very handy when used with `Spacer` to push content below the status bars:
- * ```
- * Column {
- *     Spacer(Modifier.statusBarHeight())
- *
- *     // Content to be drawn below status bars (y-axis)
- * }
- * ```
- *
- * It's also useful when used to draw a scrim which matches the status bars:
- * ```
- * Spacer(
- *     Modifier.statusBarHeight()
- *         .fillMaxWidth()
- *         .drawBackground(MaterialTheme.colors.background.copy(alpha = 0.3f)
- * )
- * ```
- *
- * Internally this matches the behavior of the [Modifier.height] modifier.
- */
-inline fun Modifier.statusBarsHeight() = statusBarsHeightPlus(0.dp)
-
-/**
- * Declare the height of the content to match the height of the status bars, plus some
- * additional height passed in via [additional].
- *
- * As an example, this could be used with `Spacer` to push content below the status bar
- * and app bars:
- *
- * ```
- * Column {
- *     Spacer(Modifier.statusBarHeightPlus(56.dp))
- *
- *     // Content to be drawn below status bars and app bar (y-axis)
- * }
- * ```
- *
- * Internally this matches the behavior of the [Modifier.height] modifier.
- *
- * @param additional Any additional height to add to the status bars size.
- */
-fun Modifier.statusBarsHeightPlus(additional: Dp) = composed {
+fun Modifier.statusBarsHeight(
+    additional: Dp = 0.dp
+): Modifier = composed {
     InsetsSizeModifier(
         insets = AmbientWindowInsets.current.statusBars,
         heightSide = VerticalSide.Top,
@@ -146,29 +96,12 @@ fun Modifier.statusBarsHeightPlus(additional: Dp) = composed {
  * ```
  *
  * Internally this matches the behavior of the [Modifier.height] modifier.
- */
-inline fun Modifier.navigationBarsHeight() = navigationBarsHeightPlus(0.dp)
-
-/**
- * Declare the height of the content to match the height of the navigation bars, plus some
- * additional height passed in via [additional]
- *
- * As an example, this could be used with `Spacer` to push content above the navigation bar
- * and bottom app bars:
- *
- * ```
- * Column {
- *     // Content to be drawn above navigation bars and bottom app bar (y-axis)
- *
- *     Spacer(Modifier.statusBarHeightPlus(48.dp))
- * }
- * ```
- *
- * Internally this matches the behavior of the [Modifier.height] modifier.
  *
  * @param additional Any additional height to add to the status bars size.
  */
-fun Modifier.navigationBarsHeightPlus(additional: Dp) = composed {
+fun Modifier.navigationBarsHeight(
+    additional: Dp = 0.dp
+): Modifier = composed {
     InsetsSizeModifier(
         insets = AmbientWindowInsets.current.navigationBars,
         heightSide = VerticalSide.Bottom,
@@ -204,22 +137,12 @@ fun Modifier.navigationBarsHeightPlus(additional: Dp) = composed {
  * Internally this matches the behavior of the [Modifier.height] modifier.
  *
  * @param side The navigation bar side to use as the source for the width.
- */
-inline fun Modifier.navigationBarWidth(side: HorizontalSide) = navigationBarsWidthPlus(side, 0.dp)
-
-/**
- * Declare the preferred width of the content to match the width of the navigation bars,
- * on the given [side], plus additional width passed in via [additional].
- *
- * Internally this matches the behavior of the [Modifier.height] modifier.
- *
- * @param side The navigation bar side to use as the source for the width.
  * @param additional Any additional width to add to the status bars size.
  */
-fun Modifier.navigationBarsWidthPlus(
+fun Modifier.navigationBarsWidth(
     side: HorizontalSide,
-    additional: Dp
-) = composed {
+    additional: Dp = 0.dp
+): Modifier = composed {
     InsetsSizeModifier(
         insets = AmbientWindowInsets.current.navigationBars,
         widthSide = side,
