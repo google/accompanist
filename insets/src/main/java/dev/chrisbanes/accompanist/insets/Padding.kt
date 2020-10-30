@@ -21,12 +21,18 @@
 
 package dev.chrisbanes.accompanist.insets
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.LayoutModifier
 import androidx.compose.ui.Measurable
 import androidx.compose.ui.MeasureScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.platform.DensityAmbient
+import androidx.compose.ui.platform.LayoutDirectionAmbient
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.offset
 
 /**
@@ -120,4 +126,42 @@ private data class InsetsPaddingModifier(
             placeable.place(left, top)
         }
     }
+}
+
+/**
+ * Returns the current insets converted into a [PaddingValues].
+ *
+ * @param start Whether to apply the inset on the start dimension.
+ * @param top Whether to apply the inset on the top dimension.
+ * @param end Whether to apply the inset on the end dimension.
+ * @param bottom Whether to apply the inset on the bottom dimension.
+ */
+@Composable
+fun Insets.toPaddingValues(
+    start: Boolean = true,
+    top: Boolean = true,
+    end: Boolean = true,
+    bottom: Boolean = true
+): PaddingValues = with(DensityAmbient.current) {
+    val layoutDirection = LayoutDirectionAmbient.current
+    PaddingValues(
+        start = when {
+            start && layoutDirection == LayoutDirection.Ltr -> this@toPaddingValues.left.toDp()
+            start && layoutDirection == LayoutDirection.Rtl -> this@toPaddingValues.right.toDp()
+            else -> 0.dp
+        },
+        top = when {
+            top -> this@toPaddingValues.top.toDp()
+            else -> 0.dp
+        },
+        end = when {
+            end && layoutDirection == LayoutDirection.Ltr -> this@toPaddingValues.right.toDp()
+            end && layoutDirection == LayoutDirection.Rtl -> this@toPaddingValues.left.toDp()
+            else -> 0.dp
+        },
+        bottom = when {
+            bottom -> this@toPaddingValues.bottom.toDp()
+            else -> 0.dp
+        }
+    )
 }
