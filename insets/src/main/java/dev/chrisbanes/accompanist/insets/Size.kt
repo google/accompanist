@@ -145,6 +145,13 @@ fun Modifier.navigationBarsWidth(
     )
 }
 
+/**
+ * [Modifier] class which powers the modifiers above. This is the lower level modifier which
+ * supports the functionality through a number of parameters.
+ *
+ * We may make this public at some point. If you need this, please let us know via the
+ * issue tracker.
+ */
 private data class InsetsSizeModifier(
     private val insets: Insets,
     private val widthSide: HorizontalSide? = null,
