@@ -1,6 +1,6 @@
-# Jetpack Compose + Glide
+# Glide for Jetpack Compose
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/dev.chrisbanes.accompanist/accompanist-glide/badge.svg)](https://search.maven.org/search?q=g:dev.chrisbanes.accompanist)
+[![Maven Central](https://img.shields.io/maven-central/v/dev.chrisbanes.accompanist/accompanist-glide)](https://search.maven.org/search?q=g:dev.chrisbanes.accompanist)
 
 This library brings easy-to-use composable which can fetch and display images from external sources, such as network, using the [Glide][glide] image loading library.
 
@@ -121,6 +121,8 @@ Providers(AmbientRequestManager provides requestManager) {
 For more information on ambients, see [here](https://developer.android.com/reference/kotlin/androidx/compose/runtime/Ambient).
 
 ## Download
+
+[![Maven Central](https://img.shields.io/maven-central/v/dev.chrisbanes.accompanist/accompanist-glide)](https://search.maven.org/search?q=g:dev.chrisbanes.accompanist)
 
 ```groovy
 repositories {

@@ -1,8 +1,8 @@
-# Jetpack Compose + Picasso
+# Picasso for Jetpack Compose
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/dev.chrisbanes.accompanist/accompanist-picasso/badge.svg)](https://search.maven.org/search?q=g:dev.chrisbanes.accompanist)
+[![Maven Central](https://img.shields.io/maven-central/v/dev.chrisbanes.accompanist/accompanist-picasso)](https://search.maven.org/search?q=g:dev.chrisbanes.accompanist)
 
-This library brings easy-to-use composable which can fetch and display images from external sources, such as network, using the [Picasso][picasso] image loading library.
+This library brings easy-to-use composable which can fetch and display images from external sources, such as network, using the [Picasso][picasso] v2 image loading library.
 
 <img src="https://raw.githubusercontent.com/square/picasso/master/website/static/sample.png" width="400" alt="Picasso sample screenshot">
 
@@ -112,6 +112,8 @@ Providers(AmbientPicasso provides picasso) {
 For more information on ambients, see [here](https://developer.android.com/reference/kotlin/androidx/compose/runtime/Ambient).
 
 ## Download
+
+[![Maven Central](https://img.shields.io/maven-central/v/dev.chrisbanes.accompanist/accompanist-picasso)](https://search.maven.org/search?q=g:dev.chrisbanes.accompanist)
 
 ```groovy
 repositories {
