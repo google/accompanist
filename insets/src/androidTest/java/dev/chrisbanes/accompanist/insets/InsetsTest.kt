@@ -16,9 +16,13 @@
 
 package dev.chrisbanes.accompanist.insets
 
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.test.filters.LargeTest
-import androidx.ui.test.createComposeRule
+import androidx.test.filters.SdkSuppress
+import androidx.ui.test.createAndroidComposeRule
 import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 
@@ -26,5 +30,23 @@ import org.junit.runners.JUnit4
 @RunWith(JUnit4::class)
 class InsetsTest {
     @get:Rule
-    val composeTestRule = createComposeRule()
+    val composeTestRule = createAndroidComposeRule(InsetsTestActivity::class.java)
+
+    @Test
+    @SdkSuppress(minSdkVersion = 23) // ViewCompat.getRootWindowInsets
+    fun assertValuesMatchViewInsets() {
+        lateinit var composeWindowInsets: WindowInsets
+        composeTestRule.setContent {
+            ProvideWindowInsets {
+                composeWindowInsets = AmbientWindowInsets.current
+            }
+        }
+
+        lateinit var rootWindowInsets: WindowInsetsCompat
+        composeTestRule.activityRule.scenario.onActivity {
+            rootWindowInsets = ViewCompat.getRootWindowInsets(it.window.decorView)!!
+        }
+
+        composeWindowInsets.assertEqualTo(rootWindowInsets)
+    }
 }
