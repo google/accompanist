@@ -23,11 +23,11 @@ package dev.chrisbanes.accompanist.insets
 
 import android.view.View
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticAmbientOf
@@ -120,7 +120,7 @@ fun ProvideWindowInsets(
 
     val windowInsets = remember { WindowInsets() }
 
-    onCommit(view) {
+    DisposableEffect(view) {
         ViewCompat.setOnApplyWindowInsetsListener(view) { _, wic ->
             windowInsets.systemBars.updateFrom(wic, Type.systemBars())
             windowInsets.systemGestures.updateFrom(wic, Type.systemGestures())
