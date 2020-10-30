@@ -87,6 +87,8 @@ LazyColumn(
 )
 ```
 
+For a more complex example, see the [`EdgeToEdgeLazyColumn`](./sample/src/main/java/dev/chrisbanes/accompanist/sample/insets/EdgeToEdgeLazyColumn.kt) example.
+
 ## Download
 
 ```groovy
