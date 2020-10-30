@@ -103,8 +103,13 @@ private fun Sample() {
                     ListItem(imageUrl, Modifier.fillMaxWidth())
                 }
 
+                /**
+                 * We show a translucent app bar above which floats about the content. Our
+                 * [InsetAwareTopAppBar] below automatically draws behind the status bar too.
+                 */
                 InsetAwareTopAppBar(
                     title = { Text(stringResource(R.string.insets_title_list)) },
+                    backgroundColor = MaterialTheme.colors.surface.copy(alpha = 0.9f),
                     modifier = Modifier.fillMaxWidth()
                         // We use onSizeChanged to track the app bar height, and update
                         // our state above
