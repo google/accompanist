@@ -108,7 +108,7 @@ dependencies {
 Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap]. These are updated on every commit.
 
 [compose]: https://developer.android.com/jetpack/compose
-[snap]: https://oss.sonatype.org/content/repositories/snapshots/dev/chrisbanes/accompanist/accompanist-glide/
+[snap]: https://oss.sonatype.org/content/repositories/snapshots/dev/chrisbanes/accompanist/accompanist-insets/
 [insetter-view]: https://github.com/chrisbanes/insetter
 [insets]: https://developer.android.com/reference/kotlin/androidx/core/view/WindowInsetsCompat
 [insettypes]: https://developer.android.com/reference/kotlin/androidx/core/view/WindowInsetsCompat.Type
