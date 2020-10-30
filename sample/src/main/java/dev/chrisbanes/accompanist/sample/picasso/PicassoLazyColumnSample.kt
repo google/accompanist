@@ -16,8 +16,6 @@
 
 package dev.chrisbanes.accompanist.sample.picasso
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.ExperimentalLayout
 import androidx.compose.foundation.layout.Row
@@ -32,24 +30,14 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.chrisbanes.accompanist.picasso.PicassoImage
+import dev.chrisbanes.accompanist.sample.AccompanistSampleActivity
 import dev.chrisbanes.accompanist.sample.R
 import dev.chrisbanes.accompanist.sample.randomSampleImageUrl
 
-class PicassoLazyColumnSample : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setContent {
-            MaterialTheme {
-                Sample()
-            }
-        }
-    }
-}
+class PicassoLazyColumnSample : AccompanistSampleActivity(content = { Sample() })
 
 private const val NumberItems = 60
 
