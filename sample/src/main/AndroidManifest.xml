@@ -121,6 +121,26 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".insets.InsetsBasicSample"
+            android:label="@string/insets_title_basic"
+            android:theme="@style/Theme.AccompanistSample.NoActionBar.TransparentBars">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".insets.EdgeToEdgeLazyColumn"
+            android:label="@string/insets_title_list"
+            android:theme="@style/Theme.AccompanistSample.NoActionBar.TransparentBars">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

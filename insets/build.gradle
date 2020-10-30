@@ -16,21 +16,21 @@
 
 import dev.chrisbanes.accompanist.buildsrc.Libs
 
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'org.jetbrains.dokka'
+}
 
-apply plugin: 'kotlin-android'
+kotlin {
+    explicitApi()
+}
 
 android {
     compileSdkVersion 30
 
     defaultConfig {
-        applicationId "dev.chrisbanes.insetter.sample"
         minSdkVersion 21
-        targetSdkVersion 30
-
-        versionCode 1
-        versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -40,6 +40,7 @@ android {
     }
 
     buildFeatures {
+        buildConfig false
         compose true
     }
 
@@ -47,20 +48,46 @@ android {
         kotlinCompilerVersion Libs.Kotlin.version
         kotlinCompilerExtensionVersion Libs.AndroidX.Compose.version
     }
+
+    lintOptions {
+        textReport true
+        textOutput 'stdout'
+        // We run a full lint analysis as build part in CI, so skip vital checks for assemble tasks
+        checkReleaseBuilds false
+    }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+}
+
+afterEvaluate {
+    tasks.withType(org.jetbrains.dokka.gradle.DokkaTask).configureEach {
+        outputDirectory.set(rootProject.file('docs/api'))
+    }
 }
 
 dependencies {
-    implementation project(':picasso')
-    implementation project(':coil')
-    implementation project(':glide')
-    implementation project(':insets')
-
-    implementation Libs.Coil.gif
-
+    implementation Libs.AndroidX.coreAlpha
     implementation Libs.AndroidX.Compose.runtime
-    implementation Libs.AndroidX.Compose.material
     implementation Libs.AndroidX.Compose.foundation
-    implementation Libs.AndroidX.Compose.layout
 
     implementation Libs.Kotlin.stdlib
+    // implementation Libs.Coroutines.android
+
+    // ======================
+    // Test dependencies
+    // ======================
+
+    androidTestImplementation Libs.junit
+    androidTestImplementation Libs.truth
+
+    androidTestImplementation Libs.AndroidX.Compose.test
+    androidTestImplementation Libs.AndroidX.Compose.ui
+    androidTestImplementation Libs.AndroidX.Test.rules
+    androidTestImplementation Libs.AndroidX.Test.runner
 }
+
+apply plugin: "com.vanniktech.maven.publish"

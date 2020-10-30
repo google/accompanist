@@ -85,7 +85,7 @@ object Libs {
         const val core = "androidx.core:core:1.2.0"
         const val coreKtx = "androidx.core:core-ktx:1.2.0"
 
-        const val appcompat = "androidx.appcompat:appcompat:1.3.0-alpha02"
+        const val coreAlpha = "androidx.core:core:1.5.0-alpha04"
     }
 
     object Coil {
