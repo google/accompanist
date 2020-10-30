@@ -53,6 +53,7 @@ dependencies {
     implementation project(':picasso')
     implementation project(':coil')
     implementation project(':glide')
+    implementation project(':insets')
 
     implementation Libs.Coil.gif
 

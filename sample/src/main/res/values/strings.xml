@@ -28,4 +28,6 @@
     <string name="glide_title_basic">Glide: Basic</string>
     <string name="glide_title_grid">Glide: Grid</string>
     <string name="glide_title_lazy_row">Glide: Lazy row</string>
+
+    <string name="insets_title_basic">Insets: Basic</string>
 </resources>

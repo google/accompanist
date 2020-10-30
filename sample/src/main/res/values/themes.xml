@@ -26,4 +26,12 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="Theme.AccompanistSample.NoActionBar.TransparentBars">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+
 </resources>
