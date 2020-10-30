@@ -30,4 +30,5 @@
     <string name="glide_title_lazy_row">Glide: Lazy row</string>
 
     <string name="insets_title_basic">Insets: Basic</string>
+    <string name="insets_title_list">Insets: Edge-to-edge list</string>
 </resources>

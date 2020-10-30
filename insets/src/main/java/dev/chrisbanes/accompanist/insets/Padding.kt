@@ -31,6 +31,7 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.platform.LayoutDirectionAmbient
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.offset
@@ -165,3 +166,23 @@ fun Insets.toPaddingValues(
         }
     )
 }
+
+/**
+ * Returns a new [PaddingValues] with the provided values added to each relevant dimension.
+ *
+ * @param start Value to add to the start dimension.
+ * @param top Value to add to the top dimension.
+ * @param end Value to add to the end dimension.
+ * @param bottom Value to add to the bottom dimension.
+ */
+inline fun PaddingValues.add(
+    start: Dp = 0.dp,
+    top: Dp = 0.dp,
+    end: Dp = 0.dp,
+    bottom: Dp = 0.dp,
+): PaddingValues = copy(
+    start = this.start + start,
+    top = this.top + top,
+    end = this.end + end,
+    bottom = this.bottom + bottom
+)
