@@ -1,6 +1,6 @@
 # Insets for Jetpack Compose
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/dev.chrisbanes.accompanist/accompanist-insets/badge.svg)](https://search.maven.org/search?q=g:dev.chrisbanes.accompanist)
+[![Maven Central](https://img.shields.io/maven-central/v/dev.chrisbanes.accompanist/accompanist-insets)](https://search.maven.org/search?q=g:dev.chrisbanes.accompanist)
 
 Insets for Jetpack Compose takes a lot of the ideas which drove [Insetter][insetter-view] for views, and applies them for use in composables.
 
@@ -94,6 +94,8 @@ For a more complex example, see the [`EdgeToEdgeLazyColumn`](./sample/src/main/j
 </a>
 
 ## Download
+
+[![Maven Central](https://img.shields.io/maven-central/v/dev.chrisbanes.accompanist/accompanist-insets)](https://search.maven.org/search?q=g:dev.chrisbanes.accompanist)
 
 ```groovy
 repositories {
