@@ -17,7 +17,7 @@
 package dev.chrisbanes.accompanist.sample.glide
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.ExperimentalLayout
 import androidx.compose.foundation.layout.Row
@@ -39,7 +39,7 @@ import dev.chrisbanes.accompanist.glide.GlideImage
 import dev.chrisbanes.accompanist.sample.R
 import dev.chrisbanes.accompanist.sample.randomSampleImageUrl
 
-class GlideLazyColumnSample : AppCompatActivity() {
+class GlideLazyColumnSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

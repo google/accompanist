@@ -19,7 +19,7 @@ package dev.chrisbanes.accompanist.sample.coil
 import android.content.Context
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Box
@@ -51,7 +51,7 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 import dev.chrisbanes.accompanist.sample.R
 import dev.chrisbanes.accompanist.sample.randomSampleImageUrl
 
-class CoilBasicSample : AppCompatActivity() {
+class CoilBasicSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

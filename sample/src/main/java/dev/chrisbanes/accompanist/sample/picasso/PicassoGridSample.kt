@@ -17,7 +17,7 @@
 package dev.chrisbanes.accompanist.sample.picasso
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.ExperimentalLayout
@@ -36,7 +36,7 @@ import dev.chrisbanes.accompanist.picasso.PicassoImage
 import dev.chrisbanes.accompanist.sample.R
 import dev.chrisbanes.accompanist.sample.randomSampleImageUrl
 
-class PicassoGridSample : AppCompatActivity() {
+class PicassoGridSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
