@@ -57,7 +57,7 @@ object Libs {
         }
 
         object Compose {
-            const val snapshot = "6922857"
+            const val snapshot = "6943980"
             const val version = "1.0.0-SNAPSHOT"
 
             @JvmStatic
@@ -79,7 +79,7 @@ object Libs {
             const val material = "androidx.compose.material:material:${version}"
 
             const val tooling = "androidx.ui:ui-tooling:${version}"
-            const val test = "androidx.ui:ui-test:${version}"
+            const val test = "androidx.compose.ui:ui-test-junit4:${version}"
         }
 
         const val core = "androidx.core:core:1.2.0"

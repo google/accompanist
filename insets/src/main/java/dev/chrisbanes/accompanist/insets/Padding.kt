@@ -23,11 +23,12 @@ package dev.chrisbanes.accompanist.insets
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.LayoutModifier
-import androidx.compose.ui.Measurable
-import androidx.compose.ui.MeasureScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.layout.LayoutModifier
+import androidx.compose.ui.layout.Measurable
+import androidx.compose.ui.layout.MeasureResult
+import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.platform.LayoutDirectionAmbient
 import androidx.compose.ui.unit.Constraints
@@ -109,7 +110,7 @@ private data class InsetsPaddingModifier(
     override fun MeasureScope.measure(
         measurable: Measurable,
         constraints: Constraints
-    ): MeasureScope.MeasureResult {
+    ): MeasureResult {
         val left = if (applyLeft) insets.left else 0
         val top = if (applyTop) insets.top else 0
         val right = if (applyRight) insets.right else 0

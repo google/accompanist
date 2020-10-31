@@ -16,11 +16,11 @@
 
 package dev.chrisbanes.accompanist.insets
 
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.test.filters.LargeTest
 import androidx.test.filters.SdkSuppress
-import androidx.ui.test.createAndroidComposeRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

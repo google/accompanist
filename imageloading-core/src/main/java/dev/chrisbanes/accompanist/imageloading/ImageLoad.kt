@@ -20,7 +20,8 @@
 package dev.chrisbanes.accompanist.imageloading
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedTask
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,7 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.stateFor
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.WithConstraints
+import androidx.compose.ui.layout.WithConstraints
 import androidx.compose.ui.unit.IntSize
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -86,7 +87,7 @@ fun <R : Any, TR : Any> ImageLoad(
         ImageLoadRequestActor(executeRequest)
     }
 
-    LaunchedTask(requestActor) {
+    LaunchedEffect(requestActor) {
         // Launch the Actor
         requestActor.run { _, newState ->
             // Update the result state
