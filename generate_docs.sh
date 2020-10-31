@@ -25,28 +25,27 @@ cp CONTRIBUTING.md $DOCS_ROOT/contributing.md
 cp images/social.png $DOCS_ROOT/header.png
 
 sed -i.bak 's/CONTRIBUTING.md/contributing/' $DOCS_ROOT/index.md
-sed -i.bak 's/coil\/README.md/glide/' $DOCS_ROOT/index.md
-sed -i.bak 's/glide\/README.md/coil/' $DOCS_ROOT/index.md
-sed -i.bak 's/picasso\/README.md/picasso/' $DOCS_ROOT/index.md
+sed -i.bak 's/README.md//' $DOCS_ROOT/index.md
 sed -i.bak 's/images\/social.png/header.png/' $DOCS_ROOT/index.md
-
-cp coil/README.md $DOCS_ROOT/coil.md
-mkdir -p $DOCS_ROOT/coil
-cp coil/images/crossfade.gif $DOCS_ROOT/coil/crossfade.gif
-sed -i.bak 's/images\/crossfade.gif/crossfade.gif/' $DOCS_ROOT/coil.md
-
-cp picasso/README.md $DOCS_ROOT/picasso.md
-mkdir -p $DOCS_ROOT/picasso
-cp picasso/images/crossfade.gif $DOCS_ROOT/picasso/crossfade.gif
-sed -i.bak 's/images\/crossfade.gif/crossfade.gif/' $DOCS_ROOT/picasso.md
-
-cp glide/README.md $DOCS_ROOT/glide.md
-mkdir -p $DOCS_ROOT/glide
-cp glide/images/crossfade.gif $DOCS_ROOT/glide/crossfade.gif
-sed -i.bak 's/images\/crossfade.gif/crossfade.gif/' $DOCS_ROOT/glide.md
 
 # Convert docs/xxx.md links to just xxx/
 sed -i.bak 's/docs\/\([a-zA-Z-]*\).md/\1/' $DOCS_ROOT/index.md
+
+cp coil/README.md $DOCS_ROOT/coil.md
+mkdir -p $DOCS_ROOT/coil
+cp -r coil/images $DOCS_ROOT/coil
+
+cp picasso/README.md $DOCS_ROOT/picasso.md
+mkdir -p $DOCS_ROOT/picasso
+cp -r picasso/images $DOCS_ROOT/picasso
+
+cp glide/README.md $DOCS_ROOT/glide.md
+mkdir -p $DOCS_ROOT/glide
+cp -r glide/images $DOCS_ROOT/glide
+
+cp insets/README.md $DOCS_ROOT/insets.md
+mkdir -p $DOCS_ROOT/insets
+cp -r insets/images $DOCS_ROOT/insets
 
 #########################
 # Tidy up Dokka output
