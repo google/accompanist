@@ -81,7 +81,6 @@ dependencies {
 
     implementation Libs.AndroidX.coreKtx
     implementation Libs.AndroidX.Compose.runtime
-    implementation Libs.AndroidX.Compose.material
     implementation Libs.AndroidX.Compose.foundation
 
     implementation Libs.Kotlin.stdlib
@@ -98,6 +97,7 @@ dependencies {
 
     androidTestImplementation Libs.AndroidX.Compose.test
     androidTestImplementation Libs.AndroidX.Compose.ui
+    androidTestImplementation Libs.AndroidX.Compose.material
     androidTestImplementation Libs.AndroidX.Test.rules
     androidTestImplementation Libs.AndroidX.Test.runner
 }
