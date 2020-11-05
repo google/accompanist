@@ -47,6 +47,7 @@ import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import dev.chrisbanes.accompanist.imageloading.ImageLoadState
 import dev.chrisbanes.accompanist.imageloading.test.ImageMockWebServer
+import dev.chrisbanes.accompanist.imageloading.test.assertPixels
 import dev.chrisbanes.accompanist.imageloading.test.awaitNext
 import dev.chrisbanes.accompanist.picasso.test.R
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -121,14 +122,12 @@ class PicassoTest {
         // Wait for the onRequestCompleted to release the latch
         latch.await(5, TimeUnit.SECONDS)
 
-        @Suppress("DEPRECATION")
         composeTestRule.onNodeWithTag(TestTags.Image)
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
             .assertIsDisplayed()
             .captureToImage()
-            .asAndroidBitmap()
-            .assertPixels { Color.Red }
+            .assertPixels(Color.Red)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -151,14 +150,12 @@ class PicassoTest {
         loadCompleteSignal.awaitNext(5, TimeUnit.SECONDS)
 
         // Assert that the content is completely Red
-        @Suppress("DEPRECATION")
         composeTestRule.onNodeWithTag(TestTags.Image)
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
             .assertIsDisplayed()
             .captureToImage()
-            .asAndroidBitmap()
-            .assertPixels { Color.Red }
+            .assertPixels(Color.Red)
 
         // Now switch the data URI to the blue drawable
         data.value = server.url("/blue")
@@ -167,14 +164,12 @@ class PicassoTest {
         loadCompleteSignal.awaitNext(5, TimeUnit.SECONDS)
 
         // Assert that the content is completely Blue
-        @Suppress("DEPRECATION")
         composeTestRule.onNodeWithTag(TestTags.Image)
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
             .assertIsDisplayed()
             .captureToImage()
-            .asAndroidBitmap()
-            .assertPixels { Color.Blue }
+            .assertPixels(Color.Blue)
 
         // Close the signal channel
         loadCompleteSignal.close()
@@ -259,12 +254,10 @@ class PicassoTest {
         latch.await(5, TimeUnit.SECONDS)
 
         // Assert that the layout is displayed and that we're showing the red image
-        @Suppress("DEPRECATION")
         composeTestRule.onNodeWithTag(TestTags.Image)
             .assertIsDisplayed()
             .captureToImage()
-            .asAndroidBitmap()
-            .assertPixels { Color.Red }
+            .assertPixels(Color.Red)
     }
 
     @SdkSuppress(minSdkVersion = 26) // captureToImage
