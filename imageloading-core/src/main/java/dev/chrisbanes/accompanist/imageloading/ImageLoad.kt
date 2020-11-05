@@ -28,7 +28,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.referentialEqualityPolicy
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.stateFor
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.WithConstraints
 import androidx.compose.ui.unit.IntSize
@@ -68,12 +67,14 @@ fun <R : Any, TR : Any> ImageLoad(
     onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
     content: @Composable (imageLoadState: ImageLoadState) -> Unit
 ) {
-    var state by stateFor<ImageLoadState>(requestKey) { ImageLoadState.Empty }
+    var state by remember(requestKey) {
+        mutableStateOf<ImageLoadState>(ImageLoadState.Empty)
+    }
 
-    // This may look a little weird, but allows the launchInComposition callback to always
+    // This may look a little weird, but allows the LaunchedEffect callback to always
     // invoke the last provided [onRequestCompleted].
     //
-    // If a composition happens *after* launchInComposition has launched, the given
+    // If a composition happens *after* LaunchedEffect has launched, the given
     // [onRequestCompleted] might have changed. If the actor lambda below directly referenced
     // [onRequestCompleted] it would have captured access to the initial onRequestCompleted
     // value, not the latest.
