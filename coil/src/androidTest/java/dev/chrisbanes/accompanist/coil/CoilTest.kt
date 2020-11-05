@@ -17,8 +17,8 @@
 package dev.chrisbanes.accompanist.coil
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.preferredSize
+import androidx.compose.material.Text
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
