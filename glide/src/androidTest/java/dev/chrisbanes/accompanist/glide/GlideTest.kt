@@ -25,14 +25,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.onCommit
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.platform.ViewAmbient
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.assertHeightIsAtLeast
 import androidx.compose.ui.test.assertHeightIsEqualTo
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertPixels
 import androidx.compose.ui.test.assertWidthIsAtLeast
 import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.captureToImage
@@ -52,6 +50,7 @@ import com.google.common.truth.Truth.assertThat
 import dev.chrisbanes.accompanist.glide.test.R
 import dev.chrisbanes.accompanist.imageloading.ImageLoadState
 import dev.chrisbanes.accompanist.imageloading.test.ImageMockWebServer
+import dev.chrisbanes.accompanist.imageloading.test.assertPixels
 import dev.chrisbanes.accompanist.imageloading.test.awaitNext
 import dev.chrisbanes.accompanist.imageloading.test.receiveBlocking
 import dev.chrisbanes.accompanist.imageloading.test.resourceUri
@@ -176,14 +175,12 @@ class GlideTest {
         // Wait for the onRequestCompleted to release the latch
         latch.await(5, TimeUnit.SECONDS)
 
-        @Suppress("DEPRECATION")
         composeTestRule.onNodeWithTag(GlideTestTags.Image)
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
             .assertIsDisplayed()
             .captureToImage()
-            .asAndroidBitmap()
-            .assertPixels { Color.Red }
+            .assertPixels(Color.Red)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -206,14 +203,12 @@ class GlideTest {
         loadCompleteSignal.awaitNext(5, TimeUnit.SECONDS)
 
         // Assert that the content is completely Red
-        @Suppress("DEPRECATION")
         composeTestRule.onNodeWithTag(GlideTestTags.Image)
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
             .assertIsDisplayed()
             .captureToImage()
-            .asAndroidBitmap()
-            .assertPixels { Color.Red }
+            .assertPixels(Color.Red)
 
         // Now switch the data URI to the blue drawable
         data.value = server.url("/blue")
@@ -222,14 +217,12 @@ class GlideTest {
         loadCompleteSignal.awaitNext(5, TimeUnit.SECONDS)
 
         // Assert that the content is completely Blue
-        @Suppress("DEPRECATION")
         composeTestRule.onNodeWithTag(GlideTestTags.Image)
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
             .assertIsDisplayed()
             .captureToImage()
-            .asAndroidBitmap()
-            .assertPixels { Color.Blue }
+            .assertPixels(Color.Blue)
 
         // Close the signal channel
         loadCompleteSignal.close()
@@ -443,12 +436,10 @@ class GlideTest {
         latch.await(5, TimeUnit.SECONDS)
 
         // Assert that the whole layout is drawn cyan
-        @Suppress("DEPRECATION")
         composeTestRule.onNodeWithTag(GlideTestTags.Image)
             .assertIsDisplayed()
             .captureToImage()
-            .asAndroidBitmap()
-            .assertPixels { Color.Cyan }
+            .assertPixels(Color.Cyan)
     }
 
     @Test
@@ -507,11 +498,9 @@ class GlideTest {
         latch.await(5, TimeUnit.SECONDS)
 
         // Assert that the whole layout is drawn red
-        @Suppress("DEPRECATION")
         composeTestRule.onNodeWithTag(GlideTestTags.Image)
             .assertIsDisplayed()
             .captureToImage()
-            .asAndroidBitmap()
-            .assertPixels { Color.Red }
+            .assertPixels(Color.Red)
     }
 }
