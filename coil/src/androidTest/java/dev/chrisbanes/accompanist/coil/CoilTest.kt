@@ -23,6 +23,7 @@ import androidx.compose.runtime.Providers
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.platform.testTag
@@ -32,7 +33,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertPixels
 import androidx.compose.ui.test.assertWidthIsAtLeast
 import androidx.compose.ui.test.assertWidthIsEqualTo
-import androidx.compose.ui.test.captureToBitmap
+import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -165,7 +166,7 @@ class CoilTest {
     }
 
     @Test
-    @SdkSuppress(minSdkVersion = 26) // captureToBitmap is SDK 26+
+    @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
     fun basicLoad_drawable() {
         val latch = CountDownLatch(1)
 
@@ -180,11 +181,13 @@ class CoilTest {
         // Wait for the onRequestCompleted to release the latch
         latch.await(5, TimeUnit.SECONDS)
 
+        @Suppress("DEPRECATION")
         composeTestRule.onNodeWithTag(CoilTestTags.Image)
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
             .assertIsDisplayed()
-            .captureToBitmap()
+            .captureToImage()
+            .asAndroidBitmap()
             .assertPixels { Color.Red }
     }
 
@@ -259,7 +262,7 @@ class CoilTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    @SdkSuppress(minSdkVersion = 26) // captureToBitmap is SDK 26+
+    @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
     fun basicLoad_switchData() {
         val loadCompleteSignal = Channel<Unit>(Channel.UNLIMITED)
         val data = MutableStateFlow(server.url("/red"))
@@ -277,11 +280,13 @@ class CoilTest {
         loadCompleteSignal.awaitNext(5, TimeUnit.SECONDS)
 
         // Assert that the content is completely Red
+        @Suppress("DEPRECATION")
         composeTestRule.onNodeWithTag(CoilTestTags.Image)
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
             .assertIsDisplayed()
-            .captureToBitmap()
+            .captureToImage()
+            .asAndroidBitmap()
             .assertPixels { Color.Red }
 
         // Now switch the data URI to the blue drawable
@@ -291,11 +296,13 @@ class CoilTest {
         loadCompleteSignal.awaitNext(5, TimeUnit.SECONDS)
 
         // Assert that the content is completely Blue
+        @Suppress("DEPRECATION")
         composeTestRule.onNodeWithTag(CoilTestTags.Image)
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
             .assertIsDisplayed()
-            .captureToBitmap()
+            .captureToImage()
+            .asAndroidBitmap()
             .assertPixels { Color.Blue }
 
         // Close the signal channel
@@ -436,7 +443,7 @@ class CoilTest {
     }
 
     @Test
-    @SdkSuppress(minSdkVersion = 26) // captureToBitmap is SDK 26+
+    @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
     fun content_custom() {
         val latch = CountDownLatch(1)
 
@@ -455,9 +462,11 @@ class CoilTest {
         latch.await(5, TimeUnit.SECONDS)
 
         // Assert that the whole layout is drawn cyan
+        @Suppress("DEPRECATION")
         composeTestRule.onNodeWithTag(CoilTestTags.Image)
             .assertIsDisplayed()
-            .captureToBitmap()
+            .captureToImage()
+            .asAndroidBitmap()
             .assertPixels { Color.Cyan }
     }
 
@@ -505,7 +514,7 @@ class CoilTest {
     }
 
     @Test
-    @SdkSuppress(minSdkVersion = 26) // captureToBitmap is SDK 26+
+    @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
     fun error_slot() {
         val latch = CountDownLatch(1)
 
@@ -525,9 +534,11 @@ class CoilTest {
         latch.await(5, TimeUnit.SECONDS)
 
         // Assert that the whole layout is drawn red
+        @Suppress("DEPRECATION")
         composeTestRule.onNodeWithTag(CoilTestTags.Image)
             .assertIsDisplayed()
-            .captureToBitmap()
+            .captureToImage()
+            .asAndroidBitmap()
             .assertPixels { Color.Red }
     }
 }

@@ -23,6 +23,7 @@ import androidx.compose.runtime.Providers
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.assertHeightIsAtLeast
@@ -31,7 +32,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertPixels
 import androidx.compose.ui.test.assertWidthIsAtLeast
 import androidx.compose.ui.test.assertWidthIsEqualTo
-import androidx.compose.ui.test.captureToBitmap
+import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -105,7 +106,7 @@ class PicassoTest {
     }
 
     @Test
-    @SdkSuppress(minSdkVersion = 26) // captureToBitmap is SDK 26+
+    @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
     fun basicLoad_drawable() {
         val latch = CountDownLatch(1)
 
@@ -120,17 +121,19 @@ class PicassoTest {
         // Wait for the onRequestCompleted to release the latch
         latch.await(5, TimeUnit.SECONDS)
 
+        @Suppress("DEPRECATION")
         composeTestRule.onNodeWithTag(TestTags.Image)
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
             .assertIsDisplayed()
-            .captureToBitmap()
+            .captureToImage()
+            .asAndroidBitmap()
             .assertPixels { Color.Red }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    @SdkSuppress(minSdkVersion = 26) // captureToBitmap is SDK 26+
+    @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
     fun basicLoad_switchData() {
         val loadCompleteSignal = Channel<Unit>(Channel.UNLIMITED)
         val data = MutableStateFlow(server.url("/red"))
@@ -148,11 +151,13 @@ class PicassoTest {
         loadCompleteSignal.awaitNext(5, TimeUnit.SECONDS)
 
         // Assert that the content is completely Red
+        @Suppress("DEPRECATION")
         composeTestRule.onNodeWithTag(TestTags.Image)
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
             .assertIsDisplayed()
-            .captureToBitmap()
+            .captureToImage()
+            .asAndroidBitmap()
             .assertPixels { Color.Red }
 
         // Now switch the data URI to the blue drawable
@@ -162,11 +167,13 @@ class PicassoTest {
         loadCompleteSignal.awaitNext(5, TimeUnit.SECONDS)
 
         // Assert that the content is completely Blue
+        @Suppress("DEPRECATION")
         composeTestRule.onNodeWithTag(TestTags.Image)
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
             .assertIsDisplayed()
-            .captureToBitmap()
+            .captureToImage()
+            .asAndroidBitmap()
             .assertPixels { Color.Blue }
 
         // Close the signal channel
@@ -225,7 +232,7 @@ class PicassoTest {
             .assertIsDisplayed()
     }
 
-    @SdkSuppress(minSdkVersion = 26) // captureToBitmap
+    @SdkSuppress(minSdkVersion = 26) // captureToImage
     @Test
     fun customPicasso_param() {
         val latch = CountDownLatch(1)
@@ -252,13 +259,15 @@ class PicassoTest {
         latch.await(5, TimeUnit.SECONDS)
 
         // Assert that the layout is displayed and that we're showing the red image
+        @Suppress("DEPRECATION")
         composeTestRule.onNodeWithTag(TestTags.Image)
             .assertIsDisplayed()
-            .captureToBitmap()
+            .captureToImage()
+            .asAndroidBitmap()
             .assertPixels { Color.Red }
     }
 
-    @SdkSuppress(minSdkVersion = 26) // captureToBitmap
+    @SdkSuppress(minSdkVersion = 26) // captureToImage
     @Test
     fun customPicasso_ambient() {
         val latch = CountDownLatch(1)
@@ -286,9 +295,11 @@ class PicassoTest {
         latch.await(5, TimeUnit.SECONDS)
 
         // Assert that the layout is displayed and that we're showing the red image
+        @Suppress("DEPRECATION")
         composeTestRule.onNodeWithTag(TestTags.Image)
             .assertIsDisplayed()
-            .captureToBitmap()
+            .captureToImage()
+            .asAndroidBitmap()
             .assertPixels { Color.Red }
     }
 
@@ -379,7 +390,7 @@ class PicassoTest {
     }
 
     @Test
-    @SdkSuppress(minSdkVersion = 26) // captureToBitmap is SDK 26+
+    @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
     fun content_custom() {
         val latch = CountDownLatch(1)
 
@@ -398,9 +409,11 @@ class PicassoTest {
         latch.await(5, TimeUnit.SECONDS)
 
         // Assert that the whole layout is drawn cyan
+        @Suppress("DEPRECATION")
         composeTestRule.onNodeWithTag(TestTags.Image)
             .assertIsDisplayed()
-            .captureToBitmap()
+            .captureToImage()
+            .asAndroidBitmap()
             .assertPixels { Color.Cyan }
     }
 
@@ -444,7 +457,7 @@ class PicassoTest {
     }
 
     @Test
-    @SdkSuppress(minSdkVersion = 26) // captureToBitmap is SDK 26+
+    @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
     fun error_slot() {
         val latch = CountDownLatch(1)
 
@@ -464,9 +477,11 @@ class PicassoTest {
         latch.await(5, TimeUnit.SECONDS)
 
         // Assert that the whole layout is drawn red
+        @Suppress("DEPRECATION")
         composeTestRule.onNodeWithTag(TestTags.Image)
             .assertIsDisplayed()
-            .captureToBitmap()
+            .captureToImage()
+            .asAndroidBitmap()
             .assertPixels { Color.Red }
     }
 }
