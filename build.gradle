@@ -111,24 +111,36 @@ subprojects {
                     skipEmptyPackages.set(true)
                     skipDeprecated.set(true)
                     jdkVersion.set(8)
+
                     // Add Android SDK packages
                     noAndroidSdkLink.set(false)
 
-                    // Link Compose docs
+                    // AndroidX + Compose docs
                     externalDocumentationLink {
-                        url.set(new URL("https://developer.android.com/reference/kotlin/"))
-                        packageListUrl.set(new URL("https://developer.android.com/reference/kotlin/androidx/ui/package-list"))
+                        url = new URL("https://developer.android.com/reference/")
+                        packageListUrl = new URL("https://developer.android.com/reference/androidx/package-list")
                     }
-                    // Link Coil docs
+                    externalDocumentationLink {
+                        url = new URL("https://developer.android.com/reference/kotlin/")
+                        packageListUrl = new URL("https://developer.android.com/reference/kotlin/androidx/package-list")
+                    }
+
+                    // Coil docs
                     if (rootProject.file('package-list-coil-base').exists()) {
                         externalDocumentationLink {
                             url.set(new URL("https://coil-kt.github.io/coil/api/coil-base/"))
                             packageListUrl.set(new URL("file://$rootDir/package-list-coil-base"))
                         }
                     }
+
+                    // Picasso docs
                     externalDocumentationLink {
                         url.set(new URL("https://square.github.io/picasso/2.x/picasso/"))
-                        packageListUrl.set(new URL("https://square.github.io/picasso/2.x/picasso/package-list"))
+                    }
+
+                    // Glide docs
+                    externalDocumentationLink {
+                        url.set(new URL("https://bumptech.github.io/glide/javadocs/4110/"))
                     }
                 }
             }
