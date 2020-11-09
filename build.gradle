@@ -20,6 +20,7 @@ import dev.chrisbanes.accompanist.buildsrc.Versions
 buildscript {
     repositories {
         google()
+        mavenCentral()
         jcenter()
     }
 
@@ -38,13 +39,15 @@ plugins {
     id "com.diffplug.spotless" version "5.1.1"
 }
 
+apply plugin: 'org.jetbrains.dokka'
+
 apply plugin: 'binary-compatibility-validator'
 apiValidation {
     // Ignore the sample from API tracking/checking
     ignoredProjects += ["sample", "imageloading-testutils"]
 }
 
-subprojects {
+allprojects {
     repositories {
         google()
         mavenCentral()
@@ -104,6 +107,11 @@ subprojects {
     // Must be afterEvaluate or else com.vanniktech.maven.publish will overwrite our
     // dokka and version configuration.
     afterEvaluate {
+        tasks.withType(org.jetbrains.dokka.gradle.DokkaMultiModuleTask).configureEach {
+            outputDirectory.set(rootProject.file('docs/api'))
+            //documentationFileName.set("index.md")
+        }
+
         tasks.withType(org.jetbrains.dokka.gradle.DokkaTask).configureEach {
             sourceSets {
                 configureEach {
@@ -117,12 +125,12 @@ subprojects {
 
                     // AndroidX + Compose docs
                     externalDocumentationLink {
-                        url = new URL("https://developer.android.com/reference/")
-                        packageListUrl = new URL("https://developer.android.com/reference/androidx/package-list")
+                        url.set(new URL("https://developer.android.com/reference/"))
+                        packageListUrl.set(new URL("https://developer.android.com/reference/androidx/package-list"))
                     }
                     externalDocumentationLink {
-                        url = new URL("https://developer.android.com/reference/kotlin/")
-                        packageListUrl = new URL("https://developer.android.com/reference/kotlin/androidx/package-list")
+                        url.set(new URL("https://developer.android.com/reference/kotlin/"))
+                        packageListUrl.set(new URL("https://developer.android.com/reference/kotlin/androidx/package-list"))
                     }
 
                     // Coil docs

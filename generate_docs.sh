@@ -12,7 +12,7 @@ sed -i.bak 's/$dokka.linkExtension:md/$dokka.linkExtension:html/g' package-list-
 # Clear out the old API docs
 [ -d docs/api ] && rm -r docs/api
 # Build the docs with dokka
-./gradlew clean dokkaGfm
+./gradlew clean dokkaHtml
 
 # Clean up the temp Coil package list
 rm package-list-coil-base
@@ -46,14 +46,3 @@ cp -r glide/images $DOCS_ROOT/glide
 cp insets/README.md $DOCS_ROOT/insets.md
 mkdir -p $DOCS_ROOT/insets
 cp -r insets/images $DOCS_ROOT/insets
-
-#########################
-# Tidy up Dokka output
-#########################
-
-# Remove all of the line breaks in the docs
-find $DOCS_ROOT/api/ -name '*.md' -exec sed -i.bak 's/<br><br>//g' {} \;
-# Remove the random androidJvm headers
-find $DOCS_ROOT/api/ -name '*.md' -exec sed -i.bak 's/\[*androidJvm\]*//g' {} \;
-# Remove the 'Brief description' headers
-find $DOCS_ROOT/api/ -name '*.md' -exec sed -i.bak 's/Brief description//g' {} \;
