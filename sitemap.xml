@@ -1,47 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url>
      <loc>https://chrisbanes.github.io/accompanist/</loc>
-     <lastmod>2020-10-28</lastmod>
+     <lastmod>2020-11-11</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://chrisbanes.github.io/accompanist/coil/</loc>
-     <lastmod>2020-10-28</lastmod>
+     <lastmod>2020-11-11</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://chrisbanes.github.io/accompanist/glide/</loc>
-     <lastmod>2020-10-28</lastmod>
+     <lastmod>2020-11-11</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://chrisbanes.github.io/accompanist/picasso/</loc>
-     <lastmod>2020-10-28</lastmod>
+     <lastmod>2020-11-11</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
-     <loc>https://chrisbanes.github.io/accompanist/api/coil/</loc>
-     <lastmod>2020-10-28</lastmod>
-     <changefreq>daily</changefreq>
-    </url><url>
-     <loc>https://chrisbanes.github.io/accompanist/api/glide/</loc>
-     <lastmod>2020-10-28</lastmod>
-     <changefreq>daily</changefreq>
-    </url><url>
-     <loc>https://chrisbanes.github.io/accompanist/api/picasso/</loc>
-     <lastmod>2020-10-28</lastmod>
-     <changefreq>daily</changefreq>
-    </url><url>
-     <loc>https://chrisbanes.github.io/accompanist/api/imageloading-core/</loc>
-     <lastmod>2020-10-28</lastmod>
+     <loc>https://chrisbanes.github.io/accompanist/insets/</loc>
+     <lastmod>2020-11-11</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://chrisbanes.github.io/accompanist/using-snapshot-version/</loc>
-     <lastmod>2020-10-28</lastmod>
+     <lastmod>2020-11-11</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://chrisbanes.github.io/accompanist/contributing/</loc>
-     <lastmod>2020-10-28</lastmod>
+     <lastmod>2020-11-11</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://chrisbanes.github.io/accompanist/updating/</loc>
-     <lastmod>2020-10-28</lastmod>
+     <lastmod>2020-11-11</lastmod>
      <changefreq>daily</changefreq>
     </url>
 </urlset>
