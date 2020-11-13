@@ -133,7 +133,7 @@ private val listItems = buildList {
  * contents down, but still draws the background behind the status bar too.
  */
 @Composable
-private fun InsetAwareTopAppBar(
+fun InsetAwareTopAppBar(
     title: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     navigationIcon: @Composable (() -> Unit)? = null,

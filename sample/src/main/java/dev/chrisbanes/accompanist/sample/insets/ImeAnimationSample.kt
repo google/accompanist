@@ -27,7 +27,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,7 +38,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
 import dev.chrisbanes.accompanist.insets.navigationBarsWithImePadding
-import dev.chrisbanes.accompanist.insets.statusBarsPadding
 import dev.chrisbanes.accompanist.sample.R
 import dev.chrisbanes.accompanist.sample.randomSampleImageUrl
 
@@ -70,14 +68,12 @@ private val listItems = buildList {
 private fun Sample() {
     ProvideWindowInsets {
         Column(Modifier.fillMaxSize()) {
-            TopAppBar(
+            InsetAwareTopAppBar(
                 title = {
                     Text(stringResource(R.string.insets_title_imeanim))
                 },
                 backgroundColor = MaterialTheme.colors.surface,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .statusBarsPadding()
+                modifier = Modifier.fillMaxWidth()
             )
 
             // Need to use ScrollableColumn for the reverseScrollDirection support
@@ -96,6 +92,7 @@ private fun Sample() {
                 OutlinedTextField(
                     value = text.value,
                     onValueChange = { text.value = it },
+                    placeholder = { Text(text = "Watch me animate...") },
                     modifier = Modifier.fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 8.dp)
                         .navigationBarsWithImePadding()
