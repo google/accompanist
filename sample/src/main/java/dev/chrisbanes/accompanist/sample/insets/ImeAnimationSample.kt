@@ -18,11 +18,11 @@ package dev.chrisbanes.accompanist.sample.insets
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
@@ -32,11 +32,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
+import dev.chrisbanes.accompanist.insets.AmbientWindowInsets
 import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
 import dev.chrisbanes.accompanist.sample.R
@@ -79,15 +81,25 @@ private fun Sample() {
                     .statusBarsPadding()
             )
 
-            LazyColumnFor(
-                items = listItems,
+            // Need to use ScrollableColumn for the reverseScrollDirection support
+            // FR for LazyColumn: https://issuetracker.google.com/173207790
+            ScrollableColumn(
+                reverseScrollDirection = true,
                 modifier = Modifier.weight(1f)
-            ) { imageUrl ->
-                ListItem(imageUrl, Modifier.fillMaxWidth())
+            ) {
+                listItems.forEach { imageUrl ->
+                    ListItem(imageUrl, Modifier.fillMaxWidth())
+                }
             }
 
             Surface(
-                elevation = 1.dp
+                elevation = 1.dp,
+                modifier = Modifier.padding(
+                    bottom = with(DensityAmbient.current) {
+                        val insets = AmbientWindowInsets.current
+                        insets.ime.bottom.toDp()
+                    }
+                )
             ) {
                 val text = remember { mutableStateOf(TextFieldValue()) }
                 OutlinedTextField(

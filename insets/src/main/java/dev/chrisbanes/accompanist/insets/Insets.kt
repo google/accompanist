@@ -21,7 +21,10 @@
 
 package dev.chrisbanes.accompanist.insets
 
+import android.os.Build
 import android.view.View
+import android.view.WindowInsetsAnimation
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Providers
@@ -35,6 +38,7 @@ import androidx.compose.ui.platform.ViewAmbient
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsCompat.Type
+import android.view.WindowInsets as WindowInsetsPlatform
 
 /**
  * Main holder of our inset values.
@@ -97,6 +101,12 @@ class Insets {
      * Whether the insets are currently visible.
      */
     var isVisible by mutableStateOf(true)
+        internal set
+
+    /**
+     * Whether the insets are currently visible.
+     */
+    var beingAnimated by mutableStateOf(false)
         internal set
 }
 
@@ -178,9 +188,43 @@ class ViewWindowInsetObserver(private val view: View) {
             windowInsets.systemGestures.updateFrom(wic, Type.systemGestures())
             windowInsets.statusBars.updateFrom(wic, Type.statusBars())
             windowInsets.navigationBars.updateFrom(wic, Type.navigationBars())
-            windowInsets.ime.updateFrom(wic, Type.ime())
+
+            if (!windowInsets.ime.beingAnimated) {
+                // If this inset type is being animated, we'll ignored
+                windowInsets.ime.updateFrom(wic, Type.ime())
+            }
 
             if (consumeWindowInsets) WindowInsetsCompat.CONSUMED else wic
+        }
+
+        if (Build.VERSION.SDK_INT >= 30) {
+            view.setWindowInsetsAnimationCallback(
+                object : WindowInsetsAnimation.Callback(DISPATCH_MODE_STOP) {
+                    override fun onPrepare(animation: WindowInsetsAnimation) {
+                        if (animation.typeMask and WindowInsetsPlatform.Type.ime() != 0) {
+                            windowInsets.ime.beingAnimated = true
+                        }
+                        // TODO add rest of types
+                    }
+
+                    override fun onProgress(
+                        insets: android.view.WindowInsets,
+                        runningAnimations: MutableList<WindowInsetsAnimation>
+                    ): android.view.WindowInsets {
+                        windowInsets.ime.updateFrom(insets, WindowInsetsPlatform.Type.ime())
+                        // TODO add rest of types
+
+                        return insets
+                    }
+
+                    override fun onEnd(animation: WindowInsetsAnimation) {
+                        if (animation.typeMask and WindowInsetsPlatform.Type.ime() != 0) {
+                            windowInsets.ime.beingAnimated = false
+                        }
+                        // TODO add rest of types
+                    }
+                }
+            )
         }
 
         // Add an OnAttachStateChangeListener to request an inset pass each time we're attached
@@ -246,6 +290,7 @@ fun ProvideWindowInsets(
     DisposableEffect(view) {
         val observer = ViewWindowInsetObserver(view)
         observer.observeInto(windowInsets, consumeWindowInsets)
+
         onDispose {
             observer.stop()
         }
@@ -259,7 +304,21 @@ fun ProvideWindowInsets(
 /**
  * Updates our mutable state backed [Insets] from an Android system insets.
  */
-private fun Insets.updateFrom(windowInsets: WindowInsetsCompat, type: Int) {
+private fun Insets.updateFrom(wic: WindowInsetsCompat, type: Int) {
+    val insets = wic.getInsets(type)
+    left = insets.left
+    top = insets.top
+    right = insets.right
+    bottom = insets.bottom
+
+    isVisible = wic.isVisible(type)
+}
+
+/**
+ * Updates our mutable state backed [Insets] from an Android system insets.
+ */
+@RequiresApi(30)
+private fun Insets.updateFrom(windowInsets: android.view.WindowInsets, type: Int) {
     val insets = windowInsets.getInsets(type)
     left = insets.left
     top = insets.top
