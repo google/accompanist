@@ -108,6 +108,36 @@ class Insets {
      */
     var beingAnimated by mutableStateOf(false)
         internal set
+
+    fun copy(
+        left: Int = this.left,
+        top: Int = this.top,
+        right: Int = this.right,
+        bottom: Int = this.bottom,
+        isVisible: Boolean = this.isVisible,
+        beingAnimated: Boolean = this.beingAnimated,
+    ): Insets = Insets().apply {
+        this.left = left
+        this.top = top
+        this.right = right
+        this.bottom = bottom
+        this.isVisible = isVisible
+        this.beingAnimated = beingAnimated
+    }
+
+    operator fun minus(other: Insets): Insets = copy(
+        left = this@Insets.left - other.left,
+        top = this@Insets.top - other.top,
+        right = this@Insets.right - other.right,
+        bottom = this@Insets.bottom - other.bottom,
+    )
+
+    operator fun plus(other: Insets): Insets = copy(
+        left = this@Insets.left + other.left,
+        top = this@Insets.top + other.top,
+        right = this@Insets.right + other.right,
+        bottom = this@Insets.bottom + other.bottom,
+    )
 }
 
 val AmbientWindowInsets = staticAmbientOf<WindowInsets> {
@@ -318,7 +348,7 @@ private fun Insets.updateFrom(wic: WindowInsetsCompat, type: Int) {
  * Updates our mutable state backed [Insets] from an Android system insets.
  */
 @RequiresApi(30)
-private fun Insets.updateFrom(windowInsets: android.view.WindowInsets, type: Int) {
+private fun Insets.updateFrom(windowInsets: WindowInsetsPlatform, type: Int) {
     val insets = windowInsets.getInsets(type)
     left = insets.left
     top = insets.top
@@ -327,6 +357,13 @@ private fun Insets.updateFrom(windowInsets: android.view.WindowInsets, type: Int
 
     isVisible = windowInsets.isVisible(type)
 }
+
+internal fun Insets.coerceAtLeastEachDimension(other: Insets): Insets = copy(
+    left = left.coerceAtLeast(other.left),
+    top = top.coerceAtLeast(other.top),
+    right = right.coerceAtLeast(other.top),
+    bottom = bottom.coerceAtLeast(other.bottom),
+)
 
 enum class HorizontalSide { Left, Right }
 enum class VerticalSide { Top, Bottom }

@@ -32,14 +32,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
-import dev.chrisbanes.accompanist.insets.AmbientWindowInsets
 import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
+import dev.chrisbanes.accompanist.insets.navigationBarsWithImePadding
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
 import dev.chrisbanes.accompanist.sample.R
 import dev.chrisbanes.accompanist.sample.randomSampleImageUrl
@@ -92,21 +91,14 @@ private fun Sample() {
                 }
             }
 
-            Surface(
-                elevation = 1.dp,
-                modifier = Modifier.padding(
-                    bottom = with(DensityAmbient.current) {
-                        val insets = AmbientWindowInsets.current
-                        insets.ime.bottom.toDp()
-                    }
-                )
-            ) {
+            Surface(elevation = 1.dp) {
                 val text = remember { mutableStateOf(TextFieldValue()) }
                 OutlinedTextField(
                     value = text.value,
                     onValueChange = { text.value = it },
                     modifier = Modifier.fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 8.dp)
+                        .navigationBarsWithImePadding()
                 )
             }
         }

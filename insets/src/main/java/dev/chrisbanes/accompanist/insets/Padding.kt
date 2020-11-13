@@ -90,6 +90,38 @@ fun Modifier.navigationBarsPadding(
 }
 
 /**
+ * Apply additional space which matches the height of the [WindowInsets.ime] (on-screen keyboard)
+ * height along the bottom edge of the content.
+ *
+ * This method has no special handling for the [WindowInsets.navigationBars], which usually
+ * intersect the [WindowInsets.ime]. Most apps will usually want to use the
+ * [Modifier.navigationBarsWithImePadding] modifier.
+ */
+fun Modifier.imePadding(): Modifier = composed {
+    insetsPadding(
+        insets = AmbientWindowInsets.current.ime,
+        left = true,
+        right = true,
+        bottom = true,
+    )
+}
+
+/**
+ * Apply additional space which matches the height of the [WindowInsets.ime] (on-screen keyboard)
+ * height and [WindowInsets.navigationBars]. This is what apps should use to handle any insets
+ * at the bottom of the screen.
+ */
+fun Modifier.navigationBarsWithImePadding(): Modifier = composed {
+    insetsPadding(
+        insets = AmbientWindowInsets.current.ime
+            .coerceAtLeastEachDimension(AmbientWindowInsets.current.navigationBars),
+        left = true,
+        right = true,
+        bottom = true,
+    )
+}
+
+/**
  * Allows conditional setting of [insets] on each dimension.
  */
 private inline fun Modifier.insetsPadding(
