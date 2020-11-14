@@ -370,12 +370,18 @@ private fun Insets.updateFrom(windowInsets: WindowInsetsPlatform, type: Int) {
     isVisible = windowInsets.isVisible(type)
 }
 
-internal fun Insets.coerceEachDimensionAtLeast(other: Insets): Insets = copy(
-    left = left.coerceAtLeast(other.left),
-    top = top.coerceAtLeast(other.top),
-    right = right.coerceAtLeast(other.right),
-    bottom = bottom.coerceAtLeast(other.bottom),
-)
+internal fun Insets.coerceEachDimensionAtLeast(other: Insets): Insets {
+    // Fast path, no need to copy if `this` >= `other`
+    if (left >= other.left && top >= other.top && right >= other.right && bottom >= other.bottom) {
+        return this
+    }
+    return copy(
+        left = left.coerceAtLeast(other.left),
+        top = top.coerceAtLeast(other.top),
+        right = right.coerceAtLeast(other.right),
+        bottom = bottom.coerceAtLeast(other.bottom),
+    )
+}
 
 enum class HorizontalSide { Left, Right }
 enum class VerticalSide { Top, Bottom }
