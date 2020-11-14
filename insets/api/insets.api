@@ -1,5 +1,5 @@
 public final class dev/chrisbanes/accompanist/insets/ComposeInsets {
-	public static final fun ProvideWindowInsets (ZLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun ProvideWindowInsets (ZZLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 	public static final fun add-L4cKpv0 (Landroidx/compose/foundation/layout/PaddingValues;FFFF)Landroidx/compose/foundation/layout/PaddingValues;
 	public static final fun add-L4cKpv0$default (Landroidx/compose/foundation/layout/PaddingValues;FFFFILjava/lang/Object;)Landroidx/compose/foundation/layout/PaddingValues;
 	public static final fun getAmbientWindowInsets ()Landroidx/compose/runtime/ProvidableAmbient;
