@@ -114,7 +114,7 @@ fun Modifier.imePadding(): Modifier = composed {
 fun Modifier.navigationBarsWithImePadding(): Modifier = composed {
     insetsPadding(
         insets = AmbientWindowInsets.current.ime
-            .coerceAtLeastEachDimension(AmbientWindowInsets.current.navigationBars),
+            .coerceEachDimensionAtLeast(AmbientWindowInsets.current.navigationBars),
         left = true,
         right = true,
         bottom = true,

@@ -103,11 +103,7 @@ class Insets {
     var isVisible by mutableStateOf(true)
         internal set
 
-    /**
-     * Whether the insets are currently visible.
-     */
-    var beingAnimated by mutableStateOf(false)
-        internal set
+    internal var ongoingAnimations by mutableStateOf(0)
 
     fun copy(
         left: Int = this.left,
@@ -115,14 +111,13 @@ class Insets {
         right: Int = this.right,
         bottom: Int = this.bottom,
         isVisible: Boolean = this.isVisible,
-        beingAnimated: Boolean = this.beingAnimated,
     ): Insets = Insets().apply {
         this.left = left
         this.top = top
         this.right = right
         this.bottom = bottom
         this.isVisible = isVisible
-        this.beingAnimated = beingAnimated
+        this.ongoingAnimations = ongoingAnimations
     }
 
     operator fun minus(other: Insets): Insets = copy(
@@ -214,14 +209,31 @@ class ViewWindowInsetObserver(private val view: View) {
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(view) { _, wic ->
-            windowInsets.systemBars.updateFrom(wic, Type.systemBars())
-            windowInsets.systemGestures.updateFrom(wic, Type.systemGestures())
-            windowInsets.statusBars.updateFrom(wic, Type.statusBars())
-            windowInsets.navigationBars.updateFrom(wic, Type.navigationBars())
-
-            if (!windowInsets.ime.beingAnimated) {
-                // If this inset type is being animated, we'll ignored
-                windowInsets.ime.updateFrom(wic, Type.ime())
+            // Go through each inset type and update it from the WindowInsetsCompat.
+            //
+            // If the inset type is currently being animated we ignore this pass. This is
+            // because WindowInsetsAnimation is built with the view system in mind, such that
+            // it forces consumers to be laid out in the final state, then immediately transform
+            // itself to look like the start state (because we shouldn't use layout
+            // animations in views). For more information, see:
+            // https://medium.com/androiddevelopers/animating-your-keyboard-reacting-to-inset-animations-839be3d4c31b
+            //
+            // Compose (hopefully) doesn't need that, so we can just apply the animated insets
+            // directly to the layout.
+            windowInsets.statusBars.run {
+                if (ongoingAnimations == 0) updateFrom(wic, Type.statusBars())
+            }
+            windowInsets.navigationBars.run {
+                if (ongoingAnimations == 0) updateFrom(wic, Type.navigationBars())
+            }
+            windowInsets.systemBars.run {
+                if (ongoingAnimations == 0) updateFrom(wic, Type.systemBars())
+            }
+            windowInsets.systemGestures.run {
+                if (ongoingAnimations == 0) updateFrom(wic, Type.systemGestures())
+            }
+            windowInsets.ime.run {
+                if (ongoingAnimations == 0) updateFrom(wic, Type.ime())
             }
 
             if (consumeWindowInsets) WindowInsetsCompat.CONSUMED else wic
@@ -232,7 +244,7 @@ class ViewWindowInsetObserver(private val view: View) {
                 object : WindowInsetsAnimation.Callback(DISPATCH_MODE_STOP) {
                     override fun onPrepare(animation: WindowInsetsAnimation) {
                         if (animation.typeMask and WindowInsetsPlatform.Type.ime() != 0) {
-                            windowInsets.ime.beingAnimated = true
+                            windowInsets.ime.ongoingAnimations++
                         }
                         // TODO add rest of types
                     }
@@ -249,7 +261,7 @@ class ViewWindowInsetObserver(private val view: View) {
 
                     override fun onEnd(animation: WindowInsetsAnimation) {
                         if (animation.typeMask and WindowInsetsPlatform.Type.ime() != 0) {
-                            windowInsets.ime.beingAnimated = false
+                            windowInsets.ime.ongoingAnimations--
                         }
                         // TODO add rest of types
                     }
@@ -358,10 +370,10 @@ private fun Insets.updateFrom(windowInsets: WindowInsetsPlatform, type: Int) {
     isVisible = windowInsets.isVisible(type)
 }
 
-internal fun Insets.coerceAtLeastEachDimension(other: Insets): Insets = copy(
+internal fun Insets.coerceEachDimensionAtLeast(other: Insets): Insets = copy(
     left = left.coerceAtLeast(other.left),
     top = top.coerceAtLeast(other.top),
-    right = right.coerceAtLeast(other.top),
+    right = right.coerceAtLeast(other.right),
     bottom = bottom.coerceAtLeast(other.bottom),
 )
 
