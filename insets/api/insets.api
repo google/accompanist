@@ -28,9 +28,8 @@ public final class dev/chrisbanes/accompanist/insets/HorizontalSide : java/lang/
 
 public final class dev/chrisbanes/accompanist/insets/Insets {
 	public fun <init> ()V
-	public final fun copy (IIIIZZ)Ldev/chrisbanes/accompanist/insets/Insets;
-	public static synthetic fun copy$default (Ldev/chrisbanes/accompanist/insets/Insets;IIIIZZILjava/lang/Object;)Ldev/chrisbanes/accompanist/insets/Insets;
-	public final fun getBeingAnimated ()Z
+	public final fun copy (IIIIZ)Ldev/chrisbanes/accompanist/insets/Insets;
+	public static synthetic fun copy$default (Ldev/chrisbanes/accompanist/insets/Insets;IIIIZILjava/lang/Object;)Ldev/chrisbanes/accompanist/insets/Insets;
 	public final fun getBottom ()I
 	public final fun getLeft ()I
 	public final fun getRight ()I

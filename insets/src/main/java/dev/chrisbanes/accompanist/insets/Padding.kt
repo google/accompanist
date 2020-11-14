@@ -47,12 +47,12 @@ import androidx.compose.ui.unit.offset
 fun Modifier.systemBarsPadding(
     enabled: Boolean = true
 ): Modifier = composed {
-    insetsPadding(
+    InsetsPaddingModifier(
         insets = AmbientWindowInsets.current.systemBars,
-        left = enabled,
-        top = enabled,
-        right = enabled,
-        bottom = enabled
+        applyLeft = enabled,
+        applyTop = enabled,
+        applyRight = enabled,
+        applyBottom = enabled
     )
 }
 
@@ -61,7 +61,10 @@ fun Modifier.systemBarsPadding(
  * of the content.
  */
 fun Modifier.statusBarsPadding(): Modifier = composed {
-    insetsPadding(insets = AmbientWindowInsets.current.statusBars, top = true)
+    InsetsPaddingModifier(
+        insets = AmbientWindowInsets.current.statusBars,
+        applyTop = true
+    )
 }
 
 /**
@@ -81,11 +84,11 @@ fun Modifier.navigationBarsPadding(
     left: Boolean = true,
     right: Boolean = true
 ): Modifier = composed {
-    insetsPadding(
+    InsetsPaddingModifier(
         insets = AmbientWindowInsets.current.navigationBars,
-        left = left,
-        right = right,
-        bottom = bottom
+        applyLeft = left,
+        applyRight = right,
+        applyBottom = bottom
     )
 }
 
@@ -98,11 +101,11 @@ fun Modifier.navigationBarsPadding(
  * [Modifier.navigationBarsWithImePadding] modifier.
  */
 fun Modifier.imePadding(): Modifier = composed {
-    insetsPadding(
+    InsetsPaddingModifier(
         insets = AmbientWindowInsets.current.ime,
-        left = true,
-        right = true,
-        bottom = true,
+        applyLeft = true,
+        applyRight = true,
+        applyBottom = true,
     )
 }
 
@@ -112,41 +115,36 @@ fun Modifier.imePadding(): Modifier = composed {
  * at the bottom of the screen.
  */
 fun Modifier.navigationBarsWithImePadding(): Modifier = composed {
-    insetsPadding(
-        insets = AmbientWindowInsets.current.ime
-            .coerceEachDimensionAtLeast(AmbientWindowInsets.current.navigationBars),
-        left = true,
-        right = true,
-        bottom = true,
+    InsetsPaddingModifier(
+        insets = AmbientWindowInsets.current.ime,
+        minimumInsets = AmbientWindowInsets.current.navigationBars,
+        applyLeft = true,
+        applyRight = true,
+        applyBottom = true,
     )
 }
 
-/**
- * Allows conditional setting of [insets] on each dimension.
- */
-private inline fun Modifier.insetsPadding(
-    insets: Insets,
-    left: Boolean = false,
-    top: Boolean = false,
-    right: Boolean = false,
-    bottom: Boolean = false,
-): Modifier = this then InsetsPaddingModifier(insets, left, top, right, bottom)
-
 private data class InsetsPaddingModifier(
     private val insets: Insets,
-    private val applyLeft: Boolean,
-    private val applyTop: Boolean,
-    private val applyRight: Boolean,
-    private val applyBottom: Boolean
+    private val minimumInsets: Insets? = null,
+    private val applyLeft: Boolean = false,
+    private val applyTop: Boolean = false,
+    private val applyRight: Boolean = false,
+    private val applyBottom: Boolean = false,
 ) : LayoutModifier {
     override fun MeasureScope.measure(
         measurable: Measurable,
         constraints: Constraints
     ): MeasureResult {
-        val left = if (applyLeft) insets.left else 0
-        val top = if (applyTop) insets.top else 0
-        val right = if (applyRight) insets.right else 0
-        val bottom = if (applyBottom) insets.bottom else 0
+        val transformedInsets = if (minimumInsets != null) {
+            // If we have a minimum insets, coerce each dimensions
+            insets.coerceEachDimensionAtLeast(minimumInsets)
+        } else insets
+
+        val left = if (applyLeft) transformedInsets.left else 0
+        val top = if (applyTop) transformedInsets.top else 0
+        val right = if (applyRight) transformedInsets.right else 0
+        val bottom = if (applyBottom) transformedInsets.bottom else 0
         val horizontal = left + right
         val vertical = top + bottom
 
