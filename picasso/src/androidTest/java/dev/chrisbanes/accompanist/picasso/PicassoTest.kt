@@ -340,10 +340,9 @@ class PicassoTest {
         latch.await(5, TimeUnit.SECONDS)
 
         composeTestRule.runOnIdle {
-            assertThat(states).hasSize(3)
-            assertThat(states[0]).isEqualTo(ImageLoadState.Empty)
-            assertThat(states[1]).isEqualTo(ImageLoadState.Loading)
-            assertThat(states[2]).isInstanceOf(ImageLoadState.Error::class.java)
+            assertThat(states).hasSize(2)
+            assertThat(states[0]).isEqualTo(ImageLoadState.Loading)
+            assertThat(states[1]).isInstanceOf(ImageLoadState.Error::class.java)
         }
     }
 
@@ -372,10 +371,9 @@ class PicassoTest {
         latch.await(5, TimeUnit.SECONDS)
 
         composeTestRule.runOnIdle {
-            assertThat(states).hasSize(3)
-            assertThat(states[0]).isEqualTo(ImageLoadState.Empty)
-            assertThat(states[1]).isEqualTo(ImageLoadState.Loading)
-            assertThat(states[2]).isInstanceOf(ImageLoadState.Success::class.java)
+            assertThat(states).hasSize(2)
+            assertThat(states[0]).isEqualTo(ImageLoadState.Loading)
+            assertThat(states[1]).isInstanceOf(ImageLoadState.Success::class.java)
         }
     }
 
