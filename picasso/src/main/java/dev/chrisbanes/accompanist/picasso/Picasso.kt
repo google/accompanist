@@ -28,8 +28,7 @@ import androidx.compose.runtime.staticAmbientOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.ImageAsset
-import androidx.compose.ui.graphics.asImageAsset
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.ImagePainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
@@ -99,7 +98,7 @@ fun PicassoImage(
                 val target = object : com.squareup.picasso.Target {
                     override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
                         val state = ImageLoadState.Success(
-                            painter = ImagePainter(bitmap.asImageAsset()),
+                            painter = ImagePainter(bitmap.asImageBitmap()),
                             source = from.toDataSource()
                         )
                         cont.resume(state) {
@@ -190,10 +189,10 @@ fun PicassoImage(
  *
  * @param data The data to load. See [RequestCreator.data] for the types allowed.
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
- * @param alignment Optional alignment parameter used to place the loaded [ImageAsset] in the
+ * @param alignment Optional alignment parameter used to place the loaded [ImageBitmap] in the
  * given bounds defined by the width and height.
  * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
- * used if the bounds are a different size from the intrinsic size of the loaded [ImageAsset].
+ * used if the bounds are a different size from the intrinsic size of the loaded [ImageBitmap].
  * @param colorFilter Optional colorFilter to apply for the [Painter] when it is rendered onscreen.
  * @param error Content to be displayed when the request failed.
  * @param loading Content to be displayed when the request is in progress.

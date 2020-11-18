@@ -73,11 +73,12 @@ private fun Sample() {
 
             FloatingActionButton(
                 onClick = { /* */ },
-                icon = { Icon(Icons.Default.Face) },
                 modifier = Modifier.align(Alignment.BottomEnd)
                     .navigationBarsPadding()
                     .padding(16.dp)
-            )
+            ) {
+                Icon(Icons.Default.Face)
+            }
         }
     }
 }

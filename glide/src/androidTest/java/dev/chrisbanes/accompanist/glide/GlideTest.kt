@@ -26,7 +26,7 @@ import androidx.compose.runtime.onCommit
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
-import androidx.compose.ui.platform.ViewAmbient
+import androidx.compose.ui.platform.AmbientView
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.assertHeightIsAtLeast
 import androidx.compose.ui.test.assertHeightIsEqualTo
@@ -288,7 +288,7 @@ class GlideTest {
 
         composeTestRule.setContent {
             // Create a RequestManager with a listener which updates our loaded list
-            val glide = Glide.with(ViewAmbient.current)
+            val glide = Glide.with(AmbientView.current)
                 .addDefaultRequestListener(SimpleRequestListener { model -> loaded += model })
 
             GlideImage(
@@ -313,7 +313,7 @@ class GlideTest {
 
         composeTestRule.setContent {
             // Create a RequestManager with a listener which updates our loaded list
-            val glide = Glide.with(ViewAmbient.current)
+            val glide = Glide.with(AmbientView.current)
                 .addDefaultRequestListener(SimpleRequestListener { model -> loaded += model })
 
             Providers(AmbientRequestManager provides glide) {

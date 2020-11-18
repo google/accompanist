@@ -29,8 +29,8 @@ import androidx.compose.ui.layout.LayoutModifier
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.MeasureScope
-import androidx.compose.ui.platform.DensityAmbient
-import androidx.compose.ui.platform.LayoutDirectionAmbient
+import androidx.compose.ui.platform.AmbientDensity
+import androidx.compose.ui.platform.AmbientLayoutDirection
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
@@ -144,8 +144,8 @@ fun Insets.toPaddingValues(
     top: Boolean = true,
     end: Boolean = true,
     bottom: Boolean = true
-): PaddingValues = with(DensityAmbient.current) {
-    val layoutDirection = LayoutDirectionAmbient.current
+): PaddingValues = with(AmbientDensity.current) {
+    val layoutDirection = AmbientLayoutDirection.current
     PaddingValues(
         start = when {
             start && layoutDirection == LayoutDirection.Ltr -> this@toPaddingValues.left.toDp()

@@ -31,7 +31,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticAmbientOf
-import androidx.compose.ui.platform.ViewAmbient
+import androidx.compose.ui.platform.AmbientView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsCompat.Type
@@ -116,7 +116,7 @@ fun ProvideWindowInsets(
     consumeWindowInsets: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val view = ViewAmbient.current
+    val view = AmbientView.current
 
     val windowInsets = remember { WindowInsets() }
 

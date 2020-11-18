@@ -24,7 +24,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
-import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.assertHeightIsAtLeast
 import androidx.compose.ui.test.assertHeightIsEqualTo
@@ -98,7 +98,7 @@ class CoilTest {
 
         composeTestRule.setContent {
             CoilImage(
-                request = ImageRequest.Builder(ContextAmbient.current)
+                request = ImageRequest.Builder(AmbientContext.current)
                     .data(server.url("/image"))
                     .listener { _, _ -> latch.countDown() }
                     .build(),
