@@ -37,7 +37,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.geometry.toRect
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.ImageAsset
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.DrawScope
@@ -55,14 +54,14 @@ private const val DefaultTransitionDuration = 1000
  * [Material Image Loading](https://material.io/archive/guidelines/patterns/loading-images.html)
  * pattern.
  *
- * @param asset The [ImageAsset] to draw.
+ * @param asset The [ImageBitmap] to draw.
  * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
  * background)
- * @param alignment Optional alignment parameter used to place the [ImageAsset] in the given
+ * @param alignment Optional alignment parameter used to place the [ImageBitmap] in the given
  * bounds defined by the width and height.
  * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be used
- * if the bounds are a different size from the intrinsic size of the [ImageAsset].
- * @param colorFilter Optional ColorFilter to apply for the [ImageAsset] when it is rendered
+ * if the bounds are a different size from the intrinsic size of the [ImageBitmap].
+ * @param colorFilter Optional ColorFilter to apply for the [ImageBitmap] when it is rendered
  * onscreen
  * @param clock The [AnimationClockObservable] to use for running animations.
  * @param fadeInEnabled Whether the fade-in animation should be used or not.
@@ -102,8 +101,8 @@ fun MaterialLoadingImage(
  * @param alignment Optional alignment parameter used to place the [painter] in the given
  * bounds defined by the width and height.
  * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be used
- * if the bounds are a different size from the intrinsic size of the [ImageAsset].
- * @param colorFilter Optional ColorFilter to apply for the [ImageAsset] when it is rendered
+ * if the bounds are a different size from the intrinsic size of the [ImageBitmap].
+ * @param colorFilter Optional ColorFilter to apply for the [ImageBitmap] when it is rendered
  * onscreen
  * @param clock The [AnimationClockObservable] to use for running animations.
  * @param fadeInEnabled Whether the fade-in animation should be used or not.
@@ -146,11 +145,11 @@ fun MaterialLoadingImage(
  * @param result A [ImageLoadState.Success] instance.
  * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
  * background)
- * @param alignment Optional alignment parameter used to place the [ImageAsset] in the given
+ * @param alignment Optional alignment parameter used to place the [ImageBitmap] in the given
  * bounds defined by the width and height.
  * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be used
- * if the bounds are a different size from the intrinsic size of the [ImageAsset].
- * @param colorFilter Optional ColorFilter to apply for the [ImageAsset] when it is rendered
+ * if the bounds are a different size from the intrinsic size of the [ImageBitmap].
+ * @param colorFilter Optional ColorFilter to apply for the [ImageBitmap] when it is rendered
  * onscreen
  * @param clock The [AnimationClockObservable] to use for running animations.
  * @param skipFadeWhenLoadedFromMemory Whether the fade animation should be skipped when the result
@@ -242,7 +241,7 @@ private class MaterialLoadingPainterWrapper(
     }
 
     /**
-     * Return the dimension of the underlying [ImageAsset] as its intrinsic width and height
+     * Return the dimension of the underlying [ImageBitmap] as its intrinsic width and height
      */
     override val intrinsicSize: Size get() = painter.intrinsicSize
 

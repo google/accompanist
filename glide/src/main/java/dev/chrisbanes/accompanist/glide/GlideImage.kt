@@ -26,7 +26,6 @@ import androidx.compose.runtime.staticAmbientOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.ImageAsset
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.AmbientView
@@ -141,10 +140,10 @@ fun GlideImage(
  *
  * @param data The data to load.
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
- * @param alignment Optional alignment parameter used to place the loaded [ImageAsset] in the
+ * @param alignment Optional alignment parameter used to place the loaded [ImageBitmap] in the
  * given bounds defined by the width and height.
  * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
- * used if the bounds are a different size from the intrinsic size of the loaded [ImageAsset].
+ * used if the bounds are a different size from the intrinsic size of the loaded [ImageBitmap].
  * @param colorFilter Optional colorFilter to apply for the [Painter] when it is rendered onscreen.
  * @param error Content to be displayed when the request failed.
  * @param loading Content to be displayed when the request is in progress.

@@ -26,7 +26,6 @@ import androidx.compose.runtime.staticAmbientOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.ImageAsset
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.AmbientContext
@@ -202,10 +201,10 @@ fun CoilImage(
  *
  * @param data The data to load. See [ImageRequest.Builder.data] for the types allowed.
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
- * @param alignment Optional alignment parameter used to place the loaded [ImageAsset] in the
+ * @param alignment Optional alignment parameter used to place the loaded [ImageBitmap] in the
  * given bounds defined by the width and height.
  * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
- * used if the bounds are a different size from the intrinsic size of the loaded [ImageAsset].
+ * used if the bounds are a different size from the intrinsic size of the loaded [ImageBitmap].
  * @param colorFilter Optional colorFilter to apply for the [Painter] when it is rendered onscreen.
  * @param error Content to be displayed when the request failed.
  * @param loading Content to be displayed when the request is in progress.
@@ -276,10 +275,10 @@ fun CoilImage(
  * @param request The request to execute. If the request does not have a [ImageRequest.sizeResolver]
  * set, one will be set on the request using the layout constraints.
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
- * @param alignment Optional alignment parameter used to place the loaded [ImageAsset] in the
+ * @param alignment Optional alignment parameter used to place the loaded [ImageBitmap] in the
  * given bounds defined by the width and height.
  * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
- * used if the bounds are a different size from the intrinsic size of the loaded [ImageAsset].
+ * used if the bounds are a different size from the intrinsic size of the loaded [ImageBitmap].
  * @param colorFilter Optional colorFilter to apply for the [Painter] when it is rendered onscreen.
  * @param error Content to be displayed when the request failed.
  * @param loading Content to be displayed when the request is in progress.
