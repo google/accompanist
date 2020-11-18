@@ -47,6 +47,11 @@ apiValidation {
     ignoredProjects += ["sample", "imageloading-testutils"]
 }
 
+tasks.withType(org.jetbrains.dokka.gradle.DokkaMultiModuleTask).configureEach {
+    outputDirectory = rootProject.file('docs/api')
+    failOnWarning = true
+}
+
 allprojects {
     repositories {
         google()
@@ -57,7 +62,9 @@ allprojects {
             maven { url Libs.AndroidX.Compose.snapshotUrl }
         }
     }
+}
 
+subprojects {
     apply plugin: 'com.diffplug.spotless'
     spotless {
         kotlin {
@@ -107,11 +114,6 @@ allprojects {
     // Must be afterEvaluate or else com.vanniktech.maven.publish will overwrite our
     // dokka and version configuration.
     afterEvaluate {
-        tasks.withType(org.jetbrains.dokka.gradle.DokkaMultiModuleTask).configureEach {
-            outputDirectory.set(rootProject.file('docs/api'))
-            //documentationFileName.set("index.md")
-        }
-
         tasks.withType(org.jetbrains.dokka.gradle.DokkaTask).configureEach {
             sourceSets {
                 configureEach {
@@ -125,30 +127,30 @@ allprojects {
 
                     // AndroidX + Compose docs
                     externalDocumentationLink {
-                        url.set(new URL("https://developer.android.com/reference/"))
-                        packageListUrl.set(new URL("https://developer.android.com/reference/androidx/package-list"))
+                        url = new URL("https://developer.android.com/reference/")
+                        packageListUrl = new URL("https://developer.android.com/reference/androidx/package-list")
                     }
                     externalDocumentationLink {
-                        url.set(new URL("https://developer.android.com/reference/kotlin/"))
-                        packageListUrl.set(new URL("https://developer.android.com/reference/kotlin/androidx/package-list"))
+                        url = new URL("https://developer.android.com/reference/kotlin/")
+                        packageListUrl = new URL("https://developer.android.com/reference/kotlin/androidx/package-list")
                     }
 
                     // Coil docs
                     if (rootProject.file('package-list-coil-base').exists()) {
                         externalDocumentationLink {
-                            url.set(new URL("https://coil-kt.github.io/coil/api/coil-base/"))
-                            packageListUrl.set(new URL("file://$rootDir/package-list-coil-base"))
+                            url = new URL("https://coil-kt.github.io/coil/api/coil-base/")
+                            packageListUrl = new URL("file://$rootDir/package-list-coil-base")
                         }
                     }
 
                     // Picasso docs
                     externalDocumentationLink {
-                        url.set(new URL("https://square.github.io/picasso/2.x/picasso/"))
+                        url = new URL("https://square.github.io/picasso/2.x/picasso/")
                     }
 
                     // Glide docs
                     externalDocumentationLink {
-                        url.set(new URL("https://bumptech.github.io/glide/javadocs/4110/"))
+                        url = new URL("https://bumptech.github.io/glide/javadocs/4110/")
                     }
                 }
             }

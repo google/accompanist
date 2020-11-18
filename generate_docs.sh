@@ -12,7 +12,7 @@ sed -i.bak 's/$dokka.linkExtension:md/$dokka.linkExtension:html/g' package-list-
 # Clear out the old API docs
 [ -d docs/api ] && rm -r docs/api
 # Build the docs with dokka
-./gradlew clean dokkaHtml
+./gradlew clean dokkaHtmlMultiModule
 
 # Clean up the temp Coil package list
 rm package-list-coil-base
