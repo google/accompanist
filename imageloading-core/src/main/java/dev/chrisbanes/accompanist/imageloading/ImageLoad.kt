@@ -68,7 +68,8 @@ fun <R : Any, TR : Any> ImageLoad(
     content: @Composable (imageLoadState: ImageLoadState) -> Unit
 ) {
     var state by remember(requestKey) {
-        mutableStateOf<ImageLoadState>(ImageLoadState.Empty)
+        // We start from the loading state, to avoid thrashing from empty -> loading straightaway
+        mutableStateOf<ImageLoadState>(ImageLoadState.Loading)
     }
 
     // This may look a little weird, but allows the LaunchedEffect callback to always
