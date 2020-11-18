@@ -23,13 +23,11 @@ import androidx.compose.runtime.Providers
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.assertHeightIsAtLeast
 import androidx.compose.ui.test.assertHeightIsEqualTo
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertPixels
 import androidx.compose.ui.test.assertWidthIsAtLeast
 import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.captureToImage
@@ -292,8 +290,7 @@ class PicassoTest {
         composeTestRule.onNodeWithTag(TestTags.Image)
             .assertIsDisplayed()
             .captureToImage()
-            .asAndroidBitmap()
-            .assertPixels { Color.Red }
+            .assertPixels(Color.Red)
     }
 
     @Test
@@ -406,8 +403,7 @@ class PicassoTest {
         composeTestRule.onNodeWithTag(TestTags.Image)
             .assertIsDisplayed()
             .captureToImage()
-            .asAndroidBitmap()
-            .assertPixels { Color.Cyan }
+            .assertPixels(Color.Cyan)
     }
 
     @Test
@@ -474,7 +470,6 @@ class PicassoTest {
         composeTestRule.onNodeWithTag(TestTags.Image)
             .assertIsDisplayed()
             .captureToImage()
-            .asAndroidBitmap()
-            .assertPixels { Color.Red }
+            .assertPixels(Color.Red)
     }
 }
