@@ -1,0 +1,50 @@
+//[insets](../index.md)/[dev.chrisbanes.accompanist.insets](index.md)/[navigationBarsHeight](navigation-bars-height.md)
+
+
+
+# navigationBarsHeight  
+  
+Brief description  
+
+
+
+
+Declare the preferred height of the content to match the height of the navigation bars when present at the bottom of the screen.
+
+
+
+This is very handy when used with Spacer to push content below the navigation bars:
+
+Column {  
+    // Content to be drawn above status bars (y-axis)  
+    Spacer(Modifier.navigationBarHeight())  
+}
+
+It's also useful when used to draw a scrim which matches the navigation bars:
+
+Spacer(  
+    Modifier.navigationBarHeight()  
+        .fillMaxWidth()  
+        .drawBackground(MaterialTheme.colors.background.copy(alpha = 0.3f)  
+)
+
+Internally this matches the behavior of the Modifier.height modifier.
+
+
+
+
+
+## Parameters  
+  
+  
+  
+|  Name|  Summary| 
+|---|---|
+| additional| Any additional height to add to the status bars size.
+  
+  
+Content  
+fun Modifier.[navigationBarsHeight](navigation-bars-height.md)(additional: Dp): Modifier  
+
+
+

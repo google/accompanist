@@ -1,0 +1,30 @@
+//[insets](../index.md)/[dev.chrisbanes.accompanist.insets](index.md)/[add](add.md)
+
+
+
+# add  
+  
+Brief description  
+
+
+Returns a new PaddingValues with the provided values added to each relevant dimension.
+
+
+
+## Parameters  
+  
+  
+  
+|  Name|  Summary| 
+|---|---|
+| bottom| Value to add to the bottom dimension.
+| end| Value to add to the end dimension.
+| start| Value to add to the start dimension.
+| top| Value to add to the top dimension.
+  
+  
+Content  
+inline fun PaddingValues.[add](add.md)(start: Dp, top: Dp, end: Dp, bottom: Dp): PaddingValues  
+
+
+

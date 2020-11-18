@@ -1,0 +1,35 @@
+//[insets](../../index.md)/[dev.chrisbanes.accompanist.insets](../index.md)/[HorizontalSide](index.md)
+
+
+
+# HorizontalSide  
+  enum [HorizontalSide](index.md) : [Enum](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/index.html)<[HorizontalSide](index.md)>    
+
+
+## Entries  
+  
+|  Name|  Summary| 
+|---|---|
+| [Left](-left/index.md)|   [Left](-left/index.md)()  <br>  <br>   <br>
+| [Right](-right/index.md)|   [Right](-right/index.md)()  <br>  <br>   <br>
+
+
+## Functions  
+  
+|  Name|  Summary| 
+|---|---|
+| [compareTo](-right/index.md#kotlin/Enum/compareTo/#dev.chrisbanes.accompanist.insets.HorizontalSide/PointingToDeclaration/)|   <br>Content  <br>operator override fun [compareTo](-right/index.md#kotlin/Enum/compareTo/#dev.chrisbanes.accompanist.insets.HorizontalSide/PointingToDeclaration/)(other: [HorizontalSide](index.md)): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br>
+| [equals](../-vertical-side/-bottom/index.md#kotlin/Enum/equals/#kotlin.Any?/PointingToDeclaration/)|   <br>Content  <br>operator override fun [equals](../-vertical-side/-bottom/index.md#kotlin/Enum/equals/#kotlin.Any?/PointingToDeclaration/)(other: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br>
+| [finalize](../-vertical-side/-bottom/index.md#kotlin/Enum/finalize/#/PointingToDeclaration/)|   <br>Content  <br>override fun [finalize](../-vertical-side/-bottom/index.md#kotlin/Enum/finalize/#/PointingToDeclaration/)()  <br>
+| [getDeclaringClass](../-vertical-side/-bottom/index.md#kotlin/Enum/getDeclaringClass/#/PointingToDeclaration/)|   <br>Content  <br>override fun [getDeclaringClass](../-vertical-side/-bottom/index.md#kotlin/Enum/getDeclaringClass/#/PointingToDeclaration/)(): [Class](https://developer.android.com/reference/kotlin/java/lang/Class.html)<[HorizontalSide](index.md)>  <br>
+| [hashCode](../-vertical-side/-bottom/index.md#kotlin/Enum/hashCode/#/PointingToDeclaration/)|   <br>Content  <br>override fun [hashCode](../-vertical-side/-bottom/index.md#kotlin/Enum/hashCode/#/PointingToDeclaration/)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br>
+| [toString](../-vertical-side/-bottom/index.md#kotlin/Enum/toString/#/PointingToDeclaration/)|   <br>Content  <br>open override fun [toString](../-vertical-side/-bottom/index.md#kotlin/Enum/toString/#/PointingToDeclaration/)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br>
+
+
+## Properties  
+  
+|  Name|  Summary| 
+|---|---|
+| [name](index.md#dev.chrisbanes.accompanist.insets/HorizontalSide/name/#/PointingToDeclaration/)|   override val [name](index.md#dev.chrisbanes.accompanist.insets/HorizontalSide/name/#/PointingToDeclaration/): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)   <br>
+| [ordinal](index.md#dev.chrisbanes.accompanist.insets/HorizontalSide/ordinal/#/PointingToDeclaration/)|   override val [ordinal](index.md#dev.chrisbanes.accompanist.insets/HorizontalSide/ordinal/#/PointingToDeclaration/): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)   <br>
+

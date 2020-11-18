@@ -1,0 +1,44 @@
+//[imageloading-core](../index.md)/[dev.chrisbanes.accompanist.imageloading](index.md)/[ImageLoad](-image-load.md)
+
+
+
+# ImageLoad  
+  
+Brief description  
+
+
+
+
+A generic image loading composable, which provides hooks for image loading libraries to use. Apps shouldn't generally use this function, instead preferring one of the extension libraries which build upon this, such as the Coil library.
+
+
+
+The executeRequest parameters allows providing of a lambda to execute the 'image load'. The [R](-image-load.md) type and request parameter should be whatever primitive the library uses to model a request. The [TR](-image-load.md) type would normally be the same as [R](-image-load.md), but allows transforming of the request for execution (say to wrap with extra information).
+
+
+
+
+
+## Parameters  
+  
+  
+  
+|  Name|  Summary| 
+|---|---|
+| content| Content to be displayed for the given state.
+| executeRequest| Suspending lambda to execute an image loading request.
+| modifier| Modifier used to adjust the layout algorithm or draw decoration content.
+| onRequestCompleted| Listener which will be called when the loading request has finished.
+| request| The request to execute.
+| requestKey| The object to key this request on. If the request type supports equality then the default value will work. Otherwise pass in the data value.
+| shouldRefetchOnSizeChange| Lambda which will be invoked when the size changes, allowing optional re-fetching of the image. Return true to re-fetch the image.
+| transformRequestForSize| Optionally transform request for the given IntSize.
+  
+  
+Content  
+@Composable()  
+  
+fun <[R](-image-load.md) : [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html), [TR](-image-load.md) : [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)> [ImageLoad](-image-load.md)(request: [R](-image-load.md), executeRequest: [SuspendFunction1](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-suspend-function1/index.html)<[TR](-image-load.md), [ImageLoadState](-image-load-state/index.md)>, modifier: Modifier, requestKey: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html), transformRequestForSize: ([R](-image-load.md), IntSize) -> [TR](-image-load.md)?, shouldRefetchOnSizeChange: ([ImageLoadState](-image-load-state/index.md), IntSize) -> [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html), onRequestCompleted: ([ImageLoadState](-image-load-state/index.md)) -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html), content: ([ImageLoadState](-image-load-state/index.md)) -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html))  
+
+
+

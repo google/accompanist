@@ -1,0 +1,16 @@
+//[coil](../index.md)/[dev.chrisbanes.accompanist.coil](index.md)/[CoilImageWithCrossfade](-coil-image-with-crossfade.md)
+
+
+
+# CoilImageWithCrossfade  
+  
+Content  
+@Composable()  
+  
+~~fun~~ [~~CoilImageWithCrossfade~~](-coil-image-with-crossfade.md)~~(~~~~data~~~~:~~ [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)~~,~~ ~~modifier~~~~:~~ Modifier~~,~~ ~~alignment~~~~:~~ Alignment~~,~~ ~~contentScale~~~~:~~ ContentScale~~,~~ ~~crossfadeDuration~~~~:~~ [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)~~,~~ ~~imageLoader~~~~:~~ ImageLoader~~,~~ ~~shouldRefetchOnSizeChange~~~~:~~ (ImageLoadState, IntSize) -> [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)~~,~~ ~~onRequestCompleted~~~~:~~ (ImageLoadState) -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)~~,~~ ~~error~~~~:~~ (ImageLoadState.Error) -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)?~~,~~ ~~loading~~~~:~~ () -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)?~~)~~  
+@Composable()  
+  
+~~fun~~ [~~CoilImageWithCrossfade~~](-coil-image-with-crossfade.md)~~(~~~~request~~~~:~~ ImageRequest~~,~~ ~~modifier~~~~:~~ Modifier~~,~~ ~~alignment~~~~:~~ Alignment~~,~~ ~~contentScale~~~~:~~ ContentScale~~,~~ ~~crossfadeDuration~~~~:~~ [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)~~,~~ ~~imageLoader~~~~:~~ ImageLoader~~,~~ ~~shouldRefetchOnSizeChange~~~~:~~ (ImageLoadState, IntSize) -> [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)~~,~~ ~~onRequestCompleted~~~~:~~ (ImageLoadState) -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)~~,~~ ~~error~~~~:~~ (ImageLoadState.Error) -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)?~~,~~ ~~loading~~~~:~~ () -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)?~~)~~  
+
+
+

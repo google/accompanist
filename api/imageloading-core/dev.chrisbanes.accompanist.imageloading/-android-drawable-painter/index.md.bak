@@ -1,0 +1,53 @@
+//[imageloading-core](../../index.md)/[dev.chrisbanes.accompanist.imageloading](../index.md)/[AndroidDrawablePainter](index.md)
+
+
+
+# AndroidDrawablePainter  
+  
+
+
+
+A Painter which draws an Android [Drawable](https://developer.android.com/reference/kotlin/android/graphics/drawable/Drawable.html). Supports [Animatable](https://developer.android.com/reference/kotlin/android/graphics/drawable/Animatable.html) drawables.
+
+
+
+Taken from https://goo.gle/compose-drawable-painter
+
+
+
+class [AndroidDrawablePainter](index.md)(**drawable**: [Drawable](https://developer.android.com/reference/kotlin/android/graphics/drawable/Drawable.html)) : Painter   
+
+
+## Constructors  
+  
+|  Name|  Summary| 
+|---|---|
+| [AndroidDrawablePainter](-android-drawable-painter.md)|   fun [AndroidDrawablePainter](-android-drawable-painter.md)(drawable: [Drawable](https://developer.android.com/reference/kotlin/android/graphics/drawable/Drawable.html))   <br>
+
+
+## Functions  
+  
+|  Name|  Summary| 
+|---|---|
+| [configureAlpha](index.md#androidx.compose.ui.graphics.painter/Painter/configureAlpha/#kotlin.Float/PointingToDeclaration/)|   <br>Content  <br>override fun [configureAlpha](index.md#androidx.compose.ui.graphics.painter/Painter/configureAlpha/#kotlin.Float/PointingToDeclaration/)(alpha: [Float](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html))  <br>
+| [configureColorFilter](index.md#androidx.compose.ui.graphics.painter/Painter/configureColorFilter/#androidx.compose.ui.graphics.ColorFilter?/PointingToDeclaration/)|   <br>Content  <br>override fun [configureColorFilter](index.md#androidx.compose.ui.graphics.painter/Painter/configureColorFilter/#androidx.compose.ui.graphics.ColorFilter?/PointingToDeclaration/)(colorFilter: ColorFilter?)  <br>
+| [configureLayoutDirection](index.md#androidx.compose.ui.graphics.painter/Painter/configureLayoutDirection/#androidx.compose.ui.unit.LayoutDirection/PointingToDeclaration/)|   <br>Content  <br>override fun [configureLayoutDirection](index.md#androidx.compose.ui.graphics.painter/Painter/configureLayoutDirection/#androidx.compose.ui.unit.LayoutDirection/PointingToDeclaration/)(rtl: LayoutDirection)  <br>
+| [draw](index.md#androidx.compose.ui.graphics.painter/Painter/draw/androidx.compose.ui.graphics.drawscope.DrawScope#androidx.compose.ui.geometry.Size#kotlin.Float#androidx.compose.ui.graphics.ColorFilter?/PointingToDeclaration/)|   <br>Content  <br>override fun DrawScope.[draw](index.md#androidx.compose.ui.graphics.painter/Painter/draw/androidx.compose.ui.graphics.drawscope.DrawScope#androidx.compose.ui.geometry.Size#kotlin.Float#androidx.compose.ui.graphics.ColorFilter?/PointingToDeclaration/)(size: Size, alpha: [Float](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html), colorFilter: ColorFilter?)  <br>
+| [equals](../-image-load-state/-error/index.md#kotlin/Any/equals/#kotlin.Any?/PointingToDeclaration/)|   <br>Content  <br>open operator override fun [equals](../-image-load-state/-error/index.md#kotlin/Any/equals/#kotlin.Any?/PointingToDeclaration/)(other: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br>
+| [hashCode](../-image-loading-color-matrix/index.md#kotlin/Any/hashCode/#/PointingToDeclaration/)|   <br>Content  <br>open override fun [hashCode](../-image-loading-color-matrix/index.md#kotlin/Any/hashCode/#/PointingToDeclaration/)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br>
+| [obtainPaint](index.md#androidx.compose.ui.graphics.painter/Painter/obtainPaint/#/PointingToDeclaration/)|   <br>Content  <br>override fun [obtainPaint](index.md#androidx.compose.ui.graphics.painter/Painter/obtainPaint/#/PointingToDeclaration/)(): Paint  <br>
+| [toString](../-image-loading-color-matrix/index.md#kotlin/Any/toString/#/PointingToDeclaration/)|   <br>Content  <br>open override fun [toString](../-image-loading-color-matrix/index.md#kotlin/Any/toString/#/PointingToDeclaration/)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br>
+
+
+## Properties  
+  
+|  Name|  Summary| 
+|---|---|
+| [alpha](index.md#dev.chrisbanes.accompanist.imageloading/AndroidDrawablePainter/alpha/#/PointingToDeclaration/)|   override var [alpha](index.md#dev.chrisbanes.accompanist.imageloading/AndroidDrawablePainter/alpha/#/PointingToDeclaration/): [Float](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html)   <br>
+| [colorFilter](index.md#dev.chrisbanes.accompanist.imageloading/AndroidDrawablePainter/colorFilter/#/PointingToDeclaration/)|   override var [colorFilter](index.md#dev.chrisbanes.accompanist.imageloading/AndroidDrawablePainter/colorFilter/#/PointingToDeclaration/): ColorFilter?   <br>
+| [drawLambda](index.md#dev.chrisbanes.accompanist.imageloading/AndroidDrawablePainter/drawLambda/#/PointingToDeclaration/)|   override val [drawLambda](index.md#dev.chrisbanes.accompanist.imageloading/AndroidDrawablePainter/drawLambda/#/PointingToDeclaration/): DrawScope.() -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)   <br>
+| [intrinsicSize](index.md#dev.chrisbanes.accompanist.imageloading/AndroidDrawablePainter/intrinsicSize/#/PointingToDeclaration/)|   open override val [intrinsicSize](index.md#dev.chrisbanes.accompanist.imageloading/AndroidDrawablePainter/intrinsicSize/#/PointingToDeclaration/): Size   <br>
+| [layerPaint](index.md#dev.chrisbanes.accompanist.imageloading/AndroidDrawablePainter/layerPaint/#/PointingToDeclaration/)|   override var [layerPaint](index.md#dev.chrisbanes.accompanist.imageloading/AndroidDrawablePainter/layerPaint/#/PointingToDeclaration/): Paint?   <br>
+| [layoutDirection](index.md#dev.chrisbanes.accompanist.imageloading/AndroidDrawablePainter/layoutDirection/#/PointingToDeclaration/)|   override var [layoutDirection](index.md#dev.chrisbanes.accompanist.imageloading/AndroidDrawablePainter/layoutDirection/#/PointingToDeclaration/): LayoutDirection   <br>
+| [useLayer](index.md#dev.chrisbanes.accompanist.imageloading/AndroidDrawablePainter/useLayer/#/PointingToDeclaration/)|   override var [useLayer](index.md#dev.chrisbanes.accompanist.imageloading/AndroidDrawablePainter/useLayer/#/PointingToDeclaration/): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)   <br>
+

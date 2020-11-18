@@ -1,0 +1,29 @@
+//[insets](../index.md)/[dev.chrisbanes.accompanist.insets](index.md)/[navigationBarsPadding](navigation-bars-padding.md)
+
+
+
+# navigationBarsPadding  
+  
+Brief description  
+
+
+Apply additional space which matches the height of the navigation bars height along the bottom edge of the content, and additional space which matches the width of the navigation bars on the respective left and right edges.
+
+
+
+## Parameters  
+  
+  
+  
+|  Name|  Summary| 
+|---|---|
+| bottom| Whether to apply padding to the bottom edge, which matches the navigation bars height (if present) at the bottom edge of the screen. Defaults to true.
+| left| Whether to apply padding to the left edge, which matches the navigation bars width (if present) on the left edge of the screen. Defaults to true.
+| right| Whether to apply padding to the right edge, which matches the navigation bars width (if present) on the right edge of the screen. Defaults to true.
+  
+  
+Content  
+fun Modifier.[navigationBarsPadding](navigation-bars-padding.md)(bottom: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html), left: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html), right: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)): Modifier  
+
+
+

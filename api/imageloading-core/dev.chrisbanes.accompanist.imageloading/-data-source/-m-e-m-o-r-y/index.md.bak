@@ -1,0 +1,34 @@
+//[imageloading-core](../../../index.md)/[dev.chrisbanes.accompanist.imageloading](../../index.md)/[DataSource](../index.md)/[MEMORY](index.md)
+
+
+
+# MEMORY  
+  
+
+Represents an in-memory data source or cache (e.g. [Bitmap](https://developer.android.com/reference/kotlin/android/graphics/Bitmap.html), [ByteBuffer](https://developer.android.com/reference/kotlin/java/nio/ByteBuffer.html)).
+
+[MEMORY](index.md)()  
+  
+   
+
+
+## Functions  
+  
+|  Name|  Summary| 
+|---|---|
+| [clone](../-n-e-t-w-o-r-k/index.md#kotlin/Enum/clone/#/PointingToDeclaration/)|   <br>Content  <br>protected override fun [clone](../-n-e-t-w-o-r-k/index.md#kotlin/Enum/clone/#/PointingToDeclaration/)(): [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)  <br>
+| [compareTo](../-n-e-t-w-o-r-k/index.md#kotlin/Enum/compareTo/#dev.chrisbanes.accompanist.imageloading.DataSource/PointingToDeclaration/)|   <br>Content  <br>operator override fun [compareTo](../-n-e-t-w-o-r-k/index.md#kotlin/Enum/compareTo/#dev.chrisbanes.accompanist.imageloading.DataSource/PointingToDeclaration/)(other: [DataSource](../index.md)): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br>
+| [equals](../-n-e-t-w-o-r-k/index.md#kotlin/Enum/equals/#kotlin.Any?/PointingToDeclaration/)|   <br>Content  <br>operator override fun [equals](../-n-e-t-w-o-r-k/index.md#kotlin/Enum/equals/#kotlin.Any?/PointingToDeclaration/)(other: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br>
+| [finalize](../-n-e-t-w-o-r-k/index.md#kotlin/Enum/finalize/#/PointingToDeclaration/)|   <br>Content  <br>override fun [finalize](../-n-e-t-w-o-r-k/index.md#kotlin/Enum/finalize/#/PointingToDeclaration/)()  <br>
+| [getDeclaringClass](../-n-e-t-w-o-r-k/index.md#kotlin/Enum/getDeclaringClass/#/PointingToDeclaration/)|   <br>Content  <br>override fun [getDeclaringClass](../-n-e-t-w-o-r-k/index.md#kotlin/Enum/getDeclaringClass/#/PointingToDeclaration/)(): [Class](https://developer.android.com/reference/kotlin/java/lang/Class.html)<[DataSource](../index.md)>  <br>
+| [hashCode](../-n-e-t-w-o-r-k/index.md#kotlin/Enum/hashCode/#/PointingToDeclaration/)|   <br>Content  <br>override fun [hashCode](../-n-e-t-w-o-r-k/index.md#kotlin/Enum/hashCode/#/PointingToDeclaration/)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br>
+| [toString](../-n-e-t-w-o-r-k/index.md#kotlin/Enum/toString/#/PointingToDeclaration/)|   <br>Content  <br>open override fun [toString](../-n-e-t-w-o-r-k/index.md#kotlin/Enum/toString/#/PointingToDeclaration/)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br>
+
+
+## Properties  
+  
+|  Name|  Summary| 
+|---|---|
+| [name](index.md#dev.chrisbanes.accompanist.imageloading/DataSource.MEMORY/name/#/PointingToDeclaration/)|   override val [name](index.md#dev.chrisbanes.accompanist.imageloading/DataSource.MEMORY/name/#/PointingToDeclaration/): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)   <br>
+| [ordinal](index.md#dev.chrisbanes.accompanist.imageloading/DataSource.MEMORY/ordinal/#/PointingToDeclaration/)|   override val [ordinal](index.md#dev.chrisbanes.accompanist.imageloading/DataSource.MEMORY/ordinal/#/PointingToDeclaration/): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)   <br>
+

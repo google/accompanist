@@ -1,0 +1,27 @@
+//[insets](../index.md)/[dev.chrisbanes.accompanist.insets](index.md)/[systemBarsPadding](system-bars-padding.md)
+
+
+
+# systemBarsPadding  
+  
+Brief description  
+
+
+Selectively apply additional space which matches the width/height of any system bars present on the respective edges of the screen.
+
+
+
+## Parameters  
+  
+  
+  
+|  Name|  Summary| 
+|---|---|
+| enabled| Whether to apply padding using the system bars dimensions on the respective edges. Defaults to true.
+  
+  
+Content  
+fun Modifier.[systemBarsPadding](system-bars-padding.md)(enabled: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)): Modifier  
+
+
+

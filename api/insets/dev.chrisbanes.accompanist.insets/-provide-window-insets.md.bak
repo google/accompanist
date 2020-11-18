@@ -1,0 +1,29 @@
+//[insets](../index.md)/[dev.chrisbanes.accompanist.insets](index.md)/[ProvideWindowInsets](-provide-window-insets.md)
+
+
+
+# ProvideWindowInsets  
+  
+Brief description  
+
+
+Applies any [WindowInsetsCompat](https://developer.android.com/reference/kotlin/androidx/core/view/WindowInsetsCompat.html) values to [AmbientWindowInsets](index.md#dev.chrisbanes.accompanist.insets//AmbientWindowInsets/#/PointingToDeclaration/), which are then available within content.
+
+
+
+## Parameters  
+  
+  
+  
+|  Name|  Summary| 
+|---|---|
+| consumeWindowInsets| Whether to consume any [WindowInsetsCompat](https://developer.android.com/reference/kotlin/androidx/core/view/WindowInsetsCompat.html)s which are dispatched to the host view. Defaults to true.
+  
+  
+Content  
+@Composable()  
+  
+fun [ProvideWindowInsets](-provide-window-insets.md)(consumeWindowInsets: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html), content: () -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html))  
+
+
+

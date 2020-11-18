@@ -1,0 +1,17 @@
+//[insets](../index.md)/[dev.chrisbanes.accompanist.insets](index.md)/[statusBarsPadding](status-bars-padding.md)
+
+
+
+# statusBarsPadding  
+  
+Brief description  
+
+
+Apply additional space which matches the height of the status bars height along the top edge of the content.
+
+  
+Content  
+fun Modifier.[statusBarsPadding](status-bars-padding.md)(): Modifier  
+
+
+

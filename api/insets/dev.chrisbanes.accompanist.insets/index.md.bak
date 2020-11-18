@@ -1,0 +1,38 @@
+//[insets](../index.md)/[dev.chrisbanes.accompanist.insets](index.md)
+
+
+
+# Package dev.chrisbanes.accompanist.insets  
+
+
+## Types  
+  
+|  Name|  Summary| 
+|---|---|
+| [HorizontalSide](-horizontal-side/index.md)|   <br>Content  <br>enum [HorizontalSide](-horizontal-side/index.md) : [Enum](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/index.html)<[HorizontalSide](-horizontal-side/index.md)>   <br>
+| [Insets](-insets/index.md)|   <br>Content  <br>@Stable()  <br>  <br>class [Insets](-insets/index.md)  <br>
+| [VerticalSide](-vertical-side/index.md)|   <br>Content  <br>enum [VerticalSide](-vertical-side/index.md) : [Enum](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/index.html)<[VerticalSide](-vertical-side/index.md)>   <br>
+| [WindowInsets](-window-insets/index.md)|   <br>Brief description  <br>Main holder of our inset values.  <br>Content  <br>@Stable()  <br>  <br>class [WindowInsets](-window-insets/index.md)  <br>
+
+
+## Functions  
+  
+|  Name|  Summary| 
+|---|---|
+| [add](add.md)|   <br>Brief description  <br>Returns a new PaddingValues with the provided values added to each relevant dimension.  <br>Content  <br>inline fun PaddingValues.[add](add.md)(start: Dp, top: Dp, end: Dp, bottom: Dp): PaddingValues  <br>
+| [navigationBarsHeight](navigation-bars-height.md)|   <br>Brief description  <br>Declare the preferred height of the content to match the height of the navigation bars when present at the bottom of the screen.This is very handy when used with Spacer to push content below the navigation bars:Column {  <br>    // Content to be drawn above status bars (y-axis)  <br>    Spacer(Modifier.navigationBarHeight())  <br>}It's also useful when used to draw a scrim which matches the navigation bars:Spacer(  <br>    Modifier.navigationBarHeight()  <br>        .fillMaxWidth()  <br>        .drawBackground(MaterialTheme.colors.background.copy(alpha = 0.3f)  <br>)Internally this matches the behavior of the Modifier.height modifier.  <br>Content  <br>fun Modifier.[navigationBarsHeight](navigation-bars-height.md)(additional: Dp): Modifier  <br>
+| [navigationBarsPadding](navigation-bars-padding.md)|   <br>Brief description  <br>Apply additional space which matches the height of the navigation bars height along the bottom edge of the content, and additional space which matches the width of the navigation bars on the respective left and right edges.  <br>Content  <br>fun Modifier.[navigationBarsPadding](navigation-bars-padding.md)(bottom: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html), left: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html), right: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)): Modifier  <br>
+| [navigationBarsWidth](navigation-bars-width.md)|   <br>Brief description  <br>Declare the preferred width of the content to match the width of the navigation bars, on the given side.This is very handy when used with Spacer to push content inside from any vertical navigation bars (typically when the device is in landscape):Row {  <br>    Spacer(Modifier.navigationBarWidth(HorizontalSide.Left))  <br>  <br>    // Content to be inside the navigation bars (x-axis)  <br>  <br>    Spacer(Modifier.navigationBarWidth(HorizontalSide.Right))  <br>}It's also useful when used to draw a scrim which matches the navigation bars:Spacer(  <br>    Modifier.navigationBarWidth(HorizontalSide.Left)  <br>        .fillMaxHeight()  <br>        .drawBackground(MaterialTheme.colors.background.copy(alpha = 0.3f)  <br>)Internally this matches the behavior of the Modifier.height modifier.  <br>Content  <br>fun Modifier.[navigationBarsWidth](navigation-bars-width.md)(side: [HorizontalSide](-horizontal-side/index.md), additional: Dp): Modifier  <br>
+| [ProvideWindowInsets](-provide-window-insets.md)|   <br>Brief description  <br>Applies any [WindowInsetsCompat](https://developer.android.com/reference/kotlin/androidx/core/view/WindowInsetsCompat.html) values to [AmbientWindowInsets](index.md#dev.chrisbanes.accompanist.insets//AmbientWindowInsets/#/PointingToDeclaration/), which are then available within content.  <br>Content  <br>@Composable()  <br>  <br>fun [ProvideWindowInsets](-provide-window-insets.md)(consumeWindowInsets: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html), content: () -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html))  <br>
+| [statusBarsHeight](status-bars-height.md)|   <br>Brief description  <br>Declare the height of the content to match the height of the status bars exactly.This is very handy when used with Spacer to push content below the status bars:Column {  <br>    Spacer(Modifier.statusBarHeight())  <br>  <br>    // Content to be drawn below status bars (y-axis)  <br>}It's also useful when used to draw a scrim which matches the status bars:Spacer(  <br>    Modifier.statusBarHeight()  <br>        .fillMaxWidth()  <br>        .drawBackground(MaterialTheme.colors.background.copy(alpha = 0.3f)  <br>)Internally this matches the behavior of the Modifier.height modifier.  <br>Content  <br>fun Modifier.[statusBarsHeight](status-bars-height.md)(additional: Dp): Modifier  <br>
+| [statusBarsPadding](status-bars-padding.md)|   <br>Brief description  <br>Apply additional space which matches the height of the status bars height along the top edge of the content.  <br>Content  <br>fun Modifier.[statusBarsPadding](status-bars-padding.md)(): Modifier  <br>
+| [systemBarsPadding](system-bars-padding.md)|   <br>Brief description  <br>Selectively apply additional space which matches the width/height of any system bars present on the respective edges of the screen.  <br>Content  <br>fun Modifier.[systemBarsPadding](system-bars-padding.md)(enabled: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)): Modifier  <br>
+| [toPaddingValues](to-padding-values.md)|   <br>Brief description  <br>Returns the current insets converted into a PaddingValues.  <br>Content  <br>@Composable()  <br>  <br>fun [Insets](-insets/index.md).[toPaddingValues](to-padding-values.md)(start: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html), top: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html), end: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html), bottom: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)): PaddingValues  <br>
+
+
+## Properties  
+  
+|  Name|  Summary| 
+|---|---|
+| [AmbientWindowInsets](index.md#dev.chrisbanes.accompanist.insets//AmbientWindowInsets/#/PointingToDeclaration/)|   val [AmbientWindowInsets](index.md#dev.chrisbanes.accompanist.insets//AmbientWindowInsets/#/PointingToDeclaration/): ProvidableAmbient<[WindowInsets](-window-insets/index.md)>   <br>
+

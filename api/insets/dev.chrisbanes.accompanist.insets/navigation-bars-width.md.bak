@@ -1,0 +1,54 @@
+//[insets](../index.md)/[dev.chrisbanes.accompanist.insets](index.md)/[navigationBarsWidth](navigation-bars-width.md)
+
+
+
+# navigationBarsWidth  
+  
+Brief description  
+
+
+
+
+Declare the preferred width of the content to match the width of the navigation bars, on the given side.
+
+
+
+This is very handy when used with Spacer to push content inside from any vertical navigation bars (typically when the device is in landscape):
+
+Row {  
+    Spacer(Modifier.navigationBarWidth(HorizontalSide.Left))  
+  
+    // Content to be inside the navigation bars (x-axis)  
+  
+    Spacer(Modifier.navigationBarWidth(HorizontalSide.Right))  
+}
+
+It's also useful when used to draw a scrim which matches the navigation bars:
+
+Spacer(  
+    Modifier.navigationBarWidth(HorizontalSide.Left)  
+        .fillMaxHeight()  
+        .drawBackground(MaterialTheme.colors.background.copy(alpha = 0.3f)  
+)
+
+Internally this matches the behavior of the Modifier.height modifier.
+
+
+
+
+
+## Parameters  
+  
+  
+  
+|  Name|  Summary| 
+|---|---|
+| additional| Any additional width to add to the status bars size.
+| side| The navigation bar side to use as the source for the width.
+  
+  
+Content  
+fun Modifier.[navigationBarsWidth](navigation-bars-width.md)(side: [HorizontalSide](-horizontal-side/index.md), additional: Dp): Modifier  
+
+
+
