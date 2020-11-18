@@ -25,8 +25,8 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.referentialEqualityPolicy
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.WithConstraints
@@ -72,18 +72,7 @@ fun <R : Any, TR : Any> ImageLoad(
         mutableStateOf<ImageLoadState>(ImageLoadState.Loading)
     }
 
-    // This may look a little weird, but allows the LaunchedEffect callback to always
-    // invoke the last provided [onRequestCompleted].
-    //
-    // If a composition happens *after* LaunchedEffect has launched, the given
-    // [onRequestCompleted] might have changed. If the actor lambda below directly referenced
-    // [onRequestCompleted] it would have captured access to the initial onRequestCompleted
-    // value, not the latest.
-    //
-    // This `callback` state enables the actor lambda to only capture the remembered state
-    // reference, which we can update on each composition.
-    val callback = remember { mutableStateOf(onRequestCompleted, referentialEqualityPolicy()) }
-    callback.value = onRequestCompleted
+    val callback by rememberUpdatedState(onRequestCompleted)
 
     val requestActor = remember(requestKey) {
         ImageLoadRequestActor(executeRequest)
@@ -96,7 +85,7 @@ fun <R : Any, TR : Any> ImageLoad(
             state = newState
 
             if (newState is ImageLoadState.Success || newState is ImageLoadState.Error) {
-                callback.value(newState)
+                callback(newState)
             }
         }
     }
