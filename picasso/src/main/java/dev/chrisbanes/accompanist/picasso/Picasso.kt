@@ -29,7 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageAsset
-import androidx.compose.ui.graphics.asImageAsset
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.ImagePainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
@@ -99,7 +99,7 @@ fun PicassoImage(
                 val target = object : com.squareup.picasso.Target {
                     override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
                         val state = ImageLoadState.Success(
-                            painter = ImagePainter(bitmap.asImageAsset()),
+                            painter = ImagePainter(bitmap.asImageBitmap()),
                             source = from.toDataSource()
                         )
                         cont.resume(state) {

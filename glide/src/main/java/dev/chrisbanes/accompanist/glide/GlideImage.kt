@@ -29,7 +29,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageAsset
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.ViewAmbient
+import androidx.compose.ui.platform.AmbientView
 import androidx.compose.ui.unit.IntSize
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
@@ -59,7 +59,7 @@ object GlideImageConstants {
      */
     @Composable
     fun defaultRequestManager(): RequestManager {
-        return AmbientRequestManager.current ?: Glide.with(ViewAmbient.current)
+        return AmbientRequestManager.current ?: Glide.with(AmbientView.current)
     }
 }
 

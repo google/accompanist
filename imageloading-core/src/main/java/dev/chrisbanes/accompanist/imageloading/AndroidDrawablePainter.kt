@@ -31,7 +31,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.asImageAsset
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
@@ -167,7 +167,7 @@ private fun BlendMode.toPorterDuffMode(): PorterDuff.Mode = when (this) {
  * and use Compose primitives where possible.
  */
 fun Drawable.toPainter(): Painter = when (this) {
-    is BitmapDrawable -> ImagePainter(bitmap.asImageAsset())
+    is BitmapDrawable -> ImagePainter(bitmap.asImageBitmap())
     is ColorDrawable -> ColorPainter(Color(color))
     else -> AndroidDrawablePainter(mutate())
 }

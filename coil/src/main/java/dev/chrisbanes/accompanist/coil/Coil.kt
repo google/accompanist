@@ -29,7 +29,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageAsset
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.unit.IntSize
 import coil.Coil
 import coil.ImageLoader
@@ -55,7 +55,7 @@ object CoilImageConstants {
      */
     @Composable
     fun defaultImageLoader(): ImageLoader {
-        return AmbientImageLoader.current ?: ContextAmbient.current.imageLoader
+        return AmbientImageLoader.current ?: AmbientContext.current.imageLoader
     }
 }
 
@@ -386,7 +386,7 @@ internal fun Any.toImageRequest(): ImageRequest {
     // pass the request through
     return if (this is ImageRequest) this else {
         // Otherwise we construct a GetRequest using the data parameter
-        val context = ContextAmbient.current
+        val context = AmbientContext.current
         remember(this) { ImageRequest.Builder(context).data(this).build() }
     }
 }

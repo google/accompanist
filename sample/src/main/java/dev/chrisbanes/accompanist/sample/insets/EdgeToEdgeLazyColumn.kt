@@ -49,7 +49,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.DensityAmbient
+import androidx.compose.ui.platform.AmbientDensity
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
@@ -98,7 +98,7 @@ private fun Sample() {
                     // bar height, we disable handling it in toPaddingValues().
                     contentPadding = AmbientWindowInsets.current.systemBars
                         .toPaddingValues(top = false)
-                        .add(top = with(DensityAmbient.current) { topAppBarSize.toDp() })
+                        .add(top = with(AmbientDensity.current) { topAppBarSize.toDp() })
                 ) { imageUrl ->
                     ListItem(imageUrl, Modifier.fillMaxWidth())
                 }
@@ -118,11 +118,12 @@ private fun Sample() {
 
                 FloatingActionButton(
                     onClick = { /* TODO */ },
-                    icon = { Icon(Icons.Default.Face) },
                     modifier = Modifier.align(Alignment.BottomEnd)
                         .navigationBarsPadding()
                         .padding(16.dp)
-                )
+                ) {
+                    Icon(Icons.Default.Face)
+                }
             }
         }
     }

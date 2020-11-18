@@ -38,13 +38,14 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.geometry.toRect
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageAsset
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.painter.ImagePainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.AnimationClockAmbient
+import androidx.compose.ui.platform.AmbientAnimationClock
 import androidx.core.util.Pools
 
 private const val DefaultTransitionDuration = 1000
@@ -69,12 +70,12 @@ private const val DefaultTransitionDuration = 1000
  */
 @Composable
 fun MaterialLoadingImage(
-    asset: ImageAsset,
+    asset: ImageBitmap,
     modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
-    clock: AnimationClockObservable = AnimationClockAmbient.current.asDisposableClock(),
+    clock: AnimationClockObservable = AmbientAnimationClock.current.asDisposableClock(),
     fadeInEnabled: Boolean = true,
     fadeInDurationMs: Int = DefaultTransitionDuration
 ) {
@@ -115,7 +116,7 @@ fun MaterialLoadingImage(
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
-    clock: AnimationClockObservable = AnimationClockAmbient.current.asDisposableClock(),
+    clock: AnimationClockObservable = AmbientAnimationClock.current.asDisposableClock(),
     fadeInEnabled: Boolean = true,
     fadeInDurationMs: Int = DefaultTransitionDuration
 ) {
@@ -164,7 +165,7 @@ fun MaterialLoadingImage(
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
-    clock: AnimationClockObservable = AnimationClockAmbient.current.asDisposableClock(),
+    clock: AnimationClockObservable = AmbientAnimationClock.current.asDisposableClock(),
     skipFadeWhenLoadedFromMemory: Boolean = true,
     fadeInEnabled: Boolean = true,
     fadeInDurationMs: Int = DefaultTransitionDuration

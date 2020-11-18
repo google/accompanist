@@ -35,7 +35,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.ImageLoader
@@ -74,13 +74,13 @@ private fun Sample() {
                 // CoilImage with GIF
                 CoilImage(
                     data = "https://cataas.com/cat/gif",
-                    imageLoader = GifImageLoader(ContextAmbient.current),
+                    imageLoader = GifImageLoader(AmbientContext.current),
                     modifier = Modifier.preferredSize(128.dp)
                 )
 
                 // CoilImage with ImageRequest parameter
                 CoilImage(
-                    request = ImageRequest.Builder(ContextAmbient.current)
+                    request = ImageRequest.Builder(AmbientContext.current)
                         .data(randomSampleImageUrl())
                         .transformations(CircleCropTransformation())
                         .build(),
@@ -116,7 +116,7 @@ private fun Sample() {
 
                 // CoilImage with crossfade and ImageRequest parameter
                 CoilImage(
-                    request = ImageRequest.Builder(ContextAmbient.current)
+                    request = ImageRequest.Builder(AmbientContext.current)
                         .data(randomSampleImageUrl())
                         .transformations(CircleCropTransformation())
                         .build(),
