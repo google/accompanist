@@ -115,43 +115,41 @@ subprojects {
     // dokka and version configuration.
     afterEvaluate {
         tasks.withType(org.jetbrains.dokka.gradle.DokkaTask).configureEach {
-            sourceSets {
-                configureEach {
-                    reportUndocumented.set(true)
-                    skipEmptyPackages.set(true)
-                    skipDeprecated.set(true)
-                    jdkVersion.set(8)
+            dokkaSourceSets.configureEach {
+                reportUndocumented.set(true)
+                skipEmptyPackages.set(true)
+                skipDeprecated.set(true)
+                jdkVersion.set(8)
 
-                    // Add Android SDK packages
-                    noAndroidSdkLink.set(false)
+                // Add Android SDK packages
+                noAndroidSdkLink.set(false)
 
-                    // AndroidX + Compose docs
+                // AndroidX + Compose docs
+                externalDocumentationLink {
+                    url.set(new URL("https://developer.android.com/reference/"))
+                    packageListUrl.set(new URL("https://developer.android.com/reference/androidx/package-list"))
+                }
+                externalDocumentationLink {
+                    url.set(new URL("https://developer.android.com/reference/kotlin/"))
+                    packageListUrl.set(new URL("https://developer.android.com/reference/kotlin/androidx/package-list"))
+                }
+
+                // Coil docs
+                if (rootProject.file('package-list-coil-base').exists()) {
                     externalDocumentationLink {
-                        url = new URL("https://developer.android.com/reference/")
-                        packageListUrl = new URL("https://developer.android.com/reference/androidx/package-list")
+                        url.set(new URL("https://coil-kt.github.io/coil/api/coil-base/"))
+                        packageListUrl.set(new URL("file://$rootDir/package-list-coil-base"))
                     }
-                    externalDocumentationLink {
-                        url = new URL("https://developer.android.com/reference/kotlin/")
-                        packageListUrl = new URL("https://developer.android.com/reference/kotlin/androidx/package-list")
-                    }
+                }
 
-                    // Coil docs
-                    if (rootProject.file('package-list-coil-base').exists()) {
-                        externalDocumentationLink {
-                            url = new URL("https://coil-kt.github.io/coil/api/coil-base/")
-                            packageListUrl = new URL("file://$rootDir/package-list-coil-base")
-                        }
-                    }
+                // Picasso docs
+                externalDocumentationLink {
+                    url.set(new URL("https://square.github.io/picasso/2.x/picasso/"))
+                }
 
-                    // Picasso docs
-                    externalDocumentationLink {
-                        url = new URL("https://square.github.io/picasso/2.x/picasso/")
-                    }
-
-                    // Glide docs
-                    externalDocumentationLink {
-                        url = new URL("https://bumptech.github.io/glide/javadocs/4110/")
-                    }
+                // Glide docs
+                externalDocumentationLink {
+                    url.set(new URL("https://bumptech.github.io/glide/javadocs/4110/"))
                 }
             }
         }
