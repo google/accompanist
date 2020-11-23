@@ -20,8 +20,8 @@ public final class dev/chrisbanes/accompanist/insets/ComposeInsets {
 public final class dev/chrisbanes/accompanist/insets/HorizontalSide : java/lang/Enum {
 	public static final field Left Ldev/chrisbanes/accompanist/insets/HorizontalSide;
 	public static final field Right Ldev/chrisbanes/accompanist/insets/HorizontalSide;
-	public static final fun valueOf (Ljava/lang/String;)Ldev/chrisbanes/accompanist/insets/HorizontalSide;
-	public static final fun values ()[Ldev/chrisbanes/accompanist/insets/HorizontalSide;
+	public static fun valueOf (Ljava/lang/String;)Ldev/chrisbanes/accompanist/insets/HorizontalSide;
+	public static fun values ()[Ldev/chrisbanes/accompanist/insets/HorizontalSide;
 }
 
 public final class dev/chrisbanes/accompanist/insets/Insets {
@@ -36,8 +36,8 @@ public final class dev/chrisbanes/accompanist/insets/Insets {
 public final class dev/chrisbanes/accompanist/insets/VerticalSide : java/lang/Enum {
 	public static final field Bottom Ldev/chrisbanes/accompanist/insets/VerticalSide;
 	public static final field Top Ldev/chrisbanes/accompanist/insets/VerticalSide;
-	public static final fun valueOf (Ljava/lang/String;)Ldev/chrisbanes/accompanist/insets/VerticalSide;
-	public static final fun values ()[Ldev/chrisbanes/accompanist/insets/VerticalSide;
+	public static fun valueOf (Ljava/lang/String;)Ldev/chrisbanes/accompanist/insets/VerticalSide;
+	public static fun values ()[Ldev/chrisbanes/accompanist/insets/VerticalSide;
 }
 
 public final class dev/chrisbanes/accompanist/insets/WindowInsets {

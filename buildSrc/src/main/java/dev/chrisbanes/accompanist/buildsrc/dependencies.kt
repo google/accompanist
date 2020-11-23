@@ -28,7 +28,7 @@ object Libs {
     const val junit = "junit:junit:4.13"
 
     object Kotlin {
-        const val version = "1.4.10"
+        private const val version = "1.4.20"
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib:$version"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
 
@@ -36,11 +36,11 @@ object Libs {
     }
 
     object Dokka {
-        const val gradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:${Kotlin.version}"
+        const val gradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.4.10"
     }
 
     object Coroutines {
-        private const val version = "1.3.9"
+        private const val version = "1.4.1"
         const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
         const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version"
     }
@@ -57,7 +57,7 @@ object Libs {
         }
 
         object Compose {
-            const val snapshot = "6979516"
+            const val snapshot = "6989480"
             const val version = "1.0.0-SNAPSHOT"
 
             @JvmStatic
