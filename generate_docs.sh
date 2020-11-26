@@ -23,6 +23,11 @@ sed -i.bak 's/$dokka.linkExtension:md/$dokka.linkExtension:html/g' package-list-
 # Dokka doesn't currently allow us to change the index page name so move it manually
 mv docs/api/-modules.html docs/api/index.html
 
+# Re-word the Dokka call out
+find docs/api/ -type f -name '*.html' -exec sed -i -e 's/Sponsored and developed/Documentation generated/g' {} \;
+# Remove the copyright declaration
+find docs/api/ -type f -name '*.html' -exec sed -i -e 's/© [0-9]* Copyright//' {} \;
+
 # Clean up the temp Coil package list
 rm package-list-coil-base
 
@@ -47,3 +52,4 @@ copyReadme insets
 
 # Finally delete all of the backup files
 find . -name '*.bak' -delete
+
