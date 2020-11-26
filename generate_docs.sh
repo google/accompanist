@@ -5,6 +5,12 @@ DOCS_ROOT=docs-gen
 [ -d $DOCS_ROOT ] && rm -r $DOCS_ROOT
 mkdir $DOCS_ROOT
 
+function copyReadme {
+  cp $1/README.md $DOCS_ROOT/$1.md
+  mkdir -p $DOCS_ROOT/$1
+  cp -r $1/images $DOCS_ROOT/$1
+}
+
 # Work around Dokka failing to link against external links generated from 'gfm' sources.
 wget -O package-list-coil-base https://coil-kt.github.io/coil/api/coil-base/package-list
 sed -i.bak 's/$dokka.linkExtension:md/$dokka.linkExtension:html/g' package-list-coil-base
@@ -13,6 +19,9 @@ sed -i.bak 's/$dokka.linkExtension:md/$dokka.linkExtension:html/g' package-list-
 [ -d docs/api ] && rm -r docs/api
 # Build the docs with dokka
 ./gradlew clean dokkaHtmlMultiModule
+
+# Dokka doesn't currently allow us to change the index page name so move it manually
+mv docs/api/-modules.html docs/api/index.html
 
 # Clean up the temp Coil package list
 rm package-list-coil-base
@@ -31,18 +40,10 @@ sed -i.bak 's/images\/social.png/header.png/' $DOCS_ROOT/index.md
 # Convert docs/xxx.md links to just xxx/
 sed -i.bak 's/docs\/\([a-zA-Z-]*\).md/\1/' $DOCS_ROOT/index.md
 
-cp coil/README.md $DOCS_ROOT/coil.md
-mkdir -p $DOCS_ROOT/coil
-cp -r coil/images $DOCS_ROOT/coil
+copyReadme coil
+copyReadme picasso
+copyReadme glide
+copyReadme insets
 
-cp picasso/README.md $DOCS_ROOT/picasso.md
-mkdir -p $DOCS_ROOT/picasso
-cp -r picasso/images $DOCS_ROOT/picasso
-
-cp glide/README.md $DOCS_ROOT/glide.md
-mkdir -p $DOCS_ROOT/glide
-cp -r glide/images $DOCS_ROOT/glide
-
-cp insets/README.md $DOCS_ROOT/insets.md
-mkdir -p $DOCS_ROOT/insets
-cp -r insets/images $DOCS_ROOT/insets
+# Finally delete all of the backup files
+find . -name '*.bak' -delete
