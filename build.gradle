@@ -151,6 +151,14 @@ subprojects {
                 externalDocumentationLink {
                     url.set(new URL("https://bumptech.github.io/glide/javadocs/4110/"))
                 }
+
+                sourceLink {
+                    localDirectory.set(project.file("src/main/java"))
+                    // URL showing where the source code can be accessed through the web browser
+                    remoteUrl.set(new URL("https://github.com/chrisbanes/accompanist/blob/main/${project.name}/src/main/java"))
+                    // Suffix which is used to append the line number to the URL. Use #L for GitHub
+                    remoteLineSuffix.set("#L")
+                }
             }
         }
 
