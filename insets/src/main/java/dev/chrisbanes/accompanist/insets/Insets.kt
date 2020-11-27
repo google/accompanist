@@ -130,7 +130,7 @@ val AmbientWindowInsets = staticAmbientOf<WindowInsets> {
  *
  *     // Call start() to start listening now.
  *     // The WindowInsets instance is returned to us.
- *     val windowInsets = observer.observe()
+ *     val windowInsets = observer.start()
  *
  *     setContent {
  *         // Instead of calling ProvideWindowInsets, we use Providers to provide
