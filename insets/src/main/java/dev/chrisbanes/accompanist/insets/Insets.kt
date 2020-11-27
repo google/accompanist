@@ -105,18 +105,17 @@ val AmbientWindowInsets = staticAmbientOf<WindowInsets> {
 }
 
 /**
- * This function sets up the necessary listeners on the given [view] to be able to observe
- * [WindowInsetsCompat] instance dispatched by the system.
+ * This class sets up the necessary listeners on the given [view] to be able to observe
+ * [WindowInsetsCompat] instances dispatched by the system.
  *
- * This function is useful for when you prefer to handle the ownership of the [WindowInsets]
+ * This class is useful for when you prefer to handle the ownership of the [WindowInsets]
  * yourself. One example of this is if you find yourself using [ProvideWindowInsets] in fragments.
  *
- * It is convenient to use [ProvideWindowInsets] in a fragment, but that can result in a
+ * It is convenient to use [ProvideWindowInsets] in fragments, but that can result in a
  * delay in the initial inset update, which results in a visual flicker.
  * See [this issue](https://github.com/chrisbanes/accompanist/issues/155) for more information.
  *
- * The alternative is for fragments to manage the [WindowInsets] themselves, and call this function
- * in `onCreateView()`:
+ * The alternative is for fragments to manage the [WindowInsets] themselves, like so:
  *
  * ```
  * override fun onCreateView(
@@ -126,17 +125,16 @@ val AmbientWindowInsets = staticAmbientOf<WindowInsets> {
  * ): View = ComposeView(requireContext()).apply {
  *     layoutParams = LayoutParams(MATCH_PARENT, MATCH_PARENT)
  *
- *     // We create a WindowInsets instance ourselves...
- *     val windowInsets = WindowInsets()
+ *     // Create an ViewWindowInsetObserver using this view
+ *     val observer = ViewWindowInsetObserver(this)
  *
- *     // Since we're self-managing our own WindowInsets, we
- *     // call observeFromView() to setup the necessary listeners.
- *     windowInsets.observeFromView(this)
+ *     // Call start() to start listening now.
+ *     // The WindowInsets instance is returned to us.
+ *     val windowInsets = observer.observe()
  *
  *     setContent {
- *         // Instead of calling ProvideWindowInsets, we use
- *         // Providers to provide our self-managed WindowInsets
- *         // instance to AmbientWindowInsets
+ *         // Instead of calling ProvideWindowInsets, we use Providers to provide
+ *         // the WindowInsets instance from above to AmbientWindowInsets
  *         Providers(AmbientWindowInsets provides windowInsets) {
  *             /* Content */
  *         }
@@ -145,38 +143,86 @@ val AmbientWindowInsets = staticAmbientOf<WindowInsets> {
  * ```
  *
  * @param view The view to observe [WindowInsetsCompat]s from.
- * @param consumeWindowInsets Whether to consume any [WindowInsetsCompat]s which are dispatched to
- * the host view. Defaults to `true`.
- * @return A lambda to be invoked if this observation should be cancelled.
  */
-fun WindowInsets.observeFromView(
-    view: View,
-    consumeWindowInsets: Boolean = true,
-): () -> Unit {
-    ViewCompat.setOnApplyWindowInsetsListener(view) { _, wic ->
-        systemBars.updateFrom(wic, Type.systemBars())
-        systemGestures.updateFrom(wic, Type.systemGestures())
-        statusBars.updateFrom(wic, Type.statusBars())
-        navigationBars.updateFrom(wic, Type.navigationBars())
-        ime.updateFrom(wic, Type.ime())
-
-        if (consumeWindowInsets) WindowInsetsCompat.CONSUMED else wic
-    }
-
-    // Add an OnAttachStateChangeListener to request an inset pass each time we're attached
-    // to the window
-    val attachListener = object : View.OnAttachStateChangeListener {
+class ViewWindowInsetObserver(private val view: View) {
+    private val attachListener = object : View.OnAttachStateChangeListener {
         override fun onViewAttachedToWindow(v: View) = v.requestApplyInsets()
         override fun onViewDetachedFromWindow(v: View) = Unit
     }
-    view.addOnAttachStateChangeListener(attachListener)
 
-    if (view.isAttachedToWindow) {
-        // If the view is already attached, we can request an inset pass now
-        view.requestApplyInsets()
+    /**
+     * Whether this [ViewWindowInsetObserver] is currently observing.
+     */
+    var isObserving = false
+        private set
+
+    /**
+     * Start observing window insets from [view]. Make sure to call [stop] if required.
+     *
+     * @param consumeWindowInsets Whether to consume any [WindowInsetsCompat]s which are
+     * dispatched to the host view. Defaults to `true`.
+     */
+    fun start(consumeWindowInsets: Boolean = true): WindowInsets {
+        return WindowInsets().apply {
+            observeInto(this, consumeWindowInsets)
+        }
     }
 
-    return { view.removeOnAttachStateChangeListener(attachListener) }
+    internal fun observeInto(windowInsets: WindowInsets, consumeWindowInsets: Boolean) {
+        require(!isObserving) {
+            "start() called, but this ViewWindowInsetObserver is already observing"
+        }
+
+        ViewCompat.setOnApplyWindowInsetsListener(view) { _, wic ->
+            windowInsets.systemBars.updateFrom(wic, Type.systemBars())
+            windowInsets.systemGestures.updateFrom(wic, Type.systemGestures())
+            windowInsets.statusBars.updateFrom(wic, Type.statusBars())
+            windowInsets.navigationBars.updateFrom(wic, Type.navigationBars())
+            windowInsets.ime.updateFrom(wic, Type.ime())
+
+            if (consumeWindowInsets) WindowInsetsCompat.CONSUMED else wic
+        }
+
+        // Add an OnAttachStateChangeListener to request an inset pass each time we're attached
+        // to the window
+        view.addOnAttachStateChangeListener(attachListener)
+
+        if (view.isAttachedToWindow) {
+            // If the view is already attached, we can request an inset pass now
+            view.requestApplyInsets()
+        }
+
+        isObserving = true
+    }
+
+    /**
+     * Removes any listeners from the [view] so that we no longer observe inset changes.
+     *
+     * This is only required to be called from hosts which have a shorter lifetime than the [view].
+     * For example, if you're using [ViewWindowInsetObserver] from a `@Composable` function,
+     * you should call [stop] from an `onDispose` block, like so:
+     *
+     * ```
+     * DisposableEffect(view) {
+     *     val observer = ViewWindowInsetObserver(view)
+     *     // ...
+     *     onDispose {
+     *         observer.stop()
+     *     }
+     * }
+     * ```
+     *
+     * Whereas if you're using this class from a fragment (or similar), it is not required to
+     * call this function since it will live as least as longer as the view.
+     */
+    fun stop() {
+        require(isObserving) {
+            "stop() called, but this ViewWindowInsetObserver is not currently observing"
+        }
+        view.removeOnAttachStateChangeListener(attachListener)
+        ViewCompat.setOnApplyWindowInsetsListener(view, null)
+        isObserving = false
+    }
 }
 
 /**
@@ -184,7 +230,7 @@ fun WindowInsets.observeFromView(
  * within [content].
  *
  * If you're using this in fragments, you may wish to take a look at
- * [WindowInsets.observeFromView] for a more optimal solution.
+ * [ViewWindowInsetObserver] for a more optimal solution.
  *
  * @param consumeWindowInsets Whether to consume any [WindowInsetsCompat]s which are dispatched to
  * the host view. Defaults to `true`.
@@ -195,13 +241,13 @@ fun ProvideWindowInsets(
     content: @Composable () -> Unit
 ) {
     val view = ViewAmbient.current
-
     val windowInsets = remember { WindowInsets() }
 
     DisposableEffect(view) {
-        val disposeHandle = windowInsets.observeFromView(view, consumeWindowInsets)
+        val observer = ViewWindowInsetObserver(view)
+        observer.observeInto(windowInsets, consumeWindowInsets)
         onDispose {
-            disposeHandle()
+            observer.stop()
         }
     }
 

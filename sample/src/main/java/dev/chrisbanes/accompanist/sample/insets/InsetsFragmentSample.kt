@@ -44,9 +44,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.commit
 import dev.chrisbanes.accompanist.insets.AmbientWindowInsets
-import dev.chrisbanes.accompanist.insets.WindowInsets
+import dev.chrisbanes.accompanist.insets.ViewWindowInsetObserver
 import dev.chrisbanes.accompanist.insets.navigationBarsPadding
-import dev.chrisbanes.accompanist.insets.observeFromView
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
 import dev.chrisbanes.accompanist.sample.R
 
@@ -72,16 +71,15 @@ class InsetsFragment : Fragment() {
     ): View = ComposeView(requireContext()).apply {
         layoutParams = LayoutParams(MATCH_PARENT, MATCH_PARENT)
 
-        // We create a WindowInsets instance ourselves...
-        val windowInsets = WindowInsets()
-
-        // Since we're self-managing our own WindowInsets, we need to call observeFromView() to
-        // set the necessary listeners.
-        windowInsets.observeFromView(this)
+        // Create an ViewWindowInsetObserver using this view
+        val observer = ViewWindowInsetObserver(this)
+        // Call start() to start listening now.
+        // The WindowInsets instance is returned to us.
+        val windowInsets = observer.start()
 
         setContent {
             // Instead of calling ProvideWindowInsets, we use Providers to provide
-            // our self-managed WindowInsets instance to AmbientWindowInsets
+            // the WindowInsets instance from above to AmbientWindowInsets
             Providers(AmbientWindowInsets provides windowInsets) {
                 Sample()
             }
