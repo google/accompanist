@@ -105,8 +105,87 @@ val AmbientWindowInsets = staticAmbientOf<WindowInsets> {
 }
 
 /**
+ * This function sets up the necessary listeners on the given [view] to be able to observe
+ * [WindowInsetsCompat].
+ *
+ * This function is useful for when you prefer to handle the ownership of the [WindowInsets]
+ * yourself. One example of this is if you find yourself using [ProvideWindowInsets] in multiple
+ * fragments.
+ *
+ * It is convenient to use [ProvideWindowInsets] in each fragment, but that result in a delay in
+ * the insets being updated on startup, which visually results in a flicker.
+ * See [this issue](https://github.com/chrisbanes/accompanist/issues/155) for more information.
+ *
+ * The alternative is for fragments to manage the [WindowInsets] themselves, and call this function
+ * once in `onCreateView()`:
+ *
+ * ```
+ * override fun onCreateView(
+ *     inflater: LayoutInflater,
+ *     container: ViewGroup?,
+ *     savedInstanceState: Bundle?
+ * ): View = ComposeView(requireContext()).apply {
+ *     layoutParams = LayoutParams(MATCH_PARENT, MATCH_PARENT)
+ *
+ *     // We create a WindowInsets instance ourselves...
+ *     val windowInsets = WindowInsets()
+ *
+ *     // Since we're self-managing our own WindowInsets, we
+ *     // call observeFromView() to setup the necessary listeners.
+ *     windowInsets.observeFromView(this)
+ *
+ *     setContent {
+ *         // Instead of calling ProvideWindowInsets, we use
+ *         // Providers to provide our self-managed WindowInsets
+ *         // instance to AmbientWindowInsets
+ *         Providers(AmbientWindowInsets provides windowInsets) {
+ *             /* Content */
+ *         }
+ *     }
+ * }
+ * ```
+ *
+ * @param view The view to observe [WindowInsetsCompat]s from.
+ * @param consumeWindowInsets Whether to consume any [WindowInsetsCompat]s which are dispatched to
+ * the host view. Defaults to `true`.
+ * @return A lambda to be invoked if this observation should be cancelled.
+ */
+fun WindowInsets.observeFromView(
+    view: View,
+    consumeWindowInsets: Boolean = true,
+): () -> Unit {
+    ViewCompat.setOnApplyWindowInsetsListener(view) { _, wic ->
+        systemBars.updateFrom(wic, Type.systemBars())
+        systemGestures.updateFrom(wic, Type.systemGestures())
+        statusBars.updateFrom(wic, Type.statusBars())
+        navigationBars.updateFrom(wic, Type.navigationBars())
+        ime.updateFrom(wic, Type.ime())
+
+        if (consumeWindowInsets) WindowInsetsCompat.CONSUMED else wic
+    }
+
+    // Add an OnAttachStateChangeListener to request an inset pass each time we're attached
+    // to the window
+    val attachListener = object : View.OnAttachStateChangeListener {
+        override fun onViewAttachedToWindow(v: View) = v.requestApplyInsets()
+        override fun onViewDetachedFromWindow(v: View) = Unit
+    }
+    view.addOnAttachStateChangeListener(attachListener)
+
+    if (view.isAttachedToWindow) {
+        // If the view is already attached, we can request an inset pass now
+        view.requestApplyInsets()
+    }
+
+    return { view.removeOnAttachStateChangeListener(attachListener) }
+}
+
+/**
  * Applies any [WindowInsetsCompat] values to [AmbientWindowInsets], which are then available
  * within [content].
+ *
+ * If you're using this within fragments, you may wish to take a look at
+ * [WindowInsets.observeFromView] for a more optimal solution.
  *
  * @param consumeWindowInsets Whether to consume any [WindowInsetsCompat]s which are dispatched to
  * the host view. Defaults to `true`.
@@ -121,31 +200,9 @@ fun ProvideWindowInsets(
     val windowInsets = remember { WindowInsets() }
 
     DisposableEffect(view) {
-        ViewCompat.setOnApplyWindowInsetsListener(view) { _, wic ->
-            windowInsets.systemBars.updateFrom(wic, Type.systemBars())
-            windowInsets.systemGestures.updateFrom(wic, Type.systemGestures())
-            windowInsets.statusBars.updateFrom(wic, Type.statusBars())
-            windowInsets.navigationBars.updateFrom(wic, Type.navigationBars())
-            windowInsets.ime.updateFrom(wic, Type.ime())
-
-            if (consumeWindowInsets) WindowInsetsCompat.CONSUMED else wic
-        }
-
-        // Add an OnAttachStateChangeListener to request an inset pass each time we're attached
-        // to the window
-        val attachListener = object : View.OnAttachStateChangeListener {
-            override fun onViewAttachedToWindow(v: View) = v.requestApplyInsets()
-            override fun onViewDetachedFromWindow(v: View) = Unit
-        }
-        view.addOnAttachStateChangeListener(attachListener)
-
-        if (view.isAttachedToWindow) {
-            // If the view is already attached, we can request an inset pass now
-            view.requestApplyInsets()
-        }
-
+        val disposeHandle = windowInsets.observeFromView(view, consumeWindowInsets)
         onDispose {
-            view.removeOnAttachStateChangeListener(attachListener)
+            disposeHandle()
         }
     }
 

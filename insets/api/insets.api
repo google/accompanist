@@ -9,6 +9,8 @@ public final class dev/chrisbanes/accompanist/insets/ComposeInsets {
 	public static final fun navigationBarsPadding$default (Landroidx/compose/ui/Modifier;ZZZILjava/lang/Object;)Landroidx/compose/ui/Modifier;
 	public static final fun navigationBarsWidth-UTaBBDU (Landroidx/compose/ui/Modifier;Ldev/chrisbanes/accompanist/insets/HorizontalSide;F)Landroidx/compose/ui/Modifier;
 	public static final fun navigationBarsWidth-UTaBBDU$default (Landroidx/compose/ui/Modifier;Ldev/chrisbanes/accompanist/insets/HorizontalSide;FILjava/lang/Object;)Landroidx/compose/ui/Modifier;
+	public static final fun observeFromView (Ldev/chrisbanes/accompanist/insets/WindowInsets;Landroid/view/View;Z)Lkotlin/jvm/functions/Function0;
+	public static final fun observeFromView$default (Ldev/chrisbanes/accompanist/insets/WindowInsets;Landroid/view/View;ZILjava/lang/Object;)Lkotlin/jvm/functions/Function0;
 	public static final fun statusBarsHeight-wxomhCo (Landroidx/compose/ui/Modifier;F)Landroidx/compose/ui/Modifier;
 	public static final fun statusBarsHeight-wxomhCo$default (Landroidx/compose/ui/Modifier;FILjava/lang/Object;)Landroidx/compose/ui/Modifier;
 	public static final fun statusBarsPadding (Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
