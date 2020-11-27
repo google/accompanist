@@ -106,18 +106,18 @@ val AmbientWindowInsets = staticAmbientOf<WindowInsets> {
 
 /**
  * This function sets up the necessary listeners on the given [view] to be able to observe
- * [WindowInsetsCompat].
+ * [WindowInsetsCompat] instance dispatched by the system.
  *
  * This function is useful for when you prefer to handle the ownership of the [WindowInsets]
  * yourself. One example of this is if you find yourself using [ProvideWindowInsets] in multiple
  * fragments.
  *
- * It is convenient to use [ProvideWindowInsets] in each fragment, but that result in a delay in
- * the insets being updated on startup, which visually results in a flicker.
+ * It is convenient to use [ProvideWindowInsets] in each fragment, but that can result in a
+ * delay in the initial inset update, which results in a visual flicker.
  * See [this issue](https://github.com/chrisbanes/accompanist/issues/155) for more information.
  *
  * The alternative is for fragments to manage the [WindowInsets] themselves, and call this function
- * once in `onCreateView()`:
+ * in `onCreateView()`:
  *
  * ```
  * override fun onCreateView(
@@ -184,7 +184,7 @@ fun WindowInsets.observeFromView(
  * Applies any [WindowInsetsCompat] values to [AmbientWindowInsets], which are then available
  * within [content].
  *
- * If you're using this within fragments, you may wish to take a look at
+ * If you're using this in fragments, you may wish to take a look at
  * [WindowInsets.observeFromView] for a more optimal solution.
  *
  * @param consumeWindowInsets Whether to consume any [WindowInsetsCompat]s which are dispatched to
