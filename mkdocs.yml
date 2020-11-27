@@ -19,11 +19,11 @@ nav:
   - 'Picasso': picasso.md
   - 'Insets': insets.md
   - 'API':
-    - 'Coil': api/coil/index.md
-    - 'Glide': api/glide/index.md
-    - 'Picasso': api/picasso/index.md
-    - 'Image Loading Core': api/imageloading-core/index.md
-    - 'Insets': api/insets/index.md
+    - 'Coil': api/coil/coil/
+    - 'Glide': api/glide/glide/
+    - 'Picasso': api/picasso/picasso/
+    - 'Image Loading Core': api/imageloading-core/imageloading-core/
+    - 'Insets': api/insets/insets/
   - 'Snapshots': using-snapshot-version.md
   - 'Contributing': contributing.md
   - 'Maintainers':

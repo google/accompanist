@@ -36,7 +36,8 @@ object Libs {
     }
 
     object Dokka {
-        const val gradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.4.10"
+        private const val version = "1.4.10.2"
+        const val gradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:$version"
     }
 
     object Coroutines {

@@ -69,12 +69,6 @@ android {
     }
 }
 
-afterEvaluate {
-    tasks.withType(org.jetbrains.dokka.gradle.DokkaTask).configureEach {
-        outputDirectory.set(rootProject.file('docs/api'))
-    }
-}
-
 dependencies {
     api project(':imageloading-core')
     api Libs.glide
