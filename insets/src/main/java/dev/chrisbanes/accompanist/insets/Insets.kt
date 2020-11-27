@@ -109,10 +109,9 @@ val AmbientWindowInsets = staticAmbientOf<WindowInsets> {
  * [WindowInsetsCompat] instance dispatched by the system.
  *
  * This function is useful for when you prefer to handle the ownership of the [WindowInsets]
- * yourself. One example of this is if you find yourself using [ProvideWindowInsets] in multiple
- * fragments.
+ * yourself. One example of this is if you find yourself using [ProvideWindowInsets] in fragments.
  *
- * It is convenient to use [ProvideWindowInsets] in each fragment, but that can result in a
+ * It is convenient to use [ProvideWindowInsets] in a fragment, but that can result in a
  * delay in the initial inset update, which results in a visual flicker.
  * See [this issue](https://github.com/chrisbanes/accompanist/issues/155) for more information.
  *
