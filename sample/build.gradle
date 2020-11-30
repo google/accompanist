@@ -62,5 +62,9 @@ dependencies {
     implementation Libs.AndroidX.Compose.foundation
     implementation Libs.AndroidX.Compose.layout
 
+    implementation Libs.AndroidX.coreKtx
+    implementation Libs.AndroidX.fragmentKtx
+    implementation Libs.AndroidX.lifecycleKtx
+
     implementation Libs.Kotlin.stdlib
 }

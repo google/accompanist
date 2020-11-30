@@ -86,6 +86,10 @@ object Libs {
         const val core = "androidx.core:core:1.2.0"
         const val coreKtx = "androidx.core:core-ktx:1.2.0"
 
+        const val fragmentKtx = "androidx.fragment:fragment-ktx:1.3.0-beta01"
+
+        const val lifecycleKtx = "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-beta01"
+
         const val coreAlpha = "androidx.core:core:1.5.0-alpha04"
     }
 

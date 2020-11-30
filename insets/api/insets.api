@@ -40,6 +40,15 @@ public final class dev/chrisbanes/accompanist/insets/VerticalSide : java/lang/En
 	public static fun values ()[Ldev/chrisbanes/accompanist/insets/VerticalSide;
 }
 
+public final class dev/chrisbanes/accompanist/insets/ViewWindowInsetObserver {
+	public static final field $stable I
+	public fun <init> (Landroid/view/View;)V
+	public final fun isObserving ()Z
+	public final fun start (Z)Ldev/chrisbanes/accompanist/insets/WindowInsets;
+	public static synthetic fun start$default (Ldev/chrisbanes/accompanist/insets/ViewWindowInsetObserver;ZILjava/lang/Object;)Ldev/chrisbanes/accompanist/insets/WindowInsets;
+	public final fun stop ()V
+}
+
 public final class dev/chrisbanes/accompanist/insets/WindowInsets {
 	public fun <init> ()V
 	public final fun getIme ()Ldev/chrisbanes/accompanist/insets/Insets;

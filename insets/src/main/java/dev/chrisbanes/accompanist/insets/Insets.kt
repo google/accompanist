@@ -105,22 +105,74 @@ val AmbientWindowInsets = staticAmbientOf<WindowInsets> {
 }
 
 /**
- * Applies any [WindowInsetsCompat] values to [AmbientWindowInsets], which are then available
- * within [content].
+ * This class sets up the necessary listeners on the given [view] to be able to observe
+ * [WindowInsetsCompat] instances dispatched by the system.
  *
- * @param consumeWindowInsets Whether to consume any [WindowInsetsCompat]s which are dispatched to
- * the host view. Defaults to `true`.
+ * This class is useful for when you prefer to handle the ownership of the [WindowInsets]
+ * yourself. One example of this is if you find yourself using [ProvideWindowInsets] in fragments.
+ *
+ * It is convenient to use [ProvideWindowInsets] in fragments, but that can result in a
+ * delay in the initial inset update, which results in a visual flicker.
+ * See [this issue](https://github.com/chrisbanes/accompanist/issues/155) for more information.
+ *
+ * The alternative is for fragments to manage the [WindowInsets] themselves, like so:
+ *
+ * ```
+ * override fun onCreateView(
+ *     inflater: LayoutInflater,
+ *     container: ViewGroup?,
+ *     savedInstanceState: Bundle?
+ * ): View = ComposeView(requireContext()).apply {
+ *     layoutParams = LayoutParams(MATCH_PARENT, MATCH_PARENT)
+ *
+ *     // Create an ViewWindowInsetObserver using this view
+ *     val observer = ViewWindowInsetObserver(this)
+ *
+ *     // Call start() to start listening now.
+ *     // The WindowInsets instance is returned to us.
+ *     val windowInsets = observer.start()
+ *
+ *     setContent {
+ *         // Instead of calling ProvideWindowInsets, we use Providers to provide
+ *         // the WindowInsets instance from above to AmbientWindowInsets
+ *         Providers(AmbientWindowInsets provides windowInsets) {
+ *             /* Content */
+ *         }
+ *     }
+ * }
+ * ```
+ *
+ * @param view The view to observe [WindowInsetsCompat]s from.
  */
-@Composable
-fun ProvideWindowInsets(
-    consumeWindowInsets: Boolean = true,
-    content: @Composable () -> Unit
-) {
-    val view = AmbientView.current
+class ViewWindowInsetObserver(private val view: View) {
+    private val attachListener = object : View.OnAttachStateChangeListener {
+        override fun onViewAttachedToWindow(v: View) = v.requestApplyInsets()
+        override fun onViewDetachedFromWindow(v: View) = Unit
+    }
 
-    val windowInsets = remember { WindowInsets() }
+    /**
+     * Whether this [ViewWindowInsetObserver] is currently observing.
+     */
+    var isObserving = false
+        private set
 
-    DisposableEffect(view) {
+    /**
+     * Start observing window insets from [view]. Make sure to call [stop] if required.
+     *
+     * @param consumeWindowInsets Whether to consume any [WindowInsetsCompat]s which are
+     * dispatched to the host view. Defaults to `true`.
+     */
+    fun start(consumeWindowInsets: Boolean = true): WindowInsets {
+        return WindowInsets().apply {
+            observeInto(this, consumeWindowInsets)
+        }
+    }
+
+    internal fun observeInto(windowInsets: WindowInsets, consumeWindowInsets: Boolean) {
+        require(!isObserving) {
+            "start() called, but this ViewWindowInsetObserver is already observing"
+        }
+
         ViewCompat.setOnApplyWindowInsetsListener(view) { _, wic ->
             windowInsets.systemBars.updateFrom(wic, Type.systemBars())
             windowInsets.systemGestures.updateFrom(wic, Type.systemGestures())
@@ -133,10 +185,6 @@ fun ProvideWindowInsets(
 
         // Add an OnAttachStateChangeListener to request an inset pass each time we're attached
         // to the window
-        val attachListener = object : View.OnAttachStateChangeListener {
-            override fun onViewAttachedToWindow(v: View) = v.requestApplyInsets()
-            override fun onViewDetachedFromWindow(v: View) = Unit
-        }
         view.addOnAttachStateChangeListener(attachListener)
 
         if (view.isAttachedToWindow) {
@@ -144,8 +192,62 @@ fun ProvideWindowInsets(
             view.requestApplyInsets()
         }
 
+        isObserving = true
+    }
+
+    /**
+     * Removes any listeners from the [view] so that we no longer observe inset changes.
+     *
+     * This is only required to be called from hosts which have a shorter lifetime than the [view].
+     * For example, if you're using [ViewWindowInsetObserver] from a `@Composable` function,
+     * you should call [stop] from an `onDispose` block, like so:
+     *
+     * ```
+     * DisposableEffect(view) {
+     *     val observer = ViewWindowInsetObserver(view)
+     *     // ...
+     *     onDispose {
+     *         observer.stop()
+     *     }
+     * }
+     * ```
+     *
+     * Whereas if you're using this class from a fragment (or similar), it is not required to
+     * call this function since it will live as least as longer as the view.
+     */
+    fun stop() {
+        require(isObserving) {
+            "stop() called, but this ViewWindowInsetObserver is not currently observing"
+        }
+        view.removeOnAttachStateChangeListener(attachListener)
+        ViewCompat.setOnApplyWindowInsetsListener(view, null)
+        isObserving = false
+    }
+}
+
+/**
+ * Applies any [WindowInsetsCompat] values to [AmbientWindowInsets], which are then available
+ * within [content].
+ *
+ * If you're using this in fragments, you may wish to take a look at
+ * [ViewWindowInsetObserver] for a more optimal solution.
+ *
+ * @param consumeWindowInsets Whether to consume any [WindowInsetsCompat]s which are dispatched to
+ * the host view. Defaults to `true`.
+ */
+@Composable
+fun ProvideWindowInsets(
+    consumeWindowInsets: Boolean = true,
+    content: @Composable () -> Unit
+) {
+    val view = AmbientView.current
+    val windowInsets = remember { WindowInsets() }
+
+    DisposableEffect(view) {
+        val observer = ViewWindowInsetObserver(view)
+        observer.observeInto(windowInsets, consumeWindowInsets)
         onDispose {
-            view.removeOnAttachStateChangeListener(attachListener)
+            observer.stop()
         }
     }
 
