@@ -17,31 +17,39 @@
 package dev.chrisbanes.accompanist.sample.insets
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Providers
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.setContent
+import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
-import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.commit
+import dev.chrisbanes.accompanist.insets.AmbientWindowInsets
+import dev.chrisbanes.accompanist.insets.ViewWindowInsetObserver
 import dev.chrisbanes.accompanist.insets.navigationBarsPadding
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
 import dev.chrisbanes.accompanist.sample.R
 
-class InsetsBasicSample : ComponentActivity() {
+class InsetsFragmentSample : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -49,13 +57,31 @@ class InsetsBasicSample : ComponentActivity() {
         // insets
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
+        supportFragmentManager.commit {
+            replace(android.R.id.content, InsetsFragment())
+        }
+    }
+}
+
+class InsetsFragment : Fragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View = ComposeView(requireContext()).apply {
+        layoutParams = LayoutParams(MATCH_PARENT, MATCH_PARENT)
+
+        // Create an ViewWindowInsetObserver using this view
+        val observer = ViewWindowInsetObserver(this)
+        // Call start() to start listening now.
+        // The WindowInsets instance is returned to us.
+        val windowInsets = observer.start()
+
         setContent {
-            MaterialTheme {
-                // We need to use ProvideWindowInsets to setup the necessary listeners which
-                // power the library
-                ProvideWindowInsets {
-                    Sample()
-                }
+            // Instead of calling ProvideWindowInsets, we use Providers to provide
+            // the WindowInsets instance from above to AmbientWindowInsets
+            Providers(AmbientWindowInsets provides windowInsets) {
+                Sample()
             }
         }
     }
@@ -66,7 +92,7 @@ private fun Sample() {
     Box(Modifier.fillMaxSize()) {
         TopAppBar(
             title = {
-                Text(stringResource(R.string.insets_title_basic))
+                Text(stringResource(R.string.insets_title_fragment))
             },
             modifier = Modifier
                 .align(Alignment.TopCenter)
