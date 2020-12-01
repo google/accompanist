@@ -36,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
+import dev.chrisbanes.accompanist.insets.ExperimentalAnimatedInsets
 import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
 import dev.chrisbanes.accompanist.insets.navigationBarsWithImePadding
 import dev.chrisbanes.accompanist.sample.R
@@ -64,9 +65,10 @@ private val listItems = buildList {
     }
 }
 
+@OptIn(ExperimentalAnimatedInsets::class)
 @Composable
 private fun Sample() {
-    ProvideWindowInsets {
+    ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
         Column(Modifier.fillMaxSize()) {
             InsetAwareTopAppBar(
                 title = {

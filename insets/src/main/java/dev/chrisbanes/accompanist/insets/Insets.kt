@@ -188,7 +188,8 @@ class ViewWindowInsetObserver(private val view: View) {
     /**
      * Whether this [ViewWindowInsetObserver] is currently observing.
      */
-    var isObserving = false
+    @Suppress("MemberVisibilityCanBePrivate")
+    var isObserving: Boolean = false
         private set
 
     /**
@@ -198,11 +199,36 @@ class ViewWindowInsetObserver(private val view: View) {
      * dispatched to the host view. Defaults to `true`.
      */
     fun start(
-        consumeWindowInsets: Boolean = true,
-        windowInsetsAnimationsEnabled: Boolean = true
+        consumeWindowInsets: Boolean = true
     ): WindowInsets {
         return WindowInsets().apply {
-            observeInto(this, consumeWindowInsets, windowInsetsAnimationsEnabled)
+            observeInto(
+                windowInsets = this,
+                consumeWindowInsets = consumeWindowInsets,
+                windowInsetsAnimationsEnabled = false
+            )
+        }
+    }
+
+    /**
+     * Start observing window insets from [view]. Make sure to call [stop] if required.
+     *
+     * @param windowInsetsAnimationsEnabled Whether to listen for [WindowInsetsAnimation]s, such as
+     * IME animations.
+     * @param consumeWindowInsets Whether to consume any [WindowInsetsCompat]s which are
+     * dispatched to the host view. Defaults to `true`.
+     */
+    @ExperimentalAnimatedInsets
+    fun start(
+        windowInsetsAnimationsEnabled: Boolean,
+        consumeWindowInsets: Boolean = true,
+    ): WindowInsets {
+        return WindowInsets().apply {
+            observeInto(
+                windowInsets = this,
+                consumeWindowInsets = consumeWindowInsets,
+                windowInsetsAnimationsEnabled = windowInsetsAnimationsEnabled
+            )
         }
     }
 
@@ -254,7 +280,7 @@ class ViewWindowInsetObserver(private val view: View) {
         }
         view.addOnAttachStateChangeListener(attachListener)
 
-        if (Build.VERSION.SDK_INT >= 30 && windowInsetsAnimationsEnabled) {
+        if (windowInsetsAnimationsEnabled && Build.VERSION.SDK_INT >= 30) {
             InnerWindowInsetsAnimationCallback.setup(view, windowInsets)
         }
 
@@ -305,13 +331,49 @@ class ViewWindowInsetObserver(private val view: View) {
  *
  * @param consumeWindowInsets Whether to consume any [WindowInsetsCompat]s which are dispatched to
  * the host view. Defaults to `true`.
- * @param windowInsetsAnimationsEnabled Whether to listen for [WindowInsetsAnimation]s, such as
- * IME animations. Defaults to `true`.
  */
 @Composable
 fun ProvideWindowInsets(
     consumeWindowInsets: Boolean = true,
-    windowInsetsAnimationsEnabled: Boolean = true,
+    content: @Composable () -> Unit,
+) {
+    val view = ViewAmbient.current
+    val windowInsets = remember { WindowInsets() }
+
+    DisposableEffect(view) {
+        val observer = ViewWindowInsetObserver(view)
+        observer.observeInto(
+            windowInsets = windowInsets,
+            consumeWindowInsets = consumeWindowInsets,
+            windowInsetsAnimationsEnabled = false
+        )
+        onDispose {
+            observer.stop()
+        }
+    }
+
+    Providers(AmbientWindowInsets provides windowInsets) {
+        content()
+    }
+}
+
+/**
+ * Applies any [WindowInsetsCompat] values to [AmbientWindowInsets], which are then available
+ * within [content].
+ *
+ * If you're using this in fragments, you may wish to take a look at
+ * [ViewWindowInsetObserver] for a more optimal solution.
+ *
+ * @param windowInsetsAnimationsEnabled Whether to listen for [WindowInsetsAnimation]s, such as
+ * IME animations.
+ * @param consumeWindowInsets Whether to consume any [WindowInsetsCompat]s which are dispatched to
+ * the host view. Defaults to `true`.
+ */
+@ExperimentalAnimatedInsets
+@Composable
+fun ProvideWindowInsets(
+    windowInsetsAnimationsEnabled: Boolean,
+    consumeWindowInsets: Boolean = true,
     content: @Composable () -> Unit
 ) {
     val view = ViewAmbient.current
@@ -320,11 +382,10 @@ fun ProvideWindowInsets(
     DisposableEffect(view) {
         val observer = ViewWindowInsetObserver(view)
         observer.observeInto(
-            windowInsets,
-            consumeWindowInsets,
-            windowInsetsAnimationsEnabled
+            windowInsets = windowInsets,
+            consumeWindowInsets = consumeWindowInsets,
+            windowInsetsAnimationsEnabled = windowInsetsAnimationsEnabled
         )
-
         onDispose {
             observer.stop()
         }
@@ -416,3 +477,8 @@ internal fun Insets.coerceEachDimensionAtLeast(other: Insets): Insets {
 
 enum class HorizontalSide { Left, Right }
 enum class VerticalSide { Top, Bottom }
+
+@RequiresOptIn(message = "Animated Insets support is experimental. The API may be changed in the future.")
+@Retention(AnnotationRetention.BINARY)
+@Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
+annotation class ExperimentalAnimatedInsets

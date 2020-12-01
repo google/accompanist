@@ -1,4 +1,5 @@
 public final class dev/chrisbanes/accompanist/insets/ComposeInsets {
+	public static final fun ProvideWindowInsets (ZLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 	public static final fun ProvideWindowInsets (ZZLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 	public static final fun add-L4cKpv0 (Landroidx/compose/foundation/layout/PaddingValues;FFFF)Landroidx/compose/foundation/layout/PaddingValues;
 	public static final fun add-L4cKpv0$default (Landroidx/compose/foundation/layout/PaddingValues;FFFFILjava/lang/Object;)Landroidx/compose/foundation/layout/PaddingValues;
@@ -17,6 +18,9 @@ public final class dev/chrisbanes/accompanist/insets/ComposeInsets {
 	public static final fun systemBarsPadding (Landroidx/compose/ui/Modifier;Z)Landroidx/compose/ui/Modifier;
 	public static final fun systemBarsPadding$default (Landroidx/compose/ui/Modifier;ZILjava/lang/Object;)Landroidx/compose/ui/Modifier;
 	public static final fun toPaddingValues (Ldev/chrisbanes/accompanist/insets/Insets;ZZZZLandroidx/compose/runtime/Composer;II)Landroidx/compose/foundation/layout/PaddingValues;
+}
+
+public abstract interface annotation class dev/chrisbanes/accompanist/insets/ExperimentalAnimatedInsets : java/lang/annotation/Annotation {
 }
 
 public final class dev/chrisbanes/accompanist/insets/HorizontalSide : java/lang/Enum {
@@ -51,7 +55,9 @@ public final class dev/chrisbanes/accompanist/insets/ViewWindowInsetObserver {
 	public fun <init> (Landroid/view/View;)V
 	public final fun isObserving ()Z
 	public final fun start (Z)Ldev/chrisbanes/accompanist/insets/WindowInsets;
+	public final fun start (ZZ)Ldev/chrisbanes/accompanist/insets/WindowInsets;
 	public static synthetic fun start$default (Ldev/chrisbanes/accompanist/insets/ViewWindowInsetObserver;ZILjava/lang/Object;)Ldev/chrisbanes/accompanist/insets/WindowInsets;
+	public static synthetic fun start$default (Ldev/chrisbanes/accompanist/insets/ViewWindowInsetObserver;ZZILjava/lang/Object;)Ldev/chrisbanes/accompanist/insets/WindowInsets;
 	public final fun stop ()V
 }
 
