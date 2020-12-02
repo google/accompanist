@@ -52,4 +52,3 @@ copyReadme insets
 
 # Finally delete all of the backup files
 find . -name '*.bak' -delete
-
