@@ -316,6 +316,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#animated-insets-support-experimental" class="md-nav__link">
+    Animated Insets support (Experimental)
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -366,7 +373,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../api/coil/" title="Coil" class="md-nav__link">
+    <a href="../api/coil/coil/" title="Coil" class="md-nav__link">
       Coil
     </a>
   </li>
@@ -378,7 +385,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../api/glide/" title="Glide" class="md-nav__link">
+    <a href="../api/glide/glide/" title="Glide" class="md-nav__link">
       Glide
     </a>
   </li>
@@ -390,7 +397,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../api/picasso/" title="Picasso" class="md-nav__link">
+    <a href="../api/picasso/picasso/" title="Picasso" class="md-nav__link">
       Picasso
     </a>
   </li>
@@ -402,7 +409,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../api/imageloading-core/" title="Image Loading Core" class="md-nav__link">
+    <a href="../api/imageloading-core/imageloading-core/" title="Image Loading Core" class="md-nav__link">
       Image Loading Core
     </a>
   </li>
@@ -414,7 +421,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../api/insets/" title="Insets" class="md-nav__link">
+    <a href="../api/insets/insets/" title="Insets" class="md-nav__link">
       Insets
     </a>
   </li>
@@ -558,6 +565,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#animated-insets-support-experimental" class="md-nav__link">
+    Animated Insets support (Experimental)
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -666,6 +680,24 @@ wrap your content. This would typically be done near the top level of your compo
 <p><a href="images/edge-to-edge-list.jpg">
 <img src="images/edge-to-edge-list.jpg" width=300>
 </a></p>
+<h3 id="animated-insets-support-experimental">Animated Insets support (Experimental)<a class="headerlink" href="#animated-insets-support-experimental" title="Permanent link">&para;</a></h3>
+<p><img alt="" src="images/ime-insets.gif" /></p>
+<p>The library now has experimental support for <a href="https://developer.android.com/reference/android/view/WindowInsetsAnimation"><code>WindowInsetsAnimations</code></a>.
+The new <code>imePadding()</code> and <code>navigationBarsWithImePadding()</code> modifiers allow content to animate with the device's on screen-keyboard (IME), while it is being animated on/off screen. This currently only works when running on devices with API 30+.</p>
+<p>To enable animated insets support, you need need to new <code>ProvideWindowInsets</code> overload, and set <code>windowInsetsAnimationsEnabled = true</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">ProvideWindowInsets</span><span class="p">(</span><span class="n">windowInsetsAnimationsEnabled</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// content</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>You can then use the new <code>navigationBarsWithImePadding()</code> modifier like so:</p>
+<div class="highlight"><pre><span></span><code><span class="n">OutlinedTextField</span><span class="p">(</span>
+    <span class="c1">// other params,</span>
+    <span class="n">modifier</span> <span class="p">=</span> <span class="n">Modifier</span><span class="p">.</span><span class="n">navigationBarsWithImePadding</span><span class="p">()</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>See the <a href="https://github.com/chrisbanes/accompanist/blob/main/sample/src/main/java/dev/chrisbanes/accompanist/sample/insets/ImeAnimationSample.kt">ImeAnimationSample</a> for a working example.</p>
 <h2 id="download">Download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h2>
 <p><a href="https://search.maven.org/search?q=g:dev.chrisbanes.accompanist"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/dev.chrisbanes.accompanist/accompanist-insets" /></a></p>
 <div class="highlight"><pre><span></span><code><span class="n">repositories</span> <span class="o">{</span>
@@ -711,13 +743,13 @@ wrap your content. This would typically be done near the top level of your compo
           </a>
         
         
-          <a href="../api/coil/" title="Coil" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../using-snapshot-version/" title="Snapshots" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Coil
+                Snapshots
               </div>
             </div>
             <div class="md-footer-nav__button md-icon">
