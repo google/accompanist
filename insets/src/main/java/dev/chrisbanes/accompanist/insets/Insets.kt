@@ -21,7 +21,10 @@
 
 package dev.chrisbanes.accompanist.insets
 
+import android.os.Build
 import android.view.View
+import android.view.WindowInsetsAnimation
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Providers
@@ -34,7 +37,7 @@ import androidx.compose.runtime.staticAmbientOf
 import androidx.compose.ui.platform.AmbientView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsCompat.Type
+import android.view.WindowInsets as WindowInsetsPlatform
 
 /**
  * Main holder of our inset values.
@@ -98,10 +101,41 @@ class Insets {
      */
     var isVisible by mutableStateOf(true)
         internal set
+
+    internal var ongoingAnimations by mutableStateOf(0)
+
+    fun copy(
+        left: Int = this.left,
+        top: Int = this.top,
+        right: Int = this.right,
+        bottom: Int = this.bottom,
+        isVisible: Boolean = this.isVisible,
+    ): Insets = Insets().apply {
+        this.left = left
+        this.top = top
+        this.right = right
+        this.bottom = bottom
+        this.isVisible = isVisible
+        this.ongoingAnimations = ongoingAnimations
+    }
+
+    operator fun minus(other: Insets): Insets = copy(
+        left = this@Insets.left - other.left,
+        top = this@Insets.top - other.top,
+        right = this@Insets.right - other.right,
+        bottom = this@Insets.bottom - other.bottom,
+    )
+
+    operator fun plus(other: Insets): Insets = copy(
+        left = this@Insets.left + other.left,
+        top = this@Insets.top + other.top,
+        right = this@Insets.right + other.right,
+        bottom = this@Insets.bottom + other.bottom,
+    )
 }
 
 val AmbientWindowInsets = staticAmbientOf<WindowInsets> {
-    error("AmbientInsets value not available. Are you using ProvideWindowInsets?")
+    error("AmbientWindowInsets value not available. Are you using ProvideWindowInsets?")
 }
 
 /**
@@ -153,7 +187,8 @@ class ViewWindowInsetObserver(private val view: View) {
     /**
      * Whether this [ViewWindowInsetObserver] is currently observing.
      */
-    var isObserving = false
+    @Suppress("MemberVisibilityCanBePrivate")
+    var isObserving: Boolean = false
         private set
 
     /**
@@ -162,30 +197,101 @@ class ViewWindowInsetObserver(private val view: View) {
      * @param consumeWindowInsets Whether to consume any [WindowInsetsCompat]s which are
      * dispatched to the host view. Defaults to `true`.
      */
-    fun start(consumeWindowInsets: Boolean = true): WindowInsets {
+    fun start(
+        consumeWindowInsets: Boolean = true
+    ): WindowInsets {
         return WindowInsets().apply {
-            observeInto(this, consumeWindowInsets)
+            observeInto(
+                windowInsets = this,
+                consumeWindowInsets = consumeWindowInsets,
+                windowInsetsAnimationsEnabled = false
+            )
         }
     }
 
-    internal fun observeInto(windowInsets: WindowInsets, consumeWindowInsets: Boolean) {
+    /**
+     * Start observing window insets from [view]. Make sure to call [stop] if required.
+     *
+     * @param windowInsetsAnimationsEnabled Whether to listen for [WindowInsetsAnimation]s, such as
+     * IME animations.
+     * @param consumeWindowInsets Whether to consume any [WindowInsetsCompat]s which are
+     * dispatched to the host view. Defaults to `true`.
+     */
+    @ExperimentalAnimatedInsets
+    fun start(
+        windowInsetsAnimationsEnabled: Boolean,
+        consumeWindowInsets: Boolean = true,
+    ): WindowInsets {
+        return WindowInsets().apply {
+            observeInto(
+                windowInsets = this,
+                consumeWindowInsets = consumeWindowInsets,
+                windowInsetsAnimationsEnabled = windowInsetsAnimationsEnabled
+            )
+        }
+    }
+
+    internal fun observeInto(
+        windowInsets: WindowInsets,
+        consumeWindowInsets: Boolean,
+        windowInsetsAnimationsEnabled: Boolean,
+    ) {
         require(!isObserving) {
             "start() called, but this ViewWindowInsetObserver is already observing"
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(view) { _, wic ->
-            windowInsets.systemBars.updateFrom(wic, Type.systemBars())
-            windowInsets.systemGestures.updateFrom(wic, Type.systemGestures())
-            windowInsets.statusBars.updateFrom(wic, Type.statusBars())
-            windowInsets.navigationBars.updateFrom(wic, Type.navigationBars())
-            windowInsets.ime.updateFrom(wic, Type.ime())
+            // Go through each inset type and update it from the WindowInsetsCompat.
+            //
+            // If the inset type is currently being animated we ignore this pass. This is
+            // because WindowInsetsAnimation is built with the view system in mind, such that
+            // it forces consumers to be laid out in the final state, then immediately transform
+            // itself to look like the start state (because we shouldn't use layout
+            // animations in views). For more information, see:
+            // https://medium.com/androiddevelopers/animating-your-keyboard-reacting-to-inset-animations-839be3d4c31b
+            //
+            // Compose (hopefully) doesn't need that, so we can just apply the animated insets
+            // directly to the layout.
+            windowInsets.statusBars.run {
+                if (ongoingAnimations == 0) {
+                    updateFrom(wic, WindowInsetsCompat.Type.statusBars())
+                }
+            }
+            windowInsets.navigationBars.run {
+                if (ongoingAnimations == 0) {
+                    updateFrom(wic, WindowInsetsCompat.Type.navigationBars())
+                }
+            }
+            windowInsets.systemBars.run {
+                if (ongoingAnimations == 0) {
+                    updateFrom(wic, WindowInsetsCompat.Type.systemBars())
+                }
+            }
+            windowInsets.systemGestures.run {
+                if (ongoingAnimations == 0) {
+                    updateFrom(wic, WindowInsetsCompat.Type.systemGestures())
+                }
+            }
+            windowInsets.ime.run {
+                if (ongoingAnimations == 0) {
+                    updateFrom(wic, WindowInsetsCompat.Type.ime())
+                }
+            }
 
             if (consumeWindowInsets) WindowInsetsCompat.CONSUMED else wic
         }
 
         // Add an OnAttachStateChangeListener to request an inset pass each time we're attached
         // to the window
+        val attachListener = object : View.OnAttachStateChangeListener {
+            override fun onViewAttachedToWindow(v: View) = v.requestApplyInsets()
+            override fun onViewDetachedFromWindow(v: View) = Unit
+        }
         view.addOnAttachStateChangeListener(attachListener)
+
+        if (windowInsetsAnimationsEnabled && Build.VERSION.SDK_INT >= 30) {
+            InnerWindowInsetsAnimationCallback.setup(view, windowInsets)
+        }
 
         if (view.isAttachedToWindow) {
             // If the view is already attached, we can request an inset pass now
@@ -238,14 +344,18 @@ class ViewWindowInsetObserver(private val view: View) {
 @Composable
 fun ProvideWindowInsets(
     consumeWindowInsets: Boolean = true,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val view = AmbientView.current
     val windowInsets = remember { WindowInsets() }
 
     DisposableEffect(view) {
         val observer = ViewWindowInsetObserver(view)
-        observer.observeInto(windowInsets, consumeWindowInsets)
+        observer.observeInto(
+            windowInsets = windowInsets,
+            consumeWindowInsets = consumeWindowInsets,
+            windowInsetsAnimationsEnabled = false
+        )
         onDispose {
             observer.stop()
         }
@@ -253,6 +363,138 @@ fun ProvideWindowInsets(
 
     Providers(AmbientWindowInsets provides windowInsets) {
         content()
+    }
+}
+
+/**
+ * Applies any [WindowInsetsCompat] values to [AmbientWindowInsets], which are then available
+ * within [content].
+ *
+ * If you're using this in fragments, you may wish to take a look at
+ * [ViewWindowInsetObserver] for a more optimal solution.
+ *
+ * @param windowInsetsAnimationsEnabled Whether to listen for [WindowInsetsAnimation]s, such as
+ * IME animations.
+ * @param consumeWindowInsets Whether to consume any [WindowInsetsCompat]s which are dispatched to
+ * the host view. Defaults to `true`.
+ */
+@ExperimentalAnimatedInsets
+@Composable
+fun ProvideWindowInsets(
+    windowInsetsAnimationsEnabled: Boolean,
+    consumeWindowInsets: Boolean = true,
+    content: @Composable () -> Unit
+) {
+    val view = AmbientView.current
+    val windowInsets = remember { WindowInsets() }
+
+    DisposableEffect(view) {
+        val observer = ViewWindowInsetObserver(view)
+        observer.observeInto(
+            windowInsets = windowInsets,
+            consumeWindowInsets = consumeWindowInsets,
+            windowInsetsAnimationsEnabled = windowInsetsAnimationsEnabled
+        )
+        onDispose {
+            observer.stop()
+        }
+    }
+
+    Providers(AmbientWindowInsets provides windowInsets) {
+        content()
+    }
+}
+
+@RequiresApi(30)
+private class InnerWindowInsetsAnimationCallback(
+    private val windowInsets: WindowInsets,
+) : WindowInsetsAnimation.Callback(DISPATCH_MODE_STOP) {
+    override fun onPrepare(animation: WindowInsetsAnimation) {
+        // Go through each type and flag that an animation has started
+        if (animation.typeMask and WindowInsetsPlatform.Type.ime() != 0) {
+            windowInsets.ime.ongoingAnimations++
+        }
+        if (animation.typeMask and WindowInsetsPlatform.Type.statusBars() != 0) {
+            windowInsets.statusBars.ongoingAnimations++
+        }
+        if (animation.typeMask and WindowInsetsPlatform.Type.navigationBars() != 0) {
+            windowInsets.navigationBars.ongoingAnimations++
+        }
+        if (animation.typeMask and WindowInsetsPlatform.Type.systemBars() != 0) {
+            windowInsets.systemBars.ongoingAnimations++
+        }
+        if (animation.typeMask and WindowInsetsPlatform.Type.systemGestures() != 0) {
+            windowInsets.systemGestures.ongoingAnimations++
+        }
+    }
+
+    override fun onProgress(
+        platformInsets: WindowInsetsPlatform,
+        runningAnimations: List<WindowInsetsAnimation>
+    ): WindowInsetsPlatform {
+        val runningTypes = runningAnimations.fold(0) { acc, animation ->
+            acc or animation.typeMask
+        }
+        if (runningTypes and WindowInsetsPlatform.Type.ime() != 0) {
+            windowInsets.ime.updateFrom(
+                windowInsets = platformInsets,
+                type = WindowInsetsCompat.Type.ime()
+            )
+        }
+        if (runningTypes and WindowInsetsPlatform.Type.statusBars() != 0) {
+            windowInsets.statusBars.updateFrom(
+                windowInsets = platformInsets,
+                type = WindowInsetsCompat.Type.statusBars()
+            )
+        }
+        if (runningTypes and WindowInsetsPlatform.Type.navigationBars() != 0) {
+            windowInsets.navigationBars.updateFrom(
+                windowInsets = platformInsets,
+                type = WindowInsetsCompat.Type.navigationBars()
+            )
+        }
+        if (runningTypes and WindowInsetsPlatform.Type.systemBars() != 0) {
+            windowInsets.systemBars.updateFrom(
+                windowInsets = platformInsets,
+                type = WindowInsetsCompat.Type.systemBars()
+            )
+        }
+        if (runningTypes and WindowInsetsPlatform.Type.systemGestures() != 0) {
+            windowInsets.systemGestures.updateFrom(
+                windowInsets = platformInsets,
+                type = WindowInsetsCompat.Type.systemGestures()
+            )
+        }
+        return platformInsets
+    }
+
+    override fun onEnd(animation: WindowInsetsAnimation) {
+        // Go through each type and flag that an animation has ended
+        if (animation.typeMask and WindowInsetsPlatform.Type.ime() != 0) {
+            windowInsets.ime.ongoingAnimations--
+        }
+        if (animation.typeMask and WindowInsetsPlatform.Type.statusBars() != 0) {
+            windowInsets.statusBars.ongoingAnimations--
+        }
+        if (animation.typeMask and WindowInsetsPlatform.Type.navigationBars() != 0) {
+            windowInsets.navigationBars.ongoingAnimations--
+        }
+        if (animation.typeMask and WindowInsetsPlatform.Type.systemBars() != 0) {
+            windowInsets.systemBars.ongoingAnimations--
+        }
+        if (animation.typeMask and WindowInsetsPlatform.Type.systemGestures() != 0) {
+            windowInsets.systemGestures.ongoingAnimations--
+        }
+    }
+
+    companion object {
+        /**
+         * This function may look useless, but this keeps the API 30 method call in a
+         * separate class, which makes class loaders on older platforms happy.
+         */
+        fun setup(view: View, windowInsets: WindowInsets) {
+            view.setWindowInsetsAnimationCallback(InnerWindowInsetsAnimationCallback(windowInsets))
+        }
     }
 }
 
@@ -269,5 +511,37 @@ private fun Insets.updateFrom(windowInsets: WindowInsetsCompat, type: Int) {
     isVisible = windowInsets.isVisible(type)
 }
 
+/**
+ * Updates our mutable state backed [Insets] from an Android system insets.
+ */
+@RequiresApi(30)
+private fun Insets.updateFrom(windowInsets: WindowInsetsPlatform, type: Int) {
+    val insets = windowInsets.getInsets(type)
+    left = insets.left
+    top = insets.top
+    right = insets.right
+    bottom = insets.bottom
+
+    isVisible = windowInsets.isVisible(type)
+}
+
+internal fun Insets.coerceEachDimensionAtLeast(other: Insets): Insets {
+    // Fast path, no need to copy if `this` >= `other`
+    if (left >= other.left && top >= other.top && right >= other.right && bottom >= other.bottom) {
+        return this
+    }
+    return copy(
+        left = left.coerceAtLeast(other.left),
+        top = top.coerceAtLeast(other.top),
+        right = right.coerceAtLeast(other.right),
+        bottom = bottom.coerceAtLeast(other.bottom),
+    )
+}
+
 enum class HorizontalSide { Left, Right }
 enum class VerticalSide { Top, Bottom }
+
+@RequiresOptIn(message = "Animated Insets support is experimental. The API may be changed in the future.")
+@Retention(AnnotationRetention.BINARY)
+@Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
+annotation class ExperimentalAnimatedInsets
