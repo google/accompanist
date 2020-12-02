@@ -1,20 +1,26 @@
 public final class dev/chrisbanes/accompanist/insets/ComposeInsets {
 	public static final fun ProvideWindowInsets (ZLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun ProvideWindowInsets (ZZLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 	public static final fun add-L4cKpv0 (Landroidx/compose/foundation/layout/PaddingValues;FFFF)Landroidx/compose/foundation/layout/PaddingValues;
 	public static final fun add-L4cKpv0$default (Landroidx/compose/foundation/layout/PaddingValues;FFFFILjava/lang/Object;)Landroidx/compose/foundation/layout/PaddingValues;
 	public static final fun getAmbientWindowInsets ()Landroidx/compose/runtime/ProvidableAmbient;
+	public static final fun imePadding (Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
 	public static final fun navigationBarsHeight-wxomhCo (Landroidx/compose/ui/Modifier;F)Landroidx/compose/ui/Modifier;
 	public static final fun navigationBarsHeight-wxomhCo$default (Landroidx/compose/ui/Modifier;FILjava/lang/Object;)Landroidx/compose/ui/Modifier;
 	public static final fun navigationBarsPadding (Landroidx/compose/ui/Modifier;ZZZ)Landroidx/compose/ui/Modifier;
 	public static final fun navigationBarsPadding$default (Landroidx/compose/ui/Modifier;ZZZILjava/lang/Object;)Landroidx/compose/ui/Modifier;
 	public static final fun navigationBarsWidth-UTaBBDU (Landroidx/compose/ui/Modifier;Ldev/chrisbanes/accompanist/insets/HorizontalSide;F)Landroidx/compose/ui/Modifier;
 	public static final fun navigationBarsWidth-UTaBBDU$default (Landroidx/compose/ui/Modifier;Ldev/chrisbanes/accompanist/insets/HorizontalSide;FILjava/lang/Object;)Landroidx/compose/ui/Modifier;
+	public static final fun navigationBarsWithImePadding (Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
 	public static final fun statusBarsHeight-wxomhCo (Landroidx/compose/ui/Modifier;F)Landroidx/compose/ui/Modifier;
 	public static final fun statusBarsHeight-wxomhCo$default (Landroidx/compose/ui/Modifier;FILjava/lang/Object;)Landroidx/compose/ui/Modifier;
 	public static final fun statusBarsPadding (Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
 	public static final fun systemBarsPadding (Landroidx/compose/ui/Modifier;Z)Landroidx/compose/ui/Modifier;
 	public static final fun systemBarsPadding$default (Landroidx/compose/ui/Modifier;ZILjava/lang/Object;)Landroidx/compose/ui/Modifier;
 	public static final fun toPaddingValues (Ldev/chrisbanes/accompanist/insets/Insets;ZZZZLandroidx/compose/runtime/Composer;II)Landroidx/compose/foundation/layout/PaddingValues;
+}
+
+public abstract interface annotation class dev/chrisbanes/accompanist/insets/ExperimentalAnimatedInsets : java/lang/annotation/Annotation {
 }
 
 public final class dev/chrisbanes/accompanist/insets/HorizontalSide : java/lang/Enum {
@@ -26,11 +32,15 @@ public final class dev/chrisbanes/accompanist/insets/HorizontalSide : java/lang/
 
 public final class dev/chrisbanes/accompanist/insets/Insets {
 	public fun <init> ()V
+	public final fun copy (IIIIZ)Ldev/chrisbanes/accompanist/insets/Insets;
+	public static synthetic fun copy$default (Ldev/chrisbanes/accompanist/insets/Insets;IIIIZILjava/lang/Object;)Ldev/chrisbanes/accompanist/insets/Insets;
 	public final fun getBottom ()I
 	public final fun getLeft ()I
 	public final fun getRight ()I
 	public final fun getTop ()I
 	public final fun isVisible ()Z
+	public final fun minus (Ldev/chrisbanes/accompanist/insets/Insets;)Ldev/chrisbanes/accompanist/insets/Insets;
+	public final fun plus (Ldev/chrisbanes/accompanist/insets/Insets;)Ldev/chrisbanes/accompanist/insets/Insets;
 }
 
 public final class dev/chrisbanes/accompanist/insets/VerticalSide : java/lang/Enum {
@@ -45,7 +55,9 @@ public final class dev/chrisbanes/accompanist/insets/ViewWindowInsetObserver {
 	public fun <init> (Landroid/view/View;)V
 	public final fun isObserving ()Z
 	public final fun start (Z)Ldev/chrisbanes/accompanist/insets/WindowInsets;
+	public final fun start (ZZ)Ldev/chrisbanes/accompanist/insets/WindowInsets;
 	public static synthetic fun start$default (Ldev/chrisbanes/accompanist/insets/ViewWindowInsetObserver;ZILjava/lang/Object;)Ldev/chrisbanes/accompanist/insets/WindowInsets;
+	public static synthetic fun start$default (Ldev/chrisbanes/accompanist/insets/ViewWindowInsetObserver;ZZILjava/lang/Object;)Ldev/chrisbanes/accompanist/insets/WindowInsets;
 	public final fun stop ()V
 }
 
