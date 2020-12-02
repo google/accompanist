@@ -93,6 +93,33 @@ For a more complex example, see the [`EdgeToEdgeLazyColumn`](https://github.com/
 <img src="images/edge-to-edge-list.jpg" width=300>
 </a>
 
+### Animated Insets support (Experimental)
+
+![](images/ime-insets.gif)
+
+The library now has experimental support for [`WindowInsetsAnimations`](https://developer.android.com/reference/android/view/WindowInsetsAnimation).
+The new `imePadding()` and `navigationBarsWithImePadding()` modifiers allow content to animate with the device's on screen-keyboard (IME), while it is being animated on/off screen. This currently only works when running on devices with API 30+.
+
+To enable animated insets support, you need need to new `ProvideWindowInsets` overload, and set `windowInsetsAnimationsEnabled = true`.
+
+``` kotlin
+ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
+    // content
+}
+```
+
+You can then use the new `navigationBarsWithImePadding()` modifier like so:
+
+``` kotlin
+OutlinedTextField(
+    // other params,
+    modifier = Modifier.navigationBarsWithImePadding()
+)
+```
+
+See the [ImeAnimationSample](https://github.com/chrisbanes/accompanist/blob/main/sample/src/main/java/dev/chrisbanes/accompanist/sample/insets/ImeAnimationSample.kt) for a working example.
+
+
 ## Download
 
 [![Maven Central](https://img.shields.io/maven-central/v/dev.chrisbanes.accompanist/accompanist-insets)](https://search.maven.org/search?q=g:dev.chrisbanes.accompanist)
