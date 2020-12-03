@@ -12,7 +12,7 @@ function copyReadme {
 }
 
 # Work around Dokka failing to link against external links generated from 'gfm' sources.
-wget -O package-list-coil-base https://coil-kt.github.io/coil/api/coil-base/package-list
+curl -o package-list-coil-base https://coil-kt.github.io/coil/api/coil-base/package-list
 sed -i.bak 's/$dokka.linkExtension:md/$dokka.linkExtension:html/g' package-list-coil-base
 
 # Clear out the old API docs
