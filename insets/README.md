@@ -18,7 +18,7 @@ setContent {
 }
 ```
 
-> **Note:** this library does not disable window decor fitting. For your view hierarchy to able to recieve insets, you need to make sure to call: [`WindowCompat.setDecorFitsSystemWindows(window, false)`](https://developer.android.com/reference/androidx/core/view/WindowCompat#setDecorFitsSystemWindows(android.view.Window,%20boolean)) from your Activity.
+**Note: this library does not disable window decor fitting.** For your view hierarchy to able to recieve insets, you need to make sure to call: [`WindowCompat.setDecorFitsSystemWindows(window, false)`](https://developer.android.com/reference/androidx/core/view/WindowCompat#setDecorFitsSystemWindows(android.view.Window,%20boolean)) from your Activity.
 
 `ProvideWindowInsets` allows the library to set an [`OnApplyWindowInsetsListener`][insetslistener] on your content's host view. That listener is used to update the value of an ambient bundled in this library: `AmbientWindowInsets`.
 
