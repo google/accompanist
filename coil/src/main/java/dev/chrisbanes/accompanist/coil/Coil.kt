@@ -26,7 +26,9 @@ import androidx.compose.runtime.staticAmbientOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.unit.IntSize
@@ -381,11 +383,38 @@ private fun coil.decode.DataSource.toDataSource(): DataSource = when (this) {
 
 @Composable
 internal fun Any.toImageRequest(): ImageRequest {
-    // If the developer is accidentally using the wrong function (data vs request), just
-    // pass the request through
-    return if (this is ImageRequest) this else {
-        // Otherwise we construct a GetRequest using the data parameter
-        val context = AmbientContext.current
-        remember(this) { ImageRequest.Builder(context).data(this).build() }
+    when (this) {
+        is android.graphics.drawable.Drawable -> {
+            throw IllegalArgumentException(
+                "Unsupported type: Drawable." +
+                    " If you wish to load a drawable, pass in the resource ID."
+            )
+        }
+        is ImageBitmap -> {
+            throw IllegalArgumentException(
+                "Unsupported type: ImageBitmap." +
+                    " If you wish to display this ImageBitmap, use androidx.compose.foundation.Image()"
+            )
+        }
+        is ImageVector -> {
+            throw IllegalArgumentException(
+                "Unsupported type: ImageVector." +
+                    " If you wish to display this ImageVector, use androidx.compose.foundation.Image()"
+            )
+        }
+        is Painter -> {
+            throw IllegalArgumentException(
+                "Unsupported type: Painter." +
+                    " If you wish to draw this Painter, use androidx.compose.foundation.Image()"
+            )
+        }
+        // If the developer is accidentally using the wrong function (data vs request), just
+        // pass the request through
+        is ImageRequest -> return this
+        else -> {
+            // Otherwise we construct a GetRequest using the data parameter
+            val context = AmbientContext.current
+            return remember(this) { ImageRequest.Builder(context).data(this).build() }
+        }
     }
 }

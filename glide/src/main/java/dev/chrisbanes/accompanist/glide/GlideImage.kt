@@ -26,7 +26,9 @@ import androidx.compose.runtime.staticAmbientOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.AmbientView
 import androidx.compose.ui.unit.IntSize
@@ -101,7 +103,7 @@ fun GlideImage(
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
     ImageLoad(
-        request = requestManager.load(data),
+        request = requestManager.load(checkData(data)),
         requestKey = data, // Glide RequestBuilder doesn't support equality so we use the data
         executeRequest = { (r, size) -> requestManager.execute(r, size) },
         transformRequestForSize = { r, size ->
@@ -273,4 +275,34 @@ private fun com.bumptech.glide.load.DataSource.toDataSource(): DataSource = when
     com.bumptech.glide.load.DataSource.DATA_DISK_CACHE -> DataSource.DISK
     com.bumptech.glide.load.DataSource.RESOURCE_DISK_CACHE -> DataSource.DISK
     com.bumptech.glide.load.DataSource.MEMORY_CACHE -> DataSource.MEMORY
+}
+
+private fun checkData(data: Any): Any {
+    when (data) {
+        is Drawable -> {
+            throw IllegalArgumentException(
+                "Unsupported type: Drawable." +
+                    " If you wish to load a drawable, pass in the resource ID."
+            )
+        }
+        is ImageBitmap -> {
+            throw IllegalArgumentException(
+                "Unsupported type: ImageBitmap." +
+                    " If you wish to display this ImageBitmap, use androidx.compose.foundation.Image()"
+            )
+        }
+        is ImageVector -> {
+            throw IllegalArgumentException(
+                "Unsupported type: ImageVector." +
+                    " If you wish to display this ImageVector, use androidx.compose.foundation.Image()"
+            )
+        }
+        is Painter -> {
+            throw IllegalArgumentException(
+                "Unsupported type: Painter." +
+                    " If you wish to draw this Painter, use androidx.compose.foundation.Image()"
+            )
+        }
+    }
+    return data
 }
