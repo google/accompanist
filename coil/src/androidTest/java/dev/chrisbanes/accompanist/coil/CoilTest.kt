@@ -26,6 +26,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.test.assertHeightIsAtLeast
 import androidx.compose.ui.test.assertHeightIsEqualTo
 import androidx.compose.ui.test.assertIsDisplayed
@@ -528,6 +530,46 @@ class CoilTest {
             .assertIsDisplayed()
             .captureToImage()
             .assertPixels(Color.Red)
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun data_drawable_throws() {
+        composeTestRule.setContent {
+            CoilImage(
+                data = android.graphics.drawable.ShapeDrawable(),
+                modifier = Modifier.preferredSize(128.dp, 128.dp),
+            )
+        }
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun data_imagebitmap_throws() {
+        composeTestRule.setContent {
+            CoilImage(
+                data = imageResource(android.R.drawable.ic_delete),
+                modifier = Modifier.preferredSize(128.dp, 128.dp),
+            )
+        }
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun data_imagevector_throws() {
+        composeTestRule.setContent {
+            CoilImage(
+                data = vectorResource(R.drawable.ic_android_black_24dp),
+                modifier = Modifier.preferredSize(128.dp, 128.dp),
+            )
+        }
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun data_painter_throws() {
+        composeTestRule.setContent {
+            CoilImage(
+                data = ColorPainter(Color.Magenta),
+                modifier = Modifier.preferredSize(128.dp, 128.dp),
+            )
+        }
     }
 }
 
