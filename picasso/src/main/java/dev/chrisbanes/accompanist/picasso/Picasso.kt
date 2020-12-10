@@ -28,9 +28,11 @@ import androidx.compose.runtime.staticAmbientOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.ImagePainter
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.IntSize
 import com.squareup.picasso.Picasso
@@ -257,5 +259,29 @@ private fun Any.toRequestCreator(picasso: Picasso): RequestCreator = when (this)
     is File -> picasso.load(this)
     is Int -> picasso.load(this)
     is HttpUrl -> picasso.load(Uri.parse(toString()))
+    is Drawable -> {
+        throw IllegalArgumentException(
+            "Unsupported type: Drawable." +
+                " If you wish to load a drawable, pass in the resource ID."
+        )
+    }
+    is ImageBitmap -> {
+        throw IllegalArgumentException(
+            "Unsupported type: ImageBitmap." +
+                " If you wish to display this ImageBitmap, use androidx.compose.foundation.Image()"
+        )
+    }
+    is ImageVector -> {
+        throw IllegalArgumentException(
+            "Unsupported type: ImageVector." +
+                " If you wish to display this ImageVector, use androidx.compose.foundation.Image()"
+        )
+    }
+    is Painter -> {
+        throw IllegalArgumentException(
+            "Unsupported type: Painter." +
+                " If you wish to draw this Painter, use androidx.compose.foundation.Image()"
+        )
+    }
     else -> throw IllegalArgumentException("Data is not of a type which Picasso supports: ${this::class.java}")
 }

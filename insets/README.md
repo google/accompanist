@@ -18,7 +18,7 @@ setContent {
 }
 ```
 
-> Note: Whether `ProvideWindowInsets` is called outside or within `MaterialTheme` doesn't particularly matter.
+**Note: this library does not disable window decor fitting.** For your view hierarchy to able to recieve insets, you need to make sure to call: [`WindowCompat.setDecorFitsSystemWindows(window, false)`](https://developer.android.com/reference/androidx/core/view/WindowCompat#setDecorFitsSystemWindows(android.view.Window,%20boolean)) from your Activity.
 
 `ProvideWindowInsets` allows the library to set an [`OnApplyWindowInsetsListener`][insetslistener] on your content's host view. That listener is used to update the value of an ambient bundled in this library: `AmbientWindowInsets`.
 
@@ -120,6 +120,18 @@ OutlinedTextField(
 See the [ImeAnimationSample](https://github.com/chrisbanes/accompanist/blob/main/sample/src/main/java/dev/chrisbanes/accompanist/sample/insets/ImeAnimationSample.kt) for a working example.
 
 
+#### IME animations
+If you're using the animation insets support for IME/keyboard animations, you also need to ensure that the activity's `windowSoftInputMode` is set to `adjustResize`:
+
+``` xml
+<activity
+      android:name=".MyActivity"
+      android:windowSoftInputMode="adjustResize">
+</activity>
+```
+
+The default value of `windowSoftInputMode` _should_ work, but Compose does not currently set the flags necessary (see [here](https://issuetracker.google.com/154101484)).
+
 ## Download
 
 [![Maven Central](https://img.shields.io/maven-central/v/dev.chrisbanes.accompanist/accompanist-insets)](https://search.maven.org/search?q=g:dev.chrisbanes.accompanist)
@@ -135,6 +147,14 @@ dependencies {
 ```
 
 Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap]. These are updated on every commit.
+
+### Something not working?
+
+If you find that something isn't working correctly, here's a checklist to try:
+
+- Check that you've called [`WindowCompat.setDecorFitsSystemWindows(window, false)`](https://developer.android.com/reference/androidx/core/view/WindowCompat#setDecorFitsSystemWindows(android.view.Window,%20boolean)) in your Activity. Unless you do that, the window decor will consume the insets, and they will not be dispatched to your content.
+- If it's something related to the keyboard, check that the Activity's `windowSoftInputMode` is set to `adjustResize`. Without that, IME visibility changes will not be sent as inset changes.
+- If you're using `ProvideWindowInsets` (or `ViewWindowInsetObserver`) in multiple layers of your view hierarchy (i.e. in the activity, _and_ in a fragment), you need to turn off consuming of insets. By default `ProvideWindowInsets` and `ViewWindowInsetObserver` will completely consume any insets passed to it. In the previous example, this means that the activity content will get the insets, but the fragment won't. To disable consuming, pass `consumeWindowInsets = false` to `ProvideWindowInsets` or `ViewWindowInsetObserver.start()`.
 
 [compose]: https://developer.android.com/jetpack/compose
 [snap]: https://oss.sonatype.org/content/repositories/snapshots/dev/chrisbanes/accompanist/accompanist-insets/

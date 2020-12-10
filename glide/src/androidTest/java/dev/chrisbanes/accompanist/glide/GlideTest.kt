@@ -17,6 +17,7 @@
 package dev.chrisbanes.accompanist.glide
 
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.ShapeDrawable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.material.Text
@@ -28,6 +29,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.platform.AmbientView
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.test.assertHeightIsAtLeast
 import androidx.compose.ui.test.assertHeightIsEqualTo
 import androidx.compose.ui.test.assertIsDisplayed
@@ -500,5 +503,45 @@ class GlideTest {
             .assertIsDisplayed()
             .captureToImage()
             .assertPixels(Color.Red)
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun data_drawable_throws() {
+        composeTestRule.setContent {
+            GlideImage(
+                data = ShapeDrawable(),
+                modifier = Modifier.preferredSize(128.dp, 128.dp),
+            )
+        }
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun data_imagebitmap_throws() {
+        composeTestRule.setContent {
+            GlideImage(
+                data = imageResource(android.R.drawable.ic_delete),
+                modifier = Modifier.preferredSize(128.dp, 128.dp),
+            )
+        }
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun data_imagevector_throws() {
+        composeTestRule.setContent {
+            GlideImage(
+                data = vectorResource(R.drawable.ic_android_black_24dp),
+                modifier = Modifier.preferredSize(128.dp, 128.dp),
+            )
+        }
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun data_painter_throws() {
+        composeTestRule.setContent {
+            GlideImage(
+                data = ColorPainter(Color.Magenta),
+                modifier = Modifier.preferredSize(128.dp, 128.dp),
+            )
+        }
     }
 }
