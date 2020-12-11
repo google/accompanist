@@ -148,6 +148,8 @@ fun CoilImage(
 ) {
     ImageLoad(
         request = request,
+        // Workaround. Need to work out this ImageRequest equality isn't working
+        requestKey = request.data,
         executeRequest = { imageLoader.execute(it).toResult() },
         transformRequestForSize = { r, size ->
             val sizedRequest = when {
