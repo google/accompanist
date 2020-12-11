@@ -23,7 +23,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumnFor
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -83,17 +83,18 @@ private fun Sample() {
                 // A state instance which allows us to track the size of the top app bar
                 var topAppBarSize by remember { mutableStateOf(0) }
 
-                LazyColumnFor(
-                    items = listItems,
-                    // We use the systemBar insets as the source of our content padding.
-                    // We add on the topAppBarSize, so that the content is displayed below
-                    // the app bar. Since the top inset is already contained within the app
-                    // bar height, we disable handling it in toPaddingValues().
+                // We use the systemBar insets as the source of our content padding.
+                // We add on the topAppBarSize, so that the content is displayed below
+                // the app bar. Since the top inset is already contained within the app
+                // bar height, we disable handling it in toPaddingValues().
+                LazyColumn(
                     contentPadding = AmbientWindowInsets.current.systemBars
                         .toPaddingValues(top = false)
                         .add(top = with(AmbientDensity.current) { topAppBarSize.toDp() })
-                ) { imageUrl ->
-                    ListItem(imageUrl, Modifier.fillMaxWidth())
+                ) {
+                    items(items = listItems) { imageUrl ->
+                        ListItem(imageUrl, Modifier.fillMaxWidth())
+                    }
                 }
 
                 /**
