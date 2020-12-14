@@ -11,9 +11,9 @@ public final class dev/chrisbanes/accompanist/coil/CoilImage {
 	public static final fun getAmbientImageLoader ()Landroidx/compose/runtime/ProvidableAmbient;
 }
 
-public final class dev/chrisbanes/accompanist/coil/CoilImageConstants {
+public final class dev/chrisbanes/accompanist/coil/CoilImageDefaults {
 	public static final field $stable I
-	public static final field INSTANCE Ldev/chrisbanes/accompanist/coil/CoilImageConstants;
+	public static final field INSTANCE Ldev/chrisbanes/accompanist/coil/CoilImageDefaults;
 	public final fun defaultImageLoader (Landroidx/compose/runtime/Composer;I)Lcoil/ImageLoader;
 }
 
