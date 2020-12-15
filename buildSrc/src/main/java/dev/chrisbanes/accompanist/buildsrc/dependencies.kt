@@ -28,7 +28,7 @@ object Libs {
     const val junit = "junit:junit:4.13"
 
     object Kotlin {
-        private const val version = "1.4.20"
+        private const val version = "1.4.21"
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib:$version"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
 
@@ -58,7 +58,7 @@ object Libs {
         }
 
         object Compose {
-            const val snapshot = "7024175"
+            const val snapshot = "7033025"
             const val version = "1.0.0-SNAPSHOT"
 
             @JvmStatic
