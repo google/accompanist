@@ -53,7 +53,10 @@ import kotlinx.coroutines.suspendCancellableCoroutine
  */
 val AmbientRequestManager = staticAmbientOf<RequestManager?> { null }
 
-object GlideImageConstants {
+/**
+ * Contains some default values used for [GlideImage].
+ */
+object GlideImageDefaults {
     /**
      * Returns the default [RequestManager] value for the `requestManager` parameter
      * in [GlideImage].
@@ -96,7 +99,7 @@ fun GlideImage(
     data: Any,
     modifier: Modifier = Modifier,
     requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)? = null,
-    requestManager: RequestManager = GlideImageConstants.defaultRequestManager(),
+    requestManager: RequestManager = GlideImageDefaults.defaultRequestManager(),
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
     content: @Composable (imageLoadState: ImageLoadState) -> Unit
@@ -167,7 +170,7 @@ fun GlideImage(
     colorFilter: ColorFilter? = null,
     fadeIn: Boolean = false,
     requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)? = null,
-    requestManager: RequestManager = GlideImageConstants.defaultRequestManager(),
+    requestManager: RequestManager = GlideImageDefaults.defaultRequestManager(),
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
     error: @Composable ((ImageLoadState.Error) -> Unit)? = null,

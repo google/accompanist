@@ -4,9 +4,9 @@ public final class dev/chrisbanes/accompanist/glide/GlideImage {
 	public static final fun getAmbientRequestManager ()Landroidx/compose/runtime/ProvidableAmbient;
 }
 
-public final class dev/chrisbanes/accompanist/glide/GlideImageConstants {
+public final class dev/chrisbanes/accompanist/glide/GlideImageDefaults {
 	public static final field $stable I
-	public static final field INSTANCE Ldev/chrisbanes/accompanist/glide/GlideImageConstants;
+	public static final field INSTANCE Ldev/chrisbanes/accompanist/glide/GlideImageDefaults;
 	public final fun defaultRequestManager (Landroidx/compose/runtime/Composer;I)Lcom/bumptech/glide/RequestManager;
 }
 

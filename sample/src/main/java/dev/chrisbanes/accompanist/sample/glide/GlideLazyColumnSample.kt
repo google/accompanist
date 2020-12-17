@@ -22,7 +22,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.foundation.layout.preferredWidth
-import androidx.compose.foundation.lazy.LazyColumnFor
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -54,20 +54,22 @@ private fun Sample() {
         val items = buildList {
             repeat(NumberItems) { add(randomSampleImageUrl(it)) }
         }
-        LazyColumnFor(items, modifier = Modifier.padding(16.dp)) { imageUrl ->
-            Row(Modifier.padding(16.dp)) {
-                GlideImage(
-                    data = imageUrl,
-                    modifier = Modifier.preferredSize(64.dp)
-                )
+        LazyColumn(Modifier.padding(16.dp)) {
+            items(items) { imageUrl ->
+                Row(Modifier.padding(16.dp)) {
+                    GlideImage(
+                        data = imageUrl,
+                        modifier = Modifier.preferredSize(64.dp)
+                    )
 
-                Spacer(Modifier.preferredWidth(8.dp))
+                    Spacer(Modifier.preferredWidth(8.dp))
 
-                Text(
-                    text = "Text",
-                    style = MaterialTheme.typography.subtitle2,
-                    modifier = Modifier.weight(1f).align(Alignment.CenterVertically)
-                )
+                    Text(
+                        text = "Text",
+                        style = MaterialTheme.typography.subtitle2,
+                        modifier = Modifier.weight(1f).align(Alignment.CenterVertically)
+                    )
+                }
             }
         }
     }

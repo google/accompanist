@@ -50,7 +50,10 @@ import dev.chrisbanes.accompanist.imageloading.toPainter
  */
 val AmbientImageLoader = staticAmbientOf<ImageLoader?> { null }
 
-object CoilImageConstants {
+/**
+ * Contains some default values used for [CoilImage].
+ */
+object CoilImageDefaults {
     /**
      * Returns the default [ImageLoader] value for the `imageLoader` parameter in [CoilImage].
      */
@@ -81,7 +84,7 @@ object CoilImageConstants {
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
  * @param requestBuilder Optional builder for the [ImageRequest].
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to
- * [CoilImageConstants.defaultImageLoader].
+ * [CoilImageDefaults.defaultImageLoader].
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
@@ -92,7 +95,7 @@ fun CoilImage(
     data: Any,
     modifier: Modifier = Modifier,
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
-    imageLoader: ImageLoader = CoilImageConstants.defaultImageLoader(),
+    imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
     content: @Composable (imageLoadState: ImageLoadState) -> Unit
@@ -130,7 +133,7 @@ fun CoilImage(
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
  * @param requestBuilder Optional builder for the [ImageRequest].
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to
- * [CoilImageConstants.defaultImageLoader].
+ * [CoilImageDefaults.defaultImageLoader].
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
@@ -141,7 +144,7 @@ fun CoilImage(
     request: ImageRequest,
     modifier: Modifier = Modifier,
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
-    imageLoader: ImageLoader = CoilImageConstants.defaultImageLoader(),
+    imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
     content: @Composable (imageLoadState: ImageLoadState) -> Unit
@@ -214,7 +217,7 @@ fun CoilImage(
  * Default: `false`.
  * @param requestBuilder Optional builder for the [ImageRequest].
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to
- * [CoilImageConstants.defaultImageLoader].
+ * [CoilImageDefaults.defaultImageLoader].
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
@@ -228,7 +231,7 @@ fun CoilImage(
     colorFilter: ColorFilter? = null,
     fadeIn: Boolean = false,
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
-    imageLoader: ImageLoader = CoilImageConstants.defaultImageLoader(),
+    imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
     error: @Composable ((ImageLoadState.Error) -> Unit)? = null,
@@ -287,7 +290,7 @@ fun CoilImage(
  * @param fadeIn Whether to run a fade-in animation when images are successfully loaded. Default: `false`.
  * @param requestBuilder Optional builder for the [ImageRequest].
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to
- * [CoilImageConstants.defaultImageLoader].
+ * [CoilImageDefaults.defaultImageLoader].
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
@@ -301,7 +304,7 @@ fun CoilImage(
     colorFilter: ColorFilter? = null,
     fadeIn: Boolean = false,
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
-    imageLoader: ImageLoader = CoilImageConstants.defaultImageLoader(),
+    imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
     error: @Composable ((ImageLoadState.Error) -> Unit)? = null,
