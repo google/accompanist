@@ -28,11 +28,15 @@ import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.dynamicanimation.animation.SpringForce
 import androidx.dynamicanimation.animation.springAnimationOf
 import androidx.dynamicanimation.animation.withSpringForceProperties
+import kotlin.math.abs
 import kotlin.math.roundToInt
 
 /**
  * A wrapper around the new [WindowInsetsAnimationController] APIs in Android 11, to simplify
  * the implementation of common use-cases around the IME.
+ *
+ * This is taken from the [WindowInsetsAnimation](https://github.com/android/user-interface-samples/tree/master/WindowInsetsAnimation/)
+ * sample.
  */
 @RequiresApi(30)
 internal class SimpleImeAnimationController {
@@ -285,13 +289,22 @@ internal class SimpleImeAnimationController {
         val shown = controller.shownStateInsets.bottom
         val hidden = controller.hiddenStateInsets.bottom
 
+        // If we have a velocity, we can use it's direction to determine
+        // the visibility. Upwards == visible
+        if (velocityY != null) {
+            val flingDistance = calculateFlingDistance(velocityY)
+            // If the velocity would cause a fling distance which covers the IME height,
+            // fling...
+            if (flingDistance > abs(shown - hidden)) {
+                animateImeToVisibility(
+                    visible = velocityY < 0,
+                    velocityY = velocityY
+                )
+                return
+            }
+        }
+
         when {
-            // If we have a velocity, we can use it's direction to determine
-            // the visibility. Upwards == visible
-            velocityY != null -> animateImeToVisibility(
-                visible = velocityY < 0,
-                velocityY = velocityY
-            )
             // The current inset matches either the shown/hidden inset, finish() immediately
             current == shown -> {
                 controller.finish(true)
@@ -382,6 +395,10 @@ internal class SimpleImeAnimationController {
                 onFinished?.invoke(velocity)
             }
         }.also { it.start() }
+    }
+
+    private fun calculateFlingDistance(velocity: Float, friction: Float = 1.0f): Float {
+        return velocity / (friction * -4.2f)
     }
 }
 

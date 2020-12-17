@@ -30,6 +30,9 @@ import androidx.compose.ui.unit.Velocity
 import kotlin.math.roundToInt
 
 /**
+ * Remembers a [NestedScrollConnection] which scrolls the Android on-screen keyboard on/off
+ * screen as appropriate.
+ *
  * @param scrollImeOffScreenWhenVisible Set to true to allow scrolling the IME off screen
  * (from being visible), by an downwards scroll. Defaults to `true`.
  * @param scrollImeOnScreenWhenNotVisible Set to true to allow scrolling the IME on screen (from not being visible),
@@ -51,7 +54,7 @@ fun rememberImeNestedScrollConnection(
     }
 }
 
-internal class ImeNestedScrollConnection constructor(
+internal class ImeNestedScrollConnection(
     private val view: View,
     private val scrollImeOffScreenWhenVisible: Boolean,
     private val scrollImeOnScreenWhenNotVisible: Boolean,
@@ -128,7 +131,8 @@ internal class ImeNestedScrollConnection constructor(
             }
 
             if (scrollImeOnScreenWhenNotVisible &&
-                !imeAnimController.isInsetAnimationRequestPending() && imeVisible
+                !imeAnimController.isInsetAnimationRequestPending() &&
+                !imeVisible
             ) {
                 // If we don't currently have control, the IME is not shown,
                 // the user is scrolling up, and the view can't scroll up any more
@@ -162,27 +166,13 @@ internal class ImeNestedScrollConnection constructor(
             return
         }
 
-        if (scrollImeOnScreenWhenNotVisible) {
-            // Otherwise we may need to start a control request and immediately fling
-            // using the velocityY
-            when {
-                available.pixelsPerSecond.y < 0 && !imeVisible -> {
-                    // If the fling is in a upwards direction, and the IME is not visible,
-                    // start an control request with an immediate fling
-                    imeAnimController.startAndFling(view, available.pixelsPerSecond.y) {
-                        onFinished(Velocity(Offset(0f, it)))
-                    }
-                    return
-                }
-                available.pixelsPerSecond.y > 0 && imeVisible -> {
-                    // If the fling is in a downwards direction, and the IME is visible,
-                    // start an control request with an immediate fling
-                    imeAnimController.startAndFling(view, available.pixelsPerSecond.y) {
-                        onFinished(Velocity(Offset(0f, it)))
-                    }
-                    return
-                }
+        // If the fling is in a (upwards direction, and the IME is not visible)
+        // start an control request with an immediate fling
+        if (scrollImeOnScreenWhenNotVisible && available.pixelsPerSecond.y > 0 == imeVisible) {
+            imeAnimController.startAndFling(view, available.pixelsPerSecond.y) {
+                onFinished(Velocity(Offset(0f, it)))
             }
+            return
         }
 
         // If we reach here we just call onFinished()
