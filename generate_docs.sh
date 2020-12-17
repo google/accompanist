@@ -5,7 +5,7 @@ DOCS_ROOT=docs-gen
 [ -d $DOCS_ROOT ] && rm -r $DOCS_ROOT
 mkdir $DOCS_ROOT
 
-function copyReadme {
+copyReadme() {
   cp $1/README.md $DOCS_ROOT/$1.md
   mkdir -p $DOCS_ROOT/$1
   cp -r $1/images $DOCS_ROOT/$1
