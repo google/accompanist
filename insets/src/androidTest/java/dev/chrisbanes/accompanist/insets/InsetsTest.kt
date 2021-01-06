@@ -32,6 +32,13 @@ class InsetsTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule(InsetsTestActivity::class.java)
 
+    /**
+     * Needed due to https://issuetracker.google.com/174839536.
+     * Otherwise this module has no tests when running on API < 23.
+     */
+    @Test
+    fun dummyTest() = Unit
+
     @Test
     @SdkSuppress(minSdkVersion = 23) // ViewCompat.getRootWindowInsets
     fun assertValuesMatchViewInsets() {
