@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:JvmName("ImeNestedScrollConnection")
+
 package dev.chrisbanes.accompanist.insets
 
 import android.os.Build
@@ -35,8 +37,8 @@ import kotlin.math.roundToInt
  *
  * @param scrollImeOffScreenWhenVisible Set to true to allow scrolling the IME off screen
  * (from being visible), by an downwards scroll. Defaults to `true`.
- * @param scrollImeOnScreenWhenNotVisible Set to true to allow scrolling the IME on screen (from not being visible),
- * by an upwards scroll. Defaults to `true`.
+ * @param scrollImeOnScreenWhenNotVisible Set to true to allow scrolling the IME on screen
+ * (from not being visible), by an upwards scroll. Defaults to `true`.
  */
 @ExperimentalAnimatedInsets
 @Composable
@@ -54,14 +56,29 @@ fun rememberImeNestedScrollConnection(
     }
 }
 
-internal class ImeNestedScrollConnection(
+/**
+ * A [NestedScrollConnection] which scrolls the Android on-screen keyboard on/off
+ * screen as appropriate, when the user scrolls content. This class may be made an internal
+ * library class in the future.
+ *
+ * You probably do not wish to use this directly, and should use
+ * [rememberImeNestedScrollConnection] instead.
+ *
+ * @param view The host Compose [View]. Usually this comes from [AmbientView].
+ * @param scrollImeOffScreenWhenVisible Set to true to allow scrolling the IME off screen
+ * (from being visible), by an downwards scroll. Defaults to `true`.
+ * @param scrollImeOnScreenWhenNotVisible Set to true to allow scrolling the IME on screen
+ * (from not being visible), by an upwards scroll. Defaults to `true`.
+ */
+@ExperimentalAnimatedInsets
+class ImeNestedScrollConnection(
     private val view: View,
     private val scrollImeOffScreenWhenVisible: Boolean,
     private val scrollImeOnScreenWhenNotVisible: Boolean,
 ) : NestedScrollConnection {
 
-    @RequiresApi(30)
-    private val imeAnimController = SimpleImeAnimationController()
+    @delegate:RequiresApi(30)
+    private val imeAnimController by lazy(LazyThreadSafetyMode.NONE, ::SimpleImeAnimationController)
 
     @get:RequiresApi(30)
     private val imeVisible: Boolean
@@ -99,7 +116,7 @@ internal class ImeNestedScrollConnection(
             if (scrollImeOffScreenWhenVisible && imeVisible) {
                 // If we're not in control, the IME is currently open, and,
                 // 'scroll IME away when visible' is enabled, we start a control request
-                imeAnimController.startControlRequest(view = view)
+                imeAnimController.startControlRequest(view)
 
                 // We consume the scroll to stop the list scrolling while we wait for a controller
                 return available
@@ -160,8 +177,8 @@ internal class ImeNestedScrollConnection(
         if (imeAnimController.isInsetAnimationInProgress()) {
             // If we have an IME animation in progress, from the user scrolling, we can
             // animate to the end state using the velocity
-            imeAnimController.animateToFinish(available.pixelsPerSecond.y) {
-                onFinished(Velocity(Offset(0f, it)))
+            imeAnimController.animateToFinish(available.pixelsPerSecond.y) { remainingVelocity ->
+                onFinished(Velocity(Offset(0f, remainingVelocity)))
             }
             return
         }
@@ -169,8 +186,11 @@ internal class ImeNestedScrollConnection(
         // If the fling is in a (upwards direction, and the IME is not visible)
         // start an control request with an immediate fling
         if (scrollImeOnScreenWhenNotVisible && available.pixelsPerSecond.y > 0 == imeVisible) {
-            imeAnimController.startAndFling(view, available.pixelsPerSecond.y) {
-                onFinished(Velocity(Offset(0f, it)))
+            imeAnimController.startAndFling(
+                view = view,
+                velocityY = available.pixelsPerSecond.y
+            ) { remainingVelocity ->
+                onFinished(Velocity(Offset(0f, remainingVelocity)))
             }
             return
         }

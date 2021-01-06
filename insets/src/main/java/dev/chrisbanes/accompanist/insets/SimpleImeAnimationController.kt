@@ -133,7 +133,7 @@ internal class SimpleImeAnimationController {
     fun startAndFling(
         view: View,
         velocityY: Float,
-        onFinished: ((Float) -> Unit)? = null
+        onFinished: ((remainingVelocity: Float) -> Unit)? = null
     ) = startControlRequest(view) {
         animateToFinish(velocityY, onFinished = onFinished)
     }
