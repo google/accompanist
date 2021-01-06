@@ -47,7 +47,7 @@ private fun Sample() {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(R.string.coil_title_grid)) }
+                title = { Text(text = stringResource(R.string.coil_title_lazy_row)) }
             )
         }
     ) {

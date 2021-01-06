@@ -19,7 +19,6 @@ package dev.chrisbanes.accompanist.sample.glide
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayout
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -53,64 +52,59 @@ private fun Sample() {
         }
     ) {
         ScrollableColumn(modifier = Modifier.padding(16.dp)) {
-            FlowRow(
-                mainAxisSpacing = 4.dp,
-                crossAxisSpacing = 4.dp
-            ) {
-                // GlideImage with data parameter
-                GlideImage(
-                    data = randomSampleImageUrl(),
-                    modifier = Modifier.preferredSize(128.dp)
-                )
+            // GlideImage with data parameter
+            GlideImage(
+                data = randomSampleImageUrl(),
+                modifier = Modifier.preferredSize(128.dp)
+            )
 
-                // GlideImage with loading slot
-                GlideImage(
-                    data = randomSampleImageUrl(),
-                    loading = {
-                        Box(Modifier.fillMaxSize()) {
-                            CircularProgressIndicator(Modifier.align(Alignment.Center))
-                        }
-                    },
-                    modifier = Modifier.preferredSize(128.dp)
-                )
-
-                // GlideImage with crossfade and data parameter
-                GlideImage(
-                    data = randomSampleImageUrl(),
-                    fadeIn = true,
-                    modifier = Modifier.preferredSize(128.dp)
-                )
-
-                // GlideImage with crossfade and loading slot
-                GlideImage(
-                    data = randomSampleImageUrl(),
-                    fadeIn = true,
-                    loading = {
-                        Box(Modifier.fillMaxSize()) {
-                            CircularProgressIndicator(Modifier.align(Alignment.Center))
-                        }
-                    },
-                    modifier = Modifier.preferredSize(128.dp)
-                )
-
-                // GlideImage with an implicit size
-                GlideImage(
-                    data = randomSampleImageUrl(),
-                    loading = {
-                        Box(Modifier.fillMaxSize()) {
-                            CircularProgressIndicator(Modifier.align(Alignment.Center))
-                        }
+            // GlideImage with loading slot
+            GlideImage(
+                data = randomSampleImageUrl(),
+                loading = {
+                    Box(Modifier.fillMaxSize()) {
+                        CircularProgressIndicator(Modifier.align(Alignment.Center))
                     }
-                )
+                },
+                modifier = Modifier.preferredSize(128.dp)
+            )
 
-                // GlideImage with an aspect ratio
-                GlideImage(
-                    data = randomSampleImageUrl(),
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.preferredWidth(256.dp)
-                        .aspectRatio(16 / 9f)
-                )
-            }
+            // GlideImage with crossfade and data parameter
+            GlideImage(
+                data = randomSampleImageUrl(),
+                fadeIn = true,
+                modifier = Modifier.preferredSize(128.dp)
+            )
+
+            // GlideImage with crossfade and loading slot
+            GlideImage(
+                data = randomSampleImageUrl(),
+                fadeIn = true,
+                loading = {
+                    Box(Modifier.fillMaxSize()) {
+                        CircularProgressIndicator(Modifier.align(Alignment.Center))
+                    }
+                },
+                modifier = Modifier.preferredSize(128.dp)
+            )
+
+            // GlideImage with an implicit size
+            GlideImage(
+                data = randomSampleImageUrl(),
+                loading = {
+                    Box(Modifier.fillMaxSize()) {
+                        CircularProgressIndicator(Modifier.align(Alignment.Center))
+                    }
+                }
+            )
+
+            // GlideImage with an aspect ratio
+            GlideImage(
+                data = randomSampleImageUrl(),
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.preferredWidth(256.dp)
+                    .aspectRatio(16 / 9f)
+            )
         }
     }
 }
