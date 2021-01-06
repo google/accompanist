@@ -16,24 +16,19 @@
 
 package dev.chrisbanes.accompanist.sample
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.darkColors
+import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.setContent
 
-/**
- * Simple activity which allows sub-classes to pass in a [Composable] content lambda.
- */
-open class AccompanistSampleActivity(
-    private val content: @Composable () -> Unit
-) : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setContent {
-            AccompanistSampleTheme {
-                content()
-            }
-        }
-    }
+@Composable
+fun AccompanistSampleTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable () -> Unit
+) {
+    MaterialTheme(
+        colors = if (darkTheme) darkColors() else lightColors(),
+        content = content
+    )
 }

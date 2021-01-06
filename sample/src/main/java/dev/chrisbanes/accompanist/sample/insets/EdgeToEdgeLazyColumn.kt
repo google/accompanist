@@ -55,6 +55,7 @@ import dev.chrisbanes.accompanist.insets.add
 import dev.chrisbanes.accompanist.insets.navigationBarsPadding
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
 import dev.chrisbanes.accompanist.insets.toPaddingValues
+import dev.chrisbanes.accompanist.sample.AccompanistSampleTheme
 import dev.chrisbanes.accompanist.sample.R
 import dev.chrisbanes.accompanist.sample.randomSampleImageUrl
 
@@ -67,8 +68,10 @@ class EdgeToEdgeLazyColumn : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
-            MaterialTheme {
-                Sample()
+            AccompanistSampleTheme {
+                Surface {
+                    Sample()
+                }
             }
         }
     }

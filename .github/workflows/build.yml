@@ -26,10 +26,10 @@ jobs:
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
-      - name: set up JDK 8 (1.8)
+      - name: set up JDK
         uses: actions/setup-java@v1
         with:
-          java-version: 8
+          java-version: 11
 
       - name: Decrypt secrets
         run: release/signing-setup.sh ${{ secrets.ENCRYPT_KEY }}
@@ -59,7 +59,7 @@ jobs:
       # Allow tests to continue on other devices if they fail on one device.
       fail-fast: false
       matrix:
-        api-level: [23, 26, 29]
+        api-level: [21, 23, 26, 29]
     env:
       TERM: dumb
 
@@ -69,10 +69,10 @@ jobs:
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
-      - name: set up JDK 8 (1.8)
+      - name: set up JDK
         uses: actions/setup-java@v1
         with:
-          java-version: 8
+          java-version: 11
 
       - name: Decrypt secrets
         run: release/signing-setup.sh ${{ secrets.ENCRYPT_KEY }}
@@ -92,7 +92,8 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          script: ./gradlew connectedCheck --scan
+          # We need to list out all modules due to https://issuetracker.google.com/174839536
+          script: ./gradlew --scan coil:connectedCheck glide:connectedCheck picasso:connectedCheck insets:connectedCheck
 
       - name: Clean secrets
         if: always()
@@ -123,10 +124,10 @@ jobs:
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
-      - name: set up JDK 8 (1.8)
+      - name: set up JDK
         uses: actions/setup-java@v1
         with:
-          java-version: 8
+          java-version: 11
 
       - name: Decrypt secrets
         run: release/signing-setup.sh ${{ secrets.ENCRYPT_KEY }}
@@ -142,12 +143,15 @@ jobs:
             ~/.gradle/caches/build-cache-*
           key: gradle-${{ hashFiles('checksum.txt') }}
 
-      - name: Deploy to Sonatype
+      - name: Build docs
         # We manually run assemble & dokka before uploadArchives. If we only run uploadArchives,
         # the assemble and dokka tasks are run interleaved on each module, which can cause
         # connection timeouts to Sonatype (since we need to wait for assemble+dokka to finish).
-        # By front-loading the assemble+dokka tasks, the upload is much quicker.
-        run: ./gradlew assembleRelease dokkaHtml uploadArchives --no-parallel
+        # By front-loading the assemble+dokka tasks, the upload below is much quicker.
+        run: ./gradlew assembleRelease dokkaHtml
+
+      - name: Deploy to Sonatype
+        run: ./gradlew uploadArchives --no-parallel
         env:
           SONATYPE_NEXUS_USERNAME: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
           SONATYPE_NEXUS_PASSWORD: ${{ secrets.SONATYPE_NEXUS_PASSWORD }}
