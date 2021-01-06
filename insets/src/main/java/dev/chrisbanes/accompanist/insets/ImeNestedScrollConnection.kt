@@ -99,14 +99,7 @@ class ImeNestedScrollConnection(
             // If the user is scrolling down...
 
             if (imeAnimController.isInsetAnimationInProgress()) {
-                // If we currently have control, we can update the IME insets using insetBy().
-                //
-                // The negation on the deltaY and the return value is necessary since nested
-                // scrolling uses dy values, from 0 (top) to infinity (bottom), meaning that
-                // positive values indicate a downwards motion. IME insets are different, as they
-                // treat values from from 0 (bottom) to IME-height (top). Since we're using
-                // insetBy() with delta values, we can just pass in a simple negation and let it
-                // handle the min/max positions.
+                // If we currently have control, we can update the IME insets using insetBy()
                 return Offset(
                     x = 0f,
                     y = imeAnimController.insetBy(available.y.roundToInt()).toFloat()
