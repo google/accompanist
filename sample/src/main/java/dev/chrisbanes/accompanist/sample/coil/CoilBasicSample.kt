@@ -21,7 +21,6 @@ import android.os.Build.VERSION.SDK_INT
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayout
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -61,99 +60,94 @@ private fun Sample() {
         }
     ) {
         ScrollableColumn(modifier = Modifier.padding(16.dp)) {
-            FlowRow(
-                mainAxisSpacing = 4.dp,
-                crossAxisSpacing = 4.dp
-            ) {
-                // CoilImage with data parameter
-                CoilImage(
-                    data = randomSampleImageUrl(),
-                    modifier = Modifier.preferredSize(128.dp)
-                )
+            // CoilImage with data parameter
+            CoilImage(
+                data = randomSampleImageUrl(),
+                modifier = Modifier.preferredSize(128.dp)
+            )
 
-                // CoilImage with GIF
-                CoilImage(
-                    data = "https://cataas.com/cat/gif",
-                    imageLoader = GifImageLoader(AmbientContext.current),
-                    modifier = Modifier.preferredSize(128.dp)
-                )
+            // CoilImage with GIF
+            CoilImage(
+                data = "https://cataas.com/cat/gif",
+                imageLoader = GifImageLoader(AmbientContext.current),
+                modifier = Modifier.preferredSize(128.dp)
+            )
 
-                // CoilImage with ImageRequest parameter
-                CoilImage(
-                    request = ImageRequest.Builder(AmbientContext.current)
-                        .data(randomSampleImageUrl())
-                        .transformations(CircleCropTransformation())
-                        .build(),
-                    modifier = Modifier.preferredSize(128.dp)
-                )
+            // CoilImage with ImageRequest parameter
+            CoilImage(
+                request = ImageRequest.Builder(AmbientContext.current)
+                    .data(randomSampleImageUrl())
+                    .transformations(CircleCropTransformation())
+                    .build(),
+                modifier = Modifier.preferredSize(128.dp)
+            )
 
-                // CoilImage with ImageRequest builder parameter
-                CoilImage(
-                    data = randomSampleImageUrl(),
-                    requestBuilder = {
-                        transformations(CircleCropTransformation())
-                    },
-                    modifier = Modifier.preferredSize(128.dp)
-                )
+            // CoilImage with ImageRequest builder parameter
+            CoilImage(
+                data = randomSampleImageUrl(),
+                requestBuilder = {
+                    transformations(CircleCropTransformation())
+                },
+                modifier = Modifier.preferredSize(128.dp)
+            )
 
-                // CoilImage with loading slot
-                CoilImage(
-                    data = randomSampleImageUrl(),
-                    loading = {
-                        Box(Modifier.fillMaxSize()) {
-                            CircularProgressIndicator(Modifier.align(Alignment.Center))
-                        }
-                    },
-                    modifier = Modifier.preferredSize(128.dp)
-                )
-
-                // CoilImage with crossfade and data parameter
-                CoilImage(
-                    data = randomSampleImageUrl(),
-                    fadeIn = true,
-                    modifier = Modifier.preferredSize(128.dp)
-                )
-
-                // CoilImage with crossfade and ImageRequest parameter
-                CoilImage(
-                    request = ImageRequest.Builder(AmbientContext.current)
-                        .data(randomSampleImageUrl())
-                        .transformations(CircleCropTransformation())
-                        .build(),
-                    fadeIn = true,
-                    modifier = Modifier.preferredSize(128.dp)
-                )
-
-                // CoilImage with crossfade and loading slot
-                CoilImage(
-                    data = randomSampleImageUrl(),
-                    fadeIn = true,
-                    loading = {
-                        Box(Modifier.fillMaxSize()) {
-                            CircularProgressIndicator(Modifier.align(Alignment.Center))
-                        }
-                    },
-                    modifier = Modifier.preferredSize(128.dp)
-                )
-
-                // CoilImage with an implicit size
-                CoilImage(
-                    data = randomSampleImageUrl(),
-                    loading = {
-                        Box(Modifier.fillMaxSize()) {
-                            CircularProgressIndicator(Modifier.align(Alignment.Center))
-                        }
+            // CoilImage with loading slot
+            CoilImage(
+                data = randomSampleImageUrl(),
+                loading = {
+                    Box(Modifier.fillMaxSize()) {
+                        CircularProgressIndicator(Modifier.align(Alignment.Center))
                     }
-                )
+                },
+                modifier = Modifier.preferredSize(128.dp)
+            )
 
-                // CoilImage with an aspect ratio and crop scale
-                CoilImage(
-                    data = randomSampleImageUrl(),
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.preferredWidth(256.dp)
-                        .aspectRatio(16 / 9f)
-                )
-            }
+            // CoilImage with crossfade and data parameter
+            CoilImage(
+                data = randomSampleImageUrl(),
+                fadeIn = true,
+                modifier = Modifier.preferredSize(128.dp)
+            )
+
+            // CoilImage with crossfade and ImageRequest parameter
+            CoilImage(
+                request = ImageRequest.Builder(AmbientContext.current)
+                    .data(randomSampleImageUrl())
+                    .transformations(CircleCropTransformation())
+                    .build(),
+                fadeIn = true,
+                modifier = Modifier.preferredSize(128.dp)
+            )
+
+            // CoilImage with crossfade and loading slot
+            CoilImage(
+                data = randomSampleImageUrl(),
+                fadeIn = true,
+                loading = {
+                    Box(Modifier.fillMaxSize()) {
+                        CircularProgressIndicator(Modifier.align(Alignment.Center))
+                    }
+                },
+                modifier = Modifier.preferredSize(128.dp)
+            )
+
+            // CoilImage with an implicit size
+            CoilImage(
+                data = randomSampleImageUrl(),
+                loading = {
+                    Box(Modifier.fillMaxSize()) {
+                        CircularProgressIndicator(Modifier.align(Alignment.Center))
+                    }
+                }
+            )
+
+            // CoilImage with an aspect ratio and crop scale
+            CoilImage(
+                data = randomSampleImageUrl(),
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.preferredWidth(256.dp)
+                    .aspectRatio(16 / 9f)
+            )
         }
     }
 }
