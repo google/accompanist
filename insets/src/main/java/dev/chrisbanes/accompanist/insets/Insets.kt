@@ -21,10 +21,8 @@
 
 package dev.chrisbanes.accompanist.insets
 
-import android.os.Build
 import android.view.View
 import android.view.WindowInsetsAnimation
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Providers
@@ -36,8 +34,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticAmbientOf
 import androidx.compose.ui.platform.AmbientView
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsAnimationCompat
 import androidx.core.view.WindowInsetsCompat
-import android.view.WindowInsets as WindowInsetsPlatform
 
 /**
  * Main holder of our inset values.
@@ -289,8 +287,13 @@ class ViewWindowInsetObserver(private val view: View) {
         }
         view.addOnAttachStateChangeListener(attachListener)
 
-        if (windowInsetsAnimationsEnabled && Build.VERSION.SDK_INT >= 30) {
-            InnerWindowInsetsAnimationCallback.setup(view, windowInsets)
+        if (windowInsetsAnimationsEnabled) {
+            ViewCompat.setWindowInsetsAnimationCallback(
+                view,
+                InnerWindowInsetsAnimationCallback(windowInsets)
+            )
+        } else {
+            ViewCompat.setWindowInsetsAnimationCallback(view, null)
         }
 
         if (view.isAttachedToWindow) {
@@ -405,61 +408,60 @@ fun ProvideWindowInsets(
     }
 }
 
-@RequiresApi(30)
 private class InnerWindowInsetsAnimationCallback(
     private val windowInsets: WindowInsets,
-) : WindowInsetsAnimation.Callback(DISPATCH_MODE_STOP) {
-    override fun onPrepare(animation: WindowInsetsAnimation) {
+) : WindowInsetsAnimationCompat.Callback(DISPATCH_MODE_STOP) {
+    override fun onPrepare(animation: WindowInsetsAnimationCompat) {
         // Go through each type and flag that an animation has started
-        if (animation.typeMask and WindowInsetsPlatform.Type.ime() != 0) {
+        if (animation.typeMask and WindowInsetsCompat.Type.ime() != 0) {
             windowInsets.ime.ongoingAnimations++
         }
-        if (animation.typeMask and WindowInsetsPlatform.Type.statusBars() != 0) {
+        if (animation.typeMask and WindowInsetsCompat.Type.statusBars() != 0) {
             windowInsets.statusBars.ongoingAnimations++
         }
-        if (animation.typeMask and WindowInsetsPlatform.Type.navigationBars() != 0) {
+        if (animation.typeMask and WindowInsetsCompat.Type.navigationBars() != 0) {
             windowInsets.navigationBars.ongoingAnimations++
         }
-        if (animation.typeMask and WindowInsetsPlatform.Type.systemBars() != 0) {
+        if (animation.typeMask and WindowInsetsCompat.Type.systemBars() != 0) {
             windowInsets.systemBars.ongoingAnimations++
         }
-        if (animation.typeMask and WindowInsetsPlatform.Type.systemGestures() != 0) {
+        if (animation.typeMask and WindowInsetsCompat.Type.systemGestures() != 0) {
             windowInsets.systemGestures.ongoingAnimations++
         }
     }
 
     override fun onProgress(
-        platformInsets: WindowInsetsPlatform,
-        runningAnimations: List<WindowInsetsAnimation>
-    ): WindowInsetsPlatform {
+        platformInsets: WindowInsetsCompat,
+        runningAnimations: List<WindowInsetsAnimationCompat>
+    ): WindowInsetsCompat {
         val runningTypes = runningAnimations.fold(0) { acc, animation ->
             acc or animation.typeMask
         }
-        if (runningTypes and WindowInsetsPlatform.Type.ime() != 0) {
+        if (runningTypes and WindowInsetsCompat.Type.ime() != 0) {
             windowInsets.ime.updateFrom(
                 windowInsets = platformInsets,
                 type = WindowInsetsCompat.Type.ime()
             )
         }
-        if (runningTypes and WindowInsetsPlatform.Type.statusBars() != 0) {
+        if (runningTypes and WindowInsetsCompat.Type.statusBars() != 0) {
             windowInsets.statusBars.updateFrom(
                 windowInsets = platformInsets,
                 type = WindowInsetsCompat.Type.statusBars()
             )
         }
-        if (runningTypes and WindowInsetsPlatform.Type.navigationBars() != 0) {
+        if (runningTypes and WindowInsetsCompat.Type.navigationBars() != 0) {
             windowInsets.navigationBars.updateFrom(
                 windowInsets = platformInsets,
                 type = WindowInsetsCompat.Type.navigationBars()
             )
         }
-        if (runningTypes and WindowInsetsPlatform.Type.systemBars() != 0) {
+        if (runningTypes and WindowInsetsCompat.Type.systemBars() != 0) {
             windowInsets.systemBars.updateFrom(
                 windowInsets = platformInsets,
                 type = WindowInsetsCompat.Type.systemBars()
             )
         }
-        if (runningTypes and WindowInsetsPlatform.Type.systemGestures() != 0) {
+        if (runningTypes and WindowInsetsCompat.Type.systemGestures() != 0) {
             windowInsets.systemGestures.updateFrom(
                 windowInsets = platformInsets,
                 type = WindowInsetsCompat.Type.systemGestures()
@@ -468,32 +470,22 @@ private class InnerWindowInsetsAnimationCallback(
         return platformInsets
     }
 
-    override fun onEnd(animation: WindowInsetsAnimation) {
+    override fun onEnd(animation: WindowInsetsAnimationCompat) {
         // Go through each type and flag that an animation has ended
-        if (animation.typeMask and WindowInsetsPlatform.Type.ime() != 0) {
+        if (animation.typeMask and WindowInsetsCompat.Type.ime() != 0) {
             windowInsets.ime.ongoingAnimations--
         }
-        if (animation.typeMask and WindowInsetsPlatform.Type.statusBars() != 0) {
+        if (animation.typeMask and WindowInsetsCompat.Type.statusBars() != 0) {
             windowInsets.statusBars.ongoingAnimations--
         }
-        if (animation.typeMask and WindowInsetsPlatform.Type.navigationBars() != 0) {
+        if (animation.typeMask and WindowInsetsCompat.Type.navigationBars() != 0) {
             windowInsets.navigationBars.ongoingAnimations--
         }
-        if (animation.typeMask and WindowInsetsPlatform.Type.systemBars() != 0) {
+        if (animation.typeMask and WindowInsetsCompat.Type.systemBars() != 0) {
             windowInsets.systemBars.ongoingAnimations--
         }
-        if (animation.typeMask and WindowInsetsPlatform.Type.systemGestures() != 0) {
+        if (animation.typeMask and WindowInsetsCompat.Type.systemGestures() != 0) {
             windowInsets.systemGestures.ongoingAnimations--
-        }
-    }
-
-    companion object {
-        /**
-         * This function may look useless, but this keeps the API 30 method call in a
-         * separate class, which makes class loaders on older platforms happy.
-         */
-        fun setup(view: View, windowInsets: WindowInsets) {
-            view.setWindowInsetsAnimationCallback(InnerWindowInsetsAnimationCallback(windowInsets))
         }
     }
 }
@@ -502,20 +494,6 @@ private class InnerWindowInsetsAnimationCallback(
  * Updates our mutable state backed [Insets] from an Android system insets.
  */
 private fun Insets.updateFrom(windowInsets: WindowInsetsCompat, type: Int) {
-    val insets = windowInsets.getInsets(type)
-    left = insets.left
-    top = insets.top
-    right = insets.right
-    bottom = insets.bottom
-
-    isVisible = windowInsets.isVisible(type)
-}
-
-/**
- * Updates our mutable state backed [Insets] from an Android system insets.
- */
-@RequiresApi(30)
-private fun Insets.updateFrom(windowInsets: WindowInsetsPlatform, type: Int) {
     val insets = windowInsets.getInsets(type)
     left = insets.left
     top = insets.top
