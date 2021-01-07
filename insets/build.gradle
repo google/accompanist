@@ -72,11 +72,11 @@ android {
 
 dependencies {
     implementation Libs.AndroidX.coreAlpha
+    implementation Libs.AndroidX.dynamicanimation
     implementation Libs.AndroidX.Compose.runtime
     implementation Libs.AndroidX.Compose.foundation
 
     implementation Libs.Kotlin.stdlib
-    // implementation Libs.Coroutines.android
 
     // ======================
     // Test dependencies

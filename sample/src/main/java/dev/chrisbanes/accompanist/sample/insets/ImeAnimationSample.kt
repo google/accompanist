@@ -31,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.gesture.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
@@ -39,6 +40,7 @@ import androidx.core.view.WindowCompat
 import dev.chrisbanes.accompanist.insets.ExperimentalAnimatedInsets
 import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
 import dev.chrisbanes.accompanist.insets.navigationBarsWithImePadding
+import dev.chrisbanes.accompanist.insets.rememberImeNestedScrollConnection
 import dev.chrisbanes.accompanist.sample.AccompanistSampleTheme
 import dev.chrisbanes.accompanist.sample.R
 import dev.chrisbanes.accompanist.sample.randomSampleImageUrl
@@ -85,7 +87,9 @@ private fun Sample() {
             // FR for LazyColumn: https://issuetracker.google.com/173207790
             ScrollableColumn(
                 reverseScrollDirection = true,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
+                    .nestedScroll(connection = rememberImeNestedScrollConnection())
             ) {
                 listItems.forEach { imageUrl ->
                     ListItem(imageUrl, Modifier.fillMaxWidth())

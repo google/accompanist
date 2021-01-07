@@ -30,6 +30,10 @@ public final class dev/chrisbanes/accompanist/insets/HorizontalSide : java/lang/
 	public static fun values ()[Ldev/chrisbanes/accompanist/insets/HorizontalSide;
 }
 
+public final class dev/chrisbanes/accompanist/insets/ImeNestedScrollConnection {
+	public static final fun rememberImeNestedScrollConnection (ZZLandroidx/compose/runtime/Composer;II)Landroidx/compose/ui/gesture/nestedscroll/NestedScrollConnection;
+}
+
 public final class dev/chrisbanes/accompanist/insets/Insets {
 	public fun <init> ()V
 	public final fun copy (IIIIZ)Ldev/chrisbanes/accompanist/insets/Insets;
