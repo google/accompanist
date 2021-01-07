@@ -45,6 +45,7 @@ theme:
 # Extensions
 markdown_extensions:
   - admonition
+  - attr_list
   - codehilite:
       guess_lang: false
   - footnotes
@@ -52,6 +53,7 @@ markdown_extensions:
       permalink: true
   - pymdownx.betterem
   - pymdownx.superfences
+  - pymdownx.tabbed
 
 extra:
   social:

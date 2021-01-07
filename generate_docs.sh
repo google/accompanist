@@ -18,7 +18,7 @@ sed -i.bak 's/$dokka.linkExtension:md/$dokka.linkExtension:html/g' package-list-
 # Clear out the old API docs
 [ -d docs/api ] && rm -r docs/api
 # Build the docs with dokka
-./gradlew clean dokkaHtmlMultiModule
+./gradlew dokkaHtmlMultiModule
 
 # Dokka doesn't currently allow us to change the index page name so move it manually
 mv docs/api/-modules.html docs/api/index.html
@@ -48,7 +48,6 @@ sed -i.bak 's/docs\/\([a-zA-Z-]*\).md/\1/' $DOCS_ROOT/index.md
 copyReadme coil
 copyReadme picasso
 copyReadme glide
-copyReadme insets
 
 # Finally delete all of the backup files
 find . -name '*.bak' -delete
