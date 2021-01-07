@@ -57,6 +57,8 @@ object Libs {
             const val espressoCore = "androidx.test.espresso:espresso-core:3.2.0"
         }
 
+        const val dynamicanimation = "androidx.dynamicanimation:dynamicanimation-ktx:1.0.0-alpha03"
+
         object Compose {
             const val snapshot = ""
             const val version = "1.0.0-alpha09"
