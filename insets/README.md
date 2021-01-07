@@ -18,11 +18,9 @@ setContent {
 }
 ```
 
-For more information, visit the documentation: chrisbanes.github.io/accompanist/insets
+For more information, visit the documentation: https://chrisbanes.github.io/accompanist/insets
 
 ## Download
-
-[![Maven Central](https://img.shields.io/maven-central/v/dev.chrisbanes.accompanist/accompanist-insets)](https://search.maven.org/search?q=g:dev.chrisbanes.accompanist)
 
 ```groovy
 repositories {
@@ -35,3 +33,6 @@ dependencies {
 ```
 
 Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap]. These are updated on every commit.
+
+
+  [snap]: https://oss.sonatype.org/content/repositories/snapshots/dev/chrisbanes/accompanist/accompanist-insets/
