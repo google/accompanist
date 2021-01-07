@@ -42,9 +42,11 @@ We provide two types of modifiers for easy handling of insets: padding and size.
 #### Padding modifiers
 The padding modifiers allow you to apply padding to a composable which matches a specific type of inset. Currently we provide:
 
-- `Modifier.statusBarsPadding()`
-- `Modifier.navigationBarsPadding()`
-- `Modifier.systemBarsPadding()`
+- [`Modifier.statusBarsPadding()`](https://chrisbanes.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/status-bars-padding.html)
+- [`Modifier.navigationBarsPadding()`](https://chrisbanes.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/navigation-bars-padding.html)
+- [`Modifier.systemBarsPadding()`](https://chrisbanes.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/system-bars-padding.html)
+- [`Modifier.imePadding()`](hhttps://chrisbanes.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/ime-padding.html)
+- [`Modifier.navigationBarsWithImePadding()`](https://chrisbanes.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/navigation-bars-with-ime-padding.html)
 
 These are commonly used to move composables out from under the system bars. The common example would be a [`FloatingActionButton`][fab]:
 
@@ -61,9 +63,9 @@ FloatingActionButton(
 #### Size modifiers
 The size modifiers allow you to match the size of a composable to a specific type of inset. Currently we provide:
 
-- `Modifier.statusBarsHeight()`
-- `Modifier.navigationBarsHeight()`
-- `Modifier.navigationBarsWidth()`
+- [`Modifier.statusBarsHeight()`](https://chrisbanes.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/status-bars-height.html)
+- [`Modifier.navigationBarsHeight()`](https://chrisbanes.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/navigation-bars-height.html)
+- [`Modifier.navigationBarsWidth()`](https://chrisbanes.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/navigation-bars-width.html)
 
 These are commonly used to allow composables behind the system bars, to provide background protection, or similar:
 
@@ -93,12 +95,13 @@ For a more complex example, see the [`EdgeToEdgeLazyColumn`](https://github.com/
 <img src="images/edge-to-edge-list.jpg" width=300>
 </a>
 
-### Animated Insets support (Experimental)
+### 🚧 Animated Insets support (Experimental)
 
 ![](images/ime-insets.gif)
 
-The library now has experimental support for [`WindowInsetsAnimations`](https://developer.android.com/reference/android/view/WindowInsetsAnimation).
-The new `imePadding()` and `navigationBarsWithImePadding()` modifiers allow content to animate with the device's on screen-keyboard (IME), while it is being animated on/off screen. This currently only works when running on devices with API 30+.
+The library now has experimental support for [`WindowInsetsAnimations`](https://developer.android.com/reference/android/view/WindowInsetsAnimation), allowing your content is react to inset animations, such as the on screen-keyboard (IME) being animated on/off screen. The `imePadding()` and `navigationBarsWithImePadding()` modifiers are available especially for this use-case. 
+
+This functionality works wherever [WindowInsetsAnimationCompat](https://developer.android.com/reference/androidx/core/view/WindowInsetsAnimationCompat) works, which at the time or writing is on devices running API 23+.
 
 To enable animated insets support, you need need to new `ProvideWindowInsets` overload, and set `windowInsetsAnimationsEnabled = true`.
 
@@ -119,8 +122,7 @@ OutlinedTextField(
 
 See the [ImeAnimationSample](https://github.com/chrisbanes/accompanist/blob/main/sample/src/main/java/dev/chrisbanes/accompanist/sample/insets/ImeAnimationSample.kt) for a working example.
 
-
-#### IME animations
+#### 🚧 IME animations
 If you're using the animation insets support for IME/keyboard animations, you also need to ensure that the activity's `windowSoftInputMode` is set to `adjustResize`:
 
 ``` xml
@@ -131,6 +133,32 @@ If you're using the animation insets support for IME/keyboard animations, you al
 ```
 
 The default value of `windowSoftInputMode` _should_ work, but Compose does not currently set the flags necessary (see [here](https://issuetracker.google.com/154101484)).
+
+### 🚧 Controlling the IME (on-screen keyboard)
+
+This library also has support for controlling the IME from scroll gestures, allowing your scrollable components to pull/push the IME on/off screen. This is acheived through the built-in [`NestedScrollConnection`](https://developer.android.com/reference/kotlin/androidx/compose/ui/gesture/nestedscroll/NestedScrollConnection) implementation returned by [`rememberImeNestedScrollConnection()`](https://chrisbanes.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/remember-ime-nested-scroll-connection.html).
+
+``` kotlin
+// Here we're using ScrollableColumn, but it also works with LazyColumn, etc.
+ScrollableColumn(
+    // We use the nestedScroll modifier, passing in the 
+    // the connection from rememberImeNestedScrollConnection()
+    modifier = Modifier.nestedScroll(
+        connection = rememberImeNestedScrollConnection()
+    )
+) {
+  // list content
+}
+```
+
+You can see the effect in action here:
+
+![](images/ime-scroll.gif)
+
+
+This functionality only works when running on devices with API 30+.
+
+Again, see the [ImeAnimationSample](https://github.com/chrisbanes/accompanist/blob/main/sample/src/main/java/dev/chrisbanes/accompanist/sample/insets/ImeAnimationSample.kt) for a working example.
 
 ## Download
 
