@@ -92,7 +92,7 @@ object Libs {
 
         const val lifecycleKtx = "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-beta01"
 
-        const val coreAlpha = "androidx.core:core:1.5.0-alpha04"
+        const val coreAlpha = "androidx.core:core:1.5.0-SNAPSHOT"
     }
 
     object Coil {
