@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:JvmName("ImeNestedScrollConnection")
-
 package dev.chrisbanes.accompanist.insets
 
 import android.os.Build

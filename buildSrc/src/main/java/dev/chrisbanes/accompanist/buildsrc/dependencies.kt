@@ -32,7 +32,7 @@ object Libs {
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib:$version"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
 
-        const val binaryCompatibility = "org.jetbrains.kotlinx:binary-compatibility-validator:0.2.3"
+        const val binaryCompatibility = "org.jetbrains.kotlinx:binary-compatibility-validator:0.3.0"
     }
 
     object Dokka {

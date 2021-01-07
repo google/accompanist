@@ -30,7 +30,16 @@ public final class dev/chrisbanes/accompanist/insets/HorizontalSide : java/lang/
 	public static fun values ()[Ldev/chrisbanes/accompanist/insets/HorizontalSide;
 }
 
-public final class dev/chrisbanes/accompanist/insets/ImeNestedScrollConnection {
+public final class dev/chrisbanes/accompanist/insets/ImeNestedScrollConnection : androidx/compose/ui/gesture/nestedscroll/NestedScrollConnection {
+	public static final field $stable I
+	public fun <init> (Landroid/view/View;ZZ)V
+	public fun onPostFling-Pv53iXo (JJLkotlin/jvm/functions/Function1;)V
+	public fun onPostScroll-l-UAZDg (JJLandroidx/compose/ui/gesture/nestedscroll/NestedScrollSource;)J
+	public fun onPreFling-TH1AsA0 (J)J
+	public fun onPreScroll-vG6bCaM (JLandroidx/compose/ui/gesture/nestedscroll/NestedScrollSource;)J
+}
+
+public final class dev/chrisbanes/accompanist/insets/ImeNestedScrollConnectionKt {
 	public static final fun rememberImeNestedScrollConnection (ZZLandroidx/compose/runtime/Composer;II)Landroidx/compose/ui/gesture/nestedscroll/NestedScrollConnection;
 }
 
