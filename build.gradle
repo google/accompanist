@@ -179,9 +179,11 @@ subprojects {
             // any snapshot dependencies
             configurations.configureEach { configuration ->
                 configuration.dependencies.configureEach { dependency ->
-                    if (dependency.version.endsWith('SNAPSHOT')) {
+                    def depVersion = dependency.version
+                    if (depVersion != null && depVersion.endsWith('SNAPSHOT')) {
                         throw new IllegalArgumentException(
-                                "Using SNAPSHOT dependency with non-SNAPSHOT library version: $dependency")
+                                "Using SNAPSHOT dependency with non-SNAPSHOT library version: $dependency"
+                        )
                     }
                 }
             }
