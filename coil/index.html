@@ -1,6 +1,4 @@
 
-
-
 <!doctype html>
 <html lang="en" class="no-js">
   <head>
@@ -11,13 +9,14 @@
         <meta name="description" content="A group of libraries to help write Jetpack Compose apps.">
       
       
-        <link rel="canonical" href="https://chrisbanes.github.io/accompanist/coil/">
-      
       
         <meta name="author" content="Chris Banes">
       
+      
+        <link rel="canonical" href="https://chrisbanes.github.io/accompanist/coil/">
+      
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.5.6">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.4">
     
     
       
@@ -25,20 +24,22 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.63b94e9e.min.css">
-      
-        <link rel="stylesheet" href="../assets/stylesheets/palette.7f672a1f.min.css">
-      
+      <link rel="stylesheet" href="../assets/stylesheets/main.15aa0b43.min.css">
       
         
+        <link rel="stylesheet" href="../assets/stylesheets/palette.75751829.min.css">
         
-        <meta name="theme-color" content="">
+          
+          
+          <meta name="theme-color" content="#000000">
+        
       
     
     
     
       
-        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:300,400,400i,700%7CIBM+Plex+Mono&display=fallback">
         <style>body,input{font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"IBM Plex Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
       
@@ -55,7 +56,10 @@
     
     
     
+    
+    
     <body dir="ltr" data-md-color-scheme="" data-md-color-primary="black" data-md-color-accent="deep-orange">
+      
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -73,7 +77,9 @@
       
     </div>
     
-      <header class="md-header" data-md-component="header">
+      
+
+<header class="md-header" data-md-component="header">
   <nav class="md-header-nav md-grid" aria-label="Header">
     <a href="https://chrisbanes.github.io/accompanist/" title="Accompanist" class="md-header-nav__button md-logo" aria-label="Accompanist">
       
@@ -85,18 +91,20 @@
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
     </label>
     <div class="md-header-nav__title" data-md-component="header-title">
-      
-        <div class="md-header-nav__ellipsis">
-          <span class="md-header-nav__topic md-ellipsis">
+      <div class="md-header-nav__ellipsis">
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
             Accompanist
           </span>
-          <span class="md-header-nav__topic md-ellipsis">
+        </div>
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
             
               Coil
             
           </span>
         </div>
-      
+      </div>
     </div>
     
       <label class="md-header-nav__button md-icon" for="__search">
@@ -107,7 +115,7 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
       <label class="md-search__icon md-icon" for="__search">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
@@ -148,8 +156,6 @@
     
     <div class="md-container" data-md-component="container">
       
-        
-      
       
         
       
@@ -157,10 +163,16 @@
         <div class="md-main__inner md-grid">
           
             
-              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
-                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+                    
+
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
     <a href="https://chrisbanes.github.io/accompanist/" title="Accompanist" class="md-nav__button md-logo" aria-label="Accompanist">
       
@@ -191,8 +203,9 @@
       
 
 
+
   <li class="md-nav__item">
-    <a href=".." title="Overview" class="md-nav__link">
+    <a href=".." class="md-nav__link">
       Overview
     </a>
   </li>
@@ -201,6 +214,7 @@
       
       
       
+
 
   
 
@@ -214,12 +228,10 @@
     
       <label class="md-nav__link md-nav__link--active" for="__toc">
         Coil
-        <span class="md-nav__icon md-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"/></svg>
-        </span>
+        <span class="md-nav__icon md-icon"></span>
       </label>
     
-    <a href="./" title="Coil" class="md-nav__link md-nav__link--active">
+    <a href="./" class="md-nav__link md-nav__link--active">
       Coil
     </a>
     
@@ -231,9 +243,7 @@
   
   
     <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
-      </span>
+      <span class="md-nav__icon md-icon"></span>
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-scrollfix>
@@ -318,8 +328,9 @@
       
 
 
+
   <li class="md-nav__item">
-    <a href="../glide/" title="Glide" class="md-nav__link">
+    <a href="../glide/" class="md-nav__link">
       Glide
     </a>
   </li>
@@ -330,8 +341,9 @@
       
 
 
+
   <li class="md-nav__item">
-    <a href="../picasso/" title="Picasso" class="md-nav__link">
+    <a href="../picasso/" class="md-nav__link">
       Picasso
     </a>
   </li>
@@ -342,8 +354,9 @@
       
 
 
+
   <li class="md-nav__item">
-    <a href="../insets/" title="Insets" class="md-nav__link">
+    <a href="../insets/" class="md-nav__link">
       Insets
     </a>
   </li>
@@ -354,21 +367,20 @@
       
 
 
+
+  
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6" >
     
     <label class="md-nav__link" for="nav-6">
       API
-      <span class="md-nav__icon md-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
-      </span>
+      <span class="md-nav__icon md-icon"></span>
     </label>
     <nav class="md-nav" aria-label="API" data-md-level="1">
       <label class="md-nav__title" for="nav-6">
-        <span class="md-nav__icon md-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
-        </span>
+        <span class="md-nav__icon md-icon"></span>
         API
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -379,8 +391,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../api/coil/coil/" title="Coil" class="md-nav__link">
+    <a href="../api/coil/coil/" class="md-nav__link">
       Coil
     </a>
   </li>
@@ -391,8 +404,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../api/glide/glide/" title="Glide" class="md-nav__link">
+    <a href="../api/glide/glide/" class="md-nav__link">
       Glide
     </a>
   </li>
@@ -403,8 +417,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../api/picasso/picasso/" title="Picasso" class="md-nav__link">
+    <a href="../api/picasso/picasso/" class="md-nav__link">
       Picasso
     </a>
   </li>
@@ -415,8 +430,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../api/imageloading-core/imageloading-core/" title="Image Loading Core" class="md-nav__link">
+    <a href="../api/imageloading-core/imageloading-core/" class="md-nav__link">
       Image Loading Core
     </a>
   </li>
@@ -427,8 +443,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../api/insets/insets/" title="Insets" class="md-nav__link">
+    <a href="../api/insets/insets/" class="md-nav__link">
       Insets
     </a>
   </li>
@@ -444,8 +461,9 @@
       
 
 
+
   <li class="md-nav__item">
-    <a href="../using-snapshot-version/" title="Snapshots" class="md-nav__link">
+    <a href="../using-snapshot-version/" class="md-nav__link">
       Snapshots
     </a>
   </li>
@@ -456,8 +474,9 @@
       
 
 
+
   <li class="md-nav__item">
-    <a href="../contributing/" title="Contributing" class="md-nav__link">
+    <a href="../contributing/" class="md-nav__link">
       Contributing
     </a>
   </li>
@@ -468,21 +487,20 @@
       
 
 
+
+  
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-9" type="checkbox" id="nav-9">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-9" type="checkbox" id="nav-9" >
     
     <label class="md-nav__link" for="nav-9">
       Maintainers
-      <span class="md-nav__icon md-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
-      </span>
+      <span class="md-nav__icon md-icon"></span>
     </label>
     <nav class="md-nav" aria-label="Maintainers" data-md-level="1">
       <label class="md-nav__title" for="nav-9">
-        <span class="md-nav__icon md-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
-        </span>
+        <span class="md-nav__icon md-icon"></span>
         Maintainers
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -493,8 +511,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../updating/" title="Update guide" class="md-nav__link">
+    <a href="../updating/" class="md-nav__link">
       Update guide
     </a>
   </li>
@@ -512,7 +531,8 @@
               </div>
             
             
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -523,9 +543,7 @@
   
   
     <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
-      </span>
+      <span class="md-nav__icon md-icon"></span>
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-scrollfix>
@@ -615,9 +633,6 @@
                   </a>
                 
                 
-                  
-                
-                
                 <h1 id="coil-for-jetpack-compose">Coil for Jetpack Compose<a class="headerlink" href="#coil-for-jetpack-compose" title="Permanent link">&para;</a></h1>
 <p><a href="https://search.maven.org/search?q=g:dev.chrisbanes.accompanist"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/dev.chrisbanes.accompanist/accompanist-coil" /></a></p>
 <p>This library brings easy-to-use composable which can fetch and display images from external sources, such as network, using the <a href="https://github.com/coil-kt/coil">Coil</a> image loading library.</p>
@@ -629,7 +644,6 @@
     <span class="k">data</span> <span class="p">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span>
 <span class="p">)</span>
 </code></pre></div>
-
 <p>This loads the <code>data</code> passed in with <a href="https://github.com/coil-kt/coil">Coil</a>, and then displays the resulting image using the standard <code>Image</code> composable.</p>
 <p>You can also customize the Coil <a href="https://coil-kt.github.io/coil/image_requests/"><code>ImageRequest</code></a> through the <code>requestBuilder</code> parameter. This allows usage of things like (but not limited to) transformations:</p>
 <div class="highlight"><pre><span></span><code><span class="n">CoilImage</span><span class="p">(</span>
@@ -639,7 +653,6 @@
     <span class="p">},</span>
 <span class="p">)</span>
 </code></pre></div>
-
 <p>It also provides optional content 'slots', allowing you to provide custom content to be displayed when the request is loading, and/or if the image request failed:</p>
 <div class="highlight"><pre><span></span><code><span class="n">CoilImage</span><span class="p">(</span>
     <span class="k">data</span> <span class="p">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
@@ -653,7 +666,6 @@
     <span class="p">}</span>
 <span class="p">)</span>
 </code></pre></div>
-
 <h2 id="fade-in-animation">Fade-in animation<a class="headerlink" href="#fade-in-animation" title="Permanent link">&para;</a></h2>
 <p>This library has built-in support for animating loaded images in, using a <a href="https://material.io/archive/guidelines/patterns/loading-images.html">fade-in animation</a>.</p>
 <p><img alt="" src="./images/crossfade.gif" /></p>
@@ -665,7 +677,6 @@
     <span class="n">fadeIn</span> <span class="p">=</span> <span class="k">true</span>
 <span class="p">)</span>
 </code></pre></div>
-
 <h2 id="custom-content">Custom content<a class="headerlink" href="#custom-content" title="Permanent link">&para;</a></h2>
 <p>If you need more control over the animation, or you want to provide custom layout for the loaded image, you can use the <code>content</code> composable version of <code>CoilImage</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="n">CoilImage</span><span class="p">(</span>
@@ -685,7 +696,6 @@
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
-
 <h2 id="gifs">GIFs<a class="headerlink" href="#gifs" title="Permanent link">&para;</a></h2>
 <p>Accompanist Coil supports GIFs through Coil's own GIF support. Follow the <a href="https://coil-kt.github.io/coil/gifs/">setup instructions</a> and it should just work.</p>
 <h2 id="custom-imageloader">Custom ImageLoader<a class="headerlink" href="#custom-imageloader" title="Permanent link">&para;</a></h2>
@@ -703,7 +713,6 @@ calls, we provide the <code>AmbientImageLoader</code> ambient.</p>
     <span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
-
 <p>For more information on ambients, see <a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Ambient">here</a>.</p>
 <h2 id="download">Download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h2>
 <p><a href="https://search.maven.org/search?q=g:dev.chrisbanes.accompanist"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/dev.chrisbanes.accompanist/accompanist-coil" /></a></p>
@@ -715,7 +724,6 @@ calls, we provide the <code>AmbientImageLoader</code> ambient.</p>
     <span class="n">implementation</span> <span class="s2">&quot;dev.chrisbanes.accompanist:accompanist-coil:&lt;version&gt;&quot;</span>
 <span class="o">}</span>
 </code></pre></div>
-
 <p>Snapshots of the development version are available in <a href="https://oss.sonatype.org/content/repositories/snapshots/dev/chrisbanes/accompanist/accompanist-coil/">Sonatype's <code>snapshots</code> repository</a>. These are updated on every commit.</p>
 <h3 id="whats-the-goal-of-the-library">What's the goal of the library?<a class="headerlink" href="#whats-the-goal-of-the-library" title="Permanent link">&para;</a></h3>
 <p>Eventually the goal is to upstream all of this functionality back to <a href="https://github.com/coil-kt/coil">Coil</a>. <a href="https://developer.android.com/jetpack/compose">Jetpack Compose</a>'s development is currently moving very fast, which means that there are frequent API changes between releases. For now, it makes sense to keep this as a seperately released library to track the latest Compose release.</p>
@@ -737,7 +745,7 @@ calls, we provide the <code>AmbientImageLoader</code> ambient.</p>
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href=".." title="Overview" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href=".." class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -752,7 +760,7 @@ calls, we provide the <code>AmbientImageLoader</code> ambient.</p>
           </a>
         
         
-          <a href="../glide/" title="Glide" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../glide/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
@@ -798,15 +806,15 @@ calls, we provide the <code>AmbientImageLoader</code> ambient.</p>
       
     </div>
     
-      <script src="../assets/javascripts/vendor.d1f5a259.min.js"></script>
-      <script src="../assets/javascripts/bundle.d5fec882.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      <script src="../assets/javascripts/vendor.93c04032.min.js"></script>
+      <script src="../assets/javascripts/bundle.83e5331e.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({
           base: "..",
           features: [],
           search: Object.assign({
-            worker: "../assets/javascripts/worker/search.fae956e7.min.js"
+            worker: "../assets/javascripts/worker/search.8c7e0a7e.min.js"
           }, typeof search !== "undefined" && search)
         })
       </script>

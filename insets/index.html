@@ -1,6 +1,4 @@
 
-
-
 <!doctype html>
 <html lang="en" class="no-js">
   <head>
@@ -11,13 +9,14 @@
         <meta name="description" content="A group of libraries to help write Jetpack Compose apps.">
       
       
-        <link rel="canonical" href="https://chrisbanes.github.io/accompanist/insets/">
-      
       
         <meta name="author" content="Chris Banes">
       
+      
+        <link rel="canonical" href="https://chrisbanes.github.io/accompanist/insets/">
+      
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.5.6">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.4">
     
     
       
@@ -25,20 +24,22 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.63b94e9e.min.css">
-      
-        <link rel="stylesheet" href="../assets/stylesheets/palette.7f672a1f.min.css">
-      
+      <link rel="stylesheet" href="../assets/stylesheets/main.15aa0b43.min.css">
       
         
+        <link rel="stylesheet" href="../assets/stylesheets/palette.75751829.min.css">
         
-        <meta name="theme-color" content="">
+          
+          
+          <meta name="theme-color" content="#000000">
+        
       
     
     
     
       
-        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:300,400,400i,700%7CIBM+Plex+Mono&display=fallback">
         <style>body,input{font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"IBM Plex Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
       
@@ -55,7 +56,10 @@
     
     
     
+    
+    
     <body dir="ltr" data-md-color-scheme="" data-md-color-primary="black" data-md-color-accent="deep-orange">
+      
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -73,7 +77,9 @@
       
     </div>
     
-      <header class="md-header" data-md-component="header">
+      
+
+<header class="md-header" data-md-component="header">
   <nav class="md-header-nav md-grid" aria-label="Header">
     <a href="https://chrisbanes.github.io/accompanist/" title="Accompanist" class="md-header-nav__button md-logo" aria-label="Accompanist">
       
@@ -85,18 +91,20 @@
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
     </label>
     <div class="md-header-nav__title" data-md-component="header-title">
-      
-        <div class="md-header-nav__ellipsis">
-          <span class="md-header-nav__topic md-ellipsis">
+      <div class="md-header-nav__ellipsis">
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
             Accompanist
           </span>
-          <span class="md-header-nav__topic md-ellipsis">
+        </div>
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
             
               Insets
             
           </span>
         </div>
-      
+      </div>
     </div>
     
       <label class="md-header-nav__button md-icon" for="__search">
@@ -107,7 +115,7 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
       <label class="md-search__icon md-icon" for="__search">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
@@ -148,8 +156,6 @@
     
     <div class="md-container" data-md-component="container">
       
-        
-      
       
         
       
@@ -157,10 +163,16 @@
         <div class="md-main__inner md-grid">
           
             
-              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
-                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+                    
+
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
     <a href="https://chrisbanes.github.io/accompanist/" title="Accompanist" class="md-nav__button md-logo" aria-label="Accompanist">
       
@@ -191,8 +203,9 @@
       
 
 
+
   <li class="md-nav__item">
-    <a href=".." title="Overview" class="md-nav__link">
+    <a href=".." class="md-nav__link">
       Overview
     </a>
   </li>
@@ -203,8 +216,9 @@
       
 
 
+
   <li class="md-nav__item">
-    <a href="../coil/" title="Coil" class="md-nav__link">
+    <a href="../coil/" class="md-nav__link">
       Coil
     </a>
   </li>
@@ -215,8 +229,9 @@
       
 
 
+
   <li class="md-nav__item">
-    <a href="../glide/" title="Glide" class="md-nav__link">
+    <a href="../glide/" class="md-nav__link">
       Glide
     </a>
   </li>
@@ -227,8 +242,9 @@
       
 
 
+
   <li class="md-nav__item">
-    <a href="../picasso/" title="Picasso" class="md-nav__link">
+    <a href="../picasso/" class="md-nav__link">
       Picasso
     </a>
   </li>
@@ -237,6 +253,7 @@
       
       
       
+
 
   
 
@@ -250,12 +267,10 @@
     
       <label class="md-nav__link md-nav__link--active" for="__toc">
         Insets
-        <span class="md-nav__icon md-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"/></svg>
-        </span>
+        <span class="md-nav__icon md-icon"></span>
       </label>
     
-    <a href="./" title="Insets" class="md-nav__link md-nav__link--active">
+    <a href="./" class="md-nav__link md-nav__link--active">
       Insets
     </a>
     
@@ -267,9 +282,7 @@
   
   
     <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
-      </span>
+      <span class="md-nav__icon md-icon"></span>
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-scrollfix>
@@ -316,13 +329,25 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#animated-insets-support-experimental" class="md-nav__link">
-    Animated Insets support (Experimental)
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#experimental" class="md-nav__link">
+    🚧 Experimental
   </a>
   
-    <nav class="md-nav" aria-label="Animated Insets support (Experimental)">
+    <nav class="md-nav" aria-label="🚧 Experimental">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#animated-insets-support" class="md-nav__link">
+    Animated Insets support
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#ime-animations" class="md-nav__link">
@@ -331,8 +356,10 @@
   
 </li>
         
-      </ul>
-    </nav>
+          <li class="md-nav__item">
+  <a href="#controlling-the-ime-on-screen-keyboard" class="md-nav__link">
+    Controlling the IME (on-screen keyboard)
+  </a>
   
 </li>
         
@@ -346,18 +373,12 @@
     Download
   </a>
   
-    <nav class="md-nav" aria-label="Download">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
+</li>
+      
+        <li class="md-nav__item">
   <a href="#something-not-working" class="md-nav__link">
     Something not working?
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -373,21 +394,20 @@
       
 
 
+
+  
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6" >
     
     <label class="md-nav__link" for="nav-6">
       API
-      <span class="md-nav__icon md-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
-      </span>
+      <span class="md-nav__icon md-icon"></span>
     </label>
     <nav class="md-nav" aria-label="API" data-md-level="1">
       <label class="md-nav__title" for="nav-6">
-        <span class="md-nav__icon md-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
-        </span>
+        <span class="md-nav__icon md-icon"></span>
         API
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -398,8 +418,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../api/coil/coil/" title="Coil" class="md-nav__link">
+    <a href="../api/coil/coil/" class="md-nav__link">
       Coil
     </a>
   </li>
@@ -410,8 +431,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../api/glide/glide/" title="Glide" class="md-nav__link">
+    <a href="../api/glide/glide/" class="md-nav__link">
       Glide
     </a>
   </li>
@@ -422,8 +444,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../api/picasso/picasso/" title="Picasso" class="md-nav__link">
+    <a href="../api/picasso/picasso/" class="md-nav__link">
       Picasso
     </a>
   </li>
@@ -434,8 +457,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../api/imageloading-core/imageloading-core/" title="Image Loading Core" class="md-nav__link">
+    <a href="../api/imageloading-core/imageloading-core/" class="md-nav__link">
       Image Loading Core
     </a>
   </li>
@@ -446,8 +470,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../api/insets/insets/" title="Insets" class="md-nav__link">
+    <a href="../api/insets/insets/" class="md-nav__link">
       Insets
     </a>
   </li>
@@ -463,8 +488,9 @@
       
 
 
+
   <li class="md-nav__item">
-    <a href="../using-snapshot-version/" title="Snapshots" class="md-nav__link">
+    <a href="../using-snapshot-version/" class="md-nav__link">
       Snapshots
     </a>
   </li>
@@ -475,8 +501,9 @@
       
 
 
+
   <li class="md-nav__item">
-    <a href="../contributing/" title="Contributing" class="md-nav__link">
+    <a href="../contributing/" class="md-nav__link">
       Contributing
     </a>
   </li>
@@ -487,21 +514,20 @@
       
 
 
+
+  
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-9" type="checkbox" id="nav-9">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-9" type="checkbox" id="nav-9" >
     
     <label class="md-nav__link" for="nav-9">
       Maintainers
-      <span class="md-nav__icon md-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
-      </span>
+      <span class="md-nav__icon md-icon"></span>
     </label>
     <nav class="md-nav" aria-label="Maintainers" data-md-level="1">
       <label class="md-nav__title" for="nav-9">
-        <span class="md-nav__icon md-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
-        </span>
+        <span class="md-nav__icon md-icon"></span>
         Maintainers
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -512,8 +538,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../updating/" title="Update guide" class="md-nav__link">
+    <a href="../updating/" class="md-nav__link">
       Update guide
     </a>
   </li>
@@ -531,7 +558,8 @@
               </div>
             
             
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -542,9 +570,7 @@
   
   
     <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
-      </span>
+      <span class="md-nav__icon md-icon"></span>
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-scrollfix>
@@ -591,13 +617,25 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#animated-insets-support-experimental" class="md-nav__link">
-    Animated Insets support (Experimental)
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#experimental" class="md-nav__link">
+    🚧 Experimental
   </a>
   
-    <nav class="md-nav" aria-label="Animated Insets support (Experimental)">
+    <nav class="md-nav" aria-label="🚧 Experimental">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#animated-insets-support" class="md-nav__link">
+    Animated Insets support
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#ime-animations" class="md-nav__link">
@@ -606,8 +644,10 @@
   
 </li>
         
-      </ul>
-    </nav>
+          <li class="md-nav__item">
+  <a href="#controlling-the-ime-on-screen-keyboard" class="md-nav__link">
+    Controlling the IME (on-screen keyboard)
+  </a>
   
 </li>
         
@@ -621,18 +661,12 @@
     Download
   </a>
   
-    <nav class="md-nav" aria-label="Download">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
+</li>
+      
+        <li class="md-nav__item">
   <a href="#something-not-working" class="md-nav__link">
     Something not working?
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -653,9 +687,6 @@
                   </a>
                 
                 
-                  
-                
-                
                 <h1 id="insets-for-jetpack-compose">Insets for Jetpack Compose<a class="headerlink" href="#insets-for-jetpack-compose" title="Permanent link">&para;</a></h1>
 <p><a href="https://search.maven.org/search?q=g:dev.chrisbanes.accompanist"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/dev.chrisbanes.accompanist/accompanist-insets" /></a></p>
 <p>Insets for Jetpack Compose takes a lot of the ideas which drove <a href="https://github.com/chrisbanes/insetter">Insetter</a> for views, and applies them for use in composables.</p>
@@ -670,8 +701,10 @@ wrap your content. This would typically be done near the top level of your compo
   <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
-
-<p><strong>Note: this library does not disable window decor fitting.</strong> For your view hierarchy to able to recieve insets, you need to make sure to call: <a href="https://developer.android.com/reference/androidx/core/view/WindowCompat#setDecorFitsSystemWindows(android.view.Window,%20boolean)"><code>WindowCompat.setDecorFitsSystemWindows(window, false)</code></a> from your Activity.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>This library does not disable window decor fitting.</strong> For your view hierarchy to able to receive insets, you need to make sure to call: <a href="https://developer.android.com/reference/androidx/core/view/WindowCompat#setDecorFitsSystemWindows(android.view.Window,%20boolean)"><code>WindowCompat.setDecorFitsSystemWindows(window, false)</code></a> from your Activity.</p>
+</div>
 <p><code>ProvideWindowInsets</code> allows the library to set an <a href="https://developer.android.com/reference/kotlin/androidx/core/view/OnApplyWindowInsetsListener"><code>OnApplyWindowInsetsListener</code></a> on your content's host view. That listener is used to update the value of an ambient bundled in this library: <code>AmbientWindowInsets</code>.</p>
 <p><code>AmbientWindowInsets</code> holds an instance of <code>WindowInsets</code> which contains the value of various <a href="https://developer.android.com/reference/kotlin/androidx/core/view/WindowInsetsCompat">WindowInsets</a> <a href="https://developer.android.com/reference/kotlin/androidx/core/view/WindowInsetsCompat.Type">types</a>. You can use the values manually like so:</p>
 <div class="highlight"><pre><span></span><code><span class="n">@Composable</span>
@@ -681,16 +714,17 @@ wrap your content. This would typically be done near the top level of your compo
   <span class="n">Box</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="n">padding</span><span class="p">(</span><span class="n">bottom</span> <span class="p">=</span> <span class="n">insets</span><span class="p">.</span><span class="n">ime</span><span class="p">.</span><span class="n">bottom</span><span class="p">))</span>
 <span class="p">}</span>
 </code></pre></div>
-
 <p>...but we also provide some easy-to-use <a href="https://developer.android.com/reference/kotlin/androidx/ui/core/Modifier">Modifier</a>s.</p>
 <h3 id="modifiers">Modifiers<a class="headerlink" href="#modifiers" title="Permanent link">&para;</a></h3>
 <p>We provide two types of modifiers for easy handling of insets: padding and size.</p>
 <h4 id="padding-modifiers">Padding modifiers<a class="headerlink" href="#padding-modifiers" title="Permanent link">&para;</a></h4>
 <p>The padding modifiers allow you to apply padding to a composable which matches a specific type of inset. Currently we provide:</p>
 <ul>
-<li><code>Modifier.statusBarsPadding()</code></li>
-<li><code>Modifier.navigationBarsPadding()</code></li>
-<li><code>Modifier.systemBarsPadding()</code></li>
+<li><a href="https://chrisbanes.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/status-bars-padding.html"><code>Modifier.statusBarsPadding()</code></a></li>
+<li><a href="https://chrisbanes.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/navigation-bars-padding.html"><code>Modifier.navigationBarsPadding()</code></a></li>
+<li><a href="https://chrisbanes.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/system-bars-padding.html"><code>Modifier.systemBarsPadding()</code></a></li>
+<li><a href="https://chrisbanes.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/ime-padding.html"><code>Modifier.imePadding()</code></a></li>
+<li><a href="https://chrisbanes.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/navigation-bars-with-ime-padding.html"><code>Modifier.navigationBarsWithImePadding()</code></a></li>
 </ul>
 <p>These are commonly used to move composables out from under the system bars. The common example would be a <a href="https://developer.android.com/reference/kotlin/androidx/compose/material/package-summary#floatingactionbutton"><code>FloatingActionButton</code></a>:</p>
 <div class="highlight"><pre><span></span><code><span class="n">FloatingActionButton</span><span class="p">(</span>
@@ -701,13 +735,12 @@ wrap your content. This would typically be done near the top level of your compo
         <span class="p">.</span><span class="n">navigationBarsPadding</span><span class="p">()</span> <span class="c1">// Move it out from under the nav bar</span>
 <span class="p">)</span>
 </code></pre></div>
-
 <h4 id="size-modifiers">Size modifiers<a class="headerlink" href="#size-modifiers" title="Permanent link">&para;</a></h4>
 <p>The size modifiers allow you to match the size of a composable to a specific type of inset. Currently we provide:</p>
 <ul>
-<li><code>Modifier.statusBarsHeight()</code></li>
-<li><code>Modifier.navigationBarsHeight()</code></li>
-<li><code>Modifier.navigationBarsWidth()</code></li>
+<li><a href="https://chrisbanes.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/status-bars-height.html"><code>Modifier.statusBarsHeight()</code></a></li>
+<li><a href="https://chrisbanes.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/navigation-bars-height.html"><code>Modifier.navigationBarsHeight()</code></a></li>
+<li><a href="https://chrisbanes.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/navigation-bars-width.html"><code>Modifier.navigationBarsWidth()</code></a></li>
 </ul>
 <p>These are commonly used to allow composables behind the system bars, to provide background protection, or similar:</p>
 <div class="highlight"><pre><span></span><code><span class="n">Spacer</span><span class="p">(</span>
@@ -717,7 +750,6 @@ wrap your content. This would typically be done near the top level of your compo
         <span class="p">.</span><span class="n">fillMaxWidth</span><span class="p">()</span>
 <span class="p">)</span>
 </code></pre></div>
-
 <h3 id="paddingvalues">PaddingValues<a class="headerlink" href="#paddingvalues" title="Permanent link">&para;</a></h3>
 <p>Compose also provides the concept of <a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/PaddingValues"><code>PaddingValues</code></a>, a data class which contains the padding values to be applied on all dimensions (similar to a rect). This is commonly used with container composables, such as <a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/lazy/package-summary#lazycolumn"><code>LazyColumn</code></a>, to set the content padding.</p>
 <p>You may want to use inset values for content padding, so this library provides the <code>Insets.toPaddingValues()</code> extension function to convert between <code>Insets</code> and <code>PaddingValues</code>. Here's an example of using the system bars insets:</p>
@@ -725,38 +757,62 @@ wrap your content. This would typically be done near the top level of your compo
   <span class="n">contentPadding</span> <span class="p">=</span> <span class="n">AmbientWindowInsets</span><span class="p">.</span><span class="n">current</span><span class="p">.</span><span class="n">systemBars</span><span class="p">.</span><span class="n">toPaddingValues</span><span class="p">()</span>
 <span class="p">)</span>
 </code></pre></div>
-
 <p>For a more complex example, see the <a href="https://github.com/chrisbanes/accompanist/blob/main/sample/src/main/java/dev/chrisbanes/accompanist/sample/insets/EdgeToEdgeLazyColumn.kt"><code>EdgeToEdgeLazyColumn</code></a> example:</p>
 <p><a href="images/edge-to-edge-list.jpg">
 <img src="images/edge-to-edge-list.jpg" width=300>
 </a></p>
-<h3 id="animated-insets-support-experimental">Animated Insets support (Experimental)<a class="headerlink" href="#animated-insets-support-experimental" title="Permanent link">&para;</a></h3>
-<p><img alt="" src="images/ime-insets.gif" /></p>
-<p>The library now has experimental support for <a href="https://developer.android.com/reference/android/view/WindowInsetsAnimation"><code>WindowInsetsAnimations</code></a>.
-The new <code>imePadding()</code> and <code>navigationBarsWithImePadding()</code> modifiers allow content to animate with the device's on screen-keyboard (IME), while it is being animated on/off screen. This currently only works when running on devices with API 30+.</p>
+<h2 id="experimental">🚧 Experimental<a class="headerlink" href="#experimental" title="Permanent link">&para;</a></h2>
+<p>The features below are experimental, and require developers to <a href="https://kotlinlang.org/docs/reference/opt-in-requirements.html">opt-in</a>.</p>
+<h3 id="animated-insets-support">Animated Insets support<a class="headerlink" href="#animated-insets-support" title="Permanent link">&para;</a></h3>
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Info</label><div class="tabbed-content">
+<p><img align="right" alt="" loading="lazy" src="images/ime-insets.gif" /></p>
+<p>The library now has experimental support for <a href="https://developer.android.com/reference/android/view/WindowInsetsAnimation"><code>WindowInsetsAnimations</code></a>, allowing your content is react to inset animations, such as the on screen-keyboard (IME) being animated on/off screen. The <code>imePadding()</code> and <code>navigationBarsWithImePadding()</code> modifiers are available especially for this use-case. </p>
+<p>This functionality works wherever <a href="https://developer.android.com/reference/androidx/core/view/WindowInsetsAnimationCompat">WindowInsetsAnimationCompat</a> works, which at the time or writing is on devices running API 21+.</p>
 <p>To enable animated insets support, you need need to new <code>ProvideWindowInsets</code> overload, and set <code>windowInsetsAnimationsEnabled = true</code>.</p>
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Usage</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code><span class="n">ProvideWindowInsets</span><span class="p">(</span><span class="n">windowInsetsAnimationsEnabled</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// content</span>
 <span class="p">}</span>
 </code></pre></div>
-
 <p>You can then use the new <code>navigationBarsWithImePadding()</code> modifier like so:</p>
 <div class="highlight"><pre><span></span><code><span class="n">OutlinedTextField</span><span class="p">(</span>
     <span class="c1">// other params,</span>
     <span class="n">modifier</span> <span class="p">=</span> <span class="n">Modifier</span><span class="p">.</span><span class="n">navigationBarsWithImePadding</span><span class="p">()</span>
 <span class="p">)</span>
 </code></pre></div>
-
 <p>See the <a href="https://github.com/chrisbanes/accompanist/blob/main/sample/src/main/java/dev/chrisbanes/accompanist/sample/insets/ImeAnimationSample.kt">ImeAnimationSample</a> for a working example.</p>
-<h4 id="ime-animations">IME animations<a class="headerlink" href="#ime-animations" title="Permanent link">&para;</a></h4>
+</div>
+</div>
+<h3 id="ime-animations">IME animations<a class="headerlink" href="#ime-animations" title="Permanent link">&para;</a></h3>
 <p>If you're using the animation insets support for IME/keyboard animations, you also need to ensure that the activity's <code>windowSoftInputMode</code> is set to <code>adjustResize</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">&lt;activity</span>
       <span class="na">android:name=</span><span class="s">&quot;.MyActivity&quot;</span>
       <span class="na">android:windowSoftInputMode=</span><span class="s">&quot;adjustResize&quot;</span><span class="nt">&gt;</span>
 <span class="nt">&lt;/activity&gt;</span>
 </code></pre></div>
-
 <p>The default value of <code>windowSoftInputMode</code> <em>should</em> work, but Compose does not currently set the flags necessary (see <a href="https://issuetracker.google.com/154101484">here</a>).</p>
+<h3 id="controlling-the-ime-on-screen-keyboard">Controlling the IME (on-screen keyboard)<a class="headerlink" href="#controlling-the-ime-on-screen-keyboard" title="Permanent link">&para;</a></h3>
+<div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Info</label><div class="tabbed-content">
+<p><img align="right" alt="" loading="lazy" src="images/ime-scroll.gif" /></p>
+<p>This library also has support for controlling the IME from scroll gestures, allowing your scrollable components to pull/push the IME on/off screen. This is acheived through the built-in <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/gesture/nestedscroll/NestedScrollConnection"><code>NestedScrollConnection</code></a> implementation returned by <a href="https://chrisbanes.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/remember-ime-nested-scroll-connection.html"><code>rememberImeNestedScrollConnection()</code></a>.</p>
+<p>This functionality only works when running on devices with API 30+.</p>
+</div>
+<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">Usage</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="c1">// Here we&#39;re using ScrollableColumn, but it also works with LazyColumn, etc.</span>
+<span class="n">ScrollableColumn</span><span class="p">(</span>
+    <span class="c1">// We use the nestedScroll modifier, passing in the </span>
+    <span class="c1">// the connection from rememberImeNestedScrollConnection()</span>
+    <span class="n">modifier</span> <span class="p">=</span> <span class="n">Modifier</span><span class="p">.</span><span class="n">nestedScroll</span><span class="p">(</span>
+        <span class="n">connection</span> <span class="p">=</span> <span class="n">rememberImeNestedScrollConnection</span><span class="p">()</span>
+    <span class="p">)</span>
+<span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// list content</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>See the <a href="https://github.com/chrisbanes/accompanist/blob/main/sample/src/main/java/dev/chrisbanes/accompanist/sample/insets/ImeAnimationSample.kt">ImeAnimationSample</a> for a working example.</p>
+</div>
+</div>
 <h2 id="download">Download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h2>
 <p><a href="https://search.maven.org/search?q=g:dev.chrisbanes.accompanist"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/dev.chrisbanes.accompanist/accompanist-insets" /></a></p>
 <div class="highlight"><pre><span></span><code><span class="n">repositories</span> <span class="o">{</span>
@@ -767,9 +823,8 @@ The new <code>imePadding()</code> and <code>navigationBarsWithImePadding()</code
     <span class="n">implementation</span> <span class="s2">&quot;dev.chrisbanes.accompanist:accompanist-insets:&lt;version&gt;&quot;</span>
 <span class="o">}</span>
 </code></pre></div>
-
 <p>Snapshots of the development version are available in <a href="https://oss.sonatype.org/content/repositories/snapshots/dev/chrisbanes/accompanist/accompanist-insets/">Sonatype's <code>snapshots</code> repository</a>. These are updated on every commit.</p>
-<h3 id="something-not-working">Something not working?<a class="headerlink" href="#something-not-working" title="Permanent link">&para;</a></h3>
+<h2 id="something-not-working">Something not working?<a class="headerlink" href="#something-not-working" title="Permanent link">&para;</a></h2>
 <p>If you find that something isn't working correctly, here's a checklist to try:</p>
 <ul>
 <li>Check that you've called <a href="https://developer.android.com/reference/androidx/core/view/WindowCompat#setDecorFitsSystemWindows(android.view.Window,%20boolean)"><code>WindowCompat.setDecorFitsSystemWindows(window, false)</code></a> in your Activity. Unless you do that, the window decor will consume the insets, and they will not be dispatched to your content.</li>
@@ -794,7 +849,7 @@ The new <code>imePadding()</code> and <code>navigationBarsWithImePadding()</code
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../picasso/" title="Picasso" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../picasso/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -809,7 +864,7 @@ The new <code>imePadding()</code> and <code>navigationBarsWithImePadding()</code
           </a>
         
         
-          <a href="../using-snapshot-version/" title="Snapshots" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../using-snapshot-version/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
@@ -855,15 +910,15 @@ The new <code>imePadding()</code> and <code>navigationBarsWithImePadding()</code
       
     </div>
     
-      <script src="../assets/javascripts/vendor.d1f5a259.min.js"></script>
-      <script src="../assets/javascripts/bundle.d5fec882.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      <script src="../assets/javascripts/vendor.93c04032.min.js"></script>
+      <script src="../assets/javascripts/bundle.83e5331e.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({
           base: "..",
           features: [],
           search: Object.assign({
-            worker: "../assets/javascripts/worker/search.fae956e7.min.js"
+            worker: "../assets/javascripts/worker/search.8c7e0a7e.min.js"
           }, typeof search !== "undefined" && search)
         })
       </script>
