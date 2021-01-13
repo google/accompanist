@@ -60,8 +60,8 @@ object Libs {
         const val dynamicanimation = "androidx.dynamicanimation:dynamicanimation-ktx:1.0.0-alpha03"
 
         object Compose {
-            const val snapshot = ""
-            const val version = "1.0.0-alpha10"
+            const val snapshot = "7067732"
+            const val version = "1.0.0-SNAPSHOT"
 
             @JvmStatic
             val snapshotUrl: String
