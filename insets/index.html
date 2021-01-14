@@ -16,7 +16,7 @@
         <link rel="canonical" href="https://chrisbanes.github.io/accompanist/insets/">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.4">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.3">
     
     
       
@@ -24,10 +24,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.15aa0b43.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.3b61ea93.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.75751829.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.39b8e14a.min.css">
         
           
           
@@ -828,7 +828,8 @@ wrap your content. This would typically be done near the top level of your compo
 <p>If you find that something isn't working correctly, here's a checklist to try:</p>
 <ul>
 <li>Check that you've called <a href="https://developer.android.com/reference/androidx/core/view/WindowCompat#setDecorFitsSystemWindows(android.view.Window,%20boolean)"><code>WindowCompat.setDecorFitsSystemWindows(window, false)</code></a> in your Activity. Unless you do that, the window decor will consume the insets, and they will not be dispatched to your content.</li>
-<li>If it's something related to the keyboard, check that the Activity's <code>windowSoftInputMode</code> is set to <code>adjustResize</code>. Without that, IME visibility changes will not be sent as inset changes.</li>
+<li>If it's something related to the keyboard, check that the Activity's <code>windowSoftInputMode</code> is set to <a href="https://developer.android.com/reference/android/view/WindowManager.LayoutParams#SOFT_INPUT_ADJUST_RESIZE"><code>adjustResize</code></a>. Without that, IME visibility changes will not be sent as inset changes.</li>
+<li>Similarly, if you're setting <a href="https://developer.android.com/reference/android/view/WindowManager.LayoutParams#FLAG_FULLSCREEN"><code>android:windowFullscreen</code></a> to <code>true</code> (or using a <code>.Fullscreen</code> theme), be aware that <code>adjustResize</code> will not work. Please see the <a href="https://developer.android.com/reference/android/view/WindowManager.LayoutParams#FLAG_FULLSCREEN">documentation</a> for an alternative.</li>
 <li>If you're using <code>ProvideWindowInsets</code> (or <code>ViewWindowInsetObserver</code>) in multiple layers of your view hierarchy (i.e. in the activity, <em>and</em> in a fragment), you need to turn off consuming of insets. By default <code>ProvideWindowInsets</code> and <code>ViewWindowInsetObserver</code> will completely consume any insets passed to it. In the previous example, this means that the activity content will get the insets, but the fragment won't. To disable consuming, pass <code>consumeWindowInsets = false</code> to <code>ProvideWindowInsets</code> or <code>ViewWindowInsetObserver.start()</code>.</li>
 </ul>
                 
@@ -910,8 +911,8 @@ wrap your content. This would typically be done near the top level of your compo
       
     </div>
     
-      <script src="../assets/javascripts/vendor.93c04032.min.js"></script>
-      <script src="../assets/javascripts/bundle.83e5331e.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      <script src="../assets/javascripts/vendor.08c56446.min.js"></script>
+      <script src="../assets/javascripts/bundle.6ced434e.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({

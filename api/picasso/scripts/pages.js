@@ -1,0 +1,1 @@
+var pages = [{"name":"val AmbientPicasso: ProvidableAmbient<Picasso>","description":"dev.chrisbanes.accompanist.picasso.AmbientPicasso","location":"picasso/dev.chrisbanes.accompanist.picasso/-ambient-picasso.html","searchKeys":["AmbientPicasso","val AmbientPicasso: ProvidableAmbient<Picasso>"]}]
