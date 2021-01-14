@@ -179,6 +179,11 @@ subprojects {
             // any snapshot dependencies
             configurations.configureEach { configuration ->
                 configuration.dependencies.configureEach { dependency ->
+                    if (dependency instanceof ProjectDependency) {
+                        // We don't care about internal project dependencies
+                        return
+                    }
+
                     def depVersion = dependency.version
                     if (depVersion != null && depVersion.endsWith('SNAPSHOT')) {
                         throw new IllegalArgumentException(
