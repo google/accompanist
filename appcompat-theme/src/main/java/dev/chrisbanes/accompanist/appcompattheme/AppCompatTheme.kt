@@ -30,7 +30,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Density
-import androidx.core.content.res.getResourceIdOrThrow
 import androidx.core.content.res.use
 import java.lang.reflect.Method
 
@@ -121,6 +120,7 @@ data class ThemeParameters(
  * @return [ThemeParameters] instance containing the resulting [Colors], [Typography]
  * and [Shapes].
  */
+@Suppress("UNUSED_PARAMETER")
 fun createAppCompatTheme(
     context: Context,
     density: Density = Density(context),
@@ -129,58 +129,45 @@ fun createAppCompatTheme(
     setTextColors: Boolean = false
 ): ThemeParameters {
     return context.obtainStyledAttributes(R.styleable.ComposeThemeAdapterTheme).use { ta ->
-        require(ta.hasValue(R.styleable.ComposeThemeAdapterTheme_isMaterialTheme)) {
-            "MaterialThemeUsingMdcTheme requires the host context's theme" +
-                " to extend Theme.MaterialComponents"
+        require(ta.hasValue(R.styleable.ComposeThemeAdapterTheme_windowActionBar)) {
+            "createAppCompatTheme requires the host context's theme to extend Theme.AppCompat"
         }
 
         val colors: Colors? = if (readColors) {
-            /* First we'll read the Material color palette */
-            val primary = ta.getComposeColor(R.styleable.ComposeThemeAdapterTheme_colorPrimary)
-            val primaryVariant = ta.getComposeColor(R.styleable.ComposeThemeAdapterTheme_colorPrimaryVariant)
-            val onPrimary = ta.getComposeColor(R.styleable.ComposeThemeAdapterTheme_colorOnPrimary)
-            val secondary = ta.getComposeColor(R.styleable.ComposeThemeAdapterTheme_colorSecondary)
-            val secondaryVariant = ta.getComposeColor(R.styleable.ComposeThemeAdapterTheme_colorSecondaryVariant)
-            val onSecondary = ta.getComposeColor(R.styleable.ComposeThemeAdapterTheme_colorOnSecondary)
-            val background = ta.getComposeColor(R.styleable.ComposeThemeAdapterTheme_android_colorBackground)
-            val onBackground = ta.getComposeColor(R.styleable.ComposeThemeAdapterTheme_colorOnBackground)
-            val surface = ta.getComposeColor(R.styleable.ComposeThemeAdapterTheme_colorSurface)
-            val onSurface = ta.getComposeColor(R.styleable.ComposeThemeAdapterTheme_colorOnSurface)
-            val error = ta.getComposeColor(R.styleable.ComposeThemeAdapterTheme_colorError)
-            val onError = ta.getComposeColor(R.styleable.ComposeThemeAdapterTheme_colorOnError)
-
             val isLightTheme = ta.getBoolean(R.styleable.ComposeThemeAdapterTheme_isLightTheme, true)
 
-            if (isLightTheme) {
-                lightColors(
-                    primary = primary,
-                    primaryVariant = primaryVariant,
-                    onPrimary = onPrimary,
-                    secondary = secondary,
-                    secondaryVariant = secondaryVariant,
-                    onSecondary = onSecondary,
-                    background = background,
-                    onBackground = onBackground,
-                    surface = surface,
-                    onSurface = onSurface,
-                    error = error,
-                    onError = onError
-                )
-            } else {
-                darkColors(
-                    primary = primary,
-                    primaryVariant = primaryVariant,
-                    onPrimary = onPrimary,
-                    secondary = secondary,
-                    onSecondary = onSecondary,
-                    background = background,
-                    onBackground = onBackground,
-                    surface = surface,
-                    onSurface = onSurface,
-                    error = error,
-                    onError = onError
-                )
-            }
+            val defaultColors = if (isLightTheme) lightColors() else darkColors()
+
+            /* First we'll read the Material color palette */
+            val primary = ta.getComposeColor(R.styleable.ComposeThemeAdapterTheme_colorPrimary)
+            val primaryVariant = ta.getComposeColor(R.styleable.ComposeThemeAdapterTheme_colorPrimaryDark)
+            val onPrimary = primary.calculateOnColor()
+
+            val secondary = ta.getComposeColor(R.styleable.ComposeThemeAdapterTheme_colorAccent)
+            // TODO: lighten/darken secondary for variant?
+            val secondaryVariant = secondary
+            val onSecondary = secondary.calculateOnColor()
+
+            val background = ta.getComposeColor(R.styleable.ComposeThemeAdapterTheme_android_colorBackground)
+            val onBackground = background.calculateOnColor()
+
+            val error = ta.getComposeColor(R.styleable.ComposeThemeAdapterTheme_colorError)
+            val onError = error.calculateOnColor()
+
+            defaultColors.copy(
+                primary = primary,
+                primaryVariant = primaryVariant,
+                onPrimary = onPrimary,
+                secondary = secondary,
+                secondaryVariant = secondaryVariant,
+                onSecondary = onSecondary,
+                background = background,
+                onBackground = onBackground,
+//                surface = surface,
+//                onSurface = onSurface,
+                error = error,
+                onError = onError
+            )
         } else null
 
         /**
@@ -193,84 +180,84 @@ fun createAppCompatTheme(
 
         val typography = if (readTypography) {
             Typography().merge(
-                h1 = textStyleFromTextAppearance(
-                    context,
-                    density,
-                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceHeadline1),
-                    setTextColors
-                ),
-                h2 = textStyleFromTextAppearance(
-                    context,
-                    density,
-                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceHeadline2),
-                    setTextColors
-                ),
-                h3 = textStyleFromTextAppearance(
-                    context,
-                    density,
-                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceHeadline3),
-                    setTextColors
-                ),
-                h4 = textStyleFromTextAppearance(
-                    context,
-                    density,
-                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceHeadline4),
-                    setTextColors
-                ),
-                h5 = textStyleFromTextAppearance(
-                    context,
-                    density,
-                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceHeadline5),
-                    setTextColors
-                ),
-                h6 = textStyleFromTextAppearance(
-                    context,
-                    density,
-                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceHeadline6),
-                    setTextColors
-                ),
-                subtitle1 = textStyleFromTextAppearance(
-                    context,
-                    density,
-                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceSubtitle1),
-                    setTextColors
-                ),
-                subtitle2 = textStyleFromTextAppearance(
-                    context,
-                    density,
-                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceSubtitle2),
-                    setTextColors
-                ),
-                body1 = textStyleFromTextAppearance(
-                    context,
-                    density,
-                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceBody1),
-                    setTextColors
-                ),
-                body2 = textStyleFromTextAppearance(
-                    context,
-                    density,
-                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceBody2),
-                    setTextColors
-                ),
-                button = textStyleFromTextAppearance(
-                    context,
-                    density,
-                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceButton),
-                    setTextColors
-                ),
-                caption = textStyleFromTextAppearance(
-                    context,
-                    density,
-                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceCaption),
-                    setTextColors
-                ),
-                overline = textStyleFromTextAppearance(
-                    context,
-                    density,
-                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceOverline),
-                    setTextColors
-                )
+//                h1 = textStyleFromTextAppearance(
+//                    context,
+//                    density,
+//                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceHeadline1),
+//                    setTextColors
+//                ),
+//                h2 = textStyleFromTextAppearance(
+//                    context,
+//                    density,
+//                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceHeadline2),
+//                    setTextColors
+//                ),
+//                h3 = textStyleFromTextAppearance(
+//                    context,
+//                    density,
+//                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceHeadline3),
+//                    setTextColors
+//                ),
+//                h4 = textStyleFromTextAppearance(
+//                    context,
+//                    density,
+//                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceHeadline4),
+//                    setTextColors
+//                ),
+//                h5 = textStyleFromTextAppearance(
+//                    context,
+//                    density,
+//                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceHeadline5),
+//                    setTextColors
+//                ),
+//                h6 = textStyleFromTextAppearance(
+//                    context,
+//                    density,
+//                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceHeadline6),
+//                    setTextColors
+//                ),
+//                subtitle1 = textStyleFromTextAppearance(
+//                    context,
+//                    density,
+//                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceSubtitle1),
+//                    setTextColors
+//                ),
+//                subtitle2 = textStyleFromTextAppearance(
+//                    context,
+//                    density,
+//                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceSubtitle2),
+//                    setTextColors
+//                ),
+//                body1 = textStyleFromTextAppearance(
+//                    context,
+//                    density,
+//                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceBody1),
+//                    setTextColors
+//                ),
+//                body2 = textStyleFromTextAppearance(
+//                    context,
+//                    density,
+//                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceBody2),
+//                    setTextColors
+//                ),
+//                button = textStyleFromTextAppearance(
+//                    context,
+//                    density,
+//                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceButton),
+//                    setTextColors
+//                ),
+//                caption = textStyleFromTextAppearance(
+//                    context,
+//                    density,
+//                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceCaption),
+//                    setTextColors
+//                ),
+//                overline = textStyleFromTextAppearance(
+//                    context,
+//                    density,
+//                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceOverline),
+//                    setTextColors
+//                )
             )
         } else null
 

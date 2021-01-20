@@ -18,38 +18,14 @@
 <resources>
 
     <declare-styleable name="ComposeThemeAdapterTheme">
-        <attr name="isMaterialTheme" />
+        <!-- Used as a test to determine if AppCompat theme or not -->
+        <attr name="windowActionBar" />
 
         <attr name="colorPrimary" />
-        <attr name="colorPrimaryVariant" />
-        <attr name="colorOnPrimary" />
-        <attr name="colorSecondary" />
-        <attr name="colorSecondaryVariant" />
-        <attr name="colorOnSecondary" />
-        <attr name="colorSurface" />
-        <attr name="colorOnSurface" />
+        <attr name="colorPrimaryDark" />
+        <attr name="colorAccent" />
         <attr name="android:colorBackground" />
-        <attr name="colorOnBackground" />
         <attr name="colorError" />
-        <attr name="colorOnError" />
-
-        <attr name="textAppearanceBody1" />
-        <attr name="textAppearanceBody2" />
-        <attr name="textAppearanceButton" />
-        <attr name="textAppearanceCaption" />
-        <attr name="textAppearanceHeadline1" />
-        <attr name="textAppearanceHeadline2" />
-        <attr name="textAppearanceHeadline3" />
-        <attr name="textAppearanceHeadline4" />
-        <attr name="textAppearanceHeadline5" />
-        <attr name="textAppearanceHeadline6" />
-        <attr name="textAppearanceOverline" />
-        <attr name="textAppearanceSubtitle1" />
-        <attr name="textAppearanceSubtitle2" />
-
-        <attr name="shapeAppearanceSmallComponent" />
-        <attr name="shapeAppearanceMediumComponent" />
-        <attr name="shapeAppearanceLargeComponent" />
 
         <attr name="isLightTheme" />
     </declare-styleable>
@@ -79,16 +55,6 @@
 
         <!-- TODOs below -->
         <attr name="android:fontVariationSettings" />
-    </declare-styleable>
-
-    <declare-styleable name="ComposeThemeAdapterShapeAppearance">
-        <attr name="cornerSize" />
-        <attr name="cornerSizeTopLeft" />
-        <attr name="cornerSizeTopRight" />
-        <attr name="cornerSizeBottomRight" />
-        <attr name="cornerSizeBottomLeft" />
-
-        <attr name="cornerFamily" />
     </declare-styleable>
 
 </resources>

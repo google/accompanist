@@ -47,10 +47,6 @@
         <item name="textAppearanceButton">@style/TextAppearance.MdcThemeTest.Button</item>
         <item name="textAppearanceOverline">@style/TextAppearance.MdcThemeTest.Overline</item>
 
-        <!-- Shape Appearances -->
-        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.MdcThemeTest.CutDifferentSizes</item>
-        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.MdcThemeTest.RoundedSameSize</item>
-        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.MdcThemeTest.CutNoSize</item>
     </style>
 
     <style name="Theme.MdcThemeTest.NotMdc" parent="Theme.AppCompat.DayNight" />
