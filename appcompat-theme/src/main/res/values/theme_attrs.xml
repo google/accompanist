@@ -17,7 +17,7 @@
 
 <resources>
 
-    <declare-styleable name="ComposeThemeAdapterTheme">
+    <declare-styleable name="AppCompatThemeAdapterTheme">
         <!-- Used as a test to determine if AppCompat theme or not -->
         <attr name="windowActionBar" />
 
@@ -30,7 +30,7 @@
         <attr name="isLightTheme" />
     </declare-styleable>
 
-    <declare-styleable name="ComposeThemeAdapterTextAppearance">
+    <declare-styleable name="AppCompatThemeAdapterTextAppearance">
         <attr name="android:textColor" />
         <attr name="android:textSize" />
         <attr name="android:textStyle" />

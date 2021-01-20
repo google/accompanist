@@ -45,30 +45,30 @@ internal fun textStyleFromTextAppearance(
     @StyleRes id: Int,
     setTextColors: Boolean
 ): TextStyle {
-    return context.obtainStyledAttributes(id, R.styleable.ComposeThemeAdapterTextAppearance).use { a ->
-        val textStyle = a.getInt(R.styleable.ComposeThemeAdapterTextAppearance_android_textStyle, -1)
-        val textFontWeight = a.getInt(R.styleable.ComposeThemeAdapterTextAppearance_android_textFontWeight, -1)
-        val typeface = a.getInt(R.styleable.ComposeThemeAdapterTextAppearance_android_typeface, -1)
+    return context.obtainStyledAttributes(id, R.styleable.AppCompatThemeAdapterTextAppearance).use { a ->
+        val textStyle = a.getInt(R.styleable.AppCompatThemeAdapterTextAppearance_android_textStyle, -1)
+        val textFontWeight = a.getInt(R.styleable.AppCompatThemeAdapterTextAppearance_android_textFontWeight, -1)
+        val typeface = a.getInt(R.styleable.AppCompatThemeAdapterTextAppearance_android_typeface, -1)
 
         // TODO read and expand android:fontVariationSettings.
         // Variable fonts are not supported in Compose yet
 
         // FYI, this only works with static font files in assets
         val fontFamily: FontFamilyWithWeight? = a.getFontFamilyOrNull(
-            R.styleable.ComposeThemeAdapterTextAppearance_fontFamily
-        ) ?: a.getFontFamilyOrNull(R.styleable.ComposeThemeAdapterTextAppearance_android_fontFamily)
+            R.styleable.AppCompatThemeAdapterTextAppearance_fontFamily
+        ) ?: a.getFontFamilyOrNull(R.styleable.AppCompatThemeAdapterTextAppearance_android_fontFamily)
 
         TextStyle(
             color = when {
                 setTextColors -> {
-                    a.getComposeColor(R.styleable.ComposeThemeAdapterTextAppearance_android_textColor)
+                    a.getComposeColor(R.styleable.AppCompatThemeAdapterTextAppearance_android_textColor)
                 }
                 else -> Color.Unspecified
             },
-            fontSize = a.getTextUnit(R.styleable.ComposeThemeAdapterTextAppearance_android_textSize, density),
+            fontSize = a.getTextUnit(R.styleable.AppCompatThemeAdapterTextAppearance_android_textSize, density),
             lineHeight = run {
-                a.getTextUnitOrNull(R.styleable.ComposeThemeAdapterTextAppearance_lineHeight, density)
-                    ?: a.getTextUnitOrNull(R.styleable.ComposeThemeAdapterTextAppearance_android_lineHeight, density)
+                a.getTextUnitOrNull(R.styleable.AppCompatThemeAdapterTextAppearance_lineHeight, density)
+                    ?: a.getTextUnitOrNull(R.styleable.AppCompatThemeAdapterTextAppearance_android_lineHeight, density)
                     ?: TextUnit.Unspecified
             },
             fontFamily = when {
@@ -99,19 +99,19 @@ internal fun textStyleFromTextAppearance(
                 fontFamily != null -> fontFamily.weight
                 else -> null
             },
-            fontFeatureSettings = a.getString(R.styleable.ComposeThemeAdapterTextAppearance_android_fontFeatureSettings),
+            fontFeatureSettings = a.getString(R.styleable.AppCompatThemeAdapterTextAppearance_android_fontFeatureSettings),
             shadow = run {
-                val shadowColor = a.getComposeColor(R.styleable.ComposeThemeAdapterTextAppearance_android_shadowColor)
+                val shadowColor = a.getComposeColor(R.styleable.AppCompatThemeAdapterTextAppearance_android_shadowColor)
                 if (shadowColor != Color.Unspecified) {
-                    val dx = a.getFloat(R.styleable.ComposeThemeAdapterTextAppearance_android_shadowDx, 0f)
-                    val dy = a.getFloat(R.styleable.ComposeThemeAdapterTextAppearance_android_shadowDy, 0f)
-                    val rad = a.getFloat(R.styleable.ComposeThemeAdapterTextAppearance_android_shadowRadius, 0f)
+                    val dx = a.getFloat(R.styleable.AppCompatThemeAdapterTextAppearance_android_shadowDx, 0f)
+                    val dy = a.getFloat(R.styleable.AppCompatThemeAdapterTextAppearance_android_shadowDy, 0f)
+                    val rad = a.getFloat(R.styleable.AppCompatThemeAdapterTextAppearance_android_shadowRadius, 0f)
                     Shadow(color = shadowColor, offset = Offset(dx, dy), blurRadius = rad)
                 } else null
             },
             letterSpacing = when {
-                a.hasValue(R.styleable.ComposeThemeAdapterTextAppearance_android_letterSpacing) -> {
-                    a.getFloat(R.styleable.ComposeThemeAdapterTextAppearance_android_letterSpacing, 0f).em
+                a.hasValue(R.styleable.AppCompatThemeAdapterTextAppearance_android_letterSpacing) -> {
+                    a.getFloat(R.styleable.AppCompatThemeAdapterTextAppearance_android_letterSpacing, 0f).em
                 }
                 else -> TextUnit.Unspecified
             }

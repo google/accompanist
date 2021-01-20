@@ -128,30 +128,30 @@ fun createAppCompatTheme(
     readTypography: Boolean = true,
     setTextColors: Boolean = false
 ): ThemeParameters {
-    return context.obtainStyledAttributes(R.styleable.ComposeThemeAdapterTheme).use { ta ->
-        require(ta.hasValue(R.styleable.ComposeThemeAdapterTheme_windowActionBar)) {
+    return context.obtainStyledAttributes(R.styleable.AppCompatThemeAdapterTheme).use { ta ->
+        require(ta.hasValue(R.styleable.AppCompatThemeAdapterTheme_windowActionBar)) {
             "createAppCompatTheme requires the host context's theme to extend Theme.AppCompat"
         }
 
         val colors: Colors? = if (readColors) {
-            val isLightTheme = ta.getBoolean(R.styleable.ComposeThemeAdapterTheme_isLightTheme, true)
+            val isLightTheme = ta.getBoolean(R.styleable.AppCompatThemeAdapterTheme_isLightTheme, true)
 
             val defaultColors = if (isLightTheme) lightColors() else darkColors()
 
             /* First we'll read the Material color palette */
-            val primary = ta.getComposeColor(R.styleable.ComposeThemeAdapterTheme_colorPrimary)
-            val primaryVariant = ta.getComposeColor(R.styleable.ComposeThemeAdapterTheme_colorPrimaryDark)
+            val primary = ta.getComposeColor(R.styleable.AppCompatThemeAdapterTheme_colorPrimary)
+            val primaryVariant = ta.getComposeColor(R.styleable.AppCompatThemeAdapterTheme_colorPrimaryDark)
             val onPrimary = primary.calculateOnColor()
 
-            val secondary = ta.getComposeColor(R.styleable.ComposeThemeAdapterTheme_colorAccent)
+            val secondary = ta.getComposeColor(R.styleable.AppCompatThemeAdapterTheme_colorAccent)
             // TODO: lighten/darken secondary for variant?
             val secondaryVariant = secondary
             val onSecondary = secondary.calculateOnColor()
 
-            val background = ta.getComposeColor(R.styleable.ComposeThemeAdapterTheme_android_colorBackground)
+            val background = ta.getComposeColor(R.styleable.AppCompatThemeAdapterTheme_android_colorBackground)
             val onBackground = background.calculateOnColor()
 
-            val error = ta.getComposeColor(R.styleable.ComposeThemeAdapterTheme_colorError)
+            val error = ta.getComposeColor(R.styleable.AppCompatThemeAdapterTheme_colorError)
             val onError = error.calculateOnColor()
 
             defaultColors.copy(
@@ -183,79 +183,79 @@ fun createAppCompatTheme(
 //                h1 = textStyleFromTextAppearance(
 //                    context,
 //                    density,
-//                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceHeadline1),
+//                    ta.getResourceIdOrThrow(R.styleable.AppCompatThemeAdapterTheme_textAppearanceHeadline1),
 //                    setTextColors
 //                ),
 //                h2 = textStyleFromTextAppearance(
 //                    context,
 //                    density,
-//                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceHeadline2),
+//                    ta.getResourceIdOrThrow(R.styleable.AppCompatThemeAdapterTheme_textAppearanceHeadline2),
 //                    setTextColors
 //                ),
 //                h3 = textStyleFromTextAppearance(
 //                    context,
 //                    density,
-//                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceHeadline3),
+//                    ta.getResourceIdOrThrow(R.styleable.AppCompatThemeAdapterTheme_textAppearanceHeadline3),
 //                    setTextColors
 //                ),
 //                h4 = textStyleFromTextAppearance(
 //                    context,
 //                    density,
-//                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceHeadline4),
+//                    ta.getResourceIdOrThrow(R.styleable.AppCompatThemeAdapterTheme_textAppearanceHeadline4),
 //                    setTextColors
 //                ),
 //                h5 = textStyleFromTextAppearance(
 //                    context,
 //                    density,
-//                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceHeadline5),
+//                    ta.getResourceIdOrThrow(R.styleable.AppCompatThemeAdapterTheme_textAppearanceHeadline5),
 //                    setTextColors
 //                ),
 //                h6 = textStyleFromTextAppearance(
 //                    context,
 //                    density,
-//                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceHeadline6),
+//                    ta.getResourceIdOrThrow(R.styleable.AppCompatThemeAdapterTheme_textAppearanceHeadline6),
 //                    setTextColors
 //                ),
 //                subtitle1 = textStyleFromTextAppearance(
 //                    context,
 //                    density,
-//                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceSubtitle1),
+//                    ta.getResourceIdOrThrow(R.styleable.AppCompatThemeAdapterTheme_textAppearanceSubtitle1),
 //                    setTextColors
 //                ),
 //                subtitle2 = textStyleFromTextAppearance(
 //                    context,
 //                    density,
-//                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceSubtitle2),
+//                    ta.getResourceIdOrThrow(R.styleable.AppCompatThemeAdapterTheme_textAppearanceSubtitle2),
 //                    setTextColors
 //                ),
 //                body1 = textStyleFromTextAppearance(
 //                    context,
 //                    density,
-//                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceBody1),
+//                    ta.getResourceIdOrThrow(R.styleable.AppCompatThemeAdapterTheme_textAppearanceBody1),
 //                    setTextColors
 //                ),
 //                body2 = textStyleFromTextAppearance(
 //                    context,
 //                    density,
-//                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceBody2),
+//                    ta.getResourceIdOrThrow(R.styleable.AppCompatThemeAdapterTheme_textAppearanceBody2),
 //                    setTextColors
 //                ),
 //                button = textStyleFromTextAppearance(
 //                    context,
 //                    density,
-//                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceButton),
+//                    ta.getResourceIdOrThrow(R.styleable.AppCompatThemeAdapterTheme_textAppearanceButton),
 //                    setTextColors
 //                ),
 //                caption = textStyleFromTextAppearance(
 //                    context,
 //                    density,
-//                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceCaption),
+//                    ta.getResourceIdOrThrow(R.styleable.AppCompatThemeAdapterTheme_textAppearanceCaption),
 //                    setTextColors
 //                ),
 //                overline = textStyleFromTextAppearance(
 //                    context,
 //                    density,
-//                    ta.getResourceIdOrThrow(R.styleable.ComposeThemeAdapterTheme_textAppearanceOverline),
+//                    ta.getResourceIdOrThrow(R.styleable.AppCompatThemeAdapterTheme_textAppearanceOverline),
 //                    setTextColors
 //                )
             )
