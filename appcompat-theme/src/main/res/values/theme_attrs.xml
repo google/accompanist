@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2020 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+
+    <declare-styleable name="ComposeThemeAdapterTheme">
+        <attr name="isMaterialTheme" />
+
+        <attr name="colorPrimary" />
+        <attr name="colorPrimaryVariant" />
+        <attr name="colorOnPrimary" />
+        <attr name="colorSecondary" />
+        <attr name="colorSecondaryVariant" />
+        <attr name="colorOnSecondary" />
+        <attr name="colorSurface" />
+        <attr name="colorOnSurface" />
+        <attr name="android:colorBackground" />
+        <attr name="colorOnBackground" />
+        <attr name="colorError" />
+        <attr name="colorOnError" />
+
+        <attr name="textAppearanceBody1" />
+        <attr name="textAppearanceBody2" />
+        <attr name="textAppearanceButton" />
+        <attr name="textAppearanceCaption" />
+        <attr name="textAppearanceHeadline1" />
+        <attr name="textAppearanceHeadline2" />
+        <attr name="textAppearanceHeadline3" />
+        <attr name="textAppearanceHeadline4" />
+        <attr name="textAppearanceHeadline5" />
+        <attr name="textAppearanceHeadline6" />
+        <attr name="textAppearanceOverline" />
+        <attr name="textAppearanceSubtitle1" />
+        <attr name="textAppearanceSubtitle2" />
+
+        <attr name="shapeAppearanceSmallComponent" />
+        <attr name="shapeAppearanceMediumComponent" />
+        <attr name="shapeAppearanceLargeComponent" />
+
+        <attr name="isLightTheme" />
+    </declare-styleable>
+
+    <declare-styleable name="ComposeThemeAdapterTextAppearance">
+        <attr name="android:textColor" />
+        <attr name="android:textSize" />
+        <attr name="android:textStyle" />
+        <attr name="android:textFontWeight" />
+
+        <attr name="android:typeface" />
+
+        <attr name="android:shadowColor" />
+        <attr name="android:shadowDx" />
+        <attr name="android:shadowDy" />
+        <attr name="android:shadowRadius" />
+
+        <attr name="lineHeight" />
+        <attr name="android:lineHeight" />
+
+        <attr name="android:letterSpacing" />
+
+        <attr name="android:fontFeatureSettings" />
+
+        <attr name="android:fontFamily" />
+        <attr name="fontFamily" />
+
+        <!-- TODOs below -->
+        <attr name="android:fontVariationSettings" />
+    </declare-styleable>
+
+    <declare-styleable name="ComposeThemeAdapterShapeAppearance">
+        <attr name="cornerSize" />
+        <attr name="cornerSizeTopLeft" />
+        <attr name="cornerSizeTopRight" />
+        <attr name="cornerSizeBottomRight" />
+        <attr name="cornerSizeBottomLeft" />
+
+        <attr name="cornerFamily" />
+    </declare-styleable>
+
+</resources>

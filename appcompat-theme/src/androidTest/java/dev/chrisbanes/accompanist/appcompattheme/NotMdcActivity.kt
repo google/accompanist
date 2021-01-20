@@ -14,22 +14,8 @@
  * limitations under the License.
  */
 
-plugins {
-    id 'com.gradle.enterprise' version '3.5'
-}
+package dev.chrisbanes.accompanist.appcompattheme
 
-gradleEnterprise {
-    buildScan {
-        termsOfServiceUrl = 'https://gradle.com/terms-of-service'
-        termsOfServiceAgree = 'yes'
-    }
-}
+import androidx.appcompat.app.AppCompatActivity
 
-include ':coil'
-include ':picasso'
-include ':glide'
-include ':imageloading-core'
-include ':imageloading-testutils'
-include ':insets'
-include ':appcompat-theme'
-include ':sample'
+class NotMdcActivity : AppCompatActivity()

@@ -14,22 +14,16 @@
  * limitations under the License.
  */
 
-plugins {
-    id 'com.gradle.enterprise' version '3.5'
-}
+package dev.chrisbanes.accompanist.appcompattheme
 
-gradleEnterprise {
-    buildScan {
-        termsOfServiceUrl = 'https://gradle.com/terms-of-service'
-        termsOfServiceAgree = 'yes'
-    }
-}
+import android.content.Context
+import android.content.res.Configuration
 
-include ':coil'
-include ':picasso'
-include ':glide'
-include ':imageloading-core'
-include ':imageloading-testutils'
-include ':insets'
-include ':appcompat-theme'
-include ':sample'
+/**
+ * This allows us to check whether this [Context]s resource configuration is in 'night mode',
+ * which is also known as dark theme.
+ */
+fun Context.isInDarkTheme(): Boolean {
+    return resources.configuration.uiMode and
+        Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+}

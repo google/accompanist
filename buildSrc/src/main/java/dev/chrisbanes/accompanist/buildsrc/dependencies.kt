@@ -46,6 +46,9 @@ object Libs {
         const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version"
     }
 
+    const val appcompat = "com.google.android.material:material:1.1.0"
+    const val mdc = "com.google.android.material:material:1.1.0"
+
     object AndroidX {
         object Test {
             private const val version = "1.2.0"
@@ -58,6 +61,8 @@ object Libs {
         }
 
         const val dynamicanimation = "androidx.dynamicanimation:dynamicanimation-ktx:1.0.0-alpha03"
+
+        const val appcompat = "androidx.appcompat:appcompat:1.2.0"
 
         object Compose {
             const val snapshot = ""

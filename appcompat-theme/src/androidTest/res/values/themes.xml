@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2020 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+
+    <style name="Theme.MdcThemeTest" parent="Theme.MaterialComponents.DayNight">
+        <!-- Colors -->
+        <item name="colorPrimary">@color/aquamarine</item>
+        <item name="colorPrimaryVariant">@color/royal_blue</item>
+        <item name="colorOnPrimary">@color/midnight_blue</item>
+        <item name="colorSecondary">@color/dark_golden_rod</item>
+        <item name="colorSecondaryVariant">@color/blue_violet</item>
+        <item name="colorOnSecondary">@color/slate_gray</item>
+        <item name="colorSurface">@color/spring_green</item>
+        <item name="colorOnSurface">@color/navy</item>
+        <item name="android:colorBackground">@color/light_coral</item>
+        <item name="colorOnBackground">@color/orchid</item>
+        <item name="colorError">@color/dark_salmon</item>
+        <item name="colorOnError">@color/beige</item>
+
+        <!-- Text Appearances -->
+        <item name="textAppearanceHeadline1">@style/TextAppearance.MdcThemeTest.Headline1</item>
+        <item name="textAppearanceHeadline2">@style/TextAppearance.MdcThemeTest.Headline2</item>
+        <item name="textAppearanceHeadline3">@style/TextAppearance.MdcThemeTest.Headline3</item>
+        <item name="textAppearanceHeadline4">@style/TextAppearance.MdcThemeTest.Headline4</item>
+        <item name="textAppearanceHeadline5">@style/TextAppearance.MdcThemeTest.Headline5</item>
+        <item name="textAppearanceHeadline6">@style/TextAppearance.MdcThemeTest.Headline6</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.MdcThemeTest.Subtitle1</item>
+        <item name="textAppearanceSubtitle2">@style/TextAppearance.MdcThemeTest.Subtitle2</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.MdcThemeTest.Body1</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.MdcThemeTest.Body2</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.MdcThemeTest.Caption</item>
+        <item name="textAppearanceButton">@style/TextAppearance.MdcThemeTest.Button</item>
+        <item name="textAppearanceOverline">@style/TextAppearance.MdcThemeTest.Overline</item>
+
+        <!-- Shape Appearances -->
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.MdcThemeTest.CutDifferentSizes</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.MdcThemeTest.RoundedSameSize</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.MdcThemeTest.CutNoSize</item>
+    </style>
+
+    <style name="Theme.MdcThemeTest.NotMdc" parent="Theme.AppCompat.DayNight" />
+
+</resources>
