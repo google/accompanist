@@ -21,40 +21,16 @@
         <!-- Used as a test to determine if AppCompat theme or not -->
         <attr name="windowActionBar" />
 
+        <attr name="isLightTheme" />
+
         <attr name="colorPrimary" />
         <attr name="colorPrimaryDark" />
         <attr name="colorAccent" />
         <attr name="android:colorBackground" />
         <attr name="colorError" />
 
-        <attr name="isLightTheme" />
-    </declare-styleable>
-
-    <declare-styleable name="AppCompatThemeAdapterTextAppearance">
-        <attr name="android:textColor" />
-        <attr name="android:textSize" />
-        <attr name="android:textStyle" />
-        <attr name="android:textFontWeight" />
-
-        <attr name="android:typeface" />
-
-        <attr name="android:shadowColor" />
-        <attr name="android:shadowDx" />
-        <attr name="android:shadowDy" />
-        <attr name="android:shadowRadius" />
-
-        <attr name="lineHeight" />
-        <attr name="android:lineHeight" />
-
-        <attr name="android:letterSpacing" />
-
-        <attr name="android:fontFeatureSettings" />
-
         <attr name="android:fontFamily" />
         <attr name="fontFamily" />
-
-        <!-- TODOs below -->
-        <attr name="android:fontVariationSettings" />
     </declare-styleable>
 
 </resources>
