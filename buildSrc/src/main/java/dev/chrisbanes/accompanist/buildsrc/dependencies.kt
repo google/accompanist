@@ -46,9 +46,6 @@ object Libs {
         const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version"
     }
 
-    const val appcompat = "com.google.android.material:material:1.1.0"
-    const val mdc = "com.google.android.material:material:1.1.0"
-
     object AndroidX {
         object Test {
             private const val version = "1.2.0"
