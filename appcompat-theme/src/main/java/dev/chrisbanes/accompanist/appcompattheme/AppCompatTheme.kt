@@ -26,6 +26,7 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.AmbientContext
 import androidx.core.content.res.use
 
@@ -111,7 +112,10 @@ fun Context.createAppCompatTheme(
         // onSurface and onBackground colors
         val textColorPrimary = ta.getComposeColor(
             R.styleable.AppCompatThemeAdapterTheme_android_textColorPrimary
-        ).copy(alpha = 1f)
+        ).let { color ->
+            // We only force the alpha value if it's not Unspecified
+            if (color != Color.Unspecified) color.copy(alpha = 1f) else color
+        }
 
         val surface = defaultColors.surface
         val onSurface = surface.calculateOnColorWithTextColorPrimary(textColorPrimary)
