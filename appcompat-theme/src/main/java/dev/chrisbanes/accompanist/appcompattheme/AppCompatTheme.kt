@@ -35,10 +35,8 @@ import androidx.core.content.res.use
  * values from the `Theme.AppCompat` Android theme.
  *
  * @param context The context to read the theme from.
- * @param readColors whether the read the MDC color palette from the context's theme.
- * If `false`, the current value of [MaterialTheme.colors] is preserved.
- * @param readTypography whether the read the MDC text appearances from [context]'s theme.
- * If `false`, the current value of [MaterialTheme.typography] is preserved.
+ * @param readColors whether the read the color palette from the [context]'s theme.
+ * @param readTypography whether to read the font family from [context]'s theme.
  * @param shapes A set of shapes to be used by the components in this hierarchy.
  */
 @Composable
@@ -81,8 +79,8 @@ data class ThemeParameters(
  * matching 'read' parameter. For example, if you set [readColors] to `false`,
  * [ThemeParameters.colors] will be null.
  *
- * @param readColors whether the read the MDC color palette from the context's theme.
- * @param readTypography whether the read the MDC text appearances from [context]'s theme.
+ * @param readColors whether the read the color palette from the [context]'s theme.
+ * @param readTypography whether to read the font family from [context]'s theme.
  *
  * @return [ThemeParameters] instance containing the resulting [Colors] and [Typography]
  */

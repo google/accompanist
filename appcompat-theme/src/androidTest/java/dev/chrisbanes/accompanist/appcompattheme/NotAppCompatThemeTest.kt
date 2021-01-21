@@ -30,7 +30,7 @@ class NotAppCompatThemeTest {
     val composeTestRule = createAndroidComposeRule<NotAppCompatActivity>()
 
     @Test(expected = IllegalArgumentException::class)
-    fun throwForNonMdcTheme() = composeTestRule.setContent {
+    fun throwForNonAppCompatTheme() = composeTestRule.setContent {
         AppCompatTheme {
             // Nothing to do here, exception should be thrown
         }
