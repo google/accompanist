@@ -16,7 +16,6 @@
 
 package dev.chrisbanes.accompanist.sample.picasso
 
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayout
 import androidx.compose.foundation.layout.aspectRatio
@@ -24,6 +23,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.foundation.layout.preferredWidth
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -51,69 +51,90 @@ private fun Sample() {
             )
         }
     ) {
-        ScrollableColumn(modifier = Modifier.padding(16.dp)) {
-            // PicassoImage with data parameter
-            PicassoImage(
-                data = randomSampleImageUrl(),
-                modifier = Modifier.preferredSize(128.dp)
-            )
+        LazyColumn(Modifier.padding(16.dp)) {
+            item {
+                // PicassoImage with data parameter
+                PicassoImage(
+                    data = randomSampleImageUrl(),
+                    contentDescription = null,
+                    modifier = Modifier.preferredSize(128.dp)
+                )
+            }
 
-            // PicassoImage with ImageRequest builder parameter
-            PicassoImage(
-                data = randomSampleImageUrl(),
-                requestBuilder = {
-                    rotate(90f)
-                },
-                modifier = Modifier.preferredSize(128.dp)
-            )
+            item {
+                // PicassoImage with ImageRequest builder parameter
+                PicassoImage(
+                    data = randomSampleImageUrl(),
+                    requestBuilder = {
+                        rotate(90f)
+                    },
+                    contentDescription = null,
+                    modifier = Modifier.preferredSize(128.dp)
+                )
+            }
 
-            // PicassoImage with loading slot
-            PicassoImage(
-                data = randomSampleImageUrl(),
-                loading = {
-                    Box(Modifier.fillMaxSize()) {
-                        CircularProgressIndicator(Modifier.align(Alignment.Center))
-                    }
-                },
-                modifier = Modifier.preferredSize(128.dp)
-            )
+            item {
+                // PicassoImage with loading slot
+                PicassoImage(
+                    data = randomSampleImageUrl(),
+                    loading = {
+                        Box(Modifier.fillMaxSize()) {
+                            CircularProgressIndicator(Modifier.align(Alignment.Center))
+                        }
+                    },
+                    contentDescription = null,
+                    modifier = Modifier.preferredSize(128.dp)
+                )
+            }
 
-            // PicassoImage with crossfade and data parameter
-            PicassoImage(
-                data = randomSampleImageUrl(),
-                fadeIn = true,
-                modifier = Modifier.preferredSize(128.dp)
-            )
+            item {
+                // PicassoImage with crossfade and data parameter
+                PicassoImage(
+                    data = randomSampleImageUrl(),
+                    fadeIn = true,
+                    contentDescription = null,
+                    modifier = Modifier.preferredSize(128.dp)
+                )
+            }
 
-            // PicassoImage with crossfade and loading slot
-            PicassoImage(
-                data = randomSampleImageUrl(),
-                fadeIn = true,
-                loading = {
-                    Box(Modifier.fillMaxSize()) {
-                        CircularProgressIndicator(Modifier.align(Alignment.Center))
-                    }
-                },
-                modifier = Modifier.preferredSize(128.dp)
-            )
+            item {
+                // PicassoImage with crossfade and loading slot
+                PicassoImage(
+                    data = randomSampleImageUrl(),
+                    fadeIn = true,
+                    loading = {
+                        Box(Modifier.fillMaxSize()) {
+                            CircularProgressIndicator(Modifier.align(Alignment.Center))
+                        }
+                    },
+                    contentDescription = null,
+                    modifier = Modifier.preferredSize(128.dp)
+                )
+            }
 
-            // PicassoImage with an implicit size and loading slot
-            PicassoImage(
-                data = randomSampleImageUrl(),
-                loading = {
-                    Box(Modifier.fillMaxSize()) {
-                        CircularProgressIndicator(Modifier.align(Alignment.Center))
-                    }
-                }
-            )
+            item {
+                // PicassoImage with an implicit size and loading slot
+                PicassoImage(
+                    data = randomSampleImageUrl(),
+                    loading = {
+                        Box(Modifier.fillMaxSize()) {
+                            CircularProgressIndicator(Modifier.align(Alignment.Center))
+                        }
+                    },
+                    contentDescription = null,
+                )
+            }
 
-            // PicassoImage with an aspect ratio
-            PicassoImage(
-                data = randomSampleImageUrl(),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.preferredWidth(256.dp)
-                    .aspectRatio(16 / 9f)
-            )
+            item {
+                // PicassoImage with an aspect ratio
+                PicassoImage(
+                    data = randomSampleImageUrl(),
+                    contentScale = ContentScale.Crop,
+                    contentDescription = null,
+                    modifier = Modifier.preferredWidth(256.dp)
+                        .aspectRatio(16 / 9f)
+                )
+            }
         }
     }
 }

@@ -83,7 +83,10 @@ private fun Sample() {
                 .navigationBarsPadding()
                 .padding(16.dp)
         ) {
-            Icon(Icons.Default.Face)
+            Icon(
+                imageVector = Icons.Default.Face,
+                contentDescription = "Face icon"
+            )
         }
     }
 }

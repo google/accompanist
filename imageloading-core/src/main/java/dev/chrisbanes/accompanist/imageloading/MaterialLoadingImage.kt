@@ -21,7 +21,6 @@ package dev.chrisbanes.accompanist.imageloading
 import android.graphics.ColorMatrixColorFilter
 import androidx.compose.animation.asDisposableClock
 import androidx.compose.animation.core.AnimationClockObservable
-import androidx.compose.animation.core.FloatPropKey
 import androidx.compose.animation.core.createAnimation
 import androidx.compose.animation.core.transitionDefinition
 import androidx.compose.animation.core.tween
@@ -214,6 +213,7 @@ private class MaterialLoadingPainterWrapper(
         policy = neverEqualPolicy()
     )
 
+    @Suppress("DEPRECATION")
     private val animation = CrossfadeTransition.definition(duration).createAnimation(clock)
 
     init {
@@ -275,14 +275,15 @@ private class MaterialLoadingPainterWrapper(
  */
 private val paintPool = Pools.SimplePool<Paint>(2)
 
+@Suppress("DEPRECATION") // Need to fix this
 private object CrossfadeTransition {
     enum class State {
         Loaded, Empty
     }
 
-    val Alpha = FloatPropKey()
-    val Brightness = FloatPropKey()
-    val Saturation = FloatPropKey()
+    val Alpha = androidx.compose.animation.core.FloatPropKey()
+    val Brightness = androidx.compose.animation.core.FloatPropKey()
+    val Saturation = androidx.compose.animation.core.FloatPropKey()
 
     fun definition(durationMs: Int) = transitionDefinition<State> {
         state(State.Empty) {
