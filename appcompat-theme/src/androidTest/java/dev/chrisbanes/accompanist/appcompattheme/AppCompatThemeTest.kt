@@ -21,6 +21,7 @@ import android.view.ContextThemeWrapper
 import androidx.annotation.StyleRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.MaterialTheme
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -58,19 +59,27 @@ class AppCompatThemeTest<T : AppCompatActivity>(activityClass: Class<T>) {
             val color = MaterialTheme.colors
 
             assertEquals(colorResource(R.color.aquamarine), color.primary)
+            // By default, onSecondary is calculated to the highest contrast of black/white
+            // against primary
+            assertEquals(Color.Black, color.onPrimary)
+            // primaryVariant == colorPrimaryDark
             assertEquals(colorResource(R.color.royal_blue), color.primaryVariant)
-            // assertEquals(colorResource(R.color.midnight_blue), color.onPrimary)
 
             assertEquals(colorResource(R.color.dark_golden_rod), color.secondary)
+            // By default, onSecondary is calculated to the highest contrast of black/white
+            // against secondary
+            assertEquals(Color.Black, color.onSecondary)
             // Assert that secondaryVariant == secondary
             assertEquals(colorResource(R.color.dark_golden_rod), color.secondaryVariant)
-            // assertEquals(colorResource(R.color.slate_gray), color.onSecondary)
 
             assertEquals(colorResource(R.color.dark_salmon), color.error)
-            // assertEquals(colorResource(R.color.beige), color.onError)
+            // onError is calculated to the highest contrast of black/white against error
+            assertEquals(Color.Black, color.onError)
 
             assertEquals(colorResource(R.color.light_coral), color.background)
-            // assertEquals(colorResource(R.color.orchid), color.onBackground)
+            // By default, onBackground is calculated to the highest contrast of black/white
+            // against background
+            assertEquals(Color.Black, color.onBackground)
         }
     }
 

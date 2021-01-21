@@ -29,6 +29,8 @@
         <attr name="android:colorBackground" />
         <attr name="colorError" />
 
+        <attr name="android:textColorPrimary" />
+
         <attr name="android:fontFamily" />
         <attr name="fontFamily" />
     </declare-styleable>
