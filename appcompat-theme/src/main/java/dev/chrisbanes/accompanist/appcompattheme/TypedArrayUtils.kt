@@ -45,7 +45,6 @@ internal fun TypedArray.getComposeColor(
  *
  * @param index index of attribute to retrieve.
  */
-@SuppressLint("RestrictedApi") // FontResourcesParserCompat
 internal fun TypedArray.getFontFamilyOrNull(index: Int): FontFamilyWithWeight? {
     val tv = tempTypedValue.getOrSet(::TypedValue)
     if (getValue(index, tv) && tv.type == TypedValue.TYPE_STRING) {
