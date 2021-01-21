@@ -31,8 +31,62 @@ import androidx.compose.ui.platform.AmbientContext
 import androidx.core.content.res.use
 
 /**
- * This function creates the components of a [androidx.compose.material.MaterialTheme], reading the
- * values from the `Theme.AppCompat` Android theme.
+ * This function creates the components of a [MaterialTheme], synthesizing a material theme
+ * from values in the [context]'s `Theme.AppCompat` theme.
+ *
+ * If you are using [Material Design Components](https://material.io/develop/android/)
+ * in your app, you should use the
+ * [MDC Compose Theme Adapter](https://github.com/material-components/material-components-android-compose-theme-adapter)
+ * instead, as it allows much finer-grained reading of your theme.
+ *
+ * Synthesizing a material theme from an `AppCompat` theme is not perfect, since `Theme.AppCompat`
+ * does not expose the same level of customization as `Theme.MaterialComponents`.
+ * Going through the pillars of material theming:
+ *
+ * ### Colors
+ *
+ * AppCompat has a limited set of top-level color attributes, which means that [AppCompatTheme]
+ * has to generate/select alternative colors in certain situations. The mapping is currently:
+ *
+ * | MaterialTheme color | AppCompat                                             |
+ * |---------------------|-------------------------------------------------------|
+ * | primary             | colorPrimary                                          |
+ * | primaryVariant      | colorPrimaryDark                                      |
+ * | onPrimary           | Calculated black/white                                |
+ * | secondary           | colorAccent                                           |
+ * | secondaryVariant    | colorAccent                                           |
+ * | onSecondary         | Calculated black/white                                |
+ * | surface             | Default                                               |
+ * | onSurface           | android:textColorPrimary, else calculated black/white |
+ * | background          | android:colorBackground                               |
+ * | onBackground        | android:textColorPrimary, else calculated black/white |
+ * | error               | colorError                                            |
+ * | onError             | Calculated black/white                                |
+ *
+ * Where the table says "calculated black/white", this means either black/white, depending on
+ * which provides the greatest contrast against the corresponding background color.
+ *
+ * ### Typography
+ *
+ * AppCompat does not provide any semantic text appearances (such as headline6, body1, etc), and
+ * instead relies on text appearances for specific widgets or use cases. As such, the only thing
+ * we read from an AppCompat theme is the default `app:fontFamily` or `android:fontFamily`.
+ * For example:
+ *
+ * ```
+ * <style name="Theme.MyApp" parent="Theme.AppCompat">
+ *     <item name="fontFamily">@font/my_font</item>
+ * </style>
+ * ```
+ *
+ * Compose does not currently support downloadable fonts, so any font referenced from the theme
+ * should from your resources. See [here](https://developer.android.com/guide/topics/resources/font-resource)
+ * for more information.
+ *
+ * ### Shape
+ *
+ * AppCompat has no concept of shape theming, therefore we use the default value from
+ * [MaterialTheme.shapes]. If you wish to provide custom values, use the [shapes] parameter.
  *
  * @param context The context to read the theme from.
  * @param readColors whether the read the color palette from the [context]'s theme.
@@ -63,8 +117,8 @@ fun AppCompatTheme(
 }
 
 /**
- * This class contains the individual components of a [MaterialTheme]: [Colors], [Typography]
- * and [Shapes].
+ * This class contains some of the individual components of a [MaterialTheme]:
+ * [Colors] & [Typography].
  */
 data class ThemeParameters(
     val colors: Colors?,
@@ -73,14 +127,15 @@ data class ThemeParameters(
 
 /**
  * This function creates the components of a [androidx.compose.material.MaterialTheme], reading the
- * values from the `Theme.AppCompat` Android theme.
+ * values from the `Theme.AppCompat` Android theme. Please see the documentation
+ * of [AppCompatTheme] for more information on how the theme is read.
  *
  * The individual components of the returned [ThemeParameters] may be `null`, depending on the
  * matching 'read' parameter. For example, if you set [readColors] to `false`,
  * [ThemeParameters.colors] will be null.
  *
- * @param readColors whether the read the color palette from the [context]'s theme.
- * @param readTypography whether to read the font family from [context]'s theme.
+ * @param readColors whether the read the color palette from this context's theme.
+ * @param readTypography whether to read the font family from this context's theme.
  *
  * @return [ThemeParameters] instance containing the resulting [Colors] and [Typography]
  */
@@ -99,10 +154,13 @@ fun Context.createAppCompatTheme(
 
         /* First we'll read the Material color palette */
         val primary = ta.getComposeColor(R.styleable.AppCompatThemeAdapterTheme_colorPrimary)
+        // colorPrimaryDark is roughly equivalent to primaryVariant
         val primaryVariant = ta.getComposeColor(R.styleable.AppCompatThemeAdapterTheme_colorPrimaryDark)
         val onPrimary = primary.calculateOnColor()
 
+        // colorAccent is roughly equivalent to secondary
         val secondary = ta.getComposeColor(R.styleable.AppCompatThemeAdapterTheme_colorAccent)
+        // We don't have a secondaryVariant, so just use the secondary
         val secondaryVariant = secondary
         val onSecondary = secondary.calculateOnColor()
 
