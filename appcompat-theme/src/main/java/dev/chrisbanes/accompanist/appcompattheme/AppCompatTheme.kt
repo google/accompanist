@@ -142,10 +142,6 @@ fun Context.createAppCompatTheme(
      * Next we'll create a typography instance. We only use the default app:fontFamily or
      * android:fontFamily set in the theme. If neither of these are set, we return null.
      */
-    /**
-     * Next we'll create a typography instance. We only use the default app:fontFamily or
-     * android:fontFamily set in the theme. If neither of these are set, we return null.
-     */
     val typography = if (readTypography) {
         val fontFamily = ta.getFontFamilyOrNull(R.styleable.AppCompatThemeAdapterTheme_fontFamily)
             ?: ta.getFontFamilyOrNull(R.styleable.AppCompatThemeAdapterTheme_android_fontFamily)
