@@ -93,6 +93,7 @@ class PicassoTest {
         composeTestRule.setContent {
             PicassoImage(
                 data = server.url("/image"),
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(TestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
@@ -115,6 +116,7 @@ class PicassoTest {
         composeTestRule.setContent {
             PicassoImage(
                 data = R.drawable.red_rectangle,
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(TestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
@@ -142,6 +144,7 @@ class PicassoTest {
             val resId = data.collectAsState()
             PicassoImage(
                 data = resId.value,
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(TestTags.Image),
                 onRequestCompleted = { loadCompleteSignal.offer(Unit) }
             )
@@ -186,6 +189,7 @@ class PicassoTest {
             val size = sizeFlow.collectAsState()
             PicassoImage(
                 data = server.url("/red"),
+                contentDescription = null,
                 modifier = Modifier.preferredSize(size.value).testTag(TestTags.Image),
                 onRequestCompleted = { loadCompleteSignal.offer(it) }
             )
@@ -214,6 +218,7 @@ class PicassoTest {
         composeTestRule.setContent {
             PicassoImage(
                 data = server.url("/image"),
+                contentDescription = null,
                 modifier = Modifier.testTag(TestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
@@ -246,6 +251,7 @@ class PicassoTest {
             PicassoImage(
                 data = server.url("/noimage"),
                 picasso = picasso,
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(TestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
@@ -279,6 +285,7 @@ class PicassoTest {
             Providers(AmbientPicasso provides picasso) {
                 PicassoImage(
                     data = server.url("/noimage"),
+                    contentDescription = null,
                     modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(TestTags.Image),
                     onRequestCompleted = { latch.countDown() }
                 )
@@ -303,6 +310,7 @@ class PicassoTest {
         composeTestRule.setContent {
             PicassoImage(
                 data = server.url("/noimage"),
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(TestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
@@ -390,9 +398,12 @@ class PicassoTest {
                 data = server.url("/image"),
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(TestTags.Image),
                 onRequestCompleted = { latch.countDown() }
-            ) { _ ->
+            ) {
                 // Return an Image which just draws cyan
-                Image(painter = ColorPainter(Color.Cyan))
+                Image(
+                    painter = ColorPainter(Color.Cyan),
+                    contentDescription = null,
+                )
             }
         }
 
@@ -421,6 +432,7 @@ class PicassoTest {
             PicassoImage(
                 data = server.url("/image"),
                 picasso = picasso,
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
                 // Disable any caches. If the item is in the cache, the fetch is
                 // synchronous which means the Loading state is skipped
@@ -454,9 +466,13 @@ class PicassoTest {
         composeTestRule.setContent {
             PicassoImage(
                 data = server.url("/noimage"),
+                contentDescription = null,
                 error = {
                     // Return failure content which just draws red
-                    Image(painter = ColorPainter(Color.Red))
+                    Image(
+                        painter = ColorPainter(Color.Red),
+                        contentDescription = null,
+                    )
                 },
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(TestTags.Image),
                 onRequestCompleted = { latch.countDown() }
@@ -479,6 +495,7 @@ class PicassoTest {
         composeTestRule.setContent {
             PicassoImage(
                 data = ShapeDrawable(),
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
             )
         }
@@ -489,6 +506,7 @@ class PicassoTest {
         composeTestRule.setContent {
             PicassoImage(
                 data = imageResource(android.R.drawable.ic_delete),
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
             )
         }
@@ -499,6 +517,7 @@ class PicassoTest {
         composeTestRule.setContent {
             PicassoImage(
                 data = vectorResource(R.drawable.ic_android_black_24dp),
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
             )
         }
@@ -509,6 +528,7 @@ class PicassoTest {
         composeTestRule.setContent {
             PicassoImage(
                 data = ColorPainter(Color.Magenta),
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
             )
         }
