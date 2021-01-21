@@ -144,6 +144,10 @@ fun GlideImage(
  * ```
  *
  * @param data The data to load.
+ * @param contentDescription text used by accessibility services to describe what this image
+ * represents. This should always be provided unless this image is used for decorative purposes,
+ * and does not represent a meaningful action that a user can take. This text should be
+ * localized, such as by using [androidx.compose.ui.res.stringResource] or similar.
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
  * @param alignment Optional alignment parameter used to place the loaded [ImageBitmap] in the
  * given bounds defined by the width and height.
@@ -164,6 +168,7 @@ fun GlideImage(
 @Composable
 fun GlideImage(
     data: Any,
+    contentDescription: String?,
     modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
@@ -188,6 +193,7 @@ fun GlideImage(
             is ImageLoadState.Success -> {
                 MaterialLoadingImage(
                     result = imageState,
+                    contentDescription = contentDescription,
                     fadeInEnabled = fadeIn,
                     alignment = alignment,
                     contentScale = contentScale,

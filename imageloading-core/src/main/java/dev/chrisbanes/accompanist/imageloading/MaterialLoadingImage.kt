@@ -55,6 +55,10 @@ private const val DefaultTransitionDuration = 1000
  * pattern.
  *
  * @param asset The [ImageBitmap] to draw.
+ * @param contentDescription text used by accessibility services to describe what this image
+ * represents. This should always be provided unless this image is used for decorative purposes,
+ * and does not represent a meaningful action that a user can take. This text should be
+ * localized, such as by using [androidx.compose.ui.res.stringResource] or similar.
  * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
  * background)
  * @param alignment Optional alignment parameter used to place the [ImageBitmap] in the given
@@ -70,6 +74,7 @@ private const val DefaultTransitionDuration = 1000
 @Composable
 fun MaterialLoadingImage(
     asset: ImageBitmap,
+    contentDescription: String?,
     modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
@@ -80,6 +85,7 @@ fun MaterialLoadingImage(
 ) {
     MaterialLoadingImage(
         painter = ImagePainter(asset),
+        contentDescription = contentDescription,
         modifier = modifier,
         alignment = alignment,
         contentScale = contentScale,
@@ -96,6 +102,10 @@ fun MaterialLoadingImage(
  * pattern.
  *
  * @param painter The [Painter] to draw.
+ * @param contentDescription text used by accessibility services to describe what this image
+ * represents. This should always be provided unless this image is used for decorative purposes,
+ * and does not represent a meaningful action that a user can take. This text should be
+ * localized, such as by using [androidx.compose.ui.res.stringResource] or similar.
  * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
  * background)
  * @param alignment Optional alignment parameter used to place the [painter] in the given
@@ -111,6 +121,7 @@ fun MaterialLoadingImage(
 @Composable
 fun MaterialLoadingImage(
     painter: Painter,
+    contentDescription: String?,
     modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
@@ -130,6 +141,7 @@ fun MaterialLoadingImage(
             // If the fade is disabled, just use the standard ImagePainter
             painter
         },
+        contentDescription = contentDescription,
         alignment = alignment,
         contentScale = contentScale,
         colorFilter = colorFilter,
@@ -143,6 +155,10 @@ fun MaterialLoadingImage(
  * pattern.
  *
  * @param result A [ImageLoadState.Success] instance.
+ * @param contentDescription text used by accessibility services to describe what this image
+ * represents. This should always be provided unless this image is used for decorative purposes,
+ * and does not represent a meaningful action that a user can take. This text should be
+ * localized, such as by using [androidx.compose.ui.res.stringResource] or similar.
  * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
  * background)
  * @param alignment Optional alignment parameter used to place the [ImageBitmap] in the given
@@ -160,6 +176,7 @@ fun MaterialLoadingImage(
 @Composable
 fun MaterialLoadingImage(
     result: ImageLoadState.Success,
+    contentDescription: String?,
     modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
@@ -171,6 +188,7 @@ fun MaterialLoadingImage(
 ) {
     MaterialLoadingImage(
         painter = result.painter,
+        contentDescription = contentDescription,
         alignment = alignment,
         contentScale = contentScale,
         colorFilter = colorFilter,
