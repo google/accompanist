@@ -18,6 +18,8 @@ package dev.chrisbanes.accompanist.sample.coil
 
 import android.content.Context
 import android.os.Build.VERSION.SDK_INT
+import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayout
 import androidx.compose.foundation.layout.aspectRatio
@@ -35,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.ImageLoader
@@ -43,11 +46,20 @@ import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
 import dev.chrisbanes.accompanist.coil.CoilImage
-import dev.chrisbanes.accompanist.sample.AccompanistSampleActivity
+import dev.chrisbanes.accompanist.sample.AccompanistSampleTheme
 import dev.chrisbanes.accompanist.sample.R
 import dev.chrisbanes.accompanist.sample.randomSampleImageUrl
 
-class CoilBasicSample : AccompanistSampleActivity(content = { Sample() })
+class CoilBasicSample : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            AccompanistSampleTheme {
+                Sample()
+            }
+        }
+    }
+}
 
 @OptIn(ExperimentalLayout::class)
 @Composable
@@ -174,7 +186,8 @@ private fun Sample() {
                     data = randomSampleImageUrl(),
                     contentScale = ContentScale.Crop,
                     contentDescription = null,
-                    modifier = Modifier.preferredWidth(256.dp)
+                    modifier = Modifier
+                        .preferredWidth(256.dp)
                         .aspectRatio(16 / 9f)
                 )
             }
