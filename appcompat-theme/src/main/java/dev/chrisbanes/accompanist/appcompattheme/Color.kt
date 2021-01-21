@@ -24,6 +24,33 @@ internal fun Color.calculateContrastForForeground(foreground: Color): Double {
     return ColorUtils.calculateContrast(foreground.toArgb(), toArgb())
 }
 
+/**
+ * The WCAG AA minimum contrast for body text is 4.5:1. We may wish to increase this to
+ * the AAA level of 7:1 ratio.
+ */
+private const val MINIMUM_CONTRAST = 4.5
+
+/**
+ * Calculates the 'on' color for this background color.
+ *
+ * This version of the function tries to use the given [textColorPrimary], as long as it
+ * meets the minimum contrast against this color.
+ */
+internal fun Color.calculateOnColorWithTextColorPrimary(textColorPrimary: Color): Color {
+    if (textColorPrimary != Color.Unspecified &&
+        calculateContrastForForeground(textColorPrimary) >= MINIMUM_CONTRAST
+    ) {
+        return textColorPrimary
+    }
+    return calculateOnColor()
+}
+
+/**
+ * Calculates the 'on' color for this background color.
+ *
+ * In practice this returns either black or white, depending on which has the highest
+ * contrast against this color.
+ */
 internal fun Color.calculateOnColor(): Color {
     val contrastForBlack = calculateContrastForForeground(Color.Black)
     val contrastForWhite = calculateContrastForForeground(Color.White)

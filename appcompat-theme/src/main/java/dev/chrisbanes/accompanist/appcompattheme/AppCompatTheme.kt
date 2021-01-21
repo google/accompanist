@@ -104,12 +104,20 @@ fun Context.createAppCompatTheme(
         val onPrimary = primary.calculateOnColor()
 
         val secondary = ta.getComposeColor(R.styleable.AppCompatThemeAdapterTheme_colorAccent)
-        // TODO: lighten/darken secondary for variant?
         val secondaryVariant = secondary
         val onSecondary = secondary.calculateOnColor()
 
+        // We try and use the android:textColorPrimary value (with forced 100% alpha) for the
+        // onSurface and onBackground colors
+        val textColorPrimary = ta.getComposeColor(
+            R.styleable.AppCompatThemeAdapterTheme_android_textColorPrimary
+        ).copy(alpha = 1f)
+
+        val surface = defaultColors.surface
+        val onSurface = surface.calculateOnColorWithTextColorPrimary(textColorPrimary)
+
         val background = ta.getComposeColor(R.styleable.AppCompatThemeAdapterTheme_android_colorBackground)
-        val onBackground = background.calculateOnColor()
+        val onBackground = background.calculateOnColorWithTextColorPrimary(textColorPrimary)
 
         val error = ta.getComposeColor(R.styleable.AppCompatThemeAdapterTheme_colorError)
         val onError = error.calculateOnColor()
@@ -121,6 +129,8 @@ fun Context.createAppCompatTheme(
             secondary = secondary,
             secondaryVariant = secondaryVariant,
             onSecondary = onSecondary,
+            surface = surface,
+            onSurface = onSurface,
             background = background,
             onBackground = onBackground,
             error = error,

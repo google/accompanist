@@ -16,11 +16,14 @@
 
 package dev.chrisbanes.accompanist.appcompattheme
 
-import android.content.Context
 import android.view.ContextThemeWrapper
 import androidx.annotation.StyleRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Typography
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Providers
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.colorResource
@@ -84,6 +87,40 @@ class AppCompatThemeTest<T : AppCompatActivity>(activityClass: Class<T>) {
     }
 
     @Test
+    fun colors_textColorPrimary() = composeTestRule.setContent {
+        WithThemeOverlay(R.style.ThemeOverlay_TextColorPrimary) {
+            AppCompatTheme {
+                val color = MaterialTheme.colors
+
+                assertEquals(colorResource(R.color.aquamarine), color.primary)
+                assertEquals(Color.Black, color.onPrimary)
+                assertEquals(colorResource(R.color.royal_blue), color.primaryVariant)
+                assertEquals(colorResource(R.color.dark_golden_rod), color.secondary)
+                assertEquals(Color.Black, color.onSecondary)
+                assertEquals(colorResource(R.color.dark_golden_rod), color.secondaryVariant)
+                assertEquals(colorResource(R.color.dark_salmon), color.error)
+                assertEquals(Color.Black, color.onError)
+
+                assertEquals(colorResource(R.color.light_coral), color.background)
+                // Our textColorPrimary (midnight_blue) contains provides enough contrast vs
+                // the background color, so it should be used.
+                assertEquals(colorResource(R.color.midnight_blue), color.onBackground)
+
+                if (!isSystemInDarkTheme()) {
+                    // Our textColorPrimary (midnight_blue) provides enough contrast vs
+                    // the light surface color, so it should be used.
+                    assertEquals(colorResource(R.color.midnight_blue), color.onSurface)
+                } else {
+                    // In dark theme, textColorPrimary (midnight_blue) does not provide
+                    // enough contrast vs  the light surface color,
+                    // so we use a computed value of white
+                    assertEquals(Color.White, color.onSurface)
+                }
+            }
+        }
+    }
+
+    @Test
     fun type_rubik_family() = composeTestRule.setContent {
         val rubik = fontFamily(
             font(R.font.rubik_300, FontWeight.W300),
@@ -91,47 +128,47 @@ class AppCompatThemeTest<T : AppCompatActivity>(activityClass: Class<T>) {
             font(R.font.rubik_500, FontWeight.W500)
         )
 
-        testTypography(
-            context = AmbientContext.current,
-            themeOverlayId = R.style.ThemeOverlay_RubikFontFamily,
-            expectedFontFamily = rubik
-        )
+        WithThemeOverlay(R.style.ThemeOverlay_RubikFontFamily) {
+            AppCompatTheme {
+                MaterialTheme.typography.assertFontFamily(expected = rubik)
+            }
+        }
     }
 
     @Test
     fun type_rubik_fixed400() = composeTestRule.setContent {
-        testTypography(
-            context = AmbientContext.current,
-            themeOverlayId = R.style.ThemeOverlay_Rubik400,
-            expectedFontFamily = font(R.font.rubik_400, FontWeight.W400).asFontFamily()
-        )
+        WithThemeOverlay(R.style.ThemeOverlay_Rubik400) {
+            AppCompatTheme {
+                MaterialTheme.typography
+                    .assertFontFamily(font(R.font.rubik_400, FontWeight.W400).asFontFamily())
+            }
+        }
     }
+}
 
-    private fun testTypography(
-        context: Context,
-        @StyleRes themeOverlayId: Int,
-        expectedFontFamily: FontFamily
-    ) {
-        val themedContext = ContextThemeWrapper(context, themeOverlayId)
+private fun Typography.assertFontFamily(expected: FontFamily) {
+    assertEquals(expected, h1.fontFamily)
+    assertEquals(expected, h2.fontFamily)
+    assertEquals(expected, h3.fontFamily)
+    assertEquals(expected, h4.fontFamily)
+    assertEquals(expected, h5.fontFamily)
+    assertEquals(expected, h5.fontFamily)
+    assertEquals(expected, h6.fontFamily)
+    assertEquals(expected, body1.fontFamily)
+    assertEquals(expected, body2.fontFamily)
+    assertEquals(expected, button.fontFamily)
+    assertEquals(expected, caption.fontFamily)
+    assertEquals(expected, overline.fontFamily)
+}
 
-        val typography = themedContext.createAppCompatTheme(
-            readColors = false,
-            readTypography = true
-        ).typography
-
-        checkNotNull(typography)
-
-        assertEquals(expectedFontFamily, typography.h1.fontFamily)
-        assertEquals(expectedFontFamily, typography.h2.fontFamily)
-        assertEquals(expectedFontFamily, typography.h3.fontFamily)
-        assertEquals(expectedFontFamily, typography.h4.fontFamily)
-        assertEquals(expectedFontFamily, typography.h5.fontFamily)
-        assertEquals(expectedFontFamily, typography.h5.fontFamily)
-        assertEquals(expectedFontFamily, typography.h6.fontFamily)
-        assertEquals(expectedFontFamily, typography.body1.fontFamily)
-        assertEquals(expectedFontFamily, typography.body2.fontFamily)
-        assertEquals(expectedFontFamily, typography.button.fontFamily)
-        assertEquals(expectedFontFamily, typography.caption.fontFamily)
-        assertEquals(expectedFontFamily, typography.overline.fontFamily)
-    }
+/**
+ * Function which applies an Android theme overlay to the current context.
+ */
+@Composable
+fun WithThemeOverlay(
+    @StyleRes themeOverlayId: Int,
+    content: @Composable () -> Unit,
+) {
+    val themedContext = ContextThemeWrapper(AmbientContext.current, themeOverlayId)
+    Providers(AmbientContext provides themedContext, content = content)
 }

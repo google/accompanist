@@ -29,6 +29,10 @@
         <item name="colorError">@color/dark_salmon</item>
     </style>
 
+    <style name="ThemeOverlay.TextColorPrimary" parent="">
+        <item name="android:textColorPrimary">@color/midnight_blue</item>
+    </style>
+
     <style name="ThemeOverlay.RubikFontFamily" parent="">
         <item name="fontFamily">@font/rubik</item>
     </style>
