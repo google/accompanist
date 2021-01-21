@@ -2,7 +2,7 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/dev.chrisbanes.accompanist/accompanist-appcompat-theme)](https://search.maven.org/search?q=g:dev.chrisbanes.accompanist)
 
-AppCompat Compose Theme Adapter enables reuse of [AppCompat][mdc] XML themes, for theming in [Jetpack Compose][compose].
+AppCompat Compose Theme Adapter enables reuse of [AppCompat][appcompat] XML themes, for theming in [Jetpack Compose][compose].
 
 ## Usage
 This library attempts to bridge the gap between [AppCompat][appcompat] XML themes, and themes in [Jetpack Compose][compose],
