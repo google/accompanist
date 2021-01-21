@@ -21,11 +21,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 
 /**
- * An [AppCompatActivity] which forces the night mode to 'dark theme'.
+ * An [AppCompatActivity] which forces the night mode to 'light theme'.
  */
-class DarkMdcActivity : AppCompatActivity() {
+class LightAppCompatActivity : AppCompatActivity() {
     override fun attachBaseContext(newBase: Context) {
-        delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
+        delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_NO
         super.attachBaseContext(newBase)
     }
 }

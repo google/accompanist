@@ -1,7 +1,7 @@
 public final class dev/chrisbanes/accompanist/appcompattheme/AppCompatTheme {
-	public static final fun AppCompatTheme (Landroid/content/Context;Landroidx/compose/material/Shapes;ZZZLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
-	public static final fun createAppCompatTheme (Landroid/content/Context;Landroidx/compose/ui/unit/Density;ZZZ)Ldev/chrisbanes/accompanist/appcompattheme/ThemeParameters;
-	public static synthetic fun createAppCompatTheme$default (Landroid/content/Context;Landroidx/compose/ui/unit/Density;ZZZILjava/lang/Object;)Ldev/chrisbanes/accompanist/appcompattheme/ThemeParameters;
+	public static final fun AppCompatTheme (Landroid/content/Context;ZZLandroidx/compose/material/Shapes;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun createAppCompatTheme (Landroid/content/Context;ZZ)Ldev/chrisbanes/accompanist/appcompattheme/ThemeParameters;
+	public static synthetic fun createAppCompatTheme$default (Landroid/content/Context;ZZILjava/lang/Object;)Ldev/chrisbanes/accompanist/appcompattheme/ThemeParameters;
 }
 
 public final class dev/chrisbanes/accompanist/appcompattheme/ThemeParameters {

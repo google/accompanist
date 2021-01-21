@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 The Android Open Source Project
+ * Copyright 2020 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,23 +16,16 @@
 
 package dev.chrisbanes.accompanist.appcompattheme
 
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.test.filters.MediumTest
-import org.junit.Rule
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
+import android.content.Context
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 
-@MediumTest
-@RunWith(JUnit4::class)
-class NotMdcThemeTest {
-    @get:Rule
-    val composeTestRule = createAndroidComposeRule<NotMdcActivity>()
-
-    @Test(expected = IllegalArgumentException::class)
-    fun throwForNonMdcTheme() = composeTestRule.setContent {
-        AppCompatTheme {
-            // Nothing to do here, exception should be thrown
-        }
+/**
+ * An [AppCompatActivity] which forces the night mode to 'dark theme'.
+ */
+class DarkAppCompatActivity : AppCompatActivity() {
+    override fun attachBaseContext(newBase: Context) {
+        delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
+        super.attachBaseContext(newBase)
     }
 }

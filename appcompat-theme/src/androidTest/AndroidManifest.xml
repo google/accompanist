@@ -15,23 +15,23 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.google.android.material.composethemeadapter">
+    package="dev.chrisbanes.accompanist.appcompattheme">
 
     <uses-sdk android:targetSdkVersion="29" />
 
     <application>
 
         <activity
-            android:name=".LightMdcActivity"
-            android:theme="@style/Theme.MdcThemeTest" />
+            android:name=".LightAppCompatActivity"
+            android:theme="@style/Theme.AppCompatThemeTest" />
 
         <activity
-            android:name=".DarkMdcActivity"
-            android:theme="@style/Theme.MdcThemeTest" />
+            android:name=".DarkAppCompatActivity"
+            android:theme="@style/Theme.AppCompatThemeTest" />
 
         <activity
-            android:name=".NotMdcActivity"
-            android:theme="@style/Theme.MdcThemeTest.NotMdc" />
+            android:name=".NotAppCompatActivity"
+            android:theme="@android:style/Theme.Material" />
 
     </application>
 
