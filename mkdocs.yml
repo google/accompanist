@@ -18,12 +18,14 @@ nav:
   - 'Glide': glide.md
   - 'Picasso': picasso.md
   - 'Insets': insets.md
+  - 'AppCompat Theme': appcompat-theme.md
   - 'API':
     - 'Coil': api/coil/coil/
     - 'Glide': api/glide/glide/
     - 'Picasso': api/picasso/picasso/
     - 'Image Loading Core': api/imageloading-core/imageloading-core/
     - 'Insets': api/insets/insets/
+    - 'AppCompat Theme': api/appcompat-theme/appcompat-theme
   - 'Snapshots': using-snapshot-version.md
   - 'Contributing': contributing.md
   - 'Maintainers':
