@@ -17,6 +17,7 @@
 package dev.chrisbanes.accompanist.coil
 
 import android.graphics.drawable.ShapeDrawable
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.material.Text
@@ -35,7 +36,6 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertWidthIsAtLeast
 import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.captureToImage
-import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.unit.dp
@@ -76,8 +76,9 @@ import java.util.concurrent.atomic.AtomicInteger
 @LargeTest
 @RunWith(JUnit4::class)
 class CoilTest {
+    @Suppress("DEPRECATION") // createAndroidComposeRuleLegacy
     @get:Rule
-    val composeTestRule = createComposeRule()
+    val composeTestRule = androidx.compose.ui.test.junit4.createAndroidComposeRuleLegacy<ComponentActivity>()
 
     // Our MockWebServer. We use a response delay to simulate real-world conditions
     private val server = ImageMockWebServer()
