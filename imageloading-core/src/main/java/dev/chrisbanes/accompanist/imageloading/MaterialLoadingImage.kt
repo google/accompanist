@@ -21,7 +21,6 @@ package dev.chrisbanes.accompanist.imageloading
 import android.graphics.ColorMatrixColorFilter
 import androidx.compose.animation.asDisposableClock
 import androidx.compose.animation.core.AnimationClockObservable
-import androidx.compose.animation.core.FloatPropKey
 import androidx.compose.animation.core.createAnimation
 import androidx.compose.animation.core.transitionDefinition
 import androidx.compose.animation.core.tween
@@ -55,6 +54,10 @@ private const val DefaultTransitionDuration = 1000
  * pattern.
  *
  * @param asset The [ImageBitmap] to draw.
+ * @param contentDescription text used by accessibility services to describe what this image
+ * represents. This should always be provided unless this image is used for decorative purposes,
+ * and does not represent a meaningful action that a user can take. This text should be
+ * localized, such as by using [androidx.compose.ui.res.stringResource] or similar.
  * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
  * background)
  * @param alignment Optional alignment parameter used to place the [ImageBitmap] in the given
@@ -70,6 +73,7 @@ private const val DefaultTransitionDuration = 1000
 @Composable
 fun MaterialLoadingImage(
     asset: ImageBitmap,
+    contentDescription: String?,
     modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
@@ -80,6 +84,7 @@ fun MaterialLoadingImage(
 ) {
     MaterialLoadingImage(
         painter = ImagePainter(asset),
+        contentDescription = contentDescription,
         modifier = modifier,
         alignment = alignment,
         contentScale = contentScale,
@@ -96,6 +101,10 @@ fun MaterialLoadingImage(
  * pattern.
  *
  * @param painter The [Painter] to draw.
+ * @param contentDescription text used by accessibility services to describe what this image
+ * represents. This should always be provided unless this image is used for decorative purposes,
+ * and does not represent a meaningful action that a user can take. This text should be
+ * localized, such as by using [androidx.compose.ui.res.stringResource] or similar.
  * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
  * background)
  * @param alignment Optional alignment parameter used to place the [painter] in the given
@@ -111,6 +120,7 @@ fun MaterialLoadingImage(
 @Composable
 fun MaterialLoadingImage(
     painter: Painter,
+    contentDescription: String?,
     modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
@@ -130,6 +140,7 @@ fun MaterialLoadingImage(
             // If the fade is disabled, just use the standard ImagePainter
             painter
         },
+        contentDescription = contentDescription,
         alignment = alignment,
         contentScale = contentScale,
         colorFilter = colorFilter,
@@ -143,6 +154,10 @@ fun MaterialLoadingImage(
  * pattern.
  *
  * @param result A [ImageLoadState.Success] instance.
+ * @param contentDescription text used by accessibility services to describe what this image
+ * represents. This should always be provided unless this image is used for decorative purposes,
+ * and does not represent a meaningful action that a user can take. This text should be
+ * localized, such as by using [androidx.compose.ui.res.stringResource] or similar.
  * @param modifier Modifier used to adjust the layout algorithm or draw decoration content (ex.
  * background)
  * @param alignment Optional alignment parameter used to place the [ImageBitmap] in the given
@@ -160,6 +175,7 @@ fun MaterialLoadingImage(
 @Composable
 fun MaterialLoadingImage(
     result: ImageLoadState.Success,
+    contentDescription: String?,
     modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
@@ -171,6 +187,7 @@ fun MaterialLoadingImage(
 ) {
     MaterialLoadingImage(
         painter = result.painter,
+        contentDescription = contentDescription,
         alignment = alignment,
         contentScale = contentScale,
         colorFilter = colorFilter,
@@ -196,6 +213,7 @@ private class MaterialLoadingPainterWrapper(
         policy = neverEqualPolicy()
     )
 
+    @Suppress("DEPRECATION")
     private val animation = CrossfadeTransition.definition(duration).createAnimation(clock)
 
     init {
@@ -257,14 +275,15 @@ private class MaterialLoadingPainterWrapper(
  */
 private val paintPool = Pools.SimplePool<Paint>(2)
 
+@Suppress("DEPRECATION") // Need to fix this
 private object CrossfadeTransition {
     enum class State {
         Loaded, Empty
     }
 
-    val Alpha = FloatPropKey()
-    val Brightness = FloatPropKey()
-    val Saturation = FloatPropKey()
+    val Alpha = androidx.compose.animation.core.FloatPropKey()
+    val Brightness = androidx.compose.animation.core.FloatPropKey()
+    val Saturation = androidx.compose.animation.core.FloatPropKey()
 
     fun definition(durationMs: Int) = transitionDefinition<State> {
         state(State.Empty) {

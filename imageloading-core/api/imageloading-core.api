@@ -17,7 +17,7 @@ public final class dev/chrisbanes/accompanist/imageloading/DataSource : java/lan
 }
 
 public final class dev/chrisbanes/accompanist/imageloading/ImageLoad {
-	public static final fun ImageLoad (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;Landroidx/compose/ui/Modifier;Ljava/lang/Object;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+	public static final fun ImageLoad (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;Landroidx/compose/ui/Modifier;Ljava/lang/Object;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
 	public static final fun getDefaultRefetchOnSizeChangeLambda ()Lkotlin/jvm/functions/Function2;
 	public static final fun getEmptyRequestCompleteLambda ()Lkotlin/jvm/functions/Function1;
 }
@@ -79,8 +79,8 @@ public final class dev/chrisbanes/accompanist/imageloading/ImageLoadingColorMatr
 }
 
 public final class dev/chrisbanes/accompanist/imageloading/MaterialLoadingImage {
-	public static final fun MaterialLoadingImage (Landroidx/compose/ui/graphics/ImageBitmap;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;Landroidx/compose/animation/core/AnimationClockObservable;ZILandroidx/compose/runtime/Composer;II)V
-	public static final fun MaterialLoadingImage (Landroidx/compose/ui/graphics/painter/Painter;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;Landroidx/compose/animation/core/AnimationClockObservable;ZILandroidx/compose/runtime/Composer;II)V
-	public static final fun MaterialLoadingImage (Ldev/chrisbanes/accompanist/imageloading/ImageLoadState$Success;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;Landroidx/compose/animation/core/AnimationClockObservable;ZZILandroidx/compose/runtime/Composer;II)V
+	public static final fun MaterialLoadingImage (Landroidx/compose/ui/graphics/ImageBitmap;Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;Landroidx/compose/animation/core/AnimationClockObservable;ZILandroidx/compose/runtime/Composer;II)V
+	public static final fun MaterialLoadingImage (Landroidx/compose/ui/graphics/painter/Painter;Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;Landroidx/compose/animation/core/AnimationClockObservable;ZILandroidx/compose/runtime/Composer;II)V
+	public static final fun MaterialLoadingImage (Ldev/chrisbanes/accompanist/imageloading/ImageLoadState$Success;Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;Landroidx/compose/animation/core/AnimationClockObservable;ZZILandroidx/compose/runtime/Composer;II)V
 }
 

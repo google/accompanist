@@ -16,7 +16,8 @@
 
 package dev.chrisbanes.accompanist.sample.glide
 
-import androidx.compose.foundation.ScrollableColumn
+import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayout
 import androidx.compose.foundation.layout.aspectRatio
@@ -24,6 +25,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.foundation.layout.preferredWidth
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -32,14 +34,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.chrisbanes.accompanist.glide.GlideImage
-import dev.chrisbanes.accompanist.sample.AccompanistSampleActivity
+import dev.chrisbanes.accompanist.sample.AccompanistSampleTheme
 import dev.chrisbanes.accompanist.sample.R
 import dev.chrisbanes.accompanist.sample.randomSampleImageUrl
 
-class GlideBasicSample : AccompanistSampleActivity(content = { Sample() })
+class GlideBasicSample : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            AccompanistSampleTheme {
+                Sample()
+            }
+        }
+    }
+}
 
 @OptIn(ExperimentalLayout::class)
 @Composable
@@ -51,60 +63,78 @@ private fun Sample() {
             )
         }
     ) {
-        ScrollableColumn(modifier = Modifier.padding(16.dp)) {
-            // GlideImage with data parameter
-            GlideImage(
-                data = randomSampleImageUrl(),
-                modifier = Modifier.preferredSize(128.dp)
-            )
+        LazyColumn(Modifier.padding(16.dp)) {
+            item {
+                // GlideImage with data parameter
+                GlideImage(
+                    data = randomSampleImageUrl(),
+                    contentDescription = null,
+                    modifier = Modifier.preferredSize(128.dp)
+                )
+            }
 
-            // GlideImage with loading slot
-            GlideImage(
-                data = randomSampleImageUrl(),
-                loading = {
-                    Box(Modifier.fillMaxSize()) {
-                        CircularProgressIndicator(Modifier.align(Alignment.Center))
-                    }
-                },
-                modifier = Modifier.preferredSize(128.dp)
-            )
+            item {
+                // GlideImage with loading slot
+                GlideImage(
+                    data = randomSampleImageUrl(),
+                    loading = {
+                        Box(Modifier.fillMaxSize()) {
+                            CircularProgressIndicator(Modifier.align(Alignment.Center))
+                        }
+                    },
+                    contentDescription = null,
+                    modifier = Modifier.preferredSize(128.dp)
+                )
+            }
 
-            // GlideImage with crossfade and data parameter
-            GlideImage(
-                data = randomSampleImageUrl(),
-                fadeIn = true,
-                modifier = Modifier.preferredSize(128.dp)
-            )
+            item {
+                // GlideImage with crossfade and data parameter
+                GlideImage(
+                    data = randomSampleImageUrl(),
+                    fadeIn = true,
+                    contentDescription = null,
+                    modifier = Modifier.preferredSize(128.dp)
+                )
+            }
 
-            // GlideImage with crossfade and loading slot
-            GlideImage(
-                data = randomSampleImageUrl(),
-                fadeIn = true,
-                loading = {
-                    Box(Modifier.fillMaxSize()) {
-                        CircularProgressIndicator(Modifier.align(Alignment.Center))
-                    }
-                },
-                modifier = Modifier.preferredSize(128.dp)
-            )
+            item {
+                // GlideImage with crossfade and loading slot
+                GlideImage(
+                    data = randomSampleImageUrl(),
+                    fadeIn = true,
+                    loading = {
+                        Box(Modifier.fillMaxSize()) {
+                            CircularProgressIndicator(Modifier.align(Alignment.Center))
+                        }
+                    },
+                    contentDescription = null,
+                    modifier = Modifier.preferredSize(128.dp)
+                )
+            }
 
-            // GlideImage with an implicit size
-            GlideImage(
-                data = randomSampleImageUrl(),
-                loading = {
-                    Box(Modifier.fillMaxSize()) {
-                        CircularProgressIndicator(Modifier.align(Alignment.Center))
-                    }
-                }
-            )
+            item {
+                // GlideImage with an implicit size
+                GlideImage(
+                    data = randomSampleImageUrl(),
+                    loading = {
+                        Box(Modifier.fillMaxSize()) {
+                            CircularProgressIndicator(Modifier.align(Alignment.Center))
+                        }
+                    },
+                    contentDescription = null,
+                )
+            }
 
-            // GlideImage with an aspect ratio
-            GlideImage(
-                data = randomSampleImageUrl(),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.preferredWidth(256.dp)
-                    .aspectRatio(16 / 9f)
-            )
+            item {
+                // GlideImage with an aspect ratio
+                GlideImage(
+                    data = randomSampleImageUrl(),
+                    contentScale = ContentScale.Crop,
+                    contentDescription = null,
+                    modifier = Modifier.preferredWidth(256.dp)
+                        .aspectRatio(16 / 9f)
+                )
+            }
         }
     }
 }

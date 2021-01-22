@@ -16,6 +16,8 @@
 
 package dev.chrisbanes.accompanist.coil
 
+import android.graphics.drawable.ShapeDrawable
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.material.Text
@@ -34,7 +36,6 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertWidthIsAtLeast
 import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.captureToImage
-import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.unit.dp
@@ -75,8 +76,9 @@ import java.util.concurrent.atomic.AtomicInteger
 @LargeTest
 @RunWith(JUnit4::class)
 class CoilTest {
+    @Suppress("DEPRECATION") // createAndroidComposeRuleLegacy
     @get:Rule
-    val composeTestRule = createComposeRule()
+    val composeTestRule = androidx.compose.ui.test.junit4.createAndroidComposeRuleLegacy<ComponentActivity>()
 
     // Our MockWebServer. We use a response delay to simulate real-world conditions
     private val server = ImageMockWebServer()
@@ -104,6 +106,7 @@ class CoilTest {
                     .data(server.url("/image"))
                     .listener { _, _ -> latch.countDown() }
                     .build(),
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
                 onRequestCompleted = { results += it }
             )
@@ -130,6 +133,7 @@ class CoilTest {
                 requestBuilder = {
                     listener { _, _ -> latch.countDown() }
                 },
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
                 onRequestCompleted = { results += it }
             )
@@ -152,6 +156,7 @@ class CoilTest {
         composeTestRule.setContent {
             CoilImage(
                 data = server.url("/image"),
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
@@ -174,6 +179,7 @@ class CoilTest {
         composeTestRule.setContent {
             CoilImage(
                 data = resourceUri(R.drawable.red_rectangle),
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
@@ -211,6 +217,7 @@ class CoilTest {
         composeTestRule.setContent {
             CoilImage(
                 data = server.url("/image"),
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
                 imageLoader = imageLoader,
                 onRequestCompleted = { latch.countDown() }
@@ -246,6 +253,7 @@ class CoilTest {
             Providers(AmbientImageLoader provides imageLoader) {
                 CoilImage(
                     data = server.url("/image"),
+                    contentDescription = null,
                     modifier = Modifier.preferredSize(128.dp, 128.dp),
                     onRequestCompleted = { latch.countDown() }
                 )
@@ -270,6 +278,7 @@ class CoilTest {
             val resId = data.collectAsState()
             CoilImage(
                 data = resId.value,
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
                 onRequestCompleted = { loadCompleteSignal.offer(Unit) }
             )
@@ -314,6 +323,7 @@ class CoilTest {
             val size = sizeFlow.collectAsState()
             CoilImage(
                 data = server.url("/red"),
+                contentDescription = null,
                 modifier = Modifier.preferredSize(size.value).testTag(CoilTestTags.Image),
                 onRequestCompleted = { loadCompleteSignal.offer(it) }
             )
@@ -343,6 +353,7 @@ class CoilTest {
         composeTestRule.setContent {
             CoilImage(
                 data = server.url("/image"),
+                contentDescription = null,
                 modifier = Modifier.testTag(CoilTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
@@ -364,6 +375,7 @@ class CoilTest {
         composeTestRule.setContent {
             CoilImage(
                 data = server.url("/noimage"),
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
@@ -446,9 +458,13 @@ class CoilTest {
                 data = server.url("/image"),
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
-            ) { _ ->
+            ) {
                 // Return an Image which just draws cyan
-                Image(painter = ColorPainter(Color.Cyan))
+                Image(
+                    painter = ColorPainter(Color.Cyan),
+                    contentDescription = null,
+                    modifier = Modifier.matchParentSize()
+                )
             }
         }
 
@@ -484,6 +500,7 @@ class CoilTest {
             CoilImage(
                 data = server.url("/image"),
                 imageLoader = imageLoader,
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
                 loading = { Text(text = "Loading") },
                 onRequestCompleted = { loadLatch.countDown() }
@@ -515,8 +532,13 @@ class CoilTest {
                 data = server.url("/noimage"),
                 error = {
                     // Return failure content which just draws red
-                    Image(painter = ColorPainter(Color.Red))
+                    Image(
+                        painter = ColorPainter(Color.Red),
+                        contentDescription = null,
+                        modifier = Modifier.matchParentSize()
+                    )
                 },
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
@@ -536,7 +558,8 @@ class CoilTest {
     fun data_drawable_throws() {
         composeTestRule.setContent {
             CoilImage(
-                data = android.graphics.drawable.ShapeDrawable(),
+                data = ShapeDrawable(),
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
             )
         }
@@ -547,6 +570,7 @@ class CoilTest {
         composeTestRule.setContent {
             CoilImage(
                 data = imageResource(android.R.drawable.ic_delete),
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
             )
         }
@@ -557,6 +581,7 @@ class CoilTest {
         composeTestRule.setContent {
             CoilImage(
                 data = vectorResource(R.drawable.ic_android_black_24dp),
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
             )
         }
@@ -567,6 +592,7 @@ class CoilTest {
         composeTestRule.setContent {
             CoilImage(
                 data = ColorPainter(Color.Magenta),
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
             )
         }

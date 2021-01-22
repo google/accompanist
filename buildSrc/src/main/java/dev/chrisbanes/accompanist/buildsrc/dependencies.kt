@@ -28,7 +28,7 @@ object Libs {
     const val junit = "junit:junit:4.13"
 
     object Kotlin {
-        private const val version = "1.4.21"
+        private const val version = "1.4.21-2"
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib:$version"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
 
@@ -60,8 +60,8 @@ object Libs {
         const val dynamicanimation = "androidx.dynamicanimation:dynamicanimation-ktx:1.0.0-alpha03"
 
         object Compose {
-            const val snapshot = ""
-            const val version = "1.0.0-alpha10"
+            const val snapshot = "7094152"
+            const val version = "1.0.0-SNAPSHOT"
 
             @JvmStatic
             val snapshotUrl: String

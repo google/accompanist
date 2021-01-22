@@ -18,11 +18,12 @@ package dev.chrisbanes.accompanist.sample.insets
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
@@ -83,15 +84,13 @@ private fun Sample() {
                 modifier = Modifier.fillMaxWidth()
             )
 
-            // Need to use ScrollableColumn for the reverseScrollDirection support
-            // FR for LazyColumn: https://issuetracker.google.com/173207790
-            ScrollableColumn(
-                reverseScrollDirection = true,
+            LazyColumn(
+                reverseLayout = true,
                 modifier = Modifier
                     .weight(1f)
                     .nestedScroll(connection = rememberImeNestedScrollConnection())
             ) {
-                listItems.forEach { imageUrl ->
+                items(listItems) { imageUrl ->
                     ListItem(imageUrl, Modifier.fillMaxWidth())
                 }
             }
