@@ -23,13 +23,11 @@ import android.os.Build
 import android.util.TypedValue
 import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontListFontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.font.asFontFamily
-import androidx.compose.ui.text.font.font
-import androidx.compose.ui.text.font.fontFamily
+import androidx.compose.ui.text.font.toFontFamily
 import androidx.core.content.res.FontResourcesParserCompat
 import androidx.core.content.res.getColorOrThrow
 import kotlin.concurrent.getOrSet
@@ -70,7 +68,7 @@ internal fun TypedArray.getFontFamilyOrNull(index: Int): FontFamilyWithWeight? {
                         resources.parseXmlFontFamily(tv.resourceId)?.let(::FontFamilyWithWeight)
                     } else {
                         // Otherwise we just load it as a single font
-                        FontFamilyWithWeight(font(tv.resourceId).asFontFamily())
+                        FontFamilyWithWeight(Font(tv.resourceId).toFontFamily())
                     }
                 } else null
             }
@@ -81,7 +79,7 @@ internal fun TypedArray.getFontFamilyOrNull(index: Int): FontFamilyWithWeight? {
 
 @SuppressLint("RestrictedApi") // FontResourcesParserCompat.*
 @RequiresApi(23) // XML font families with >1 fonts are only supported on API 23+
-private fun Resources.parseXmlFontFamily(resourceId: Int): FontListFontFamily? {
+private fun Resources.parseXmlFontFamily(resourceId: Int): FontFamily? {
     val parser = getXml(resourceId)
 
     // Can't use {} since XmlResourceParser is AutoCloseable, not Closeable
@@ -90,13 +88,13 @@ private fun Resources.parseXmlFontFamily(resourceId: Int): FontListFontFamily? {
         val result = FontResourcesParserCompat.parse(parser, this)
         if (result is FontResourcesParserCompat.FontFamilyFilesResourceEntry) {
             val fonts = result.entries.map { font ->
-                font(
+                Font(
                     resId = font.resourceId,
                     weight = fontWeightOf(font.weight),
                     style = if (font.isItalic) FontStyle.Italic else FontStyle.Normal
                 )
             }
-            return fontFamily(fonts)
+            return FontFamily(fonts)
         }
     } finally {
         parser.close()

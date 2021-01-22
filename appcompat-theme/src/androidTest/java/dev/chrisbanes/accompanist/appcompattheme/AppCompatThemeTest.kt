@@ -28,11 +28,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.font.asFontFamily
-import androidx.compose.ui.text.font.font
-import androidx.compose.ui.text.font.fontFamily
+import androidx.compose.ui.text.font.toFontFamily
 import androidx.test.filters.LargeTest
 import androidx.test.filters.SdkSuppress
 import dev.chrisbanes.accompanist.appcompattheme.test.R
@@ -124,7 +123,7 @@ class AppCompatThemeTest<T : AppCompatActivity>(activityClass: Class<T>) {
     @Test
     @SdkSuppress(maxSdkVersion = 22) // On API 21-22, the family is loaded with only the 400 font
     fun type_rubik_family_api21() = composeTestRule.setContent {
-        val rubik = font(R.font.rubik, FontWeight.W400).asFontFamily()
+        val rubik = Font(R.font.rubik, FontWeight.W400).toFontFamily()
 
         WithThemeOverlay(R.style.ThemeOverlay_RubikFontFamily) {
             AppCompatTheme {
@@ -136,11 +135,11 @@ class AppCompatThemeTest<T : AppCompatActivity>(activityClass: Class<T>) {
     @Test
     @SdkSuppress(minSdkVersion = 23) // XML font families with >1 fonts are only supported on API 23+
     fun type_rubik_family_api23() = composeTestRule.setContent {
-        val rubik = fontFamily(
-            font(R.font.rubik_300, FontWeight.W300),
-            font(R.font.rubik_400, FontWeight.W400),
-            font(R.font.rubik_500, FontWeight.W500),
-            font(R.font.rubik_700, FontWeight.W700),
+        val rubik = FontFamily(
+            Font(R.font.rubik_300, FontWeight.W300),
+            Font(R.font.rubik_400, FontWeight.W400),
+            Font(R.font.rubik_500, FontWeight.W500),
+            Font(R.font.rubik_700, FontWeight.W700),
         )
 
         WithThemeOverlay(R.style.ThemeOverlay_RubikFontFamily) {
@@ -152,7 +151,7 @@ class AppCompatThemeTest<T : AppCompatActivity>(activityClass: Class<T>) {
 
     @Test
     fun type_rubik_fixed400() = composeTestRule.setContent {
-        val rubik400 = font(R.font.rubik_400, FontWeight.W400).asFontFamily()
+        val rubik400 = Font(R.font.rubik_400, FontWeight.W400).toFontFamily()
         WithThemeOverlay(R.style.ThemeOverlay_Rubik400) {
             AppCompatTheme {
                 MaterialTheme.typography.assertFontFamily(expected = rubik400)
