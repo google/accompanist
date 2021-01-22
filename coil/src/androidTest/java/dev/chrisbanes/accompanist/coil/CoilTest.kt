@@ -17,12 +17,10 @@
 package dev.chrisbanes.accompanist.coil
 
 import android.graphics.drawable.ShapeDrawable
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.material.Text
 import androidx.compose.runtime.Providers
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -39,6 +37,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertWidthIsAtLeast
 import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.captureToImage
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.unit.dp
@@ -61,13 +60,11 @@ import dev.chrisbanes.accompanist.imageloading.test.receiveBlocking
 import dev.chrisbanes.accompanist.imageloading.test.resourceUri
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.withTimeoutOrNull
 import org.junit.After
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -79,9 +76,8 @@ import java.util.concurrent.atomic.AtomicInteger
 @LargeTest
 @RunWith(JUnit4::class)
 class CoilTest {
-    @Suppress("DEPRECATION") // createAndroidComposeRuleLegacy
     @get:Rule
-    val composeTestRule = androidx.compose.ui.test.junit4.createAndroidComposeRuleLegacy<ComponentActivity>()
+    val composeTestRule = createComposeRule()
 
     // Our MockWebServer. We use a response delay to simulate real-world conditions
     private val server = ImageMockWebServer()
@@ -116,7 +112,7 @@ class CoilTest {
         }
 
         // Wait for the Coil request listener to run
-        composeTestRule.waitUntil { requestCompleted }
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         composeTestRule.runOnIdle {
             // And assert that we got a single successful result
@@ -143,7 +139,7 @@ class CoilTest {
         }
 
         // Wait for the Coil request listener to run
-        composeTestRule.waitUntil { requestCompleted }
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         composeTestRule.runOnIdle {
             // And assert that we got a single successful result
@@ -166,7 +162,7 @@ class CoilTest {
         }
 
         // Wait for the onRequestCompleted to run
-        composeTestRule.waitUntil { requestCompleted }
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         composeTestRule.onNodeWithTag(CoilTestTags.Image)
             .assertIsDisplayed()
@@ -175,7 +171,6 @@ class CoilTest {
     }
 
     @Test
-    @Ignore("TODO: painters without an intrinsic size are now drawn with 0,0 size")
     @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
     fun basicLoad_drawable() {
         var requestCompleted by mutableStateOf(false)
@@ -190,7 +185,7 @@ class CoilTest {
         }
 
         // Wait for the onRequestCompleted to run
-        composeTestRule.waitUntil { requestCompleted }
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         composeTestRule.onNodeWithTag(CoilTestTags.Image)
             .assertWidthIsEqualTo(128.dp)
@@ -229,7 +224,7 @@ class CoilTest {
         }
 
         // Wait for the onRequestCompleted to run
-        composeTestRule.waitUntil { requestCompleted }
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         // Verify that our eventListener was invoked
         assertThat(eventListener.startCalled.get()).isAtLeast(1)
@@ -265,7 +260,7 @@ class CoilTest {
         }
 
         // Wait for the onRequestCompleted to run
-        composeTestRule.waitUntil { requestCompleted }
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         // Verify that our eventListener was invoked
         assertThat(eventListener.startCalled.get()).isAtLeast(1)
@@ -276,20 +271,21 @@ class CoilTest {
     @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
     fun basicLoad_switchData() {
         var loadCompleteSignal by mutableStateOf(false)
-        val data = MutableStateFlow(server.url("/red"))
+        var data by mutableStateOf(server.url("/red"))
 
         composeTestRule.setContent {
-            val resId = data.collectAsState()
             CoilImage(
-                data = resId.value,
+                data = data,
                 contentDescription = null,
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
+                modifier = Modifier
+                    .preferredSize(128.dp, 128.dp)
+                    .testTag(CoilTestTags.Image),
                 onRequestCompleted = { loadCompleteSignal = true }
             )
         }
 
         // Await the first load
-        composeTestRule.waitUntil { loadCompleteSignal }
+        composeTestRule.waitUntil(10_000) { loadCompleteSignal }
         loadCompleteSignal = false
 
         // Assert that the content is completely Red
@@ -301,10 +297,10 @@ class CoilTest {
             .assertPixels(Color.Red)
 
         // Now switch the data URI to the blue drawable
-        data.value = server.url("/blue")
+        data = server.url("/blue")
 
         // Await the second load
-        composeTestRule.waitUntil { loadCompleteSignal }
+        composeTestRule.waitUntil(10_000) { loadCompleteSignal }
 
         // Assert that the content is completely Blue
         composeTestRule.onNodeWithTag(CoilTestTags.Image)
@@ -319,14 +315,15 @@ class CoilTest {
     @Test
     fun basicLoad_changeSize() {
         val loadCompleteSignal = Channel<ImageLoadState>(Channel.UNLIMITED)
-        val sizeFlow = MutableStateFlow(128.dp)
+        var size by mutableStateOf(128.dp)
 
         composeTestRule.setContent {
-            val size = sizeFlow.collectAsState()
             CoilImage(
                 data = server.url("/red"),
                 contentDescription = null,
-                modifier = Modifier.preferredSize(size.value).testTag(CoilTestTags.Image),
+                modifier = Modifier
+                    .preferredSize(size)
+                    .testTag(CoilTestTags.Image),
                 onRequestCompleted = { loadCompleteSignal.offer(it) }
             )
         }
@@ -336,7 +333,7 @@ class CoilTest {
             .isInstanceOf(ImageLoadState.Success::class.java)
 
         // Now change the size
-        sizeFlow.value = 256.dp
+        size = 256.dp
 
         // Await the potential second load (which shouldn't come)
         runBlocking {
@@ -362,7 +359,7 @@ class CoilTest {
         }
 
         // Wait for the onRequestCompleted to run
-        composeTestRule.waitUntil { requestCompleted }
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         composeTestRule.onNodeWithTag(CoilTestTags.Image)
             .assertWidthIsAtLeast(1.dp)
@@ -378,13 +375,15 @@ class CoilTest {
             CoilImage(
                 data = server.url("/noimage"),
                 contentDescription = null,
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
+                modifier = Modifier
+                    .preferredSize(128.dp, 128.dp)
+                    .testTag(CoilTestTags.Image),
                 onRequestCompleted = { requestCompleted = true }
             )
         }
 
         // Wait for the onRequestCompleted to run
-        composeTestRule.waitUntil { requestCompleted }
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         // Assert that the layout is in the tree and has the correct size
         composeTestRule.onNodeWithTag(CoilTestTags.Image)
@@ -412,7 +411,7 @@ class CoilTest {
         }
 
         // Wait for the onRequestCompleted to run
-        composeTestRule.waitUntil { requestCompleted }
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         composeTestRule.runOnIdle {
             assertThat(states).hasSize(2)
@@ -441,7 +440,7 @@ class CoilTest {
         }
 
         // Wait for the onRequestCompleted to run
-        composeTestRule.waitUntil { requestCompleted }
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         composeTestRule.runOnIdle {
             assertThat(states).hasSize(2)
@@ -458,7 +457,9 @@ class CoilTest {
         composeTestRule.setContent {
             CoilImage(
                 data = server.url("/image"),
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
+                modifier = Modifier
+                    .preferredSize(128.dp, 128.dp)
+                    .testTag(CoilTestTags.Image),
                 onRequestCompleted = { requestCompleted = true }
             ) {
                 // Return an Image which just draws cyan
@@ -471,7 +472,7 @@ class CoilTest {
         }
 
         // Wait for the onRequestCompleted to run
-        composeTestRule.waitUntil { requestCompleted }
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         // Assert that the whole layout is drawn cyan
         composeTestRule.onNodeWithTag(CoilTestTags.Image)
@@ -541,13 +542,15 @@ class CoilTest {
                     )
                 },
                 contentDescription = null,
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(CoilTestTags.Image),
+                modifier = Modifier
+                    .preferredSize(128.dp, 128.dp)
+                    .testTag(CoilTestTags.Image),
                 onRequestCompleted = { requestCompleted = true }
             )
         }
 
         // Wait for the onRequestCompleted to run
-        composeTestRule.waitUntil { requestCompleted }
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         // Assert that the whole layout is drawn red
         composeTestRule.onNodeWithTag(CoilTestTags.Image)

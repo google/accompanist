@@ -91,7 +91,10 @@ fun <R : Any, TR : Any> ImageLoad(
         }
     }
 
-    BoxWithConstraints(modifier, propagateMinConstraints = true) {
+    BoxWithConstraints(
+        modifier = modifier,
+        propagateMinConstraints = true,
+    ) {
         // We remember the last size in a MutableRef (below) rather than a MutableState.
         // This is because we don't need value changes to trigger a re-composition, we are only
         // using it to store the last value.

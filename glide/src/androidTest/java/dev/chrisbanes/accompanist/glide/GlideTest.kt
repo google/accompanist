@@ -18,13 +18,14 @@ package dev.chrisbanes.accompanist.glide
 
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.ShapeDrawable
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.material.Text
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
@@ -38,6 +39,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertWidthIsAtLeast
 import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.captureToImage
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.unit.dp
@@ -54,12 +56,10 @@ import dev.chrisbanes.accompanist.glide.test.R
 import dev.chrisbanes.accompanist.imageloading.ImageLoadState
 import dev.chrisbanes.accompanist.imageloading.test.ImageMockWebServer
 import dev.chrisbanes.accompanist.imageloading.test.assertPixels
-import dev.chrisbanes.accompanist.imageloading.test.awaitNext
 import dev.chrisbanes.accompanist.imageloading.test.receiveBlocking
 import dev.chrisbanes.accompanist.imageloading.test.resourceUri
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeoutOrNull
 import org.junit.After
@@ -68,15 +68,12 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 
 @LargeTest
 @RunWith(JUnit4::class)
 class GlideTest {
-    @Suppress("DEPRECATION") // createAndroidComposeRuleLegacy
     @get:Rule
-    val composeTestRule = androidx.compose.ui.test.junit4.createAndroidComposeRuleLegacy<ComponentActivity>()
+    val composeTestRule = createComposeRule()
 
     // Our MockWebServer. We use a response delay to simulate real-world conditions
     private val server = ImageMockWebServer()
@@ -96,7 +93,7 @@ class GlideTest {
     @Test
     fun onRequestCompleted() {
         val results = ArrayList<ImageLoadState>()
-        val latch = CountDownLatch(1)
+        var requestCompleted by mutableStateOf(false)
 
         composeTestRule.setContent {
             GlideImage(
@@ -109,7 +106,7 @@ class GlideTest {
                             target: Target<Drawable>?,
                             isFirstResource: Boolean
                         ): Boolean {
-                            latch.countDown()
+                            requestCompleted = true
                             // False so that Glide still invokes the Target
                             return false
                         }
@@ -121,7 +118,7 @@ class GlideTest {
                             source: DataSource?,
                             isFirstResource: Boolean
                         ): Boolean {
-                            latch.countDown()
+                            requestCompleted = true
                             // False so that Glide still invokes the Target
                             return false
                         }
@@ -134,7 +131,7 @@ class GlideTest {
         }
 
         // Wait for the Glide request listener to release the latch
-        latch.await(5, TimeUnit.SECONDS)
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         composeTestRule.runOnIdle {
             // And assert that we got a single successful result
@@ -145,19 +142,19 @@ class GlideTest {
 
     @Test
     fun basicLoad_http() {
-        val latch = CountDownLatch(1)
+        var requestCompleted by mutableStateOf(false)
 
         composeTestRule.setContent {
             GlideImage(
                 data = server.url("/image").toString(),
                 contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(GlideTestTags.Image),
-                onRequestCompleted = { latch.countDown() }
+                onRequestCompleted = { requestCompleted = true }
             )
         }
 
         // Wait for the onRequestCompleted to release the latch
-        latch.await(5, TimeUnit.SECONDS)
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         composeTestRule.onNodeWithTag(GlideTestTags.Image)
             .assertIsDisplayed()
@@ -168,19 +165,19 @@ class GlideTest {
     @Test
     @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
     fun basicLoad_drawable() {
-        val latch = CountDownLatch(1)
+        var requestCompleted by mutableStateOf(false)
 
         composeTestRule.setContent {
             GlideImage(
                 data = resourceUri(R.drawable.red_rectangle),
                 contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(GlideTestTags.Image),
-                onRequestCompleted = { latch.countDown() }
+                onRequestCompleted = { requestCompleted = true }
             )
         }
 
         // Wait for the onRequestCompleted to release the latch
-        latch.await(5, TimeUnit.SECONDS)
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         composeTestRule.onNodeWithTag(GlideTestTags.Image)
             .assertWidthIsEqualTo(128.dp)
@@ -194,21 +191,21 @@ class GlideTest {
     @Test
     @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
     fun basicLoad_switchData() {
-        val loadCompleteSignal = Channel<Unit>(Channel.UNLIMITED)
-        val data = MutableStateFlow(server.url("/red"))
+        var loadCompleteSignal by mutableStateOf(false)
+        var data by mutableStateOf(server.url("/red"))
 
         composeTestRule.setContent {
-            val resId = data.collectAsState()
             GlideImage(
-                data = resId.value.toString(),
+                data = data.toString(),
                 contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(GlideTestTags.Image),
-                onRequestCompleted = { loadCompleteSignal.offer(Unit) }
+                onRequestCompleted = { loadCompleteSignal = true }
             )
         }
 
         // Await the first load
-        loadCompleteSignal.awaitNext(5, TimeUnit.SECONDS)
+        composeTestRule.waitUntil(10_000) { loadCompleteSignal }
+        loadCompleteSignal = false
 
         // Assert that the content is completely Red
         composeTestRule.onNodeWithTag(GlideTestTags.Image)
@@ -219,10 +216,10 @@ class GlideTest {
             .assertPixels(Color.Red)
 
         // Now switch the data URI to the blue drawable
-        data.value = server.url("/blue")
+        data = server.url("/blue")
 
         // Await the second load
-        loadCompleteSignal.awaitNext(5, TimeUnit.SECONDS)
+        composeTestRule.waitUntil(10_000) { loadCompleteSignal }
 
         // Assert that the content is completely Blue
         composeTestRule.onNodeWithTag(GlideTestTags.Image)
@@ -231,23 +228,19 @@ class GlideTest {
             .assertIsDisplayed()
             .captureToImage()
             .assertPixels(Color.Blue)
-
-        // Close the signal channel
-        loadCompleteSignal.close()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun basicLoad_changeSize() {
         val loadCompleteSignal = Channel<ImageLoadState>(Channel.UNLIMITED)
-        val sizeFlow = MutableStateFlow(128.dp)
+        var size by mutableStateOf(128.dp)
 
         composeTestRule.setContent {
-            val size = sizeFlow.collectAsState()
             GlideImage(
                 data = server.url("/red").toString(),
                 contentDescription = null,
-                modifier = Modifier.preferredSize(size.value).testTag(GlideTestTags.Image),
+                modifier = Modifier.preferredSize(size).testTag(GlideTestTags.Image),
                 onRequestCompleted = { loadCompleteSignal.offer(it) }
             )
         }
@@ -257,7 +250,7 @@ class GlideTest {
             .isInstanceOf(ImageLoadState.Success::class.java)
 
         // Now change the size
-        sizeFlow.value = 256.dp
+        size = 256.dp
 
         // Await the potential second load (which shouldn't come)
         runBlocking {
@@ -271,19 +264,19 @@ class GlideTest {
 
     @Test
     fun basicLoad_nosize() {
-        val latch = CountDownLatch(1)
+        var requestCompleted by mutableStateOf(false)
 
         composeTestRule.setContent {
             GlideImage(
                 data = server.url("/image").toString(),
                 contentDescription = null,
                 modifier = Modifier.testTag(GlideTestTags.Image),
-                onRequestCompleted = { latch.countDown() }
+                onRequestCompleted = { requestCompleted = true }
             )
         }
 
         // Wait for the onRequestCompleted to release the latch
-        latch.await(5, TimeUnit.SECONDS)
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         composeTestRule.onNodeWithTag(GlideTestTags.Image)
             .assertWidthIsAtLeast(1.dp)
@@ -293,7 +286,7 @@ class GlideTest {
 
     @Test
     fun customRequestManager_param() {
-        val latch = CountDownLatch(1)
+        var requestCompleted by mutableStateOf(false)
         val loaded = mutableListOf<Any>()
 
         composeTestRule.setContent {
@@ -306,12 +299,12 @@ class GlideTest {
                 requestManager = glide,
                 contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
-                onRequestCompleted = { latch.countDown() }
+                onRequestCompleted = { requestCompleted = true }
             )
         }
 
         // Wait for the onRequestCompleted to release the latch
-        latch.await(5, TimeUnit.SECONDS)
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         // Assert that the listener was called
         assertThat(loaded).hasSize(1)
@@ -319,7 +312,7 @@ class GlideTest {
 
     @Test
     fun customRequestManager_ambient() {
-        val latch = CountDownLatch(1)
+        var requestCompleted by mutableStateOf(false)
         val loaded = mutableListOf<Any>()
 
         composeTestRule.setContent {
@@ -332,13 +325,13 @@ class GlideTest {
                     data = server.url("/image").toString(),
                     contentDescription = null,
                     modifier = Modifier.preferredSize(128.dp, 128.dp),
-                    onRequestCompleted = { latch.countDown() }
+                    onRequestCompleted = { requestCompleted = true }
                 )
             }
         }
 
         // Wait for the onRequestCompleted to release the latch
-        latch.await(5, TimeUnit.SECONDS)
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         // Assert that the listener was called
         assertThat(loaded).hasSize(1)
@@ -346,19 +339,19 @@ class GlideTest {
 
     @Test
     fun errorStillHasSize() {
-        val latch = CountDownLatch(1)
+        var requestCompleted by mutableStateOf(false)
 
         composeTestRule.setContent {
             GlideImage(
                 data = server.url("/noimage").toString(),
                 contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(GlideTestTags.Image),
-                onRequestCompleted = { latch.countDown() }
+                onRequestCompleted = { requestCompleted = true }
             )
         }
 
         // Wait for the onRequestCompleted to release the latch
-        latch.await(5, TimeUnit.SECONDS)
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         // Assert that the layout is in the tree and has the correct size
         composeTestRule.onNodeWithTag(GlideTestTags.Image)
@@ -369,7 +362,7 @@ class GlideTest {
 
     @Test
     fun content_error() {
-        val latch = CountDownLatch(1)
+        var requestCompleted by mutableStateOf(false)
         val states = ArrayList<ImageLoadState>()
 
         composeTestRule.setContent {
@@ -381,14 +374,14 @@ class GlideTest {
                     skipMemoryCache(true)
                 },
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
-                onRequestCompleted = { latch.countDown() }
+                onRequestCompleted = { requestCompleted = true }
             ) { state ->
                 states.add(state)
             }
         }
 
         // Wait for the onRequestCompleted to release the latch
-        latch.await(5, TimeUnit.SECONDS)
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         composeTestRule.runOnIdle {
             assertThat(states).hasSize(2)
@@ -399,7 +392,7 @@ class GlideTest {
 
     @Test
     fun content_success() {
-        val latch = CountDownLatch(1)
+        var requestCompleted by mutableStateOf(false)
         val states = ArrayList<ImageLoadState>()
 
         composeTestRule.setContent {
@@ -411,14 +404,14 @@ class GlideTest {
                     skipMemoryCache(true)
                 },
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
-                onRequestCompleted = { latch.countDown() }
+                onRequestCompleted = { requestCompleted = true }
             ) { state ->
                 states.add(state)
             }
         }
 
         // Wait for the onRequestCompleted to release the latch
-        latch.await(5, TimeUnit.SECONDS)
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         composeTestRule.runOnIdle {
             assertThat(states).hasSize(2)
@@ -430,13 +423,13 @@ class GlideTest {
     @Test
     @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
     fun content_custom() {
-        val latch = CountDownLatch(1)
+        var requestCompleted by mutableStateOf(false)
 
         composeTestRule.setContent {
             GlideImage(
                 data = server.url("/image").toString(),
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(GlideTestTags.Image),
-                onRequestCompleted = { latch.countDown() }
+                onRequestCompleted = { requestCompleted = true }
             ) {
                 // Return an Image which just draws cyan
                 Image(
@@ -448,7 +441,7 @@ class GlideTest {
         }
 
         // Wait for the onRequestCompleted to release the latch
-        latch.await(5, TimeUnit.SECONDS)
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         // Assert that the whole layout is drawn cyan
         composeTestRule.onNodeWithTag(GlideTestTags.Image)
@@ -459,7 +452,7 @@ class GlideTest {
 
     @Test
     fun loading_slot() {
-        val loadLatch = CountDownLatch(1)
+        var requestCompleted by mutableStateOf(false)
 
         val glide = Glide.with(InstrumentationRegistry.getInstrumentation().targetContext)
 
@@ -476,7 +469,7 @@ class GlideTest {
                 contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
                 loading = { Text(text = "Loading") },
-                onRequestCompleted = { loadLatch.countDown() }
+                onRequestCompleted = { requestCompleted = true }
             )
         }
 
@@ -487,7 +480,7 @@ class GlideTest {
         glide.resumeRequests()
 
         // We now wait for the request to complete
-        loadLatch.await(5, TimeUnit.SECONDS)
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         // And assert that the loading component no longer exists
         composeTestRule.onNodeWithText("Loading").assertDoesNotExist()
@@ -496,7 +489,7 @@ class GlideTest {
     @Test
     @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
     fun error_slot() {
-        val latch = CountDownLatch(1)
+        var requestCompleted by mutableStateOf(false)
 
         composeTestRule.setContent {
             GlideImage(
@@ -511,12 +504,12 @@ class GlideTest {
                 },
                 contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(GlideTestTags.Image),
-                onRequestCompleted = { latch.countDown() }
+                onRequestCompleted = { requestCompleted = true }
             )
         }
 
         // Wait for the onRequestCompleted to release the latch
-        latch.await(5, TimeUnit.SECONDS)
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         // Assert that the whole layout is drawn red
         composeTestRule.onNodeWithTag(GlideTestTags.Image)
