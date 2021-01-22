@@ -16,7 +16,6 @@
 
 package dev.chrisbanes.accompanist.insets
 
-import androidx.compose.ui.test.junit4.createAndroidComposeRuleLegacy
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.test.filters.LargeTest
@@ -29,8 +28,9 @@ import org.junit.runners.JUnit4
 @LargeTest
 @RunWith(JUnit4::class)
 class InsetsTest {
+    @Suppress("DEPRECATION") // createAndroidComposeRuleLegacy
     @get:Rule
-    val composeTestRule = createAndroidComposeRuleLegacy<InsetsTestActivity>()
+    val composeTestRule = androidx.compose.ui.test.junit4.createAndroidComposeRuleLegacy<InsetsTestActivity>()
 
     /**
      * Needed due to https://issuetracker.google.com/174839536.
