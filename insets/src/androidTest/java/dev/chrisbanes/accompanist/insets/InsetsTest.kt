@@ -17,7 +17,6 @@
 package dev.chrisbanes.accompanist.insets
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRuleLegacy
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.test.filters.LargeTest
