@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Android Open Source Project
+ * Copyright 2021 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,8 @@
  * limitations under the License.
  */
 
-plugins {
-    id 'com.gradle.enterprise' version '3.5'
-}
+package dev.chrisbanes.accompanist.appcompattheme
 
-gradleEnterprise {
-    buildScan {
-        termsOfServiceUrl = 'https://gradle.com/terms-of-service'
-        termsOfServiceAgree = 'yes'
-    }
-}
+import androidx.activity.ComponentActivity
 
-include ':coil'
-include ':picasso'
-include ':glide'
-include ':imageloading-core'
-include ':imageloading-testutils'
-include ':insets'
-include ':appcompat-theme'
-include ':sample'
+class NotAppCompatActivity : ComponentActivity()

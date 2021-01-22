@@ -14,22 +14,18 @@
  * limitations under the License.
  */
 
-plugins {
-    id 'com.gradle.enterprise' version '3.5'
-}
+package dev.chrisbanes.accompanist.appcompattheme
 
-gradleEnterprise {
-    buildScan {
-        termsOfServiceUrl = 'https://gradle.com/terms-of-service'
-        termsOfServiceAgree = 'yes'
+import android.content.Context
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+
+/**
+ * An [AppCompatActivity] which forces the night mode to 'dark theme'.
+ */
+class DarkAppCompatActivity : AppCompatActivity() {
+    override fun attachBaseContext(newBase: Context) {
+        delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
+        super.attachBaseContext(newBase)
     }
 }
-
-include ':coil'
-include ':picasso'
-include ':glide'
-include ':imageloading-core'
-include ':imageloading-testutils'
-include ':insets'
-include ':appcompat-theme'
-include ':sample'
