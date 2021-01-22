@@ -403,6 +403,7 @@ class PicassoTest {
                 Image(
                     painter = ColorPainter(Color.Cyan),
                     contentDescription = null,
+                    modifier = Modifier.matchParentSize()
                 )
             }
         }
@@ -472,6 +473,7 @@ class PicassoTest {
                     Image(
                         painter = ColorPainter(Color.Red),
                         contentDescription = null,
+                        modifier = Modifier.matchParentSize()
                     )
                 },
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(TestTags.Image),

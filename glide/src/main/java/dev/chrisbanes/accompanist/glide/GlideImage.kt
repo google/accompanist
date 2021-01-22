@@ -21,6 +21,7 @@ package dev.chrisbanes.accompanist.glide
 
 import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.staticAmbientOf
 import androidx.compose.ui.Alignment
@@ -102,7 +103,7 @@ fun GlideImage(
     requestManager: RequestManager = GlideImageDefaults.defaultRequestManager(),
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
-    content: @Composable (imageLoadState: ImageLoadState) -> Unit
+    content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
     ImageLoad(
@@ -178,8 +179,8 @@ fun GlideImage(
     requestManager: RequestManager = GlideImageDefaults.defaultRequestManager(),
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
-    error: @Composable ((ImageLoadState.Error) -> Unit)? = null,
-    loading: @Composable (() -> Unit)? = null,
+    error: @Composable (BoxScope.(ImageLoadState.Error) -> Unit)? = null,
+    loading: @Composable (BoxScope.() -> Unit)? = null,
 ) {
     GlideImage(
         data = data,

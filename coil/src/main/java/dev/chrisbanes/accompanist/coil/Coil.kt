@@ -20,6 +20,7 @@
 package dev.chrisbanes.accompanist.coil
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticAmbientOf
@@ -98,7 +99,7 @@ fun CoilImage(
     imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
-    content: @Composable (imageLoadState: ImageLoadState) -> Unit
+    content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
 ) {
     CoilImage(
         request = data.toImageRequest(),
@@ -147,7 +148,7 @@ fun CoilImage(
     imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
-    content: @Composable (imageLoadState: ImageLoadState) -> Unit
+    content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
 ) {
     ImageLoad(
         request = request,
@@ -239,8 +240,8 @@ fun CoilImage(
     imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
-    error: @Composable ((ImageLoadState.Error) -> Unit)? = null,
-    loading: @Composable (() -> Unit)? = null,
+    error: @Composable (BoxScope.(ImageLoadState.Error) -> Unit)? = null,
+    loading: @Composable (BoxScope.() -> Unit)? = null,
 ) {
     CoilImage(
         request = data.toImageRequest(),
@@ -318,8 +319,8 @@ fun CoilImage(
     imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
-    error: @Composable ((ImageLoadState.Error) -> Unit)? = null,
-    loading: @Composable (() -> Unit)? = null,
+    error: @Composable (BoxScope.(ImageLoadState.Error) -> Unit)? = null,
+    loading: @Composable (BoxScope.() -> Unit)? = null,
 ) {
     CoilImage(
         request = request,

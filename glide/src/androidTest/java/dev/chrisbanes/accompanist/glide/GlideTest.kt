@@ -436,11 +436,12 @@ class GlideTest {
                 data = server.url("/image").toString(),
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(GlideTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
-            ) { _ ->
+            ) {
                 // Return an Image which just draws cyan
                 Image(
                     painter = ColorPainter(Color.Cyan),
                     contentDescription = null,
+                    modifier = Modifier.matchParentSize()
                 )
             }
         }
@@ -504,6 +505,7 @@ class GlideTest {
                     Image(
                         painter = ColorPainter(Color.Red),
                         contentDescription = null,
+                        modifier = Modifier.matchParentSize()
                     )
                 },
                 contentDescription = null,

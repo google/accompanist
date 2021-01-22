@@ -19,6 +19,7 @@
 
 package dev.chrisbanes.accompanist.imageloading
 
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -65,7 +66,7 @@ fun <R : Any, TR : Any> ImageLoad(
     transformRequestForSize: (R, IntSize) -> TR?,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
-    content: @Composable (imageLoadState: ImageLoadState) -> Unit
+    content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
 ) {
     var state by remember(requestKey) {
         // We start from the loading state, to avoid thrashing from empty -> loading straightaway

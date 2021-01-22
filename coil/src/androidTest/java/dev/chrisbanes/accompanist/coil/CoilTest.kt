@@ -462,6 +462,7 @@ class CoilTest {
                 Image(
                     painter = ColorPainter(Color.Cyan),
                     contentDescription = null,
+                    modifier = Modifier.matchParentSize()
                 )
             }
         }
@@ -533,6 +534,7 @@ class CoilTest {
                     Image(
                         painter = ColorPainter(Color.Red),
                         contentDescription = null,
+                        modifier = Modifier.matchParentSize()
                     )
                 },
                 contentDescription = null,
