@@ -19,7 +19,9 @@ package dev.chrisbanes.accompanist.appcompattheme
 import android.annotation.SuppressLint
 import android.content.res.Resources
 import android.content.res.TypedArray
+import android.os.Build
 import android.util.TypedValue
+import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontListFontFamily
@@ -59,16 +61,15 @@ internal fun TypedArray.getFontFamilyOrNull(index: Int): FontFamilyWithWeight? {
             "monospace" -> FontFamilyWithWeight(FontFamily.Monospace)
             // TODO: Compose does not expose a FontFamily for all strings yet
             else -> {
+                // If there's a resource ID and the string starts with res/font,
+                // it's probably a @font resource
                 if (tv.resourceId != 0 && tv.string.startsWith("res/font")) {
-                    // If there's a resource ID and the string starts with res/font,
-                    // it's probably a @font resource
-                    if (tv.string.endsWith(".xml")) {
-                        resources.parseXmlFontFamily(tv.resourceId)?.let {
-                            FontFamilyWithWeight(it)
-                        }
+                    // If we're running on API 23+ and the resource is an XML, we can parse
+                    // the fonts into a full FontFamily.
+                    if (Build.VERSION.SDK_INT >= 23 && tv.string.endsWith(".xml")) {
+                        resources.parseXmlFontFamily(tv.resourceId)?.let(::FontFamilyWithWeight)
                     } else {
-                        // If the path doesn't end in .xml, it's likely to be a typeface file
-                        // (TTF, etc) so load it directly
+                        // Otherwise we just load it as a single font
                         FontFamilyWithWeight(font(tv.resourceId).asFontFamily())
                     }
                 } else null
@@ -79,6 +80,7 @@ internal fun TypedArray.getFontFamilyOrNull(index: Int): FontFamilyWithWeight? {
 }
 
 @SuppressLint("RestrictedApi") // FontResourcesParserCompat.*
+@RequiresApi(23) // XML font families with >1 fonts are only supported on API 23+
 private fun Resources.parseXmlFontFamily(resourceId: Int): FontListFontFamily? {
     val parser = getXml(resourceId)
 

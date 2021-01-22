@@ -32,4 +32,9 @@
         android:fontStyle="normal"
         android:fontWeight="500" />
 
+    <font
+        android:font="@font/rubik_700"
+        android:fontStyle="normal"
+        android:fontWeight="700" />
+
 </font-family>

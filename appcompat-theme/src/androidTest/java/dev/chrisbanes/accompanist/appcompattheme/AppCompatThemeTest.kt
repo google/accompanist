@@ -34,6 +34,7 @@ import androidx.compose.ui.text.font.asFontFamily
 import androidx.compose.ui.text.font.font
 import androidx.compose.ui.text.font.fontFamily
 import androidx.test.filters.LargeTest
+import androidx.test.filters.SdkSuppress
 import dev.chrisbanes.accompanist.appcompattheme.test.R
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -121,11 +122,25 @@ class AppCompatThemeTest<T : AppCompatActivity>(activityClass: Class<T>) {
     }
 
     @Test
-    fun type_rubik_family() = composeTestRule.setContent {
+    @SdkSuppress(maxSdkVersion = 22) // On API 21-22, the family is loaded with only the 400 font
+    fun type_rubik_family_api21() = composeTestRule.setContent {
+        val rubik = font(R.font.rubik, FontWeight.W400).asFontFamily()
+
+        WithThemeOverlay(R.style.ThemeOverlay_RubikFontFamily) {
+            AppCompatTheme {
+                MaterialTheme.typography.assertFontFamily(expected = rubik)
+            }
+        }
+    }
+
+    @Test
+    @SdkSuppress(minSdkVersion = 23) // XML font families with >1 fonts are only supported on API 23+
+    fun type_rubik_family_api23() = composeTestRule.setContent {
         val rubik = fontFamily(
             font(R.font.rubik_300, FontWeight.W300),
             font(R.font.rubik_400, FontWeight.W400),
-            font(R.font.rubik_500, FontWeight.W500)
+            font(R.font.rubik_500, FontWeight.W500),
+            font(R.font.rubik_700, FontWeight.W700),
         )
 
         WithThemeOverlay(R.style.ThemeOverlay_RubikFontFamily) {
@@ -137,10 +152,10 @@ class AppCompatThemeTest<T : AppCompatActivity>(activityClass: Class<T>) {
 
     @Test
     fun type_rubik_fixed400() = composeTestRule.setContent {
+        val rubik400 = font(R.font.rubik_400, FontWeight.W400).asFontFamily()
         WithThemeOverlay(R.style.ThemeOverlay_Rubik400) {
             AppCompatTheme {
-                MaterialTheme.typography
-                    .assertFontFamily(font(R.font.rubik_400, FontWeight.W400).asFontFamily())
+                MaterialTheme.typography.assertFontFamily(expected = rubik400)
             }
         }
     }
