@@ -18,12 +18,13 @@ package dev.chrisbanes.accompanist.glide
 
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.ShapeDrawable
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.material.Text
 import androidx.compose.runtime.Providers
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.onCommit
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
@@ -37,7 +38,6 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertWidthIsAtLeast
 import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.captureToImage
-import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.unit.dp
@@ -74,8 +74,9 @@ import java.util.concurrent.TimeUnit
 @LargeTest
 @RunWith(JUnit4::class)
 class GlideTest {
+    @Suppress("DEPRECATION") // createAndroidComposeRuleLegacy
     @get:Rule
-    val composeTestRule = createComposeRule()
+    val composeTestRule = androidx.compose.ui.test.junit4.createAndroidComposeRuleLegacy<ComponentActivity>()
 
     // Our MockWebServer. We use a response delay to simulate real-world conditions
     private val server = ImageMockWebServer()
@@ -126,6 +127,7 @@ class GlideTest {
                         }
                     })
                 },
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
                 onRequestCompleted = { results += it }
             )
@@ -148,6 +150,7 @@ class GlideTest {
         composeTestRule.setContent {
             GlideImage(
                 data = server.url("/image").toString(),
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(GlideTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
@@ -170,6 +173,7 @@ class GlideTest {
         composeTestRule.setContent {
             GlideImage(
                 data = resourceUri(R.drawable.red_rectangle),
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(GlideTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
@@ -197,6 +201,7 @@ class GlideTest {
             val resId = data.collectAsState()
             GlideImage(
                 data = resId.value.toString(),
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(GlideTestTags.Image),
                 onRequestCompleted = { loadCompleteSignal.offer(Unit) }
             )
@@ -241,6 +246,7 @@ class GlideTest {
             val size = sizeFlow.collectAsState()
             GlideImage(
                 data = server.url("/red").toString(),
+                contentDescription = null,
                 modifier = Modifier.preferredSize(size.value).testTag(GlideTestTags.Image),
                 onRequestCompleted = { loadCompleteSignal.offer(it) }
             )
@@ -270,6 +276,7 @@ class GlideTest {
         composeTestRule.setContent {
             GlideImage(
                 data = server.url("/image").toString(),
+                contentDescription = null,
                 modifier = Modifier.testTag(GlideTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
@@ -297,6 +304,7 @@ class GlideTest {
             GlideImage(
                 data = server.url("/image").toString(),
                 requestManager = glide,
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
                 onRequestCompleted = { latch.countDown() }
             )
@@ -322,6 +330,7 @@ class GlideTest {
             Providers(AmbientRequestManager provides glide) {
                 GlideImage(
                     data = server.url("/image").toString(),
+                    contentDescription = null,
                     modifier = Modifier.preferredSize(128.dp, 128.dp),
                     onRequestCompleted = { latch.countDown() }
                 )
@@ -342,6 +351,7 @@ class GlideTest {
         composeTestRule.setContent {
             GlideImage(
                 data = server.url("/noimage").toString(),
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(GlideTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
@@ -427,9 +437,13 @@ class GlideTest {
                 data = server.url("/image").toString(),
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(GlideTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
-            ) { _ ->
+            ) {
                 // Return an Image which just draws cyan
-                Image(painter = ColorPainter(Color.Cyan))
+                Image(
+                    painter = ColorPainter(Color.Cyan),
+                    contentDescription = null,
+                    modifier = Modifier.matchParentSize()
+                )
             }
         }
 
@@ -450,7 +464,7 @@ class GlideTest {
         val glide = Glide.with(InstrumentationRegistry.getInstrumentation().targetContext)
 
         composeTestRule.setContent {
-            onCommit {
+            SideEffect {
                 // Pause all requests so that the request doesn't complete. This needs to be done
                 // inside our content because Glide automatically resumeRequests() in onStart
                 glide.pauseAllRequests()
@@ -459,6 +473,7 @@ class GlideTest {
             GlideImage(
                 data = server.url("/image").toString(),
                 requestManager = glide,
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
                 loading = { Text(text = "Loading") },
                 onRequestCompleted = { loadLatch.countDown() }
@@ -488,8 +503,13 @@ class GlideTest {
                 data = server.url("/noimage").toString(),
                 error = {
                     // Return failure content which just draws red
-                    Image(painter = ColorPainter(Color.Red))
+                    Image(
+                        painter = ColorPainter(Color.Red),
+                        contentDescription = null,
+                        modifier = Modifier.matchParentSize()
+                    )
                 },
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(GlideTestTags.Image),
                 onRequestCompleted = { latch.countDown() }
             )
@@ -510,6 +530,7 @@ class GlideTest {
         composeTestRule.setContent {
             GlideImage(
                 data = ShapeDrawable(),
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
             )
         }
@@ -520,6 +541,7 @@ class GlideTest {
         composeTestRule.setContent {
             GlideImage(
                 data = imageResource(android.R.drawable.ic_delete),
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
             )
         }
@@ -530,6 +552,7 @@ class GlideTest {
         composeTestRule.setContent {
             GlideImage(
                 data = vectorResource(R.drawable.ic_android_black_24dp),
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
             )
         }
@@ -540,6 +563,7 @@ class GlideTest {
         composeTestRule.setContent {
             GlideImage(
                 data = ColorPainter(Color.Magenta),
+                contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
             )
         }

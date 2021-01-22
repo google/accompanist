@@ -20,6 +20,7 @@
 package dev.chrisbanes.accompanist.coil
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticAmbientOf
@@ -98,7 +99,7 @@ fun CoilImage(
     imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
-    content: @Composable (imageLoadState: ImageLoadState) -> Unit
+    content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
 ) {
     CoilImage(
         request = data.toImageRequest(),
@@ -147,7 +148,7 @@ fun CoilImage(
     imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
-    content: @Composable (imageLoadState: ImageLoadState) -> Unit
+    content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
 ) {
     ImageLoad(
         request = request,
@@ -205,6 +206,10 @@ fun CoilImage(
  * ```
  *
  * @param data The data to load. See [ImageRequest.Builder.data] for the types allowed.
+ * @param contentDescription text used by accessibility services to describe what this image
+ * represents. This should always be provided unless this image is used for decorative purposes,
+ * and does not represent a meaningful action that a user can take. This text should be
+ * localized, such as by using [androidx.compose.ui.res.stringResource] or similar.
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
  * @param alignment Optional alignment parameter used to place the loaded [ImageBitmap] in the
  * given bounds defined by the width and height.
@@ -225,6 +230,7 @@ fun CoilImage(
 @Composable
 fun CoilImage(
     data: Any,
+    contentDescription: String?,
     modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
@@ -234,12 +240,13 @@ fun CoilImage(
     imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
-    error: @Composable ((ImageLoadState.Error) -> Unit)? = null,
-    loading: @Composable (() -> Unit)? = null,
+    error: @Composable (BoxScope.(ImageLoadState.Error) -> Unit)? = null,
+    loading: @Composable (BoxScope.() -> Unit)? = null,
 ) {
     CoilImage(
         request = data.toImageRequest(),
         modifier = modifier,
+        contentDescription = contentDescription,
         alignment = alignment,
         contentScale = contentScale,
         colorFilter = colorFilter,
@@ -279,6 +286,10 @@ fun CoilImage(
  *
  * @param request The request to execute. If the request does not have a [ImageRequest.sizeResolver]
  * set, one will be set on the request using the layout constraints.
+ * @param contentDescription text used by accessibility services to describe what this image
+ * represents. This should always be provided unless this image is used for decorative purposes,
+ * and does not represent a meaningful action that a user can take. This text should be
+ * localized, such as by using [androidx.compose.ui.res.stringResource] or similar.
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
  * @param alignment Optional alignment parameter used to place the loaded [ImageBitmap] in the
  * given bounds defined by the width and height.
@@ -298,6 +309,7 @@ fun CoilImage(
 @Composable
 fun CoilImage(
     request: ImageRequest,
+    contentDescription: String?,
     modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
@@ -307,8 +319,8 @@ fun CoilImage(
     imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
-    error: @Composable ((ImageLoadState.Error) -> Unit)? = null,
-    loading: @Composable (() -> Unit)? = null,
+    error: @Composable (BoxScope.(ImageLoadState.Error) -> Unit)? = null,
+    loading: @Composable (BoxScope.() -> Unit)? = null,
 ) {
     CoilImage(
         request = request,
@@ -322,6 +334,7 @@ fun CoilImage(
             is ImageLoadState.Success -> {
                 MaterialLoadingImage(
                     result = imageState,
+                    contentDescription = contentDescription,
                     fadeInEnabled = fadeIn,
                     alignment = alignment,
                     contentScale = contentScale,

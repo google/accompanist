@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -119,7 +120,10 @@ private fun Sample() {
                         .navigationBarsPadding()
                         .padding(16.dp)
                 ) {
-                    Icon(Icons.Default.Face)
+                    Icon(
+                        imageVector = Icons.Default.Face,
+                        contentDescription = "Face icon"
+                    )
                 }
             }
         }

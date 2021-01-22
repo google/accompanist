@@ -21,6 +21,7 @@ package dev.chrisbanes.accompanist.glide
 
 import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.staticAmbientOf
 import androidx.compose.ui.Alignment
@@ -102,7 +103,7 @@ fun GlideImage(
     requestManager: RequestManager = GlideImageDefaults.defaultRequestManager(),
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
-    content: @Composable (imageLoadState: ImageLoadState) -> Unit
+    content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
     ImageLoad(
@@ -144,6 +145,10 @@ fun GlideImage(
  * ```
  *
  * @param data The data to load.
+ * @param contentDescription text used by accessibility services to describe what this image
+ * represents. This should always be provided unless this image is used for decorative purposes,
+ * and does not represent a meaningful action that a user can take. This text should be
+ * localized, such as by using [androidx.compose.ui.res.stringResource] or similar.
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
  * @param alignment Optional alignment parameter used to place the loaded [ImageBitmap] in the
  * given bounds defined by the width and height.
@@ -164,6 +169,7 @@ fun GlideImage(
 @Composable
 fun GlideImage(
     data: Any,
+    contentDescription: String?,
     modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
@@ -173,8 +179,8 @@ fun GlideImage(
     requestManager: RequestManager = GlideImageDefaults.defaultRequestManager(),
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
-    error: @Composable ((ImageLoadState.Error) -> Unit)? = null,
-    loading: @Composable (() -> Unit)? = null,
+    error: @Composable (BoxScope.(ImageLoadState.Error) -> Unit)? = null,
+    loading: @Composable (BoxScope.() -> Unit)? = null,
 ) {
     GlideImage(
         data = data,
@@ -188,6 +194,7 @@ fun GlideImage(
             is ImageLoadState.Success -> {
                 MaterialLoadingImage(
                     result = imageState,
+                    contentDescription = contentDescription,
                     fadeInEnabled = fadeIn,
                     alignment = alignment,
                     contentScale = contentScale,

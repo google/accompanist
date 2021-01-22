@@ -42,6 +42,7 @@ fun ListItem(
     Row(modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
         GlideImage(
             data = imageUrl,
+            contentDescription = null,
             modifier = Modifier.preferredSize(64.dp)
                 .clip(RoundedCornerShape(4.dp))
         )

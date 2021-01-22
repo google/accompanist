@@ -18,7 +18,7 @@ sed -i.bak 's/$dokka.linkExtension:md/$dokka.linkExtension:html/g' package-list-
 # Clear out the old API docs
 [ -d docs/api ] && rm -r docs/api
 # Build the docs with dokka
-./gradlew dokkaHtmlMultiModule
+./gradlew clean dokkaHtmlMultiModule
 
 # Dokka doesn't currently allow us to change the index page name so move it manually
 mv docs/api/-modules.html docs/api/index.html
