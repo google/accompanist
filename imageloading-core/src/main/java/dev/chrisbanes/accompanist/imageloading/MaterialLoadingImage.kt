@@ -18,12 +18,12 @@
 
 package dev.chrisbanes.accompanist.imageloading
 
+import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
-import androidx.compose.animation.asDisposableClock
-import androidx.compose.animation.core.AnimationClockObservable
-import androidx.compose.animation.core.createAnimation
-import androidx.compose.animation.core.transitionDefinition
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -42,8 +42,8 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.painter.ImagePainter
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.withSaveLayer
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.AmbientAnimationClock
 import androidx.core.util.Pools
 
 private const val DefaultTransitionDuration = 1000
@@ -66,7 +66,6 @@ private const val DefaultTransitionDuration = 1000
  * if the bounds are a different size from the intrinsic size of the [ImageBitmap].
  * @param colorFilter Optional ColorFilter to apply for the [ImageBitmap] when it is rendered
  * onscreen
- * @param clock The [AnimationClockObservable] to use for running animations.
  * @param fadeInEnabled Whether the fade-in animation should be used or not.
  * @param fadeInDurationMs The duration of the fade-in animation in milliseconds.
  */
@@ -78,7 +77,6 @@ fun MaterialLoadingImage(
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
-    clock: AnimationClockObservable = AmbientAnimationClock.current.asDisposableClock(),
     fadeInEnabled: Boolean = true,
     fadeInDurationMs: Int = DefaultTransitionDuration
 ) {
@@ -89,7 +87,6 @@ fun MaterialLoadingImage(
         alignment = alignment,
         contentScale = contentScale,
         colorFilter = colorFilter,
-        clock = clock,
         fadeInEnabled = fadeInEnabled,
         fadeInDurationMs = fadeInDurationMs
     )
@@ -113,7 +110,6 @@ fun MaterialLoadingImage(
  * if the bounds are a different size from the intrinsic size of the [ImageBitmap].
  * @param colorFilter Optional ColorFilter to apply for the [ImageBitmap] when it is rendered
  * onscreen
- * @param clock The [AnimationClockObservable] to use for running animations.
  * @param fadeInEnabled Whether the fade-in animation should be used or not.
  * @param fadeInDurationMs The duration of the fade-in animation in milliseconds.
  */
@@ -125,20 +121,13 @@ fun MaterialLoadingImage(
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
-    clock: AnimationClockObservable = AmbientAnimationClock.current.asDisposableClock(),
     fadeInEnabled: Boolean = true,
     fadeInDurationMs: Int = DefaultTransitionDuration
 ) {
     Image(
-        painter = if (fadeInEnabled) {
-            val animatedPainter = remember(painter) {
-                MaterialLoadingPainterWrapper(painter, fadeInDurationMs, clock).also { it.start() }
-            }
-            // If the animation painter is running, return use it, else use to the painter
-            if (!animatedPainter.isFinished) animatedPainter else painter
-        } else {
-            // If the fade is disabled, just use the standard ImagePainter
-            painter
+        painter = when {
+            fadeInEnabled -> painter.fadeIn(durationMs = fadeInDurationMs)
+            else -> painter
         },
         contentDescription = contentDescription,
         alignment = alignment,
@@ -166,7 +155,6 @@ fun MaterialLoadingImage(
  * if the bounds are a different size from the intrinsic size of the [ImageBitmap].
  * @param colorFilter Optional ColorFilter to apply for the [ImageBitmap] when it is rendered
  * onscreen
- * @param clock The [AnimationClockObservable] to use for running animations.
  * @param skipFadeWhenLoadedFromMemory Whether the fade animation should be skipped when the result
  * has been loaded from memory.
  * @param fadeInEnabled Whether the fade-in animation should be used or not.
@@ -180,7 +168,6 @@ fun MaterialLoadingImage(
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
-    clock: AnimationClockObservable = AmbientAnimationClock.current.asDisposableClock(),
     skipFadeWhenLoadedFromMemory: Boolean = true,
     fadeInEnabled: Boolean = true,
     fadeInDurationMs: Int = DefaultTransitionDuration
@@ -194,62 +181,68 @@ fun MaterialLoadingImage(
         modifier = modifier,
         fadeInEnabled = fadeInEnabled && !(skipFadeWhenLoadedFromMemory && result.isFromMemory()),
         fadeInDurationMs = fadeInDurationMs,
-        clock = clock,
     )
 }
 
-private class MaterialLoadingPainterWrapper(
-    private val painter: Painter,
-    duration: Int,
-    clock: AnimationClockObservable
-) : Painter() {
-    var isFinished by mutableStateOf(false)
-        private set
+@Composable
+private fun Painter.fadeIn(durationMs: Int): Painter {
+    // Create our transition state, which allow us to control the state and target states
+    val transitionState = remember { MutableTransitionState(ImageLoadTransitionState.Empty) }
+    transitionState.targetState = ImageLoadTransitionState.Loaded
 
-    // Initial matrix is completely transparent. We use the NeverEqual equivalence check since this
-    // is a mutable entity.
-    private var matrix by mutableStateOf(
-        value = ImageLoadingColorMatrix(0f, 0f, 0f),
-        policy = neverEqualPolicy()
-    )
+    // Our actual transition, which reads our transitionState
+    val transition = updateTransition(transitionState)
 
-    @Suppress("DEPRECATION")
-    private val animation = CrossfadeTransition.definition(duration).createAnimation(clock)
+    // An ImageLoadingColorMatrix which we update from the transition
+    val matrix = remember { ImageLoadingColorMatrix() }
 
-    init {
-        animation.onUpdate = {
-            // Update the matrix state value with the new animated properties. This works since
-            // we're using the NeverEqual equivalence check
-            matrix = matrix.apply {
-                saturationFraction = animation[CrossfadeTransition.Saturation]
-                alphaFraction = animation[CrossfadeTransition.Alpha]
-                brightnessFraction = animation[CrossfadeTransition.Brightness]
-            }
-        }
+    // Alpha animates over the first 50%
+    matrix.alphaFraction = transition.animateFloat(
+        transitionSpec = { tween(durationMillis = durationMs / 2) },
+        targetValueByState = { if (it == ImageLoadTransitionState.Loaded) 1f else 0f }
+    ).value
 
-        animation.onStateChangeFinished = { state ->
-            if (state == CrossfadeTransition.State.Loaded) {
-                isFinished = true
-            }
-        }
+    // Brightness animates over the first 75%
+    matrix.brightnessFraction = transition.animateFloat(
+        transitionSpec = { tween(durationMillis = durationMs * 3 / 4) },
+        targetValueByState = { if (it == ImageLoadTransitionState.Loaded) 1f else 0.8f }
+    ).value
+
+    // Saturation animates over whole duration
+    matrix.saturationFraction = transition.animateFloat(
+        transitionSpec = { tween(durationMillis = durationMs) },
+        targetValueByState = { if (it == ImageLoadTransitionState.Loaded) 1f else 0f }
+    ).value
+
+    // Return our remembered ColorMatrixPainter, and update it's matrix
+    return remember(this) {
+        ColorMatrixPainter(this)
+    }.apply {
+        this.matrix = matrix
     }
+}
+
+/**
+ * A [Painter] which draws the given [painter] using a color filter that transforms colors
+ * through a 4x5 color [matrix].
+ */
+private class ColorMatrixPainter(
+    private val painter: Painter
+) : Painter() {
+    // We use the NeverEqual equivalence check since this is a mutable entity.
+    var matrix: ColorMatrix? by mutableStateOf(value = null, policy = neverEqualPolicy())
 
     override fun DrawScope.onDraw() {
         val paint = paintPool.acquire() ?: Paint()
 
         try {
-            paint.asFrameworkPaint().colorFilter = ColorMatrixColorFilter(matrix)
+            // If he a matrix, set on it on Android Painter within a ColorMatrixColorFilter
+            matrix?.let { paint.asFrameworkPaint().colorFilter = ColorMatrixColorFilter(it) }
 
             drawIntoCanvas { canvas ->
-                canvas.saveLayer(size.toRect(), paint)
-
-                with(painter) {
-                    // Need to explicitly set alpha.
-                    // See https://issuetracker.google.com/169379346
-                    draw(size, alpha = 1f)
+                canvas.withSaveLayer(size.toRect(), paint) {
+                    with(painter) { draw(size) }
                 }
-
-                canvas.restore()
             }
         } finally {
             // Reset the Paint instance and release it back to the pool
@@ -259,14 +252,13 @@ private class MaterialLoadingPainterWrapper(
     }
 
     /**
-     * Return the dimension of the underlying [ImageBitmap] as its intrinsic width and height
+     * Return the dimension of the underlying [painter] as its intrinsic width and height
      */
     override val intrinsicSize: Size get() = painter.intrinsicSize
+}
 
-    fun start() {
-        // Start the animation by transitioning to the Loaded state
-        animation.toState(CrossfadeTransition.State.Loaded)
-    }
+private enum class ImageLoadTransitionState {
+    Loaded, Empty
 }
 
 /**
@@ -274,38 +266,5 @@ private class MaterialLoadingPainterWrapper(
  * to create.
  */
 private val paintPool = Pools.SimplePool<Paint>(2)
-
-@Suppress("DEPRECATION") // Need to fix this
-private object CrossfadeTransition {
-    enum class State {
-        Loaded, Empty
-    }
-
-    val Alpha = androidx.compose.animation.core.FloatPropKey()
-    val Brightness = androidx.compose.animation.core.FloatPropKey()
-    val Saturation = androidx.compose.animation.core.FloatPropKey()
-
-    fun definition(durationMs: Int) = transitionDefinition<State> {
-        state(State.Empty) {
-            this[Alpha] = 0f
-            this[Brightness] = 0.8f
-            this[Saturation] = 0f
-        }
-        state(State.Loaded) {
-            this[Alpha] = 1f
-            this[Brightness] = 1f
-            this[Saturation] = 1f
-        }
-
-        transition {
-            // Alpha animates over the first 50%
-            Alpha using tween(durationMillis = durationMs / 2)
-            // Brightness animates over the first 75%
-            Brightness using tween(durationMillis = durationMs * 3 / 4)
-            // Saturation animates over whole duration
-            Saturation using tween(durationMillis = durationMs)
-        }
-    }
-}
 
 private fun ImageLoadState.Success.isFromMemory(): Boolean = source == DataSource.MEMORY
