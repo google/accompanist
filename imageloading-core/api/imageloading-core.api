@@ -79,8 +79,8 @@ public final class dev/chrisbanes/accompanist/imageloading/ImageLoadingColorMatr
 }
 
 public final class dev/chrisbanes/accompanist/imageloading/MaterialLoadingImage {
-	public static final fun MaterialLoadingImage (Landroidx/compose/ui/graphics/ImageBitmap;Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;Landroidx/compose/animation/core/AnimationClockObservable;ZILandroidx/compose/runtime/Composer;II)V
-	public static final fun MaterialLoadingImage (Landroidx/compose/ui/graphics/painter/Painter;Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;Landroidx/compose/animation/core/AnimationClockObservable;ZILandroidx/compose/runtime/Composer;II)V
-	public static final fun MaterialLoadingImage (Ldev/chrisbanes/accompanist/imageloading/ImageLoadState$Success;Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;Landroidx/compose/animation/core/AnimationClockObservable;ZZILandroidx/compose/runtime/Composer;II)V
+	public static final fun MaterialLoadingImage (Landroidx/compose/ui/graphics/ImageBitmap;Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;ZILandroidx/compose/runtime/Composer;II)V
+	public static final fun MaterialLoadingImage (Landroidx/compose/ui/graphics/painter/Painter;Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;ZILandroidx/compose/runtime/Composer;II)V
+	public static final fun MaterialLoadingImage (Ldev/chrisbanes/accompanist/imageloading/ImageLoadState$Success;Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;ZZILandroidx/compose/runtime/Composer;II)V
 }
 
