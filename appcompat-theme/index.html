@@ -13,14 +13,14 @@
         <meta name="author" content="Chris Banes">
       
       
-        <link rel="canonical" href="https://chrisbanes.github.io/accompanist/updating/">
+        <link rel="canonical" href="https://chrisbanes.github.io/accompanist/appcompat-theme/">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.6">
     
     
       
-        <title>Update guide - Accompanist</title>
+        <title>AppCompat Theme - Accompanist</title>
       
     
     
@@ -68,7 +68,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#updating-releasing-accompanist" class="md-skip">
+        <a href="#appcompat-compose-theme-adapter" class="md-skip">
           Skip to content
         </a>
       
@@ -100,7 +100,7 @@
         <div class="md-header-nav__topic">
           <span class="md-ellipsis">
             
-              Update guide
+              AppCompat Theme
             
           </span>
         </div>
@@ -279,11 +279,124 @@
 
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../appcompat-theme/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          AppCompat Theme
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         AppCompat Theme
       </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#customizing-the-theme" class="md-nav__link">
+    Customizing the theme
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generated-theme" class="md-nav__link">
+    Generated theme
+  </a>
+  
+    <nav class="md-nav" aria-label="Generated theme">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#colors" class="md-nav__link">
+    Colors
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#typography" class="md-nav__link">
+    Typography
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shape" class="md-nav__link">
+    Shape
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limitations" class="md-nav__link">
+    Limitations
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+    <nav class="md-nav" aria-label="Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#library-snapshots" class="md-nav__link">
+    Library Snapshots
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contributions" class="md-nav__link">
+    Contributions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" class="md-nav__link">
+    License
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -427,14 +540,12 @@
 
   
   
-    
-  
   
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="nav-10" type="checkbox" id="nav-10" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="nav-10" type="checkbox" id="nav-10" >
       
       <label class="md-nav__link" for="nav-10">
         Maintainers
@@ -451,124 +562,11 @@
             
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Update guide
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../updating/" class="md-nav__link">
         Update guide
       </a>
-      
-        
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#new-features-bugfixes" class="md-nav__link">
-    New features &amp; bugfixes
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#jetpack-compose-snapshots" class="md-nav__link">
-    Jetpack Compose Snapshots
-  </a>
-  
-    <nav class="md-nav" aria-label="Jetpack Compose Snapshots">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#updating-to-a-newer-compose-snapshot" class="md-nav__link">
-    Updating to a newer Compose snapshot
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#releasing" class="md-nav__link">
-    Releasing
-  </a>
-  
-    <nav class="md-nav" aria-label="Releasing">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-merge-snapshot-into-main" class="md-nav__link">
-    #1: Merge snapshot into main
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-update-dependencies" class="md-nav__link">
-    #2: Update dependencies
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-bump-the-version-number" class="md-nav__link">
-    #3: Bump the version number
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-push-to-github" class="md-nav__link">
-    #4: Push to GitHub
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#5-create-release" class="md-nav__link">
-    #5: Create release
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#6-prepare-the-next-development-version" class="md-nav__link">
-    #6: Prepare the next development version
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -604,23 +602,37 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#new-features-bugfixes" class="md-nav__link">
-    New features &amp; bugfixes
+  <a href="#customizing-the-theme" class="md-nav__link">
+    Customizing the theme
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#jetpack-compose-snapshots" class="md-nav__link">
-    Jetpack Compose Snapshots
+  <a href="#generated-theme" class="md-nav__link">
+    Generated theme
   </a>
   
-    <nav class="md-nav" aria-label="Jetpack Compose Snapshots">
+    <nav class="md-nav" aria-label="Generated theme">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#updating-to-a-newer-compose-snapshot" class="md-nav__link">
-    Updating to a newer Compose snapshot
+  <a href="#colors" class="md-nav__link">
+    Colors
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#typography" class="md-nav__link">
+    Typography
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shape" class="md-nav__link">
+    Shape
   </a>
   
 </li>
@@ -631,57 +643,43 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#releasing" class="md-nav__link">
-    Releasing
+  <a href="#limitations" class="md-nav__link">
+    Limitations
   </a>
   
-    <nav class="md-nav" aria-label="Releasing">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+    <nav class="md-nav" aria-label="Usage">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-merge-snapshot-into-main" class="md-nav__link">
-    #1: Merge snapshot into main
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-update-dependencies" class="md-nav__link">
-    #2: Update dependencies
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-bump-the-version-number" class="md-nav__link">
-    #3: Bump the version number
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-push-to-github" class="md-nav__link">
-    #4: Push to GitHub
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#5-create-release" class="md-nav__link">
-    #5: Create release
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#6-prepare-the-next-development-version" class="md-nav__link">
-    #6: Prepare the next development version
+  <a href="#library-snapshots" class="md-nav__link">
+    Library Snapshots
   </a>
   
 </li>
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contributions" class="md-nav__link">
+    Contributions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" class="md-nav__link">
+    License
+  </a>
   
 </li>
       
@@ -697,97 +695,176 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/chrisbanes/accompanist/edit/master/docs/updating.md" title="Edit this page" class="md-content__button md-icon">
+                  <a href="https://github.com/chrisbanes/accompanist/edit/master/docs/appcompat-theme.md" title="Edit this page" class="md-content__button md-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
                   </a>
                 
                 
-                <h1 id="updating-releasing-accompanist">Updating &amp; releasing Accompanist<a class="headerlink" href="#updating-releasing-accompanist" title="Permanent link">&para;</a></h1>
-<p>This doc is mostly for maintainers.</p>
-<h2 id="new-features-bugfixes">New features &amp; bugfixes<a class="headerlink" href="#new-features-bugfixes" title="Permanent link">&para;</a></h2>
-<p>All new features should be uploaded as PRs against the <code>main</code> branch. </p>
-<p>Once merged into <code>main</code>, they should be merged into the <code>snapshot</code> branch:</p>
-<div class="highlight"><pre><span></span><code>git checkout main <span class="o">&amp;&amp;</span> git pull
-git checkout snapshot <span class="o">&amp;&amp;</span> git pull
-
-<span class="c1"># Create branch for PR</span>
-git checkout -b snapshot_main_merge
-<span class="c1"># Merge in the main branch</span>
-git merge main
-
-<span class="c1"># Push to GitHub</span>
+                <h1 id="appcompat-compose-theme-adapter">AppCompat Compose Theme Adapter<a class="headerlink" href="#appcompat-compose-theme-adapter" title="Permanent link">&para;</a></h1>
+<p>A library that enables reuse of <a href="https://developer.android.com/jetpack/androidx/releases/appcompat">AppCompat</a> XML themes for theming in <a href="https://developer.android.com/jetpack/compose">Jetpack Compose</a>.</p>
+<p>The basis of theming in <a href="https://developer.android.com/jetpack/compose">Jetpack Compose</a> is the <a href="https://developer.android.com/reference/kotlin/androidx/compose/material/MaterialTheme"><code>MaterialTheme</code></a> composable, where you provide <a href="https://developer.android.com/reference/kotlin/androidx/compose/material/Colors"><code>Colors</code></a>, <a href="https://developer.android.com/reference/kotlin/androidx/compose/material/Shapes"><code>Shapes</code></a> and <a href="https://developer.android.com/reference/kotlin/androidx/compose/material/Typography"><code>Typography</code></a> instances containing your styling parameters:</p>
+<div class="highlight"><pre><span></span><code><span class="n">MaterialTheme</span><span class="p">(</span>
+    <span class="n">typography</span> <span class="p">=</span> <span class="n">type</span><span class="p">,</span>
+    <span class="n">colors</span> <span class="p">=</span> <span class="n">colors</span><span class="p">,</span>
+    <span class="n">shapes</span> <span class="p">=</span> <span class="n">shapes</span>
+<span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Surface, Scaffold, etc</span>
+<span class="p">}</span>
 </code></pre></div>
-<h2 id="jetpack-compose-snapshots">Jetpack Compose Snapshots<a class="headerlink" href="#jetpack-compose-snapshots" title="Permanent link">&para;</a></h2>
-<p>We publish snapshot versions of Accompanist, which depend on a <code>SNAPSHOT</code> versions of Jetpack Compose. These are built from the <code>snapshot</code> branch.</p>
-<h3 id="updating-to-a-newer-compose-snapshot">Updating to a newer Compose snapshot<a class="headerlink" href="#updating-to-a-newer-compose-snapshot" title="Permanent link">&para;</a></h3>
-<p>As mentioned above, updating to a new Compose snapshot is done by submitting a new PR against the <code>snapshot</code> branch:</p>
-<div class="highlight"><pre><span></span><code>git checkout snapshot <span class="o">&amp;&amp;</span> git pull
-<span class="c1"># Create branch for PR</span>
-git checkout -b update_snapshot
+<p><a href="https://developer.android.com/jetpack/androidx/releases/appcompat">AppCompat</a> XML themes allow for similar but coarser theming via XML theme attributes, like so:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;style</span> <span class="na">name=</span><span class="s">&quot;Theme.MyApp&quot;</span> <span class="na">parent=</span><span class="s">&quot;Theme.AppCompat.DayNight&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">&quot;colorPrimary&quot;</span><span class="nt">&gt;</span>@color/purple_500<span class="nt">&lt;/item&gt;</span>
+    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">&quot;colorAccent&quot;</span><span class="nt">&gt;</span>@color/green_200<span class="nt">&lt;/item&gt;</span>
+<span class="nt">&lt;/style&gt;</span>
 </code></pre></div>
-<p>Now edit the project to depend on the new Compose SNAPSHOT version:</p>
-<p>Edit <a href="https://github.com/chrisbanes/accompanist/blob/main/buildSrc/src/main/java/dev/chrisbanes/accompanist/buildsrc/dependencies.kt">dependencies.kt</a>:</p>
-<ol>
-<li>Update the <code>Libs.AndroidX.Compose.snapshot</code> property to be the snapshot number</li>
-<li>Ensure that the <code>Libs.AndroidX.Compose.version</code> property is correct</li>
-</ol>
-<p>Make sure the project builds and test pass:
-<div class="highlight"><pre><span></span><code>./gradlew check
-</code></pre></div></p>
-<p>Now <code>git commit</code> the changes and push to GitHub.</p>
-<p>Finally create a PR (with the base branch as <code>snapshot</code>) and send for review.</p>
-<h2 id="releasing">Releasing<a class="headerlink" href="#releasing" title="Permanent link">&para;</a></h2>
-<p>Once the next Jetpack Compose version is out, we're ready to push a new release:</p>
-<h3 id="1-merge-snapshot-into-main">#1: Merge <code>snapshot</code> into <code>main</code><a class="headerlink" href="#1-merge-snapshot-into-main" title="Permanent link">&para;</a></h3>
-<p>First we merge the <code>snapshot</code> branch into <code>main</code>:</p>
-<div class="highlight"><pre><span></span><code>git checkout snapshot <span class="o">&amp;&amp;</span> git pull
-git checkout main <span class="o">&amp;&amp;</span> git pull
-
-<span class="c1"># Create branch for PR</span>
-git checkout -b main_snapshot_merge
-
-<span class="c1"># Merge in the snapshot branch</span>
-git merge snapshot
+<p>This library attempts to bridge the gap between <a href="https://developer.android.com/jetpack/androidx/releases/appcompat">AppCompat</a> XML themes, and themes in <a href="https://developer.android.com/jetpack/compose">Jetpack Compose</a>, allowing your composable <a href="https://developer.android.com/reference/kotlin/androidx/compose/material/MaterialTheme"><code>MaterialTheme</code></a> to be based on the <code>Activity</code>'s XML theme:</p>
+<div class="highlight"><pre><span></span><code><span class="n">AppCompatTheme</span> <span class="p">{</span>
+    <span class="c1">// MaterialTheme.colors, MaterialTheme.shapes, MaterialTheme.typography</span>
+    <span class="c1">// will now contain copies of the context&#39;s theme</span>
+<span class="p">}</span>
 </code></pre></div>
-<h3 id="2-update-dependencies">#2: Update dependencies<a class="headerlink" href="#2-update-dependencies" title="Permanent link">&para;</a></h3>
-<p>Edit <a href="https://github.com/chrisbanes/accompanist/blob/main/buildSrc/src/main/java/dev/chrisbanes/accompanist/buildsrc/dependencies.kt">dependencies.kt</a>:</p>
-<ol>
-<li>Update the <code>Libs.AndroidX.Compose.snapshot</code> property to be an empty string (<code>val snapshot = ""</code>)</li>
-<li>Update the <code>Libs.AndroidX.Compose.version</code> property to the new Compose version (<code>1.0.0-alpha03</code> for example).</li>
-</ol>
-<p>Make sure the project builds and test pass:
-<div class="highlight"><pre><span></span><code>./gradlew check
-</code></pre></div></p>
-<p>Commit the changes.</p>
-<h3 id="3-bump-the-version-number">#3: Bump the version number<a class="headerlink" href="#3-bump-the-version-number" title="Permanent link">&para;</a></h3>
-<p>Edit <a href="https://github.com/chrisbanes/accompanist/blob/main/gradle.properties">gradle.properties</a>:</p>
+<p>This is especially handy when you're migrating an existing app, a fragment (or other UI container) at a time.</p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>If you are using <a href="https://material.io/develop/android/">Material Design Components</a> in your app, you should use the
+<a href="https://github.com/material-components/material-components-android-compose-theme-adapter">MDC Compose Theme Adapter</a>
+instead, as it allows much finer-grained reading of your theme.</p>
+</div>
+<h3 id="customizing-the-theme">Customizing the theme<a class="headerlink" href="#customizing-the-theme" title="Permanent link">&para;</a></h3>
+<p>The <a href="https://chrisbanes.github.io/accompanist/api/appcompat-theme/appcompat-theme/dev.chrisbanes.accompanist.appcompattheme/-app-compat-theme.html"><code>AppCompatTheme()</code></a> function will automatically read the host context's AppCompat theme and pass them to <a href="https://developer.android.com/reference/kotlin/androidx/compose/material/MaterialTheme"><code>MaterialTheme</code></a> on your behalf, but if you want to customize the generated values, you can do so via the <a href="https://chrisbanes.github.io/accompanist/api/appcompat-theme/appcompat-theme/dev.chrisbanes.accompanist.appcompattheme/create-app-compat-theme.html"><code>createAppCompatTheme()</code></a> function:</p>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="py">context</span> <span class="p">=</span> <span class="n">ContextAmbient</span><span class="p">.</span><span class="n">current</span>
+<span class="k">var</span> <span class="p">(</span><span class="py">colors</span><span class="p">,</span> <span class="py">type</span><span class="p">)</span> <span class="p">=</span> <span class="n">context</span><span class="p">.</span><span class="n">createAppCompatTheme</span><span class="p">()</span>
+
+<span class="c1">// Modify colors or type as required. Then pass them</span>
+<span class="c1">// through to MaterialTheme...</span>
+
+<span class="n">MaterialTheme</span><span class="p">(</span>
+    <span class="n">colors</span> <span class="p">=</span> <span class="n">colors</span><span class="p">,</span>
+    <span class="n">typography</span> <span class="p">=</span> <span class="n">type</span>
+<span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// rest of layout</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h2 id="generated-theme">Generated theme<a class="headerlink" href="#generated-theme" title="Permanent link">&para;</a></h2>
+<p>Synthesizing a material theme from a <code>Theme.AppCompat</code> theme is not perfect, since <code>Theme.AppCompat</code>
+does not expose the same level of customization as is available in material theming.
+Going through the pillars of material theming:</p>
+<h3 id="colors">Colors<a class="headerlink" href="#colors" title="Permanent link">&para;</a></h3>
+<p>AppCompat has a limited set of top-level color attributes, which means that <a href="https://chrisbanes.github.io/accompanist/api/appcompat-theme/appcompat-theme/dev.chrisbanes.accompanist.appcompattheme/-app-compat-theme.html"><code>AppCompatTheme()</code></a>
+has to generate/select alternative colors in certain situations. The mapping is currently:</p>
+<table>
+<thead>
+<tr>
+<th>MaterialTheme color</th>
+<th>AppCompat attribute</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>primary</td>
+<td><code>colorPrimary</code></td>
+</tr>
+<tr>
+<td>primaryVariant</td>
+<td><code>colorPrimaryDark</code></td>
+</tr>
+<tr>
+<td>onPrimary</td>
+<td>Calculated black/white</td>
+</tr>
+<tr>
+<td>secondary</td>
+<td><code>colorAccent</code></td>
+</tr>
+<tr>
+<td>secondaryVariant</td>
+<td><code>colorAccent</code></td>
+</tr>
+<tr>
+<td>onSecondary</td>
+<td>Calculated black/white</td>
+</tr>
+<tr>
+<td>surface</td>
+<td>Default</td>
+</tr>
+<tr>
+<td>onSurface</td>
+<td><code>android:textColorPrimary</code>, else calculated black/white</td>
+</tr>
+<tr>
+<td>background</td>
+<td><code>android:colorBackground</code></td>
+</tr>
+<tr>
+<td>onBackground</td>
+<td><code>android:textColorPrimary</code>, else calculated black/white</td>
+</tr>
+<tr>
+<td>error</td>
+<td><code>colorError</code></td>
+</tr>
+<tr>
+<td>onError</td>
+<td>Calculated black/white</td>
+</tr>
+</tbody>
+</table>
+<p>Where the table says "calculated black/white", this means either black/white, depending on
+which provides the greatest contrast against the corresponding background color.</p>
+<h3 id="typography">Typography<a class="headerlink" href="#typography" title="Permanent link">&para;</a></h3>
+<p>AppCompat does not provide any semantic text appearances (such as headline6, body1, etc), and
+instead relies on text appearances for specific widgets or use cases. As such, the only thing
+we read from an AppCompat theme is the default <code>app:fontFamily</code> or <code>android:fontFamily</code>.
+For example:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;style</span> <span class="na">name=</span><span class="s">&quot;Theme.MyApp&quot;</span> <span class="na">parent=</span><span class="s">&quot;Theme.AppCompat&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">&quot;fontFamily&quot;</span><span class="nt">&gt;</span>@font/my_font<span class="nt">&lt;/item&gt;</span>
+<span class="nt">&lt;/style&gt;</span>
+</code></pre></div>
+<p>Compose does not currently support downloadable fonts, so any font referenced from the theme
+should from your resources. See <a href="https://developer.android.com/guide/topics/resources/font-resource">here</a>
+for more information.</p>
+<h3 id="shape">Shape<a class="headerlink" href="#shape" title="Permanent link">&para;</a></h3>
+<p>AppCompat has no concept of shape theming, therefore we use the default value from
+<a href="https://developer.android.com/reference/kotlin/androidx/compose/material/Shapes"><code>MaterialTheme.shapes</code></a>. If you wish to provide custom values, use the <code>shapes</code> parameter on <code>AppCompatTheme</code>.</p>
+<h2 id="limitations">Limitations<a class="headerlink" href="#limitations" title="Permanent link">&para;</a></h2>
+<p>There are some known limitations with the implementation at the moment:</p>
 <ul>
-<li>Update the <code>VERSION_NAME</code> property and remove the <code>-SNAPSHOT</code> suffix.</li>
+<li>This relies on your <code>Activity</code>/<code>Context</code> theme extending one of the <code>Theme.AppCompat</code> themes.</li>
+<li>Variable fonts are not supported in Compose yet, meaning that the value of <code>android:fontVariationSettings</code> are currently ignored.</li>
+<li>You can modify the resulting <code>MaterialTheme</code> in Compose as required, but this <em>only</em> works in Compose. Any changes you make will not be reflected in the Activity theme.</li>
 </ul>
-<p>Commit the changes, using the commit message containing the new version name.</p>
-<h3 id="4-push-to-github">#4: Push to GitHub<a class="headerlink" href="#4-push-to-github" title="Permanent link">&para;</a></h3>
-<p>Push the branch to GitHub and create a PR against the <code>main</code> branch, and send for review. Once approved and merged, it will be automatically deployed to Maven Central.</p>
-<h3 id="5-create-release">#5: Create release<a class="headerlink" href="#5-create-release" title="Permanent link">&para;</a></h3>
-<p>Once the above PR has been approved and merged, we need to create the GitHub release:</p>
-<ul>
-<li>Open up the <a href="https://github.com/chrisbanes/accompanist/releases">Releases</a> page.</li>
-<li>At the top you should see a 'Draft' release, auto populated with any PRs since the last release. Click 'Edit'.</li>
-<li>Make sure that the version number matches what we released (the tool guesses but is not always correct).</li>
-<li>Double check everything, then press 'Publish release'.</li>
-</ul>
-<p>At this point the release is published. This will trigger the docs action to run, which will auto-deploy a new version of the <a href="https://chrisbanes.github.io/accompanist/">website</a>.</p>
-<h3 id="6-prepare-the-next-development-version">#6: Prepare the next development version<a class="headerlink" href="#6-prepare-the-next-development-version" title="Permanent link">&para;</a></h3>
-<p>The current release is now finished, but we need to update the version for the next development version:</p>
-<p>Edit <a href="https://github.com/chrisbanes/accompanist/blob/main/gradle.properties">gradle.properties</a>:</p>
-<ul>
-<li>Update the <code>VERSION_NAME</code> property, by increasing the version number, and adding the <code>-SNAPSHOT</code> suffix.</li>
-<li>Example: released version: <code>0.3.0</code>. Update to <code>0.3.1-SNAPSHOT</code></li>
-</ul>
-<p><code>git commit</code> and push to <code>main</code>.</p>
-<p>Finally, merge all of these changes back to <code>snapshot</code>:</p>
-<div class="highlight"><pre><span></span><code>git checkout snapshot &amp;&amp; git pull
-git merge main
-git push
+<hr />
+<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">repositories</span> <span class="o">{</span>
+    <span class="n">mavenCentral</span><span class="o">()</span>
+<span class="o">}</span>
+
+<span class="n">dependencies</span> <span class="o">{</span>
+    <span class="n">implementation</span> <span class="s2">&quot;dev.chrisbanes.accompanist:accompanist-appcompat-theme:&lt;version&gt;&quot;</span>
+<span class="o">}</span>
+</code></pre></div>
+<h3 id="library-snapshots">Library Snapshots<a class="headerlink" href="#library-snapshots" title="Permanent link">&para;</a></h3>
+<p>Snapshots of the current development version of this library are available, which track the latest commit. See <a href="../using-snapshot-version">here</a> for more information on how to use them.</p>
+<hr />
+<h2 id="contributions">Contributions<a class="headerlink" href="#contributions" title="Permanent link">&para;</a></h2>
+<p>Please contribute! We will gladly review any pull requests.
+Make sure to read the <a href="../contributing">Contributing</a> page first though.</p>
+<h2 id="license">License<a class="headerlink" href="#license" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>Copyright 2020 The Android Open Source Project
+
+Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 </code></pre></div>
                 
               
@@ -807,7 +884,7 @@ git push
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../contributing/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../insets/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -816,11 +893,25 @@ git push
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Contributing
+                Insets
               </div>
             </div>
           </a>
         
+        
+          <a href="../using-snapshot-version/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Snapshots
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
         
       </nav>
     </div>
