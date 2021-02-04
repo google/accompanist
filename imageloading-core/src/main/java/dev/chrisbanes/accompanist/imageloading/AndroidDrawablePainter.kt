@@ -16,7 +16,6 @@
 
 package dev.chrisbanes.accompanist.imageloading
 
-import android.graphics.PorterDuff
 import android.graphics.drawable.Animatable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
@@ -28,21 +27,24 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.asAndroidColorFilter
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.ColorPainter
-import androidx.compose.ui.graphics.painter.ImagePainter
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.withSave
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.core.graphics.drawable.DrawableCompat
 import kotlin.math.roundToInt
+
+private val MAIN_HANDLER by lazy(LazyThreadSafetyMode.NONE) {
+    Handler(Looper.getMainLooper())
+}
 
 /**
  * A [Painter] which draws an Android [Drawable]. Supports [Animatable] drawables.
@@ -55,8 +57,6 @@ class AndroidDrawablePainter(
     private var invalidateTick by mutableStateOf(0)
     private var startedAnimatable = drawable is Animatable && drawable.isRunning
 
-    private val handler by lazy { Handler(Looper.getMainLooper()) }
-
     init {
         drawable.callback = object : Drawable.Callback {
             override fun invalidateDrawable(d: Drawable) {
@@ -65,11 +65,11 @@ class AndroidDrawablePainter(
             }
 
             override fun scheduleDrawable(d: Drawable, what: Runnable, time: Long) {
-                handler.postAtTime(what, time)
+                MAIN_HANDLER.postAtTime(what, time)
             }
 
             override fun unscheduleDrawable(d: Drawable, what: Runnable) {
-                handler.removeCallbacks(what)
+                MAIN_HANDLER.removeCallbacks(what)
             }
         }
     }
@@ -80,13 +80,7 @@ class AndroidDrawablePainter(
     }
 
     override fun applyColorFilter(colorFilter: ColorFilter?): Boolean {
-        if (colorFilter != null) {
-            drawable.setTint(colorFilter.color.toArgb())
-            drawable.setTintMode(colorFilter.blendMode.toPorterDuffMode())
-        } else {
-            drawable.setTintList(null)
-            drawable.setTintMode(null)
-        }
+        drawable.colorFilter = colorFilter?.asAndroidColorFilter()
         return true
     }
 
@@ -102,8 +96,8 @@ class AndroidDrawablePainter(
 
     override val intrinsicSize: Size
         get() = Size(
-            drawable.intrinsicWidth.toFloat(),
-            drawable.intrinsicHeight.toFloat()
+            width = drawable.intrinsicWidth.toFloat(),
+            height = drawable.intrinsicHeight.toFloat()
         )
 
     override fun DrawScope.onDraw() {
@@ -134,40 +128,11 @@ class AndroidDrawablePainter(
 }
 
 /**
- * Copied from AndroidBlendMode.kt in ui-graphics
- */
-private fun BlendMode.toPorterDuffMode(): PorterDuff.Mode = when (this) {
-    BlendMode.Clear -> PorterDuff.Mode.CLEAR
-    BlendMode.Src -> PorterDuff.Mode.SRC
-    BlendMode.Dst -> PorterDuff.Mode.DST
-    BlendMode.SrcOver -> PorterDuff.Mode.SRC_OVER
-    BlendMode.DstOver -> PorterDuff.Mode.DST_OVER
-    BlendMode.SrcIn -> PorterDuff.Mode.SRC_IN
-    BlendMode.DstIn -> PorterDuff.Mode.DST_IN
-    BlendMode.SrcOut -> PorterDuff.Mode.SRC_OUT
-    BlendMode.DstOut -> PorterDuff.Mode.DST_OUT
-    BlendMode.SrcAtop -> PorterDuff.Mode.SRC_ATOP
-    BlendMode.DstAtop -> PorterDuff.Mode.DST_ATOP
-    BlendMode.Xor -> PorterDuff.Mode.XOR
-    BlendMode.Plus -> PorterDuff.Mode.ADD
-    BlendMode.Screen -> PorterDuff.Mode.SCREEN
-    BlendMode.Overlay -> PorterDuff.Mode.OVERLAY
-    BlendMode.Darken -> PorterDuff.Mode.DARKEN
-    BlendMode.Lighten -> PorterDuff.Mode.LIGHTEN
-    BlendMode.Modulate -> {
-        // b/73224934 Android PorterDuff Multiply maps to Skia Modulate
-        PorterDuff.Mode.MULTIPLY
-    }
-    // Always return SRC_OVER as the default if there is no valid alternative
-    else -> PorterDuff.Mode.SRC_OVER
-}
-
-/**
  * Allows wrapping of a [Drawable] into a [Painter], attempting to un-wrap the drawable contents
  * and use Compose primitives where possible.
  */
 fun Drawable.toPainter(): Painter = when (this) {
-    is BitmapDrawable -> ImagePainter(bitmap.asImageBitmap())
+    is BitmapDrawable -> BitmapPainter(bitmap.asImageBitmap())
     is ColorDrawable -> ColorPainter(Color(color))
     else -> AndroidDrawablePainter(mutate())
 }

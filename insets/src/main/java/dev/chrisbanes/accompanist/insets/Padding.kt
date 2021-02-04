@@ -29,8 +29,8 @@ import androidx.compose.ui.layout.LayoutModifier
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.MeasureScope
-import androidx.compose.ui.platform.AmbientDensity
-import androidx.compose.ui.platform.AmbientLayoutDirection
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
@@ -48,7 +48,7 @@ fun Modifier.systemBarsPadding(
     enabled: Boolean = true
 ): Modifier = composed {
     InsetsPaddingModifier(
-        insets = AmbientWindowInsets.current.systemBars,
+        insets = LocalWindowInsets.current.systemBars,
         applyLeft = enabled,
         applyTop = enabled,
         applyRight = enabled,
@@ -62,7 +62,7 @@ fun Modifier.systemBarsPadding(
  */
 fun Modifier.statusBarsPadding(): Modifier = composed {
     InsetsPaddingModifier(
-        insets = AmbientWindowInsets.current.statusBars,
+        insets = LocalWindowInsets.current.statusBars,
         applyTop = true
     )
 }
@@ -85,7 +85,7 @@ fun Modifier.navigationBarsPadding(
     right: Boolean = true
 ): Modifier = composed {
     InsetsPaddingModifier(
-        insets = AmbientWindowInsets.current.navigationBars,
+        insets = LocalWindowInsets.current.navigationBars,
         applyLeft = left,
         applyRight = right,
         applyBottom = bottom
@@ -102,7 +102,7 @@ fun Modifier.navigationBarsPadding(
  */
 fun Modifier.imePadding(): Modifier = composed {
     InsetsPaddingModifier(
-        insets = AmbientWindowInsets.current.ime,
+        insets = LocalWindowInsets.current.ime,
         applyLeft = true,
         applyRight = true,
         applyBottom = true,
@@ -116,8 +116,8 @@ fun Modifier.imePadding(): Modifier = composed {
  */
 fun Modifier.navigationBarsWithImePadding(): Modifier = composed {
     InsetsPaddingModifier(
-        insets = AmbientWindowInsets.current.ime,
-        minimumInsets = AmbientWindowInsets.current.navigationBars,
+        insets = LocalWindowInsets.current.ime,
+        minimumInsets = LocalWindowInsets.current.navigationBars,
         applyLeft = true,
         applyRight = true,
         applyBottom = true,
@@ -167,53 +167,41 @@ private data class InsetsPaddingModifier(
  * @param top Whether to apply the inset on the top dimension.
  * @param end Whether to apply the inset on the end dimension.
  * @param bottom Whether to apply the inset on the bottom dimension.
+ * @param additionalStart Value to add to the start dimension.
+ * @param additionalTop Value to add to the top dimension.
+ * @param additionalEnd Value to add to the end dimension.
+ * @param additionalBottom Value to add to the bottom dimension.
  */
 @Composable
 fun Insets.toPaddingValues(
     start: Boolean = true,
     top: Boolean = true,
     end: Boolean = true,
-    bottom: Boolean = true
-): PaddingValues = with(AmbientDensity.current) {
-    val layoutDirection = AmbientLayoutDirection.current
+    bottom: Boolean = true,
+    additionalStart: Dp = 0.dp,
+    additionalTop: Dp = 0.dp,
+    additionalEnd: Dp = 0.dp,
+    additionalBottom: Dp = 0.dp,
+): PaddingValues = with(LocalDensity.current) {
+    val layoutDirection = LocalLayoutDirection.current
     PaddingValues(
-        start = when {
+        start = additionalStart + when {
             start && layoutDirection == LayoutDirection.Ltr -> this@toPaddingValues.left.toDp()
             start && layoutDirection == LayoutDirection.Rtl -> this@toPaddingValues.right.toDp()
             else -> 0.dp
         },
-        top = when {
+        top = additionalTop + when {
             top -> this@toPaddingValues.top.toDp()
             else -> 0.dp
         },
-        end = when {
+        end = additionalEnd + when {
             end && layoutDirection == LayoutDirection.Ltr -> this@toPaddingValues.right.toDp()
             end && layoutDirection == LayoutDirection.Rtl -> this@toPaddingValues.left.toDp()
             else -> 0.dp
         },
-        bottom = when {
+        bottom = additionalBottom + when {
             bottom -> this@toPaddingValues.bottom.toDp()
             else -> 0.dp
         }
     )
 }
-
-/**
- * Returns a new [PaddingValues] with the provided values added to each relevant dimension.
- *
- * @param start Value to add to the start dimension.
- * @param top Value to add to the top dimension.
- * @param end Value to add to the end dimension.
- * @param bottom Value to add to the bottom dimension.
- */
-inline fun PaddingValues.add(
-    start: Dp = 0.dp,
-    top: Dp = 0.dp,
-    end: Dp = 0.dp,
-    bottom: Dp = 0.dp,
-): PaddingValues = copy(
-    start = this.start + start,
-    top = this.top + top,
-    end = this.end + end,
-    bottom = this.bottom + bottom
-)

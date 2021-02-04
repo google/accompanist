@@ -21,14 +21,14 @@ setContent {
 !!! note
     **This library does not disable window decor fitting.** For your view hierarchy to able to receive insets, you need to make sure to call: [`WindowCompat.setDecorFitsSystemWindows(window, false)`](https://developer.android.com/reference/androidx/core/view/WindowCompat#setDecorFitsSystemWindows(android.view.Window,%20boolean)) from your Activity.
 
-`ProvideWindowInsets` allows the library to set an [`OnApplyWindowInsetsListener`][insetslistener] on your content's host view. That listener is used to update the value of an ambient bundled in this library: `AmbientWindowInsets`.
+`ProvideWindowInsets` allows the library to set an [`OnApplyWindowInsetsListener`][insetslistener] on your content's host view. That listener is used to update the value of a composition local bundled in this library: `LocalWindowInsets`.
 
-`AmbientWindowInsets` holds an instance of `WindowInsets` which contains the value of various [WindowInsets][insets] [types][insettypes]. You can use the values manually like so:
+`LocalWindowInsets` holds an instance of `WindowInsets` which contains the value of various [WindowInsets][insets] [types][insettypes]. You can use the values manually like so:
 
 ``` kotlin
 @Composable
 fun ImeAvoidingBox() {
-  val insets = AmbientWindowInsets.current
+  val insets = LocalWindowInsets.current
 
   Box(Modifier.padding(bottom = insets.ime.bottom))
 }
@@ -86,7 +86,7 @@ You may want to use inset values for content padding, so this library provides t
 
 ``` kotlin
 LazyColumn(
-  contentPadding = AmbientWindowInsets.current.systemBars.toPaddingValues()
+  contentPadding = LocalWindowInsets.current.systemBars.toPaddingValues()
 )
 ```
 

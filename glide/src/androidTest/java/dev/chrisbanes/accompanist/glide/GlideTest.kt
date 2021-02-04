@@ -29,10 +29,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
-import androidx.compose.ui.platform.AmbientView
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.imageResource
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.test.assertHeightIsAtLeast
 import androidx.compose.ui.test.assertHeightIsEqualTo
 import androidx.compose.ui.test.assertIsDisplayed
@@ -291,7 +290,7 @@ class GlideTest {
 
         composeTestRule.setContent {
             // Create a RequestManager with a listener which updates our loaded list
-            val glide = Glide.with(AmbientView.current)
+            val glide = Glide.with(LocalView.current)
                 .addDefaultRequestListener(SimpleRequestListener { model -> loaded += model })
 
             GlideImage(
@@ -317,10 +316,10 @@ class GlideTest {
 
         composeTestRule.setContent {
             // Create a RequestManager with a listener which updates our loaded list
-            val glide = Glide.with(AmbientView.current)
+            val glide = Glide.with(LocalView.current)
                 .addDefaultRequestListener(SimpleRequestListener { model -> loaded += model })
 
-            Providers(AmbientRequestManager provides glide) {
+            Providers(LocalRequestManager provides glide) {
                 GlideImage(
                     data = server.url("/image").toString(),
                     contentDescription = null,
@@ -533,7 +532,7 @@ class GlideTest {
     fun data_imagebitmap_throws() {
         composeTestRule.setContent {
             GlideImage(
-                data = imageResource(android.R.drawable.ic_delete),
+                data = painterResource(android.R.drawable.ic_delete),
                 contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
             )
@@ -544,7 +543,7 @@ class GlideTest {
     fun data_imagevector_throws() {
         composeTestRule.setContent {
             GlideImage(
-                data = vectorResource(R.drawable.ic_android_black_24dp),
+                data = painterResource(R.drawable.ic_android_black_24dp),
                 contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
             )

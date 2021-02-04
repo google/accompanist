@@ -31,8 +31,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.staticAmbientOf
-import androidx.compose.ui.platform.AmbientView
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.platform.LocalView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsAnimationCompat
 import androidx.core.view.WindowInsetsCompat
@@ -132,8 +132,18 @@ class Insets {
     )
 }
 
-val AmbientWindowInsets = staticAmbientOf<WindowInsets> {
-    error("AmbientWindowInsets value not available. Are you using ProvideWindowInsets?")
+@Deprecated(
+    "Renamed to LocalWindowInsets",
+    replaceWith = ReplaceWith(
+        "LocalWindowInsets",
+        "dev.chrisbanes.accompanist.insets.LocalWindowInsets"
+    )
+)
+val AmbientWindowInsets
+    get() = LocalWindowInsets
+
+val LocalWindowInsets = staticCompositionLocalOf<WindowInsets> {
+    error("LocalWindowInsets value not available. Are you using ProvideWindowInsets?")
 }
 
 /**
@@ -166,8 +176,8 @@ val AmbientWindowInsets = staticAmbientOf<WindowInsets> {
  *
  *     setContent {
  *         // Instead of calling ProvideWindowInsets, we use Providers to provide
- *         // the WindowInsets instance from above to AmbientWindowInsets
- *         Providers(AmbientWindowInsets provides windowInsets) {
+ *         // the WindowInsets instance from above to LocalWindowInsets
+ *         Providers(LocalWindowInsets provides windowInsets) {
  *             /* Content */
  *         }
  *     }
@@ -335,7 +345,7 @@ class ViewWindowInsetObserver(private val view: View) {
 }
 
 /**
- * Applies any [WindowInsetsCompat] values to [AmbientWindowInsets], which are then available
+ * Applies any [WindowInsetsCompat] values to [LocalWindowInsets], which are then available
  * within [content].
  *
  * If you're using this in fragments, you may wish to take a look at
@@ -349,7 +359,7 @@ fun ProvideWindowInsets(
     consumeWindowInsets: Boolean = true,
     content: @Composable () -> Unit,
 ) {
-    val view = AmbientView.current
+    val view = LocalView.current
     val windowInsets = remember { WindowInsets() }
 
     DisposableEffect(view) {
@@ -364,13 +374,13 @@ fun ProvideWindowInsets(
         }
     }
 
-    Providers(AmbientWindowInsets provides windowInsets) {
+    Providers(LocalWindowInsets provides windowInsets) {
         content()
     }
 }
 
 /**
- * Applies any [WindowInsetsCompat] values to [AmbientWindowInsets], which are then available
+ * Applies any [WindowInsetsCompat] values to [LocalWindowInsets], which are then available
  * within [content].
  *
  * If you're using this in fragments, you may wish to take a look at
@@ -388,7 +398,7 @@ fun ProvideWindowInsets(
     consumeWindowInsets: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val view = AmbientView.current
+    val view = LocalView.current
     val windowInsets = remember { WindowInsets() }
 
     DisposableEffect(view) {
@@ -403,7 +413,7 @@ fun ProvideWindowInsets(
         }
     }
 
-    Providers(AmbientWindowInsets provides windowInsets) {
+    Providers(LocalWindowInsets provides windowInsets) {
         content()
     }
 }

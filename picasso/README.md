@@ -92,7 +92,7 @@ PicassoImage(
 ## Custom Picasso
 
 If you wish to provide a default `Picasso` to use across all of your `PicassoImage`
-calls, we provide the `AmbientPicasso` ambient. 
+calls, we provide the `LocalPicasso` composition local. 
 
 You can use it like so:
 
@@ -101,15 +101,15 @@ val picasso = Picasso.Builder(...)
     // Customize as required
     .build()
 
-Providers(AmbientPicasso provides picasso) {
-    // This will automatically use the value of AmbientPicasso
+Providers(LocalPicasso provides picasso) {
+    // This will automatically use the value of LocalPicasso
     PicasoImage(
         data = ...
     )
 }
 ```
 
-For more information on ambients, see [here](https://developer.android.com/reference/kotlin/androidx/compose/runtime/Ambient).
+For more information on composition locals, see [here](https://developer.android.com/reference/kotlin/androidx/compose/runtime/CompositionLocal).
 
 ## Download
 

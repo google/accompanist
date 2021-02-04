@@ -23,7 +23,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.staticAmbientOf
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -31,7 +31,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.IntSize
 import coil.Coil
 import coil.ImageLoader
@@ -46,10 +46,20 @@ import dev.chrisbanes.accompanist.imageloading.ImageLoadState
 import dev.chrisbanes.accompanist.imageloading.MaterialLoadingImage
 import dev.chrisbanes.accompanist.imageloading.toPainter
 
+@Deprecated(
+    "Renamed to LocalImageLoader",
+    replaceWith = ReplaceWith(
+        "LocalImageLoader",
+        "dev.chrisbanes.accompanist.coil.LocalImageLoader"
+    )
+)
+val AmbientImageLoader
+    get() = LocalImageLoader
+
 /**
- * Ambient containing the preferred [ImageLoader] to use in [CoilImage].
+ * Composition local containing the preferred [ImageLoader] to use in [CoilImage].
  */
-val AmbientImageLoader = staticAmbientOf<ImageLoader?> { null }
+val LocalImageLoader = staticCompositionLocalOf<ImageLoader?> { null }
 
 /**
  * Contains some default values used for [CoilImage].
@@ -60,7 +70,7 @@ object CoilImageDefaults {
      */
     @Composable
     fun defaultImageLoader(): ImageLoader {
-        return AmbientImageLoader.current ?: AmbientContext.current.imageLoader
+        return LocalImageLoader.current ?: LocalContext.current.imageLoader
     }
 }
 
@@ -429,7 +439,7 @@ internal fun Any.toImageRequest(): ImageRequest {
         is ImageRequest -> return this
         else -> {
             // Otherwise we construct a GetRequest using the data parameter
-            val context = AmbientContext.current
+            val context = LocalContext.current
             return remember(this) { ImageRequest.Builder(context).data(this).build() }
         }
     }

@@ -22,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.widget.FrameLayout
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -43,7 +44,7 @@ import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.commit
-import dev.chrisbanes.accompanist.insets.AmbientWindowInsets
+import dev.chrisbanes.accompanist.insets.LocalWindowInsets
 import dev.chrisbanes.accompanist.insets.ViewWindowInsetObserver
 import dev.chrisbanes.accompanist.insets.navigationBarsPadding
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
@@ -57,8 +58,12 @@ class InsetsFragmentSample : FragmentActivity() {
         // insets
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
+        val content = FrameLayout(this)
+        content.id = View.generateViewId()
+        setContentView(content)
+
         supportFragmentManager.commit {
-            replace(android.R.id.content, InsetsFragment())
+            replace(content.id, InsetsFragment())
         }
     }
 }
@@ -79,8 +84,8 @@ class InsetsFragment : Fragment() {
 
         setContent {
             // Instead of calling ProvideWindowInsets, we use Providers to provide
-            // the WindowInsets instance from above to AmbientWindowInsets
-            Providers(AmbientWindowInsets provides windowInsets) {
+            // the WindowInsets instance from above to LocalWindowInsets
+            Providers(LocalWindowInsets provides windowInsets) {
                 Sample()
             }
         }

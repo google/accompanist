@@ -45,7 +45,7 @@ class InsetsTest {
         lateinit var composeWindowInsets: WindowInsets
         composeTestRule.setContent {
             ProvideWindowInsets {
-                composeWindowInsets = AmbientWindowInsets.current
+                composeWindowInsets = LocalWindowInsets.current
             }
         }
 

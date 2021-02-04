@@ -96,7 +96,7 @@ Accompanist Coil supports GIFs through Coil's own GIF support. Follow the [setup
 ## Custom ImageLoader
 
 If you wish to provide a default [`ImageLoader`](https://coil-kt.github.io/coil/image_loaders/) to use across all of your `CoilImage`
-calls, we provide the `AmbientImageLoader` ambient.
+calls, we provide the `LocalImageLoader` composition local.
 
 You can use it like so:
 
@@ -105,15 +105,15 @@ val imageLoader = ImageLoader.Builder(context)
     // customize the ImageLoader as needed
     .build()
 
-Providers(AmbientImageLoader provides imageLoader) {
-    // This will automatically use the value of AmbientImageLoader
+Providers(LocalImageLoader provides imageLoader) {
+    // This will automatically use the value of LocalImageLoader
     CoilImage(
         data = ...
     )
 }
 ```
 
-For more information on ambients, see [here](https://developer.android.com/reference/kotlin/androidx/compose/runtime/Ambient).
+For more information on composition locals, see [here](https://developer.android.com/reference/kotlin/androidx/compose/runtime/CompositionLocal).
 
 ## Download
 

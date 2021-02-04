@@ -25,13 +25,13 @@ import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.staticAmbientOf
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.painter.ImagePainter
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -50,10 +50,20 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import okhttp3.HttpUrl
 import java.io.File
 
+@Deprecated(
+    "Renamed to LocalPicasso",
+    replaceWith = ReplaceWith(
+        "LocalPicasso",
+        "dev.chrisbanes.accompanist.picasso.LocalPicasso"
+    )
+)
+val AmbientPicasso
+    get() = LocalPicasso
+
 /**
- * Ambient containing the preferred [Picasso] to use in [PicassoImage]. Defaults to [Picasso.get].
+ * Composition local containing the preferred [Picasso] to use in [PicassoImage]. Defaults to [Picasso.get].
  */
-val AmbientPicasso = staticAmbientOf { Picasso.get() }
+val LocalPicasso = staticCompositionLocalOf { Picasso.get() }
 
 /**
  * Creates a composable that will attempt to load the given [data] using [Picasso], and provides
@@ -75,7 +85,7 @@ val AmbientPicasso = staticAmbientOf { Picasso.get() }
  * @param data The data to load. See [RequestCreator.data] for the types allowed.
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
  * @param picasso The [Picasso] instance to use for requests. Defaults to the current value of
- * [AmbientPicasso].
+ * [LocalPicasso].
  * @param requestBuilder Optional builder for the [RequestCreator].
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
@@ -86,7 +96,7 @@ val AmbientPicasso = staticAmbientOf { Picasso.get() }
 fun PicassoImage(
     data: Any,
     modifier: Modifier = Modifier,
-    picasso: Picasso = AmbientPicasso.current,
+    picasso: Picasso = LocalPicasso.current,
     requestBuilder: (RequestCreator.(size: IntSize) -> RequestCreator)? = null,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
@@ -101,7 +111,7 @@ fun PicassoImage(
                 val target = object : com.squareup.picasso.Target {
                     override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
                         val state = ImageLoadState.Success(
-                            painter = ImagePainter(bitmap.asImageBitmap()),
+                            painter = BitmapPainter(bitmap.asImageBitmap()),
                             source = from.toDataSource()
                         )
                         cont.resume(state) {
@@ -206,7 +216,7 @@ fun PicassoImage(
  * @param fadeIn Whether to run a fade-in animation when images are successfully loaded.
  * Default: `false`.
  * @param picasso The [Picasso] instance to use for requests. Defaults to the current value
- * of [AmbientPicasso].
+ * of [LocalPicasso].
  * @param requestBuilder Optional builder for the [RequestCreator].
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
@@ -221,7 +231,7 @@ fun PicassoImage(
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
     fadeIn: Boolean = false,
-    picasso: Picasso = AmbientPicasso.current,
+    picasso: Picasso = LocalPicasso.current,
     requestBuilder: (RequestCreator.(size: IntSize) -> RequestCreator)? = null,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
