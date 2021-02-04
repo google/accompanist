@@ -101,7 +101,7 @@ Accompanist Glide supports GIFs through Glide's own GIF support. There's nothing
 ## Custom RequestManager
 
 If you wish to provide a default `RequestManager` to use across all of your `GlideImage`
-calls, we provide the `AmbientRequestManager` ambient.
+calls, we provide the `LocalRequestManager` composition local.
 
 You can use it like so:
 
@@ -110,15 +110,15 @@ val requestManager = Glide.with(...)
     // customize the RequestManager as needed
     .build()
 
-Providers(AmbientRequestManager provides requestManager) {
-    // This will automatically use the value of AmbientRequestManager
+Providers(LocalRequestManager provides requestManager) {
+    // This will automatically use the value of LocalRequestManager
     GlideImage(
         data = ...
     )
 }
 ```
 
-For more information on ambients, see [here](https://developer.android.com/reference/kotlin/androidx/compose/runtime/Ambient).
+For more information on composition locals, see [here](https://developer.android.com/reference/kotlin/androidx/compose/runtime/CompositionLocal).
 
 ## Download
 

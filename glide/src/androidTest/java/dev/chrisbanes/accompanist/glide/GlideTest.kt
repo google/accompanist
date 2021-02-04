@@ -320,7 +320,7 @@ class GlideTest {
             val glide = Glide.with(LocalView.current)
                 .addDefaultRequestListener(SimpleRequestListener { model -> loaded += model })
 
-            Providers(AmbientRequestManager provides glide) {
+            Providers(LocalRequestManager provides glide) {
                 GlideImage(
                     data = server.url("/image").toString(),
                     contentDescription = null,

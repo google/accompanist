@@ -275,7 +275,7 @@ class PicassoTest {
             .build()
 
         composeTestRule.setContent {
-            Providers(AmbientPicasso provides picasso) {
+            Providers(LocalPicasso provides picasso) {
                 PicassoImage(
                     data = server.url("/noimage"),
                     contentDescription = null,

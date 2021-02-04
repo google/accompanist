@@ -45,7 +45,7 @@ This is especially handy when you're migrating an existing app, a fragment (or o
 The [`AppCompatTheme()`][appcompatheme] function will automatically read the host context's AppCompat theme and pass them to [`MaterialTheme`][materialtheme] on your behalf, but if you want to customize the generated values, you can do so via the [`createAppCompatTheme()`][createappcompattheme] function:
 
 ``` kotlin
-val context = ContextAmbient.current
+val context = ContextLocal.current
 var (colors, type) = context.createAppCompatTheme()
 
 // Modify colors or type as required. Then pass them

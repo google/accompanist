@@ -4,6 +4,7 @@ public final class dev/chrisbanes/accompanist/coil/CoilImage {
 	public static final fun CoilImage (Ljava/lang/Object;Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function2;Lcoil/ImageLoader;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
 	public static final fun CoilImage (Ljava/lang/Object;Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;ZLkotlin/jvm/functions/Function2;Lcoil/ImageLoader;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;III)V
 	public static final fun getAmbientImageLoader ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+	public static final fun getLocalImageLoader ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 }
 
 public final class dev/chrisbanes/accompanist/coil/CoilImageDefaults {

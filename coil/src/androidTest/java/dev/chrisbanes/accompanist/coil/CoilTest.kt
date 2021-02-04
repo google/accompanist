@@ -249,7 +249,7 @@ class CoilTest {
             .build()
 
         composeTestRule.setContent {
-            Providers(AmbientImageLoader provides imageLoader) {
+            Providers(LocalImageLoader provides imageLoader) {
                 CoilImage(
                     data = server.url("/image"),
                     contentDescription = null,

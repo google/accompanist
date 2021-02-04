@@ -46,10 +46,20 @@ import dev.chrisbanes.accompanist.imageloading.ImageLoadState
 import dev.chrisbanes.accompanist.imageloading.MaterialLoadingImage
 import dev.chrisbanes.accompanist.imageloading.toPainter
 
+@Deprecated(
+    "Renamed to LocalImageLoader",
+    replaceWith = ReplaceWith(
+        "LocalImageLoader",
+        "dev.chrisbanes.accompanist.coil.LocalImageLoader"
+    )
+)
+val AmbientImageLoader
+    get() = LocalImageLoader
+
 /**
- * Ambient containing the preferred [ImageLoader] to use in [CoilImage].
+ * Composition local containing the preferred [ImageLoader] to use in [CoilImage].
  */
-val AmbientImageLoader = staticCompositionLocalOf { null }
+val LocalImageLoader = staticCompositionLocalOf<ImageLoader?> { null }
 
 /**
  * Contains some default values used for [CoilImage].
@@ -60,7 +70,7 @@ object CoilImageDefaults {
      */
     @Composable
     fun defaultImageLoader(): ImageLoader {
-        return AmbientImageLoader.current ?: LocalContext.current.imageLoader
+        return LocalImageLoader.current ?: LocalContext.current.imageLoader
     }
 }
 

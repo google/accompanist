@@ -134,7 +134,10 @@ class Insets {
 
 @Deprecated(
     "Renamed to LocalWindowInsets",
-    replaceWith = ReplaceWith("LocalWindowInsets", "dev.chrisbanes.accompanist.insets")
+    replaceWith = ReplaceWith(
+        "LocalWindowInsets",
+        "dev.chrisbanes.accompanist.insets.LocalWindowInsets"
+    )
 )
 val AmbientWindowInsets
     get() = LocalWindowInsets

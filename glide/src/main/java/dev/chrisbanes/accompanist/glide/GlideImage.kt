@@ -49,10 +49,20 @@ import dev.chrisbanes.accompanist.imageloading.toPainter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 
+@Deprecated(
+    "Renamed to LocalRequestManager",
+    replaceWith = ReplaceWith(
+        "LocalRequestManager",
+        "dev.chrisbanes.accompanist.glide.LocalRequestManager"
+    )
+)
+val AmbientRequestManager
+    get() = LocalRequestManager
+
 /**
- * Ambient containing the preferred [RequestManager] to use in [GlideImage].
+ * Composition local containing the preferred [RequestManager] to use in [GlideImage].
  */
-val AmbientRequestManager = staticCompositionLocalOf { null }
+val LocalRequestManager = staticCompositionLocalOf<RequestManager?> { null }
 
 /**
  * Contains some default values used for [GlideImage].
@@ -64,7 +74,7 @@ object GlideImageDefaults {
      */
     @Composable
     fun defaultRequestManager(): RequestManager {
-        return AmbientRequestManager.current ?: Glide.with(LocalView.current)
+        return LocalRequestManager.current ?: Glide.with(LocalView.current)
     }
 }
 
@@ -89,7 +99,7 @@ object GlideImageDefaults {
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
  * @param requestBuilder Optional builder for the [RequestBuilder].
  * @param requestManager The [RequestManager] to use when requesting the image. Defaults to the
- * current value of [AmbientRequestManager].
+ * current value of [LocalRequestManager].
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
@@ -161,7 +171,7 @@ fun GlideImage(
  * Default: `false`.
  * @param requestBuilder Optional builder for the [RequestBuilder].
  * @param requestManager The [RequestManager] to use when requesting the image. Defaults to the
- * current value of [AmbientRequestManager].
+ * current value of [LocalRequestManager].
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
