@@ -28,8 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.imageResource
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.test.assertHeightIsAtLeast
 import androidx.compose.ui.test.assertHeightIsEqualTo
 import androidx.compose.ui.test.assertIsDisplayed
@@ -499,7 +498,7 @@ class PicassoTest {
     fun data_imagebitmap_throws() {
         composeTestRule.setContent {
             PicassoImage(
-                data = imageResource(android.R.drawable.ic_delete),
+                data = painterResource(android.R.drawable.ic_delete),
                 contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
             )
@@ -510,7 +509,7 @@ class PicassoTest {
     fun data_imagevector_throws() {
         composeTestRule.setContent {
             PicassoImage(
-                data = vectorResource(R.drawable.ic_android_black_24dp),
+                data = painterResource(R.drawable.ic_android_black_24dp),
                 contentDescription = null,
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
             )
