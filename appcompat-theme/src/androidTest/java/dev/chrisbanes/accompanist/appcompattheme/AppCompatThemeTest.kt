@@ -25,7 +25,7 @@ import androidx.compose.material.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.text.font.Font
@@ -183,6 +183,6 @@ fun WithThemeOverlay(
     @StyleRes themeOverlayId: Int,
     content: @Composable () -> Unit,
 ) {
-    val themedContext = ContextThemeWrapper(AmbientContext.current, themeOverlayId)
-    Providers(AmbientContext provides themedContext, content = content)
+    val themedContext = ContextThemeWrapper(LocalContext.current, themeOverlayId)
+    Providers(LocalContext provides themedContext, content = content)
 }

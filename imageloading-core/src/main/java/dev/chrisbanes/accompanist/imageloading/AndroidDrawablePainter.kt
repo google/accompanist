@@ -35,10 +35,9 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.ColorPainter
-import androidx.compose.ui.graphics.painter.ImagePainter
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.withSave
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.core.graphics.drawable.DrawableCompat
@@ -54,6 +53,7 @@ class AndroidDrawablePainter(
 ) : Painter() {
     private var invalidateTick by mutableStateOf(0)
     private var startedAnimatable = drawable is Animatable && drawable.isRunning
+    private var colorFilter: ColorFilter? = null
 
     private val handler by lazy { Handler(Looper.getMainLooper()) }
 
@@ -80,13 +80,7 @@ class AndroidDrawablePainter(
     }
 
     override fun applyColorFilter(colorFilter: ColorFilter?): Boolean {
-        if (colorFilter != null) {
-            drawable.setTint(colorFilter.color.toArgb())
-            drawable.setTintMode(colorFilter.blendMode.toPorterDuffMode())
-        } else {
-            drawable.setTintList(null)
-            drawable.setTintMode(null)
-        }
+        this.colorFilter = colorFilter
         return true
     }
 
@@ -167,7 +161,7 @@ private fun BlendMode.toPorterDuffMode(): PorterDuff.Mode = when (this) {
  * and use Compose primitives where possible.
  */
 fun Drawable.toPainter(): Painter = when (this) {
-    is BitmapDrawable -> ImagePainter(bitmap.asImageBitmap())
+    is BitmapDrawable -> BitmapPainter(bitmap.asImageBitmap())
     is ColorDrawable -> ColorPainter(Color(color))
     else -> AndroidDrawablePainter(mutate())
 }

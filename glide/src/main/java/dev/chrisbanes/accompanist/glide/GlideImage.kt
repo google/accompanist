@@ -23,7 +23,7 @@ import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.staticAmbientOf
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -31,7 +31,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.AmbientView
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.IntSize
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
@@ -52,7 +52,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 /**
  * Ambient containing the preferred [RequestManager] to use in [GlideImage].
  */
-val AmbientRequestManager = staticAmbientOf<RequestManager?> { null }
+val AmbientRequestManager = staticCompositionLocalOf { null }
 
 /**
  * Contains some default values used for [GlideImage].
@@ -64,7 +64,7 @@ object GlideImageDefaults {
      */
     @Composable
     fun defaultRequestManager(): RequestManager {
-        return AmbientRequestManager.current ?: Glide.with(AmbientView.current)
+        return AmbientRequestManager.current ?: Glide.with(LocalView.current)
     }
 }
 

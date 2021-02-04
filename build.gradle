@@ -111,6 +111,18 @@ subprojects {
         }
     }
 
+    // FIXME: Only needed for Compose 1.0.0-alpha12 snapshots
+    configurations.configureEach {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            if (details.requested.group == 'androidx.lifecycle') {
+                details.useVersion('2.3.0-rc01')
+            }
+            if (details.requested.group == 'androidx.savedstate') {
+                details.useVersion('1.1.0-rc01')
+            }
+        }
+    }
+
     // Must be afterEvaluate or else com.vanniktech.maven.publish will overwrite our
     // dokka and version configuration.
     afterEvaluate {

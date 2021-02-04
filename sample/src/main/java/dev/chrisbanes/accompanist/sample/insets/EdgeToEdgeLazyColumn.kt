@@ -18,6 +18,7 @@ package dev.chrisbanes.accompanist.sample.insets
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
@@ -44,13 +45,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.AmbientDensity
-import androidx.compose.ui.platform.setContent
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
-import dev.chrisbanes.accompanist.insets.AmbientWindowInsets
+import dev.chrisbanes.accompanist.insets.LocalWindowInsets
 import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
 import dev.chrisbanes.accompanist.insets.add
 import dev.chrisbanes.accompanist.insets.navigationBarsPadding
@@ -92,9 +92,9 @@ private fun Sample() {
                 // the app bar. Since the top inset is already contained within the app
                 // bar height, we disable handling it in toPaddingValues().
                 LazyColumn(
-                    contentPadding = AmbientWindowInsets.current.systemBars
+                    contentPadding = LocalWindowInsets.current.systemBars
                         .toPaddingValues(top = false)
-                        .add(top = with(AmbientDensity.current) { topAppBarSize.toDp() })
+                        .add(top = with(LocalDensity.current) { topAppBarSize.toDp() })
                 ) {
                     items(items = listItems) { imageUrl ->
                         ListItem(imageUrl, Modifier.fillMaxWidth())

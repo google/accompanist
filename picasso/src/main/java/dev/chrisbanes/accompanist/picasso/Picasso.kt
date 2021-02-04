@@ -25,13 +25,13 @@ import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.staticAmbientOf
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.painter.ImagePainter
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -53,7 +53,7 @@ import java.io.File
 /**
  * Ambient containing the preferred [Picasso] to use in [PicassoImage]. Defaults to [Picasso.get].
  */
-val AmbientPicasso = staticAmbientOf { Picasso.get() }
+val AmbientPicasso = staticCompositionLocalOf { Picasso.get() }
 
 /**
  * Creates a composable that will attempt to load the given [data] using [Picasso], and provides
@@ -101,7 +101,7 @@ fun PicassoImage(
                 val target = object : com.squareup.picasso.Target {
                     override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
                         val state = ImageLoadState.Success(
-                            painter = ImagePainter(bitmap.asImageBitmap()),
+                            painter = BitmapPainter(bitmap.asImageBitmap()),
                             source = from.toDataSource()
                         )
                         cont.resume(state) {

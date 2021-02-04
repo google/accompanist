@@ -43,7 +43,7 @@ import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.commit
-import dev.chrisbanes.accompanist.insets.AmbientWindowInsets
+import dev.chrisbanes.accompanist.insets.LocalWindowInsets
 import dev.chrisbanes.accompanist.insets.ViewWindowInsetObserver
 import dev.chrisbanes.accompanist.insets.navigationBarsPadding
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
@@ -79,8 +79,8 @@ class InsetsFragment : Fragment() {
 
         setContent {
             // Instead of calling ProvideWindowInsets, we use Providers to provide
-            // the WindowInsets instance from above to AmbientWindowInsets
-            Providers(AmbientWindowInsets provides windowInsets) {
+            // the WindowInsets instance from above to LocalWindowInsets
+            Providers(LocalWindowInsets provides windowInsets) {
                 Sample()
             }
         }

@@ -40,7 +40,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.graphics.painter.ImagePainter
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.withSaveLayer
 import androidx.compose.ui.layout.ContentScale
@@ -81,7 +81,7 @@ fun MaterialLoadingImage(
     fadeInDurationMs: Int = DefaultTransitionDuration
 ) {
     MaterialLoadingImage(
-        painter = ImagePainter(asset),
+        painter = BitmapPainter(asset),
         contentDescription = contentDescription,
         modifier = modifier,
         alignment = alignment,

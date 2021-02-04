@@ -64,7 +64,7 @@ fun Modifier.statusBarsHeight(
     additional: Dp = 0.dp
 ): Modifier = composed {
     InsetsSizeModifier(
-        insets = AmbientWindowInsets.current.statusBars,
+        insets = LocalWindowInsets.current.statusBars,
         heightSide = VerticalSide.Top,
         additionalHeight = additional
     )
@@ -99,7 +99,7 @@ fun Modifier.navigationBarsHeight(
     additional: Dp = 0.dp
 ): Modifier = composed {
     InsetsSizeModifier(
-        insets = AmbientWindowInsets.current.navigationBars,
+        insets = LocalWindowInsets.current.navigationBars,
         heightSide = VerticalSide.Bottom,
         additionalHeight = additional
     )
@@ -140,7 +140,7 @@ fun Modifier.navigationBarsWidth(
     additional: Dp = 0.dp
 ): Modifier = composed {
     InsetsSizeModifier(
-        insets = AmbientWindowInsets.current.navigationBars,
+        insets = LocalWindowInsets.current.navigationBars,
         widthSide = side,
         additionalWidth = additional
     )
@@ -162,8 +162,8 @@ private data class InsetsSizeModifier(
 ) : LayoutModifier {
     private val Density.targetConstraints: Constraints
         get() {
-            val additionalWidthPx = additionalWidth.toIntPx()
-            val additionalHeightPx = additionalHeight.toIntPx()
+            val additionalWidthPx = additionalWidth.roundToPx()
+            val additionalHeightPx = additionalHeight.roundToPx()
             return Constraints(
                 minWidth = additionalWidthPx + when (widthSide) {
                     HorizontalSide.Left -> insets.left

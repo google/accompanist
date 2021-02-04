@@ -29,7 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
-import androidx.compose.ui.platform.AmbientView
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.vectorResource
@@ -291,7 +291,7 @@ class GlideTest {
 
         composeTestRule.setContent {
             // Create a RequestManager with a listener which updates our loaded list
-            val glide = Glide.with(AmbientView.current)
+            val glide = Glide.with(LocalView.current)
                 .addDefaultRequestListener(SimpleRequestListener { model -> loaded += model })
 
             GlideImage(
@@ -317,7 +317,7 @@ class GlideTest {
 
         composeTestRule.setContent {
             // Create a RequestManager with a listener which updates our loaded list
-            val glide = Glide.with(AmbientView.current)
+            val glide = Glide.with(LocalView.current)
                 .addDefaultRequestListener(SimpleRequestListener { model -> loaded += model })
 
             Providers(AmbientRequestManager provides glide) {

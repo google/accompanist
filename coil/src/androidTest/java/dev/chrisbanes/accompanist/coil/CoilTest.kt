@@ -27,7 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.vectorResource
@@ -101,7 +101,7 @@ class CoilTest {
 
         composeTestRule.setContent {
             CoilImage(
-                request = ImageRequest.Builder(AmbientContext.current)
+                request = ImageRequest.Builder(LocalContext.current)
                     .data(server.url("/image"))
                     .listener { _, _ -> requestCompleted = true }
                     .build(),

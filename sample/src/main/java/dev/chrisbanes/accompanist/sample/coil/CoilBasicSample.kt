@@ -20,6 +20,7 @@ import android.content.Context
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayout
 import androidx.compose.foundation.layout.aspectRatio
@@ -36,8 +37,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.AmbientContext
-import androidx.compose.ui.platform.setContent
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.ImageLoader
@@ -86,7 +86,7 @@ private fun Sample() {
                 CoilImage(
                     data = "https://cataas.com/cat/gif",
                     contentDescription = "Cat animation",
-                    imageLoader = GifImageLoader(AmbientContext.current),
+                    imageLoader = GifImageLoader(LocalContext.current),
                     modifier = Modifier.preferredSize(128.dp)
                 )
             }
@@ -94,7 +94,7 @@ private fun Sample() {
             item {
                 // CoilImage with ImageRequest parameter
                 CoilImage(
-                    request = ImageRequest.Builder(AmbientContext.current)
+                    request = ImageRequest.Builder(LocalContext.current)
                         .data(randomSampleImageUrl())
                         .transformations(CircleCropTransformation())
                         .build(),
@@ -142,7 +142,7 @@ private fun Sample() {
             item {
                 // CoilImage with crossfade and ImageRequest parameter
                 CoilImage(
-                    request = ImageRequest.Builder(AmbientContext.current)
+                    request = ImageRequest.Builder(LocalContext.current)
                         .data(randomSampleImageUrl())
                         .transformations(CircleCropTransformation())
                         .build(),
