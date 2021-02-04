@@ -52,7 +52,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import dev.chrisbanes.accompanist.insets.LocalWindowInsets
 import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
-import dev.chrisbanes.accompanist.insets.add
 import dev.chrisbanes.accompanist.insets.navigationBarsPadding
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
 import dev.chrisbanes.accompanist.insets.toPaddingValues
@@ -92,9 +91,10 @@ private fun Sample() {
                 // the app bar. Since the top inset is already contained within the app
                 // bar height, we disable handling it in toPaddingValues().
                 LazyColumn(
-                    contentPadding = LocalWindowInsets.current.systemBars
-                        .toPaddingValues(top = false)
-                        .add(top = with(LocalDensity.current) { topAppBarSize.toDp() })
+                    contentPadding = LocalWindowInsets.current.systemBars.toPaddingValues(
+                        top = false,
+                        additionalTop = with(LocalDensity.current) { topAppBarSize.toDp() }
+                    )
                 ) {
                     items(items = listItems) { imageUrl ->
                         ListItem(imageUrl, Modifier.fillMaxWidth())

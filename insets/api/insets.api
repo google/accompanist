@@ -1,23 +1,22 @@
 public final class dev/chrisbanes/accompanist/insets/ComposeInsets {
 	public static final fun ProvideWindowInsets (ZLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 	public static final fun ProvideWindowInsets (ZZLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
-	public static final fun add-L4cKpv0 (Landroidx/compose/foundation/layout/PaddingValues;FFFF)Landroidx/compose/foundation/layout/PaddingValues;
-	public static final fun add-L4cKpv0$default (Landroidx/compose/foundation/layout/PaddingValues;FFFFILjava/lang/Object;)Landroidx/compose/foundation/layout/PaddingValues;
-	public static final fun getAmbientWindowInsets ()Landroidx/compose/runtime/ProvidableAmbient;
+	public static final fun getAmbientWindowInsets ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+	public static final fun getLocalWindowInsets ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 	public static final fun imePadding (Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
-	public static final fun navigationBarsHeight-wxomhCo (Landroidx/compose/ui/Modifier;F)Landroidx/compose/ui/Modifier;
-	public static final fun navigationBarsHeight-wxomhCo$default (Landroidx/compose/ui/Modifier;FILjava/lang/Object;)Landroidx/compose/ui/Modifier;
+	public static final fun navigationBarsHeight-3ABfNKs (Landroidx/compose/ui/Modifier;F)Landroidx/compose/ui/Modifier;
+	public static synthetic fun navigationBarsHeight-3ABfNKs$default (Landroidx/compose/ui/Modifier;FILjava/lang/Object;)Landroidx/compose/ui/Modifier;
 	public static final fun navigationBarsPadding (Landroidx/compose/ui/Modifier;ZZZ)Landroidx/compose/ui/Modifier;
-	public static final fun navigationBarsPadding$default (Landroidx/compose/ui/Modifier;ZZZILjava/lang/Object;)Landroidx/compose/ui/Modifier;
-	public static final fun navigationBarsWidth-UTaBBDU (Landroidx/compose/ui/Modifier;Ldev/chrisbanes/accompanist/insets/HorizontalSide;F)Landroidx/compose/ui/Modifier;
-	public static final fun navigationBarsWidth-UTaBBDU$default (Landroidx/compose/ui/Modifier;Ldev/chrisbanes/accompanist/insets/HorizontalSide;FILjava/lang/Object;)Landroidx/compose/ui/Modifier;
+	public static synthetic fun navigationBarsPadding$default (Landroidx/compose/ui/Modifier;ZZZILjava/lang/Object;)Landroidx/compose/ui/Modifier;
+	public static final fun navigationBarsWidth-wH6b6FI (Landroidx/compose/ui/Modifier;Ldev/chrisbanes/accompanist/insets/HorizontalSide;F)Landroidx/compose/ui/Modifier;
+	public static synthetic fun navigationBarsWidth-wH6b6FI$default (Landroidx/compose/ui/Modifier;Ldev/chrisbanes/accompanist/insets/HorizontalSide;FILjava/lang/Object;)Landroidx/compose/ui/Modifier;
 	public static final fun navigationBarsWithImePadding (Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
-	public static final fun statusBarsHeight-wxomhCo (Landroidx/compose/ui/Modifier;F)Landroidx/compose/ui/Modifier;
-	public static final fun statusBarsHeight-wxomhCo$default (Landroidx/compose/ui/Modifier;FILjava/lang/Object;)Landroidx/compose/ui/Modifier;
+	public static final fun statusBarsHeight-3ABfNKs (Landroidx/compose/ui/Modifier;F)Landroidx/compose/ui/Modifier;
+	public static synthetic fun statusBarsHeight-3ABfNKs$default (Landroidx/compose/ui/Modifier;FILjava/lang/Object;)Landroidx/compose/ui/Modifier;
 	public static final fun statusBarsPadding (Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
 	public static final fun systemBarsPadding (Landroidx/compose/ui/Modifier;Z)Landroidx/compose/ui/Modifier;
-	public static final fun systemBarsPadding$default (Landroidx/compose/ui/Modifier;ZILjava/lang/Object;)Landroidx/compose/ui/Modifier;
-	public static final fun toPaddingValues (Ldev/chrisbanes/accompanist/insets/Insets;ZZZZLandroidx/compose/runtime/Composer;II)Landroidx/compose/foundation/layout/PaddingValues;
+	public static synthetic fun systemBarsPadding$default (Landroidx/compose/ui/Modifier;ZILjava/lang/Object;)Landroidx/compose/ui/Modifier;
+	public static final fun toPaddingValues-s2pLCVw (Ldev/chrisbanes/accompanist/insets/Insets;ZZZZFFFFLandroidx/compose/runtime/Composer;II)Landroidx/compose/foundation/layout/PaddingValues;
 }
 
 public abstract interface annotation class dev/chrisbanes/accompanist/insets/ExperimentalAnimatedInsets : java/lang/annotation/Annotation {
@@ -33,10 +32,10 @@ public final class dev/chrisbanes/accompanist/insets/HorizontalSide : java/lang/
 public final class dev/chrisbanes/accompanist/insets/ImeNestedScrollConnection : androidx/compose/ui/gesture/nestedscroll/NestedScrollConnection {
 	public static final field $stable I
 	public fun <init> (Landroid/view/View;ZZ)V
-	public fun onPostFling-Pv53iXo (JJLkotlin/jvm/functions/Function1;)V
-	public fun onPostScroll-l-UAZDg (JJLandroidx/compose/ui/gesture/nestedscroll/NestedScrollSource;)J
-	public fun onPreFling-TH1AsA0 (J)J
-	public fun onPreScroll-vG6bCaM (JLandroidx/compose/ui/gesture/nestedscroll/NestedScrollSource;)J
+	public fun onPostFling-NWHyrqs (JJLkotlin/jvm/functions/Function1;)V
+	public fun onPostScroll-akrDWew (JJLandroidx/compose/ui/gesture/nestedscroll/NestedScrollSource;)J
+	public fun onPreFling-AH228Gc (J)J
+	public fun onPreScroll-8S9VItk (JLandroidx/compose/ui/gesture/nestedscroll/NestedScrollSource;)J
 }
 
 public final class dev/chrisbanes/accompanist/insets/ImeNestedScrollConnectionKt {
