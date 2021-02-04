@@ -16,7 +16,6 @@
 
 package dev.chrisbanes.accompanist.imageloading
 
-import android.graphics.PorterDuff
 import android.graphics.drawable.Animatable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
@@ -28,9 +27,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.asAndroidColorFilter
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
@@ -53,9 +52,6 @@ class AndroidDrawablePainter(
 ) : Painter() {
     private var invalidateTick by mutableStateOf(0)
     private var startedAnimatable = drawable is Animatable && drawable.isRunning
-    private var colorFilter: ColorFilter? = null
-
-    private val handler by lazy { Handler(Looper.getMainLooper()) }
 
     init {
         drawable.callback = object : Drawable.Callback {
@@ -80,7 +76,7 @@ class AndroidDrawablePainter(
     }
 
     override fun applyColorFilter(colorFilter: ColorFilter?): Boolean {
-        this.colorFilter = colorFilter
+        drawable.colorFilter = colorFilter?.asAndroidColorFilter()
         return true
     }
 
@@ -96,8 +92,8 @@ class AndroidDrawablePainter(
 
     override val intrinsicSize: Size
         get() = Size(
-            drawable.intrinsicWidth.toFloat(),
-            drawable.intrinsicHeight.toFloat()
+            width = drawable.intrinsicWidth.toFloat(),
+            height = drawable.intrinsicHeight.toFloat()
         )
 
     override fun DrawScope.onDraw() {
@@ -125,35 +121,12 @@ class AndroidDrawablePainter(
             }
         }
     }
-}
 
-/**
- * Copied from AndroidBlendMode.kt in ui-graphics
- */
-private fun BlendMode.toPorterDuffMode(): PorterDuff.Mode = when (this) {
-    BlendMode.Clear -> PorterDuff.Mode.CLEAR
-    BlendMode.Src -> PorterDuff.Mode.SRC
-    BlendMode.Dst -> PorterDuff.Mode.DST
-    BlendMode.SrcOver -> PorterDuff.Mode.SRC_OVER
-    BlendMode.DstOver -> PorterDuff.Mode.DST_OVER
-    BlendMode.SrcIn -> PorterDuff.Mode.SRC_IN
-    BlendMode.DstIn -> PorterDuff.Mode.DST_IN
-    BlendMode.SrcOut -> PorterDuff.Mode.SRC_OUT
-    BlendMode.DstOut -> PorterDuff.Mode.DST_OUT
-    BlendMode.SrcAtop -> PorterDuff.Mode.SRC_ATOP
-    BlendMode.DstAtop -> PorterDuff.Mode.DST_ATOP
-    BlendMode.Xor -> PorterDuff.Mode.XOR
-    BlendMode.Plus -> PorterDuff.Mode.ADD
-    BlendMode.Screen -> PorterDuff.Mode.SCREEN
-    BlendMode.Overlay -> PorterDuff.Mode.OVERLAY
-    BlendMode.Darken -> PorterDuff.Mode.DARKEN
-    BlendMode.Lighten -> PorterDuff.Mode.LIGHTEN
-    BlendMode.Modulate -> {
-        // b/73224934 Android PorterDuff Multiply maps to Skia Modulate
-        PorterDuff.Mode.MULTIPLY
+    companion object {
+        private val handler by lazy(LazyThreadSafetyMode.NONE) {
+            Handler(Looper.getMainLooper())
+        }
     }
-    // Always return SRC_OVER as the default if there is no valid alternative
-    else -> PorterDuff.Mode.SRC_OVER
 }
 
 /**
