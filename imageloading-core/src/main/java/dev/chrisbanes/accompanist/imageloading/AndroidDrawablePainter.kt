@@ -42,6 +42,10 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.core.graphics.drawable.DrawableCompat
 import kotlin.math.roundToInt
 
+private val MAIN_HANDLER by lazy(LazyThreadSafetyMode.NONE) {
+    Handler(Looper.getMainLooper())
+}
+
 /**
  * A [Painter] which draws an Android [Drawable]. Supports [Animatable] drawables.
  *
@@ -61,11 +65,11 @@ class AndroidDrawablePainter(
             }
 
             override fun scheduleDrawable(d: Drawable, what: Runnable, time: Long) {
-                handler.postAtTime(what, time)
+                MAIN_HANDLER.postAtTime(what, time)
             }
 
             override fun unscheduleDrawable(d: Drawable, what: Runnable) {
-                handler.removeCallbacks(what)
+                MAIN_HANDLER.removeCallbacks(what)
             }
         }
     }
@@ -119,12 +123,6 @@ class AndroidDrawablePainter(
                 }
                 drawable.draw(canvas.nativeCanvas)
             }
-        }
-    }
-
-    companion object {
-        private val handler by lazy(LazyThreadSafetyMode.NONE) {
-            Handler(Looper.getMainLooper())
         }
     }
 }
