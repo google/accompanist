@@ -22,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.widget.FrameLayout
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -57,8 +58,12 @@ class InsetsFragmentSample : FragmentActivity() {
         // insets
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
+        val content = FrameLayout(this)
+        content.id = View.generateViewId()
+        setContentView(content)
+
         supportFragmentManager.commit {
-            replace(android.R.id.content, InsetsFragment())
+            replace(content.id, InsetsFragment())
         }
     }
 }
