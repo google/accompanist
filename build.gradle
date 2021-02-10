@@ -91,6 +91,9 @@ subprojects {
 
             // Allow use of @OptIn
             freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+
+            // FIXME figure out why this is needed
+            freeCompilerArgs += "-Xallow-unstable-dependencies"
         }
     }
 
@@ -105,18 +108,6 @@ subprojects {
                 project.ext.set(prop.key, rootProject.file(prop.value).absolutePath)
             } else {
                 project.ext.set(prop.key, prop.value)
-            }
-        }
-    }
-
-    // FIXME: Only needed for Compose 1.0.0-alpha12 snapshots
-    configurations.configureEach {
-        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-            if (details.requested.group == 'androidx.lifecycle') {
-                details.useVersion('2.3.0-rc01')
-            }
-            if (details.requested.group == 'androidx.savedstate') {
-                details.useVersion('1.1.0-rc01')
             }
         }
     }
