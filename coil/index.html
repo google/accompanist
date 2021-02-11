@@ -16,7 +16,7 @@
         <link rel="canonical" href="https://chrisbanes.github.io/accompanist/coil/">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.6">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.8">
     
     
       
@@ -739,20 +739,20 @@
 <p>Accompanist Coil supports GIFs through Coil's own GIF support. Follow the <a href="https://coil-kt.github.io/coil/gifs/">setup instructions</a> and it should just work.</p>
 <h2 id="custom-imageloader">Custom ImageLoader<a class="headerlink" href="#custom-imageloader" title="Permanent link">&para;</a></h2>
 <p>If you wish to provide a default <a href="https://coil-kt.github.io/coil/image_loaders/"><code>ImageLoader</code></a> to use across all of your <code>CoilImage</code>
-calls, we provide the <code>AmbientImageLoader</code> ambient.</p>
+calls, we provide the <code>LocalImageLoader</code> composition local.</p>
 <p>You can use it like so:</p>
 <div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="py">imageLoader</span> <span class="p">=</span> <span class="n">ImageLoader</span><span class="p">.</span><span class="n">Builder</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
     <span class="c1">// customize the ImageLoader as needed</span>
     <span class="p">.</span><span class="n">build</span><span class="p">()</span>
 
-<span class="n">Providers</span><span class="p">(</span><span class="n">AmbientImageLoader</span> <span class="n">provides</span> <span class="n">imageLoader</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// This will automatically use the value of AmbientImageLoader</span>
+<span class="n">Providers</span><span class="p">(</span><span class="n">LocalImageLoader</span> <span class="n">provides</span> <span class="n">imageLoader</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// This will automatically use the value of LocalImageLoader</span>
     <span class="n">CoilImage</span><span class="p">(</span>
         <span class="k">data</span> <span class="p">=</span> <span class="p">...</span>
     <span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>For more information on ambients, see <a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Ambient">here</a>.</p>
+<p>For more information on composition locals, see <a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/CompositionLocal">here</a>.</p>
 <h2 id="download">Download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h2>
 <p><a href="https://search.maven.org/search?q=g:dev.chrisbanes.accompanist"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/dev.chrisbanes.accompanist/accompanist-coil" /></a></p>
 <div class="highlight"><pre><span></span><code><span class="n">repositories</span> <span class="o">{</span>
@@ -845,8 +845,8 @@ calls, we provide the <code>AmbientImageLoader</code> ambient.</p>
       
     </div>
     
-      <script src="../assets/javascripts/vendor.53cc9318.min.js"></script>
-      <script src="../assets/javascripts/bundle.e9c9f54f.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      <script src="../assets/javascripts/vendor.18f0862e.min.js"></script>
+      <script src="../assets/javascripts/bundle.994580cf.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({
