@@ -1,0 +1,1 @@
+sourceset_dependencies = '{":appcompat-theme:dokkaHtml/androidTestRelease": [], ":appcompat-theme:dokkaHtml/debug": [], ":appcompat-theme:dokkaHtml/main": [], ":appcompat-theme:dokkaHtml/release": []}'
