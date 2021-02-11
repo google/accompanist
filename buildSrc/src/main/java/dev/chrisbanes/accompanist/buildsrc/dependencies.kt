@@ -97,7 +97,7 @@ object Libs {
         const val coreAlpha = "androidx.core:core:1.5.0-beta01"
 
         object Activity {
-            const val activityCompose = "androidx.activity:activity-compose:1.3.0-alpha01"
+            const val activityCompose = "androidx.activity:activity-compose:1.3.0-alpha02"
         }
     }
 
