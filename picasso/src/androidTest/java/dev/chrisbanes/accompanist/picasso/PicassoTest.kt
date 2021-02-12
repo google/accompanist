@@ -18,9 +18,9 @@ package dev.chrisbanes.accompanist.picasso
 
 import android.graphics.drawable.ShapeDrawable
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.preferredSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
-import androidx.compose.runtime.Providers
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -93,7 +93,7 @@ class PicassoTest {
             PicassoImage(
                 data = server.url("/image"),
                 contentDescription = null,
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(TestTags.Image),
+                modifier = Modifier.size(128.dp, 128.dp).testTag(TestTags.Image),
                 onRequestCompleted = { requestCompleted = true }
             )
         }
@@ -116,7 +116,7 @@ class PicassoTest {
             PicassoImage(
                 data = R.drawable.red_rectangle,
                 contentDescription = null,
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(TestTags.Image),
+                modifier = Modifier.size(128.dp, 128.dp).testTag(TestTags.Image),
                 onRequestCompleted = { requestCompleted = true }
             )
         }
@@ -143,7 +143,7 @@ class PicassoTest {
             PicassoImage(
                 data = data,
                 contentDescription = null,
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(TestTags.Image),
+                modifier = Modifier.size(128.dp, 128.dp).testTag(TestTags.Image),
                 onRequestCompleted = { loadCompleteSignal = true }
             )
         }
@@ -185,7 +185,7 @@ class PicassoTest {
             PicassoImage(
                 data = server.url("/red"),
                 contentDescription = null,
-                modifier = Modifier.preferredSize(size).testTag(TestTags.Image),
+                modifier = Modifier.size(size).testTag(TestTags.Image),
                 onRequestCompleted = { loadCompleteSignal.offer(it) }
             )
         }
@@ -244,7 +244,7 @@ class PicassoTest {
                 data = server.url("/noimage"),
                 picasso = picasso,
                 contentDescription = null,
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(TestTags.Image),
+                modifier = Modifier.size(128.dp, 128.dp).testTag(TestTags.Image),
                 onRequestCompleted = { requestCompleted = true }
             )
         }
@@ -274,11 +274,11 @@ class PicassoTest {
             .build()
 
         composeTestRule.setContent {
-            Providers(LocalPicasso provides picasso) {
+            CompositionLocalProvider(LocalPicasso provides picasso) {
                 PicassoImage(
                     data = server.url("/noimage"),
                     contentDescription = null,
-                    modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(TestTags.Image),
+                    modifier = Modifier.size(128.dp, 128.dp).testTag(TestTags.Image),
                     onRequestCompleted = { requestCompleted = true }
                 )
             }
@@ -303,7 +303,7 @@ class PicassoTest {
             PicassoImage(
                 data = server.url("/noimage"),
                 contentDescription = null,
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(TestTags.Image),
+                modifier = Modifier.size(128.dp, 128.dp).testTag(TestTags.Image),
                 onRequestCompleted = { requestCompleted = true }
             )
         }
@@ -326,7 +326,7 @@ class PicassoTest {
         composeTestRule.setContent {
             PicassoImage(
                 data = server.url("/noimage"),
-                modifier = Modifier.preferredSize(128.dp, 128.dp),
+                modifier = Modifier.size(128.dp, 128.dp),
                 // Disable any caches. If the item is in the cache, the fetch is
                 // synchronous which means the Loading state is skipped
                 requestBuilder = {
@@ -357,7 +357,7 @@ class PicassoTest {
         composeTestRule.setContent {
             PicassoImage(
                 data = server.url("/image"),
-                modifier = Modifier.preferredSize(128.dp, 128.dp),
+                modifier = Modifier.size(128.dp, 128.dp),
                 // Disable any caches. If the item is in the cache, the fetch is
                 // synchronous which means the Loading state is skipped
                 requestBuilder = {
@@ -388,7 +388,7 @@ class PicassoTest {
         composeTestRule.setContent {
             PicassoImage(
                 data = server.url("/image"),
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(TestTags.Image),
+                modifier = Modifier.size(128.dp, 128.dp).testTag(TestTags.Image),
                 onRequestCompleted = { requestCompleted = true }
             ) {
                 // Return an Image which just draws cyan
@@ -425,7 +425,7 @@ class PicassoTest {
                 data = server.url("/image"),
                 picasso = picasso,
                 contentDescription = null,
-                modifier = Modifier.preferredSize(128.dp, 128.dp),
+                modifier = Modifier.size(128.dp, 128.dp),
                 // Disable any caches. If the item is in the cache, the fetch is
                 // synchronous which means the Loading state is skipped
                 requestBuilder = {
@@ -467,7 +467,7 @@ class PicassoTest {
                         modifier = Modifier.matchParentSize()
                     )
                 },
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(TestTags.Image),
+                modifier = Modifier.size(128.dp, 128.dp).testTag(TestTags.Image),
                 onRequestCompleted = { requestCompleted = true }
             )
         }
@@ -489,7 +489,7 @@ class PicassoTest {
             PicassoImage(
                 data = ShapeDrawable(),
                 contentDescription = null,
-                modifier = Modifier.preferredSize(128.dp, 128.dp),
+                modifier = Modifier.size(128.dp, 128.dp),
             )
         }
     }
@@ -500,7 +500,7 @@ class PicassoTest {
             PicassoImage(
                 data = painterResource(android.R.drawable.ic_delete),
                 contentDescription = null,
-                modifier = Modifier.preferredSize(128.dp, 128.dp),
+                modifier = Modifier.size(128.dp, 128.dp),
             )
         }
     }
@@ -511,7 +511,7 @@ class PicassoTest {
             PicassoImage(
                 data = painterResource(R.drawable.ic_android_black_24dp),
                 contentDescription = null,
-                modifier = Modifier.preferredSize(128.dp, 128.dp),
+                modifier = Modifier.size(128.dp, 128.dp),
             )
         }
     }
@@ -522,7 +522,7 @@ class PicassoTest {
             PicassoImage(
                 data = ColorPainter(Color.Magenta),
                 contentDescription = null,
-                modifier = Modifier.preferredSize(128.dp, 128.dp),
+                modifier = Modifier.size(128.dp, 128.dp),
             )
         }
     }

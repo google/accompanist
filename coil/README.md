@@ -105,7 +105,7 @@ val imageLoader = ImageLoader.Builder(context)
     // customize the ImageLoader as needed
     .build()
 
-Providers(LocalImageLoader provides imageLoader) {
+CompositionLocalProvider(LocalImageLoader provides imageLoader) {
     // This will automatically use the value of LocalImageLoader
     CoilImage(
         data = ...

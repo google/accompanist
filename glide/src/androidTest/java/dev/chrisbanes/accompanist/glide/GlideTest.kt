@@ -19,9 +19,9 @@ package dev.chrisbanes.accompanist.glide
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.ShapeDrawable
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.preferredSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
-import androidx.compose.runtime.Providers
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -124,7 +124,7 @@ class GlideTest {
                     })
                 },
                 contentDescription = null,
-                modifier = Modifier.preferredSize(128.dp, 128.dp),
+                modifier = Modifier.size(128.dp, 128.dp),
                 onRequestCompleted = { results += it }
             )
         }
@@ -147,7 +147,7 @@ class GlideTest {
             GlideImage(
                 data = server.url("/image").toString(),
                 contentDescription = null,
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(GlideTestTags.Image),
+                modifier = Modifier.size(128.dp, 128.dp).testTag(GlideTestTags.Image),
                 onRequestCompleted = { requestCompleted = true }
             )
         }
@@ -170,7 +170,7 @@ class GlideTest {
             GlideImage(
                 data = resourceUri(R.drawable.red_rectangle),
                 contentDescription = null,
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(GlideTestTags.Image),
+                modifier = Modifier.size(128.dp, 128.dp).testTag(GlideTestTags.Image),
                 onRequestCompleted = { requestCompleted = true }
             )
         }
@@ -197,7 +197,7 @@ class GlideTest {
             GlideImage(
                 data = data.toString(),
                 contentDescription = null,
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(GlideTestTags.Image),
+                modifier = Modifier.size(128.dp, 128.dp).testTag(GlideTestTags.Image),
                 onRequestCompleted = { loadCompleteSignal = true }
             )
         }
@@ -239,7 +239,7 @@ class GlideTest {
             GlideImage(
                 data = server.url("/red").toString(),
                 contentDescription = null,
-                modifier = Modifier.preferredSize(size).testTag(GlideTestTags.Image),
+                modifier = Modifier.size(size).testTag(GlideTestTags.Image),
                 onRequestCompleted = { loadCompleteSignal.offer(it) }
             )
         }
@@ -297,7 +297,7 @@ class GlideTest {
                 data = server.url("/image").toString(),
                 requestManager = glide,
                 contentDescription = null,
-                modifier = Modifier.preferredSize(128.dp, 128.dp),
+                modifier = Modifier.size(128.dp, 128.dp),
                 onRequestCompleted = { requestCompleted = true }
             )
         }
@@ -319,11 +319,11 @@ class GlideTest {
             val glide = Glide.with(LocalView.current)
                 .addDefaultRequestListener(SimpleRequestListener { model -> loaded += model })
 
-            Providers(LocalRequestManager provides glide) {
+            CompositionLocalProvider(LocalRequestManager provides glide) {
                 GlideImage(
                     data = server.url("/image").toString(),
                     contentDescription = null,
-                    modifier = Modifier.preferredSize(128.dp, 128.dp),
+                    modifier = Modifier.size(128.dp, 128.dp),
                     onRequestCompleted = { requestCompleted = true }
                 )
             }
@@ -344,7 +344,7 @@ class GlideTest {
             GlideImage(
                 data = server.url("/noimage").toString(),
                 contentDescription = null,
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(GlideTestTags.Image),
+                modifier = Modifier.size(128.dp, 128.dp).testTag(GlideTestTags.Image),
                 onRequestCompleted = { requestCompleted = true }
             )
         }
@@ -372,7 +372,7 @@ class GlideTest {
                     // synchronous and the dispatcher pause has no effect
                     skipMemoryCache(true)
                 },
-                modifier = Modifier.preferredSize(128.dp, 128.dp),
+                modifier = Modifier.size(128.dp, 128.dp),
                 onRequestCompleted = { requestCompleted = true }
             ) { state ->
                 states.add(state)
@@ -402,7 +402,7 @@ class GlideTest {
                     // synchronous and the dispatcher pause has no effect
                     skipMemoryCache(true)
                 },
-                modifier = Modifier.preferredSize(128.dp, 128.dp),
+                modifier = Modifier.size(128.dp, 128.dp),
                 onRequestCompleted = { requestCompleted = true }
             ) { state ->
                 states.add(state)
@@ -427,7 +427,7 @@ class GlideTest {
         composeTestRule.setContent {
             GlideImage(
                 data = server.url("/image").toString(),
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(GlideTestTags.Image),
+                modifier = Modifier.size(128.dp, 128.dp).testTag(GlideTestTags.Image),
                 onRequestCompleted = { requestCompleted = true }
             ) {
                 // Return an Image which just draws cyan
@@ -466,7 +466,7 @@ class GlideTest {
                 data = server.url("/image").toString(),
                 requestManager = glide,
                 contentDescription = null,
-                modifier = Modifier.preferredSize(128.dp, 128.dp),
+                modifier = Modifier.size(128.dp, 128.dp),
                 loading = { Text(text = "Loading") },
                 onRequestCompleted = { requestCompleted = true }
             )
@@ -502,7 +502,7 @@ class GlideTest {
                     )
                 },
                 contentDescription = null,
-                modifier = Modifier.preferredSize(128.dp, 128.dp).testTag(GlideTestTags.Image),
+                modifier = Modifier.size(128.dp, 128.dp).testTag(GlideTestTags.Image),
                 onRequestCompleted = { requestCompleted = true }
             )
         }
@@ -523,7 +523,7 @@ class GlideTest {
             GlideImage(
                 data = ShapeDrawable(),
                 contentDescription = null,
-                modifier = Modifier.preferredSize(128.dp, 128.dp),
+                modifier = Modifier.size(128.dp, 128.dp),
             )
         }
     }
@@ -534,7 +534,7 @@ class GlideTest {
             GlideImage(
                 data = painterResource(android.R.drawable.ic_delete),
                 contentDescription = null,
-                modifier = Modifier.preferredSize(128.dp, 128.dp),
+                modifier = Modifier.size(128.dp, 128.dp),
             )
         }
     }
@@ -545,7 +545,7 @@ class GlideTest {
             GlideImage(
                 data = painterResource(R.drawable.ic_android_black_24dp),
                 contentDescription = null,
-                modifier = Modifier.preferredSize(128.dp, 128.dp),
+                modifier = Modifier.size(128.dp, 128.dp),
             )
         }
     }
@@ -556,7 +556,7 @@ class GlideTest {
             GlideImage(
                 data = ColorPainter(Color.Magenta),
                 contentDescription = null,
-                modifier = Modifier.preferredSize(128.dp, 128.dp),
+                modifier = Modifier.size(128.dp, 128.dp),
             )
         }
     }

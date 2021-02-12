@@ -22,12 +22,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ExperimentalLayout
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredSize
-import androidx.compose.foundation.layout.preferredWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
@@ -61,7 +60,6 @@ class CoilBasicSample : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalLayout::class)
 @Composable
 private fun Sample() {
     Scaffold(
@@ -77,7 +75,7 @@ private fun Sample() {
                 CoilImage(
                     data = randomSampleImageUrl(),
                     contentDescription = null,
-                    modifier = Modifier.preferredSize(128.dp)
+                    modifier = Modifier.size(128.dp)
                 )
             }
 
@@ -86,8 +84,8 @@ private fun Sample() {
                 CoilImage(
                     data = "https://cataas.com/cat/gif",
                     contentDescription = "Cat animation",
-                    imageLoader = GifImageLoader(LocalContext.current),
-                    modifier = Modifier.preferredSize(128.dp)
+                    imageLoader = gifImageLoader(LocalContext.current),
+                    modifier = Modifier.size(128.dp)
                 )
             }
 
@@ -99,7 +97,7 @@ private fun Sample() {
                         .transformations(CircleCropTransformation())
                         .build(),
                     contentDescription = null,
-                    modifier = Modifier.preferredSize(128.dp)
+                    modifier = Modifier.size(128.dp)
                 )
             }
 
@@ -111,7 +109,7 @@ private fun Sample() {
                         transformations(CircleCropTransformation())
                     },
                     contentDescription = null,
-                    modifier = Modifier.preferredSize(128.dp)
+                    modifier = Modifier.size(128.dp)
                 )
             }
 
@@ -125,7 +123,7 @@ private fun Sample() {
                             CircularProgressIndicator(Modifier.align(Alignment.Center))
                         }
                     },
-                    modifier = Modifier.preferredSize(128.dp)
+                    modifier = Modifier.size(128.dp)
                 )
             }
 
@@ -135,7 +133,7 @@ private fun Sample() {
                     data = randomSampleImageUrl(),
                     fadeIn = true,
                     contentDescription = null,
-                    modifier = Modifier.preferredSize(128.dp)
+                    modifier = Modifier.size(128.dp)
                 )
             }
 
@@ -148,7 +146,7 @@ private fun Sample() {
                         .build(),
                     fadeIn = true,
                     contentDescription = null,
-                    modifier = Modifier.preferredSize(128.dp)
+                    modifier = Modifier.size(128.dp)
                 )
             }
 
@@ -163,7 +161,7 @@ private fun Sample() {
                         }
                     },
                     contentDescription = null,
-                    modifier = Modifier.preferredSize(128.dp)
+                    modifier = Modifier.size(128.dp)
                 )
             }
 
@@ -187,7 +185,7 @@ private fun Sample() {
                     contentScale = ContentScale.Crop,
                     contentDescription = null,
                     modifier = Modifier
-                        .preferredWidth(256.dp)
+                        .width(256.dp)
                         .aspectRatio(16 / 9f)
                 )
             }
@@ -195,7 +193,7 @@ private fun Sample() {
     }
 }
 
-fun GifImageLoader(context: Context): ImageLoader = ImageLoader.Builder(context)
+fun gifImageLoader(context: Context): ImageLoader = ImageLoader.Builder(context)
     .componentRegistry {
         if (SDK_INT >= 28) add(ImageDecoderDecoder()) else add(GifDecoder())
     }

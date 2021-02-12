@@ -23,7 +23,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Typography
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Providers
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -184,5 +184,5 @@ fun WithThemeOverlay(
     content: @Composable () -> Unit,
 ) {
     val themedContext = ContextThemeWrapper(LocalContext.current, themeOverlayId)
-    Providers(LocalContext provides themedContext, content = content)
+    CompositionLocalProvider(LocalContext provides themedContext, content = content)
 }
