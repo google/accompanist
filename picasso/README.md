@@ -101,7 +101,7 @@ val picasso = Picasso.Builder(...)
     // Customize as required
     .build()
 
-Providers(LocalPicasso provides picasso) {
+CompositionLocalProvider(LocalPicasso provides picasso) {
     // This will automatically use the value of LocalPicasso
     PicasoImage(
         data = ...

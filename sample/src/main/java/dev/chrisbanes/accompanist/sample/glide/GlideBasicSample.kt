@@ -20,12 +20,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ExperimentalLayout
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredSize
-import androidx.compose.foundation.layout.preferredWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
@@ -53,7 +52,6 @@ class GlideBasicSample : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalLayout::class)
 @Composable
 private fun Sample() {
     Scaffold(
@@ -69,7 +67,7 @@ private fun Sample() {
                 GlideImage(
                     data = randomSampleImageUrl(),
                     contentDescription = null,
-                    modifier = Modifier.preferredSize(128.dp)
+                    modifier = Modifier.size(128.dp)
                 )
             }
 
@@ -83,7 +81,7 @@ private fun Sample() {
                         }
                     },
                     contentDescription = null,
-                    modifier = Modifier.preferredSize(128.dp)
+                    modifier = Modifier.size(128.dp)
                 )
             }
 
@@ -93,7 +91,7 @@ private fun Sample() {
                     data = randomSampleImageUrl(),
                     fadeIn = true,
                     contentDescription = null,
-                    modifier = Modifier.preferredSize(128.dp)
+                    modifier = Modifier.size(128.dp)
                 )
             }
 
@@ -108,7 +106,7 @@ private fun Sample() {
                         }
                     },
                     contentDescription = null,
-                    modifier = Modifier.preferredSize(128.dp)
+                    modifier = Modifier.size(128.dp)
                 )
             }
 
@@ -131,7 +129,7 @@ private fun Sample() {
                     data = randomSampleImageUrl(),
                     contentScale = ContentScale.Crop,
                     contentDescription = null,
-                    modifier = Modifier.preferredWidth(256.dp)
+                    modifier = Modifier.width(256.dp)
                         .aspectRatio(16 / 9f)
                 )
             }

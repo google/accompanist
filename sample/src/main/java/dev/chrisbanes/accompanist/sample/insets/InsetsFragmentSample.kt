@@ -34,7 +34,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Providers
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -83,9 +83,9 @@ class InsetsFragment : Fragment() {
         val windowInsets = observer.start()
 
         setContent {
-            // Instead of calling ProvideWindowInsets, we use Providers to provide
+            // Instead of calling ProvideWindowInsets, we use CompositionLocalProvider to provide
             // the WindowInsets instance from above to LocalWindowInsets
-            Providers(LocalWindowInsets provides windowInsets) {
+            CompositionLocalProvider(LocalWindowInsets provides windowInsets) {
                 Sample()
             }
         }

@@ -19,8 +19,8 @@ package dev.chrisbanes.accompanist.sample.insets
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredSize
-import androidx.compose.foundation.layout.preferredWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -43,11 +43,11 @@ fun ListItem(
         GlideImage(
             data = imageUrl,
             contentDescription = null,
-            modifier = Modifier.preferredSize(64.dp)
+            modifier = Modifier.size(64.dp)
                 .clip(RoundedCornerShape(4.dp))
         )
 
-        Spacer(Modifier.preferredWidth(16.dp))
+        Spacer(Modifier.width(16.dp))
 
         Text(
             text = "Text",

@@ -24,8 +24,8 @@ package dev.chrisbanes.accompanist.insets
 import android.view.View
 import android.view.WindowInsetsAnimation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.Providers
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -175,9 +175,9 @@ val LocalWindowInsets = staticCompositionLocalOf<WindowInsets> {
  *     val windowInsets = observer.start()
  *
  *     setContent {
- *         // Instead of calling ProvideWindowInsets, we use Providers to provide
+ *         // Instead of calling ProvideWindowInsets, we use CompositionLocalProvider to provide
  *         // the WindowInsets instance from above to LocalWindowInsets
- *         Providers(LocalWindowInsets provides windowInsets) {
+ *         CompositionLocalProvider(LocalWindowInsets provides windowInsets) {
  *             /* Content */
  *         }
  *     }
@@ -374,7 +374,7 @@ fun ProvideWindowInsets(
         }
     }
 
-    Providers(LocalWindowInsets provides windowInsets) {
+    CompositionLocalProvider(LocalWindowInsets provides windowInsets) {
         content()
     }
 }
@@ -413,7 +413,7 @@ fun ProvideWindowInsets(
         }
     }
 
-    Providers(LocalWindowInsets provides windowInsets) {
+    CompositionLocalProvider(LocalWindowInsets provides windowInsets) {
         content()
     }
 }

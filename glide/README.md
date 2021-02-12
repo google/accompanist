@@ -110,7 +110,7 @@ val requestManager = Glide.with(...)
     // customize the RequestManager as needed
     .build()
 
-Providers(LocalRequestManager provides requestManager) {
+CompositionLocalProvider(LocalRequestManager provides requestManager) {
     // This will automatically use the value of LocalRequestManager
     GlideImage(
         data = ...
