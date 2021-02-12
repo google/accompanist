@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.Velocity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
 import kotlin.math.roundToInt
 
 /**
@@ -171,9 +172,14 @@ class ImeNestedScrollConnection(
             // animate to the end state using the velocity
             return suspendCancellableCoroutine { cont ->
                 imeAnimController.animateToFinish(available.y) { remainingVelocity ->
-                    cont.resume(Velocity(x = 0f, y = remainingVelocity)) {
-                        imeAnimController.cancel()
-                    }
+                    cont.resume(
+                        value = Velocity(x = 0f, y = remainingVelocity),
+                        onCancellation = { imeAnimController.finish() }
+                    )
+                }
+                // If the coroutine is cancelled, cancel the IME animation
+                cont.invokeOnCancellation {
+                    imeAnimController.cancel()
                 }
             }
         }
@@ -183,14 +189,19 @@ class ImeNestedScrollConnection(
         if (scrollImeOnScreenWhenNotVisible && available.y > 0 == imeVisible) {
             return suspendCancellableCoroutine { cont ->
                 imeAnimController.startAndFling(view, available.y) { remainingVelocity ->
-                    cont.resume(Velocity(x = 0f, y = remainingVelocity)) {
-                        imeAnimController.cancel()
-                    }
+                    cont.resume(
+                        value = Velocity(x = 0f, y = remainingVelocity),
+                        onCancellation = { imeAnimController.finish() }
+                    )
+                }
+                // If the coroutine is cancelled, cancel the IME animation
+                cont.invokeOnCancellation {
+                    imeAnimController.cancel()
                 }
             }
         }
 
-        // If we reach here we just call onFinished()
+        // If we reach here we just return zero velocity
         return Velocity.Zero
     }
 }
