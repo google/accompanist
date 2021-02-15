@@ -31,7 +31,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.IntSize
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
@@ -74,7 +74,11 @@ object GlideImageDefaults {
      */
     @Composable
     fun defaultRequestManager(): RequestManager {
-        return LocalRequestManager.current ?: Glide.with(LocalView.current)
+        return LocalRequestManager.current
+            // By default Glide tries to install lifecycle listeners to automatically re-trigger
+            // requests when resumed. We don't want that with Compose, since we rely on composition
+            // for our 'lifecycle'. We can stop Glide doing this by using the application context.
+            ?: Glide.with(LocalContext.current.applicationContext)
     }
 }
 
@@ -230,6 +234,11 @@ private suspend fun RequestManager.execute(
 
     val target = object : EmptyCustomTarget(size.width, size.height) {
         override fun onLoadFailed(errorDrawable: Drawable?) {
+            if (cont.isCompleted) {
+                // If we've already completed, ignore this
+                return
+            }
+
             val result = ImageLoadState.Error(
                 painter = errorDrawable?.toPainter(),
                 throwable = failException
@@ -251,6 +260,11 @@ private suspend fun RequestManager.execute(
             dataSource: com.bumptech.glide.load.DataSource,
             isFirstResource: Boolean
         ): Boolean {
+            if (cont.isCompleted) {
+                // If we've already completed, ignore this
+                return true
+            }
+
             val result = ImageLoadState.Success(
                 painter = drawable.toPainter(),
                 source = dataSource.toDataSource()
