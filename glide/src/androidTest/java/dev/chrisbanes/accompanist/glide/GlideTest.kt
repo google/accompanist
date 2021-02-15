@@ -18,11 +18,11 @@ package dev.chrisbanes.accompanist.glide
 
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.ShapeDrawable
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.material.Text
 import androidx.compose.runtime.Providers
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -38,13 +38,13 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertWidthIsAtLeast
 import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.captureToImage
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
 import androidx.test.filters.LargeTest
 import androidx.test.filters.SdkSuppress
-import androidx.test.platform.app.InstrumentationRegistry
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -72,7 +72,7 @@ import org.junit.runners.JUnit4
 @RunWith(JUnit4::class)
 class GlideTest {
     @get:Rule
-    val composeTestRule = createComposeRule()
+    val composeTestRule = createAndroidComposeRule(ComponentActivity::class.java)
 
     // Our MockWebServer. We use a response delay to simulate real-world conditions
     private val server = ImageMockWebServer()
@@ -453,15 +453,12 @@ class GlideTest {
     fun loading_slot() {
         var requestCompleted by mutableStateOf(false)
 
-        val glide = Glide.with(InstrumentationRegistry.getInstrumentation().targetContext)
+        val glide = Glide.with(composeTestRule.activity.applicationContext).apply {
+            // Pause all requests so that the request doesn't complete
+            pauseAllRequests()
+        }
 
         composeTestRule.setContent {
-            SideEffect {
-                // Pause all requests so that the request doesn't complete. This needs to be done
-                // inside our content because Glide automatically resumeRequests() in onStart
-                glide.pauseAllRequests()
-            }
-
             GlideImage(
                 data = server.url("/image").toString(),
                 requestManager = glide,
@@ -559,5 +556,30 @@ class GlideTest {
                 modifier = Modifier.preferredSize(128.dp, 128.dp),
             )
         }
+    }
+
+    @Test
+    fun error_stoppedThenResumed() {
+        var requestCompleted by mutableStateOf(false)
+
+        composeTestRule.setContent {
+            GlideImage(
+                data = "",
+                contentDescription = null,
+                modifier = Modifier.preferredSize(128.dp, 128.dp),
+                onRequestCompleted = { requestCompleted = true }
+            )
+        }
+
+        // Wait for the onRequestCompleted to release the latch
+        composeTestRule.waitUntil(10_000) { requestCompleted }
+
+        // Now stop the activity, then resume it
+        composeTestRule.activityRule.scenario
+            .moveToState(Lifecycle.State.CREATED)
+            .moveToState(Lifecycle.State.RESUMED)
+
+        // And wait for idle. We shouldn't crash.
+        composeTestRule.waitForIdle()
     }
 }
