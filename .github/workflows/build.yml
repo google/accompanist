@@ -92,8 +92,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          # We need to list out all modules due to https://issuetracker.google.com/174839536
-          script: ./gradlew --scan coil:connectedCheck glide:connectedCheck picasso:connectedCheck insets:connectedCheck appcompat-theme:connectedCheck
+          script: ./gradlew --scan connectedCheck
 
       - name: Clean secrets
         if: always()
