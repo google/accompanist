@@ -59,6 +59,15 @@
         </activity>
 
         <activity
+            android:name=".coil.CoilLazyGridSample"
+            android:label="@string/coil_title_lazy_grid">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".picasso.PicassoBasicSample"
             android:label="@string/picasso_title_basic">
             <intent-filter>
@@ -70,6 +79,16 @@
         <activity
             android:name=".picasso.PicassoLazyColumnSample"
             android:label="@string/picasso_title_lazy_row">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+
+        <activity
+            android:name=".picasso.PicassoLazyGridSample"
+            android:label="@string/picasso_title_lazy_grid">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
@@ -88,6 +107,15 @@
         <activity
             android:name=".glide.GlideLazyColumnSample"
             android:label="@string/glide_title_lazy_row">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".glide.GlideLazyGridSample"
+            android:label="@string/glide_title_lazy_grid">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
