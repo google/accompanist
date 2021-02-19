@@ -222,7 +222,10 @@ private suspend fun RequestManager.execute(
 ): ImageLoadState = suspendCancellableCoroutine { cont ->
     var failException: Throwable? = null
 
-    val target = object : EmptyCustomTarget(size.width, size.height) {
+    val target = object : EmptyCustomTarget(
+        if (size.width > 0) size.width else Target.SIZE_ORIGINAL,
+        if (size.height > 0) size.height else Target.SIZE_ORIGINAL
+    ) {
         override fun onLoadFailed(errorDrawable: Drawable?) {
             if (cont.isCompleted) {
                 // If we've already completed, ignore this
