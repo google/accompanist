@@ -19,12 +19,15 @@
 
     <string name="coil_title_basic">Coil: Basic</string>
     <string name="coil_title_lazy_row">Coil: Lazy row</string>
+    <string name="coil_title_lazy_grid">Coil: Lazy grid</string>
 
     <string name="picasso_title_basic">Picasso: Basic</string>
     <string name="picasso_title_lazy_row">Picasso: Lazy row</string>
+    <string name="picasso_title_lazy_grid">Picasso: Lazy grid</string>
 
     <string name="glide_title_basic">Glide: Basic</string>
     <string name="glide_title_lazy_row">Glide: Lazy row</string>
+    <string name="glide_title_lazy_grid">Glide: Lazy grid</string>
 
     <string name="insets_title_basic">Insets: Basic</string>
     <string name="insets_title_fragment">Insets: Fragment</string>
