@@ -50,16 +50,6 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import okhttp3.HttpUrl
 import java.io.File
 
-@Deprecated(
-    "Renamed to LocalPicasso",
-    replaceWith = ReplaceWith(
-        "LocalPicasso",
-        "dev.chrisbanes.accompanist.picasso.LocalPicasso"
-    )
-)
-val AmbientPicasso
-    get() = LocalPicasso
-
 /**
  * Composition local containing the preferred [Picasso] to use in [PicassoImage]. Defaults to [Picasso.get].
  */

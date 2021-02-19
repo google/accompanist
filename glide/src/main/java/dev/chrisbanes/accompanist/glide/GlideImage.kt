@@ -49,16 +49,6 @@ import dev.chrisbanes.accompanist.imageloading.toPainter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 
-@Deprecated(
-    "Renamed to LocalRequestManager",
-    replaceWith = ReplaceWith(
-        "LocalRequestManager",
-        "dev.chrisbanes.accompanist.glide.LocalRequestManager"
-    )
-)
-val AmbientRequestManager
-    get() = LocalRequestManager
-
 /**
  * Composition local containing the preferred [RequestManager] to use in [GlideImage].
  */
