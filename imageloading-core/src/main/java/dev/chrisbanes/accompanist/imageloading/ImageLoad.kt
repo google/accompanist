@@ -74,7 +74,6 @@ fun <R : Any, TR : Any> ImageLoad(
         initialValue = ImageLoadState.Loading,
         key1 = requestKey,
         key2 = requestSize,
-        key3 = updatedTransformRequestForSize,
     ) {
         value = requestSize?.let { updatedTransformRequestForSize(request, it) }
             ?.let { transformedRequest ->
