@@ -16,6 +16,7 @@ public final class dev/chrisbanes/accompanist/insets/ComposeInsets {
 	public static final fun statusBarsPadding (Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
 	public static final fun systemBarsPadding (Landroidx/compose/ui/Modifier;Z)Landroidx/compose/ui/Modifier;
 	public static synthetic fun systemBarsPadding$default (Landroidx/compose/ui/Modifier;ZILjava/lang/Object;)Landroidx/compose/ui/Modifier;
+	public static final fun toPaddingValues-nbWgWpA (Ldev/chrisbanes/accompanist/insets/Insets;ZZZZFFLandroidx/compose/runtime/Composer;II)Landroidx/compose/foundation/layout/PaddingValues;
 	public static final fun toPaddingValues-s2pLCVw (Ldev/chrisbanes/accompanist/insets/Insets;ZZZZFFFFLandroidx/compose/runtime/Composer;II)Landroidx/compose/foundation/layout/PaddingValues;
 }
 

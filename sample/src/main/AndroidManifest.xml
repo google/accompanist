@@ -60,7 +60,8 @@
 
         <activity
             android:name=".coil.CoilLazyGridSample"
-            android:label="@string/coil_title_lazy_grid">
+            android:label="@string/coil_title_lazy_grid"
+            android:theme="@style/Theme.AccompanistSample.NoActionBar.TransparentBars">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
@@ -88,7 +89,8 @@
 
         <activity
             android:name=".picasso.PicassoLazyGridSample"
-            android:label="@string/picasso_title_lazy_grid">
+            android:label="@string/picasso_title_lazy_grid"
+            android:theme="@style/Theme.AccompanistSample.NoActionBar.TransparentBars">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
@@ -115,7 +117,8 @@
 
         <activity
             android:name=".glide.GlideLazyGridSample"
-            android:label="@string/glide_title_lazy_grid">
+            android:label="@string/glide_title_lazy_grid"
+            android:theme="@style/Theme.AccompanistSample.NoActionBar.TransparentBars">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />

@@ -21,29 +21,37 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.ExperimentalLayout
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
 import dev.chrisbanes.accompanist.coil.CoilImage
+import dev.chrisbanes.accompanist.insets.LocalWindowInsets
+import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
+import dev.chrisbanes.accompanist.insets.toPaddingValues
 import dev.chrisbanes.accompanist.sample.AccompanistSampleTheme
 import dev.chrisbanes.accompanist.sample.R
+import dev.chrisbanes.accompanist.sample.insets.InsetAwareTopAppBar
 import dev.chrisbanes.accompanist.sample.randomSampleImageUrl
 
 class CoilLazyGridSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setContent {
-            AccompanistSampleTheme {
-                Sample()
+            ProvideWindowInsets {
+                AccompanistSampleTheme {
+                    Sample()
+                }
             }
         }
     }
@@ -60,14 +68,16 @@ private const val NumberItems = 60
 private fun Sample() {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(text = stringResource(R.string.glide_title_lazy_row)) }
+            InsetAwareTopAppBar(
+                title = { Text(text = stringResource(R.string.coil_title_lazy_grid)) },
+                backgroundColor = MaterialTheme.colors.surface,
             )
         }
     ) {
         LazyVerticalGrid(
             cells = GridCells.Adaptive(96.dp),
-            contentPadding = PaddingValues(16.dp),
+            contentPadding = LocalWindowInsets.current.navigationBars
+                .toPaddingValues(additionalVertical = 16.dp, additionalHorizontal = 16.dp),
         ) {
             items(NumberItems) { index ->
                 CoilImage(

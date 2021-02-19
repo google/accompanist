@@ -167,6 +167,35 @@ private data class InsetsPaddingModifier(
  * @param top Whether to apply the inset on the top dimension.
  * @param end Whether to apply the inset on the end dimension.
  * @param bottom Whether to apply the inset on the bottom dimension.
+ * @param additionalHorizontal Value to add to the start and end dimensions.
+ * @param additionalVertical Value to add to the top and bottom dimensions.
+ */
+@Composable
+inline fun Insets.toPaddingValues(
+    start: Boolean = true,
+    top: Boolean = true,
+    end: Boolean = true,
+    bottom: Boolean = true,
+    additionalHorizontal: Dp = 0.dp,
+    additionalVertical: Dp = 0.dp,
+) = toPaddingValues(
+    start = start,
+    top = top,
+    end = end,
+    bottom = bottom,
+    additionalStart = additionalHorizontal,
+    additionalTop = additionalVertical,
+    additionalEnd = additionalHorizontal,
+    additionalBottom = additionalVertical
+)
+
+/**
+ * Returns the current insets converted into a [PaddingValues].
+ *
+ * @param start Whether to apply the inset on the start dimension.
+ * @param top Whether to apply the inset on the top dimension.
+ * @param end Whether to apply the inset on the end dimension.
+ * @param bottom Whether to apply the inset on the bottom dimension.
  * @param additionalStart Value to add to the start dimension.
  * @param additionalTop Value to add to the top dimension.
  * @param additionalEnd Value to add to the end dimension.
