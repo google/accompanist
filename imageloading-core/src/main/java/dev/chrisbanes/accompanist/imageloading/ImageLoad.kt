@@ -93,9 +93,9 @@ fun <R : Any, TR : Any> ImageLoad(
             width = if (constraints.hasBoundedWidth) constraints.maxWidth else -1,
             height = if (constraints.hasBoundedHeight) constraints.maxHeight else -1
         )
-
-        val lastSize = requestSize
-        if (lastSize == null || (lastSize != size && shouldRefetchOnSizeChange(loadState, size))) {
+        if (requestSize == null ||
+            (requestSize != size && shouldRefetchOnSizeChange(loadState, size))
+        ) {
             requestSize = size
         }
 
