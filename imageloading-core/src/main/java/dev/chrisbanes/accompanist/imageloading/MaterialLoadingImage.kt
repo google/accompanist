@@ -24,6 +24,10 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -112,15 +116,28 @@ fun MaterialLoadingImage(
     fadeInEnabled: Boolean = true,
     fadeInDurationMs: Int = DefaultTransitionDuration
 ) {
+    val cf = if (fadeInEnabled) {
+        val fadeInTransition = updateFadeInTransition(key = painter, durationMs = fadeInDurationMs)
+        remember { ColorMatrix() }
+            .apply {
+                setAlpha(fadeInTransition.alpha)
+                setBrightness(fadeInTransition.brightness)
+                setSaturation(fadeInTransition.saturation)
+            }
+            .let { matrix ->
+                ColorFilter.colorMatrix(matrix)
+            }
+    } else {
+        // If fade in isn't enable, just use the provided `colorFilter`
+        colorFilter
+    }
+
     Image(
         painter = painter,
         contentDescription = contentDescription,
         alignment = alignment,
         contentScale = contentScale,
-        colorFilter = when {
-            fadeInEnabled -> fadeInColorFilter(fadeInDurationMs)
-            else -> colorFilter
-        },
+        colorFilter = cf,
         modifier = modifier,
     )
 }
@@ -173,40 +190,47 @@ fun MaterialLoadingImage(
 }
 
 @Composable
-private fun fadeInColorFilter(durationMs: Int): ColorFilter {
+private fun updateFadeInTransition(key: Any, durationMs: Int): FadeInTransition {
     // Create our transition state, which allow us to control the state and target states
-    val transitionState = remember { MutableTransitionState(ImageLoadTransitionState.Empty) }
-    transitionState.targetState = ImageLoadTransitionState.Loaded
+    val transitionState = remember(key) {
+        MutableTransitionState(ImageLoadTransitionState.Empty).apply {
+            targetState = ImageLoadTransitionState.Loaded
+        }
+    }
 
     // Our actual transition, which reads our transitionState
     val transition = updateTransition(transitionState)
-
-    val matrix = remember { ColorMatrix() }
 
     // Alpha animates over the first 50%
     val alpha = transition.animateFloat(
         transitionSpec = { tween(durationMillis = durationMs / 2) },
         targetValueByState = { if (it == ImageLoadTransitionState.Loaded) 1f else 0f }
-    ).value
+    )
 
     // Brightness animates over the first 75%
     val brightness = transition.animateFloat(
         transitionSpec = { tween(durationMillis = durationMs * 3 / 4) },
         targetValueByState = { if (it == ImageLoadTransitionState.Loaded) 1f else 0.8f }
-    ).value
+    )
 
     // Saturation animates over whole duration
     val saturation = transition.animateFloat(
         transitionSpec = { tween(durationMillis = durationMs) },
         targetValueByState = { if (it == ImageLoadTransitionState.Loaded) 1f else 0f }
-    ).value
+    )
 
-    matrix.setAlpha(alpha)
-    matrix.setBrightness(brightness)
-    matrix.setSaturation(saturation)
+    return remember(transition) { FadeInTransition(alpha, brightness, saturation) }
+}
 
-    // Return our remembered ColorMatrix in a ColorFilter
-    return ColorFilter.colorMatrix(matrix)
+@Stable
+private class FadeInTransition(
+    alpha: State<Float> = mutableStateOf(0f),
+    brightness: State<Float> = mutableStateOf(0f),
+    saturation: State<Float> = mutableStateOf(0f),
+) {
+    val alpha by alpha
+    val brightness by brightness
+    val saturation by saturation
 }
 
 private enum class ImageLoadTransitionState { Loaded, Empty }
