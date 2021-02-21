@@ -163,7 +163,9 @@ fun InsetAwareTopAppBar(
             backgroundColor = Color.Transparent,
             contentColor = contentColor,
             elevation = 0.dp,
-            modifier = Modifier.statusBarsPadding()
+            modifier = Modifier
+                .statusBarsPadding()
+                .navigationBarsPadding(bottom = false)
         )
     }
 }
