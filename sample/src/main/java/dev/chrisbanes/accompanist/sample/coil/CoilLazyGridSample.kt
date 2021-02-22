@@ -20,7 +20,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.ExperimentalLayout
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.GridCells
@@ -60,7 +59,6 @@ class CoilLazyGridSample : ComponentActivity() {
 private const val NumberItems = 60
 
 @OptIn(
-    ExperimentalLayout::class,
     ExperimentalStdlibApi::class,
     ExperimentalFoundationApi::class
 )
