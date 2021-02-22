@@ -23,10 +23,13 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.gesture.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.gesture.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.Velocity
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
 import kotlin.math.roundToInt
 
 /**
@@ -154,39 +157,51 @@ class ImeNestedScrollConnection(
         return Offset.Zero
     }
 
-    override fun onPostFling(
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override suspend fun onPostFling(
         consumed: Velocity,
-        available: Velocity,
-        onFinished: (Velocity) -> Unit
-    ) {
+        available: Velocity
+    ): Velocity {
         if (Build.VERSION.SDK_INT < 30) {
             // SimpleImeAnimationController only works on API 30+
-            onFinished(Velocity.Zero)
-            return
+            return Velocity.Zero
         }
 
         if (imeAnimController.isInsetAnimationInProgress()) {
             // If we have an IME animation in progress, from the user scrolling, we can
             // animate to the end state using the velocity
-            imeAnimController.animateToFinish(available.y) { remainingVelocity ->
-                onFinished(Velocity(x = 0f, y = remainingVelocity))
+            return suspendCancellableCoroutine { cont ->
+                imeAnimController.animateToFinish(available.y) { remainingVelocity ->
+                    cont.resume(
+                        value = Velocity(x = 0f, y = remainingVelocity),
+                        onCancellation = { imeAnimController.finish() }
+                    )
+                }
+                // If the coroutine is cancelled, cancel the IME animation
+                cont.invokeOnCancellation {
+                    imeAnimController.cancel()
+                }
             }
-            return
         }
 
         // If the fling is in a (upwards direction, and the IME is not visible)
         // start an control request with an immediate fling
         if (scrollImeOnScreenWhenNotVisible && available.y > 0 == imeVisible) {
-            imeAnimController.startAndFling(
-                view = view,
-                velocityY = available.y
-            ) { remainingVelocity ->
-                onFinished(Velocity(x = 0f, y = remainingVelocity))
+            return suspendCancellableCoroutine { cont ->
+                imeAnimController.startAndFling(view, available.y) { remainingVelocity ->
+                    cont.resume(
+                        value = Velocity(x = 0f, y = remainingVelocity),
+                        onCancellation = { imeAnimController.finish() }
+                    )
+                }
+                // If the coroutine is cancelled, cancel the IME animation
+                cont.invokeOnCancellation {
+                    imeAnimController.cancel()
+                }
             }
-            return
         }
 
-        // If we reach here we just call onFinished()
-        onFinished(Velocity.Zero)
+        // If we reach here we just return zero velocity
+        return Velocity.Zero
     }
 }

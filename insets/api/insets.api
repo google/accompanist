@@ -29,17 +29,17 @@ public final class dev/chrisbanes/accompanist/insets/HorizontalSide : java/lang/
 	public static fun values ()[Ldev/chrisbanes/accompanist/insets/HorizontalSide;
 }
 
-public final class dev/chrisbanes/accompanist/insets/ImeNestedScrollConnection : androidx/compose/ui/gesture/nestedscroll/NestedScrollConnection {
+public final class dev/chrisbanes/accompanist/insets/ImeNestedScrollConnection : androidx/compose/ui/input/nestedscroll/NestedScrollConnection {
 	public static final field $stable I
 	public fun <init> (Landroid/view/View;ZZ)V
-	public fun onPostFling-NWHyrqs (JJLkotlin/jvm/functions/Function1;)V
-	public fun onPostScroll-akrDWew (JJLandroidx/compose/ui/gesture/nestedscroll/NestedScrollSource;)J
-	public fun onPreFling-AH228Gc (J)J
-	public fun onPreScroll-8S9VItk (JLandroidx/compose/ui/gesture/nestedscroll/NestedScrollSource;)J
+	public fun onPostFling-RZ2iAVY (JJLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun onPostScroll-akrDWew (JJLandroidx/compose/ui/input/nestedscroll/NestedScrollSource;)J
+	public fun onPreFling-QWom1Mo (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun onPreScroll-8S9VItk (JLandroidx/compose/ui/input/nestedscroll/NestedScrollSource;)J
 }
 
 public final class dev/chrisbanes/accompanist/insets/ImeNestedScrollConnectionKt {
-	public static final fun rememberImeNestedScrollConnection (ZZLandroidx/compose/runtime/Composer;II)Landroidx/compose/ui/gesture/nestedscroll/NestedScrollConnection;
+	public static final fun rememberImeNestedScrollConnection (ZZLandroidx/compose/runtime/Composer;II)Landroidx/compose/ui/input/nestedscroll/NestedScrollConnection;
 }
 
 public final class dev/chrisbanes/accompanist/insets/Insets {

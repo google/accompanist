@@ -19,12 +19,11 @@ package dev.chrisbanes.accompanist.sample.glide
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.ExperimentalLayout
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredSize
-import androidx.compose.foundation.layout.preferredWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
@@ -54,7 +53,7 @@ class GlideLazyColumnSample : ComponentActivity() {
 
 private const val NumberItems = 60
 
-@OptIn(ExperimentalLayout::class, ExperimentalStdlibApi::class)
+@OptIn(ExperimentalStdlibApi::class)
 @Composable
 private fun Sample() {
     Scaffold(
@@ -73,10 +72,10 @@ private fun Sample() {
                     GlideImage(
                         data = imageUrl,
                         contentDescription = null,
-                        modifier = Modifier.preferredSize(64.dp)
+                        modifier = Modifier.size(64.dp)
                     )
 
-                    Spacer(Modifier.preferredWidth(8.dp))
+                    Spacer(Modifier.width(8.dp))
 
                     Text(
                         text = "Text",
