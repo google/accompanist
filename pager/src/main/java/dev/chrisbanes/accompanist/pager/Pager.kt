@@ -53,6 +53,8 @@ import kotlinx.coroutines.launch
 import kotlin.math.floor
 import kotlin.math.roundToInt
 
+private const val ScrollThreshold = 0.4f
+
 /**
  * TODO
  */
@@ -174,8 +176,8 @@ class PagerState(
         val max = if (currentPage == minPage) 0f else 1f
         val min = if (currentPage == maxPage) 0f else -1f
         val offset = when {
-            currentPageOffset >= 0.4f -> 1f
-            currentPageOffset <= -0.4f -> -1f
+            currentPageOffset >= ScrollThreshold -> 1f
+            currentPageOffset <= -ScrollThreshold -> -1f
             else -> 0f
         }
         return offset.coerceIn(min, max)
