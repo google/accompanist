@@ -20,8 +20,10 @@ package dev.chrisbanes.accompanist.pager
 
 import android.util.Log
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.DecayAnimationSpec
 import androidx.compose.animation.core.calculateTargetValue
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.splineBasedDecay
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.awaitHorizontalTouchSlopOrCancellation
@@ -35,7 +37,6 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.structuralEqualityPolicy
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.PointerInputChange
@@ -49,13 +50,12 @@ import androidx.compose.ui.layout.ParentDataModifier
 import androidx.compose.ui.unit.Density
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlin.math.floor
 import kotlin.math.roundToInt
 
 /**
- * This is a modified version of:
- * https://gist.github.com/adamp/07d468f4bcfe632670f305ce3734f511
+ * TODO
  */
-
 class PagerState(
     currentPage: Int = 0,
     minPage: Int = 0,
@@ -69,7 +69,7 @@ class PagerState(
             _currentPage = _currentPage.coerceIn(_minPage, _maxPage)
         }
 
-    private var _maxPage by mutableStateOf(maxPage, structuralEqualityPolicy())
+    private var _maxPage by mutableStateOf(maxPage)
     var maxPage: Int
         get() = _maxPage
         set(value) {
@@ -78,11 +78,18 @@ class PagerState(
         }
 
     private var _currentPage by mutableStateOf(currentPage.coerceIn(minPage, maxPage))
-    var currentPage: Int
+    val currentPage: Int
         get() = _currentPage
-        set(value) {
-            _currentPage = value.coerceIn(minPage, maxPage)
-        }
+
+    private val _currentPageOffset = Animatable(0f).apply {
+        updateBounds(-1f, 1f)
+    }
+
+    /**
+     * TODO kdoc
+     */
+    val currentPageOffset: Float
+        get() = _currentPageOffset.value
 
     /**
      * TODO kdoc
@@ -97,28 +104,58 @@ class PagerState(
     val selectionState
         get() = _selectionState
 
-    suspend fun <R> selectPage(block: PagerState.() -> R): R = try {
-        _selectionState = SelectionState.Undecided
-        block()
-    } finally {
-        selectPage()
+    private val animatedScroller = Animatable(0f)
+
+    /**
+     * TODO
+     */
+    suspend fun animateScrollToPage(
+        page: Int,
+        animationSpec: AnimationSpec<Float> = spring(),
+        initialVelocity: Float = 0f,
+    ) {
+        if (page == currentPage) return
+
+        coroutineScope {
+            selectPage {
+                animatedScroller.updateBounds(minPage.toFloat(), maxPage.toFloat())
+                animatedScroller.snapTo(currentPage + currentPageOffset)
+                animatedScroller.animateTo(
+                    targetValue = page.coerceIn(minPage, maxPage).toFloat(),
+                    animationSpec = animationSpec,
+                    initialVelocity = initialVelocity
+                ) {
+                    launch {
+                        _currentPage = floor(value).toInt()
+                        _currentPageOffset.snapTo(_currentPage - value)
+                    }
+                }
+            }
+        }
     }
 
-    suspend fun selectPage() {
-        currentPage -= currentPageOffset.roundToInt()
+    /**
+     * TODO
+     */
+    suspend fun scrollToPage(page: Int) = selectPage {
+        _currentPage = page
+        snapToOffset(0f)
+    }
+
+    private suspend fun selectPage() {
+        _currentPage -= currentPageOffset.roundToInt()
         snapToOffset(0f)
         _selectionState = SelectionState.Selected
     }
 
-    internal val _currentPageOffset = Animatable(0f).apply {
-        updateBounds(-1f, 1f)
+    private suspend fun <R> selectPage(block: suspend PagerState.() -> R): R {
+        _selectionState = SelectionState.Undecided
+        return try {
+            block()
+        } finally {
+            selectPage()
+        }
     }
-
-    /**
-     * TODO kdoc
-     */
-    val currentPageOffset: Float
-        get() = _currentPageOffset.value
 
     /**
      * TODO make this public?
@@ -175,6 +212,10 @@ class PagerState(
         coroutineScope {
             while (true) {
                 val down = awaitPointerEventScope { awaitFirstDown() }
+
+                if (animatedScroller.isRunning) {
+                    animatedScroller.stop()
+                }
 
                 // Reset the velocity tracker and add our initial down event
                 velocityTracker.resetTracking()
