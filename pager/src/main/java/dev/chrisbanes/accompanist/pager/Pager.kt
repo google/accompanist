@@ -18,15 +18,14 @@
 
 package dev.chrisbanes.accompanist.pager
 
-import android.util.Log
-import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.SplineBasedFloatDecayAnimationSpec
 import androidx.compose.animation.core.AnimationSpec
-import androidx.compose.animation.core.DecayAnimationSpec
-import androidx.compose.animation.core.calculateTargetValue
+import androidx.compose.animation.core.FloatDecayAnimationSpec
+import androidx.compose.animation.core.animate
+import androidx.compose.animation.core.animateDecay
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.splineBasedDecay
+import androidx.compose.foundation.MutatorMutex
 import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.gestures.awaitHorizontalTouchSlopOrCancellation
 import androidx.compose.foundation.gestures.horizontalDrag
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -48,8 +47,6 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.ParentDataModifier
 import androidx.compose.ui.unit.Density
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import kotlin.math.floor
 import kotlin.math.roundToInt
 
@@ -83,15 +80,18 @@ class PagerState(
     val currentPage: Int
         get() = _currentPage
 
-    private val _currentPageOffset = Animatable(0f).apply {
-        updateBounds(-1f, 1f)
-    }
+    private var _currentPageOffset by mutableStateOf(0f)
 
     /**
      * TODO kdoc
      */
-    val currentPageOffset: Float
-        get() = _currentPageOffset.value
+    var currentPageOffset: Float
+        get() = _currentPageOffset
+        private set(value) {
+            val max = if (currentPage == minPage) 0f else 1f
+            val min = if (currentPage == maxPage) 0f else -1f
+            _currentPageOffset = value.coerceIn(min, max)
+        }
 
     /**
      * TODO kdoc
@@ -106,7 +106,7 @@ class PagerState(
     val selectionState
         get() = _selectionState
 
-    private val animatedScroller = Animatable(0f)
+    private val mutatorMutex = MutatorMutex()
 
     /**
      * TODO
@@ -118,76 +118,58 @@ class PagerState(
     ) {
         if (page == currentPage) return
 
-        coroutineScope {
-            selectPage {
-                animatedScroller.updateBounds(minPage.toFloat(), maxPage.toFloat())
-                animatedScroller.snapTo(currentPage + currentPageOffset)
-                animatedScroller.animateTo(
-                    targetValue = page.coerceIn(minPage, maxPage).toFloat(),
-                    animationSpec = animationSpec,
-                    initialVelocity = initialVelocity
-                ) {
-                    launch {
-                        _currentPage = floor(value).toInt()
-                        _currentPageOffset.snapTo(_currentPage - value)
-                    }
-                }
+        mutatorMutex.mutate {
+            _selectionState = SelectionState.Undecided
+            animate(
+                initialValue = currentPage + currentPageOffset,
+                targetValue = page.coerceIn(minPage, maxPage).toFloat(),
+                initialVelocity = initialVelocity,
+                animationSpec = animationSpec
+            ) { value, _ ->
+                _currentPage = floor(value).toInt()
+                _currentPageOffset = _currentPage - value
             }
+            _selectionState = SelectionState.Selected
         }
     }
 
     /**
      * TODO
      */
-    suspend fun scrollToPage(page: Int) = selectPage {
-        _currentPage = page
-        snapToOffset(0f)
-    }
-
-    private suspend fun selectPage() {
-        _currentPage -= currentPageOffset.roundToInt()
-        snapToOffset(0f)
-        _selectionState = SelectionState.Selected
-    }
-
-    private suspend fun <R> selectPage(block: suspend PagerState.() -> R): R {
-        _selectionState = SelectionState.Undecided
-        return try {
-            block()
-        } finally {
-            selectPage()
+    suspend fun scrollToPage(page: Int) {
+        mutatorMutex.mutate {
+            _currentPage = page
+            _currentPageOffset = 0f
+            _selectionState = SelectionState.Selected
         }
     }
 
-    /**
-     * TODO make this public?
-     */
-    private suspend fun snapToOffset(offset: Float) {
-        val max = if (currentPage == minPage) 0f else 1f
-        val min = if (currentPage == maxPage) 0f else -1f
-        _currentPageOffset.snapTo(offset.coerceIn(min, max))
-
-        Log.d("PagerState", "snapToOffset: $offset. $this")
+    private fun snapPage() {
+        _currentPage -= currentPageOffset.roundToInt()
+        _currentPageOffset = 0f
+        _selectionState = SelectionState.Selected
     }
 
-    private suspend fun deltaY(delta: Float) = snapToOffset(_currentPageOffset.value + delta)
-
     private fun determineSpringBackOffset(): Float {
-        val max = if (currentPage == minPage) 0f else 1f
-        val min = if (currentPage == maxPage) 0f else -1f
         val offset = when {
             currentPageOffset >= ScrollThreshold -> 1f
             currentPageOffset <= -ScrollThreshold -> -1f
             else -> 0f
         }
-        return offset.coerceIn(min, max)
+        return offset.coerceIn(
+            minimumValue = if (currentPage == maxPage) 0f else -1f,
+            maximumValue = if (currentPage == minPage) 0f else 1f
+        )
     }
 
     /**
      * TODO make this public?
      */
-    private suspend fun fling(velocity: Float, animationSpec: DecayAnimationSpec<Float>) {
-        val target = animationSpec.calculateTargetValue(currentPageOffset, velocity)
+    private suspend fun fling(
+        velocity: Float,
+        animationSpec: FloatDecayAnimationSpec
+    ) {
+        val target = animationSpec.getTargetValue(currentPageOffset, velocity)
 
         // If the animation can naturally end outside of visual bounds, we will
         // animate with decay.
@@ -196,66 +178,60 @@ class PagerState(
             if (velocity < 0 && currentPage == maxPage) return
             if (velocity > 0 && currentPage == minPage) return
             // TODO: need to enforce velocity in percentage rather than pixels
-            _currentPageOffset.animateDecay(velocity, animationSpec)
-            selectPage()
+
+            animateDecay(
+                initialValue = _currentPageOffset,
+                initialVelocity = velocity,
+                animationSpec = animationSpec
+            ) { value, _ ->
+                _currentPageOffset = value
+            }
+            snapPage()
         } else {
-            // Not enough velocity to be dismissed, spring back to 0f
-            _currentPageOffset.animateTo(
+            animate(
+                initialValue = currentPageOffset,
                 targetValue = determineSpringBackOffset(),
-                initialVelocity = velocity
-            )
-            selectPage()
+                initialVelocity = velocity,
+                animationSpec = spring() // TODO spline?
+            ) { value, _ ->
+                _currentPageOffset = value
+            }
+            snapPage()
         }
     }
 
     internal suspend fun PointerInputScope.detectPageTouch(pageSize: Int) {
         val velocityTracker = VelocityTracker()
+        val decay = SplineBasedFloatDecayAnimationSpec(this)
 
-        coroutineScope {
-            while (true) {
-                val down = awaitPointerEventScope { awaitFirstDown() }
-
-                if (animatedScroller.isRunning) {
-                    animatedScroller.stop()
-                }
-
-                // Reset the velocity tracker and add our initial down event
-                velocityTracker.resetTracking()
-                velocityTracker.addPosition(down)
-
+        while (true) {
+            mutatorMutex.mutate {
                 awaitPointerEventScope {
-                    awaitHorizontalTouchSlopOrCancellation(down.id) { change, _ ->
-                        _selectionState = SelectionState.Undecided
+                    val down = awaitFirstDown()
 
-                        launch {
-                            deltaY(change.positionChange().x / pageSize)
-                        }
-                        // Add the movement to the velocity tracker
-                        velocityTracker.addPosition(change)
-                    }
-                }
+                    // Reset the velocity tracker and add our initial down event
+                    velocityTracker.resetTracking()
+                    velocityTracker.addPosition(down)
 
-                awaitPointerEventScope {
+                    _selectionState = SelectionState.Undecided
+
                     horizontalDrag(down.id) { change ->
-                        // Snaps the value by the amount of finger movement
-                        launch {
-                            deltaY(change.positionChange().x / pageSize)
-                        }
+                        // Snap the value by the amount of finger movement
+                        _currentPageOffset += change.positionChange().x / pageSize
                         // Add the movement to the velocity tracker
                         velocityTracker.addPosition(change)
                     }
                 }
+            }
 
+            mutatorMutex.mutate {
                 // The drag has finished, now calculate the velocity and fling
-                val velocity = velocityTracker.calculateVelocity().y
-
-                launch {
-                    val decay = splineBasedDecay<Float>(this@detectPageTouch)
+                fling(
                     // Velocity is in pixels per second, but we deal in percentage offsets, so we
                     // need to scale the velocity to match
-                    val pageVelocity = velocity / pageSize
-                    fling(pageVelocity, decay)
-                }
+                    velocity = velocityTracker.calculateVelocity().y / pageSize,
+                    animationSpec = decay
+                )
             }
         }
     }
