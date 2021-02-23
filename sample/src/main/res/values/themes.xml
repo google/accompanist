@@ -19,6 +19,7 @@
         <item name="colorPrimary">@android:color/white</item>
         <item name="colorPrimaryDark">@android:color/white</item>
         <item name="colorAccent">@color/pink_a200</item>
+        <item name="android:windowLightStatusBar" tools:ignore="NewApi">@bool/is_light_theme</item>
     </style>
 
     <style name="Theme.AccompanistSample.NoActionBar">
@@ -30,7 +31,6 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
 
-        <item name="android:windowLightStatusBar" tools:ignore="NewApi">@bool/is_light_theme</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
     </style>

@@ -33,4 +33,6 @@
     <string name="insets_title_fragment">Insets: Fragment</string>
     <string name="insets_title_list">Insets: Edge-to-edge list</string>
     <string name="insets_title_imeanim">Insets: IME Animations</string>
+
+    <string name="pager_title_basics">Pager: Basics</string>
 </resources>

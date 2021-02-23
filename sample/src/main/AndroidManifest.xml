@@ -166,6 +166,16 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".pager.PagerBasicSample"
+            android:label="@string/pager_title_basics"
+            android:theme="@style/Theme.AccompanistSample">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

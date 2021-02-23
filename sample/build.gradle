@@ -53,6 +53,7 @@ dependencies {
     implementation project(':coil')
     implementation project(':glide')
     implementation project(':insets')
+    implementation project(':pager')
 
     implementation Libs.Coil.gif
 
