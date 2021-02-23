@@ -1,0 +1,42 @@
+public final class dev/chrisbanes/accompanist/pager/PagerKt {
+	public static final fun Pager (Ldev/chrisbanes/accompanist/pager/PagerState;Landroidx/compose/ui/Modifier;ILkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+}
+
+public abstract interface class dev/chrisbanes/accompanist/pager/PagerScope : androidx/compose/foundation/layout/BoxScope {
+	public abstract fun getCurrentPage ()I
+	public abstract fun getCurrentPageOffset ()F
+	public abstract fun getSelectionState ()Ldev/chrisbanes/accompanist/pager/PagerState$SelectionState;
+}
+
+public final class dev/chrisbanes/accompanist/pager/PagerScope$DefaultImpls {
+	public static fun align (Ldev/chrisbanes/accompanist/pager/PagerScope;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;)Landroidx/compose/ui/Modifier;
+	public static fun matchParentSize (Ldev/chrisbanes/accompanist/pager/PagerScope;Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
+}
+
+public final class dev/chrisbanes/accompanist/pager/PagerState {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (III)V
+	public synthetic fun <init> (IIIILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun fling (FLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getCurrentPage ()I
+	public final fun getCurrentPageOffset ()F
+	public final fun getMaxPage ()I
+	public final fun getMinPage ()I
+	public final fun getSelectionState ()Ldev/chrisbanes/accompanist/pager/PagerState$SelectionState;
+	public final fun selectPage (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun selectPage (Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun setCurrentPage (I)V
+	public final fun setMaxPage (I)V
+	public final fun setMinPage (I)V
+	public final fun snapToOffset (FLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chrisbanes/accompanist/pager/PagerState$SelectionState : java/lang/Enum {
+	public static final field Selected Ldev/chrisbanes/accompanist/pager/PagerState$SelectionState;
+	public static final field Undecided Ldev/chrisbanes/accompanist/pager/PagerState$SelectionState;
+	public static fun valueOf (Ljava/lang/String;)Ldev/chrisbanes/accompanist/pager/PagerState$SelectionState;
+	public static fun values ()[Ldev/chrisbanes/accompanist/pager/PagerState$SelectionState;
+}
+
