@@ -103,13 +103,11 @@ class PagerState(
      */
     enum class SelectionState { Selected, Undecided }
 
-    private var _selectionState by mutableStateOf(SelectionState.Selected)
-
     /**
      * TODO kdoc
      */
-    val selectionState
-        get() = _selectionState
+    var selectionState by mutableStateOf(SelectionState.Selected)
+        private set
 
     private val mutatorMutex = MutatorMutex()
 
@@ -124,7 +122,7 @@ class PagerState(
         if (page == currentPage) return
 
         mutatorMutex.mutate {
-            _selectionState = SelectionState.Undecided
+            selectionState = SelectionState.Undecided
             animate(
                 initialValue = currentPage + currentPageOffset,
                 targetValue = page.coerceIn(minPage, maxPage).toFloat(),
@@ -134,7 +132,7 @@ class PagerState(
                 currentPage = floor(value).toInt()
                 currentPageOffset = currentPage - value
             }
-            _selectionState = SelectionState.Selected
+            selectionState = SelectionState.Selected
         }
     }
 
@@ -145,14 +143,14 @@ class PagerState(
         mutatorMutex.mutate {
             currentPage = page
             currentPageOffset = 0f
-            _selectionState = SelectionState.Selected
+            selectionState = SelectionState.Selected
         }
     }
 
     private fun snapPage() {
         currentPage -= currentPageOffset.roundToInt()
         currentPageOffset = 0f
-        _selectionState = SelectionState.Selected
+        selectionState = SelectionState.Selected
     }
 
     private fun determineSpringBackOffset(): Float {
@@ -228,7 +226,7 @@ class PagerState(
                     velocityTracker.resetTracking()
                     velocityTracker.addPosition(down)
 
-                    _selectionState = SelectionState.Undecided
+                    selectionState = SelectionState.Undecided
 
                     horizontalDrag(down.id) { change ->
                         // Snap the value by the amount of finger movement
