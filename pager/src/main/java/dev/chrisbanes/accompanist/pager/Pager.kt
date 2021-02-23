@@ -18,12 +18,14 @@
 
 package dev.chrisbanes.accompanist.pager
 
-import androidx.compose.animation.SplineBasedFloatDecayAnimationSpec
 import androidx.compose.animation.core.AnimationSpec
-import androidx.compose.animation.core.FloatDecayAnimationSpec
+import androidx.compose.animation.core.AnimationState
+import androidx.compose.animation.core.DecayAnimationSpec
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateDecay
+import androidx.compose.animation.core.calculateTargetValue
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.splineBasedDecay
 import androidx.compose.foundation.MutatorMutex
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.horizontalDrag
@@ -47,7 +49,6 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.ParentDataModifier
 import androidx.compose.ui.unit.Density
-import kotlin.coroutines.cancellation.CancellationException
 import kotlin.math.floor
 import kotlin.math.roundToInt
 
@@ -172,9 +173,9 @@ class PagerState(
      */
     private suspend fun fling(
         velocity: Float,
-        animationSpec: FloatDecayAnimationSpec
+        animationSpec: DecayAnimationSpec<Float>,
     ) {
-        val target = animationSpec.getTargetValue(currentPageOffset, velocity)
+        val target = animationSpec.calculateTargetValue(currentPageOffset, velocity)
 
         // If we're at our page bounds, and we're flinging in the bounded direction, skip...
         if (velocity < 0 && currentPage == maxPage) return
@@ -184,18 +185,14 @@ class PagerState(
         // animate with decay.
         if (target < -1f || target > 1f) {
             // Animate with the decay animation spec using the fling velocity
-            animateDecay(
-                initialValue = currentPageOffset,
-                initialVelocity = velocity,
-                animationSpec = animationSpec
-            ) { value, _ ->
+            AnimationState(currentPageOffset, velocity).animateDecay(animationSpec) {
                 // The property will coerce the value to the corrent range
                 currentPageOffset = value
 
                 if (value <= -1f || value >= 1f) {
                     // If we reach the bounds of the allowed offset, throw a CancellationException
                     // to cancel the animation
-                    throw CancellationException()
+                    cancelAnimation()
                 }
             }
             snapPage()
@@ -215,7 +212,7 @@ class PagerState(
 
     internal suspend fun PointerInputScope.detectPageTouch(pageSize: Int) {
         val velocityTracker = VelocityTracker()
-        val decay = SplineBasedFloatDecayAnimationSpec(this)
+        val decay = splineBasedDecay<Float>(this)
 
         while (true) {
             mutatorMutex.mutate {
