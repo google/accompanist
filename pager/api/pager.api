@@ -1,5 +1,5 @@
 public final class dev/chrisbanes/accompanist/pager/PagerKt {
-	public static final fun Pager (Ldev/chrisbanes/accompanist/pager/PagerState;Landroidx/compose/ui/Modifier;ILkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+	public static final fun Pager (Ldev/chrisbanes/accompanist/pager/PagerState;Landroidx/compose/ui/Modifier;ILkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
 }
 
 public abstract interface class dev/chrisbanes/accompanist/pager/PagerScope : androidx/compose/foundation/layout/BoxScope {

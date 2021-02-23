@@ -147,7 +147,7 @@ fun Pager(
     state: PagerState,
     modifier: Modifier = Modifier,
     offscreenLimit: Int = 2,
-    pageContent: @Composable PagerScope.() -> Unit
+    pageContent: @Composable PagerScope.(page: Int) -> Unit
 ) {
     var pageSize by remember { mutableStateOf(0) }
     val coroutineScope = rememberCoroutineScope()
@@ -159,11 +159,14 @@ fun Pager(
             for (page in minPage..maxPage) {
                 val pageData = PageData(page)
                 key(pageData) {
-                    Box(contentAlignment = Alignment.Center, modifier = pageData) {
-                        val scope = remember(this, state, page) {
-                            PagerScopeImpl(this, state, page)
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = pageData
+                    ) {
+                        val scope = remember(this, state) {
+                            PagerScopeImpl(this, state)
                         }
-                        scope.pageContent()
+                        scope.pageContent(page)
                     }
                 }
             }
@@ -244,7 +247,6 @@ interface PagerScope : BoxScope {
 private class PagerScopeImpl(
     private val boxScope: BoxScope,
     private val state: PagerState,
-    val page: Int
 ) : PagerScope, BoxScope by boxScope {
     override val currentPage: Int
         get() = state.currentPage
