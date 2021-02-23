@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused")
+@file:Suppress("unused", "MemberVisibilityCanBePrivate", "PropertyName")
 
 package dev.chrisbanes.accompanist.pager
 
@@ -23,6 +23,7 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
@@ -74,12 +75,21 @@ class PagerState(
             _currentPage = value.coerceIn(minPage, maxPage)
         }
 
+    /**
+     * TODO kdoc
+     */
     enum class SelectionState { Selected, Undecided }
 
-    var selectionState by mutableStateOf(SelectionState.Selected)
+    internal var _selectionState by mutableStateOf(SelectionState.Selected)
 
-    suspend inline fun <R> selectPage(block: PagerState.() -> R): R = try {
-        selectionState = SelectionState.Undecided
+    /**
+     * TODO kdoc
+     */
+    val selectionState
+        get() = _selectionState
+
+    suspend fun <R> selectPage(block: PagerState.() -> R): R = try {
+        _selectionState = SelectionState.Undecided
         block()
     } finally {
         selectPage()
@@ -88,12 +98,16 @@ class PagerState(
     suspend fun selectPage() {
         currentPage -= currentPageOffset.roundToInt()
         snapToOffset(0f)
-        selectionState = SelectionState.Selected
+        _selectionState = SelectionState.Selected
     }
 
     private var _currentPageOffset = Animatable(0f).apply {
         updateBounds(-1f, 1f)
     }
+
+    /**
+     * TODO kdoc
+     */
     val currentPageOffset: Float
         get() = _currentPageOffset.value
 
@@ -111,8 +125,13 @@ class PagerState(
         selectPage()
     }
 
-    override fun toString(): String = "PagerState{minPage=$minPage, maxPage=$maxPage, " +
-        "currentPage=$currentPage, currentPageOffset=$currentPageOffset}"
+    override fun toString(): String = "PagerState(" +
+        "minPage=$minPage, " +
+        "maxPage=$maxPage, " +
+        "currentPage=$currentPage, " +
+        "selectionState=$selectionState, " +
+        "currentPageOffset=$currentPageOffset" +
+        ")"
 }
 
 @Immutable
@@ -121,7 +140,7 @@ private data class PageData(val page: Int) : ParentDataModifier {
 }
 
 private val Measurable.page: Int
-    get() = (parentData as? PageData)?.page ?: error("no PageData for measurable $this")
+    get() = (parentData as? PageData)?.page ?: error("No PageData for measurable $this")
 
 @Composable
 fun Pager(
@@ -139,9 +158,11 @@ fun Pager(
 
             for (page in minPage..maxPage) {
                 val pageData = PageData(page)
-                val scope = PagerScope(state, page)
                 key(pageData) {
                     Box(contentAlignment = Alignment.Center, modifier = pageData) {
+                        val scope = remember(this, state, page) {
+                            PagerScopeImpl(this, state, page)
+                        }
                         scope.pageContent()
                     }
                 }
@@ -150,7 +171,7 @@ fun Pager(
         modifier = modifier.draggable(
             orientation = Orientation.Horizontal,
             onDragStarted = {
-                state.selectionState = PagerState.SelectionState.Undecided
+                state._selectionState = PagerState.SelectionState.Undecided
             },
             onDragStopped = { velocity ->
                 coroutineScope.launch {
@@ -178,9 +199,7 @@ fun Pager(
             val childConstraints = constraints.copy(minWidth = 0, minHeight = 0)
 
             measurables
-                .map {
-                    it.measure(childConstraints) to it.page
-                }
+                .map { it.measure(childConstraints) to it.page }
                 .forEach { (placeable, page) ->
                     // TODO: current this centers each page. We should investigate reading
                     //  gravity modifiers on the child, or maybe as a param to Pager.
@@ -205,25 +224,34 @@ fun Pager(
 /**
  * Scope for [Pager] content.
  */
-class PagerScope(
-    private val state: PagerState,
-    val page: Int
-) {
+interface PagerScope : BoxScope {
     /**
      * Returns the current selected page
      */
     val currentPage: Int
-        get() = state.currentPage
 
     /**
      * Returns the current selected page offset
      */
     val currentPageOffset: Float
-        get() = state.currentPageOffset
 
     /**
      * Returns the current selection state
      */
     val selectionState: PagerState.SelectionState
+}
+
+private class PagerScopeImpl(
+    private val boxScope: BoxScope,
+    private val state: PagerState,
+    val page: Int
+) : PagerScope, BoxScope by boxScope {
+    override val currentPage: Int
+        get() = state.currentPage
+
+    override val currentPageOffset: Float
+        get() = state.currentPageOffset
+
+    override val selectionState: PagerState.SelectionState
         get() = state.selectionState
 }
