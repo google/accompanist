@@ -47,6 +47,7 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.ParentDataModifier
 import androidx.compose.ui.unit.Density
+import kotlin.coroutines.cancellation.CancellationException
 import kotlin.math.floor
 import kotlin.math.roundToInt
 
@@ -65,7 +66,7 @@ class PagerState(
         get() = _minPage
         set(value) {
             _minPage = value.coerceAtMost(_maxPage)
-            _currentPage = _currentPage.coerceIn(_minPage, _maxPage)
+            currentPage = currentPage.coerceIn(_minPage, _maxPage)
         }
 
     private var _maxPage by mutableStateOf(maxPage)
@@ -73,24 +74,28 @@ class PagerState(
         get() = _maxPage
         set(value) {
             _maxPage = value.coerceAtLeast(_minPage)
-            _currentPage = _currentPage.coerceIn(_minPage, maxPage)
+            currentPage = currentPage.coerceIn(_minPage, maxPage)
         }
 
-    private var _currentPage by mutableStateOf(currentPage.coerceIn(minPage, maxPage))
-    val currentPage: Int
-        get() = _currentPage
+    private var _currentPage = mutableStateOf(currentPage.coerceIn(minPage, maxPage))
+    var currentPage: Int
+        get() = _currentPage.value
+        private set(value) {
+            _currentPage.value = value.coerceIn(_minPage, _maxPage)
+        }
 
-    private var _currentPageOffset by mutableStateOf(0f)
+    private val _currentPageOffset = mutableStateOf(0f)
 
     /**
      * TODO kdoc
      */
     var currentPageOffset: Float
-        get() = _currentPageOffset
+        get() = _currentPageOffset.value
         private set(value) {
-            val max = if (currentPage == minPage) 0f else 1f
-            val min = if (currentPage == maxPage) 0f else -1f
-            _currentPageOffset = value.coerceIn(min, max)
+            _currentPageOffset.value = value.coerceIn(
+                minimumValue = if (currentPage == maxPage) 0f else -1f,
+                maximumValue = if (currentPage == minPage) 0f else 1f,
+            )
         }
 
     /**
@@ -126,8 +131,8 @@ class PagerState(
                 initialVelocity = initialVelocity,
                 animationSpec = animationSpec
             ) { value, _ ->
-                _currentPage = floor(value).toInt()
-                _currentPageOffset = _currentPage - value
+                currentPage = floor(value).toInt()
+                currentPageOffset = currentPage - value
             }
             _selectionState = SelectionState.Selected
         }
@@ -138,15 +143,15 @@ class PagerState(
      */
     suspend fun scrollToPage(page: Int) {
         mutatorMutex.mutate {
-            _currentPage = page
-            _currentPageOffset = 0f
+            currentPage = page
+            currentPageOffset = 0f
             _selectionState = SelectionState.Selected
         }
     }
 
     private fun snapPage() {
-        _currentPage -= currentPageOffset.roundToInt()
-        _currentPageOffset = 0f
+        currentPage -= currentPageOffset.roundToInt()
+        currentPageOffset = 0f
         _selectionState = SelectionState.Selected
     }
 
@@ -164,6 +169,8 @@ class PagerState(
 
     /**
      * TODO make this public?
+     *
+     * TODO: need to enforce velocity in percentage rather than pixels
      */
     private suspend fun fling(
         velocity: Float,
@@ -171,30 +178,38 @@ class PagerState(
     ) {
         val target = animationSpec.getTargetValue(currentPageOffset, velocity)
 
-        // If the animation can naturally end outside of visual bounds, we will
+        // If we're at our page bounds, and we're flinging in the bounded direction, skip...
+        if (velocity < 0 && currentPage == maxPage) return
+        if (velocity > 0 && currentPage == minPage) return
+
+        // If the animation can naturally end outside of current page bounds, we will
         // animate with decay.
         if (target < -1f || target > 1f) {
             // Animate with the decay animation spec using the fling velocity
-            if (velocity < 0 && currentPage == maxPage) return
-            if (velocity > 0 && currentPage == minPage) return
-            // TODO: need to enforce velocity in percentage rather than pixels
-
             animateDecay(
-                initialValue = _currentPageOffset,
+                initialValue = currentPageOffset,
                 initialVelocity = velocity,
                 animationSpec = animationSpec
             ) { value, _ ->
-                _currentPageOffset = value
+                // The property will coerce the value to the corrent range
+                currentPageOffset = value
+
+                if (value <= -1f || value >= 1f) {
+                    // If we reach the bounds of the allowed offset, throw a CancellationException
+                    // to cancel the animation
+                    throw CancellationException()
+                }
             }
             snapPage()
         } else {
+            // Otherwise we animate to the next item, or spring-back depending on the offset
             animate(
                 initialValue = currentPageOffset,
                 targetValue = determineSpringBackOffset(),
                 initialVelocity = velocity,
-                animationSpec = spring() // TODO spline?
+                animationSpec = spring()
             ) { value, _ ->
-                _currentPageOffset = value
+                currentPageOffset = value
             }
             snapPage()
         }
@@ -217,7 +232,7 @@ class PagerState(
 
                     horizontalDrag(down.id) { change ->
                         // Snap the value by the amount of finger movement
-                        _currentPageOffset += change.positionChange().x / pageSize
+                        currentPageOffset += (change.positionChange().x / pageSize)
                         // Add the movement to the velocity tracker
                         velocityTracker.addPosition(change)
                     }
