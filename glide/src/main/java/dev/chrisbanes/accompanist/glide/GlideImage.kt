@@ -49,16 +49,6 @@ import dev.chrisbanes.accompanist.imageloading.toPainter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 
-@Deprecated(
-    "Renamed to LocalRequestManager",
-    replaceWith = ReplaceWith(
-        "LocalRequestManager",
-        "dev.chrisbanes.accompanist.glide.LocalRequestManager"
-    )
-)
-val AmbientRequestManager
-    get() = LocalRequestManager
-
 /**
  * Composition local containing the preferred [RequestManager] to use in [GlideImage].
  */
@@ -232,7 +222,10 @@ private suspend fun RequestManager.execute(
 ): ImageLoadState = suspendCancellableCoroutine { cont ->
     var failException: Throwable? = null
 
-    val target = object : EmptyCustomTarget(size.width, size.height) {
+    val target = object : EmptyCustomTarget(
+        if (size.width > 0) size.width else Target.SIZE_ORIGINAL,
+        if (size.height > 0) size.height else Target.SIZE_ORIGINAL
+    ) {
         override fun onLoadFailed(errorDrawable: Drawable?) {
             if (cont.isCompleted) {
                 // If we've already completed, ignore this

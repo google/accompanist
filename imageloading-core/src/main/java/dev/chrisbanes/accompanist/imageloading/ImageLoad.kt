@@ -22,18 +22,14 @@ package dev.chrisbanes.accompanist.imageloading
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntSize
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
 
 /**
  * A generic image loading composable, which provides hooks for image loading libraries to use.
@@ -68,78 +64,42 @@ fun <R : Any, TR : Any> ImageLoad(
     onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
     content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
 ) {
-    var state by remember(requestKey) {
-        // We start from the loading state, to avoid thrashing from empty -> loading straightaway
-        mutableStateOf<ImageLoadState>(ImageLoadState.Loading)
-    }
+    val updatedOnRequestCompleted by rememberUpdatedState(onRequestCompleted)
+    val updatedTransformRequestForSize by rememberUpdatedState(transformRequestForSize)
+    val updatedExecuteRequest by rememberUpdatedState(executeRequest)
 
-    val callback by rememberUpdatedState(onRequestCompleted)
+    var requestSize by remember(requestKey) { mutableStateOf<IntSize?>(null) }
 
-    val requestActor = remember(requestKey) {
-        ImageLoadRequestActor(executeRequest)
-    }
-
-    LaunchedEffect(requestActor) {
-        // Launch the Actor
-        requestActor.run { _, newState ->
-            // Update the result state
-            state = newState
-
-            if (newState is ImageLoadState.Success || newState is ImageLoadState.Error) {
-                callback(newState)
-            }
-        }
+    val loadState by produceState<ImageLoadState>(
+        initialValue = ImageLoadState.Loading,
+        key1 = requestKey,
+        key2 = requestSize,
+    ) {
+        value = requestSize?.let { updatedTransformRequestForSize(request, it) }
+            ?.let { transformedRequest ->
+                try {
+                    updatedExecuteRequest(transformedRequest)
+                } catch (throwable: Throwable) {
+                    ImageLoadState.Error(painter = null, throwable = throwable)
+                }.also(updatedOnRequestCompleted)
+            } ?: ImageLoadState.Loading
     }
 
     BoxWithConstraints(
         modifier = modifier,
         propagateMinConstraints = true,
     ) {
-        // We remember the last size in a MutableRef (below) rather than a MutableState.
-        // This is because we don't need value changes to trigger a re-composition, we are only
-        // using it to store the last value.
-        val lastRequestedSize = remember(requestActor) { MutableRef<IntSize?>(null) }
-
-        val requestSize = IntSize(
+        val size = IntSize(
             width = if (constraints.hasBoundedWidth) constraints.maxWidth else -1,
             height = if (constraints.hasBoundedHeight) constraints.maxHeight else -1
         )
-
-        val lastSize = lastRequestedSize.value
-        if (lastSize == null ||
-            (lastSize != requestSize && shouldRefetchOnSizeChange(state, requestSize))
+        if (requestSize == null ||
+            (requestSize != size && shouldRefetchOnSizeChange(loadState, size))
         ) {
-            val transformedRequest = transformRequestForSize(request, requestSize)
-            if (transformedRequest != null) {
-                requestActor.send(transformedRequest)
-                lastRequestedSize.value = requestSize
-            } else {
-                // If the transform request is null, set our state to empty
-                state = ImageLoadState.Empty
-            }
+            requestSize = size
         }
 
-        content(state)
-    }
-}
-
-/**
- * A simple mutable reference holder. Used as a replacement for [MutableState] when you don't need
- * the recomposition triggers.
- */
-@Stable
-private data class MutableRef<T>(var value: T)
-
-private fun <T> ImageLoadRequestActor(
-    execute: suspend (T) -> ImageLoadState
-) = RequestActor<T, ImageLoadState> { request ->
-    flow {
-        // First, send the loading state
-        emit(ImageLoadState.Loading)
-        // Now execute the request in Coil...
-        emit(execute(request))
-    }.catch { throwable ->
-        emit(ImageLoadState.Error(painter = null, throwable = throwable))
+        content(loadState)
     }
 }
 

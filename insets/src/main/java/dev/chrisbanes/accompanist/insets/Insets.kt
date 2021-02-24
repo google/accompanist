@@ -132,16 +132,6 @@ class Insets {
     )
 }
 
-@Deprecated(
-    "Renamed to LocalWindowInsets",
-    replaceWith = ReplaceWith(
-        "LocalWindowInsets",
-        "dev.chrisbanes.accompanist.insets.LocalWindowInsets"
-    )
-)
-val AmbientWindowInsets
-    get() = LocalWindowInsets
-
 val LocalWindowInsets = staticCompositionLocalOf<WindowInsets> {
     error("LocalWindowInsets value not available. Are you using ProvideWindowInsets?")
 }

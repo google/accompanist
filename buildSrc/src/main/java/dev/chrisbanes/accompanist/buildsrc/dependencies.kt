@@ -21,7 +21,7 @@ object Versions {
 }
 
 object Libs {
-    const val androidGradlePlugin = "com.android.tools.build:gradle:7.0.0-alpha06"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:7.0.0-alpha08"
 
     const val gradleMavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.13.0"
 
@@ -97,7 +97,7 @@ object Libs {
         const val coreAlpha = "androidx.core:core:1.5.0-beta01"
 
         object Activity {
-            const val activityCompose = "androidx.activity:activity-compose:1.3.0-SNAPSHOT"
+            const val activityCompose = "androidx.activity:activity-compose:1.3.0-alpha03"
         }
     }
 

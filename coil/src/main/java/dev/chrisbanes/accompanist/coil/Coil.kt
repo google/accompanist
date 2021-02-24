@@ -46,16 +46,6 @@ import dev.chrisbanes.accompanist.imageloading.ImageLoadState
 import dev.chrisbanes.accompanist.imageloading.MaterialLoadingImage
 import dev.chrisbanes.accompanist.imageloading.toPainter
 
-@Deprecated(
-    "Renamed to LocalImageLoader",
-    replaceWith = ReplaceWith(
-        "LocalImageLoader",
-        "dev.chrisbanes.accompanist.coil.LocalImageLoader"
-    )
-)
-val AmbientImageLoader
-    get() = LocalImageLoader
-
 /**
  * Composition local containing the preferred [ImageLoader] to use in [CoilImage].
  */
@@ -357,33 +347,6 @@ fun CoilImage(
         }
     }
 }
-
-@Deprecated(
-    message = "Use ImageLoadState",
-    replaceWith = ReplaceWith("ImageLoadState", "dev.chrisbanes.accompanist.imageloading.ImageLoadState")
-)
-@Suppress("unused")
-typealias RequestResult = ImageLoadState
-
-@Deprecated(
-    message = "Use ImageLoadState.Success",
-    replaceWith = ReplaceWith(
-        "ImageLoadState.Success",
-        "dev.chrisbanes.accompanist.imageloading.ImageLoadState.Success"
-    )
-)
-@Suppress("unused")
-typealias SuccessResult = ImageLoadState.Success
-
-@Deprecated(
-    message = "Use ImageLoadState.Error",
-    replaceWith = ReplaceWith(
-        "ImageLoadState.Error",
-        "dev.chrisbanes.accompanist.imageloading.ImageLoadState.Error"
-    )
-)
-@Suppress("unused")
-typealias ErrorResult = ImageLoadState.Error
 
 private fun ImageResult.toResult(): ImageLoadState = when (this) {
     is coil.request.SuccessResult -> {
