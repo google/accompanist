@@ -14,7 +14,8 @@ The simplest usage is like so:
 
 ```kotlin 
 CoilImage(
-    data = "https://picsum.photos/300/300"
+    data = "https://picsum.photos/300/300",
+    contentDescription = "My content description"
 )
 ```
 
@@ -25,9 +26,10 @@ You can also customize the Coil [`ImageRequest`](https://coil-kt.github.io/coil/
 ```kotlin
 CoilImage(
     data = "https://picsum.photos/300/300",
+    contentDescription = "My content description",
     requestBuilder = {
         transformations(CircleCropTransformation())
-    },
+    }
 )
 ```
 
@@ -36,6 +38,7 @@ It also provides optional content 'slots', allowing you to provide custom conten
 ``` kotlin
 CoilImage(
     data = "https://picsum.photos/300/300",
+    contentDescription = "My content description",
     loading = {
         Box(Modifier.matchParentSize()) {
             CircularProgressIndicator(Modifier.align(Alignment.Center))
@@ -62,6 +65,7 @@ A `fadeIn: Boolean` parameter has been added to `CoilImage` (default: `false`). 
 ``` kotlin
 CoilImage(
     data = "https://picsum.photos/300/300",
+    contentDescription = "My content description",
     fadeIn = true
 )
 ```
@@ -73,6 +77,7 @@ If you need more control over the animation, or you want to provide custom layou
 ``` kotlin
 CoilImage(
     data = "https://picsum.photos/300/300",
+    contentDescription = "My content description"
 ) { imageState ->
     when (imageState) {
         is ImageLoadState.Success -> {
