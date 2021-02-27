@@ -16,7 +16,7 @@
         <link rel="canonical" href="https://chrisbanes.github.io/accompanist/coil/">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.0.1">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.0.3">
     
     
       
@@ -414,7 +414,6 @@
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
-          
             
   
   
@@ -546,7 +545,6 @@
           Maintainers
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
-          
           
             
   
@@ -683,21 +681,24 @@
 <p>The primary API is via the <code>CoilImage()</code> functions. There are a number of function versions available.</p>
 <p>The simplest usage is like so:</p>
 <div class="highlight"><pre><span></span><code><span class="n">CoilImage</span><span class="p">(</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
+    <span class="n">contentDescription</span> <span class="o">=</span> <span class="s">&quot;My content description&quot;</span>
 <span class="p">)</span>
 </code></pre></div>
 <p>This loads the <code>data</code> passed in with <a href="https://github.com/coil-kt/coil">Coil</a>, and then displays the resulting image using the standard <code>Image</code> composable.</p>
 <p>You can also customize the Coil <a href="https://coil-kt.github.io/coil/image_requests/"><code>ImageRequest</code></a> through the <code>requestBuilder</code> parameter. This allows usage of things like (but not limited to) transformations:</p>
 <div class="highlight"><pre><span></span><code><span class="n">CoilImage</span><span class="p">(</span>
     <span class="n">data</span> <span class="o">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
+    <span class="n">contentDescription</span> <span class="o">=</span> <span class="s">&quot;My content description&quot;</span><span class="p">,</span>
     <span class="n">requestBuilder</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">transformations</span><span class="p">(</span><span class="n">CircleCropTransformation</span><span class="p">())</span>
-    <span class="p">},</span>
+    <span class="p">}</span>
 <span class="p">)</span>
 </code></pre></div>
 <p>It also provides optional content 'slots', allowing you to provide custom content to be displayed when the request is loading, and/or if the image request failed:</p>
 <div class="highlight"><pre><span></span><code><span class="n">CoilImage</span><span class="p">(</span>
     <span class="n">data</span> <span class="o">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
+    <span class="n">contentDescription</span> <span class="o">=</span> <span class="s">&quot;My content description&quot;</span><span class="p">,</span>
     <span class="n">loading</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">Box</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="na">matchParentSize</span><span class="p">())</span> <span class="p">{</span>
             <span class="n">CircularProgressIndicator</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="na">align</span><span class="p">(</span><span class="n">Alignment</span><span class="p">.</span><span class="na">Center</span><span class="p">))</span>
@@ -716,6 +717,7 @@
 <p>A <code>fadeIn: Boolean</code> parameter has been added to <code>CoilImage</code> (default: <code>false</code>). When enabled, a default fade-in animation will be used when the image is successfully loaded:</p>
 <div class="highlight"><pre><span></span><code><span class="n">CoilImage</span><span class="p">(</span>
     <span class="n">data</span> <span class="o">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
+    <span class="n">contentDescription</span> <span class="o">=</span> <span class="s">&quot;My content description&quot;</span><span class="p">,</span>
     <span class="n">fadeIn</span> <span class="o">=</span> <span class="kc">true</span>
 <span class="p">)</span>
 </code></pre></div>
@@ -723,6 +725,7 @@
 <p>If you need more control over the animation, or you want to provide custom layout for the loaded image, you can use the <code>content</code> composable version of <code>CoilImage</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="n">CoilImage</span><span class="p">(</span>
     <span class="n">data</span> <span class="o">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
+    <span class="n">contentDescription</span> <span class="o">=</span> <span class="s">&quot;My content description&quot;</span>
 <span class="p">)</span> <span class="p">{</span> <span class="n">imageState</span> <span class="o">-&gt;</span>
     <span class="k">when</span> <span class="p">(</span><span class="n">imageState</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">is</span> <span class="n">ImageLoadState</span><span class="p">.</span><span class="na">Success</span> <span class="o">-&gt;</span> <span class="p">{</span>
@@ -848,10 +851,10 @@ calls, we provide the <code>LocalImageLoader</code> composition local.</p>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../assets/javascripts/workers/search.f5903571.min.js", "version": null}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../assets/javascripts/workers/search.fb4a9340.min.js", "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.4e3fea51.min.js"></script>
+      <script src="../assets/javascripts/bundle.ca5457b8.min.js"></script>
       
     
   </body>
