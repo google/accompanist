@@ -26,6 +26,7 @@ import androidx.compose.animation.core.animateDecay
 import androidx.compose.animation.core.calculateTargetValue
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.splineBasedDecay
+import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.MutatorMutex
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.horizontalDrag
@@ -49,6 +50,8 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.ParentDataModifier
 import androidx.compose.ui.unit.Density
+import kotlin.coroutines.cancellation.CancellationException
+import kotlin.math.absoluteValue
 import kotlin.math.floor
 import kotlin.math.roundToInt
 
@@ -122,18 +125,27 @@ class PagerState(
     ) {
         if (page == currentPage) return
 
-        mutatorMutex.mutate {
-            selectionState = SelectionState.Undecided
-            animate(
-                initialValue = currentPage + currentPageOffset,
-                targetValue = page.coerceIn(minPage, maxPage).toFloat(),
-                initialVelocity = initialVelocity,
-                animationSpec = animationSpec
-            ) { value, _ ->
-                currentPage = floor(value).toInt()
-                currentPageOffset = currentPage - value
+        try {
+            mutatorMutex.mutate {
+                selectionState = SelectionState.Undecided
+                animate(
+                    initialValue = currentPage + currentPageOffset,
+                    targetValue = page.coerceIn(minPage, maxPage).toFloat(),
+                    initialVelocity = initialVelocity,
+                    animationSpec = animationSpec
+                ) { value, _ ->
+                    currentPage = floor(value).toInt()
+                    currentPageOffset = currentPage - value
+                }
+                selectionState = SelectionState.Selected
             }
+        } catch (e: CancellationException) {
+            // If we're cancelled, snap to the target page
+            currentPage = page
+            currentPageOffset = 0f
             selectionState = SelectionState.Selected
+
+            throw e
         }
     }
 
@@ -195,7 +207,6 @@ class PagerState(
                     cancelAnimation()
                 }
             }
-            snapPage()
         } else {
             // Otherwise we animate to the next item, or spring-back depending on the offset
             animate(
@@ -215,33 +226,39 @@ class PagerState(
         val decay = splineBasedDecay<Float>(this)
 
         while (true) {
-            mutatorMutex.mutate {
-                awaitPointerEventScope {
-                    val down = awaitFirstDown()
+            try {
+                mutatorMutex.mutate(MutatePriority.UserInput) {
+                    awaitPointerEventScope {
+                        val down = awaitFirstDown()
 
-                    // Reset the velocity tracker and add our initial down event
-                    velocityTracker.resetTracking()
-                    velocityTracker.addPosition(down)
+                        // Reset the velocity tracker and add our initial down event
+                        velocityTracker.resetTracking()
+                        velocityTracker.addPosition(down)
 
-                    selectionState = SelectionState.Undecided
+                        selectionState = SelectionState.Undecided
 
-                    horizontalDrag(down.id) { change ->
-                        // Snap the value by the amount of finger movement
-                        currentPageOffset += (change.positionChange().x / pageSize)
-                        // Add the movement to the velocity tracker
-                        velocityTracker.addPosition(change)
+                        horizontalDrag(down.id) { change ->
+                            // Snap the value by the amount of finger movement
+                            currentPageOffset += (change.positionChange().x / pageSize)
+                            // Add the movement to the velocity tracker
+                            velocityTracker.addPosition(change)
+                        }
+                    }
+
+                    val velY = velocityTracker.calculateVelocity().y
+                    if (velY.absoluteValue >= 400) {
+                        // The drag has finished, now calculate the velocity and fling
+                        fling(
+                            // Velocity is in pixels per second, but we deal in percentage offsets, so we
+                            // need to scale the velocity to match
+                            velocity = velY / pageSize,
+                            animationSpec = decay
+                        )
                     }
                 }
-            }
-
-            mutatorMutex.mutate {
-                // The drag has finished, now calculate the velocity and fling
-                fling(
-                    // Velocity is in pixels per second, but we deal in percentage offsets, so we
-                    // need to scale the velocity to match
-                    velocity = velocityTracker.calculateVelocity().y / pageSize,
-                    animationSpec = decay
-                )
+            } catch (e: CancellationException) {
+                // If we're cancelled, no-op
+                // TODO:
             }
         }
     }
