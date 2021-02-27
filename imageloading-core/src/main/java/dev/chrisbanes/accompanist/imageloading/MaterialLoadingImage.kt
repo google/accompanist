@@ -259,9 +259,9 @@ private fun ColorMatrix.setSaturation(saturation: Float) {
 
 private fun ColorMatrix.setBrightness(brightness: Float) {
     val darkening = (1f - brightness) * 255
-    this[0, 3] = darkening
-    this[1, 3] = darkening
-    this[2, 3] = darkening
+    this[0, 4] = darkening
+    this[1, 4] = darkening
+    this[2, 4] = darkening
 }
 
 private fun ColorMatrix.setAlpha(alpha: Float) = set(row = 3, column = 3, v = alpha)
