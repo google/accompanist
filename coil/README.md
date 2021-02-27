@@ -77,12 +77,12 @@ If you need more control over the animation, or you want to provide custom layou
 ``` kotlin
 CoilImage(
     data = "https://picsum.photos/300/300",
-    contentDescription = "My content description"
 ) { imageState ->
     when (imageState) {
         is ImageLoadState.Success -> {
             MaterialLoadingImage(
                 result = imageState,
+                contentDescription = "My content description",
                 fadeInEnabled = true,
                 fadeInDurationMs = 600,
             )

@@ -14,7 +14,8 @@ The simplest usage is like so:
 
 ```kotlin 
 PicassoImage(
-    data = "https://picsum.photos/300/300"
+    data = "https://picsum.photos/300/300",
+    contentDescription = "My content description",
 )
 ```
 
@@ -25,6 +26,7 @@ You can also customize the Picasso [`RequestCreator`](https://square.github.io/p
 ```kotlin
 PicassoImage(
     data = "https://picsum.photos/300/300",
+    contentDescription = "My content description",
     requestBuilder = {
         rotate(90f)
     }
@@ -36,6 +38,7 @@ It also provides optional content 'slots', allowing you to provide custom conten
 ``` kotlin
 PicassoImage(
     data = "https://picsum.photos/300/300",
+    contentDescription = "My content description",
     loading = {
         Box(Modifier.matchParentSize()) {
             CircularProgressIndicator(Modifier.align(Alignment.Center))
@@ -62,6 +65,7 @@ A `fadeIn: Boolean` parameter is available on `PicassoImage` (default: `false`).
 ``` kotlin
 PicassoImage(
     data = "https://picsum.photos/300/300",
+    contentDescription = "My content description",
     fadeIn = true
 )
 ```
@@ -78,6 +82,7 @@ PicassoImage(
         is ImageLoadState.Success -> {
             MaterialLoadingImage(
                 result = imageState,
+                contentDescription = "My content description",
                 fadeInEnabled = true,
                 fadeInDurationMs = 600,
             )

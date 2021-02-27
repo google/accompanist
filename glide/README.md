@@ -14,7 +14,8 @@ The simplest usage is like so:
 
 ```kotlin 
 GlideImage(
-    data = "https://picsum.photos/300/300"
+    data = "https://picsum.photos/300/300",
+    contentDescription = "My content description",
 )
 ```
 
@@ -25,6 +26,7 @@ You can also customize the Glide [`RequestBuilder`](https://bumptech.github.io/g
 ```kotlin
 GlideImage(
     data = "https://picsum.photos/300/300",
+    contentDescription = "My content description",
     requestBuilder = {
         val options = RequestOptions()
         options.centerCrop()
@@ -39,6 +41,7 @@ It also provides optional content 'slots', allowing you to provide custom conten
 ``` kotlin
 GlideImage(
     data = "https://picsum.photos/300/300",
+    contentDescription = "My content description",
     loading = {
         Box(Modifier.matchParentSize()) {
             CircularProgressIndicator(Modifier.align(Alignment.Center))
@@ -65,6 +68,7 @@ A `fadeIn: Boolean` parameter has been added to `GlideImage` (default: `false`).
 ``` kotlin
 GlideImage(
     data = "https://picsum.photos/300/300",
+    contentDescription = "My content description",
     fadeIn = true
 )
 ```
@@ -81,6 +85,7 @@ GlideImage(
         is ImageLoadState.Success -> {
             MaterialLoadingImage(
                 result = imageState,
+                contentDescription = "My content description",
                 fadeInEnabled = true,
                 fadeInDurationMs = 600,
             )
