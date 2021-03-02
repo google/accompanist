@@ -319,25 +319,26 @@ fun Pager(
             val offset = state.currentPageOffset
             val childConstraints = constraints.copy(minWidth = 0, minHeight = 0)
 
-            measurables
-                .map { it.measure(childConstraints) to it.page }
-                .forEach { (placeable, page) ->
-                    // TODO: current this centers each page. We should investigate reading
-                    //  gravity modifiers on the child, or maybe as a param to Pager.
-                    val xCenterOffset = (constraints.maxWidth - placeable.width) / 2
-                    val yCenterOffset = (constraints.maxHeight - placeable.height) / 2
+            measurables.forEach {
+                val placeable = it.measure(childConstraints)
+                val page = it.page
 
-                    if (currentPage == page) {
-                        pageSize = placeable.width
-                    }
+                // TODO: current this centers each page. We should investigate reading
+                //  gravity modifiers on the child, or maybe as a param to Pager.
+                val xCenterOffset = (constraints.maxWidth - placeable.width) / 2
+                val yCenterOffset = (constraints.maxHeight - placeable.height) / 2
 
-                    val xItemOffset = ((page + offset - currentPage) * placeable.width).roundToInt()
-
-                    placeable.place(
-                        x = xCenterOffset + xItemOffset,
-                        y = yCenterOffset
-                    )
+                if (currentPage == page) {
+                    pageSize = placeable.width
                 }
+
+                val xItemOffset = ((page + offset - currentPage) * placeable.width).roundToInt()
+
+                placeable.place(
+                    x = xCenterOffset + xItemOffset,
+                    y = yCenterOffset
+                )
+            }
         }
     }
 }
