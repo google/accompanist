@@ -231,7 +231,7 @@ class PagerState(
         if (target.absoluteValue > 1) {
             // Animate with the decay animation spec using the fling velocity
             AnimationState(currentPageOffset, velocity).animateDecay(animationSpec) {
-                // The property will coerce the value to the corrent range
+                // The property will coerce the value to the correct range
                 currentPageOffset = value
 
                 if (value.absoluteValue > 1) {
