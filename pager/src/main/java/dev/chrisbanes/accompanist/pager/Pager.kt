@@ -50,12 +50,16 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.ParentDataModifier
 import androidx.compose.ui.unit.Density
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.math.absoluteValue
 import kotlin.math.floor
 import kotlin.math.roundToInt
 
 private const val ScrollThreshold = 0.4f
+
+private const val MinimumFlingVelocity = 400
 
 /**
  * TODO
@@ -128,15 +132,11 @@ class PagerState(
         try {
             mutatorMutex.mutate {
                 selectionState = SelectionState.Undecided
-                animate(
-                    initialValue = currentPage + currentPageOffset,
-                    targetValue = page.coerceIn(minPage, maxPage).toFloat(),
+                animateToPage(
+                    page = page.coerceIn(minPage, maxPage),
                     initialVelocity = initialVelocity,
                     animationSpec = animationSpec
-                ) { value, _ ->
-                    currentPage = floor(value).toInt()
-                    currentPageOffset = currentPage - value
-                }
+                )
                 selectionState = SelectionState.Selected
             }
         } catch (e: CancellationException) {
@@ -160,10 +160,43 @@ class PagerState(
         }
     }
 
-    private fun snapPage() {
+    private fun snapToNearestPage() {
         currentPage -= currentPageOffset.roundToInt()
         currentPageOffset = 0f
         selectionState = SelectionState.Selected
+    }
+
+    private suspend fun springBack(
+        animationSpec: AnimationSpec<Float> = spring(),
+        initialVelocity: Float = 0f,
+    ) {
+        animate(
+            initialValue = currentPageOffset,
+            targetValue = determineSpringBackOffset(),
+            initialVelocity = initialVelocity,
+            animationSpec = animationSpec,
+        ) { value, _ ->
+            currentPageOffset = value
+        }
+        snapToNearestPage()
+        selectionState = SelectionState.Selected
+    }
+
+    private suspend fun animateToPage(
+        page: Int,
+        offset: Float = 0f,
+        animationSpec: AnimationSpec<Float> = spring(),
+        initialVelocity: Float = 0f,
+    ) {
+        animate(
+            initialValue = currentPage + currentPageOffset,
+            targetValue = page + offset,
+            initialVelocity = initialVelocity,
+            animationSpec = animationSpec
+        ) { value, _ ->
+            currentPage = floor(value).toInt()
+            currentPageOffset = currentPage - value
+        }
     }
 
     private fun determineSpringBackOffset(): Float {
@@ -195,15 +228,14 @@ class PagerState(
 
         // If the animation can naturally end outside of current page bounds, we will
         // animate with decay.
-        if (target < -1f || target > 1f) {
+        if (target.absoluteValue > 1) {
             // Animate with the decay animation spec using the fling velocity
             AnimationState(currentPageOffset, velocity).animateDecay(animationSpec) {
                 // The property will coerce the value to the corrent range
                 currentPageOffset = value
 
-                if (value <= -1f || value >= 1f) {
-                    // If we reach the bounds of the allowed offset, throw a CancellationException
-                    // to cancel the animation
+                if (value.absoluteValue > 1) {
+                    // If we reach the bounds of the allowed offset, cancel the animation
                     cancelAnimation()
                 }
             }
@@ -217,26 +249,26 @@ class PagerState(
             ) { value, _ ->
                 currentPageOffset = value
             }
-            snapPage()
+            snapToNearestPage()
         }
     }
 
-    internal suspend fun PointerInputScope.detectPageTouch(pageSize: Int) {
+    internal suspend fun PointerInputScope.detectPageTouch(pageSize: Int) = coroutineScope {
         val velocityTracker = VelocityTracker()
-        val decay = splineBasedDecay<Float>(this)
+        val decay = splineBasedDecay<Float>(this@detectPageTouch)
 
         while (true) {
             try {
+                val down = awaitPointerEventScope { awaitFirstDown() }
+
+                // Reset the velocity tracker and add our initial down event
+                velocityTracker.resetTracking()
+                velocityTracker.addPosition(down)
+
                 mutatorMutex.mutate(MutatePriority.UserInput) {
+                    selectionState = SelectionState.Undecided
+
                     awaitPointerEventScope {
-                        val down = awaitFirstDown()
-
-                        // Reset the velocity tracker and add our initial down event
-                        velocityTracker.resetTracking()
-                        velocityTracker.addPosition(down)
-
-                        selectionState = SelectionState.Undecided
-
                         horizontalDrag(down.id) { change ->
                             // Snap the value by the amount of finger movement
                             currentPageOffset += (change.positionChange().x / pageSize)
@@ -244,16 +276,20 @@ class PagerState(
                             velocityTracker.addPosition(change)
                         }
                     }
+                }
 
-                    val velY = velocityTracker.calculateVelocity().y
-                    if (velY.absoluteValue >= 400) {
-                        // The drag has finished, now calculate the velocity and fling
-                        fling(
-                            // Velocity is in pixels per second, but we deal in percentage offsets, so we
-                            // need to scale the velocity to match
-                            velocity = velY / pageSize,
-                            animationSpec = decay
-                        )
+                // The drag has finished, now calculate the velocity and fling
+                val velX = velocityTracker.calculateVelocity().x
+
+                launch {
+                    mutatorMutex.mutate {
+                        if (velX.absoluteValue >= MinimumFlingVelocity) {
+                            // Velocity is in pixels per second, but we deal in percentage offsets,
+                            // so we need to scale the velocity to match
+                            fling(velocity = velX / pageSize, animationSpec = decay)
+                        } else {
+                            springBack()
+                        }
                     }
                 }
             } catch (e: CancellationException) {
