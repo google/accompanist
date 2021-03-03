@@ -29,6 +29,7 @@ import androidx.compose.animation.splineBasedDecay
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.MutatorMutex
 import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.forEachGesture
 import androidx.compose.foundation.gestures.horizontalDrag
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -262,7 +263,7 @@ class PagerState(
         val velocityTracker = VelocityTracker()
         val decay = splineBasedDecay<Float>(this@detectPageTouch)
 
-        while (true) {
+        forEachGesture {
             try {
                 val down = awaitPointerEventScope { awaitFirstDown() }
 
