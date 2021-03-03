@@ -49,7 +49,9 @@ import androidx.compose.ui.input.pointer.util.VelocityTracker
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.ParentDataModifier
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.LayoutDirection
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
@@ -253,7 +255,10 @@ class PagerState(
         }
     }
 
-    internal suspend fun PointerInputScope.detectPageTouch(pageSize: Int) = coroutineScope {
+    internal suspend fun PointerInputScope.detectPageTouch(
+        pageSize: Int,
+        reverseScroll: Boolean,
+    ) = coroutineScope {
         val velocityTracker = VelocityTracker()
         val decay = splineBasedDecay<Float>(this@detectPageTouch)
 
@@ -271,7 +276,11 @@ class PagerState(
                     awaitPointerEventScope {
                         horizontalDrag(down.id) { change ->
                             // Snap the value by the amount of finger movement
-                            currentPageOffset += (change.positionChange().x / pageSize)
+                            if (reverseScroll) {
+                                currentPageOffset -= (change.positionChange().x / pageSize)
+                            } else {
+                                currentPageOffset += (change.positionChange().x / pageSize)
+                            }
                             // Add the movement to the velocity tracker
                             velocityTracker.addPosition(change)
                         }
@@ -324,6 +333,7 @@ fun Pager(
     pageContent: @Composable PagerScope.(page: Int) -> Unit
 ) {
     var pageSize by remember { mutableStateOf(0) }
+    val layoutDirection = LocalLayoutDirection.current
     Layout(
         content = {
             val minPage = (state.currentPage - offscreenLimit).coerceAtLeast(state.minPage)
@@ -346,7 +356,10 @@ fun Pager(
         },
         modifier = modifier.pointerInput(Unit) {
             with(state) {
-                detectPageTouch(pageSize = pageSize)
+                detectPageTouch(
+                    pageSize = pageSize,
+                    reverseScroll = layoutDirection == LayoutDirection.Rtl,
+                )
             }
         },
     ) { measurables, constraints ->
@@ -369,8 +382,7 @@ fun Pager(
                 }
 
                 val xItemOffset = ((page + offset - currentPage) * placeable.width).roundToInt()
-
-                placeable.place(
+                placeable.placeRelative(
                     x = xCenterOffset + xItemOffset,
                     y = yCenterOffset
                 )
