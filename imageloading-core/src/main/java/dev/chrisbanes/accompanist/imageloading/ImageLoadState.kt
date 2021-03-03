@@ -53,10 +53,4 @@ sealed class ImageLoadState {
         val painter: Painter? = null,
         val throwable: Throwable
     ) : ImageLoadState()
-
-    internal fun getPainterOrNull(): Painter? = when (this) {
-        is Success -> painter
-        is Error -> painter
-        else -> null
-    }
 }

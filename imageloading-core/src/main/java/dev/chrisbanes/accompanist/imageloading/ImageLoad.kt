@@ -32,8 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.paint
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.LayoutModifier
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasureResult
@@ -41,7 +39,7 @@ import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.IntSize
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
@@ -133,7 +131,7 @@ private class ImageManager<R : Any, TR : Any>(
     //   DRAW:        YES
     internal var loadState by mutableStateOf<ImageLoadState>(ImageLoadState.Loading)
 
-    private var scope = CoroutineScope(Job())
+    private var scope = CoroutineScope(Dispatchers.Main)
 
     private val layout = object : LayoutModifier {
         override fun MeasureScope.measure(
@@ -153,10 +151,7 @@ private class ImageManager<R : Any, TR : Any>(
             }
 
             val placeable = measurable.measure(constraints)
-            return layout(
-                size.width,
-                size.height
-            ) {
+            return layout(width = placeable.width, height = placeable.height) {
                 placeable.place(0, 0)
             }
         }
@@ -165,24 +160,26 @@ private class ImageManager<R : Any, TR : Any>(
     // NOTE: We build a modifier once, for each ImageManager, which handles everything. We ensure that
     // no state objects are used in its construction, so that all state observations are limited to
     // the layout and drawing phases.
-    val modifier: Modifier = Modifier.composed {
-        // NOTE: i'm not quite sure if it's smarter to put the layout modifier at the top of the
-        // chain (before paint) or the bottom of it (after paint).
-        layout
-            // NOTE: since we aren't using `Image` anymore, it is important that we handle semantics properly
-//        .semantics {
-//            contentDescription = contentDescription
-//            role = Role.Image
-//        }
-            // NOTE: not sure how important this is, but `Image` has it
-            .clipToBounds()
-            .paint(
-                painter = loadState.getPainterOrNull() ?: ColorPainter(Color.Transparent),
-                // NOTE: You should probably pipe some of these values through
-//            alignment = alignment,
-//            contentScale = contentScale,
-            )
-    }
+    val modifier: Modifier = layout
+        .clipToBounds()
+        // NOTE: since we aren't using `Image` anymore, it is important that we handle semantics properly
+        //        .semantics {
+        //            contentDescription = contentDescription
+        //            role = Role.Image
+        //        }
+        // NOTE: not sure how important this is, but `Image` has it
+
+        .composed {
+            val state = loadState
+            if (state is ImageLoadState.Success) {
+                paint(
+                    painter = state.painter,
+                    // NOTE: You should probably pipe some of these values through
+                    //            alignment = alignment,
+                    //            contentScale = contentScale,
+                )
+            } else this
+        }
 
     // NOTE: both onAbandoned and onForgotten are where we should cancel any image requests and dispose
     // of things
