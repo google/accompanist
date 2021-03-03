@@ -19,17 +19,31 @@
 
 package dev.chrisbanes.accompanist.imageloading
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.RememberObserver
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.draw.paint
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.layout.LayoutModifier
+import androidx.compose.ui.layout.Measurable
+import androidx.compose.ui.layout.MeasureResult
+import androidx.compose.ui.layout.MeasureScope
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.IntSize
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 
 /**
@@ -65,46 +79,139 @@ fun <R : Any, TR : Any> ImageLoad(
     onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
     content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
 ) {
-    val updatedOnRequestCompleted by rememberUpdatedState(onRequestCompleted)
-    val updatedTransformRequestForSize by rememberUpdatedState(transformRequestForSize)
-    val updatedExecuteRequest by rememberUpdatedState(executeRequest)
-
-    var requestSize by remember(requestKey) { mutableStateOf<IntSize?>(null) }
-
-    val loadState by produceState<ImageLoadState>(
-        initialValue = ImageLoadState.Loading,
-        key1 = requestKey,
-        key2 = requestSize,
-    ) {
-        value = requestSize?.let { updatedTransformRequestForSize(request, it) }
-            ?.let { transformedRequest ->
-                try {
-                    updatedExecuteRequest(transformedRequest)
-                } catch (ce: CancellationException) {
-                    // We specifically don't do anything for the request coroutine being
-                    // cancelled: https://github.com/chrisbanes/accompanist/issues/217
-                    throw ce
-                } catch (throwable: Throwable) {
-                    ImageLoadState.Error(painter = null, throwable = throwable)
-                }.also(updatedOnRequestCompleted)
-            } ?: ImageLoadState.Loading
+    val imageMgr = remember(requestKey) {
+        ImageManager(
+            request = request,
+            executeRequest = executeRequest,
+            transformRequestForSize = transformRequestForSize,
+            shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
+            onRequestCompleted = onRequestCompleted,
+        )
     }
 
-    BoxWithConstraints(
-        modifier = modifier,
-        propagateMinConstraints = true,
-    ) {
-        val size = IntSize(
-            width = if (constraints.hasBoundedWidth) constraints.maxWidth else -1,
-            height = if (constraints.hasBoundedHeight) constraints.maxHeight else -1
-        )
-        if (requestSize == null ||
-            (requestSize != size && shouldRefetchOnSizeChange(loadState, size))
-        ) {
-            requestSize = size
-        }
+    // NOTE: All of the things that we want to be able to change without recreating the whole object
+    // we want to do inside of here.
+    SideEffect {
+        imageMgr.transformRequestForSize = transformRequestForSize
+        imageMgr.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
+        imageMgr.onRequestCompleted = onRequestCompleted
+    }
 
-        content(loadState)
+    // NOTE: It's important that this is Box and not BoxWithConstraints. This is dramatically cheaper,
+    // and also has not children. You could use Box(modifier, content) here if you want, and add a
+    // content lambda, but that would be for content inside / on top of the image, and not for the
+    // image itself like the current implementation.
+    Box(modifier.then(imageMgr.modifier)) {
+        if (imageMgr.loadState !is ImageLoadState.Success) {
+            content(imageMgr.loadState)
+        }
+    }
+}
+
+// This class holds all of the state for the image and manages the request.
+private class ImageManager<R : Any, TR : Any>(
+    val request: R,
+    val executeRequest: suspend (TR) -> ImageLoadState,
+    var transformRequestForSize: (R, IntSize) -> TR?,
+    var shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
+    var onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
+) : RememberObserver {
+
+    // the size of the image, as informed by the layout system and the request.
+    //
+    // This value will be read during:
+    //   COMPOSITION: NO
+    //   LAYOUT:      YES
+    //   DRAW:        NO
+    private var requestSize by mutableStateOf<IntSize?>(null)
+
+    // The actual image state, populated by the image request.
+    //
+    // This value will be read during:
+    //   COMPOSITION: NO
+    //   LAYOUT:      NO
+    //   DRAW:        YES
+    internal var loadState by mutableStateOf<ImageLoadState>(ImageLoadState.Loading)
+
+    private var scope = CoroutineScope(Job())
+
+    private val layout = object : LayoutModifier {
+        override fun MeasureScope.measure(
+            measurable: Measurable,
+            constraints: Constraints
+        ): MeasureResult {
+            // NOTE: this is where the interesting logic is, but there shouldn't be anything here that
+            // you can't do that you're doing using BoxWithConstraints currently.
+            val size = IntSize(
+                width = if (constraints.hasBoundedWidth) constraints.maxWidth else -1,
+                height = if (constraints.hasBoundedHeight) constraints.maxHeight else -1
+            )
+            if (requestSize == null ||
+                (requestSize != size && shouldRefetchOnSizeChange(loadState, size))
+            ) {
+                requestSize = size
+            }
+
+            val placeable = measurable.measure(constraints)
+            return layout(
+                size.width,
+                size.height
+            ) {
+                placeable.place(0, 0)
+            }
+        }
+    }
+
+    // NOTE: We build a modifier once, for each ImageManager, which handles everything. We ensure that
+    // no state objects are used in its construction, so that all state observations are limited to
+    // the layout and drawing phases.
+    val modifier: Modifier = Modifier.composed {
+        // NOTE: i'm not quite sure if it's smarter to put the layout modifier at the top of the
+        // chain (before paint) or the bottom of it (after paint).
+        layout
+            // NOTE: since we aren't using `Image` anymore, it is important that we handle semantics properly
+//        .semantics {
+//            contentDescription = contentDescription
+//            role = Role.Image
+//        }
+            // NOTE: not sure how important this is, but `Image` has it
+            .clipToBounds()
+            .paint(
+                painter = loadState.getPainterOrNull() ?: ColorPainter(Color.Transparent),
+                // NOTE: You should probably pipe some of these values through
+//            alignment = alignment,
+//            contentScale = contentScale,
+            )
+    }
+
+    // NOTE: both onAbandoned and onForgotten are where we should cancel any image requests and dispose
+    // of things
+    override fun onAbandoned() {
+        scope.cancel()
+    }
+
+    override fun onForgotten() {
+        scope.cancel()
+    }
+
+    override fun onRemembered() {
+        // you can use a coroutine scope that is scoped to the composable, or something more custom like
+        // the imageLoader or whatever. The main point is, here is where you would start your loading
+        scope.launch {
+            loadState = requestSize
+                ?.let { transformRequestForSize(request, it) }
+                ?.let { transformedRequest ->
+                    try {
+                        executeRequest(transformedRequest)
+                    } catch (ce: CancellationException) {
+                        // We specifically don't do anything for the request coroutine being
+                        // cancelled: https://github.com/chrisbanes/accompanist/issues/217
+                        throw ce
+                    } catch (throwable: Throwable) {
+                        ImageLoadState.Error(painter = null, throwable = throwable)
+                    }.also(onRequestCompleted)
+                } ?: ImageLoadState.Loading
+        }
     }
 }
 
