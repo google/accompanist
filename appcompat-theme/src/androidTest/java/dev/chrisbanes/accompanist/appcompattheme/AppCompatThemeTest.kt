@@ -20,6 +20,7 @@ import android.view.ContextThemeWrapper
 import androidx.annotation.StyleRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Typography
 import androidx.compose.runtime.Composable
@@ -83,6 +84,8 @@ class AppCompatThemeTest<T : AppCompatActivity>(activityClass: Class<T>) {
             // By default, onBackground is calculated to the highest contrast of black/white
             // against background
             assertEquals(Color.Black, color.onBackground)
+            // AppCompatTheme updates the LocalContentColor to match the calculated onBackground
+            assertEquals(Color.Black, LocalContentColor.current)
         }
     }
 
@@ -105,6 +108,8 @@ class AppCompatThemeTest<T : AppCompatActivity>(activityClass: Class<T>) {
                 // Our textColorPrimary (midnight_blue) contains provides enough contrast vs
                 // the background color, so it should be used.
                 assertEquals(colorResource(R.color.midnight_blue), color.onBackground)
+                // AppCompatTheme updates the LocalContentColor to match the calculated onBackground
+                assertEquals(colorResource(R.color.midnight_blue), LocalContentColor.current)
 
                 if (!isSystemInDarkTheme()) {
                     // Our textColorPrimary (midnight_blue) provides enough contrast vs

@@ -15,16 +15,19 @@
  */
 
 @file:JvmName("AppCompatTheme")
+
 package dev.chrisbanes.accompanist.appcompattheme
 
 import android.content.Context
 import androidx.compose.material.Colors
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Shapes
 import androidx.compose.material.Typography
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -112,8 +115,14 @@ fun AppCompatTheme(
         colors = themeParams.colors ?: MaterialTheme.colors,
         typography = themeParams.typography ?: MaterialTheme.typography,
         shapes = shapes,
-        content = content
-    )
+    ) {
+        // We update the LocalContentColor to match our onBackground. This allows the default
+        // content color to be more appropriate to the theme background
+        CompositionLocalProvider(
+            LocalContentColor provides MaterialTheme.colors.onBackground,
+            content = content
+        )
+    }
 }
 
 /**
@@ -155,7 +164,8 @@ fun Context.createAppCompatTheme(
         /* First we'll read the Material color palette */
         val primary = ta.getComposeColor(R.styleable.AppCompatThemeAdapterTheme_colorPrimary)
         // colorPrimaryDark is roughly equivalent to primaryVariant
-        val primaryVariant = ta.getComposeColor(R.styleable.AppCompatThemeAdapterTheme_colorPrimaryDark)
+        val primaryVariant =
+            ta.getComposeColor(R.styleable.AppCompatThemeAdapterTheme_colorPrimaryDark)
         val onPrimary = primary.calculateOnColor()
 
         // colorAccent is roughly equivalent to secondary
@@ -176,7 +186,8 @@ fun Context.createAppCompatTheme(
         val surface = defaultColors.surface
         val onSurface = surface.calculateOnColorWithTextColorPrimary(textColorPrimary)
 
-        val background = ta.getComposeColor(R.styleable.AppCompatThemeAdapterTheme_android_colorBackground)
+        val background =
+            ta.getComposeColor(R.styleable.AppCompatThemeAdapterTheme_android_colorBackground)
         val onBackground = background.calculateOnColorWithTextColorPrimary(textColorPrimary)
 
         val error = ta.getComposeColor(R.styleable.AppCompatThemeAdapterTheme_colorError)
