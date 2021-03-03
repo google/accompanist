@@ -29,13 +29,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
+import androidx.compose.ui.draw.DrawModifier
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.draw.paint
+import androidx.compose.ui.graphics.drawscope.ContentDrawScope
 import androidx.compose.ui.layout.LayoutModifier
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.MeasureScope
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.IntSize
 import kotlinx.coroutines.CoroutineScope
@@ -71,6 +75,7 @@ fun <R : Any, TR : Any> ImageLoad(
     request: R,
     executeRequest: suspend (TR) -> ImageLoadState,
     modifier: Modifier = Modifier,
+    contentDescription: String? = null, // TODO: remove the default value
     requestKey: Any = request,
     transformRequestForSize: (R, IntSize) -> TR?,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
@@ -99,11 +104,19 @@ fun <R : Any, TR : Any> ImageLoad(
     // and also has not children. You could use Box(modifier, content) here if you want, and add a
     // content lambda, but that would be for content inside / on top of the image, and not for the
     // image itself like the current implementation.
-    Box(modifier.then(imageMgr.modifier)) {
-        if (imageMgr.loadState !is ImageLoadState.Success) {
-            content(imageMgr.loadState)
+
+    val semantics = if (contentDescription != null) {
+        Modifier.semantics {
+            this.contentDescription = contentDescription
+            this.role = Role.Image
         }
-    }
+    } else Modifier
+
+    Box(
+        modifier
+            .then(imageMgr.modifier)
+            .then(semantics)
+    )
 }
 
 // This class holds all of the state for the image and manages the request.
@@ -129,7 +142,7 @@ private class ImageManager<R : Any, TR : Any>(
     //   COMPOSITION: NO
     //   LAYOUT:      NO
     //   DRAW:        YES
-    internal var loadState by mutableStateOf<ImageLoadState>(ImageLoadState.Loading)
+    private var loadState by mutableStateOf<ImageLoadState>(ImageLoadState.Loading)
 
     private var scope = CoroutineScope(Dispatchers.Main)
 
@@ -157,29 +170,29 @@ private class ImageManager<R : Any, TR : Any>(
         }
     }
 
+    private val drawModifier = object : DrawModifier {
+        override fun ContentDrawScope.draw() {
+            val state = loadState
+            if (state is ImageLoadState.Success) {
+                // TODO: need to work ContentScale canvas scaling
+
+                with(state.painter) {
+                    draw(
+                        size = size,
+                        alpha = 1f,
+                        colorFilter = null,
+                    )
+                }
+            }
+        }
+    }
+
     // NOTE: We build a modifier once, for each ImageManager, which handles everything. We ensure that
     // no state objects are used in its construction, so that all state observations are limited to
     // the layout and drawing phases.
     val modifier: Modifier = layout
         .clipToBounds()
-        // NOTE: since we aren't using `Image` anymore, it is important that we handle semantics properly
-        //        .semantics {
-        //            contentDescription = contentDescription
-        //            role = Role.Image
-        //        }
-        // NOTE: not sure how important this is, but `Image` has it
-
-        .composed {
-            val state = loadState
-            if (state is ImageLoadState.Success) {
-                paint(
-                    painter = state.painter,
-                    // NOTE: You should probably pipe some of these values through
-                    //            alignment = alignment,
-                    //            contentScale = contentScale,
-                )
-            } else this
-        }
+        .then(drawModifier)
 
     // NOTE: both onAbandoned and onForgotten are where we should cancel any image requests and dispose
     // of things
