@@ -40,7 +40,6 @@ import kotlin.math.max
 import kotlin.math.roundToInt
 
 internal abstract class PainterModifier : LayoutModifier, DrawModifier {
-
     abstract val painter: Painter
     abstract val sizeToIntrinsics: Boolean
     abstract val alignment: Alignment
@@ -152,7 +151,9 @@ internal abstract class PainterModifier : LayoutModifier, DrawModifier {
     }
 
     private fun modifyConstraints(constraints: Constraints): Constraints {
-        if (!useIntrinsicSize || (constraints.hasFixedWidth && constraints.hasFixedHeight)) {
+        if ((!useIntrinsicSize && constraints.hasBoundedHeight && constraints.hasBoundedWidth) ||
+            (constraints.hasFixedWidth && constraints.hasFixedHeight)
+        ) {
             // If we have fixed constraints or we are not attempting to size the
             // composable based on the size of the Painter, do not attempt to
             // modify them. Otherwise rely on Alignment and ContentScale

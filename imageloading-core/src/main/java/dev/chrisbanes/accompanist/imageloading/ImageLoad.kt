@@ -206,9 +206,9 @@ class ImageManager<R : Any, TR : Any>(
     // no state objects are used in its construction, so that all state observations are limited to
     // the layout and drawing phases.
     val modifier: Modifier = Modifier
-        .then(layout)
         .clipToBounds()
         .then(paintModifier)
+        .then(layout)
 
     // NOTE: both onAbandoned and onForgotten are where we should cancel any image requests and dispose
     // of things
