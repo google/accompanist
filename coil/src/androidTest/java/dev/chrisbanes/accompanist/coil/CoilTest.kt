@@ -72,6 +72,7 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 
+@Suppress("DEPRECATION")
 @LargeTest
 @RunWith(JUnit4::class)
 class CoilTest {
