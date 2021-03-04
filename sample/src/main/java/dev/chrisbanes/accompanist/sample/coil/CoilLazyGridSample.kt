@@ -78,6 +78,7 @@ private fun Sample() {
                 .toPaddingValues(additionalVertical = 16.dp, additionalHorizontal = 16.dp),
         ) {
             items(NumberItems) { index ->
+                @Suppress("DEPRECATION")
                 CoilImage(
                     data = randomSampleImageUrl(index),
                     contentDescription = null,

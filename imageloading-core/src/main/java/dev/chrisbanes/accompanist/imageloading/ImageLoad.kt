@@ -22,6 +22,7 @@
 package dev.chrisbanes.accompanist.imageloading
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.SideEffect
@@ -158,11 +159,42 @@ fun <R : Any> ImageLoad(
         }
     } else Modifier
 
+    // NOTE: We build a modifier once, for each ImageManager, which handles everything. We
+    // ensure that no state objects are used in its construction, so that all state
+    // observations are limited to the layout and drawing phases.
     Box(
         modifier
             .then(semantics)
-            .then(imageMgr.modifier)
+            .clipToBounds()
+            .then(imageMgr.paintModifier)
+            .then(imageMgr.layoutModifier)
     )
+}
+
+@Deprecated("Only used to help migration. DO NOT USE.")
+@Composable
+fun <R : Any> ImageLoad(
+    request: ImageLoadRequest<R>,
+    modifier: Modifier = Modifier,
+    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
+    content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
+) {
+    val imageMgr = remember(request) {
+        ImageLoader(
+            request = request,
+            shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
+        )
+    }
+
+    // NOTE: All of the things that we want to be able to change without recreating the whole object
+    // we want to do inside of here.
+    SideEffect {
+        imageMgr.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
+    }
+
+    Box(modifier.then(imageMgr.layoutModifier)) {
+        content(imageMgr.loadState)
+    }
 }
 
 // This class holds all of the state for the image and manages the request.
@@ -188,7 +220,7 @@ private class ImageLoader<R : Any>(
 
     private val scope = CoroutineScope(Dispatchers.Main)
 
-    private val layout = object : LayoutModifier {
+    val layoutModifier = object : LayoutModifier {
         override fun MeasureScope.measure(
             measurable: Measurable,
             constraints: Constraints
@@ -214,7 +246,7 @@ private class ImageLoader<R : Any>(
 
     private val emptyPainter = ColorPainter(Color.Transparent)
 
-    private val paintModifier = object : PainterModifier() {
+    val paintModifier = object : PainterModifier() {
         override val painter: Painter
             get() = loadState.let { state ->
                 when (state) {
@@ -238,14 +270,6 @@ private class ImageLoader<R : Any>(
         override val sizeToIntrinsics: Boolean
             get() = true
     }
-
-    // NOTE: We build a modifier once, for each ImageManager, which handles everything. We ensure that
-    // no state objects are used in its construction, so that all state observations are limited to
-    // the layout and drawing phases.
-    val modifier: Modifier = Modifier
-        .clipToBounds()
-        .then(paintModifier)
-        .then(layout)
 
     // NOTE: both onAbandoned and onForgotten are where we should cancel any image requests and dispose
     // of things
