@@ -20,17 +20,12 @@
 package dev.chrisbanes.accompanist.glide
 
 import android.graphics.drawable.Drawable
-import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.IntSize
 import com.bumptech.glide.Glide
@@ -40,8 +35,6 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import dev.chrisbanes.accompanist.imageloading.DataSource
-import dev.chrisbanes.accompanist.imageloading.DefaultRefetchOnSizeChangeLambda
-import dev.chrisbanes.accompanist.imageloading.ImageLoad
 import dev.chrisbanes.accompanist.imageloading.ImageLoadRequest
 import dev.chrisbanes.accompanist.imageloading.ImageLoadState
 import dev.chrisbanes.accompanist.imageloading.toPainter
@@ -96,79 +89,6 @@ private class GlideImageLoadRequest(
         val r = requestManager.load(checkData(request))
         return requestManager.execute(requestBuilder?.invoke(r, size) ?: r, size)
     }
-}
-
-/**
- * Creates a composable that will attempt to load the given [data] using [Glide], and then
- * display the result in an [Image].
- *
- * This version of the function is more opinionated, providing:
- *
- * - Support for automatically fading-in the image once loaded. See the [fadeIn] parameter.
- *
- * ```
- * GlideImage(
- *   data = "https://www.image.url",
- *   fadeIn = true,
- *   loading = {
- *     Stack(Modifier.fillMaxSize()) {
- *       CircularProgressIndicator(Modifier.align(Alignment.Center))
- *     }
- *   }
- * )
- * ```
- *
- * @param data The data to load.
- * @param contentDescription text used by accessibility services to describe what this image
- * represents. This should always be provided unless this image is used for decorative purposes,
- * and does not represent a meaningful action that a user can take. This text should be
- * localized, such as by using [androidx.compose.ui.res.stringResource] or similar.
- * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
- * @param alignment Optional alignment parameter used to place the loaded [ImageBitmap] in the
- * given bounds defined by the width and height.
- * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
- * used if the bounds are a different size from the intrinsic size of the loaded [ImageBitmap].
- * @param colorFilter Optional colorFilter to apply for the [Painter] when it is rendered onscreen.
- * @param fadeIn Whether to run a fade-in animation when images are successfully loaded.
- * Default: `false`.
- * @param requestBuilder Optional builder for the [RequestBuilder].
- * @param requestManager The [RequestManager] to use when requesting the image. Defaults to the
- * current value of [LocalRequestManager].
- * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
- * optional re-fetching of the image. Return true to re-fetch the image.
- * @param onRequestCompleted Listener which will be called when the loading request has finished.
- */
-@Composable
-fun GlideImage(
-    data: Any,
-    contentDescription: String?,
-    modifier: Modifier = Modifier,
-    alignment: Alignment = Alignment.Center,
-    contentScale: ContentScale = ContentScale.Fit,
-    colorFilter: ColorFilter? = null,
-    fadeIn: Boolean = false,
-    fadeInDurationMs: Int = 1000,
-    requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)? = null,
-    requestManager: RequestManager = GlideImageDefaults.defaultRequestManager(),
-    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
-    onRequestCompleted: (ImageLoadState) -> Unit = {},
-) {
-    ImageLoad(
-        request = rememberGlideImageLoadRequest(
-            request = data,
-            requestBuilder = requestBuilder,
-            requestManager = requestManager,
-            onRequestCompleted = onRequestCompleted,
-        ),
-        contentDescription = contentDescription,
-        modifier = modifier,
-        alignment = alignment,
-        contentScale = contentScale,
-        colorFilter = colorFilter,
-        fadeIn = fadeIn,
-        fadeInDurationMs = fadeInDurationMs,
-        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
-    )
 }
 
 /**
