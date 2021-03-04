@@ -22,25 +22,18 @@ package dev.chrisbanes.accompanist.picasso
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.IntSize
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.RequestCreator
 import dev.chrisbanes.accompanist.imageloading.DataSource
-import dev.chrisbanes.accompanist.imageloading.DefaultRefetchOnSizeChangeLambda
-import dev.chrisbanes.accompanist.imageloading.ImageLoad
 import dev.chrisbanes.accompanist.imageloading.ImageLoadRequest
 import dev.chrisbanes.accompanist.imageloading.ImageLoadState
 import dev.chrisbanes.accompanist.imageloading.toPainter
@@ -147,79 +140,6 @@ private class PicassoImageLoadRequest(
             r.into(target)
         }
     }
-}
-
-/**
- * Creates a composable that will attempt to load the given [data] using [Picasso], and then
- * display the result in an [Image].
- *
- * This version of the function is more opinionated, providing:
- *
- * - Support for automatically fading-in the image once loaded. See the [fadeIn] parameter.
- *
- * ```
- * PicassoImage(
- *   data = "https://www.image.url",
- *   fadeIn = true,
- *   loading = {
- *     Stack(Modifier.fillMaxSize()) {
- *       CircularProgressIndicator(Modifier.align(Alignment.Center))
- *     }
- *   }
- * )
- * ```
- *
- * @param data The data to load. See [RequestCreator.data] for the types allowed.
- * @param contentDescription text used by accessibility services to describe what this image
- * represents. This should always be provided unless this image is used for decorative purposes,
- * and does not represent a meaningful action that a user can take. This text should be
- * localized, such as by using [androidx.compose.ui.res.stringResource] or similar.
- * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
- * @param alignment Optional alignment parameter used to place the loaded [ImageBitmap] in the
- * given bounds defined by the width and height.
- * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
- * used if the bounds are a different size from the intrinsic size of the loaded [ImageBitmap].
- * @param colorFilter Optional colorFilter to apply for the [Painter] when it is rendered onscreen.
- * @param fadeIn Whether to run a fade-in animation when images are successfully loaded.
- * Default: `false`.
- * @param picasso The [Picasso] instance to use for requests. Defaults to the current value
- * of [LocalPicasso].
- * @param requestBuilder Optional builder for the [RequestCreator].
- * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
- * optional re-fetching of the image. Return true to re-fetch the image.
- * @param onRequestCompleted Listener which will be called when the loading request has finished.
- */
-@Composable
-fun PicassoImage(
-    data: Any,
-    contentDescription: String?,
-    modifier: Modifier = Modifier,
-    alignment: Alignment = Alignment.Center,
-    contentScale: ContentScale = ContentScale.Fit,
-    colorFilter: ColorFilter? = null,
-    fadeIn: Boolean = false,
-    fadeInDurationMs: Int = 1000,
-    picasso: Picasso = LocalPicasso.current,
-    requestBuilder: (RequestCreator.(size: IntSize) -> RequestCreator)? = null,
-    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
-    onRequestCompleted: (ImageLoadState) -> Unit = {},
-) {
-    ImageLoad(
-        request = rememberPicassoImageLoadRequest(
-            request = data,
-            requestBuilder = requestBuilder,
-            picasso = picasso,
-            onRequestCompleted = onRequestCompleted,
-        ),
-        contentDescription = contentDescription,
-        modifier = modifier,
-        alignment = alignment,
-        contentScale = contentScale,
-        colorFilter = colorFilter,
-        fadeIn = fadeIn,
-        fadeInDurationMs = fadeInDurationMs,
-        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
-    )
 }
 
 private fun Picasso.LoadedFrom.toDataSource(): DataSource = when (this) {
