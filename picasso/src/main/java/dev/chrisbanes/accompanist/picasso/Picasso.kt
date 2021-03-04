@@ -23,37 +23,27 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.IntSize
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.RequestCreator
 import dev.chrisbanes.accompanist.imageloading.DataSource
 import dev.chrisbanes.accompanist.imageloading.DefaultRefetchOnSizeChangeLambda
+import dev.chrisbanes.accompanist.imageloading.ImageLoad
+import dev.chrisbanes.accompanist.imageloading.ImageLoadRequest
 import dev.chrisbanes.accompanist.imageloading.ImageLoadState
-import dev.chrisbanes.accompanist.imageloading.ImageManager
 import dev.chrisbanes.accompanist.imageloading.toPainter
-import dev.chrisbanes.accompanist.imageloading.updateAlpha
-import dev.chrisbanes.accompanist.imageloading.updateBrightness
-import dev.chrisbanes.accompanist.imageloading.updateFadeInTransition
-import dev.chrisbanes.accompanist.imageloading.updateSaturation
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 import okhttp3.HttpUrl
@@ -64,17 +54,66 @@ import java.io.File
  */
 val LocalPicasso = staticCompositionLocalOf { Picasso.get() }
 
-private fun picassoImageManager(
-    data: Any,
+@Composable
+fun rememberPicassoImageLoadRequest(
+    request: Any,
     picasso: Picasso,
     requestBuilder: (RequestCreator.(size: IntSize) -> RequestCreator)?,
-    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean,
     onRequestCompleted: (ImageLoadState) -> Unit,
-) = ImageManager(
-    request = data.toRequestCreator(picasso),
-    executeRequest = { r ->
-        @OptIn(ExperimentalCoroutinesApi::class)
-        suspendCancellableCoroutine { cont ->
+): ImageLoadRequest<Any> = remember(request, picasso) {
+    PicassoImageLoadRequest(
+        request = request,
+        picasso = picasso,
+        requestBuilder = requestBuilder,
+        onRequestCompleted = onRequestCompleted
+    )
+}
+
+private class PicassoImageLoadRequest(
+    override val request: Any,
+    private val picasso: Picasso,
+    private val requestBuilder: (RequestCreator.(size: IntSize) -> RequestCreator)?,
+    override val onRequestCompleted: (ImageLoadState) -> Unit,
+) : ImageLoadRequest<Any>() {
+    override suspend fun doExecute(request: Any, size: IntSize): ImageLoadState {
+        return createRequest(size)?.let { executePicasso(it) }
+            ?: ImageLoadState.Empty
+    }
+
+    private fun createRequest(size: IntSize): RequestCreator? {
+        val r = request.toRequestCreator(picasso)
+
+        val sizedRequest = when {
+            // If the size contains an unspecified sized dimension, we don't specify a size
+            // in the Coil request
+            size.width < 0 || size.height < 0 -> r
+            // If we have a non-zero size, we can modify the request to include the size
+            size != IntSize.Zero -> {
+                // We use centerInside() here, otherwise Picasso will resize the image ignoring
+                // aspect ratio. centerInside() isn't great, since it means that the image
+                // could be loaded smaller than the composable, only to be scaled up again by
+                // the chosen ContentScale. Unfortunately there's not much else we can do.
+                // See https://github.com/chrisbanes/accompanist/issues/118
+                r.resize(size.width, size.height)
+                    .centerInside()
+                    .onlyScaleDown()
+            }
+            // Otherwise we have a zero size, so no point executing a request
+            else -> return null
+        }
+
+        return if (sizedRequest != null && requestBuilder != null) {
+            // If we have a transformed request and builder, let it run
+            requestBuilder.invoke(sizedRequest, size)
+        } else {
+            // Otherwise we just return the sizedRequest
+            sizedRequest
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private suspend fun executePicasso(r: RequestCreator): ImageLoadState {
+        return suspendCancellableCoroutine { cont ->
             val target = object : com.squareup.picasso.Target {
                 override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
                     val state = ImageLoadState.Success(
@@ -107,38 +146,8 @@ private fun picassoImageManager(
             // Now kick off the image load into our target
             r.into(target)
         }
-    },
-    transformRequestForSize = { r, size ->
-        val sizedRequest = when {
-            // If the size contains an unspecified sized dimension, we don't specify a size
-            // in the Coil request
-            size.width < 0 || size.height < 0 -> r
-            // If we have a non-zero size, we can modify the request to include the size
-            size != IntSize.Zero -> {
-                // We use centerInside() here, otherwise Picasso will resize the image ignoring
-                // aspect ratio. centerInside() isn't great, since it means that the image
-                // could be loaded smaller than the composable, only to be scaled up again by
-                // the chosen ContentScale. Unfortunately there's not much else we can do.
-                // See https://github.com/chrisbanes/accompanist/issues/118
-                r.resize(size.width, size.height)
-                    .centerInside()
-                    .onlyScaleDown()
-            }
-            // Otherwise we have a zero size, so no point executing a request
-            else -> null
-        }
-
-        if (sizedRequest != null && requestBuilder != null) {
-            // If we have a transformed request and builder, let it run
-            requestBuilder(sizedRequest, size)
-        } else {
-            // Otherwise we just return the sizedRequest
-            sizedRequest
-        }
-    },
-    shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
-    onRequestCompleted = onRequestCompleted,
-)
+    }
+}
 
 /**
  * Creates a composable that will attempt to load the given [data] using [Picasso], and then
@@ -195,60 +204,21 @@ fun PicassoImage(
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = {},
 ) {
-    val imageMgr = remember(data, picasso) {
-        picassoImageManager(
-            data = data,
+    ImageLoad(
+        request = rememberPicassoImageLoadRequest(
+            request = data,
             requestBuilder = requestBuilder,
             picasso = picasso,
-            shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
             onRequestCompleted = onRequestCompleted,
-        )
-    }
-
-    val cf = if (fadeIn) {
-        val fadeInTransition = updateFadeInTransition(key = data, durationMs = fadeInDurationMs)
-        remember { ColorMatrix() }
-            .apply {
-                updateAlpha(fadeInTransition.alpha)
-                updateBrightness(fadeInTransition.brightness)
-                updateSaturation(fadeInTransition.saturation)
-            }
-            .let { matrix ->
-                ColorFilter.colorMatrix(matrix)
-            }
-    } else {
-        // If fade in isn't enable, just use the provided `colorFilter`
-        colorFilter
-    }
-
-    // NOTE: All of the things that we want to be able to change without recreating the whole object
-    // we want to do inside of here.
-    SideEffect {
-        // TODO: requestBuilder
-        imageMgr.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
-        imageMgr.onRequestCompleted = onRequestCompleted
-
-        imageMgr.contentScale = contentScale
-        imageMgr.colorFilter = cf
-        imageMgr.alignment = alignment
-    }
-
-    // NOTE: It's important that this is Box and not BoxWithConstraints. This is dramatically cheaper,
-    // and also has not children. You could use Box(modifier, content) here if you want, and add a
-    // content lambda, but that would be for content inside / on top of the image, and not for the
-    // image itself like the current implementation.
-
-    val semantics = if (contentDescription != null) {
-        Modifier.semantics {
-            this.contentDescription = contentDescription
-            this.role = Role.Image
-        }
-    } else Modifier
-
-    Box(
-        modifier
-            .then(semantics)
-            .then(imageMgr.modifier)
+        ),
+        contentDescription = contentDescription,
+        modifier = modifier,
+        alignment = alignment,
+        contentScale = contentScale,
+        colorFilter = colorFilter,
+        fadeIn = fadeIn,
+        fadeInDurationMs = fadeInDurationMs,
+        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
     )
 }
 

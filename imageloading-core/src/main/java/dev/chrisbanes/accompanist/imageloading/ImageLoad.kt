@@ -22,7 +22,6 @@
 package dev.chrisbanes.accompanist.imageloading
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.SideEffect
@@ -35,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
@@ -53,6 +53,29 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
+
+/**
+ * TODO
+ */
+abstract class ImageLoadRequest<R : Any> {
+    protected abstract val request: R
+    protected abstract val onRequestCompleted: (ImageLoadState) -> Unit
+
+    suspend fun execute(size: IntSize): ImageLoadState {
+        onRequestCompleted(ImageLoadState.Loading)
+        return try {
+            doExecute(request, size)
+        } catch (ce: CancellationException) {
+            // We specifically don't do anything for the request coroutine being
+            // cancelled: https://github.com/chrisbanes/accompanist/issues/217
+            throw ce
+        } catch (throwable: Throwable) {
+            ImageLoadState.Error(painter = null, throwable = throwable)
+        }.also(onRequestCompleted)
+    }
+
+    protected abstract suspend fun doExecute(request: R, size: IntSize): ImageLoadState
+}
 
 /**
  * A generic image loading composable, which provides hooks for image loading libraries to use.
@@ -77,33 +100,50 @@ import kotlin.coroutines.cancellation.CancellationException
  * @param content Content to be displayed for the given state.
  */
 @Composable
-fun <R : Any, TR : Any> ImageLoad(
-    request: R,
-    executeRequest: suspend (TR) -> ImageLoadState,
+fun <R : Any> ImageLoad(
+    request: ImageLoadRequest<R>,
+    contentDescription: String?,
     modifier: Modifier = Modifier,
-    contentDescription: String? = null, // TODO: remove the default value
-    requestKey: Any = request,
-    transformRequestForSize: (R, IntSize) -> TR?,
+    alignment: Alignment = Alignment.Center,
+    contentScale: ContentScale = ContentScale.Fit,
+    colorFilter: ColorFilter? = null,
+    fadeIn: Boolean = false,
+    fadeInDurationMs: Int = DefaultTransitionDuration,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
-    onRequestCompleted: (ImageLoadState) -> Unit = {},
-    content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
 ) {
-    val imageMgr = remember(requestKey) {
-        ImageManager(
+    val imageMgr = remember(request) {
+        ImageLoader(
             request = request,
-            executeRequest = executeRequest,
-            transformRequestForSize = transformRequestForSize,
             shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
-            onRequestCompleted = onRequestCompleted,
         )
+    }
+
+    val cf = if (fadeIn && imageMgr.loadState is ImageLoadState.Success) {
+        val fadeInTransition = updateFadeInTransition(
+            key = imageMgr.request,
+            durationMs = fadeInDurationMs
+        )
+        remember { ColorMatrix() }
+            .apply {
+                updateAlpha(fadeInTransition.alpha)
+                updateBrightness(fadeInTransition.brightness)
+                updateSaturation(fadeInTransition.saturation)
+            }
+            .let { matrix ->
+                ColorFilter.colorMatrix(matrix)
+            }
+    } else {
+        // If fade in isn't enable, just use the provided `colorFilter`
+        colorFilter
     }
 
     // NOTE: All of the things that we want to be able to change without recreating the whole object
     // we want to do inside of here.
     SideEffect {
-        imageMgr.transformRequestForSize = transformRequestForSize
         imageMgr.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
-        imageMgr.onRequestCompleted = onRequestCompleted
+        imageMgr.contentScale = contentScale
+        imageMgr.colorFilter = cf
+        imageMgr.alignment = alignment
     }
 
     // NOTE: It's important that this is Box and not BoxWithConstraints. This is dramatically cheaper,
@@ -126,12 +166,9 @@ fun <R : Any, TR : Any> ImageLoad(
 }
 
 // This class holds all of the state for the image and manages the request.
-class ImageManager<R : Any, TR : Any>(
-    val request: R,
-    val executeRequest: suspend (TR) -> ImageLoadState,
-    var transformRequestForSize: (R, IntSize) -> TR?,
+private class ImageLoader<R : Any>(
+    val request: ImageLoadRequest<R>,
     var shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean,
-    var onRequestCompleted: (ImageLoadState) -> Unit,
 ) : RememberObserver {
 
     // the size of the image, as informed by the layout system and the request.
@@ -187,13 +224,13 @@ class ImageManager<R : Any, TR : Any>(
             }
 
         override val alignment: Alignment
-            get() = this@ImageManager.alignment
+            get() = this@ImageLoader.alignment
 
         override val contentScale: ContentScale
-            get() = this@ImageManager.contentScale
+            get() = this@ImageLoader.contentScale
 
         override val colorFilter: ColorFilter?
-            get() = this@ImageManager.colorFilter
+            get() = this@ImageLoader.colorFilter
 
         override val alpha: Float
             get() = 1f
@@ -224,19 +261,9 @@ class ImageManager<R : Any, TR : Any>(
         // you can use a coroutine scope that is scoped to the composable, or something more custom like
         // the imageLoader or whatever. The main point is, here is where you would start your loading
         scope.launch {
-            loadState = requestSize
-                ?.let { transformRequestForSize(request, it) }
-                ?.let { transformedRequest ->
-                    try {
-                        executeRequest(transformedRequest)
-                    } catch (ce: CancellationException) {
-                        // We specifically don't do anything for the request coroutine being
-                        // cancelled: https://github.com/chrisbanes/accompanist/issues/217
-                        throw ce
-                    } catch (throwable: Throwable) {
-                        ImageLoadState.Error(painter = null, throwable = throwable)
-                    }.also(onRequestCompleted)
-                } ?: ImageLoadState.Loading
+            requestSize?.also { size ->
+                loadState = request.execute(size)
+            }
         }
     }
 }

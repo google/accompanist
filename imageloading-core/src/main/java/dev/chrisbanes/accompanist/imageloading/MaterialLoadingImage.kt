@@ -38,7 +38,7 @@ import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 
-private const val DefaultTransitionDuration = 1000
+internal const val DefaultTransitionDuration = 1000
 
 /**
  * A wrapper around [Image] which implements the
@@ -190,7 +190,7 @@ fun MaterialLoadingImage(
 }
 
 @Composable
-fun updateFadeInTransition(key: Any, durationMs: Int): FadeInTransition {
+internal fun updateFadeInTransition(key: Any, durationMs: Int): FadeInTransition {
     // Create our transition state, which allow us to control the state and target states
     val transitionState = remember(key) {
         MutableTransitionState(ImageLoadTransitionState.Empty).apply {
@@ -223,7 +223,7 @@ fun updateFadeInTransition(key: Any, durationMs: Int): FadeInTransition {
 }
 
 @Stable
-class FadeInTransition(
+internal class FadeInTransition(
     alpha: State<Float> = mutableStateOf(0f),
     brightness: State<Float> = mutableStateOf(0f),
     saturation: State<Float> = mutableStateOf(0f),
@@ -241,7 +241,7 @@ private fun ImageLoadState.Success.isFromMemory(): Boolean = source == DataSourc
  * Ideally we'd use setToSaturation. We can't use that though since it
  * resets the matrix before applying the values
  */
-fun ColorMatrix.updateSaturation(saturation: Float) {
+internal fun ColorMatrix.updateSaturation(saturation: Float) {
     val invSat = 1 - saturation
     val R = 0.213f * invSat
     val G = 0.715f * invSat
@@ -257,11 +257,11 @@ fun ColorMatrix.updateSaturation(saturation: Float) {
     this[2, 2] = B + saturation
 }
 
-fun ColorMatrix.updateBrightness(brightness: Float) {
+internal fun ColorMatrix.updateBrightness(brightness: Float) {
     val darkening = (1f - brightness) * 255
     this[0, 4] = darkening
     this[1, 4] = darkening
     this[2, 4] = darkening
 }
 
-fun ColorMatrix.updateAlpha(alpha: Float) = set(row = 3, column = 3, v = alpha)
+internal fun ColorMatrix.updateAlpha(alpha: Float) = set(row = 3, column = 3, v = alpha)

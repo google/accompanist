@@ -20,24 +20,17 @@
 package dev.chrisbanes.accompanist.coil
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.IntSize
 import coil.Coil
 import coil.ImageLoader
@@ -46,13 +39,10 @@ import coil.request.ImageRequest
 import coil.request.ImageResult
 import dev.chrisbanes.accompanist.imageloading.DataSource
 import dev.chrisbanes.accompanist.imageloading.DefaultRefetchOnSizeChangeLambda
+import dev.chrisbanes.accompanist.imageloading.ImageLoad
+import dev.chrisbanes.accompanist.imageloading.ImageLoadRequest
 import dev.chrisbanes.accompanist.imageloading.ImageLoadState
-import dev.chrisbanes.accompanist.imageloading.ImageManager
 import dev.chrisbanes.accompanist.imageloading.toPainter
-import dev.chrisbanes.accompanist.imageloading.updateAlpha
-import dev.chrisbanes.accompanist.imageloading.updateBrightness
-import dev.chrisbanes.accompanist.imageloading.updateFadeInTransition
-import dev.chrisbanes.accompanist.imageloading.updateSaturation
 
 /**
  * Composition local containing the preferred [ImageLoader] to use in [CoilImage].
@@ -72,39 +62,57 @@ object CoilImageDefaults {
     }
 }
 
-private fun coilImageManager(
+@Composable
+fun rememberCoilImageLoadRequest(
+    data: Any,
+    imageLoader: ImageLoader,
+    requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)?,
+    onRequestCompleted: (ImageLoadState) -> Unit = {},
+): ImageLoadRequest<ImageRequest> = rememberCoilImageLoadRequest(
+    request = data.toImageRequest(),
+    imageLoader = imageLoader,
+    requestBuilder = requestBuilder,
+    onRequestCompleted = onRequestCompleted
+)
+
+@Composable
+fun rememberCoilImageLoadRequest(
     request: ImageRequest,
     imageLoader: ImageLoader,
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)?,
-    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean,
-    onRequestCompleted: (ImageLoadState) -> Unit,
-) = ImageManager(
-    request = request,
-    executeRequest = { imageLoader.execute(it).toResult() },
-    transformRequestForSize = { r, size ->
+    onRequestCompleted: (ImageLoadState) -> Unit = {},
+): ImageLoadRequest<ImageRequest> = remember(request, imageLoader) {
+    CoilImageLoadRequest(
+        request = request,
+        imageLoader = imageLoader,
+        requestBuilder = requestBuilder,
+        onRequestCompleted = onRequestCompleted
+    )
+}
+
+private class CoilImageLoadRequest(
+    override val request: ImageRequest,
+    private val imageLoader: ImageLoader,
+    private val requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)?,
+    override val onRequestCompleted: (ImageLoadState) -> Unit = {},
+) : ImageLoadRequest<ImageRequest>() {
+    override suspend fun doExecute(request: ImageRequest, size: IntSize): ImageLoadState {
         val sizedRequest = when {
             // If the request has a size resolver set we just execute the request as-is
-            r.defined.sizeResolver != null -> r
+            request.defined.sizeResolver != null -> request
             // If the size contains an unspecified sized dimension, we don't specify a size
             // in the Coil request
-            size.width < 0 || size.height < 0 -> r
+            size.width < 0 || size.height < 0 -> request
             // If we have a non-zero size, we can modify the request to include the size
-            size != IntSize.Zero -> r.newBuilder().size(size.width, size.height).build()
-            // Otherwise we have a zero size, so no point executing a request
-            else -> null
+            size != IntSize.Zero -> request.newBuilder().size(size.width, size.height).build()
+            // Otherwise we have a zero size, so no point executing a request so return empty now
+            else -> return ImageLoadState.Empty
         }
 
-        if (sizedRequest != null && requestBuilder != null) {
-            // If we have a transformed request and builder, let it run
-            requestBuilder(sizedRequest.newBuilder(), size).build()
-        } else {
-            // Otherwise we just return the sizedRequest
-            sizedRequest
-        }
-    },
-    shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
-    onRequestCompleted = onRequestCompleted,
-)
+        val r = requestBuilder?.invoke(sizedRequest.newBuilder(), size)?.build() ?: sizedRequest
+        return imageLoader.execute(r).toResult()
+    }
+}
 
 /**
  * Creates a composable that will attempt to load the given [data] using [Coil], and then
@@ -165,19 +173,21 @@ fun CoilImage(
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = {},
 ) {
-    CoilImage(
-        request = data.toImageRequest(),
-        modifier = modifier,
+    ImageLoad(
+        request = rememberCoilImageLoadRequest(
+            data = data,
+            requestBuilder = requestBuilder,
+            imageLoader = imageLoader,
+            onRequestCompleted = onRequestCompleted,
+        ),
         contentDescription = contentDescription,
+        modifier = modifier,
         alignment = alignment,
         contentScale = contentScale,
         colorFilter = colorFilter,
         fadeIn = fadeIn,
         fadeInDurationMs = fadeInDurationMs,
-        requestBuilder = requestBuilder,
-        imageLoader = imageLoader,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
-        onRequestCompleted = onRequestCompleted,
     )
 }
 
@@ -242,60 +252,21 @@ fun CoilImage(
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = {},
 ) {
-    val imageMgr = remember(request, imageLoader) {
-        coilImageManager(
+    ImageLoad(
+        request = rememberCoilImageLoadRequest(
             request = request,
             requestBuilder = requestBuilder,
             imageLoader = imageLoader,
-            shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
             onRequestCompleted = onRequestCompleted,
-        )
-    }
-
-    val cf = if (fadeIn) {
-        val fadeInTransition = updateFadeInTransition(key = request, durationMs = fadeInDurationMs)
-        remember { ColorMatrix() }
-            .apply {
-                updateAlpha(fadeInTransition.alpha)
-                updateBrightness(fadeInTransition.brightness)
-                updateSaturation(fadeInTransition.saturation)
-            }
-            .let { matrix ->
-                ColorFilter.colorMatrix(matrix)
-            }
-    } else {
-        // If fade in isn't enable, just use the provided `colorFilter`
-        colorFilter
-    }
-
-    // NOTE: All of the things that we want to be able to change without recreating the whole object
-    // we want to do inside of here.
-    SideEffect {
-        // TODO: requestBuilder
-        imageMgr.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
-        imageMgr.onRequestCompleted = onRequestCompleted
-
-        imageMgr.contentScale = contentScale
-        imageMgr.colorFilter = cf
-        imageMgr.alignment = alignment
-    }
-
-    // NOTE: It's important that this is Box and not BoxWithConstraints. This is dramatically cheaper,
-    // and also has not children. You could use Box(modifier, content) here if you want, and add a
-    // content lambda, but that would be for content inside / on top of the image, and not for the
-    // image itself like the current implementation.
-
-    val semantics = if (contentDescription != null) {
-        Modifier.semantics {
-            this.contentDescription = contentDescription
-            this.role = Role.Image
-        }
-    } else Modifier
-
-    Box(
-        modifier
-            .then(semantics)
-            .then(imageMgr.modifier)
+        ),
+        contentDescription = contentDescription,
+        modifier = modifier,
+        alignment = alignment,
+        contentScale = contentScale,
+        colorFilter = colorFilter,
+        fadeIn = fadeIn,
+        fadeInDurationMs = fadeInDurationMs,
+        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
     )
 }
 
