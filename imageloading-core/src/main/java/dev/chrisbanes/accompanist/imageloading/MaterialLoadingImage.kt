@@ -120,9 +120,9 @@ fun MaterialLoadingImage(
         val fadeInTransition = updateFadeInTransition(key = painter, durationMs = fadeInDurationMs)
         remember { ColorMatrix() }
             .apply {
-                setAlpha(fadeInTransition.alpha)
-                setBrightness(fadeInTransition.brightness)
-                setSaturation(fadeInTransition.saturation)
+                updateAlpha(fadeInTransition.alpha)
+                updateBrightness(fadeInTransition.brightness)
+                updateSaturation(fadeInTransition.saturation)
             }
             .let { matrix ->
                 ColorFilter.colorMatrix(matrix)
@@ -190,7 +190,7 @@ fun MaterialLoadingImage(
 }
 
 @Composable
-private fun updateFadeInTransition(key: Any, durationMs: Int): FadeInTransition {
+fun updateFadeInTransition(key: Any, durationMs: Int): FadeInTransition {
     // Create our transition state, which allow us to control the state and target states
     val transitionState = remember(key) {
         MutableTransitionState(ImageLoadTransitionState.Empty).apply {
@@ -223,7 +223,7 @@ private fun updateFadeInTransition(key: Any, durationMs: Int): FadeInTransition 
 }
 
 @Stable
-private class FadeInTransition(
+class FadeInTransition(
     alpha: State<Float> = mutableStateOf(0f),
     brightness: State<Float> = mutableStateOf(0f),
     saturation: State<Float> = mutableStateOf(0f),
@@ -241,7 +241,7 @@ private fun ImageLoadState.Success.isFromMemory(): Boolean = source == DataSourc
  * Ideally we'd use setToSaturation. We can't use that though since it
  * resets the matrix before applying the values
  */
-private fun ColorMatrix.setSaturation(saturation: Float) {
+fun ColorMatrix.updateSaturation(saturation: Float) {
     val invSat = 1 - saturation
     val R = 0.213f * invSat
     val G = 0.715f * invSat
@@ -257,11 +257,11 @@ private fun ColorMatrix.setSaturation(saturation: Float) {
     this[2, 2] = B + saturation
 }
 
-private fun ColorMatrix.setBrightness(brightness: Float) {
+fun ColorMatrix.updateBrightness(brightness: Float) {
     val darkening = (1f - brightness) * 255
     this[0, 4] = darkening
     this[1, 4] = darkening
     this[2, 4] = darkening
 }
 
-private fun ColorMatrix.setAlpha(alpha: Float) = set(row = 3, column = 3, v = alpha)
+fun ColorMatrix.updateAlpha(alpha: Float) = set(row = 3, column = 3, v = alpha)

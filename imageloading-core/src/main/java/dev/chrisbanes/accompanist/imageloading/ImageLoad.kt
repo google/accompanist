@@ -17,6 +17,8 @@
 @file:JvmName("ImageLoad")
 @file:JvmMultifileClass
 
+@file:Suppress("UNUSED_PARAMETER")
+
 package dev.chrisbanes.accompanist.imageloading
 
 import androidx.compose.foundation.layout.Box
@@ -28,10 +30,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.DrawModifier
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.graphics.drawscope.ContentDrawScope
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.LayoutModifier
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasureResult
@@ -79,7 +85,7 @@ fun <R : Any, TR : Any> ImageLoad(
     requestKey: Any = request,
     transformRequestForSize: (R, IntSize) -> TR?,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
-    onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
+    onRequestCompleted: (ImageLoadState) -> Unit = {},
     content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
 ) {
     val imageMgr = remember(requestKey) {
@@ -114,37 +120,36 @@ fun <R : Any, TR : Any> ImageLoad(
 
     Box(
         modifier
-            .then(imageMgr.modifier)
             .then(semantics)
+            .then(imageMgr.modifier)
     )
 }
 
 // This class holds all of the state for the image and manages the request.
-private class ImageManager<R : Any, TR : Any>(
+class ImageManager<R : Any, TR : Any>(
     val request: R,
     val executeRequest: suspend (TR) -> ImageLoadState,
     var transformRequestForSize: (R, IntSize) -> TR?,
-    var shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
-    var onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
+    var shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean,
+    var onRequestCompleted: (ImageLoadState) -> Unit,
 ) : RememberObserver {
 
     // the size of the image, as informed by the layout system and the request.
     //
-    // This value will be read during:
-    //   COMPOSITION: NO
-    //   LAYOUT:      YES
-    //   DRAW:        NO
+    // This value will be read during layout
     private var requestSize by mutableStateOf<IntSize?>(null)
 
     // The actual image state, populated by the image request.
     //
-    // This value will be read during:
-    //   COMPOSITION: NO
-    //   LAYOUT:      NO
-    //   DRAW:        YES
-    private var loadState by mutableStateOf<ImageLoadState>(ImageLoadState.Loading)
+    // This value will be read during draw only
+    var loadState by mutableStateOf<ImageLoadState>(ImageLoadState.Loading)
+        private set
 
-    private var scope = CoroutineScope(Dispatchers.Main)
+    var colorFilter by mutableStateOf<ColorFilter?>(null)
+    var contentScale by mutableStateOf(ContentScale.Fit)
+    var alignment by mutableStateOf(Alignment.Center)
+
+    private val scope = CoroutineScope(Dispatchers.Main)
 
     private val layout = object : LayoutModifier {
         override fun MeasureScope.measure(
@@ -170,29 +175,40 @@ private class ImageManager<R : Any, TR : Any>(
         }
     }
 
-    private val drawModifier = object : DrawModifier {
-        override fun ContentDrawScope.draw() {
-            val state = loadState
-            if (state is ImageLoadState.Success) {
-                // TODO: need to work ContentScale canvas scaling
+    private val emptyPainter = ColorPainter(Color.Transparent)
 
-                with(state.painter) {
-                    draw(
-                        size = size,
-                        alpha = 1f,
-                        colorFilter = null,
-                    )
+    private val paintModifier = object : PainterModifier() {
+        override val painter: Painter
+            get() = loadState.let { state ->
+                when (state) {
+                    is ImageLoadState.Success -> state.painter
+                    else -> emptyPainter
                 }
             }
-        }
+
+        override val alignment: Alignment
+            get() = this@ImageManager.alignment
+
+        override val contentScale: ContentScale
+            get() = this@ImageManager.contentScale
+
+        override val colorFilter: ColorFilter?
+            get() = this@ImageManager.colorFilter
+
+        override val alpha: Float
+            get() = 1f
+
+        override val sizeToIntrinsics: Boolean
+            get() = true
     }
 
     // NOTE: We build a modifier once, for each ImageManager, which handles everything. We ensure that
     // no state objects are used in its construction, so that all state observations are limited to
     // the layout and drawing phases.
-    val modifier: Modifier = layout
+    val modifier: Modifier = Modifier
+        .then(layout)
         .clipToBounds()
-        .then(drawModifier)
+        .then(paintModifier)
 
     // NOTE: both onAbandoned and onForgotten are where we should cancel any image requests and dispose
     // of things
@@ -224,11 +240,6 @@ private class ImageManager<R : Any, TR : Any>(
         }
     }
 }
-
-/**
- * Empty lamdba for use in the `onRequestCompleted` parameter.
- */
-val EmptyRequestCompleteLambda: (ImageLoadState) -> Unit = {}
 
 /**
  * Default lamdba for use in the `shouldRefetchOnSizeChange` parameter.

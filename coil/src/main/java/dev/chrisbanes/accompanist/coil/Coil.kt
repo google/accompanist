@@ -20,18 +20,24 @@
 package dev.chrisbanes.accompanist.coil
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.IntSize
 import coil.Coil
 import coil.ImageLoader
@@ -40,11 +46,13 @@ import coil.request.ImageRequest
 import coil.request.ImageResult
 import dev.chrisbanes.accompanist.imageloading.DataSource
 import dev.chrisbanes.accompanist.imageloading.DefaultRefetchOnSizeChangeLambda
-import dev.chrisbanes.accompanist.imageloading.EmptyRequestCompleteLambda
-import dev.chrisbanes.accompanist.imageloading.ImageLoad
 import dev.chrisbanes.accompanist.imageloading.ImageLoadState
-import dev.chrisbanes.accompanist.imageloading.MaterialLoadingImage
+import dev.chrisbanes.accompanist.imageloading.ImageManager
 import dev.chrisbanes.accompanist.imageloading.toPainter
+import dev.chrisbanes.accompanist.imageloading.updateAlpha
+import dev.chrisbanes.accompanist.imageloading.updateBrightness
+import dev.chrisbanes.accompanist.imageloading.updateFadeInTransition
+import dev.chrisbanes.accompanist.imageloading.updateSaturation
 
 /**
  * Composition local containing the preferred [ImageLoader] to use in [CoilImage].
@@ -64,122 +72,39 @@ object CoilImageDefaults {
     }
 }
 
-/**
- * Creates a composable that will attempt to load the given [data] using [Coil], and provides
- * complete content of how the current state is displayed:
- *
- * ```
- * CoilImage(
- *   data = "https://www.image.url",
- * ) { imageState ->
- *   when (imageState) {
- *     is ImageLoadState.Success -> // TODO
- *     is ImageLoadState.Error -> // TODO
- *     ImageLoadState.Loading -> // TODO
- *     ImageLoadState.Empty -> // TODO
- *   }
- * }
- * ```
- *
- * @param data The data to load. See [ImageRequest.Builder.data] for the types allowed.
- * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
- * @param requestBuilder Optional builder for the [ImageRequest].
- * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to
- * [CoilImageDefaults.defaultImageLoader].
- * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
- * optional re-fetching of the image. Return true to re-fetch the image.
- * @param onRequestCompleted Listener which will be called when the loading request has finished.
- * @param content Content to be displayed for the given state.
- */
-@Composable
-fun CoilImage(
-    data: Any,
-    modifier: Modifier = Modifier,
-    requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
-    imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
-    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
-    onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
-    content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
-) {
-    CoilImage(
-        request = data.toImageRequest(),
-        modifier = modifier,
-        requestBuilder = requestBuilder,
-        imageLoader = imageLoader,
-        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
-        onRequestCompleted = onRequestCompleted,
-        content = content
-    )
-}
-
-/**
- * Creates a composable that will attempt to load the given [request] using [Coil], and provides
- * complete content of how the current state is displayed:
- *
- * ```
- * CoilImage(
- *   request = ImageRequest.Builder(context).data(...).build(),
- * ) { imageState ->
- *   when (imageState) {
- *     is ImageLoadState.Success -> // TODO
- *     is ImageLoadState.Error -> // TODO
- *     ImageLoadState.Loading -> // TODO
- *     ImageLoadState.Empty -> // TODO
- *   }
- * }
- * ```
- *
- * @param request The request to execute. If the request does not have a [ImageRequest.sizeResolver]
- * set, one will be set on the request using the layout constraints.
- * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
- * @param requestBuilder Optional builder for the [ImageRequest].
- * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to
- * [CoilImageDefaults.defaultImageLoader].
- * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
- * optional re-fetching of the image. Return true to re-fetch the image.
- * @param onRequestCompleted Listener which will be called when the loading request has finished.
- * @param content Content to be displayed for the given state.
- */
-@Composable
-fun CoilImage(
+private fun coilImageManager(
     request: ImageRequest,
-    modifier: Modifier = Modifier,
-    requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
-    imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
-    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
-    onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
-    content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
-) {
-    ImageLoad(
-        request = request,
-        executeRequest = { imageLoader.execute(it).toResult() },
-        transformRequestForSize = { r, size ->
-            val sizedRequest = when {
-                // If the request has a size resolver set we just execute the request as-is
-                r.defined.sizeResolver != null -> r
-                // If the size contains an unspecified sized dimension, we don't specify a size
-                // in the Coil request
-                size.width < 0 || size.height < 0 -> r
-                // If we have a non-zero size, we can modify the request to include the size
-                size != IntSize.Zero -> r.newBuilder().size(size.width, size.height).build()
-                // Otherwise we have a zero size, so no point executing a request
-                else -> null
-            }
+    imageLoader: ImageLoader,
+    requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)?,
+    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean,
+    onRequestCompleted: (ImageLoadState) -> Unit,
+) = ImageManager(
+    request = request,
+    executeRequest = { imageLoader.execute(it).toResult() },
+    transformRequestForSize = { r, size ->
+        val sizedRequest = when {
+            // If the request has a size resolver set we just execute the request as-is
+            r.defined.sizeResolver != null -> r
+            // If the size contains an unspecified sized dimension, we don't specify a size
+            // in the Coil request
+            size.width < 0 || size.height < 0 -> r
+            // If we have a non-zero size, we can modify the request to include the size
+            size != IntSize.Zero -> r.newBuilder().size(size.width, size.height).build()
+            // Otherwise we have a zero size, so no point executing a request
+            else -> null
+        }
 
-            if (sizedRequest != null && requestBuilder != null) {
-                // If we have a transformed request and builder, let it run
-                requestBuilder(sizedRequest.newBuilder(), size).build()
-            } else {
-                // Otherwise we just return the sizedRequest
-                sizedRequest
-            }
-        },
-        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
-        onRequestCompleted = onRequestCompleted,
-        modifier = modifier,
-        content = content
-    )
-}
+        if (sizedRequest != null && requestBuilder != null) {
+            // If we have a transformed request and builder, let it run
+            requestBuilder(sizedRequest.newBuilder(), size).build()
+        } else {
+            // Otherwise we just return the sizedRequest
+            sizedRequest
+        }
+    },
+    shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
+    onRequestCompleted = onRequestCompleted,
+)
 
 /**
  * Creates a composable that will attempt to load the given [data] using [Coil], and then
@@ -216,8 +141,6 @@ fun CoilImage(
  * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
  * used if the bounds are a different size from the intrinsic size of the loaded [ImageBitmap].
  * @param colorFilter Optional colorFilter to apply for the [Painter] when it is rendered onscreen.
- * @param error Content to be displayed when the request failed.
- * @param loading Content to be displayed when the request is in progress.
  * @param fadeIn Whether to run a fade-in animation when images are successfully loaded.
  * Default: `false`.
  * @param requestBuilder Optional builder for the [ImageRequest].
@@ -236,12 +159,11 @@ fun CoilImage(
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
     fadeIn: Boolean = false,
+    fadeInDurationMs: Int = 1000,
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
     imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
-    onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
-    error: @Composable (BoxScope.(ImageLoadState.Error) -> Unit)? = null,
-    loading: @Composable (BoxScope.() -> Unit)? = null,
+    onRequestCompleted: (ImageLoadState) -> Unit = {},
 ) {
     CoilImage(
         request = data.toImageRequest(),
@@ -251,12 +173,11 @@ fun CoilImage(
         contentScale = contentScale,
         colorFilter = colorFilter,
         fadeIn = fadeIn,
+        fadeInDurationMs = fadeInDurationMs,
         requestBuilder = requestBuilder,
         imageLoader = imageLoader,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         onRequestCompleted = onRequestCompleted,
-        error = error,
-        loading = loading
     )
 }
 
@@ -315,37 +236,67 @@ fun CoilImage(
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
     fadeIn: Boolean = false,
+    fadeInDurationMs: Int = 1000,
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
     imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
-    onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
-    error: @Composable (BoxScope.(ImageLoadState.Error) -> Unit)? = null,
-    loading: @Composable (BoxScope.() -> Unit)? = null,
+    onRequestCompleted: (ImageLoadState) -> Unit = {},
 ) {
-    CoilImage(
-        request = request,
-        modifier = modifier,
-        requestBuilder = requestBuilder,
-        imageLoader = imageLoader,
-        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
-        onRequestCompleted = onRequestCompleted,
-    ) { imageState ->
-        when (imageState) {
-            is ImageLoadState.Success -> {
-                MaterialLoadingImage(
-                    result = imageState,
-                    contentDescription = contentDescription,
-                    fadeInEnabled = fadeIn,
-                    alignment = alignment,
-                    contentScale = contentScale,
-                    colorFilter = colorFilter
-                )
-            }
-            is ImageLoadState.Error -> if (error != null) error(imageState)
-            ImageLoadState.Loading -> if (loading != null) loading()
-            ImageLoadState.Empty -> Unit
-        }
+    val imageMgr = remember(request, imageLoader) {
+        coilImageManager(
+            request = request,
+            requestBuilder = requestBuilder,
+            imageLoader = imageLoader,
+            shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
+            onRequestCompleted = onRequestCompleted,
+        )
     }
+
+    val cf = if (fadeIn) {
+        val fadeInTransition = updateFadeInTransition(key = request, durationMs = fadeInDurationMs)
+        remember { ColorMatrix() }
+            .apply {
+                updateAlpha(fadeInTransition.alpha)
+                updateBrightness(fadeInTransition.brightness)
+                updateSaturation(fadeInTransition.saturation)
+            }
+            .let { matrix ->
+                ColorFilter.colorMatrix(matrix)
+            }
+    } else {
+        // If fade in isn't enable, just use the provided `colorFilter`
+        colorFilter
+    }
+
+    // NOTE: All of the things that we want to be able to change without recreating the whole object
+    // we want to do inside of here.
+    SideEffect {
+        // TODO: requestBuilder
+        imageMgr.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
+        imageMgr.onRequestCompleted = onRequestCompleted
+
+        imageMgr.contentScale = contentScale
+        imageMgr.colorFilter = cf
+        imageMgr.alignment = alignment
+    }
+
+    // NOTE: It's important that this is Box and not BoxWithConstraints. This is dramatically cheaper,
+    // and also has not children. You could use Box(modifier, content) here if you want, and add a
+    // content lambda, but that would be for content inside / on top of the image, and not for the
+    // image itself like the current implementation.
+
+    val semantics = if (contentDescription != null) {
+        Modifier.semantics {
+            this.contentDescription = contentDescription
+            this.role = Role.Image
+        }
+    } else Modifier
+
+    Box(
+        modifier
+            .then(semantics)
+            .then(imageMgr.modifier)
+    )
 }
 
 private fun ImageResult.toResult(): ImageLoadState = when (this) {

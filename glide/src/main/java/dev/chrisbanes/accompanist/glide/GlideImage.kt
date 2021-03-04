@@ -21,17 +21,24 @@ package dev.chrisbanes.accompanist.glide
 
 import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.IntSize
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
@@ -41,11 +48,13 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import dev.chrisbanes.accompanist.imageloading.DataSource
 import dev.chrisbanes.accompanist.imageloading.DefaultRefetchOnSizeChangeLambda
-import dev.chrisbanes.accompanist.imageloading.EmptyRequestCompleteLambda
-import dev.chrisbanes.accompanist.imageloading.ImageLoad
 import dev.chrisbanes.accompanist.imageloading.ImageLoadState
-import dev.chrisbanes.accompanist.imageloading.MaterialLoadingImage
+import dev.chrisbanes.accompanist.imageloading.ImageManager
 import dev.chrisbanes.accompanist.imageloading.toPainter
+import dev.chrisbanes.accompanist.imageloading.updateAlpha
+import dev.chrisbanes.accompanist.imageloading.updateBrightness
+import dev.chrisbanes.accompanist.imageloading.updateFadeInTransition
+import dev.chrisbanes.accompanist.imageloading.updateSaturation
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 
@@ -72,57 +81,21 @@ object GlideImageDefaults {
     }
 }
 
-/**
- * Creates a composable that will attempt to load the given [data] using [Glide], and provides
- * complete content of how the current state is displayed:
- *
- * ```
- * GlideImage(
- *   data = "https://www.image.url",
- * ) { imageState ->
- *   when (imageState) {
- *     is ImageLoadState.Success -> // TODO
- *     is ImageLoadState.Error -> // TODO
- *     ImageLoadState.Loading -> // TODO
- *     ImageLoadState.Empty -> // TODO
- *   }
- * }
- * ```
- *
- * @param data The data to load.
- * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
- * @param requestBuilder Optional builder for the [RequestBuilder].
- * @param requestManager The [RequestManager] to use when requesting the image. Defaults to the
- * current value of [LocalRequestManager].
- * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
- * optional re-fetching of the image. Return true to re-fetch the image.
- * @param onRequestCompleted Listener which will be called when the loading request has finished.
- * @param content Content to be displayed for the given state.
- */
-@Composable
-fun GlideImage(
+private fun glideImageManager(
     data: Any,
-    modifier: Modifier = Modifier,
-    requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)? = null,
-    requestManager: RequestManager = GlideImageDefaults.defaultRequestManager(),
-    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
-    onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
-    content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
-) {
-    @OptIn(ExperimentalCoroutinesApi::class)
-    ImageLoad(
-        request = requestManager.load(checkData(data)),
-        requestKey = data, // Glide RequestBuilder doesn't support equality so we use the data
-        executeRequest = { (r, size) -> requestManager.execute(r, size) },
-        transformRequestForSize = { r, size ->
-            Pair(requestBuilder?.invoke(r, size) ?: r, size)
-        },
-        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
-        onRequestCompleted = onRequestCompleted,
-        modifier = modifier,
-        content = content
-    )
-}
+    requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)?,
+    requestManager: RequestManager,
+    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean,
+    onRequestCompleted: (ImageLoadState) -> Unit,
+) = ImageManager(
+    request = requestManager.load(checkData(data)),
+    executeRequest = { (r, size) -> requestManager.execute(r, size) },
+    transformRequestForSize = { r, size ->
+        Pair(requestBuilder?.invoke(r, size) ?: r, size)
+    },
+    shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
+    onRequestCompleted = onRequestCompleted,
+)
 
 /**
  * Creates a composable that will attempt to load the given [data] using [Glide], and then
@@ -130,10 +103,6 @@ fun GlideImage(
  *
  * This version of the function is more opinionated, providing:
  *
- * - Support for displaying alternative content while the request is 'loading'.
- *   See the [loading] parameter.
- * - Support for displaying alternative content if the request was unsuccessful.
- *   See the [error] parameter.
  * - Support for automatically fading-in the image once loaded. See the [fadeIn] parameter.
  *
  * ```
@@ -179,37 +148,67 @@ fun GlideImage(
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
     fadeIn: Boolean = false,
+    fadeInDurationMs: Int = 1000,
     requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)? = null,
     requestManager: RequestManager = GlideImageDefaults.defaultRequestManager(),
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
-    onRequestCompleted: (ImageLoadState) -> Unit = EmptyRequestCompleteLambda,
-    error: @Composable (BoxScope.(ImageLoadState.Error) -> Unit)? = null,
-    loading: @Composable (BoxScope.() -> Unit)? = null,
+    onRequestCompleted: (ImageLoadState) -> Unit = {},
 ) {
-    GlideImage(
-        data = data,
-        modifier = modifier,
-        requestBuilder = requestBuilder,
-        requestManager = requestManager,
-        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
-        onRequestCompleted = onRequestCompleted,
-    ) { imageState ->
-        when (imageState) {
-            is ImageLoadState.Success -> {
-                MaterialLoadingImage(
-                    result = imageState,
-                    contentDescription = contentDescription,
-                    fadeInEnabled = fadeIn,
-                    alignment = alignment,
-                    contentScale = contentScale,
-                    colorFilter = colorFilter
-                )
-            }
-            is ImageLoadState.Error -> if (error != null) error(imageState)
-            ImageLoadState.Loading -> if (loading != null) loading()
-            ImageLoadState.Empty -> Unit
-        }
+    val imageMgr = remember(data, requestManager) {
+        glideImageManager(
+            data = data,
+            requestBuilder = requestBuilder,
+            requestManager = requestManager,
+            shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
+            onRequestCompleted = onRequestCompleted,
+        )
     }
+
+    val cf = if (fadeIn) {
+        val fadeInTransition = updateFadeInTransition(key = data, durationMs = fadeInDurationMs)
+        remember { ColorMatrix() }
+            .apply {
+                updateAlpha(fadeInTransition.alpha)
+                updateBrightness(fadeInTransition.brightness)
+                updateSaturation(fadeInTransition.saturation)
+            }
+            .let { matrix ->
+                ColorFilter.colorMatrix(matrix)
+            }
+    } else {
+        // If fade in isn't enable, just use the provided `colorFilter`
+        colorFilter
+    }
+
+    // NOTE: All of the things that we want to be able to change without recreating the whole object
+    // we want to do inside of here.
+    SideEffect {
+        // TODO: requestBuilder
+        imageMgr.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
+        imageMgr.onRequestCompleted = onRequestCompleted
+
+        imageMgr.contentScale = contentScale
+        imageMgr.colorFilter = cf
+        imageMgr.alignment = alignment
+    }
+
+    // NOTE: It's important that this is Box and not BoxWithConstraints. This is dramatically cheaper,
+    // and also has not children. You could use Box(modifier, content) here if you want, and add a
+    // content lambda, but that would be for content inside / on top of the image, and not for the
+    // image itself like the current implementation.
+
+    val semantics = if (contentDescription != null) {
+        Modifier.semantics {
+            this.contentDescription = contentDescription
+            this.role = Role.Image
+        }
+    } else Modifier
+
+    Box(
+        modifier
+            .then(semantics)
+            .then(imageMgr.modifier)
+    )
 }
 
 /**
