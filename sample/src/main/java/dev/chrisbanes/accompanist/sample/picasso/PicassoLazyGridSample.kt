@@ -58,6 +58,7 @@ class PicassoLazyGridSample : ComponentActivity() {
 
 private const val NumberItems = 60
 
+@Suppress("DEPRECATION")
 @OptIn(
     ExperimentalStdlibApi::class,
     ExperimentalFoundationApi::class

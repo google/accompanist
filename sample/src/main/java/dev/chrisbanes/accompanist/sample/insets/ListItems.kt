@@ -40,6 +40,7 @@ fun ListItem(
     modifier: Modifier = Modifier
 ) {
     Row(modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+        @Suppress("DEPRECATION")
         GlideImage(
             data = imageUrl,
             contentDescription = null,
