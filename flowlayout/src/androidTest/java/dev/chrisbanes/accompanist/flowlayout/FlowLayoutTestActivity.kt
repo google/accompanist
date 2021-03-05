@@ -14,23 +14,18 @@
  * limitations under the License.
  */
 
-plugins {
-    id 'com.gradle.enterprise' version '3.5'
-}
+package dev.chrisbanes.accompanist.flowlayout
 
-gradleEnterprise {
-    buildScan {
-        termsOfServiceUrl = 'https://gradle.com/terms-of-service'
-        termsOfServiceAgree = 'yes'
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.core.view.WindowCompat
+
+/**
+ * [ComponentActivity] which automatically requests for the decor not to fit system windows.
+ */
+class FlowLayoutTestActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
     }
 }
-
-include ':coil'
-include ':picasso'
-include ':glide'
-include ':imageloading-core'
-include ':imageloading-testutils'
-include ':insets'
-include ':appcompat-theme'
-include ':flowlayout'
-include ':sample'

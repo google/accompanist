@@ -14,23 +14,25 @@
  * limitations under the License.
  */
 
-plugins {
-    id 'com.gradle.enterprise' version '3.5'
-}
+package dev.chrisbanes.accompanist.flowlayout
 
-gradleEnterprise {
-    buildScan {
-        termsOfServiceUrl = 'https://gradle.com/terms-of-service'
-        termsOfServiceAgree = 'yes'
-    }
-}
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.test.filters.LargeTest
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 
-include ':coil'
-include ':picasso'
-include ':glide'
-include ':imageloading-core'
-include ':imageloading-testutils'
-include ':insets'
-include ':appcompat-theme'
-include ':flowlayout'
-include ':sample'
+@LargeTest
+@RunWith(JUnit4::class)
+class FlowLayoutTest {
+    @get:Rule
+    val composeTestRule = createAndroidComposeRule<FlowLayoutTestActivity>()
+
+    /**
+     * Needed due to https://issuetracker.google.com/174839536.
+     * Otherwise this module has no tests when running on API < 23.
+     */
+    @Test
+    fun dummyTest() = Unit
+}
