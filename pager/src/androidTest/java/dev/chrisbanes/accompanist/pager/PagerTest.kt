@@ -16,15 +16,18 @@
 
 package dev.chrisbanes.accompanist.pager
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsNotDisplayed
+import androidx.compose.ui.test.assertLeftPositionInRootIsEqualTo
+import androidx.compose.ui.test.assertWidthIsEqualTo
+import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.width
 import androidx.test.filters.LargeTest
 import org.junit.Rule
 import org.junit.Test
@@ -38,32 +41,83 @@ class PagerTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun layout_fullWidthItems() {
-        val pagerState = PagerState().apply { maxPage = 3 }
+    fun layout_fullWidthItems_ltr() {
+        setPagerContent(
+            layoutDirection = LayoutDirection.Ltr,
+            pageModifier = Modifier.fillMaxWidth(),
+            offscreenLimit = 2,
+        )
 
-        composeTestRule.setContent {
-            Pager(
-                state = pagerState,
-                offscreenLimit = 1,
-                modifier = Modifier.fillMaxWidth()
-            ) { page ->
-                BasicText(
-                    text = page.toString(),
-                    Modifier.background(Color.Blue).fillMaxWidth()
-                )
-            }
-        }
+        val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
+
+        composeTestRule.onNodeWithText("0")
+            .assertExists()
+            .assertWidthIsEqualTo(rootBounds.width)
+            .assertLeftPositionInRootIsEqualTo(0.dp)
 
         composeTestRule.onNodeWithText("1")
             .assertExists()
-            .assertIsDisplayed()
+            .assertWidthIsEqualTo(rootBounds.width)
+            .assertLeftPositionInRootIsEqualTo(rootBounds.width)
 
         composeTestRule.onNodeWithText("2")
             .assertExists()
-            .assertIsNotDisplayed()
+            .assertWidthIsEqualTo(rootBounds.width)
+            .assertLeftPositionInRootIsEqualTo(rootBounds.width * 2)
 
-        // Offscreen limit is 1, so this shouldn't exist
+        // Offscreen limit is 2, so this shouldn't exist
         composeTestRule.onNodeWithText("3")
             .assertDoesNotExist()
+    }
+
+    @Test
+    fun layout_fullWidthItems_rtl() {
+        setPagerContent(
+            layoutDirection = LayoutDirection.Rtl,
+            pageModifier = Modifier.fillMaxWidth(),
+            offscreenLimit = 2,
+        )
+
+        val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
+
+        composeTestRule.onNodeWithText("0")
+            .assertExists()
+            .assertWidthIsEqualTo(rootBounds.width)
+            .assertLeftPositionInRootIsEqualTo(0.dp)
+
+        composeTestRule.onNodeWithText("1")
+            .assertExists()
+            .assertWidthIsEqualTo(rootBounds.width)
+            .assertLeftPositionInRootIsEqualTo(-rootBounds.width)
+
+        composeTestRule.onNodeWithText("2")
+            .assertExists()
+            .assertWidthIsEqualTo(rootBounds.width)
+            .assertLeftPositionInRootIsEqualTo(-rootBounds.width * 2)
+
+        // Offscreen limit is 2, so this shouldn't exist
+        composeTestRule.onNodeWithText("3")
+            .assertDoesNotExist()
+    }
+
+    private fun setPagerContent(
+        layoutDirection: LayoutDirection,
+        pageModifier: Modifier,
+        maxPage: Int = 3,
+        offscreenLimit: Int = 1,
+    ): PagerState {
+        val pagerState = PagerState().apply {
+            this.maxPage = maxPage
+        }
+        composeTestRule.setContent(layoutDirection) {
+            Pager(
+                state = pagerState,
+                offscreenLimit = offscreenLimit,
+                modifier = Modifier.fillMaxWidth()
+            ) { page ->
+                BasicText(page.toString(), pageModifier)
+            }
+        }
+        return pagerState
     }
 }
