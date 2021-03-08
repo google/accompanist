@@ -18,6 +18,7 @@
 
 package dev.chrisbanes.accompanist.pager
 
+import android.util.Log
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.AnimationState
 import androidx.compose.animation.core.DecayAnimationSpec
@@ -64,6 +65,8 @@ private const val ScrollThreshold = 0.4f
 
 private const val MinimumFlingVelocity = 400
 
+private const val DebugLog = false
+
 /**
  * TODO
  */
@@ -88,11 +91,11 @@ class PagerState(
             currentPage = currentPage.coerceIn(_minPage, maxPage)
         }
 
-    private var _currentPage = mutableStateOf(currentPage.coerceIn(minPage, maxPage))
+    private var _currentPage by mutableStateOf(currentPage.coerceIn(minPage, maxPage))
     var currentPage: Int
-        get() = _currentPage.value
+        get() = _currentPage
         private set(value) {
-            _currentPage.value = value.coerceIn(_minPage, _maxPage)
+            _currentPage = value.coerceIn(_minPage, _maxPage)
         }
 
     private val _currentPageOffset = mutableStateOf(0f)
@@ -164,6 +167,9 @@ class PagerState(
     }
 
     private fun snapToNearestPage() {
+        if (DebugLog) {
+            Log.d("Pager", "snapToNearestPage. currentPage:$currentPage, offset:$currentPageOffset")
+        }
         currentPage -= currentPageOffset.roundToInt()
         currentPageOffset = 0f
         selectionState = SelectionState.Selected
@@ -225,9 +231,12 @@ class PagerState(
     ) {
         val target = animationSpec.calculateTargetValue(currentPageOffset, velocity)
 
-        // If we're at our page bounds, and we're flinging in the bounded direction, skip...
-        if (velocity < 0 && currentPage == maxPage) return
-        if (velocity > 0 && currentPage == minPage) return
+        if (DebugLog) {
+            Log.d(
+                "Pager",
+                "fling. velocity:$velocity, page: $currentPage, offset:$currentPageOffset"
+            )
+        }
 
         // If the animation can naturally end outside of current page bounds, we will
         // animate with decay.
@@ -242,6 +251,7 @@ class PagerState(
                     cancelAnimation()
                 }
             }
+            snapToNearestPage()
         } else {
             // Otherwise we animate to the next item, or spring-back depending on the offset
             animate(
@@ -267,6 +277,10 @@ class PagerState(
             try {
                 val down = awaitPointerEventScope { awaitFirstDown() }
 
+                if (DebugLog) {
+                    Log.d("Pager", "detectPageTouch: DOWN")
+                }
+
                 // Reset the velocity tracker and add our initial down event
                 velocityTracker.resetTracking()
                 velocityTracker.addPosition(down)
@@ -276,6 +290,10 @@ class PagerState(
 
                     awaitPointerEventScope {
                         horizontalDrag(down.id) { change ->
+                            if (DebugLog) {
+                                Log.d("Pager", "detectPageTouch: horizontalDrag:$change")
+                            }
+
                             // Snap the value by the amount of finger movement
                             if (reverseScroll) {
                                 currentPageOffset -= (change.positionChange().x / pageSize)
@@ -286,6 +304,10 @@ class PagerState(
                             velocityTracker.addPosition(change)
                         }
                     }
+
+                    if (DebugLog) {
+                        Log.d("Pager", "detectPageTouch: UP")
+                    }
                 }
 
                 // The drag has finished, now calculate the velocity and fling
@@ -294,10 +316,19 @@ class PagerState(
                 launch {
                     mutatorMutex.mutate {
                         if (velX.absoluteValue >= MinimumFlingVelocity) {
+                            if (DebugLog) {
+                                Log.d("Pager", "detectPageTouch: fling")
+                            }
                             // Velocity is in pixels per second, but we deal in percentage offsets,
                             // so we need to scale the velocity to match
-                            fling(velocity = velX / pageSize, animationSpec = decay)
+                            fling(
+                                velocity = (if (reverseScroll) -velX else velX) / pageSize,
+                                animationSpec = decay
+                            )
                         } else {
+                            if (DebugLog) {
+                                Log.d("Pager", "detectPageTouch: springBack")
+                            }
                             springBack()
                         }
                     }
@@ -339,6 +370,13 @@ fun Pager(
         content = {
             val minPage = (state.currentPage - offscreenLimit).coerceAtLeast(state.minPage)
             val maxPage = (state.currentPage + offscreenLimit).coerceAtMost(state.maxPage)
+
+            if (DebugLog) {
+                Log.d(
+                    "Pager",
+                    "Layout content: minPage:$minPage, current:${state.currentPage}, maxPage:$maxPage"
+                )
+            }
 
             for (page in minPage..maxPage) {
                 val pageData = PageData(page)

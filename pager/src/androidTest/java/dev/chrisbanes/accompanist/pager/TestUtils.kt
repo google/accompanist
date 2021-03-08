@@ -19,18 +19,8 @@ package dev.chrisbanes.accompanist.pager
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.test.SemanticsNodeInteraction
-import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
-import androidx.compose.ui.unit.DpRect
 import androidx.compose.ui.unit.LayoutDirection
-
-internal fun SemanticsNodeInteraction.withUnclippedBoundsInRoot(
-    block: DpRect.() -> Unit
-): SemanticsNodeInteraction {
-    block(getUnclippedBoundsInRoot())
-    return this
-}
 
 fun ComposeContentTestRule.setContent(
     layoutDirection: LayoutDirection? = null,

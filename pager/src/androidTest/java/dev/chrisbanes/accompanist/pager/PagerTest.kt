@@ -25,86 +25,160 @@ import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.performGesture
+import androidx.compose.ui.test.swipeLeft
+import androidx.compose.ui.test.swipeRight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.width
 import androidx.test.filters.LargeTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
+import org.junit.runners.Parameterized
 
 @LargeTest
-@RunWith(JUnit4::class)
-class PagerTest {
+@RunWith(Parameterized::class)
+class PagerTest(
+    private val itemWidthFraction: Float,
+    private val offscreenLimit: Int,
+    private val layoutDirection: LayoutDirection,
+) {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    @Test
-    fun layout_fullWidthItems_ltr() {
-        setPagerContent(
-            layoutDirection = LayoutDirection.Ltr,
-            pageModifier = Modifier.fillMaxWidth(),
-            offscreenLimit = 2,
+    companion object {
+        @JvmStatic
+        @Parameterized.Parameters
+        fun data(): Collection<Array<Any>> = listOf(
+            // itemWidthFraction, offscreenLimit, layoutDirection
+
+            // Test typical full-width items
+            arrayOf(1f, 2, LayoutDirection.Ltr),
+            arrayOf(1f, 2, LayoutDirection.Rtl),
+
+            // Test an increased offscreenLimit
+            arrayOf(1f, 4, LayoutDirection.Ltr),
+            arrayOf(1f, 4, LayoutDirection.Rtl),
+
+            // Test items with 60% widths
+            arrayOf(0.6f, 2, LayoutDirection.Ltr),
+            arrayOf(0.6f, 2, LayoutDirection.Rtl),
         )
-
-        val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
-
-        composeTestRule.onNodeWithText("0")
-            .assertExists()
-            .assertWidthIsEqualTo(rootBounds.width)
-            .assertLeftPositionInRootIsEqualTo(0.dp)
-
-        composeTestRule.onNodeWithText("1")
-            .assertExists()
-            .assertWidthIsEqualTo(rootBounds.width)
-            .assertLeftPositionInRootIsEqualTo(rootBounds.width)
-
-        composeTestRule.onNodeWithText("2")
-            .assertExists()
-            .assertWidthIsEqualTo(rootBounds.width)
-            .assertLeftPositionInRootIsEqualTo(rootBounds.width * 2)
-
-        // Offscreen limit is 2, so this shouldn't exist
-        composeTestRule.onNodeWithText("3")
-            .assertDoesNotExist()
     }
 
     @Test
-    fun layout_fullWidthItems_rtl() {
+    fun layout() {
         setPagerContent(
-            layoutDirection = LayoutDirection.Rtl,
-            pageModifier = Modifier.fillMaxWidth(),
-            offscreenLimit = 2,
+            layoutDirection = layoutDirection,
+            pageModifier = Modifier.fillMaxWidth(itemWidthFraction),
+            maxPage = 10,
+            offscreenLimit = offscreenLimit,
         )
 
         val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
 
-        composeTestRule.onNodeWithText("0")
-            .assertExists()
-            .assertWidthIsEqualTo(rootBounds.width)
-            .assertLeftPositionInRootIsEqualTo(0.dp)
+        assertPagerLayout(
+            currentPage = 0,
+            maxPage = 10,
+            offscreenLimit = offscreenLimit,
+            expectedItemWidth = rootBounds.width * itemWidthFraction,
+            layoutDirection = layoutDirection,
+        )
+    }
 
-        composeTestRule.onNodeWithText("1")
-            .assertExists()
-            .assertWidthIsEqualTo(rootBounds.width)
-            .assertLeftPositionInRootIsEqualTo(-rootBounds.width)
+    @Test
+    fun swipe() {
+        setPagerContent(
+            layoutDirection = layoutDirection,
+            pageModifier = Modifier.fillMaxWidth(itemWidthFraction),
+            maxPage = 10,
+            offscreenLimit = offscreenLimit,
+        )
 
-        composeTestRule.onNodeWithText("2")
-            .assertExists()
-            .assertWidthIsEqualTo(rootBounds.width)
-            .assertLeftPositionInRootIsEqualTo(-rootBounds.width * 2)
+        val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
 
-        // Offscreen limit is 2, so this shouldn't exist
-        composeTestRule.onNodeWithText("3")
-            .assertDoesNotExist()
+        assertPagerLayout(
+            currentPage = 0,
+            maxPage = 10,
+            offscreenLimit = offscreenLimit,
+            expectedItemWidth = rootBounds.width * itemWidthFraction,
+            layoutDirection = layoutDirection,
+        )
+
+        // First test swiping from 0 to -1, which should no-op
+        composeTestRule.onRoot()
+            .performGesture {
+                when (layoutDirection) {
+                    LayoutDirection.Ltr -> swipeRight()
+                    else -> swipeLeft()
+                }
+            }
+        assertPagerLayout(
+            currentPage = 0,
+            maxPage = 10,
+            offscreenLimit = offscreenLimit,
+            expectedItemWidth = rootBounds.width * itemWidthFraction,
+            layoutDirection = layoutDirection,
+        )
+
+        // Now swipe from 0 to 1
+        composeTestRule.onRoot()
+            .performGesture {
+                when (layoutDirection) {
+                    LayoutDirection.Ltr -> swipeLeft()
+                    else -> swipeRight()
+                }
+            }
+        assertPagerLayout(
+            currentPage = 1,
+            maxPage = 10,
+            offscreenLimit = offscreenLimit,
+            expectedItemWidth = rootBounds.width * itemWidthFraction,
+            layoutDirection = layoutDirection,
+        )
+    }
+
+    private fun assertPagerLayout(
+        currentPage: Int,
+        maxPage: Int,
+        expectedItemWidth: Dp,
+        offscreenLimit: Int,
+        layoutDirection: LayoutDirection,
+    ) {
+        val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
+        val firstItemLeft = (rootBounds.width - expectedItemWidth) / 2
+
+        val laidOutRange = (currentPage - offscreenLimit)..(currentPage + offscreenLimit)
+            .coerceIn(0, maxPage)
+
+        (0..maxPage).forEach { page ->
+            if (page in laidOutRange) {
+                composeTestRule.onNodeWithText(page.toString())
+                    .assertExists()
+                    .assertWidthIsEqualTo(expectedItemWidth)
+                    .run {
+                        if (layoutDirection == LayoutDirection.Ltr) {
+                            assertLeftPositionInRootIsEqualTo(
+                                firstItemLeft + (expectedItemWidth * (page - currentPage))
+                            )
+                        } else {
+                            assertLeftPositionInRootIsEqualTo(
+                                firstItemLeft - (expectedItemWidth * (page - currentPage))
+                            )
+                        }
+                    }
+            } else {
+                composeTestRule.onNodeWithText(page.toString()).assertDoesNotExist()
+            }
+        }
     }
 
     private fun setPagerContent(
         layoutDirection: LayoutDirection,
         pageModifier: Modifier,
-        maxPage: Int = 3,
-        offscreenLimit: Int = 1,
+        maxPage: Int,
+        offscreenLimit: Int,
     ): PagerState {
         val pagerState = PagerState().apply {
             this.maxPage = maxPage
