@@ -98,14 +98,6 @@ class PagerTest(
 
         val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
 
-        assertPagerLayout(
-            currentPage = 0,
-            maxPage = 10,
-            offscreenLimit = offscreenLimit,
-            expectedItemWidth = rootBounds.width * itemWidthFraction,
-            layoutDirection = layoutDirection,
-        )
-
         // First test swiping from 0 to -1, which should no-op
         composeTestRule.onRoot()
             .performGesture {
@@ -114,6 +106,7 @@ class PagerTest(
                     else -> swipeLeft()
                 }
             }
+        // ...and assert that nothing happened
         assertPagerLayout(
             currentPage = 0,
             maxPage = 10,
@@ -122,7 +115,7 @@ class PagerTest(
             layoutDirection = layoutDirection,
         )
 
-        // Now swipe from 0 to 1
+        // Now swipe from page 0 to page 1
         composeTestRule.onRoot()
             .performGesture {
                 when (layoutDirection) {
@@ -130,6 +123,7 @@ class PagerTest(
                     else -> swipeRight()
                 }
             }
+        // ...and assert that we now laid out from page 1
         assertPagerLayout(
             currentPage = 1,
             maxPage = 10,
@@ -147,13 +141,21 @@ class PagerTest(
         layoutDirection: LayoutDirection,
     ) {
         val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
+
+        // The expected left of the first item. This uses the implicit fact that Pager
+        // centers items horizontally.
         val firstItemLeft = (rootBounds.width - expectedItemWidth) / 2
 
-        val laidOutRange = (currentPage - offscreenLimit)..(currentPage + offscreenLimit)
+        // The pages which are expected to be laid out, using the given current page,
+        // offscreenLimit and page limit
+        val expectedLaidOutPages = (currentPage - offscreenLimit)..(currentPage + offscreenLimit)
             .coerceIn(0, maxPage)
 
+        // Go through all of the pages, and assert the expected layout state
         (0..maxPage).forEach { page ->
-            if (page in laidOutRange) {
+            if (page in expectedLaidOutPages) {
+                // If this page is expected to be laid out, assert that it exists and is
+                // laid out in the correct position
                 composeTestRule.onNodeWithText(page.toString())
                     .assertExists()
                     .assertWidthIsEqualTo(expectedItemWidth)
@@ -169,6 +171,7 @@ class PagerTest(
                         }
                     }
             } else {
+                // If this page is not expected to be laid out, assert that it doesn't exist
                 composeTestRule.onNodeWithText(page.toString()).assertDoesNotExist()
             }
         }
