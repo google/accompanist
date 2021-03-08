@@ -1,6 +1,6 @@
 public final class dev/chrisbanes/accompanist/flowlayout/Flow {
-	public static final fun FlowColumn-_X57SAw (Ldev/chrisbanes/accompanist/flowlayout/SizeMode;Ldev/chrisbanes/accompanist/flowlayout/MainAxisAlignment;FLdev/chrisbanes/accompanist/flowlayout/FlowCrossAxisAlignment;FLdev/chrisbanes/accompanist/flowlayout/MainAxisAlignment;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
-	public static final fun FlowRow-_X57SAw (Ldev/chrisbanes/accompanist/flowlayout/SizeMode;Ldev/chrisbanes/accompanist/flowlayout/MainAxisAlignment;FLdev/chrisbanes/accompanist/flowlayout/FlowCrossAxisAlignment;FLdev/chrisbanes/accompanist/flowlayout/MainAxisAlignment;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun FlowColumn-07r0xoM (Landroidx/compose/ui/Modifier;Ldev/chrisbanes/accompanist/flowlayout/SizeMode;Ldev/chrisbanes/accompanist/flowlayout/MainAxisAlignment;FLdev/chrisbanes/accompanist/flowlayout/FlowCrossAxisAlignment;FLdev/chrisbanes/accompanist/flowlayout/MainAxisAlignment;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun FlowRow-07r0xoM (Landroidx/compose/ui/Modifier;Ldev/chrisbanes/accompanist/flowlayout/SizeMode;Ldev/chrisbanes/accompanist/flowlayout/MainAxisAlignment;FLdev/chrisbanes/accompanist/flowlayout/FlowCrossAxisAlignment;FLdev/chrisbanes/accompanist/flowlayout/MainAxisAlignment;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 }
 
 public final class dev/chrisbanes/accompanist/flowlayout/FlowCrossAxisAlignment : java/lang/Enum {
