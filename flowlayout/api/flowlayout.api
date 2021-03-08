@@ -1,14 +1,14 @@
+public final class dev/chrisbanes/accompanist/flowlayout/Flow {
+	public static final fun FlowColumn-_X57SAw (Ldev/chrisbanes/accompanist/flowlayout/SizeMode;Ldev/chrisbanes/accompanist/flowlayout/MainAxisAlignment;FLdev/chrisbanes/accompanist/flowlayout/FlowCrossAxisAlignment;FLdev/chrisbanes/accompanist/flowlayout/MainAxisAlignment;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun FlowRow-_X57SAw (Ldev/chrisbanes/accompanist/flowlayout/SizeMode;Ldev/chrisbanes/accompanist/flowlayout/MainAxisAlignment;FLdev/chrisbanes/accompanist/flowlayout/FlowCrossAxisAlignment;FLdev/chrisbanes/accompanist/flowlayout/MainAxisAlignment;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+}
+
 public final class dev/chrisbanes/accompanist/flowlayout/FlowCrossAxisAlignment : java/lang/Enum {
 	public static final field Center Ldev/chrisbanes/accompanist/flowlayout/FlowCrossAxisAlignment;
 	public static final field End Ldev/chrisbanes/accompanist/flowlayout/FlowCrossAxisAlignment;
 	public static final field Start Ldev/chrisbanes/accompanist/flowlayout/FlowCrossAxisAlignment;
 	public static fun valueOf (Ljava/lang/String;)Ldev/chrisbanes/accompanist/flowlayout/FlowCrossAxisAlignment;
 	public static fun values ()[Ldev/chrisbanes/accompanist/flowlayout/FlowCrossAxisAlignment;
-}
-
-public final class dev/chrisbanes/accompanist/flowlayout/FlowKt {
-	public static final fun FlowColumn-_X57SAw (Ldev/chrisbanes/accompanist/flowlayout/SizeMode;Ldev/chrisbanes/accompanist/flowlayout/MainAxisAlignment;FLdev/chrisbanes/accompanist/flowlayout/FlowCrossAxisAlignment;FLdev/chrisbanes/accompanist/flowlayout/MainAxisAlignment;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
-	public static final fun FlowRow-_X57SAw (Ldev/chrisbanes/accompanist/flowlayout/SizeMode;Ldev/chrisbanes/accompanist/flowlayout/MainAxisAlignment;FLdev/chrisbanes/accompanist/flowlayout/FlowCrossAxisAlignment;FLdev/chrisbanes/accompanist/flowlayout/MainAxisAlignment;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 }
 
 public final class dev/chrisbanes/accompanist/flowlayout/MainAxisAlignment : java/lang/Enum {

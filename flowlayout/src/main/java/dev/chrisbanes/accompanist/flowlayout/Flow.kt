@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:JvmName("Flow")
+
 package dev.chrisbanes.accompanist.flowlayout
 
 import androidx.compose.foundation.layout.Arrangement
