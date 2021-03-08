@@ -19,7 +19,11 @@ package dev.chrisbanes.accompanist.pager
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.percentOffset
+import androidx.compose.ui.test.performGesture
+import androidx.compose.ui.test.swipe
 import androidx.compose.ui.unit.LayoutDirection
 
 fun ComposeContentTestRule.setContent(
@@ -32,4 +36,22 @@ fun ComposeContentTestRule.setContent(
             content = composable
         )
     }
+}
+
+internal fun SemanticsNodeInteraction.swipeAcrossCenter(
+    distancePercentageX: Float = 0f,
+    distancePercentageY: Float = 0f,
+    durationMillis: Long = 200,
+): SemanticsNodeInteraction = performGesture {
+    swipe(
+        start = percentOffset(
+            x = 0.5f - distancePercentageX / 2,
+            y = 0.5f - distancePercentageY / 2,
+        ),
+        end = percentOffset(
+            x = 0.5f + distancePercentageX / 2,
+            y = 0.5f + distancePercentageY / 2,
+        ),
+        durationMillis = durationMillis
+    )
 }

@@ -133,6 +133,126 @@ class PagerTest(
         )
     }
 
+    @Test
+    fun mediumFastSwipeToFling() {
+        setPagerContent(
+            layoutDirection = layoutDirection,
+            pageModifier = Modifier.fillMaxWidth(itemWidthFraction),
+            maxPage = 10,
+            offscreenLimit = offscreenLimit,
+        )
+
+        val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
+
+        // Now swipe from page 0 to page 1, but only swiping over 50% of item width.
+        // This should trigger a fling()
+        composeTestRule.onRoot().swipeAcrossCenter(
+            distancePercentageX = itemWidthFraction * when (layoutDirection) {
+                LayoutDirection.Rtl -> 0.5f
+                else -> -0.5f
+            },
+            durationMillis = 200,
+        )
+        // ...and assert that we now laid out from page 1
+        assertPagerLayout(
+            currentPage = 1,
+            maxPage = 10,
+            offscreenLimit = offscreenLimit,
+            expectedItemWidth = rootBounds.width * itemWidthFraction,
+            layoutDirection = layoutDirection,
+        )
+    }
+
+    @Test
+    fun mediumSlowSwipeToSnapForward() {
+        setPagerContent(
+            layoutDirection = layoutDirection,
+            pageModifier = Modifier.fillMaxWidth(itemWidthFraction),
+            maxPage = 10,
+            offscreenLimit = offscreenLimit,
+        )
+
+        val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
+
+        // Now swipe from page 0 to page 1, but only slowly swiping over 50% of item width.
+        // This should trigger a spring to position 1
+        composeTestRule.onRoot().swipeAcrossCenter(
+            distancePercentageX = itemWidthFraction * when (layoutDirection) {
+                LayoutDirection.Rtl -> 0.5f
+                else -> -0.5f
+            },
+            durationMillis = 4000,
+        )
+        // ...and assert that we now laid out from page 1
+        assertPagerLayout(
+            currentPage = 1,
+            maxPage = 10,
+            offscreenLimit = offscreenLimit,
+            expectedItemWidth = rootBounds.width * itemWidthFraction,
+            layoutDirection = layoutDirection,
+        )
+    }
+
+    @Test
+    fun shortFastSwipeToFling() {
+        setPagerContent(
+            layoutDirection = layoutDirection,
+            pageModifier = Modifier.fillMaxWidth(itemWidthFraction),
+            maxPage = 10,
+            offscreenLimit = offscreenLimit,
+        )
+
+        val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
+
+        // Now swipe from page 0 to page 1, but only swiping over 20% of item width.
+        // This should trigger a fling to page 1
+        composeTestRule.onRoot().swipeAcrossCenter(
+            distancePercentageX = itemWidthFraction * when (layoutDirection) {
+                LayoutDirection.Rtl -> 0.3f
+                else -> -0.2f
+            },
+            durationMillis = 100,
+        )
+        // ...and assert that we now laid out from page 1
+        assertPagerLayout(
+            currentPage = 1,
+            maxPage = 10,
+            offscreenLimit = offscreenLimit,
+            expectedItemWidth = rootBounds.width * itemWidthFraction,
+            layoutDirection = layoutDirection,
+        )
+    }
+
+    @Test
+    fun shortSlowSwipeToSnapBack() {
+        setPagerContent(
+            layoutDirection = layoutDirection,
+            pageModifier = Modifier.fillMaxWidth(itemWidthFraction),
+            maxPage = 10,
+            offscreenLimit = offscreenLimit,
+        )
+
+        val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
+
+        // Now slowly swipe from page 0 to page 1, but only swiping over 10% of item width.
+        // This should trigger a spring back to the original position
+        composeTestRule.onRoot().swipeAcrossCenter(
+            distancePercentageX = itemWidthFraction * when (layoutDirection) {
+                LayoutDirection.Rtl -> 0.2f
+                else -> -0.2f
+            },
+            durationMillis = 3000,
+        )
+        // ...and assert that we 'sprang back' to page 0
+        assertPagerLayout(
+            currentPage = 0,
+            maxPage = 10,
+            offscreenLimit = offscreenLimit,
+            expectedItemWidth = rootBounds.width * itemWidthFraction,
+            layoutDirection = layoutDirection,
+        )
+    }
+
     private fun assertPagerLayout(
         currentPage: Int,
         maxPage: Int,

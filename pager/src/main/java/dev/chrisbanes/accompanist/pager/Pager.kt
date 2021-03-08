@@ -179,6 +179,9 @@ class PagerState(
         animationSpec: AnimationSpec<Float> = spring(),
         initialVelocity: Float = 0f,
     ) {
+        if (DebugLog) {
+            Log.d("Pager", "springBack. initialVelocity:$initialVelocity")
+        }
         animate(
             initialValue = currentPageOffset,
             targetValue = determineSpringBackOffset(),
@@ -267,7 +270,7 @@ class PagerState(
     }
 
     internal suspend fun PointerInputScope.detectPageTouch(
-        pageSize: Int,
+        pageSize: () -> Int,
         reverseScroll: Boolean,
     ) = coroutineScope {
         val velocityTracker = VelocityTracker()
@@ -290,23 +293,21 @@ class PagerState(
 
                     awaitPointerEventScope {
                         horizontalDrag(down.id) { change ->
-                            if (DebugLog) {
-                                Log.d("Pager", "detectPageTouch: horizontalDrag:$change")
-                            }
-
                             // Snap the value by the amount of finger movement
                             if (reverseScroll) {
-                                currentPageOffset -= (change.positionChange().x / pageSize)
+                                currentPageOffset -= (
+                                    change.positionChange().x /
+                                        pageSize().coerceAtLeast(1)
+                                    )
                             } else {
-                                currentPageOffset += (change.positionChange().x / pageSize)
+                                currentPageOffset += (
+                                    change.positionChange().x /
+                                        pageSize().coerceAtLeast(1)
+                                    )
                             }
                             // Add the movement to the velocity tracker
                             velocityTracker.addPosition(change)
                         }
-                    }
-
-                    if (DebugLog) {
-                        Log.d("Pager", "detectPageTouch: UP")
                     }
                 }
 
@@ -322,14 +323,20 @@ class PagerState(
                             // Velocity is in pixels per second, but we deal in percentage offsets,
                             // so we need to scale the velocity to match
                             fling(
-                                velocity = (if (reverseScroll) -velX else velX) / pageSize,
+                                velocity = (if (reverseScroll) -velX else velX) /
+                                    pageSize().coerceAtLeast(1),
                                 animationSpec = decay
                             )
                         } else {
                             if (DebugLog) {
                                 Log.d("Pager", "detectPageTouch: springBack")
                             }
-                            springBack()
+                            // Velocity is in pixels per second, but we deal in percentage offsets,
+                            // so we need to scale the velocity to match
+                            springBack(
+                                initialVelocity = (if (reverseScroll) -velX else velX) /
+                                    pageSize().coerceAtLeast(1)
+                            )
                         }
                     }
                 }
@@ -396,7 +403,7 @@ fun Pager(
         modifier = modifier.pointerInput(Unit) {
             with(state) {
                 detectPageTouch(
-                    pageSize = pageSize,
+                    pageSize = { pageSize },
                     reverseScroll = layoutDirection == LayoutDirection.Rtl,
                 )
             }
