@@ -19,10 +19,4 @@
 
     <uses-sdk android:targetSdkVersion="30" />
 
-    <application>
-        <activity
-            android:name="dev.chrisbanes.accompanist.flowlayout.FlowLayoutTestActivity"
-            android:theme="@android:style/Theme.Material.NoActionBar" />
-    </application>
-
 </manifest>

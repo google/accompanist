@@ -16,7 +16,7 @@
 
 package dev.chrisbanes.accompanist.flowlayout
 
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.filters.LargeTest
 import org.junit.Rule
 import org.junit.Test
@@ -27,7 +27,7 @@ import org.junit.runners.JUnit4
 @RunWith(JUnit4::class)
 class FlowLayoutTest {
     @get:Rule
-    val composeTestRule = createAndroidComposeRule<FlowLayoutTestActivity>()
+    val composeTestRule = createComposeRule()
 
     /**
      * Needed due to https://issuetracker.google.com/174839536.
