@@ -21,6 +21,7 @@ package dev.chrisbanes.accompanist.flowlayout
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.unit.Constraints
@@ -37,6 +38,7 @@ import kotlin.math.max
  *
  * Note that just like [Row], flex values cannot be used with [FlowRow].
  *
+ * @param modifier The modifier to be applied to the FlowRow.
  * @param mainAxisSize The size of the layout in the main axis direction.
  * @param mainAxisAlignment The alignment of each row's children in the main axis direction.
  * @param mainAxisSpacing The main axis spacing between the children of each row.
@@ -46,6 +48,7 @@ import kotlin.math.max
  */
 @Composable
 fun FlowRow(
+    modifier: Modifier = Modifier,
     mainAxisSize: SizeMode = SizeMode.Wrap,
     mainAxisAlignment: FlowMainAxisAlignment = FlowMainAxisAlignment.Start,
     mainAxisSpacing: Dp = 0.dp,
@@ -55,6 +58,7 @@ fun FlowRow(
     content: @Composable () -> Unit
 ) {
     Flow(
+        modifier = modifier,
         orientation = LayoutOrientation.Horizontal,
         mainAxisSize = mainAxisSize,
         mainAxisAlignment = mainAxisAlignment,
@@ -72,6 +76,7 @@ fun FlowRow(
  *
  * Note that just like [Column], flex values cannot be used with [FlowColumn].
  *
+ * @param modifier The modifier to be applied to the FlowColumn.
  * @param mainAxisSize The size of the layout in the main axis direction.
  * @param mainAxisAlignment The alignment of each column's children in the main axis direction.
  * @param mainAxisSpacing The main axis spacing between the children of each column.
@@ -81,6 +86,7 @@ fun FlowRow(
  */
 @Composable
 fun FlowColumn(
+    modifier: Modifier = Modifier,
     mainAxisSize: SizeMode = SizeMode.Wrap,
     mainAxisAlignment: FlowMainAxisAlignment = FlowMainAxisAlignment.Start,
     mainAxisSpacing: Dp = 0.dp,
@@ -90,6 +96,7 @@ fun FlowColumn(
     content: @Composable () -> Unit
 ) {
     Flow(
+        modifier = modifier,
         orientation = LayoutOrientation.Vertical,
         mainAxisSize = mainAxisSize,
         mainAxisAlignment = mainAxisAlignment,
@@ -126,6 +133,7 @@ typealias FlowMainAxisAlignment = MainAxisAlignment
  */
 @Composable
 private fun Flow(
+    modifier: Modifier,
     orientation: LayoutOrientation,
     mainAxisSize: SizeMode,
     mainAxisAlignment: FlowMainAxisAlignment,
@@ -140,7 +148,7 @@ private fun Flow(
     fun Placeable.crossAxisSize() =
         if (orientation == LayoutOrientation.Horizontal) height else width
 
-    Layout(content) { measurables, outerConstraints ->
+    Layout(content, modifier) { measurables, outerConstraints ->
         val sequences = mutableListOf<List<Placeable>>()
         val crossAxisSizes = mutableListOf<Int>()
         val crossAxisPositions = mutableListOf<Int>()
