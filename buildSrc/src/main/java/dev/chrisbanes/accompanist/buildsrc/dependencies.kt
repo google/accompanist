@@ -59,7 +59,7 @@ object Libs {
 
         const val dynamicanimation = "androidx.dynamicanimation:dynamicanimation-ktx:1.0.0-alpha03"
 
-        const val appcompat = "androidx.appcompat:appcompat:1.2.0"
+        const val appcompat = "androidx.appcompat:appcompat:1.3.0-beta01"
 
         object Compose {
             const val snapshot = "7184376"
