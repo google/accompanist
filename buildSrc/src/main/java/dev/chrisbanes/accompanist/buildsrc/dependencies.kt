@@ -28,7 +28,7 @@ object Libs {
     const val junit = "junit:junit:4.13"
 
     object Kotlin {
-        private const val version = "1.4.30"
+        private const val version = "1.4.31"
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib:$version"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
 
@@ -59,10 +59,10 @@ object Libs {
 
         const val dynamicanimation = "androidx.dynamicanimation:dynamicanimation-ktx:1.0.0-alpha03"
 
-        const val appcompat = "androidx.appcompat:appcompat:1.2.0"
+        const val appcompat = "androidx.appcompat:appcompat:1.3.0-beta01"
 
         object Compose {
-            const val snapshot = "7154166"
+            const val snapshot = "7184376"
             const val version = "1.0.0-SNAPSHOT"
 
             @JvmStatic
@@ -97,7 +97,7 @@ object Libs {
         const val coreAlpha = "androidx.core:core:1.5.0-beta02"
 
         object Activity {
-            const val activityCompose = "androidx.activity:activity-compose:1.3.0-alpha03"
+            const val activityCompose = "androidx.activity:activity-compose:1.3.0-SNAPSHOT"
         }
     }
 

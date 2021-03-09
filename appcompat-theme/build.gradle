@@ -68,12 +68,9 @@ dependencies {
     implementation Libs.AndroidX.Compose.runtime
     implementation Libs.AndroidX.Compose.material
 
-    implementation Libs.AndroidX.appcompat
+    api Libs.AndroidX.appcompat
 
     implementation Libs.Kotlin.stdlib
-
-    // FIXME: Only needed for alpha12
-    androidTestImplementation Libs.AndroidX.Activity.activityCompose
 
     androidTestImplementation Libs.junit
     androidTestImplementation Libs.AndroidX.Compose.test
