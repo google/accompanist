@@ -33,4 +33,7 @@
     <string name="insets_title_fragment">Insets: Fragment</string>
     <string name="insets_title_list">Insets: Edge-to-edge list</string>
     <string name="insets_title_imeanim">Insets: IME Animations</string>
+
+    <string name="flowlayout_title_column">Flow Layout: Column</string>
+    <string name="flowlayout_title_row">Flow Layout: Row</string>
 </resources>
