@@ -63,8 +63,6 @@ import kotlin.math.roundToInt
 
 private const val ScrollThreshold = 0.4f
 
-private const val MinimumFlingVelocity = 400
-
 private const val DebugLog = false
 
 /**
@@ -99,6 +97,8 @@ class PagerState(
         }
 
     private val _currentPageOffset = mutableStateOf(0f)
+
+    internal var pageSize by mutableStateOf(0)
 
     /**
      * TODO kdoc
@@ -175,25 +175,6 @@ class PagerState(
         selectionState = SelectionState.Selected
     }
 
-    private suspend fun springBack(
-        animationSpec: AnimationSpec<Float> = spring(),
-        initialVelocity: Float = 0f,
-    ) {
-        if (DebugLog) {
-            Log.d("Pager", "springBack. initialVelocity:$initialVelocity")
-        }
-        animate(
-            initialValue = currentPageOffset,
-            targetValue = determineSpringBackOffset(),
-            initialVelocity = initialVelocity,
-            animationSpec = animationSpec,
-        ) { value, _ ->
-            currentPageOffset = value
-        }
-        snapToNearestPage()
-        selectionState = SelectionState.Selected
-    }
-
     private suspend fun animateToPage(
         page: Int,
         offset: Float = 0f,
@@ -211,45 +192,55 @@ class PagerState(
         }
     }
 
-    private fun determineSpringBackOffset(): Float {
-        val offset = when {
-            currentPageOffset >= ScrollThreshold -> 1f
-            currentPageOffset <= -ScrollThreshold -> -1f
-            else -> 0f
-        }
-        return offset.coerceIn(
-            minimumValue = if (currentPage == maxPage) 0f else -1f,
-            maximumValue = if (currentPage == minPage) 0f else 1f
-        )
-    }
+    private fun determineSpringBackOffset(
+        offset: Float = currentPageOffset
+    ): Float = when {
+        // If the offset exceeds the scroll threshold (in either direction), we want to
+        // move to the next/previous item
+        offset >= ScrollThreshold -> 1f
+        offset <= -ScrollThreshold -> -1f
+        // Otherwise we snap-back to 0
+        else -> 0f
+    }.coerceIn(
+        minimumValue = if (currentPage == maxPage) 0f else -1f,
+        maximumValue = if (currentPage == minPage) 0f else 1f
+    )
 
     /**
      * TODO make this public?
-     *
-     * TODO: need to enforce velocity in percentage rather than pixels
      */
     private suspend fun fling(
-        velocity: Float,
+        initialVelocity: Float,
         animationSpec: DecayAnimationSpec<Float>,
     ) {
-        val target = animationSpec.calculateTargetValue(currentPageOffset, velocity)
+        // We calculate the target offset using pixels, rather than using the offset
+        val targetOffset = animationSpec.calculateTargetValue(
+            initialValue = currentPageOffset * pageSize,
+            initialVelocity = initialVelocity
+        ) / pageSize
 
         if (DebugLog) {
             Log.d(
                 "Pager",
-                "fling. velocity:$velocity, page: $currentPage, offset:$currentPageOffset"
+                "fling. velocity:$initialVelocity, " +
+                    "page: $currentPage, " +
+                    "offset:$currentPageOffset, " +
+                    "targetOffset: $targetOffset"
             )
         }
 
         // If the animation can naturally end outside of current page bounds, we will
         // animate with decay.
-        if (target.absoluteValue > 1) {
+        if (targetOffset.absoluteValue >= 1) {
             // Animate with the decay animation spec using the fling velocity
-            AnimationState(currentPageOffset, velocity).animateDecay(animationSpec) {
+            AnimationState(
+                initialValue = currentPageOffset * pageSize,
+                initialVelocity = initialVelocity
+            ).animateDecay(animationSpec) {
                 // The property will coerce the value to the correct range
-                currentPageOffset = value
+                currentPageOffset = value / pageSize
 
-                if (value.absoluteValue > 1) {
+                if (currentPageOffset.absoluteValue >= 1) {
                     // If we reach the bounds of the allowed offset, cancel the animation
                     cancelAnimation()
                 }
@@ -259,8 +250,8 @@ class PagerState(
             // Otherwise we animate to the next item, or spring-back depending on the offset
             animate(
                 initialValue = currentPageOffset,
-                targetValue = determineSpringBackOffset(),
-                initialVelocity = velocity,
+                targetValue = determineSpringBackOffset(targetOffset.coerceIn(-1f, 1f)),
+                initialVelocity = initialVelocity / pageSize.coerceAtLeast(1),
                 animationSpec = spring()
             ) { value, _ ->
                 currentPageOffset = value
@@ -270,7 +261,6 @@ class PagerState(
     }
 
     internal suspend fun PointerInputScope.detectPageTouch(
-        pageSize: () -> Int,
         reverseScroll: Boolean,
     ) = coroutineScope {
         val velocityTracker = VelocityTracker()
@@ -295,15 +285,9 @@ class PagerState(
                         horizontalDrag(down.id) { change ->
                             // Snap the value by the amount of finger movement
                             if (reverseScroll) {
-                                currentPageOffset -= (
-                                    change.positionChange().x /
-                                        pageSize().coerceAtLeast(1)
-                                    )
+                                currentPageOffset -= change.positionChange().x / pageSize.coerceAtLeast(1)
                             } else {
-                                currentPageOffset += (
-                                    change.positionChange().x /
-                                        pageSize().coerceAtLeast(1)
-                                    )
+                                currentPageOffset += change.positionChange().x / pageSize.coerceAtLeast(1)
                             }
                             // Add the movement to the velocity tracker
                             velocityTracker.addPosition(change)
@@ -314,30 +298,16 @@ class PagerState(
                 // The drag has finished, now calculate the velocity and fling
                 val velX = velocityTracker.calculateVelocity().x
 
+                if (DebugLog) {
+                    Log.d("Pager", "detectPageTouch: UP. Velocity:$velX")
+                }
+
                 launch {
                     mutatorMutex.mutate {
-                        if (velX.absoluteValue >= MinimumFlingVelocity) {
-                            if (DebugLog) {
-                                Log.d("Pager", "detectPageTouch: fling")
-                            }
-                            // Velocity is in pixels per second, but we deal in percentage offsets,
-                            // so we need to scale the velocity to match
-                            fling(
-                                velocity = (if (reverseScroll) -velX else velX) /
-                                    pageSize().coerceAtLeast(1),
-                                animationSpec = decay
-                            )
-                        } else {
-                            if (DebugLog) {
-                                Log.d("Pager", "detectPageTouch: springBack")
-                            }
-                            // Velocity is in pixels per second, but we deal in percentage offsets,
-                            // so we need to scale the velocity to match
-                            springBack(
-                                initialVelocity = (if (reverseScroll) -velX else velX) /
-                                    pageSize().coerceAtLeast(1)
-                            )
-                        }
+                        fling(
+                            initialVelocity = (if (reverseScroll) -velX else velX),
+                            animationSpec = decay
+                        )
                     }
                 }
             } catch (e: CancellationException) {
@@ -371,7 +341,6 @@ fun Pager(
     offscreenLimit: Int = 2,
     pageContent: @Composable PagerScope.(page: Int) -> Unit
 ) {
-    var pageSize by remember { mutableStateOf(0) }
     val layoutDirection = LocalLayoutDirection.current
     Layout(
         content = {
@@ -402,10 +371,7 @@ fun Pager(
         },
         modifier = modifier.pointerInput(Unit) {
             with(state) {
-                detectPageTouch(
-                    pageSize = { pageSize },
-                    reverseScroll = layoutDirection == LayoutDirection.Rtl,
-                )
+                detectPageTouch(reverseScroll = layoutDirection == LayoutDirection.Rtl)
             }
         },
     ) { measurables, constraints ->
@@ -424,7 +390,7 @@ fun Pager(
                 val yCenterOffset = (constraints.maxHeight - placeable.height) / 2
 
                 if (currentPage == page) {
-                    pageSize = placeable.width
+                    state.pageSize = placeable.width
                 }
 
                 val xItemOffset = ((page + offset - currentPage) * placeable.width).roundToInt()

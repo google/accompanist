@@ -37,6 +37,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
+private const val MediumSwipeDistance = 0.6f
+private const val ShortSwipeDistance = 0.3f
+
 @LargeTest
 @RunWith(Parameterized::class)
 class PagerTest(
@@ -144,12 +147,12 @@ class PagerTest(
 
         val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
 
-        // Now swipe from page 0 to page 1, but only swiping over 50% of item width.
+        // Now swipe from page 0 to page 1, over a medium distance of the item width.
         // This should trigger a fling()
         composeTestRule.onRoot().swipeAcrossCenter(
             distancePercentageX = itemWidthFraction * when (layoutDirection) {
-                LayoutDirection.Rtl -> 0.5f
-                else -> -0.5f
+                LayoutDirection.Rtl -> MediumSwipeDistance
+                else -> -MediumSwipeDistance
             },
             durationMillis = 200,
         )
@@ -174,12 +177,12 @@ class PagerTest(
 
         val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
 
-        // Now swipe from page 0 to page 1, but only slowly swiping over 50% of item width.
+        // Now slowly swipe from page 0 to page 1, over a medium distance of the item width.
         // This should trigger a spring to position 1
         composeTestRule.onRoot().swipeAcrossCenter(
             distancePercentageX = itemWidthFraction * when (layoutDirection) {
-                LayoutDirection.Rtl -> 0.5f
-                else -> -0.5f
+                LayoutDirection.Rtl -> MediumSwipeDistance
+                else -> -MediumSwipeDistance
             },
             durationMillis = 4000,
         )
@@ -204,14 +207,14 @@ class PagerTest(
 
         val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
 
-        // Now swipe from page 0 to page 1, but only swiping over 20% of item width.
+        // Now swipe from page 0 to page 1, over a short distance of the item width.
         // This should trigger a fling to page 1
         composeTestRule.onRoot().swipeAcrossCenter(
             distancePercentageX = itemWidthFraction * when (layoutDirection) {
-                LayoutDirection.Rtl -> 0.3f
-                else -> -0.2f
+                LayoutDirection.Rtl -> ShortSwipeDistance
+                else -> -ShortSwipeDistance
             },
-            durationMillis = 100,
+            durationMillis = 200,
         )
         // ...and assert that we now laid out from page 1
         assertPagerLayout(
@@ -234,12 +237,12 @@ class PagerTest(
 
         val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
 
-        // Now slowly swipe from page 0 to page 1, but only swiping over 10% of item width.
+        // Now slowly swipe from page 0 to page 1, over a short distance of the item width.
         // This should trigger a spring back to the original position
         composeTestRule.onRoot().swipeAcrossCenter(
             distancePercentageX = itemWidthFraction * when (layoutDirection) {
-                LayoutDirection.Rtl -> 0.2f
-                else -> -0.2f
+                LayoutDirection.Rtl -> ShortSwipeDistance
+                else -> -ShortSwipeDistance
             },
             durationMillis = 3000,
         )
