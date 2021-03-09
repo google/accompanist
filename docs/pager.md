@@ -2,7 +2,7 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/dev.chrisbanes.accompanist/accompanist-pager)](https://search.maven.org/search?q=g:dev.chrisbanes.accompanist)
 
-A library which provides a horizontally paging composable. If you've used Android's [`ViewPager`](https://developer.android.com/reference/kotlin/androidx/viewpager/widget/ViewPager) before, it has similar properties.
+A library which provides a horizontally paging layout for Jetpack Compose. If you've used Android's [`ViewPager`](https://developer.android.com/reference/kotlin/androidx/viewpager/widget/ViewPager) before, it has similar properties.
 
 <video width="300" controls loop>
   <source src="demo.mp4" type="video/mp4">
