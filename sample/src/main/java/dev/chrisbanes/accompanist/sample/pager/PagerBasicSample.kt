@@ -82,9 +82,10 @@ private fun Sample() {
         modifier = Modifier.fillMaxSize()
     ) {
         Column(Modifier.fillMaxSize()) {
-            val pagerState = remember { PagerState() }
-            // Display 10 items
-            pagerState.maxPage = 10
+            val pagerState = remember {
+                // Display 10 items
+                PagerState(pageCount = 10)
+            }
 
             Pager(
                 state = pagerState,
@@ -163,7 +164,7 @@ private fun ActionsRow(
         IconButton(
             onClick = {
                 scope.launch {
-                    pagerState.animateScrollToPage(pagerState.maxPage)
+                    pagerState.animateScrollToPage(pagerState.pageCount)
                 }
             }
         ) {

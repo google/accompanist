@@ -307,7 +307,7 @@ class PagerTest(
         offscreenLimit: Int,
     ): PagerState {
         val pagerState = PagerState().apply {
-            this.maxPage = maxPage
+            this.pageCount = maxPage
         }
         composeTestRule.setContent(layoutDirection) {
             Pager(

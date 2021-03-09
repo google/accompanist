@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused", "MemberVisibilityCanBePrivate", "PropertyName")
+@file:Suppress("MemberVisibilityCanBePrivate")
 
 package dev.chrisbanes.accompanist.pager
 
 import android.util.Log
+import androidx.annotation.FloatRange
+import androidx.annotation.IntRange
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.AnimationState
 import androidx.compose.animation.core.DecayAnimationSpec
@@ -29,7 +31,6 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.splineBasedDecay
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.MutatorMutex
-import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.forEachGesture
 import androidx.compose.foundation.gestures.horizontalDrag
 import androidx.compose.foundation.layout.Box
@@ -66,59 +67,70 @@ private const val ScrollThreshold = 0.4f
 private const val DebugLog = false
 
 /**
- * TODO
+ * A state object that can be hoisted to control and observe scrolling for [Pager].
+ *
+ * @param currentPage the initial value for [PagerState.currentPage]
+ * @param pageCount the initial value for [PagerState.pageCount]
  */
 class PagerState(
     currentPage: Int = 0,
-    minPage: Int = 0,
-    maxPage: Int = 0
+    pageCount: Int = 0,
 ) {
-    private var _minPage by mutableStateOf(minPage)
-    var minPage: Int
-        get() = _minPage
+    private var _pageCount by mutableStateOf(pageCount)
+
+    /**
+     * The index of the currently selected page.
+     */
+    var pageCount: Int
+        get() = _pageCount
         set(value) {
-            _minPage = value.coerceAtMost(_maxPage)
-            currentPage = currentPage.coerceIn(_minPage, _maxPage)
+            _pageCount = value.coerceAtLeast(0)
+            currentPage = currentPage.coerceIn(0, pageCount)
         }
 
-    private var _maxPage by mutableStateOf(maxPage)
-    var maxPage: Int
-        get() = _maxPage
-        set(value) {
-            _maxPage = value.coerceAtLeast(_minPage)
-            currentPage = currentPage.coerceIn(_minPage, maxPage)
-        }
+    private var _currentPage by mutableStateOf(currentPage.coerceIn(0, pageCount))
 
-    private var _currentPage by mutableStateOf(currentPage.coerceIn(minPage, maxPage))
+    /**
+     * The index of the currently selected page.
+     *
+     * To update the scroll position, use [scrollToPage] or [animateScrollToPage].
+     */
     var currentPage: Int
         get() = _currentPage
         private set(value) {
-            _currentPage = value.coerceIn(_minPage, _maxPage)
+            _currentPage = value.coerceIn(0, _pageCount)
         }
 
     private val _currentPageOffset = mutableStateOf(0f)
 
-    internal var pageSize by mutableStateOf(0)
-
     /**
-     * TODO kdoc
+     * The current offset from the start of [currentPage], as a fraction of the page width.
+     *
+     * To update the scroll position, use [scrollToPage] or [animateScrollToPage].
      */
+    @get:FloatRange(from = 0.0, to = 1.0)
     var currentPageOffset: Float
         get() = _currentPageOffset.value
         private set(value) {
             _currentPageOffset.value = value.coerceIn(
-                minimumValue = if (currentPage == maxPage) 0f else -1f,
-                maximumValue = if (currentPage == minPage) 0f else 1f,
+                minimumValue = if (currentPage == pageCount) 0f else -1f,
+                maximumValue = if (currentPage == 0) 0f else 1f,
             )
         }
 
-    /**
-     * TODO kdoc
-     */
-    enum class SelectionState { Selected, Undecided }
+    internal var pageSize by mutableStateOf(0)
 
     /**
-     * TODO kdoc
+     * Represents the current selection state of a [Pager].
+     * Usually read from [PagerState.selectionState].
+     */
+    enum class SelectionState {
+        Selected,
+        Undecided
+    }
+
+    /**
+     * The current selection state.
      */
     var selectionState by mutableStateOf(SelectionState.Selected)
         private set
@@ -126,11 +138,18 @@ class PagerState(
     private val mutatorMutex = MutatorMutex()
 
     /**
-     * TODO
+     * Animate (smooth scroll) to the given page.
+     *
+     * Cancels the currently running scroll, if any, and suspends until the cancellation is
+     * complete.
+     *
+     * @param page the page to snap to. Must be between 0 and [pageCount] (inclusive).
+     * @param pageOffset the percentage of the page width to offset, from the start of [page]
+     * @param initialVelocity Initial velocity in pixels per second, or `0f` to not use a start velocity.
      */
     suspend fun animateScrollToPage(
         page: Int,
-        animationSpec: AnimationSpec<Float> = spring(),
+        @FloatRange(from = 0.0, to = 1.0) pageOffset: Float = 0f,
         initialVelocity: Float = 0f,
     ) {
         if (page == currentPage) return
@@ -139,16 +158,16 @@ class PagerState(
             mutatorMutex.mutate {
                 selectionState = SelectionState.Undecided
                 animateToPage(
-                    page = page.coerceIn(minPage, maxPage),
+                    page = page.coerceIn(0, pageCount),
+                    pageOffset = pageOffset.coerceIn(0f, 1f),
                     initialVelocity = initialVelocity,
-                    animationSpec = animationSpec
                 )
                 selectionState = SelectionState.Selected
             }
         } catch (e: CancellationException) {
             // If we're cancelled, snap to the target page
             currentPage = page
-            currentPageOffset = 0f
+            currentPageOffset = pageOffset
             selectionState = SelectionState.Selected
 
             throw e
@@ -156,12 +175,22 @@ class PagerState(
     }
 
     /**
-     * TODO
+     * Instantly brings the item at [page] to the middle of the viewport, offset by [pageOffset]
+     * percentage of page width.
+     *
+     * Cancels the currently running scroll, if any, and suspends until the cancellation is
+     * complete.
+     *
+     * @param page the page to snap to. Must be between 0 and [pageCount] (inclusive).
+     * @param pageOffset the percentage of the page width to offset, from the start of [page]
      */
-    suspend fun scrollToPage(page: Int) {
+    suspend fun scrollToPage(
+        page: Int,
+        @FloatRange(from = 0.0, to = 1.0) pageOffset: Float = 0f,
+    ) {
         mutatorMutex.mutate {
             currentPage = page
-            currentPageOffset = 0f
+            currentPageOffset = pageOffset
             selectionState = SelectionState.Selected
         }
     }
@@ -177,13 +206,13 @@ class PagerState(
 
     private suspend fun animateToPage(
         page: Int,
-        offset: Float = 0f,
+        pageOffset: Float = 0f,
         animationSpec: AnimationSpec<Float> = spring(),
         initialVelocity: Float = 0f,
     ) {
         animate(
             initialValue = currentPage + currentPageOffset,
-            targetValue = page + offset,
+            targetValue = page + pageOffset,
             initialVelocity = initialVelocity,
             animationSpec = animationSpec
         ) { value, _ ->
@@ -202,8 +231,8 @@ class PagerState(
         // Otherwise we snap-back to 0
         else -> 0f
     }.coerceIn(
-        minimumValue = if (currentPage == maxPage) 0f else -1f,
-        maximumValue = if (currentPage == minPage) 0f else 1f
+        minimumValue = if (currentPage == pageCount) 0f else -1f,
+        maximumValue = if (currentPage == 0) 0f else 1f
     )
 
     /**
@@ -318,8 +347,7 @@ class PagerState(
     }
 
     override fun toString(): String = "PagerState(" +
-        "minPage=$minPage, " +
-        "maxPage=$maxPage, " +
+        "pageCount=$pageCount, " +
         "currentPage=$currentPage, " +
         "selectionState=$selectionState, " +
         "currentPageOffset=$currentPageOffset" +
@@ -334,18 +362,37 @@ private data class PageData(val page: Int) : ParentDataModifier {
 private val Measurable.page: Int
     get() = (parentData as? PageData)?.page ?: error("No PageData for measurable $this")
 
+/**
+ * A horizontally scrolling layout that allows users to flip between items to the left and right.
+ *
+ * This layout allows the setting of the [offscreenLimit], which defines the number of pages that
+ * should be retained on either side of the current page. Pages beyond this limit will be
+ * recreated as needed. This value defaults to `1`, but can be increased to enable pre-loading
+ * of more content.
+ *
+ * // TODO: add sample
+ *
+ * @param state the state object to be used to control or observe the list's state.
+ * @param modifier the modifier to apply to this layout.
+ * @param offscreenLimit the number of pages that should be retained on either side of the
+ * current page. This value is required to be `1` or greater.
+ * @param content a block which describes the content. Inside this block you can reference
+ * [PagerScope.currentPage] and other properties in [PagerScope].
+ */
 @Composable
 fun Pager(
     state: PagerState,
     modifier: Modifier = Modifier,
-    offscreenLimit: Int = 2,
-    pageContent: @Composable PagerScope.(page: Int) -> Unit
+    @IntRange(from = 1) offscreenLimit: Int = 1,
+    content: @Composable PagerScope.(page: Int) -> Unit
 ) {
+    require(offscreenLimit >= 1) { "offscreenLimit is required to be >= 1" }
+
     val layoutDirection = LocalLayoutDirection.current
     Layout(
         content = {
-            val minPage = (state.currentPage - offscreenLimit).coerceAtLeast(state.minPage)
-            val maxPage = (state.currentPage + offscreenLimit).coerceAtMost(state.maxPage)
+            val minPage = (state.currentPage - offscreenLimit).coerceAtLeast(0)
+            val maxPage = (state.currentPage + offscreenLimit).coerceAtMost(state.pageCount)
 
             if (DebugLog) {
                 Log.d(
@@ -364,7 +411,7 @@ fun Pager(
                         val scope = remember(this, state) {
                             PagerScopeImpl(this, state)
                         }
-                        scope.pageContent(page)
+                        scope.content(page)
                     }
                 }
             }
