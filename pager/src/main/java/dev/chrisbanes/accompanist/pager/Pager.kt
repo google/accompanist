@@ -36,15 +36,18 @@ import androidx.compose.foundation.gestures.forEachGesture
 import androidx.compose.foundation.gestures.horizontalDrag
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.input.pointer.PointerInputChange
 import androidx.compose.ui.input.pointer.PointerInputScope
 import androidx.compose.ui.input.pointer.pointerInput
@@ -54,6 +57,11 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.ParentDataModifier
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.semantics.ScrollAxisRange
+import androidx.compose.ui.semantics.horizontalScrollAxisRange
+import androidx.compose.ui.semantics.scrollBy
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import kotlinx.coroutines.coroutineScope
@@ -222,6 +230,16 @@ class PagerState(
         }
     }
 
+    private fun scrollByInternal(x: Float) {
+        currentPageOffset += x / pageSize.coerceAtLeast(1)
+    }
+
+    internal suspend fun scrollBy(x: Float) {
+        mutatorMutex.mutate(MutatePriority.UserInput) {
+            scrollByInternal(x)
+        }
+    }
+
     private fun determineSpringBackOffset(
         offset: Float = currentPageOffset
     ): Float = when {
@@ -315,9 +333,9 @@ class PagerState(
                         horizontalDrag(down.id) { change ->
                             // Snap the value by the amount of finger movement
                             if (reverseScroll) {
-                                currentPageOffset -= change.positionChange().x / pageSize.coerceAtLeast(1)
+                                scrollByInternal(-change.positionChange().x)
                             } else {
-                                currentPageOffset += change.positionChange().x / pageSize.coerceAtLeast(1)
+                                scrollByInternal(change.positionChange().x)
                             }
                             // Add the movement to the velocity tracker
                             velocityTracker.addPosition(change)
@@ -390,7 +408,35 @@ fun Pager(
     require(offscreenLimit >= 1) { "offscreenLimit is required to be >= 1" }
 
     val layoutDirection = LocalLayoutDirection.current
+
+    val m = Modifier
+        .composed {
+            val coroutineScope = rememberCoroutineScope()
+            semantics {
+                if (state.pageCount > 0) {
+                    horizontalScrollAxisRange = ScrollAxisRange(
+                        value = { state.currentPage + state.currentPageOffset },
+                        maxValue = { state.pageCount.toFloat() },
+                    )
+                    // Hook up scroll actions to our state
+                    scrollBy { x: Float, _ ->
+                        coroutineScope.launch { state.scrollBy(x) }
+                        true
+                    }
+                    // Treat this as a selectable group
+                    selectableGroup()
+                }
+            }
+        }
+        .pointerInput(Unit) {
+            with(state) {
+                detectPageTouch(reverseScroll = layoutDirection == LayoutDirection.Rtl)
+            }
+        }
+        .then(modifier)
+
     Layout(
+        modifier = m,
         content = {
             val minPage = (state.currentPage - offscreenLimit).coerceAtLeast(0)
             val maxPage = (state.currentPage + offscreenLimit).coerceAtMost(state.pageCount)
@@ -407,7 +453,12 @@ fun Pager(
                 key(pageData) {
                     Box(
                         contentAlignment = Alignment.Center,
-                        modifier = pageData
+                        modifier = Modifier
+                            .composed {
+                                semantics(mergeDescendants = true) {
+                                    this.selected = page == state.currentPage
+                                }
+                            }.then(pageData)
                     ) {
                         val scope = remember(this, state) {
                             PagerScopeImpl(this, state)
@@ -415,11 +466,6 @@ fun Pager(
                         scope.content(page)
                     }
                 }
-            }
-        },
-        modifier = modifier.pointerInput(Unit) {
-            with(state) {
-                detectPageTouch(reverseScroll = layoutDirection == LayoutDirection.Rtl)
             }
         },
     ) { measurables, constraints ->

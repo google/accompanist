@@ -19,6 +19,9 @@ package dev.chrisbanes.accompanist.pager
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.test.assertIsNotSelected
+import androidx.compose.ui.test.assertIsSelectable
+import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.assertLeftPositionInRootIsEqualTo
 import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
@@ -282,6 +285,14 @@ class PagerTest(
                 composeTestRule.onNodeWithText(page.toString())
                     .assertExists()
                     .assertWidthIsEqualTo(expectedItemWidth)
+                    .assertIsSelectable()
+                    .run {
+                        if (page == currentPage) {
+                            assertIsSelected()
+                        } else {
+                            assertIsNotSelected()
+                        }
+                    }
                     .run {
                         if (layoutDirection == LayoutDirection.Ltr) {
                             assertLeftPositionInRootIsEqualTo(
