@@ -29,12 +29,14 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performGesture
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.swipeLeft
 import androidx.compose.ui.test.swipeRight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.width
 import androidx.test.filters.LargeTest
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -252,6 +254,31 @@ class PagerTest(
         // ...and assert that we 'sprang back' to page 0
         assertPagerLayout(
             currentPage = 0,
+            maxPage = 10,
+            offscreenLimit = offscreenLimit,
+            expectedItemWidth = rootBounds.width * itemWidthFraction,
+            layoutDirection = layoutDirection,
+        )
+    }
+
+    @Test
+    @Ignore("Currently broken")
+    fun a11yScroll() {
+        setPagerContent(
+            layoutDirection = layoutDirection,
+            pageModifier = Modifier.fillMaxWidth(itemWidthFraction),
+            maxPage = 10,
+            offscreenLimit = offscreenLimit,
+        )
+
+        val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
+
+        // Perform a scroll to item 1
+        composeTestRule.onNodeWithText("1").performScrollTo()
+
+        // ...and assert that we scrolled to page 1
+        assertPagerLayout(
+            currentPage = 1,
             maxPage = 10,
             offscreenLimit = offscreenLimit,
             expectedItemWidth = rootBounds.width * itemWidthFraction,

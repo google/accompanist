@@ -407,7 +407,7 @@ fun Pager(
 ) {
     require(offscreenLimit >= 1) { "offscreenLimit is required to be >= 1" }
 
-    val layoutDirection = LocalLayoutDirection.current
+    val reverseScroll = LocalLayoutDirection.current == LayoutDirection.Rtl
 
     val m = Modifier
         .composed {
@@ -415,8 +415,11 @@ fun Pager(
             semantics {
                 if (state.pageCount > 0) {
                     horizontalScrollAxisRange = ScrollAxisRange(
-                        value = { state.currentPage + state.currentPageOffset },
-                        maxValue = { state.pageCount.toFloat() },
+                        value = {
+                            (state.currentPage + state.currentPageOffset) * state.pageSize
+                        },
+                        maxValue = { state.pageCount.toFloat() * state.pageSize },
+                        reverseScrolling = reverseScroll
                     )
                     // Hook up scroll actions to our state
                     scrollBy { x: Float, _ ->
@@ -430,7 +433,7 @@ fun Pager(
         }
         .pointerInput(Unit) {
             with(state) {
-                detectPageTouch(reverseScroll = layoutDirection == LayoutDirection.Rtl)
+                detectPageTouch(reverseScroll)
             }
         }
         .then(modifier)
