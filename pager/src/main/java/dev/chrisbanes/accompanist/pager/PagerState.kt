@@ -283,7 +283,7 @@ class PagerState(
             animate(
                 initialValue = currentPageOffset * pageSize,
                 targetValue = determineSpringBackOffset(targetOffset.coerceIn(-1f, 1f)) * pageSize,
-                initialVelocity = initialVelocity / pageSize.coerceAtLeast(1),
+                initialVelocity = initialVelocity,
                 animationSpec = spring()
             ) { value, _ ->
                 dragBy(value - (currentPageOffset * pageSize))

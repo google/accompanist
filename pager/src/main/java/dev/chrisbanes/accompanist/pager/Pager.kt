@@ -125,14 +125,13 @@ fun Pager(
 
     val draggable = Modifier.draggable(
         state = state.draggableState,
+        startDragImmediately = true,
         onDragStopped = { velocity ->
             launch { state.performFling(velocity, decay) }
         },
         orientation = Orientation.Horizontal,
         reverseDirection = reverseScroll,
     )
-
-
 
     Layout(
         modifier = semantics.then(draggable).then(modifier),
