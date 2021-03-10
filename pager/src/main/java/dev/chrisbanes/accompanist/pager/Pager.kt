@@ -21,19 +21,19 @@ package dev.chrisbanes.accompanist.pager
 import android.util.Log
 import androidx.annotation.IntRange
 import androidx.compose.animation.splineBasedDecay
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.ParentDataModifier
@@ -46,7 +46,6 @@ import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -97,8 +96,10 @@ fun Pager(
 ) {
     require(offscreenLimit >= 1) { "offscreenLimit is required to be >= 1" }
 
-    val dragEventChannel = remember { Channel<PagerPointerEvent>() }
     val reverseScroll = LocalLayoutDirection.current == LayoutDirection.Rtl
+
+    val density = LocalDensity.current
+    val decay = remember(density) { splineBasedDecay<Float>(density) }
 
     val semantics = Modifier.composed {
         val coroutineScope = rememberCoroutineScope()
@@ -111,7 +112,9 @@ fun Pager(
                 )
                 // Hook up scroll actions to our state
                 scrollBy { x: Float, _ ->
-                    coroutineScope.launch { state.scrollBy(x) }
+                    coroutineScope.launch {
+                        state.draggableState.drag { dragBy(x) }
+                    }
                     true
                 }
                 // Treat this as a selectable group
@@ -120,21 +123,19 @@ fun Pager(
         }
     }
 
-    val density = LocalDensity.current
-    val decay = remember(density) { splineBasedDecay<Float>(density) }
+    val draggable = Modifier.draggable(
+        state = state.draggableState,
+        onDragStopped = { velocity ->
+            launch { state.performFling(velocity, decay) }
+        },
+        orientation = Orientation.Horizontal,
+        reverseDirection = reverseScroll,
+    )
 
-    LaunchedEffect(dragEventChannel) {
-        state.receiveDragEvents(
-            channel = dragEventChannel,
-            flingSpec = decay,
-            reverseScroll = reverseScroll,
-        )
-    }
+
 
     Layout(
-        modifier = semantics
-            .pointerInput(Unit) { detectPagerPointerEvents(dragEventChannel) }
-            .then(modifier),
+        modifier = semantics.then(draggable).then(modifier),
         content = {
             val firstPage = (state.currentPage - offscreenLimit).coerceAtLeast(0)
             val lastPage = (state.currentPage + offscreenLimit).coerceAtMost(state.lastPageIndex)

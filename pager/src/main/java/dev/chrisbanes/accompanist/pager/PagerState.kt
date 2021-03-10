@@ -28,8 +28,7 @@ import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateDecay
 import androidx.compose.animation.core.calculateTargetValue
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.MutatePriority
-import androidx.compose.foundation.MutatorMutex
+import androidx.compose.foundation.gestures.DraggableState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,11 +36,6 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.channels.ReceiveChannel
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 import kotlin.math.floor
 import kotlin.math.roundToInt
@@ -146,8 +140,6 @@ class PagerState(
     var selectionState by mutableStateOf(SelectionState.Selected)
         private set
 
-    private val mutatorMutex = MutatorMutex()
-
     /**
      * Animate (smooth scroll) to the given page.
      *
@@ -165,23 +157,16 @@ class PagerState(
     ) {
         if (page == currentPage) return
 
-        try {
-            mutatorMutex.mutate {
-                selectionState = SelectionState.Undecided
-                animateToPage(
-                    page = page.coerceIn(0, lastPageIndex),
-                    pageOffset = pageOffset.coerceIn(0f, 1f),
-                    initialVelocity = initialVelocity,
-                )
-                selectionState = SelectionState.Selected
-            }
-        } catch (e: CancellationException) {
-            // If we're cancelled, snap to the target page
-            currentPage = page
-            currentPageOffset = pageOffset
+        // We don't specifically use the DragScope's dragBy, but
+        // we do want to use it's mutex
+        draggableState.drag {
+            selectionState = SelectionState.Undecided
+            animateToPage(
+                page = page.coerceIn(0, lastPageIndex),
+                pageOffset = pageOffset.coerceIn(0f, 1f),
+                initialVelocity = initialVelocity,
+            )
             selectionState = SelectionState.Selected
-
-            throw e
         }
     }
 
@@ -199,7 +184,9 @@ class PagerState(
         @IntRange(from = 0) page: Int,
         @FloatRange(from = 0.0, to = 1.0) pageOffset: Float = 0f,
     ) {
-        mutatorMutex.mutate {
+        // We don't specifically use the DragScope's dragBy, but
+        // we do want to use it's mutex
+        draggableState.drag {
             currentPage = page
             currentPageOffset = pageOffset
             selectionState = SelectionState.Selected
@@ -232,16 +219,6 @@ class PagerState(
         }
     }
 
-    private fun scrollByInternal(x: Float) {
-        currentPageOffset += x / pageSize.coerceAtLeast(1)
-    }
-
-    internal suspend fun scrollBy(x: Float) {
-        mutatorMutex.mutate(MutatePriority.UserInput) {
-            scrollByInternal(x)
-        }
-    }
-
     private fun determineSpringBackOffset(
         offset: Float = currentPageOffset
     ): Float = when {
@@ -256,13 +233,19 @@ class PagerState(
         maximumValue = if (currentPage == 0) 0f else 1f
     )
 
+    internal val draggableState = DraggableState { delta ->
+        if (DebugLog) Log.d(LogTag, "DraggableState.onDrag: $delta")
+
+        this@PagerState.currentPageOffset += delta / pageSize.coerceAtLeast(1)
+    }
+
     /**
      * TODO make this public?
      */
-    private suspend fun fling(
+    internal suspend fun performFling(
         initialVelocity: Float,
         animationSpec: DecayAnimationSpec<Float>,
-    ) {
+    ) = draggableState.drag {
         // We calculate the target offset using pixels, rather than using the offset
         val targetOffset = animationSpec.calculateTargetValue(
             initialValue = currentPageOffset * pageSize,
@@ -287,8 +270,7 @@ class PagerState(
                 initialValue = currentPageOffset * pageSize,
                 initialVelocity = initialVelocity
             ).animateDecay(animationSpec) {
-                // The property will coerce the value to the correct range
-                currentPageOffset = value / pageSize
+                dragBy(value - (currentPageOffset * pageSize))
 
                 if (currentPageOffset.absoluteValue >= 1) {
                     // If we reach the bounds of the allowed offset, cancel the animation
@@ -299,87 +281,14 @@ class PagerState(
         } else {
             // Otherwise we animate to the next item, or spring-back depending on the offset
             animate(
-                initialValue = currentPageOffset,
-                targetValue = determineSpringBackOffset(targetOffset.coerceIn(-1f, 1f)),
+                initialValue = currentPageOffset * pageSize,
+                targetValue = determineSpringBackOffset(targetOffset.coerceIn(-1f, 1f)) * pageSize,
                 initialVelocity = initialVelocity / pageSize.coerceAtLeast(1),
                 animationSpec = spring()
             ) { value, _ ->
-                currentPageOffset = value
+                dragBy(value - (currentPageOffset * pageSize))
             }
             snapToNearestPage()
-        }
-    }
-
-    internal suspend fun receiveDragEvents(
-        channel: ReceiveChannel<PagerPointerEvent>,
-        flingSpec: DecayAnimationSpec<Float>,
-        reverseScroll: Boolean = false,
-    ) = coroutineScope {
-        while (isActive) {
-            // Receive our first event
-            var event = channel.receive()
-
-            if (DebugLog) {
-                Log.d(LogTag, "receiveDragEvents: $event")
-            }
-
-            if (event is PagerPointerEvent.Down) {
-                // TODO: cancel the fling?
-            } else {
-                // If this the first event is not 'Down', skip
-                continue
-            }
-
-            event = channel.receive()
-            if (DebugLog) {
-                Log.d(LogTag, "receiveDragEvents: $event")
-            }
-
-            try {
-                mutatorMutex.mutate {
-                    while (event is PagerPointerEvent.Drag) {
-                        if (DebugLog) {
-                            Log.d(LogTag, "receiveDragEvents: $event")
-                        }
-
-                        val dx = (event as PagerPointerEvent.Drag).dx
-                        scrollByInternal(if (reverseScroll) -dx else dx)
-
-                        // Receive the next event
-                        event = channel.receive()
-                    }
-                }
-            } catch (e: CancellationException) {
-                if (DebugLog) {
-                    Log.d(LogTag, "receiveDragEvents. Cancelled whilst dragging")
-                }
-                // TODO: cancellation, while dragging
-            }
-
-            if (DebugLog) {
-                Log.d(LogTag, "receiveDragEvents: $event")
-            }
-
-            if (event is PagerPointerEvent.Up) {
-                launch {
-                    try {
-                        mutatorMutex.mutate {
-                            val velX = (event as PagerPointerEvent.Up).velocity.x
-                            fling(
-                                initialVelocity = if (reverseScroll) -velX else velX,
-                                animationSpec = flingSpec
-                            )
-                        }
-                    } catch (e: CancellationException) {
-                        if (DebugLog) {
-                            Log.d(LogTag, "receiveDragEvents. Cancelled whilst flinging")
-                        }
-                        // TODO: cancellation, while dragging
-                    }
-                }
-            } else if (event is PagerPointerEvent.Cancel) {
-                // TODO:
-            }
         }
     }
 
