@@ -54,6 +54,8 @@ dependencies {
     implementation project(':glide')
     implementation project(':insets')
 
+    implementation Libs.AndroidX.appcompat
+
     implementation Libs.Coil.gif
 
     implementation Libs.AndroidX.Compose.runtime
