@@ -30,6 +30,8 @@ import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
+private const val LogTag = "PagerPointerEvent"
+
 internal sealed class PagerPointerEvent {
     data class Down(val change: PointerInputChange) : PagerPointerEvent()
 
@@ -56,7 +58,7 @@ internal suspend fun PointerInputScope.detectPagerPointerEvents(
                 val down = awaitFirstDown()
 
                 if (DebugLog) {
-                    Log.d("PagerPointerEvent", "detectPagerPointerEvents: DOWN")
+                    Log.d(LogTag, "detectPagerPointerEvents: DOWN")
                 }
 
                 // Reset the velocity tracker and add our initial down event
@@ -86,7 +88,7 @@ internal suspend fun PointerInputScope.detectPagerPointerEvents(
                 }
 
                 if (DebugLog) {
-                    Log.d("PagerPointerEvent", "detectPagerPointerEvents: UP")
+                    Log.d(LogTag, "detectPagerPointerEvents: UP")
                 }
 
                 launch {

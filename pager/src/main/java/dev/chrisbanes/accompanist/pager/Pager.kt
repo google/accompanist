@@ -54,7 +54,12 @@ import kotlin.math.roundToInt
  */
 internal const val ScrollThreshold = 0.4f
 
+/**
+ * Library-wide switch to turn on debug logging.
+ */
 internal const val DebugLog = true
+
+private const val LogTag = "Pager"
 
 @Immutable
 private data class PageData(val page: Int) : ParentDataModifier {
@@ -136,8 +141,8 @@ fun Pager(
 
             if (DebugLog) {
                 Log.d(
-                    "Pager",
-                    "Layout content: minPage:$minPage, " +
+                    LogTag,
+                    "Content: minPage:$minPage, " +
                         "current:${state.currentPage}, " +
                         "maxPage:$maxPage"
                 )
