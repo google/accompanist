@@ -48,21 +48,21 @@ private const val LogTag = "PagerState"
  * Changes to the provided initial values will **not** result in the state being recreated or
  * changed in any way if it has already been created.
  *
+ * @param pageCount the initial value for [PagerState.pageCount]
  * @param currentPage the initial value for [PagerState.currentPage]
  * @param currentPageOffset the initial value for [PagerState.currentPageOffset]
- * @param pageCount the initial value for [PagerState.pageCount]
  */
 @ExperimentalPagerApi
 @Composable
 fun rememberPagerState(
+    pageCount: Int,
     currentPage: Int = 0,
     @FloatRange(from = 0.0, to = 1.0) currentPageOffset: Float = 0f,
-    pageCount: Int = 0,
 ): PagerState = rememberSaveable(saver = PagerState.Saver) {
     PagerState(
+        pageCount = pageCount,
         currentPage = currentPage,
         currentPageOffset = currentPageOffset,
-        pageCount = pageCount
     )
 }
 
@@ -71,15 +71,15 @@ fun rememberPagerState(
  *
  * In most cases, this will be created via [rememberPagerState].
  *
+ * @param pageCount the initial value for [PagerState.pageCount]
  * @param currentPage the initial value for [PagerState.currentPage]
  * @param currentPageOffset the initial value for [PagerState.currentPageOffset]
- * @param pageCount the initial value for [PagerState.pageCount]
  */
 @ExperimentalPagerApi
 class PagerState(
+    pageCount: Int,
     currentPage: Int = 0,
     @FloatRange(from = 0.0, to = 1.0) currentPageOffset: Float = 0f,
-    pageCount: Int = 0,
 ) {
     private var _pageCount by mutableStateOf(pageCount)
     private var _currentPage by mutableStateOf(currentPage)
@@ -87,7 +87,7 @@ class PagerState(
     internal var pageSize by mutableStateOf(0)
 
     /**
-     * The index of the currently selected page.
+     * The number of pages to display.
      */
     @get:IntRange(from = 0)
     var pageCount: Int
@@ -132,15 +132,28 @@ class PagerState(
      * Usually read from [PagerState.selectionState].
      */
     enum class SelectionState {
-        Selected,
-        Undecided
+        /**
+         * Indicates that the pager is in an idle, settled state. The current page
+         * is fully in view and no animation is in progress.
+         */
+        Idle,
+
+        /**
+         * Indicates that the pager is currently being dragged by the user.
+         */
+        Dragging,
+
+        /**
+         * Indicates that the pager is in the process of settling to a final position.
+         */
+        Settling
     }
 
     /**
      * The current selection state.
      */
-    var selectionState by mutableStateOf(SelectionState.Selected)
-        private set
+    var selectionState by mutableStateOf(SelectionState.Idle)
+        internal set
 
     /**
      * Animate (smooth scroll) to the given page.
@@ -162,13 +175,13 @@ class PagerState(
         // We don't specifically use the DragScope's dragBy, but
         // we do want to use it's mutex
         draggableState.drag {
-            selectionState = SelectionState.Undecided
+            selectionState = SelectionState.Settling
             animateToPage(
                 page = page.coerceIn(0, lastPageIndex),
                 pageOffset = pageOffset.coerceIn(0f, 1f),
                 initialVelocity = initialVelocity,
             )
-            selectionState = SelectionState.Selected
+            selectionState = SelectionState.Idle
         }
     }
 
@@ -191,7 +204,7 @@ class PagerState(
         draggableState.drag {
             currentPage = page
             currentPageOffset = pageOffset
-            selectionState = SelectionState.Selected
+            selectionState = SelectionState.Idle
         }
     }
 
@@ -201,7 +214,7 @@ class PagerState(
         }
         currentPage -= currentPageOffset.roundToInt()
         currentPageOffset = 0f
-        selectionState = SelectionState.Selected
+        selectionState = SelectionState.Idle
     }
 
     private suspend fun animateToPage(
@@ -248,6 +261,8 @@ class PagerState(
         initialVelocity: Float,
         animationSpec: DecayAnimationSpec<Float>,
     ) = draggableState.drag {
+        selectionState = SelectionState.Settling
+
         // We calculate the target offset using pixels, rather than using the offset
         val targetOffset = animationSpec.calculateTargetValue(
             initialValue = currentPageOffset * pageSize,
@@ -279,7 +294,6 @@ class PagerState(
                     cancelAnimation()
                 }
             }
-            snapToNearestPage()
         } else {
             // Otherwise we animate to the next item, or spring-back depending on the offset
             animate(
@@ -290,8 +304,9 @@ class PagerState(
             ) { value, _ ->
                 dragBy(value - (currentPageOffset * pageSize))
             }
-            snapToNearestPage()
         }
+
+        snapToNearestPage()
     }
 
     override fun toString(): String = "PagerState(" +
@@ -306,11 +321,12 @@ class PagerState(
          * The default [Saver] implementation for [PagerState].
          */
         val Saver: Saver<PagerState, *> = listSaver(
-            save = { listOf<Any>(it.currentPage, it.currentPageOffset) },
+            save = { listOf<Any>(it.pageCount, it.currentPage, it.currentPageOffset) },
             restore = {
                 PagerState(
-                    currentPage = it[0] as Int,
-                    currentPageOffset = it[1] as Float
+                    pageCount = it[0] as Int,
+                    currentPage = it[1] as Int,
+                    currentPageOffset = it[2] as Float
                 )
             }
         )

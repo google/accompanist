@@ -132,6 +132,9 @@ fun Pager(
     val draggable = Modifier.draggable(
         state = state.draggableState,
         startDragImmediately = true,
+        onDragStarted = {
+            state.selectionState = PagerState.SelectionState.Dragging
+        },
         onDragStopped = { velocity ->
             launch { state.performFling(velocity, decay) }
         },
@@ -140,7 +143,7 @@ fun Pager(
     )
 
     Layout(
-        modifier = semantics.then(draggable).then(modifier),
+        modifier = modifier.then(semantics).then(draggable),
         content = {
             val firstPage = (state.currentPage - offscreenLimit).coerceAtLeast(0)
             val lastPage = (state.currentPage + offscreenLimit).coerceAtMost(state.lastPageIndex)
