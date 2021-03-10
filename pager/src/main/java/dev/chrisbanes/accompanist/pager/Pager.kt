@@ -54,7 +54,7 @@ import kotlin.math.roundToInt
  */
 internal const val ScrollThreshold = 0.4f
 
-internal const val DebugLog = false
+internal const val DebugLog = true
 
 @Immutable
 private data class PageData(val page: Int) : ParentDataModifier {
@@ -119,14 +119,16 @@ fun Pager(
     val decay = remember(density) { splineBasedDecay<Float>(density) }
 
     LaunchedEffect(dragEventChannel) {
-        state.receiveDragEvents(dragEventChannel, decay)
+        state.receiveDragEvents(
+            channel = dragEventChannel,
+            flingSpec = decay,
+            reverseScroll = reverseScroll,
+        )
     }
 
     Layout(
         modifier = semantics
-            .pointerInput(Unit) {
-                detectPagerPointerEvents(dragEventChannel, reverseScroll)
-            }
+            .pointerInput(Unit) { detectPagerPointerEvents(dragEventChannel) }
             .then(modifier),
         content = {
             val minPage = (state.currentPage - offscreenLimit).coerceAtLeast(0)

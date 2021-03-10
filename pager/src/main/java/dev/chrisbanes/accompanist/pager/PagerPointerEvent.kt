@@ -47,8 +47,7 @@ internal sealed class PagerPointerEvent {
 }
 
 internal suspend fun PointerInputScope.detectPagerPointerEvents(
-    channel: SendChannel<PagerPointerEvent>,
-    reverseScroll: Boolean = false,
+    channel: SendChannel<PagerPointerEvent>
 ) = coroutineScope {
     val velocityTracker = VelocityTracker()
     forEachGesture {
@@ -57,7 +56,7 @@ internal suspend fun PointerInputScope.detectPagerPointerEvents(
                 val down = awaitFirstDown()
 
                 if (DebugLog) {
-                    Log.d("Pager", "detectPageTouch: DOWN")
+                    Log.d("PagerPointerEvent", "detectPagerPointerEvents: DOWN")
                 }
 
                 // Reset the velocity tracker and add our initial down event
@@ -77,13 +76,17 @@ internal suspend fun PointerInputScope.detectPagerPointerEvents(
 
                     val delta = change.positionChange()
                     val event = PagerPointerEvent.Drag(
-                        dx = if (reverseScroll) -delta.x else delta.x,
-                        dy = if (reverseScroll) -delta.y else delta.y,
+                        dx = delta.x,
+                        dy = delta.y,
                         change = change,
                     )
                     launch {
                         channel.send(event)
                     }
+                }
+
+                if (DebugLog) {
+                    Log.d("PagerPointerEvent", "detectPagerPointerEvents: UP")
                 }
 
                 launch {

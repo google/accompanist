@@ -41,6 +41,8 @@ import kotlin.math.absoluteValue
 import kotlin.math.floor
 import kotlin.math.roundToInt
 
+private const val LogTag = "PagerState"
+
 /**
  * A state object that can be hoisted to control and observe scrolling for [Pager].
  *
@@ -172,7 +174,7 @@ class PagerState(
 
     private fun snapToNearestPage() {
         if (DebugLog) {
-            Log.d("Pager", "snapToNearestPage. currentPage:$currentPage, offset:$currentPageOffset")
+            Log.d(LogTag, "snapToNearestPage. currentPage:$currentPage, offset:$currentPageOffset")
         }
         currentPage -= currentPageOffset.roundToInt()
         currentPageOffset = 0f
@@ -235,7 +237,7 @@ class PagerState(
 
         if (DebugLog) {
             Log.d(
-                "Pager",
+                LogTag,
                 "fling. velocity:$initialVelocity, " +
                     "page: $currentPage, " +
                     "offset:$currentPageOffset, " +
@@ -277,38 +279,67 @@ class PagerState(
     internal suspend fun receiveDragEvents(
         channel: ReceiveChannel<PagerPointerEvent>,
         flingSpec: DecayAnimationSpec<Float>,
+        reverseScroll: Boolean = false,
     ) = coroutineScope {
         while (isActive) {
             // Receive our first event
             var event = channel.receive()
 
-            if (event !is PagerPointerEvent.Down) {
-                // If this the first event is 'Down', skip
+            if (DebugLog) {
+                Log.d(LogTag, "receiveDragEvents: $event")
+            }
+
+            if (event is PagerPointerEvent.Down) {
+                // TODO: cancel the fling?
+            } else {
+                // If this the first event is not 'Down', skip
                 continue
             }
 
             event = channel.receive()
+            if (DebugLog) {
+                Log.d(LogTag, "receiveDragEvents: $event")
+            }
+
             try {
                 mutatorMutex.mutate {
                     while (event is PagerPointerEvent.Drag) {
-                        scrollByInternal((event as PagerPointerEvent.Drag).dx)
+                        if (DebugLog) {
+                            Log.d(LogTag, "receiveDragEvents: $event")
+                        }
+
+                        val dx = (event as PagerPointerEvent.Drag).dx
+                        scrollByInternal(if (reverseScroll) -dx else dx)
+
+                        // Receive the next event
                         event = channel.receive()
                     }
                 }
             } catch (e: CancellationException) {
+                if (DebugLog) {
+                    Log.d(LogTag, "receiveDragEvents. Cancelled whilst dragging")
+                }
                 // TODO: cancellation, while dragging
+            }
+
+            if (DebugLog) {
+                Log.d(LogTag, "receiveDragEvents: $event")
             }
 
             if (event is PagerPointerEvent.Up) {
                 launch {
                     try {
                         mutatorMutex.mutate {
+                            val velX = (event as PagerPointerEvent.Up).velocity.x
                             fling(
-                                initialVelocity = (event as PagerPointerEvent.Up).velocity.x,
+                                initialVelocity = if (reverseScroll) -velX else velX,
                                 animationSpec = flingSpec
                             )
                         }
                     } catch (e: CancellationException) {
+                        if (DebugLog) {
+                            Log.d(LogTag, "receiveDragEvents. Cancelled whilst flinging")
+                        }
                         // TODO: cancellation, while dragging
                     }
                 }
