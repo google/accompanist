@@ -89,7 +89,7 @@ class PagerTest(
 
         assertPagerLayout(
             currentPage = 0,
-            maxPage = 10,
+            pageCount = 10,
             offscreenLimit = offscreenLimit,
             expectedItemWidth = rootBounds.width * itemWidthFraction,
             layoutDirection = layoutDirection,
@@ -118,7 +118,7 @@ class PagerTest(
         // ...and assert that nothing happened
         assertPagerLayout(
             currentPage = 0,
-            maxPage = 10,
+            pageCount = 10,
             offscreenLimit = offscreenLimit,
             expectedItemWidth = rootBounds.width * itemWidthFraction,
             layoutDirection = layoutDirection,
@@ -135,7 +135,7 @@ class PagerTest(
         // ...and assert that we now laid out from page 1
         assertPagerLayout(
             currentPage = 1,
-            maxPage = 10,
+            pageCount = 10,
             offscreenLimit = offscreenLimit,
             expectedItemWidth = rootBounds.width * itemWidthFraction,
             layoutDirection = layoutDirection,
@@ -165,7 +165,7 @@ class PagerTest(
         // ...and assert that we now laid out from page 1
         assertPagerLayout(
             currentPage = 1,
-            maxPage = 10,
+            pageCount = 10,
             offscreenLimit = offscreenLimit,
             expectedItemWidth = rootBounds.width * itemWidthFraction,
             layoutDirection = layoutDirection,
@@ -195,7 +195,7 @@ class PagerTest(
         // ...and assert that we now laid out from page 1
         assertPagerLayout(
             currentPage = 1,
-            maxPage = 10,
+            pageCount = 10,
             offscreenLimit = offscreenLimit,
             expectedItemWidth = rootBounds.width * itemWidthFraction,
             layoutDirection = layoutDirection,
@@ -225,7 +225,7 @@ class PagerTest(
         // ...and assert that we now laid out from page 1
         assertPagerLayout(
             currentPage = 1,
-            maxPage = 10,
+            pageCount = 10,
             offscreenLimit = offscreenLimit,
             expectedItemWidth = rootBounds.width * itemWidthFraction,
             layoutDirection = layoutDirection,
@@ -255,7 +255,7 @@ class PagerTest(
         // ...and assert that we 'sprang back' to page 0
         assertPagerLayout(
             currentPage = 0,
-            maxPage = 10,
+            pageCount = 10,
             offscreenLimit = offscreenLimit,
             expectedItemWidth = rootBounds.width * itemWidthFraction,
             layoutDirection = layoutDirection,
@@ -280,7 +280,7 @@ class PagerTest(
         // ...and assert that we scrolled to page 1
         assertPagerLayout(
             currentPage = 1,
-            maxPage = 10,
+            pageCount = 10,
             offscreenLimit = offscreenLimit,
             expectedItemWidth = rootBounds.width * itemWidthFraction,
             layoutDirection = layoutDirection,
@@ -289,7 +289,7 @@ class PagerTest(
 
     private fun assertPagerLayout(
         currentPage: Int,
-        maxPage: Int,
+        pageCount: Int,
         expectedItemWidth: Dp,
         offscreenLimit: Int,
         layoutDirection: LayoutDirection,
@@ -303,10 +303,10 @@ class PagerTest(
         // The pages which are expected to be laid out, using the given current page,
         // offscreenLimit and page limit
         val expectedLaidOutPages = (currentPage - offscreenLimit)..(currentPage + offscreenLimit)
-            .coerceIn(0, maxPage)
+            .coerceIn(0, pageCount)
 
         // Go through all of the pages, and assert the expected layout state
-        (0..maxPage).forEach { page ->
+        (0 until pageCount).forEach { page ->
             if (page in expectedLaidOutPages) {
                 // If this page is expected to be laid out, assert that it exists and is
                 // laid out in the correct position
