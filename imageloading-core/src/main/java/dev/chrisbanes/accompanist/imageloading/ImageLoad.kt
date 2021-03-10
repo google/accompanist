@@ -30,6 +30,8 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntSize
+import java.lang.Error
+import kotlin.coroutines.cancellation.CancellationException
 
 /**
  * A generic image loading composable, which provides hooks for image loading libraries to use.
@@ -79,8 +81,19 @@ fun <R : Any, TR : Any> ImageLoad(
             ?.let { transformedRequest ->
                 try {
                     updatedExecuteRequest(transformedRequest)
-                } catch (throwable: Throwable) {
-                    ImageLoadState.Error(painter = null, throwable = throwable)
+                } catch (e: CancellationException) {
+                    // We specifically don't do anything for the request coroutine being
+                    // cancelled: https://github.com/chrisbanes/accompanist/issues/217
+                    throw e
+                } catch (e: Error) {
+                    // Re-throw all Errors
+                    throw e
+                } catch (e: IllegalStateException) {
+                    // Re-throw all IllegalStateExceptions
+                    throw e
+                } catch (t: Throwable) {
+                    // Anything else, we wrap in a Error state instance
+                    ImageLoadState.Error(painter = null, throwable = t)
                 }.also(updatedOnRequestCompleted)
             } ?: ImageLoadState.Loading
     }
