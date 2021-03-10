@@ -48,6 +48,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.chrisbanes.accompanist.coil.CoilImage
+import dev.chrisbanes.accompanist.pager.ExperimentalPagerApi
 import dev.chrisbanes.accompanist.pager.Pager
 import dev.chrisbanes.accompanist.pager.PagerState
 import dev.chrisbanes.accompanist.pager.rememberPagerState
@@ -70,6 +71,7 @@ class PagerBasicSample : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun Sample() {
     Scaffold(
@@ -123,6 +125,7 @@ private fun Sample() {
     }
 }
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun ActionsRow(
     pagerState: PagerState,

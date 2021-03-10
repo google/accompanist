@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.width
 import androidx.test.filters.LargeTest
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -45,6 +44,7 @@ import org.junit.runners.Parameterized
 private const val MediumSwipeDistance = 0.6f
 private const val ShortSwipeDistance = 0.3f
 
+@OptIn(ExperimentalPagerApi::class) // Pager is currently experimental
 @LargeTest
 @RunWith(Parameterized::class)
 class PagerTest(
@@ -262,7 +262,6 @@ class PagerTest(
     }
 
     @Test
-    @Ignore("Currently broken")
     fun a11yScroll() {
         setPagerContent(
             layoutDirection = layoutDirection,

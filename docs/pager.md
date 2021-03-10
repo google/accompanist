@@ -9,6 +9,10 @@ A library which provides a horizontally paging layout for Jetpack Compose. If yo
 Your browser does not support the video tag.
 </video>
 
+!!! warning
+    Pager is currently experimental, and it's APIs could change at any time.
+    All of the APIs are marked with the `@ExperimentalPagerApi` annotation.
+
 The simplest usage looks like the following:
 
 ``` kotlin

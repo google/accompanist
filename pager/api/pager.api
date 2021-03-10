@@ -1,3 +1,6 @@
+public abstract interface annotation class dev/chrisbanes/accompanist/pager/ExperimentalPagerApi : java/lang/annotation/Annotation {
+}
+
 public final class dev/chrisbanes/accompanist/pager/Pager {
 	public static final fun Pager (Ldev/chrisbanes/accompanist/pager/PagerState;Landroidx/compose/ui/Modifier;ILkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
 }

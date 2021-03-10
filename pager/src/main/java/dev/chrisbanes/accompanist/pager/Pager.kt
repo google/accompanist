@@ -62,6 +62,11 @@ internal const val DebugLog = false
 
 private const val LogTag = "Pager"
 
+@RequiresOptIn(message = "Accompanist Pager is experimental. The API may be changed in the future.")
+@Retention(AnnotationRetention.BINARY)
+@Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
+annotation class ExperimentalPagerApi
+
 @Immutable
 private data class PageData(val page: Int) : ParentDataModifier {
     override fun Density.modifyParentData(parentData: Any?): Any = this@PageData
@@ -87,6 +92,7 @@ private val Measurable.page: Int
  * @param content a block which describes the content. Inside this block you can reference
  * [PagerScope.currentPage] and other properties in [PagerScope].
  */
+@ExperimentalPagerApi
 @Composable
 fun Pager(
     state: PagerState,
@@ -200,6 +206,7 @@ fun Pager(
 /**
  * Scope for [Pager] content.
  */
+@ExperimentalPagerApi
 interface PagerScope : BoxScope {
     /**
      * Returns the current selected page
@@ -217,6 +224,7 @@ interface PagerScope : BoxScope {
     val selectionState: PagerState.SelectionState
 }
 
+@ExperimentalPagerApi
 private class PagerScopeImpl(
     private val boxScope: BoxScope,
     private val state: PagerState,

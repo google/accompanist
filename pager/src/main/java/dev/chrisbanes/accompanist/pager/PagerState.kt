@@ -52,6 +52,7 @@ private const val LogTag = "PagerState"
  * @param currentPageOffset the initial value for [PagerState.currentPageOffset]
  * @param pageCount the initial value for [PagerState.pageCount]
  */
+@ExperimentalPagerApi
 @Composable
 fun rememberPagerState(
     currentPage: Int = 0,
@@ -74,6 +75,7 @@ fun rememberPagerState(
  * @param currentPageOffset the initial value for [PagerState.currentPageOffset]
  * @param pageCount the initial value for [PagerState.pageCount]
  */
+@ExperimentalPagerApi
 class PagerState(
     currentPage: Int = 0,
     @FloatRange(from = 0.0, to = 1.0) currentPageOffset: Float = 0f,
