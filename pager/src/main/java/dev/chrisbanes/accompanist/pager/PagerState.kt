@@ -20,6 +20,7 @@ package dev.chrisbanes.accompanist.pager
 
 import android.util.Log
 import androidx.annotation.FloatRange
+import androidx.annotation.IntRange
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.AnimationState
 import androidx.compose.animation.core.DecayAnimationSpec
@@ -29,8 +30,12 @@ import androidx.compose.animation.core.calculateTargetValue
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.MutatorMutex
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.listSaver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.channels.ReceiveChannel
@@ -44,41 +49,72 @@ import kotlin.math.roundToInt
 private const val LogTag = "PagerState"
 
 /**
- * A state object that can be hoisted to control and observe scrolling for [Pager].
+ * Creates a [PagerState] that is remembered across compositions.
+ *
+ * Changes to the provided initial values will **not** result in the state being recreated or
+ * changed in any way if it has already been created.
  *
  * @param currentPage the initial value for [PagerState.currentPage]
+ * @param currentPageOffset the initial value for [PagerState.currentPageOffset]
+ * @param pageCount the initial value for [PagerState.pageCount]
+ */
+@Composable
+fun rememberPagerState(
+    currentPage: Int = 0,
+    @FloatRange(from = 0.0, to = 1.0) currentPageOffset: Float = 0f,
+    pageCount: Int = 0,
+): PagerState = rememberSaveable(saver = PagerState.Saver) {
+    PagerState(
+        currentPage = currentPage,
+        currentPageOffset = currentPageOffset,
+        pageCount = pageCount
+    )
+}
+
+/**
+ * A state object that can be hoisted to control and observe scrolling for [Pager].
+ *
+ * In most cases, this will be created via [rememberPagerState].
+ *
+ * @param currentPage the initial value for [PagerState.currentPage]
+ * @param currentPageOffset the initial value for [PagerState.currentPageOffset]
  * @param pageCount the initial value for [PagerState.pageCount]
  */
 class PagerState(
     currentPage: Int = 0,
+    @FloatRange(from = 0.0, to = 1.0) currentPageOffset: Float = 0f,
     pageCount: Int = 0,
 ) {
     private var _pageCount by mutableStateOf(pageCount)
+    private var _currentPage by mutableStateOf(currentPage)
+    private val _currentPageOffset = mutableStateOf(currentPageOffset)
+    internal var pageSize by mutableStateOf(0)
 
     /**
      * The index of the currently selected page.
      */
+    @get:IntRange(from = 0)
     var pageCount: Int
         get() = _pageCount
-        set(value) {
+        set(@IntRange(from = 0) value) {
             _pageCount = value.coerceAtLeast(0)
-            currentPage = currentPage.coerceIn(0, pageCount)
+            currentPage = currentPage.coerceIn(0, lastPageIndex)
         }
 
-    private var _currentPage by mutableStateOf(currentPage.coerceIn(0, pageCount))
+    internal val lastPageIndex: Int
+        get() = (pageCount - 1).coerceAtLeast(0)
 
     /**
      * The index of the currently selected page.
      *
      * To update the scroll position, use [scrollToPage] or [animateScrollToPage].
      */
+    @get:IntRange(from = 0)
     var currentPage: Int
         get() = _currentPage
         private set(value) {
             _currentPage = value.coerceIn(0, _pageCount)
         }
-
-    private val _currentPageOffset = mutableStateOf(0f)
 
     /**
      * The current offset from the start of [currentPage], as a fraction of the page width.
@@ -90,12 +126,10 @@ class PagerState(
         get() = _currentPageOffset.value
         private set(value) {
             _currentPageOffset.value = value.coerceIn(
-                minimumValue = if (currentPage == pageCount) 0f else -1f,
+                minimumValue = if (currentPage == lastPageIndex) 0f else -1f,
                 maximumValue = if (currentPage == 0) 0f else 1f,
             )
         }
-
-    internal var pageSize by mutableStateOf(0)
 
     /**
      * Represents the current selection state of a [Pager].
@@ -125,7 +159,7 @@ class PagerState(
      * @param initialVelocity Initial velocity in pixels per second, or `0f` to not use a start velocity.
      */
     suspend fun animateScrollToPage(
-        page: Int,
+        @IntRange(from = 0) page: Int,
         @FloatRange(from = 0.0, to = 1.0) pageOffset: Float = 0f,
         initialVelocity: Float = 0f,
     ) {
@@ -135,7 +169,7 @@ class PagerState(
             mutatorMutex.mutate {
                 selectionState = SelectionState.Undecided
                 animateToPage(
-                    page = page.coerceIn(0, pageCount),
+                    page = page.coerceIn(0, lastPageIndex),
                     pageOffset = pageOffset.coerceIn(0f, 1f),
                     initialVelocity = initialVelocity,
                 )
@@ -162,7 +196,7 @@ class PagerState(
      * @param pageOffset the percentage of the page width to offset, from the start of [page]
      */
     suspend fun scrollToPage(
-        page: Int,
+        @IntRange(from = 0) page: Int,
         @FloatRange(from = 0.0, to = 1.0) pageOffset: Float = 0f,
     ) {
         mutatorMutex.mutate {
@@ -218,7 +252,7 @@ class PagerState(
         // Otherwise we snap-back to 0
         else -> 0f
     }.coerceIn(
-        minimumValue = if (currentPage == pageCount) 0f else -1f,
+        minimumValue = if (currentPage == lastPageIndex) 0f else -1f,
         maximumValue = if (currentPage == 0) 0f else 1f
     )
 
@@ -355,4 +389,19 @@ class PagerState(
         "selectionState=$selectionState, " +
         "currentPageOffset=$currentPageOffset" +
         ")"
+
+    companion object {
+        /**
+         * The default [Saver] implementation for [PagerState].
+         */
+        val Saver: Saver<PagerState, *> = listSaver(
+            save = { listOf<Any>(it.currentPage, it.currentPageOffset) },
+            restore = {
+                PagerState(
+                    currentPage = it[0] as Int,
+                    currentPageOffset = it[1] as Float
+                )
+            }
+        )
+    }
 }

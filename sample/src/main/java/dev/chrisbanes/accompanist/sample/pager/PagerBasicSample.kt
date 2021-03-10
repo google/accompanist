@@ -42,7 +42,6 @@ import androidx.compose.material.icons.filled.LastPage
 import androidx.compose.material.icons.filled.NavigateBefore
 import androidx.compose.material.icons.filled.NavigateNext
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import dev.chrisbanes.accompanist.coil.CoilImage
 import dev.chrisbanes.accompanist.pager.Pager
 import dev.chrisbanes.accompanist.pager.PagerState
+import dev.chrisbanes.accompanist.pager.rememberPagerState
 import dev.chrisbanes.accompanist.sample.AccompanistSampleTheme
 import dev.chrisbanes.accompanist.sample.R
 import dev.chrisbanes.accompanist.sample.randomSampleImageUrl
@@ -82,10 +82,8 @@ private fun Sample() {
         modifier = Modifier.fillMaxSize()
     ) {
         Column(Modifier.fillMaxSize()) {
-            val pagerState = remember {
-                // Display 10 items
-                PagerState(pageCount = 10)
-            }
+            // Display 10 items
+            val pagerState = rememberPagerState(pageCount = 10)
 
             Pager(
                 state = pagerState,
@@ -166,7 +164,7 @@ private fun ActionsRow(
         IconButton(
             onClick = {
                 scope.launch {
-                    pagerState.animateScrollToPage(pagerState.pageCount)
+                    pagerState.animateScrollToPage(pagerState.pageCount - 1)
                 }
             }
         ) {

@@ -12,10 +12,8 @@ Your browser does not support the video tag.
 The simplest usage looks like the following:
 
 ``` kotlin
-val pagerState = remember {
-    // Display 10 items
-    PagerState(pageCount = 10)
-}
+// Display 10 items
+val pagerState = rememberPagerState(pageCount = 10)
 
 Pager(state = pagerState) { page ->
     // Our page content

@@ -1,4 +1,4 @@
-public final class dev/chrisbanes/accompanist/pager/PagerKt {
+public final class dev/chrisbanes/accompanist/pager/Pager {
 	public static final fun Pager (Ldev/chrisbanes/accompanist/pager/PagerState;Landroidx/compose/ui/Modifier;ILkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
 }
 
@@ -15,9 +15,10 @@ public final class dev/chrisbanes/accompanist/pager/PagerScope$DefaultImpls {
 
 public final class dev/chrisbanes/accompanist/pager/PagerState {
 	public static final field $stable I
+	public static final field Companion Ldev/chrisbanes/accompanist/pager/PagerState$Companion;
 	public fun <init> ()V
-	public fun <init> (II)V
-	public synthetic fun <init> (IIILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (IFI)V
+	public synthetic fun <init> (IFIILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun animateScrollToPage (IFFLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun animateScrollToPage$default (Ldev/chrisbanes/accompanist/pager/PagerState;IFFLkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public final fun getCurrentPage ()I
@@ -30,10 +31,18 @@ public final class dev/chrisbanes/accompanist/pager/PagerState {
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class dev/chrisbanes/accompanist/pager/PagerState$Companion {
+	public final fun getSaver ()Landroidx/compose/runtime/saveable/Saver;
+}
+
 public final class dev/chrisbanes/accompanist/pager/PagerState$SelectionState : java/lang/Enum {
 	public static final field Selected Ldev/chrisbanes/accompanist/pager/PagerState$SelectionState;
 	public static final field Undecided Ldev/chrisbanes/accompanist/pager/PagerState$SelectionState;
 	public static fun valueOf (Ljava/lang/String;)Ldev/chrisbanes/accompanist/pager/PagerState$SelectionState;
 	public static fun values ()[Ldev/chrisbanes/accompanist/pager/PagerState$SelectionState;
+}
+
+public final class dev/chrisbanes/accompanist/pager/PagerStateKt {
+	public static final fun rememberPagerState (IFILandroidx/compose/runtime/Composer;II)Ldev/chrisbanes/accompanist/pager/PagerState;
 }
 

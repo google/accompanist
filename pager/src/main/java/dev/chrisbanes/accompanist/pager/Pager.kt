@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:JvmName("Pager")
+
 package dev.chrisbanes.accompanist.pager
 
 import android.util.Log
@@ -103,10 +105,8 @@ fun Pager(
         semantics {
             if (state.pageCount > 0) {
                 horizontalScrollAxisRange = ScrollAxisRange(
-                    value = {
-                        (state.currentPage + state.currentPageOffset) * state.pageSize
-                    },
-                    maxValue = { state.pageCount.toFloat() * state.pageSize },
+                    value = { (state.currentPage + state.currentPageOffset) * state.pageSize },
+                    maxValue = { state.lastPageIndex.toFloat() * state.pageSize },
                     reverseScrolling = reverseScroll
                 )
                 // Hook up scroll actions to our state
@@ -136,19 +136,19 @@ fun Pager(
             .pointerInput(Unit) { detectPagerPointerEvents(dragEventChannel) }
             .then(modifier),
         content = {
-            val minPage = (state.currentPage - offscreenLimit).coerceAtLeast(0)
-            val maxPage = (state.currentPage + offscreenLimit).coerceAtMost(state.pageCount)
+            val firstPage = (state.currentPage - offscreenLimit).coerceAtLeast(0)
+            val lastPage = (state.currentPage + offscreenLimit).coerceAtMost(state.lastPageIndex)
 
             if (DebugLog) {
                 Log.d(
                     LogTag,
-                    "Content: minPage:$minPage, " +
+                    "Content: firstPage:$firstPage, " +
                         "current:${state.currentPage}, " +
-                        "maxPage:$maxPage"
+                        "lastPage:$lastPage"
                 )
             }
 
-            for (page in minPage..maxPage) {
+            for (page in firstPage..lastPage) {
                 val pageData = PageData(page)
                 key(pageData) {
                     val itemSemantics = Modifier.composed {

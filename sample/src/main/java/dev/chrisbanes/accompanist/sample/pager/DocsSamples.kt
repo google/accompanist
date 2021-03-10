@@ -19,17 +19,14 @@ package dev.chrisbanes.accompanist.sample.pager
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import dev.chrisbanes.accompanist.pager.Pager
-import dev.chrisbanes.accompanist.pager.PagerState
+import dev.chrisbanes.accompanist.pager.rememberPagerState
 
 @Composable
 fun PagerSample() {
-    val pagerState = remember {
-        // Display 10 items
-        PagerState(pageCount = 10)
-    }
+    // Display 10 items
+    val pagerState = rememberPagerState(pageCount = 10)
 
     Pager(state = pagerState) { page ->
         // Our page content
