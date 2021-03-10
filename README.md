@@ -22,7 +22,7 @@ latest tagged release on Compose as quickly as possible. Each [release](https://
 
 ## Future?
 
-Any of the features available in this group of libraries may become absolete in the future, at which point they will (probably) become deprecated. 
+Any of the features available in this group of libraries may become obsolete in the future, at which point they will (probably) become deprecated. 
 
 We will aim to provide a migration path (where possible), to whatever supercedes the functionality.
 
