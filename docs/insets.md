@@ -90,7 +90,7 @@ LazyColumn(
 )
 ```
 
-For a more complex example, see the [`EdgeToEdgeLazyColumn`](https://github.com/chrisbanes/accompanist/blob/main/sample/src/main/java/dev/chrisbanes/accompanist/sample/insets/EdgeToEdgeLazyColumn.kt) example:
+For a more complex example, see the [`EdgeToEdgeLazyColumn`](https://github.com/google/accompanist/blob/main/sample/src/main/java/dev/chrisbanes/accompanist/sample/insets/EdgeToEdgeLazyColumn.kt) example:
 
 <a href="images/edge-to-edge-list.jpg">
 <img src="images/edge-to-edge-list.jpg" width=300>
@@ -129,7 +129,7 @@ The features below are experimental, and require developers to [opt-in](https://
     )
     ```
 
-    See the [ImeAnimationSample](https://github.com/chrisbanes/accompanist/blob/main/sample/src/main/java/dev/chrisbanes/accompanist/sample/insets/ImeAnimationSample.kt) for a working example.
+    See the [ImeAnimationSample](https://github.com/google/accompanist/blob/main/sample/src/main/java/dev/chrisbanes/accompanist/sample/insets/ImeAnimationSample.kt) for a working example.
 
 ### IME animations
 If you're using the animation insets support for IME/keyboard animations, you also need to ensure that the activity's `windowSoftInputMode` is set to `adjustResize`:
@@ -168,7 +168,7 @@ The default value of `windowSoftInputMode` _should_ work, but Compose does not c
     }
     ```
 
-    See the [ImeAnimationSample](https://github.com/chrisbanes/accompanist/blob/main/sample/src/main/java/dev/chrisbanes/accompanist/sample/insets/ImeAnimationSample.kt) for a working example.
+    See the [ImeAnimationSample](https://github.com/google/accompanist/blob/main/sample/src/main/java/dev/chrisbanes/accompanist/sample/insets/ImeAnimationSample.kt) for a working example.
 
 
 ## Download

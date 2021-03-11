@@ -2,14 +2,14 @@
 site_name: 'Accompanist'
 site_description: 'A group of libraries to help write Jetpack Compose apps.'
 site_author: 'Chris Banes'
-site_url: 'https://chrisbanes.github.io/accompanist/'
+site_url: 'https://google.github.io/accompanist/'
 remote_branch: gh-pages
 
 docs_dir: docs-gen
 
 # Repository
 repo_name: 'Accompanist'
-repo_url: 'https://github.com/chrisbanes/accompanist'
+repo_url: 'https://github.com/google/accompanist'
 
 # Navigation
 nav:
@@ -56,8 +56,3 @@ markdown_extensions:
   - pymdownx.betterem
   - pymdownx.superfences
   - pymdownx.tabbed
-
-extra:
-  social:
-    - icon: fontawesome/brands/twitter
-      link: https://twitter.com/chrisbanes

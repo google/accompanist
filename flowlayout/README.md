@@ -18,9 +18,9 @@ FlowColumn {
 }
 ```
 
-For examples, refer to the [samples](https://github.com/chrisbanes/accompanist/tree/main/sample/src/main/java/dev/chrisbanes/accompanist/sample/flowlayout).
+For examples, refer to the [samples](https://github.com/google/accompanist/tree/main/sample/src/main/java/dev/chrisbanes/accompanist/sample/flowlayout).
 
-For more information, visit the documentation: https://chrisbanes.github.io/accompanist/flowlayout
+For more information, visit the documentation: https://google.github.io/accompanist/flowlayout
 
 ## Download
 

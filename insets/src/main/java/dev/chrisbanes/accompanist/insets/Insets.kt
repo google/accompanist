@@ -145,7 +145,7 @@ val LocalWindowInsets = staticCompositionLocalOf<WindowInsets> {
  *
  * It is convenient to use [ProvideWindowInsets] in fragments, but that can result in a
  * delay in the initial inset update, which results in a visual flicker.
- * See [this issue](https://github.com/chrisbanes/accompanist/issues/155) for more information.
+ * See [this issue](https://github.com/google/accompanist/issues/155) for more information.
  *
  * The alternative is for fragments to manage the [WindowInsets] themselves, like so:
  *
