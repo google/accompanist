@@ -301,16 +301,14 @@ class PagerState(
         // We calculate the target offset using pixels, rather than using the offset
         val targetOffset = animationSpec.calculateTargetValue(
             initialValue = currentPageOffset * pageSize,
-            initialVelocity = initialVelocity
+            initialVelocity = initialVelocity * -1
         ) / pageSize
 
         if (DebugLog) {
             Log.d(
                 LogTag,
-                "fling. velocity:$initialVelocity, " +
-                    "page: $currentPage, " +
-                    "offset:$currentPageOffset, " +
-                    "targetOffset: $targetOffset"
+                "fling. velocity:%.4f, page: %d, offset:%.4f, targetOffset:%.4f"
+                    .format(initialVelocity, currentPage, currentPageOffset, targetOffset)
             )
         }
 
@@ -318,15 +316,41 @@ class PagerState(
         // animate with decay.
         if (targetOffset.absoluteValue >= 1) {
             // Animate with the decay animation spec using the fling velocity
+
+            val targetPage = when {
+                targetOffset > 0 -> {
+                    (currentPage + 1).coerceAtMost(lastPageIndex)
+                }
+                else -> currentPage
+            }
+
             AnimationState(
                 initialValue = currentPageOffset * pageSize,
-                initialVelocity = initialVelocity
+                initialVelocity = initialVelocity * -1
             ).animateDecay(animationSpec) {
-                dragBy((currentPageOffset * pageSize) - value)
+                if (DebugLog) {
+                    Log.d(
+                        LogTag,
+                        "fling. decay. value:%.4f, page: %d, offset:%.4f"
+                            .format(value, currentPage, currentPageOffset)
+                    )
+                }
 
-                if (currentPageOffset.absoluteValue >= 1) {
+                val coerced = value.coerceIn(0f, pageSize.toFloat())
+                dragBy((currentPageOffset * pageSize) - coerced)
+
+                val pastLeftBound = initialVelocity > 0 &&
+                    (currentPage < targetPage || (currentPage == targetPage && currentPageOffset == 0f))
+
+                val pastRightBound = initialVelocity < 0 &&
+                    (currentPage > targetPage || (currentPage == targetPage && currentPageOffset > 0f))
+
+                if (pastLeftBound || pastRightBound) {
                     // If we reach the bounds of the allowed offset, cancel the animation
                     cancelAnimation()
+
+                    currentPage = targetPage
+                    currentPageOffset = 0f
                 }
             }
         } else {
@@ -334,8 +358,8 @@ class PagerState(
             animate(
                 initialValue = currentPageOffset * pageSize,
                 targetValue = pageSize * determineSpringBackOffset(
-                    velocity = initialVelocity,
-                    offset = targetOffset.coerceIn(-1f, 1f)
+                    velocity = initialVelocity * -1,
+                    offset = targetOffset
                 ),
                 initialVelocity = initialVelocity,
                 animationSpec = spring()
