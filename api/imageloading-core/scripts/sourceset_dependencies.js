@@ -1,0 +1,1 @@
+sourceset_dependencies = '{":imageloading-core:dokkaHtml/androidTestRelease": [], ":imageloading-core:dokkaHtml/debug": [], ":imageloading-core:dokkaHtml/main": [], ":imageloading-core:dokkaHtml/release": []}'
