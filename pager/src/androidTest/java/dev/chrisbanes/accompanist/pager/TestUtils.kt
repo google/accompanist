@@ -23,7 +23,7 @@ import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.percentOffset
 import androidx.compose.ui.test.performGesture
-import androidx.compose.ui.test.swipe
+import androidx.compose.ui.test.swipeWithVelocity
 import androidx.compose.ui.unit.LayoutDirection
 
 fun ComposeContentTestRule.setContent(
@@ -39,11 +39,11 @@ fun ComposeContentTestRule.setContent(
 }
 
 internal fun SemanticsNodeInteraction.swipeAcrossCenter(
+    endVelocity: Float,
     distancePercentageX: Float = 0f,
     distancePercentageY: Float = 0f,
-    durationMillis: Long = 200,
 ): SemanticsNodeInteraction = performGesture {
-    swipe(
+    swipeWithVelocity(
         start = percentOffset(
             x = 0.5f - distancePercentageX / 2,
             y = 0.5f - distancePercentageY / 2,
@@ -52,6 +52,12 @@ internal fun SemanticsNodeInteraction.swipeAcrossCenter(
             x = 0.5f + distancePercentageX / 2,
             y = 0.5f + distancePercentageY / 2,
         ),
-        durationMillis = durationMillis
+        durationMillis = 200,
+        endVelocity = endVelocity,
     )
 }
+
+fun SemanticsNodeInteraction.assertWhen(
+    condition: Boolean,
+    block: SemanticsNodeInteraction.() -> SemanticsNodeInteraction
+): SemanticsNodeInteraction = if (condition) block(this) else this

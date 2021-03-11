@@ -42,8 +42,11 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
-private const val MediumSwipeDistance = 0.6f
-private const val ShortSwipeDistance = 0.3f
+private const val MediumSwipeDistance = 0.8f
+private const val ShortSwipeDistance = 0.6f
+
+private const val FastVelocity = 4000f
+private const val SlowVelocity = 400f
 
 @OptIn(ExperimentalPagerApi::class) // Pager is currently experimental
 @LargeTest
@@ -70,9 +73,9 @@ class PagerTest(
             arrayOf(1f, 4, LayoutDirection.Ltr),
             arrayOf(1f, 4, LayoutDirection.Rtl),
 
-            // Test items with 60% widths
-            arrayOf(0.6f, 2, LayoutDirection.Ltr),
-            arrayOf(0.6f, 2, LayoutDirection.Rtl),
+            // Test items with 80% widths
+            arrayOf(0.8f, 2, LayoutDirection.Ltr),
+            arrayOf(0.8f, 2, LayoutDirection.Rtl),
         )
     }
 
@@ -108,7 +111,7 @@ class PagerTest(
         val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
 
         // First test swiping from 0 to -1, which should no-op
-        composeTestRule.onRoot()
+        composeTestRule.onNodeWithText("0")
             .performGesture {
                 when (layoutDirection) {
                     LayoutDirection.Ltr -> swipeRight()
@@ -125,7 +128,7 @@ class PagerTest(
         )
 
         // Now swipe from page 0 to page 1
-        composeTestRule.onRoot()
+        composeTestRule.onNodeWithText("0")
             .performGesture {
                 when (layoutDirection) {
                     LayoutDirection.Ltr -> swipeLeft()
@@ -143,7 +146,7 @@ class PagerTest(
     }
 
     @Test
-    fun mediumFastSwipeToFling() {
+    fun mediumDistance_fastSwipe_toFling() {
         setPagerContent(
             layoutDirection = layoutDirection,
             pageModifier = Modifier.fillMaxWidth(itemWidthFraction),
@@ -155,13 +158,14 @@ class PagerTest(
 
         // Now swipe from page 0 to page 1, over a medium distance of the item width.
         // This should trigger a fling()
-        composeTestRule.onRoot().swipeAcrossCenter(
-            distancePercentageX = itemWidthFraction * when (layoutDirection) {
-                LayoutDirection.Rtl -> MediumSwipeDistance
-                else -> -MediumSwipeDistance
-            },
-            durationMillis = 200,
-        )
+        composeTestRule.onNodeWithText("0")
+            .swipeAcrossCenter(
+                distancePercentageX = when (layoutDirection) {
+                    LayoutDirection.Rtl -> MediumSwipeDistance
+                    else -> -MediumSwipeDistance
+                },
+                endVelocity = FastVelocity
+            )
         // ...and assert that we now laid out from page 1
         assertPagerLayout(
             currentPage = 1,
@@ -173,7 +177,7 @@ class PagerTest(
     }
 
     @Test
-    fun mediumSlowSwipeToSnapForward() {
+    fun mediumDistance_slowSwipe_toSnapForward() {
         setPagerContent(
             layoutDirection = layoutDirection,
             pageModifier = Modifier.fillMaxWidth(itemWidthFraction),
@@ -185,13 +189,14 @@ class PagerTest(
 
         // Now slowly swipe from page 0 to page 1, over a medium distance of the item width.
         // This should trigger a spring to position 1
-        composeTestRule.onRoot().swipeAcrossCenter(
-            distancePercentageX = itemWidthFraction * when (layoutDirection) {
-                LayoutDirection.Rtl -> MediumSwipeDistance
-                else -> -MediumSwipeDistance
-            },
-            durationMillis = 4000,
-        )
+        composeTestRule.onNodeWithText("0")
+            .swipeAcrossCenter(
+                distancePercentageX = when (layoutDirection) {
+                    LayoutDirection.Rtl -> MediumSwipeDistance
+                    else -> -MediumSwipeDistance
+                },
+                endVelocity = SlowVelocity,
+            )
         // ...and assert that we now laid out from page 1
         assertPagerLayout(
             currentPage = 1,
@@ -203,7 +208,7 @@ class PagerTest(
     }
 
     @Test
-    fun shortFastSwipeToFling() {
+    fun shortDistance_fastSwipe_toFling() {
         setPagerContent(
             layoutDirection = layoutDirection,
             pageModifier = Modifier.fillMaxWidth(itemWidthFraction),
@@ -215,13 +220,14 @@ class PagerTest(
 
         // Now swipe from page 0 to page 1, over a short distance of the item width.
         // This should trigger a fling to page 1
-        composeTestRule.onRoot().swipeAcrossCenter(
-            distancePercentageX = itemWidthFraction * when (layoutDirection) {
-                LayoutDirection.Rtl -> ShortSwipeDistance
-                else -> -ShortSwipeDistance
-            },
-            durationMillis = 200,
-        )
+        composeTestRule.onNodeWithText("0")
+            .swipeAcrossCenter(
+                distancePercentageX = when (layoutDirection) {
+                    LayoutDirection.Rtl -> ShortSwipeDistance
+                    else -> -ShortSwipeDistance
+                },
+                endVelocity = FastVelocity,
+            )
         // ...and assert that we now laid out from page 1
         assertPagerLayout(
             currentPage = 1,
@@ -233,7 +239,7 @@ class PagerTest(
     }
 
     @Test
-    fun shortSlowSwipeToSnapBack() {
+    fun shortDistance_slowSwipe_toSnapBack() {
         setPagerContent(
             layoutDirection = layoutDirection,
             pageModifier = Modifier.fillMaxWidth(itemWidthFraction),
@@ -245,13 +251,14 @@ class PagerTest(
 
         // Now slowly swipe from page 0 to page 1, over a short distance of the item width.
         // This should trigger a spring back to the original position
-        composeTestRule.onRoot().swipeAcrossCenter(
-            distancePercentageX = itemWidthFraction * when (layoutDirection) {
-                LayoutDirection.Rtl -> ShortSwipeDistance
-                else -> -ShortSwipeDistance
-            },
-            durationMillis = 3000,
-        )
+        composeTestRule.onNodeWithText("0")
+            .swipeAcrossCenter(
+                distancePercentageX = when (layoutDirection) {
+                    LayoutDirection.Rtl -> ShortSwipeDistance
+                    else -> -ShortSwipeDistance
+                },
+                endVelocity = SlowVelocity,
+            )
         // ...and assert that we 'sprang back' to page 0
         assertPagerLayout(
             currentPage = 0,
@@ -313,25 +320,19 @@ class PagerTest(
                 composeTestRule.onNodeWithText(page.toString())
                     .assertExists()
                     .assertWidthIsEqualTo(expectedItemWidth)
+                    .assertWhen(layoutDirection == LayoutDirection.Ltr) {
+                        assertLeftPositionInRootIsEqualTo(
+                            firstItemLeft + (expectedItemWidth * (page - currentPage))
+                        )
+                    }
+                    .assertWhen(layoutDirection == LayoutDirection.Rtl) {
+                        assertLeftPositionInRootIsEqualTo(
+                            firstItemLeft - (expectedItemWidth * (page - currentPage))
+                        )
+                    }
                     .assertIsSelectable()
-                    .run {
-                        if (page == currentPage) {
-                            assertIsSelected()
-                        } else {
-                            assertIsNotSelected()
-                        }
-                    }
-                    .run {
-                        if (layoutDirection == LayoutDirection.Ltr) {
-                            assertLeftPositionInRootIsEqualTo(
-                                firstItemLeft + (expectedItemWidth * (page - currentPage))
-                            )
-                        } else {
-                            assertLeftPositionInRootIsEqualTo(
-                                firstItemLeft - (expectedItemWidth * (page - currentPage))
-                            )
-                        }
-                    }
+                    .assertWhen(page == currentPage) { assertIsSelected() }
+                    .assertWhen(page != currentPage) { assertIsNotSelected() }
             } else {
                 // If this page is not expected to be laid out, assert that it doesn't exist
                 composeTestRule.onNodeWithText(page.toString()).assertDoesNotExist()
