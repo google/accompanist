@@ -10,15 +10,18 @@ A number of libraries which integrate popular image loading libraries into Jetpa
 ### 📐 [Insets](./insets/)
 A library which brings [WindowInsets](https://developer.android.com/reference/kotlin/android/view/WindowInsets) support to Jetpack Compose.
 
-### 🎨 [AppCompat Theme Adapter](./appcompat-theme//)
+### 🎨 [AppCompat Theme Adapter](./appcompat-theme/)
 A library that enables reuse of [AppCompat][appcompat] XML themes for theming in [Jetpack Compose][compose].
+
+### 🌊 [Flow layouts](./flowlayout/)
+A library that adds a 'flexbox'-like layout to [Jetpack Compose][compose].
 
 ---
 
 ## Updates
 
 [Jetpack Compose][compose] is a fast-moving project and we aim to keep these these libraries up-to-date with the
-latest tagged release on Compose as quickly as possible. Each [release](https://github.com/chrisbanes/accompanist/releases)  outlines what version of the Compose libraries it depends on.
+latest tagged release on Compose as quickly as possible. Each [release](https://github.com/google/accompanist/releases)  outlines what version of the Compose libraries it depends on.
 
 ## Future?
 
