@@ -20,9 +20,9 @@ package com.google.accompanist.pager
 
 import android.util.Log
 import androidx.annotation.IntRange
-import androidx.compose.animation.splineBasedDecay
+import androidx.compose.animation.defaultDecayAnimationSpec
 import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
@@ -30,13 +30,12 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.ParentDataModifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.ScrollAxisRange
 import androidx.compose.ui.semantics.horizontalScrollAxisRange
@@ -46,7 +45,6 @@ import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
-import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 /**
@@ -58,7 +56,7 @@ internal const val ScrollThreshold = 0.35f
 /**
  * Library-wide switch to turn on debug logging.
  */
-internal const val DebugLog = false
+internal const val DebugLog = true
 
 private const val LogTag = "Pager"
 
@@ -102,46 +100,44 @@ fun HorizontalPager(
 ) {
     require(offscreenLimit >= 1) { "offscreenLimit is required to be >= 1" }
 
-    val reverseScroll = LocalLayoutDirection.current == LayoutDirection.Rtl
-
-    val density = LocalDensity.current
-    val decay = remember(density) { splineBasedDecay<Float>(density) }
-
-    val coroutineScope = rememberCoroutineScope()
+    val reverseDirection = LocalLayoutDirection.current == LayoutDirection.Rtl
 
     val semantics = Modifier.semantics {
         if (state.pageCount > 0) {
             horizontalScrollAxisRange = ScrollAxisRange(
                 value = { (state.currentPage + state.currentPageOffset) * state.pageSize },
                 maxValue = { state.lastPageIndex.toFloat() * state.pageSize },
-                reverseScrolling = reverseScroll
             )
             // Hook up scroll actions to our state
             scrollBy { x: Float, _ ->
-                coroutineScope.launch {
-                    state.draggableState.drag { dragBy(x) }
-                }
-                true
+                state.dispatchRawDelta(x) != 0f
             }
             // Treat this as a selectable group
             selectableGroup()
         }
     }
 
-    val draggable = Modifier.draggable(
-        state = state.draggableState,
-        startDragImmediately = true,
-        onDragStopped = { velocity ->
-            launch { state.performFling(velocity, decay) }
-        },
+    val decay = defaultDecayAnimationSpec()
+    val flingBehavior = remember(state, reverseDirection, decay) {
+        WorkaroundFlingBehavior(reverseDirection) { initialVelocity ->
+            state.fling(-initialVelocity, decay) { deltaPixels ->
+                -scrollBy(-deltaPixels)
+            }
+        }
+    }
+
+    val scrollable = Modifier.scrollable(
         orientation = Orientation.Horizontal,
-        reverseDirection = reverseScroll,
+        flingBehavior = flingBehavior,
+        reverseDirection = reverseDirection,
+        state = state,
     )
 
     Layout(
         modifier = modifier
             .then(semantics)
-            .then(draggable),
+            .then(scrollable)
+            .clipToBounds(),
         content = {
             val firstPage = (state.currentPage - offscreenLimit).coerceAtLeast(0)
             val lastPage = (state.currentPage + offscreenLimit).coerceAtMost(state.lastPageIndex)
