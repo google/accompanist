@@ -103,7 +103,7 @@ Once the above PR has been approved and merged, we need to create the GitHub rel
  * Make sure that the version number matches what we released (the tool guesses but is not always correct).
  * Double check everything, then press 'Publish release'.
 
-At this point the release is published. This will trigger the docs action to run, which will auto-deploy a new version of the [website](https://chrisbanes.github.io/accompanist/).
+At this point the release is published. This will trigger the docs action to run, which will auto-deploy a new version of the [website](https://google.github.io/accompanist/).
 
 ### #6: Prepare the next development version
 

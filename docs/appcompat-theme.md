@@ -165,8 +165,8 @@ limitations under the License.
 
  [compose]: https://developer.android.com/jetpack/compose
  [appcompat]: https://developer.android.com/jetpack/androidx/releases/appcompat
- [appcompatheme]: https://chrisbanes.github.io/accompanist/api/appcompat-theme/appcompat-theme/dev.chrisbanes.accompanist.appcompattheme/-app-compat-theme.html
- [createappcompattheme]: https://chrisbanes.github.io/accompanist/api/appcompat-theme/appcompat-theme/dev.chrisbanes.accompanist.appcompattheme/create-app-compat-theme.html
+ [appcompatheme]: https://google.github.io/accompanist/api/appcompat-theme/appcompat-theme/dev.chrisbanes.accompanist.appcompattheme/-app-compat-theme.html
+ [createappcompattheme]: https://google.github.io/accompanist/api/appcompat-theme/appcompat-theme/dev.chrisbanes.accompanist.appcompattheme/create-app-compat-theme.html
  [materialtheme]: https://developer.android.com/reference/kotlin/androidx/compose/material/MaterialTheme
  [shapes]: https://developer.android.com/reference/kotlin/androidx/compose/material/Shapes
  [colors]: https://developer.android.com/reference/kotlin/androidx/compose/material/Colors

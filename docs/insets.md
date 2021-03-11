@@ -43,11 +43,11 @@ We provide two types of modifiers for easy handling of insets: padding and size.
 #### Padding modifiers
 The padding modifiers allow you to apply padding to a composable which matches a specific type of inset. Currently we provide:
 
-- [`Modifier.statusBarsPadding()`](https://chrisbanes.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/status-bars-padding.html)
-- [`Modifier.navigationBarsPadding()`](https://chrisbanes.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/navigation-bars-padding.html)
-- [`Modifier.systemBarsPadding()`](https://chrisbanes.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/system-bars-padding.html)
-- [`Modifier.imePadding()`](https://chrisbanes.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/ime-padding.html)
-- [`Modifier.navigationBarsWithImePadding()`](https://chrisbanes.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/navigation-bars-with-ime-padding.html)
+- [`Modifier.statusBarsPadding()`](https://google.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/status-bars-padding.html)
+- [`Modifier.navigationBarsPadding()`](https://google.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/navigation-bars-padding.html)
+- [`Modifier.systemBarsPadding()`](https://google.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/system-bars-padding.html)
+- [`Modifier.imePadding()`](https://google.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/ime-padding.html)
+- [`Modifier.navigationBarsWithImePadding()`](https://google.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/navigation-bars-with-ime-padding.html)
 
 These are commonly used to move composables out from under the system bars. The common example would be a [`FloatingActionButton`][fab]:
 
@@ -64,9 +64,9 @@ FloatingActionButton(
 #### Size modifiers
 The size modifiers allow you to match the size of a composable to a specific type of inset. Currently we provide:
 
-- [`Modifier.statusBarsHeight()`](https://chrisbanes.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/status-bars-height.html)
-- [`Modifier.navigationBarsHeight()`](https://chrisbanes.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/navigation-bars-height.html)
-- [`Modifier.navigationBarsWidth()`](https://chrisbanes.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/navigation-bars-width.html)
+- [`Modifier.statusBarsHeight()`](https://google.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/status-bars-height.html)
+- [`Modifier.navigationBarsHeight()`](https://google.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/navigation-bars-height.html)
+- [`Modifier.navigationBarsWidth()`](https://google.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/navigation-bars-width.html)
 
 These are commonly used to allow composables behind the system bars, to provide background protection, or similar:
 
@@ -149,7 +149,7 @@ The default value of `windowSoftInputMode` _should_ work, but Compose does not c
 
     ![](images/ime-scroll.gif){: loading=lazy align=right }
 
-    This library also has support for controlling the IME from scroll gestures, allowing your scrollable components to pull/push the IME on/off screen. This is acheived through the built-in [`NestedScrollConnection`](https://developer.android.com/reference/kotlin/androidx/compose/ui/gesture/nestedscroll/NestedScrollConnection) implementation returned by [`rememberImeNestedScrollConnection()`](https://chrisbanes.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/remember-ime-nested-scroll-connection.html).
+    This library also has support for controlling the IME from scroll gestures, allowing your scrollable components to pull/push the IME on/off screen. This is acheived through the built-in [`NestedScrollConnection`](https://developer.android.com/reference/kotlin/androidx/compose/ui/gesture/nestedscroll/NestedScrollConnection) implementation returned by [`rememberImeNestedScrollConnection()`](https://google.github.io/accompanist/api/insets/insets/dev.chrisbanes.accompanist.insets/remember-ime-nested-scroll-connection.html).
 
     This functionality only works when running on devices with API 30+.
 
