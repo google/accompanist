@@ -53,12 +53,12 @@ import kotlin.math.roundToInt
  * The scroll threshold for moving to the next page. The value is used in both directions
  * (so both negative and positive).
  */
-internal const val ScrollThreshold = 0.4f
+internal const val ScrollThreshold = 0.35f
 
 /**
  * Library-wide switch to turn on debug logging.
  */
-internal const val DebugLog = false
+internal const val DebugLog = true
 
 private const val LogTag = "Pager"
 
@@ -196,7 +196,7 @@ fun Pager(
                     state.pageSize = placeable.width
                 }
 
-                val xItemOffset = ((page + offset - currentPage) * placeable.width).roundToInt()
+                val xItemOffset = ((page - currentPage - offset) * placeable.width).roundToInt()
                 placeable.placeRelative(
                     x = xCenterOffset + xItemOffset,
                     y = yCenterOffset

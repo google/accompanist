@@ -122,8 +122,8 @@ class PagerState(
         get() = _currentPageOffset.value
         private set(value) {
             _currentPageOffset.value = value.coerceIn(
-                minimumValue = if (currentPage == lastPageIndex) 0f else -1f,
-                maximumValue = if (currentPage == 0) 0f else 1f,
+                minimumValue = 0f,
+                maximumValue = if (currentPage == lastPageIndex) 0f else 1f,
             )
         }
 
@@ -212,7 +212,7 @@ class PagerState(
         if (DebugLog) {
             Log.d(LogTag, "snapToNearestPage. currentPage:$currentPage, offset:$currentPageOffset")
         }
-        currentPage -= currentPageOffset.roundToInt()
+        currentPage += currentPageOffset.roundToInt()
         currentPageOffset = 0f
         selectionState = SelectionState.Idle
     }
@@ -230,28 +230,63 @@ class PagerState(
             animationSpec = animationSpec
         ) { value, _ ->
             currentPage = floor(value).toInt()
-            currentPageOffset = currentPage - value
+            currentPageOffset = value - currentPage
         }
+        snapToNearestPage()
     }
 
     private fun determineSpringBackOffset(
-        offset: Float = currentPageOffset
+        velocity: Float,
+        offset: Float = currentPageOffset,
     ): Float = when {
         // If the offset exceeds the scroll threshold (in either direction), we want to
         // move to the next/previous item
-        offset >= ScrollThreshold -> 1f
-        offset <= -ScrollThreshold -> -1f
-        // Otherwise we snap-back to 0
+        offset < ScrollThreshold -> 0f
+        offset > 1 - ScrollThreshold -> 1f
+        // Otherwise we look at the velocity for scroll direction
+        velocity < 0 -> 1f
         else -> 0f
-    }.coerceIn(
-        minimumValue = if (currentPage == lastPageIndex) 0f else -1f,
-        maximumValue = if (currentPage == 0) 0f else 1f
-    )
+    }
 
     internal val draggableState = DraggableState { delta ->
-        if (DebugLog) Log.d(LogTag, "DraggableState.onDrag: $delta")
+        dragByOffset(delta / pageSize.coerceAtLeast(1))
+    }
 
-        this@PagerState.currentPageOffset += delta / pageSize.coerceAtLeast(1)
+    private fun dragByOffset(deltaOffset: Float) {
+        val targetedOffset = currentPageOffset - deltaOffset
+
+        if (targetedOffset < 0) {
+            // If the target offset is < 0, we're trying to cross the boundary to the previous page
+            if (currentPage > 0) {
+                // We can only move to the previous page if we're not at page 0
+                currentPage--
+                currentPageOffset = targetedOffset + 1
+            } else {
+                // If we're at page 0, pin to 0f offset
+                currentPageOffset = 0f
+            }
+        } else if (targetedOffset >= 1) {
+            // If the target offset is > 1, we're trying to cross the boundary to the next page
+            if (currentPage < pageCount - 1) {
+                // We can only move to the next page if we're not on the last page
+                currentPage++
+                currentPageOffset = targetedOffset - 1
+            } else {
+                // If we're on the last page, pin to 0f offset
+                currentPageOffset = 0f
+            }
+        } else {
+            // Otherwise, we can use the offset as-is
+            currentPageOffset = targetedOffset
+        }
+
+        if (DebugLog) {
+            Log.d(
+                LogTag,
+                "dragByOffset. delta:%.4f, targetOffset:%.4f, new-page:%d, new-offset:%.4f"
+                    .format(deltaOffset, targetedOffset, currentPage, currentPageOffset),
+            )
+        }
     }
 
     /**
@@ -287,7 +322,7 @@ class PagerState(
                 initialValue = currentPageOffset * pageSize,
                 initialVelocity = initialVelocity
             ).animateDecay(animationSpec) {
-                dragBy(value - (currentPageOffset * pageSize))
+                dragBy((currentPageOffset * pageSize) - value)
 
                 if (currentPageOffset.absoluteValue >= 1) {
                     // If we reach the bounds of the allowed offset, cancel the animation
@@ -298,11 +333,14 @@ class PagerState(
             // Otherwise we animate to the next item, or spring-back depending on the offset
             animate(
                 initialValue = currentPageOffset * pageSize,
-                targetValue = determineSpringBackOffset(targetOffset.coerceIn(-1f, 1f)) * pageSize,
+                targetValue = pageSize * determineSpringBackOffset(
+                    velocity = initialVelocity,
+                    offset = targetOffset.coerceIn(-1f, 1f)
+                ),
                 initialVelocity = initialVelocity,
                 animationSpec = spring()
             ) { value, _ ->
-                dragBy(value - (currentPageOffset * pageSize))
+                dragBy((currentPageOffset * pageSize) - value)
             }
         }
 
