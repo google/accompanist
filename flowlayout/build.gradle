@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Android Open Source Project
+ * Copyright 2021 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,13 +53,10 @@ android {
         textOutput 'stdout'
         // We run a full lint analysis as build part in CI, so skip vital checks for assemble tasks
         checkReleaseBuilds false
-
-        // Not much we can do about unsafe lint rules from libraries
-        disable "UnsafeExperimentalUsageError", "UnsafeExperimentalUsageWarning"
     }
 
     packagingOptions {
-        // Certain libraries include licence files in their JARs. Exclude them to enable
+        // Some of the META-INF files conflict with coroutines-test. Exclude them to enable
         // our test APK to build (has no effect on our AARs)
         excludes += "/META-INF/AL2.0"
         excludes += "/META-INF/LGPL2.1"
@@ -73,31 +70,24 @@ android {
 }
 
 dependencies {
-    api project(':imageloading-core')
-    api Libs.picasso
-
-    implementation Libs.OkHttp.okhttp
-
-    implementation Libs.AndroidX.coreKtx
-
     implementation Libs.AndroidX.Compose.runtime
     implementation Libs.AndroidX.Compose.foundation
+    implementation Libs.AndroidX.Compose.util
 
     implementation Libs.Kotlin.stdlib
-    implementation Libs.Coroutines.android
 
     // ======================
     // Test dependencies
     // ======================
 
-    androidTestImplementation project(':imageloading-testutils')
-
     androidTestImplementation Libs.junit
     androidTestImplementation Libs.truth
 
+    // FIXME: Only needed for alpha12
+    androidTestImplementation Libs.AndroidX.Activity.activityCompose
+
     androidTestImplementation Libs.AndroidX.Compose.test
     androidTestImplementation Libs.AndroidX.Compose.ui
-    androidTestImplementation Libs.AndroidX.Compose.material
     androidTestImplementation Libs.AndroidX.Test.rules
     androidTestImplementation Libs.AndroidX.Test.runner
 }

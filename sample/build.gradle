@@ -54,6 +54,9 @@ dependencies {
     implementation project(':glide')
     implementation project(':insets')
     implementation project(':pager')
+    implementation project(':flowlayout')
+
+    implementation Libs.AndroidX.appcompat
 
     implementation Libs.Coil.gif
 

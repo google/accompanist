@@ -18,7 +18,7 @@ setContent {
 }
 ```
 
-For more information, visit the documentation: https://chrisbanes.github.io/accompanist/insets
+For more information, visit the documentation: https://google.github.io/accompanist/insets
 
 ## Download
 

@@ -15,7 +15,7 @@ AppCompatTheme {
 }
 ```
 
-For more information, visit the documentation: https://chrisbanes.github.io/accompanist/appcompat-theme
+For more information, visit the documentation: https://google.github.io/accompanist/appcompat-theme
 
 ## Download
 
@@ -31,6 +31,7 @@ dependencies {
 
 Snapshots of the development version are available in Sonatype's `snapshots` [repository][snap]. These are updated on every commit.
 
+  [appcompat]: https://developer.android.com/jetpack/androidx/releases/appcompat
   [compose]: https://developer.android.com/jetpack/compose
   [appcompat]: https://developer.android.com/jetpack/androidx/releases/appcompat
   [snap]: https://oss.sonatype.org/content/repositories/snapshots/dev/chrisbanes/accompanist/accompanist-appcompat-theme/

@@ -35,4 +35,8 @@
     <string name="insets_title_imeanim">Insets: IME Animations</string>
 
     <string name="pager_title_basics">Pager: Basics</string>
+
+    <string name="flowlayout_title_column">Flow Layout: Column</string>
+    <string name="flowlayout_title_row">Flow Layout: Row</string>
+
 </resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="981px" height="355px" viewBox="0 0 981 355" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Artboard</title>
+    <g id="Artboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group" transform="translate(-150.000000, 27.000000)">
+            <text id="Accompanist" fill-rule="nonzero" font-family="JetBrainsMono-ExtraLight, JetBrains Mono" font-size="130" font-weight="300" letter-spacing="-2.30088496" fill="#4A4A4A" fill-opacity="0.87">
+                <tspan x="223.654867" y="133">Accompanist</tspan>
+            </text>
+            <line x1="1050.5" y1="153.5" x2="647" y2="153" id="Line" stroke-opacity="0.6" stroke="#434343" stroke-width="3" stroke-linecap="square"></line>
+            <line x1="591.5" y1="153.5" x2="228.5" y2="153.5" id="Line" stroke-opacity="0.6" stroke="#434343" stroke-width="3" stroke-linecap="square"></line>
+            <text id="Utils-for-Jetpack-Co" font-family="JetBrainsMono-ExtraLight, JetBrains Mono" font-size="64" font-weight="300" letter-spacing="-4" fill="#282828" fill-opacity="0.5">
+                <tspan x="210" y="266">Utils for Jetpack Compose</tspan>
+            </text>
+        </g>
+    </g>
+</svg>
