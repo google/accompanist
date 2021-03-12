@@ -72,8 +72,6 @@ dependencies {
 
     implementation Libs.AndroidX.coreKtx
 
-    implementation Libs.AndroidX.Compose.runtime
-    implementation Libs.AndroidX.Compose.foundation
     implementation Libs.AndroidX.Compose.ui
 
     implementation Libs.Kotlin.stdlib
@@ -81,6 +79,8 @@ dependencies {
 
     api Libs.OkHttp.mockWebServer
     implementation Libs.OkHttp.okhttp
+
+    implementation Libs.truth
 
     implementation Libs.Coroutines.test
 

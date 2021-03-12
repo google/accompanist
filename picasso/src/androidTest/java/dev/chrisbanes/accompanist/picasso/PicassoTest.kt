@@ -64,6 +64,12 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import java.util.concurrent.TimeUnit
 
+/**
+ * This 4% tolerance is to work around scaling issues, which causes very slight color differences
+ * when using Picasso.
+ */
+private const val PixelTolerance = 0.04f
+
 @LargeTest
 @RunWith(JUnit4::class)
 class PicassoTest {
@@ -129,7 +135,7 @@ class PicassoTest {
             .assertHeightIsEqualTo(128.dp)
             .assertIsDisplayed()
             .captureToImage()
-            .assertPixels(Color.Red)
+            .assertPixels(Color.Red, PixelTolerance)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -158,7 +164,7 @@ class PicassoTest {
             .assertHeightIsEqualTo(128.dp)
             .assertIsDisplayed()
             .captureToImage()
-            .assertPixels(Color.Red)
+            .assertPixels(Color.Red, PixelTolerance)
 
         // Now switch the data URI to the blue drawable
         data = server.url("/blue")
@@ -172,7 +178,7 @@ class PicassoTest {
             .assertHeightIsEqualTo(128.dp)
             .assertIsDisplayed()
             .captureToImage()
-            .assertPixels(Color.Blue)
+            .assertPixels(Color.Blue, PixelTolerance)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -256,7 +262,7 @@ class PicassoTest {
         composeTestRule.onNodeWithTag(TestTags.Image)
             .assertIsDisplayed()
             .captureToImage()
-            .assertPixels(Color.Red)
+            .assertPixels(Color.Red, PixelTolerance)
     }
 
     @SdkSuppress(minSdkVersion = 26) // captureToImage
@@ -292,7 +298,7 @@ class PicassoTest {
         composeTestRule.onNodeWithTag(TestTags.Image)
             .assertIsDisplayed()
             .captureToImage()
-            .assertPixels(Color.Red)
+            .assertPixels(Color.Red, PixelTolerance)
     }
 
     @Test
@@ -407,7 +413,7 @@ class PicassoTest {
         composeTestRule.onNodeWithTag(TestTags.Image)
             .assertIsDisplayed()
             .captureToImage()
-            .assertPixels(Color.Cyan)
+            .assertPixels(Color.Cyan, PixelTolerance)
     }
 
     @Test
@@ -480,7 +486,7 @@ class PicassoTest {
         composeTestRule.onNodeWithTag(TestTags.Image)
             .assertIsDisplayed()
             .captureToImage()
-            .assertPixels(Color.Red)
+            .assertPixels(Color.Red, PixelTolerance)
     }
 
     @Test(expected = IllegalArgumentException::class)

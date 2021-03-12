@@ -18,16 +18,18 @@ package dev.chrisbanes.accompanist.imageloading.test
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.toPixelMap
-import org.junit.Assert.assertEquals
+import com.google.common.truth.Truth.assertThat
 
 /**
  * Assert that all of the pixels in this image as of the [expected] color.
  */
-fun ImageBitmap.assertPixels(expected: Color) {
-    val expectedArgb = expected.toArgb()
+fun ImageBitmap.assertPixels(expected: Color, tolerance: Float = 0.0001f) {
     toPixelMap().buffer.forEach { pixel ->
-        assertEquals(expectedArgb, pixel)
+        val color = Color(pixel)
+        assertThat(color.red).isWithin(tolerance).of(expected.red)
+        assertThat(color.green).isWithin(tolerance).of(expected.green)
+        assertThat(color.blue).isWithin(tolerance).of(expected.blue)
+        assertThat(color.alpha).isWithin(tolerance).of(expected.alpha)
     }
 }

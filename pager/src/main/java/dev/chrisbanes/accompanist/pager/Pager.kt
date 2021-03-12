@@ -25,7 +25,6 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
@@ -34,7 +33,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.ParentDataModifier
@@ -43,6 +41,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.ScrollAxisRange
 import androidx.compose.ui.semantics.horizontalScrollAxisRange
 import androidx.compose.ui.semantics.scrollBy
+import androidx.compose.ui.semantics.selectableGroup
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Density
@@ -108,25 +107,24 @@ fun Pager(
     val density = LocalDensity.current
     val decay = remember(density) { splineBasedDecay<Float>(density) }
 
-    val semantics = Modifier.composed {
-        val coroutineScope = rememberCoroutineScope()
-        semantics {
-            if (state.pageCount > 0) {
-                horizontalScrollAxisRange = ScrollAxisRange(
-                    value = { (state.currentPage + state.currentPageOffset) * state.pageSize },
-                    maxValue = { state.lastPageIndex.toFloat() * state.pageSize },
-                    reverseScrolling = reverseScroll
-                )
-                // Hook up scroll actions to our state
-                scrollBy { x: Float, _ ->
-                    coroutineScope.launch {
-                        state.draggableState.drag { dragBy(x) }
-                    }
-                    true
+    val coroutineScope = rememberCoroutineScope()
+
+    val semantics = Modifier.semantics {
+        if (state.pageCount > 0) {
+            horizontalScrollAxisRange = ScrollAxisRange(
+                value = { (state.currentPage + state.currentPageOffset) * state.pageSize },
+                maxValue = { state.lastPageIndex.toFloat() * state.pageSize },
+                reverseScrolling = reverseScroll
+            )
+            // Hook up scroll actions to our state
+            scrollBy { x: Float, _ ->
+                coroutineScope.launch {
+                    state.draggableState.drag { dragBy(x) }
                 }
-                // Treat this as a selectable group
-                selectableGroup()
+                true
             }
+            // Treat this as a selectable group
+            selectableGroup()
         }
     }
 
@@ -141,7 +139,9 @@ fun Pager(
     )
 
     Layout(
-        modifier = modifier.then(semantics).then(draggable),
+        modifier = modifier
+            .then(semantics)
+            .then(draggable),
         content = {
             val firstPage = (state.currentPage - offscreenLimit).coerceAtLeast(0)
             val lastPage = (state.currentPage + offscreenLimit).coerceAtMost(state.lastPageIndex)
@@ -157,10 +157,8 @@ fun Pager(
 
             for (page in firstPage..lastPage) {
                 key(page) {
-                    val itemSemantics = Modifier.composed {
-                        semantics(mergeDescendants = true) {
-                            this.selected = page == state.currentPage
-                        }
+                    val itemSemantics = Modifier.semantics(mergeDescendants = true) {
+                        this.selected = page == state.currentPage
                     }
                     Box(
                         contentAlignment = Alignment.Center,
