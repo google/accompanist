@@ -121,7 +121,7 @@ class PagerState(
     var currentPage: Int
         get() = _currentPage
         private set(value) {
-            _currentPage = value.coerceIn(0, _pageCount)
+            _currentPage = value.coerceIn(0, lastPageIndex)
         }
 
     /**
