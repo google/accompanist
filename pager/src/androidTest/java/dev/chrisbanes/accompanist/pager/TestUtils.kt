@@ -23,8 +23,11 @@ import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.percentOffset
 import androidx.compose.ui.test.performGesture
+import androidx.compose.ui.test.swipe
 import androidx.compose.ui.test.swipeWithVelocity
 import androidx.compose.ui.unit.LayoutDirection
+import kotlin.math.absoluteValue
+import kotlin.math.roundToLong
 
 fun ComposeContentTestRule.setContent(
     layoutDirection: LayoutDirection? = null,
@@ -38,23 +41,29 @@ fun ComposeContentTestRule.setContent(
     }
 }
 
-internal fun SemanticsNodeInteraction.swipeAcrossCenter(
-    endVelocity: Float,
+internal fun SemanticsNodeInteraction.swipeHorizontalAcrossCenter(
+    velocity: Float,
     distancePercentageX: Float = 0f,
-    distancePercentageY: Float = 0f,
 ): SemanticsNodeInteraction = performGesture {
-    swipeWithVelocity(
-        start = percentOffset(
-            x = 0.5f - distancePercentageX / 2,
-            y = 0.5f - distancePercentageY / 2,
-        ),
-        end = percentOffset(
-            x = 0.5f + distancePercentageX / 2,
-            y = 0.5f + distancePercentageY / 2,
-        ),
-        durationMillis = 200,
-        endVelocity = endVelocity,
-    )
+    try {
+        val distance = visibleSize.width * distancePercentageX
+        swipeWithVelocity(
+            start = percentOffset(x = 0.5f - distancePercentageX / 2, y = 0.5f),
+            end = percentOffset(x = 0.5f + distancePercentageX / 2, y = 0.5f),
+            endVelocity = velocity,
+        )
+    } catch (e: IllegalArgumentException) {
+        // swipeWithVelocity throws an exception if the given distance + velocity isn't feasible:
+        // https://issuetracker.google.com/182477143. To work around this, we catch the exception
+        // and instead run a swipe() with a computed duration instead. This is not perfect,
+        // but good enough.
+        val distance = visibleSize.width * distancePercentageX
+        swipe(
+            start = percentOffset(x = 0.5f - distancePercentageX / 2, y = 0.5f),
+            end = percentOffset(x = 0.5f + distancePercentageX / 2, y = 0.5f),
+            durationMillis = ((distance / velocity) * 1000).roundToLong().absoluteValue,
+        )
+    }
 }
 
 fun SemanticsNodeInteraction.assertWhen(

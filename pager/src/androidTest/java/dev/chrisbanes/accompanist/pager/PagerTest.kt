@@ -159,12 +159,12 @@ class PagerTest(
         // Now swipe from page 0 to page 1, over a medium distance of the item width.
         // This should trigger a fling()
         composeTestRule.onNodeWithText("0")
-            .swipeAcrossCenter(
+            .swipeHorizontalAcrossCenter(
                 distancePercentageX = when (layoutDirection) {
                     LayoutDirection.Rtl -> MediumSwipeDistance
                     else -> -MediumSwipeDistance
                 },
-                endVelocity = FastVelocity
+                velocity = FastVelocity
             )
         // ...and assert that we now laid out from page 1
         assertPagerLayout(
@@ -190,12 +190,12 @@ class PagerTest(
         // Now slowly swipe from page 0 to page 1, over a medium distance of the item width.
         // This should trigger a spring to position 1
         composeTestRule.onNodeWithText("0")
-            .swipeAcrossCenter(
+            .swipeHorizontalAcrossCenter(
                 distancePercentageX = when (layoutDirection) {
                     LayoutDirection.Rtl -> MediumSwipeDistance
                     else -> -MediumSwipeDistance
                 },
-                endVelocity = SlowVelocity,
+                velocity = SlowVelocity,
             )
         // ...and assert that we now laid out from page 1
         assertPagerLayout(
@@ -221,12 +221,12 @@ class PagerTest(
         // Now swipe from page 0 to page 1, over a short distance of the item width.
         // This should trigger a fling to page 1
         composeTestRule.onNodeWithText("0")
-            .swipeAcrossCenter(
+            .swipeHorizontalAcrossCenter(
                 distancePercentageX = when (layoutDirection) {
                     LayoutDirection.Rtl -> ShortSwipeDistance
                     else -> -ShortSwipeDistance
                 },
-                endVelocity = FastVelocity,
+                velocity = FastVelocity,
             )
         // ...and assert that we now laid out from page 1
         assertPagerLayout(
@@ -252,12 +252,12 @@ class PagerTest(
         // Now slowly swipe from page 0 to page 1, over a short distance of the item width.
         // This should trigger a spring back to the original position
         composeTestRule.onNodeWithText("0")
-            .swipeAcrossCenter(
+            .swipeHorizontalAcrossCenter(
                 distancePercentageX = when (layoutDirection) {
                     LayoutDirection.Rtl -> ShortSwipeDistance
                     else -> -ShortSwipeDistance
                 },
-                endVelocity = SlowVelocity,
+                velocity = SlowVelocity,
             )
         // ...and assert that we 'sprang back' to page 0
         assertPagerLayout(
