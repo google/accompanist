@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -207,6 +208,7 @@ fun Pager(
  * Scope for [Pager] content.
  */
 @ExperimentalPagerApi
+@Stable
 interface PagerScope : BoxScope {
     /**
      * Returns the current selected page

@@ -30,6 +30,7 @@ import androidx.compose.animation.core.calculateTargetValue
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.gestures.DraggableState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
@@ -76,6 +77,7 @@ fun rememberPagerState(
  * @param currentPageOffset the initial value for [PagerState.currentPageOffset]
  */
 @ExperimentalPagerApi
+@Stable
 class PagerState(
     pageCount: Int,
     currentPage: Int = 0,
