@@ -138,12 +138,16 @@ class PagerState(
      * @param page the page to snap to. Must be between 0 and [pageCount] (inclusive).
      * @param pageOffset the percentage of the page width to offset, from the start of [page]
      * @param initialVelocity Initial velocity in pixels per second, or `0f` to not use a start velocity.
+     * Must be in the range 0f..1f.
      */
     suspend fun animateScrollToPage(
         @IntRange(from = 0) page: Int,
         @FloatRange(from = 0.0, to = 1.0) pageOffset: Float = 0f,
         initialVelocity: Float = 0f,
     ) {
+        require(page in 0 until pageCount) { "page must be >= 0 and < pageCount" }
+        require(pageOffset in 0f..1f) { "pageOffset must be >= 0 and <= 1" }
+
         if (page == currentPage) return
 
         // We don't specifically use the DragScope's dragBy, but
@@ -165,12 +169,16 @@ class PagerState(
      * complete.
      *
      * @param page the page to snap to. Must be between 0 and [pageCount] (inclusive).
-     * @param pageOffset the percentage of the page width to offset, from the start of [page]
+     * @param pageOffset the percentage of the page width to offset, from the start of [page].
+     * Must be in the range 0f..1f.
      */
     suspend fun scrollToPage(
         @IntRange(from = 0) page: Int,
         @FloatRange(from = 0.0, to = 1.0) pageOffset: Float = 0f,
     ) {
+        require(page in 0 until pageCount) { "page must be >= 0 and < pageCount" }
+        require(pageOffset in 0f..1f) { "pageOffset must be >= 0 and <= 1" }
+
         // We don't specifically use the DragScope's dragBy, but
         // we do want to use it's mutex
         draggableState.drag {
