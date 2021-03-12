@@ -18,11 +18,9 @@ package dev.chrisbanes.accompanist.flowlayout
 
 import android.os.Handler
 import android.os.Looper
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.Recomposer
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,6 +36,7 @@ import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.node.Ref
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
@@ -48,11 +47,8 @@ import androidx.compose.ui.unit.constrainWidth
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.isFinite
 import androidx.compose.ui.unit.offset
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Rule
@@ -61,43 +57,21 @@ import java.util.concurrent.TimeUnit
 import kotlin.math.max
 
 open class LayoutTest {
-    @Suppress("DEPRECATION")
     @get:Rule
-    val activityTestRule = androidx.test.rule.ActivityTestRule(
-        TestActivity::class.java
-    )
+    val rule = createAndroidComposeRule<TestActivity>()
+
     lateinit var activity: TestActivity
     lateinit var handler: Handler
     internal lateinit var density: Density
 
     @Before
     fun setup() {
-        activity = activityTestRule.activity
+        activity = rule.activity
         density = Density(activity)
         activity.hasFocusLatch.await(5, TimeUnit.SECONDS)
 
-        // Kotlin IR compiler doesn't seem too happy with auto-conversion from
-        // lambda to Runnable, so separate it here
-        val runnable: Runnable = object : Runnable {
-            override fun run() {
-                handler = Handler(Looper.getMainLooper())
-            }
-        }
-        activityTestRule.runOnUiThread(runnable)
-    }
-
-    internal fun show(composable: @Composable () -> Unit) {
-        val runnable: Runnable = object : Runnable {
-            override fun run() {
-                activity.setContent(content = composable)
-            }
-        }
-        activityTestRule.runOnUiThread(runnable)
-        // Wait for the frame to complete before continuing
-        runBlocking {
-            Recomposer.runningRecomposers.value.forEach { recomposer ->
-                recomposer.state.first { it <= Recomposer.State.Idle }
-            }
+        rule.activity.runOnUiThread {
+            handler = Handler(Looper.getMainLooper())
         }
     }
 
@@ -109,59 +83,6 @@ open class LayoutTest {
         size.value = IntSize(coordinates.size.width, coordinates.size.height)
         position.value = coordinates.localToRoot(Offset(0f, 0f))
         positionedLatch.countDown()
-    }
-
-    internal fun testIntrinsics(
-        vararg layouts: @Composable () -> Unit,
-        test: ((Int) -> Int, (Int) -> Int, (Int) -> Int, (Int) -> Int) -> Unit
-    ) {
-        layouts.forEach { layout ->
-            val layoutLatch = CountDownLatch(1)
-            show {
-                val measurePolicy = object : MeasurePolicy {
-                    override fun MeasureScope.measure(
-                        measurables: List<Measurable>,
-                        constraints: Constraints
-                    ): MeasureResult {
-                        val measurable = measurables.first()
-                        test(
-                            { h -> measurable.minIntrinsicWidth(h) },
-                            { w -> measurable.minIntrinsicHeight(w) },
-                            { h -> measurable.maxIntrinsicWidth(h) },
-                            { w -> measurable.maxIntrinsicHeight(w) }
-                        )
-                        layoutLatch.countDown()
-
-                        return layout(0, 0) {}
-                    }
-
-                    override fun IntrinsicMeasureScope.minIntrinsicWidth(
-                        measurables: List<IntrinsicMeasurable>,
-                        height: Int
-                    ) = 0
-
-                    override fun IntrinsicMeasureScope.minIntrinsicHeight(
-                        measurables: List<IntrinsicMeasurable>,
-                        width: Int
-                    ) = 0
-
-                    override fun IntrinsicMeasureScope.maxIntrinsicWidth(
-                        measurables: List<IntrinsicMeasurable>,
-                        height: Int
-                    ) = 0
-
-                    override fun IntrinsicMeasureScope.maxIntrinsicHeight(
-                        measurables: List<IntrinsicMeasurable>,
-                        width: Int
-                    ) = 0
-                }
-                Layout(
-                    content = layout,
-                    measurePolicy = measurePolicy
-                )
-            }
-            assertTrue(layoutLatch.await(1, TimeUnit.SECONDS))
-        }
     }
 
     @Composable
@@ -298,15 +219,6 @@ open class LayoutTest {
         if (actual.y != actual.y.toInt().toFloat()) {
             fail("Expected integer y coordinate")
         }
-    }
-
-    internal fun assertEquals(expected: Int, actual: Int) {
-        assertEquals(
-            "Expected $expected but obtained $actual",
-            expected.toFloat(),
-            actual.toFloat(),
-            0f
-        )
     }
 
     @Composable
