@@ -73,13 +73,7 @@ android {
 }
 
 dependencies {
-    implementation Libs.AndroidX.coreAlpha
-
-    implementation Libs.AndroidX.Compose.runtime
     implementation Libs.AndroidX.Compose.foundation
-    implementation Libs.AndroidX.Compose.ui
-
-    implementation Libs.Kotlin.stdlib
 
     // ======================
     // Test dependencies
