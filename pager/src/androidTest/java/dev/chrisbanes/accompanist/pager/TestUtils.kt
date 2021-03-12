@@ -45,11 +45,12 @@ internal fun SemanticsNodeInteraction.swipeHorizontalAcrossCenter(
     velocity: Float,
     distancePercentageX: Float = 0f,
 ): SemanticsNodeInteraction = performGesture {
+    val startOffset = percentOffset(x = 0.5f - distancePercentageX / 2, y = 0.5f)
+    val endOffset = percentOffset(x = 0.5f + distancePercentageX / 2, y = 0.5f)
     try {
-        val distance = visibleSize.width * distancePercentageX
         swipeWithVelocity(
-            start = percentOffset(x = 0.5f - distancePercentageX / 2, y = 0.5f),
-            end = percentOffset(x = 0.5f + distancePercentageX / 2, y = 0.5f),
+            start = startOffset,
+            end = endOffset,
             endVelocity = velocity,
         )
     } catch (e: IllegalArgumentException) {
@@ -59,9 +60,9 @@ internal fun SemanticsNodeInteraction.swipeHorizontalAcrossCenter(
         // but good enough.
         val distance = visibleSize.width * distancePercentageX
         swipe(
-            start = percentOffset(x = 0.5f - distancePercentageX / 2, y = 0.5f),
-            end = percentOffset(x = 0.5f + distancePercentageX / 2, y = 0.5f),
-            durationMillis = ((distance / velocity) * 1000).roundToLong().absoluteValue,
+            start = startOffset,
+            end = endOffset,
+            durationMillis = ((distance.absoluteValue / velocity) * 1000).roundToLong(),
         )
     }
 }

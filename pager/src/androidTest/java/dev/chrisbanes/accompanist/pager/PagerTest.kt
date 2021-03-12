@@ -270,7 +270,7 @@ class PagerTest(
     }
 
     @Test
-    @Ignore("Currently broken")
+    @Ignore("Currently broken") // TODO: Will fix this once we move to Modifier.scrollable()
     fun a11yScroll() {
         setPagerContent(
             layoutDirection = layoutDirection,
@@ -293,6 +293,8 @@ class PagerTest(
             layoutDirection = layoutDirection,
         )
     }
+
+    // TODO: add test for state restoration?
 
     private fun assertPagerLayout(
         currentPage: Int,
