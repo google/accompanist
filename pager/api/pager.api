@@ -8,7 +8,6 @@ public final class dev/chrisbanes/accompanist/pager/Pager {
 public abstract interface class dev/chrisbanes/accompanist/pager/PagerScope : androidx/compose/foundation/layout/BoxScope {
 	public abstract fun getCurrentPage ()I
 	public abstract fun getCurrentPageOffset ()F
-	public abstract fun getSelectionState ()Ldev/chrisbanes/accompanist/pager/PagerState$SelectionState;
 }
 
 public final class dev/chrisbanes/accompanist/pager/PagerScope$DefaultImpls {
@@ -17,7 +16,6 @@ public final class dev/chrisbanes/accompanist/pager/PagerScope$DefaultImpls {
 }
 
 public final class dev/chrisbanes/accompanist/pager/PagerState {
-	public static final field $stable I
 	public static final field Companion Ldev/chrisbanes/accompanist/pager/PagerState$Companion;
 	public fun <init> (IIF)V
 	public synthetic fun <init> (IIFILkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -26,7 +24,6 @@ public final class dev/chrisbanes/accompanist/pager/PagerState {
 	public final fun getCurrentPage ()I
 	public final fun getCurrentPageOffset ()F
 	public final fun getPageCount ()I
-	public final fun getSelectionState ()Ldev/chrisbanes/accompanist/pager/PagerState$SelectionState;
 	public final fun scrollToPage (IFLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun scrollToPage$default (Ldev/chrisbanes/accompanist/pager/PagerState;IFLkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public final fun setPageCount (I)V
@@ -35,14 +32,6 @@ public final class dev/chrisbanes/accompanist/pager/PagerState {
 
 public final class dev/chrisbanes/accompanist/pager/PagerState$Companion {
 	public final fun getSaver ()Landroidx/compose/runtime/saveable/Saver;
-}
-
-public final class dev/chrisbanes/accompanist/pager/PagerState$SelectionState : java/lang/Enum {
-	public static final field Dragging Ldev/chrisbanes/accompanist/pager/PagerState$SelectionState;
-	public static final field Idle Ldev/chrisbanes/accompanist/pager/PagerState$SelectionState;
-	public static final field Settling Ldev/chrisbanes/accompanist/pager/PagerState$SelectionState;
-	public static fun valueOf (Ljava/lang/String;)Ldev/chrisbanes/accompanist/pager/PagerState$SelectionState;
-	public static fun values ()[Ldev/chrisbanes/accompanist/pager/PagerState$SelectionState;
 }
 
 public final class dev/chrisbanes/accompanist/pager/PagerStateKt {

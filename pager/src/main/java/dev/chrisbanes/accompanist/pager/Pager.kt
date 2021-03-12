@@ -132,9 +132,6 @@ fun Pager(
     val draggable = Modifier.draggable(
         state = state.draggableState,
         startDragImmediately = true,
-        onDragStarted = {
-            state.selectionState = PagerState.SelectionState.Dragging
-        },
         onDragStopped = { velocity ->
             launch { state.performFling(velocity, decay) }
         },
@@ -220,11 +217,6 @@ interface PagerScope : BoxScope {
      * Returns the current selected page offset
      */
     val currentPageOffset: Float
-
-    /**
-     * Returns the current selection state
-     */
-    val selectionState: PagerState.SelectionState
 }
 
 @ExperimentalPagerApi
@@ -237,7 +229,4 @@ private class PagerScopeImpl(
 
     override val currentPageOffset: Float
         get() = state.currentPageOffset
-
-    override val selectionState: PagerState.SelectionState
-        get() = state.selectionState
 }
