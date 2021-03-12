@@ -156,8 +156,7 @@ fun Pager(
             }
 
             for (page in firstPage..lastPage) {
-                val pageData = PageData(page)
-                key(pageData) {
+                key(page) {
                     val itemSemantics = Modifier.composed {
                         semantics(mergeDescendants = true) {
                             this.selected = page == state.currentPage
@@ -165,7 +164,7 @@ fun Pager(
                     }
                     Box(
                         contentAlignment = Alignment.Center,
-                        modifier = itemSemantics.then(pageData)
+                        modifier = itemSemantics.then(PageData(page))
                     ) {
                         val scope = remember(this, state) {
                             PagerScopeImpl(this, state)
