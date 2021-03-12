@@ -46,25 +46,28 @@ private const val LogTag = "PagerState"
 /**
  * Creates a [PagerState] that is remembered across compositions.
  *
- * Changes to the provided initial values will **not** result in the state being recreated or
- * changed in any way if it has already been created.
+ * Changes to the provided values for [initialPage] and [initialPageOffset] will **not** result
+ * in the state being recreated or changed in any way if it has already been created.
+ * Changes to [pageCount] will result in the [PagerState] being updated.
  *
  * @param pageCount the initial value for [PagerState.pageCount]
- * @param currentPage the initial value for [PagerState.currentPage]
- * @param currentPageOffset the initial value for [PagerState.currentPageOffset]
+ * @param initialPage the initial value for [PagerState.currentPage]
+ * @param initialPageOffset the initial value for [PagerState.currentPageOffset]
  */
 @ExperimentalPagerApi
 @Composable
 fun rememberPagerState(
-    pageCount: Int,
-    currentPage: Int = 0,
-    @FloatRange(from = 0.0, to = 1.0) currentPageOffset: Float = 0f,
+    @IntRange(from = 0) pageCount: Int,
+    @IntRange(from = 0) initialPage: Int = 0,
+    @FloatRange(from = 0.0, to = 1.0) initialPageOffset: Float = 0f,
 ): PagerState = rememberSaveable(saver = PagerState.Saver) {
     PagerState(
         pageCount = pageCount,
-        currentPage = currentPage,
-        currentPageOffset = currentPageOffset,
+        currentPage = initialPage,
+        currentPageOffset = initialPageOffset,
     )
+}.apply {
+    this.pageCount = pageCount
 }
 
 /**
@@ -79,14 +82,20 @@ fun rememberPagerState(
 @ExperimentalPagerApi
 @Stable
 class PagerState(
-    pageCount: Int,
-    currentPage: Int = 0,
+    @IntRange(from = 0) pageCount: Int,
+    @IntRange(from = 0) currentPage: Int = 0,
     @FloatRange(from = 0.0, to = 1.0) currentPageOffset: Float = 0f,
 ) {
     private var _pageCount by mutableStateOf(pageCount)
     private var _currentPage by mutableStateOf(currentPage)
     private val _currentPageOffset = mutableStateOf(currentPageOffset)
     internal var pageSize by mutableStateOf(0)
+
+    init {
+        require(pageCount >= 0) { "pageCount must be >= 0" }
+        requireCurrentPage(currentPage, "currentPage")
+        requireCurrentPageOffset(currentPageOffset, "currentPageOffset")
+    }
 
     /**
      * The number of pages to display.
@@ -95,7 +104,8 @@ class PagerState(
     var pageCount: Int
         get() = _pageCount
         set(@IntRange(from = 0) value) {
-            _pageCount = value.coerceAtLeast(0)
+            require(value >= 0) { "pageCount must be >= 0" }
+            _pageCount = value
             currentPage = currentPage.coerceIn(0, lastPageIndex)
         }
 
@@ -145,8 +155,8 @@ class PagerState(
         @FloatRange(from = 0.0, to = 1.0) pageOffset: Float = 0f,
         initialVelocity: Float = 0f,
     ) {
-        require(page in 0 until pageCount) { "page must be >= 0 and < pageCount" }
-        require(pageOffset in 0f..1f) { "pageOffset must be >= 0 and <= 1" }
+        requireCurrentPage(page, "page")
+        requireCurrentPageOffset(pageOffset, "pageOffset")
 
         if (page == currentPage) return
 
@@ -176,8 +186,8 @@ class PagerState(
         @IntRange(from = 0) page: Int,
         @FloatRange(from = 0.0, to = 1.0) pageOffset: Float = 0f,
     ) {
-        require(page in 0 until pageCount) { "page must be >= 0 and < pageCount" }
-        require(pageOffset in 0f..1f) { "pageOffset must be >= 0 and <= 1" }
+        requireCurrentPage(page, "page")
+        requireCurrentPageOffset(pageOffset, "pageOffset")
 
         // We don't specifically use the DragScope's dragBy, but
         // we do want to use it's mutex
@@ -352,6 +362,24 @@ class PagerState(
         "currentPage=$currentPage, " +
         "currentPageOffset=$currentPageOffset" +
         ")"
+
+    private fun requireCurrentPage(value: Int, name: String) {
+        if (pageCount == 0) {
+            require(value == 0) { "$name must be 0 when pageCount is 0" }
+        } else {
+            require(value in 0 until pageCount) {
+                "$name must be >= 0 and < pageCount"
+            }
+        }
+    }
+
+    private fun requireCurrentPageOffset(value: Float, name: String) {
+        if (pageCount == 0) {
+            require(value == 0f) { "$name must be 0f when pageCount is 0" }
+        } else {
+            require(value in 0f..1f) { "$name must be >= 0 and <= 1" }
+        }
+    }
 
     companion object {
         /**
