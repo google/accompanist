@@ -18,7 +18,7 @@ A library that enables reuse of [AppCompat][appcompat] XML themes for theming in
 ## Updates
 
 [Jetpack Compose][compose] is a fast-moving project and we aim to keep these these libraries up-to-date with the
-latest tagged release on Compose as quickly as possible. Each [release](https://github.com/chrisbanes/accompanist/releases)  outlines what version of the Compose libraries it depends on.
+latest tagged release on Compose as quickly as possible. Each [release](https://github.com/google/accompanist/releases)  outlines what version of the Compose libraries it depends on.
 
 ## Future?
 
@@ -62,5 +62,5 @@ limitations under the License.
 
 [appcompat]: https://developer.android.com/jetpack/androidx/releases/appcompat
 [compose]: https://developer.android.com/jetpack/compose
-[snap]: https://oss.sonatype.org/content/repositories/snapshots/dev/chrisbanes/accompanist/
+[snap]: https://oss.sonatype.org/content/repositories/snapshots/dev/google/accompanist/
 [mdc]: https://material.io/develop/android/

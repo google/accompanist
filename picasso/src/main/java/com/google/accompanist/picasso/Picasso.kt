@@ -142,7 +142,7 @@ fun PicassoImage(
                     // aspect ratio. centerInside() isn't great, since it means that the image
                     // could be loaded smaller than the composable, only to be scaled up again by
                     // the chosen ContentScale. Unfortunately there's not much else we can do.
-                    // See https://github.com/chrisbanes/accompanist/issues/118
+                    // See https://github.com/google/accompanist/issues/118
                     r.resize(size.width, size.height)
                         .centerInside()
                         .onlyScaleDown()

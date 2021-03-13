@@ -83,7 +83,7 @@ fun <R : Any, TR : Any> ImageLoad(
                     updatedExecuteRequest(transformedRequest)
                 } catch (e: CancellationException) {
                     // We specifically don't do anything for the request coroutine being
-                    // cancelled: https://github.com/chrisbanes/accompanist/issues/217
+                    // cancelled: https://github.com/google/accompanist/issues/217
                     throw e
                 } catch (e: Error) {
                     // Re-throw all Errors

@@ -14,7 +14,7 @@ repositories {
 
 dependencies {
     // Check the latest SNAPSHOT version from the link above
-    classpath 'dev.chrisbanes.accompanist:accompanist-coil:XXX-SNAPSHOT'
+    classpath 'com.google.accompanist:accompanist-coil:XXX-SNAPSHOT'
 }
 ```
 
@@ -38,7 +38,7 @@ repositories {
 
 dependencies {
     // Check the latest SNAPSHOT version from the link above
-    classpath 'dev.chrisbanes.accompanist:accompanist-coil:XXXX.compose-YYYYY-SNAPSHOT'
+    classpath 'com.google.accompanist:accompanist-coil:XXXX.compose-YYYYY-SNAPSHOT'
 }
 ```
 
@@ -47,4 +47,4 @@ These builds are updated regularly, but there's no guarantee that we will create
 *Note:* you might also see versions in the scheme `x.x.x.ui-YYYY-SNAPSHOT`. These are the same, just using an older suffix.
 
 
- [snap]: https://oss.sonatype.org/content/repositories/snapshots/dev/chrisbanes/accompanist/
+ [snap]: https://oss.sonatype.org/content/repositories/snapshots/dev/google/accompanist/
