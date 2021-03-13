@@ -47,4 +47,4 @@ These builds are updated regularly, but there's no guarantee that we will create
 *Note:* you might also see versions in the scheme `x.x.x.ui-YYYY-SNAPSHOT`. These are the same, just using an older suffix.
 
 
- [snap]: https://oss.sonatype.org/content/repositories/snapshots/dev/google/accompanist/
+ [snap]: https://oss.sonatype.org/content/repositories/snapshots/com/google/accompanist/

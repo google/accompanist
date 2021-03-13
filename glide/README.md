@@ -142,5 +142,5 @@ dependencies {
 Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap]. These are updated on every commit.
 
 [compose]: https://developer.android.com/jetpack/compose
-[snap]: https://oss.sonatype.org/content/repositories/snapshots/dev/google/accompanist/accompanist-glide/
+[snap]: https://oss.sonatype.org/content/repositories/snapshots/com/google/accompanist/accompanist-glide/
 [glide]: https://bumptech.github.io/glide/

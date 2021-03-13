@@ -34,4 +34,4 @@ Snapshots of the development version are available in Sonatype's `snapshots` [re
   [appcompat]: https://developer.android.com/jetpack/androidx/releases/appcompat
   [compose]: https://developer.android.com/jetpack/compose
   [appcompat]: https://developer.android.com/jetpack/androidx/releases/appcompat
-  [snap]: https://oss.sonatype.org/content/repositories/snapshots/dev/google/accompanist/accompanist-appcompat-theme/
+  [snap]: https://oss.sonatype.org/content/repositories/snapshots/com/google/accompanist/accompanist-appcompat-theme/

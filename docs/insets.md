@@ -90,7 +90,7 @@ LazyColumn(
 )
 ```
 
-For a more complex example, see the [`EdgeToEdgeLazyColumn`](https://github.com/google/accompanist/blob/main/sample/src/main/java/dev/google/accompanist/sample/insets/EdgeToEdgeLazyColumn.kt) example:
+For a more complex example, see the [`EdgeToEdgeLazyColumn`](https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/insets/EdgeToEdgeLazyColumn.kt) example:
 
 <a href="images/edge-to-edge-list.jpg">
 <img src="images/edge-to-edge-list.jpg" width=300>
@@ -129,7 +129,7 @@ The features below are experimental, and require developers to [opt-in](https://
     )
     ```
 
-    See the [ImeAnimationSample](https://github.com/google/accompanist/blob/main/sample/src/main/java/dev/google/accompanist/sample/insets/ImeAnimationSample.kt) for a working example.
+    See the [ImeAnimationSample](https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/insets/ImeAnimationSample.kt) for a working example.
 
 ### IME animations
 If you're using the animation insets support for IME/keyboard animations, you also need to ensure that the activity's `windowSoftInputMode` is set to `adjustResize`:
@@ -168,7 +168,7 @@ The default value of `windowSoftInputMode` _should_ work, but Compose does not c
     }
     ```
 
-    See the [ImeAnimationSample](https://github.com/google/accompanist/blob/main/sample/src/main/java/dev/google/accompanist/sample/insets/ImeAnimationSample.kt) for a working example.
+    See the [ImeAnimationSample](https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/insets/ImeAnimationSample.kt) for a working example.
 
 
 ## Download
@@ -197,7 +197,7 @@ If you find that something isn't working correctly, here's a checklist to try:
 - If you're using `ProvideWindowInsets` (or `ViewWindowInsetObserver`) in multiple layers of your view hierarchy (i.e. in the activity, _and_ in a fragment), you need to turn off consuming of insets. By default `ProvideWindowInsets` and `ViewWindowInsetObserver` will completely consume any insets passed to it. In the previous example, this means that the activity content will get the insets, but the fragment won't. To disable consuming, pass `consumeWindowInsets = false` to `ProvideWindowInsets` or `ViewWindowInsetObserver.start()`.
 
 [compose]: https://developer.android.com/jetpack/compose
-[snap]: https://oss.sonatype.org/content/repositories/snapshots/dev/google/accompanist/accompanist-insets/
+[snap]: https://oss.sonatype.org/content/repositories/snapshots/com/google/accompanist/accompanist-insets/
 [insetter-view]: https://github.com/chrisbanes/insetter
 [insets]: https://developer.android.com/reference/kotlin/androidx/core/view/WindowInsetsCompat
 [insettypes]: https://developer.android.com/reference/kotlin/androidx/core/view/WindowInsetsCompat.Type
