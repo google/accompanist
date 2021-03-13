@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package dev.chrisbanes.accompanist.flowlayout
+package com.google.accompanist.flowlayout
 
 import androidx.activity.ComponentActivity
 import java.util.concurrent.CountDownLatch

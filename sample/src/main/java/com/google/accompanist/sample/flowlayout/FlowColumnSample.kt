@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package dev.chrisbanes.accompanist.sample.flowlayout
+package com.google.accompanist.sample.flowlayout
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -23,9 +23,9 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.ui.res.stringResource
-import dev.chrisbanes.accompanist.flowlayout.FlowColumn
-import dev.chrisbanes.accompanist.sample.AccompanistSampleTheme
-import dev.chrisbanes.accompanist.sample.R
+import com.google.accompanist.flowlayout.FlowColumn
+import com.google.accompanist.sample.AccompanistSampleTheme
+import com.google.accompanist.sample.R
 
 class FlowColumnSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

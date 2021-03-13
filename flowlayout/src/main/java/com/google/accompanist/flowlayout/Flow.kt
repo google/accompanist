@@ -16,7 +16,7 @@
 
 @file:JvmName("Flow")
 
-package dev.chrisbanes.accompanist.flowlayout
+package com.google.accompanist.flowlayout
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.Composable

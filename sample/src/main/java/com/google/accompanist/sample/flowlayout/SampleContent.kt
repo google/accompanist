@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package dev.chrisbanes.accompanist.sample.flowlayout
+package com.google.accompanist.sample.flowlayout
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

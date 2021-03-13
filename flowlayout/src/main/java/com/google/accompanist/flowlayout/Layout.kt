@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package dev.chrisbanes.accompanist.flowlayout
+package com.google.accompanist.flowlayout
 
 import androidx.compose.ui.unit.Constraints
 
