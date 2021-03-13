@@ -15,7 +15,7 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="dev.chrisbanes.accompanist.appcompattheme">
+    package="com.google.accompanist.appcompattheme">
 
     <uses-sdk android:targetSdkVersion="29" />
 

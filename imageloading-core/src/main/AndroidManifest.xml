@@ -14,5 +14,5 @@
   ~ limitations under the License.
   -->
 
-<manifest package="dev.chrisbanes.accompanist.imageloading">
+<manifest package="com.google.accompanist.imageloading">
 </manifest>

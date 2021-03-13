@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import dev.chrisbanes.accompanist.buildsrc.Libs
+import com.google.accompanist.buildsrc.Libs
 
 apply plugin: 'com.android.application'
 

@@ -15,7 +15,7 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="dev.chrisbanes.accompanist.glide.test">
+    package="com.google.accompanist.glide.test">
 
     <uses-sdk android:targetSdkVersion="30" />
 

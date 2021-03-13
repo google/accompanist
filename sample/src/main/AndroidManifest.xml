@@ -16,13 +16,13 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="dev.chrisbanes.accompanist.sample">
+    package="com.google.accompanist.sample">
 
     <!-- Used for loading images from the network -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".SampleApplication"
+        android:name="com.google.accompanist.sample.SampleApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -31,7 +31,7 @@
         android:theme="@style/Theme.AccompanistSample.NoActionBar">
 
         <activity
-            android:name=".MainActivity"
+            android:name="com.google.accompanist.sample.MainActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Material.Light">
             <intent-filter>
@@ -41,128 +41,128 @@
         </activity>
 
         <activity
-            android:name=".coil.CoilBasicSample"
+            android:name="com.google.accompanist.sample.coil.CoilBasicSample"
             android:label="@string/coil_title_basic">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
             </intent-filter>
         </activity>
 
         <activity
-            android:name=".coil.CoilLazyColumnSample"
+            android:name="com.google.accompanist.sample.coil.CoilLazyColumnSample"
             android:label="@string/coil_title_lazy_row">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
             </intent-filter>
         </activity>
 
         <activity
-            android:name=".coil.CoilLazyGridSample"
+            android:name="com.google.accompanist.sample.coil.CoilLazyGridSample"
             android:label="@string/coil_title_lazy_grid"
             android:theme="@style/Theme.AccompanistSample.NoActionBar.TransparentBars">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
             </intent-filter>
         </activity>
 
         <activity
-            android:name=".picasso.PicassoBasicSample"
+            android:name="com.google.accompanist.sample.picasso.PicassoBasicSample"
             android:label="@string/picasso_title_basic">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
             </intent-filter>
         </activity>
 
         <activity
-            android:name=".picasso.PicassoLazyColumnSample"
+            android:name="com.google.accompanist.sample.picasso.PicassoLazyColumnSample"
             android:label="@string/picasso_title_lazy_row">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
             </intent-filter>
         </activity>
 
 
         <activity
-            android:name=".picasso.PicassoLazyGridSample"
+            android:name="com.google.accompanist.sample.picasso.PicassoLazyGridSample"
             android:label="@string/picasso_title_lazy_grid"
             android:theme="@style/Theme.AccompanistSample.NoActionBar.TransparentBars">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
             </intent-filter>
         </activity>
 
         <activity
-            android:name=".glide.GlideBasicSample"
+            android:name="com.google.accompanist.sample.glide.GlideBasicSample"
             android:label="@string/glide_title_basic">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
             </intent-filter>
         </activity>
 
         <activity
-            android:name=".glide.GlideLazyColumnSample"
+            android:name="com.google.accompanist.sample.glide.GlideLazyColumnSample"
             android:label="@string/glide_title_lazy_row">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
             </intent-filter>
         </activity>
 
         <activity
-            android:name=".glide.GlideLazyGridSample"
+            android:name="com.google.accompanist.sample.glide.GlideLazyGridSample"
             android:label="@string/glide_title_lazy_grid"
             android:theme="@style/Theme.AccompanistSample.NoActionBar.TransparentBars">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
             </intent-filter>
         </activity>
 
         <activity
-            android:name=".insets.InsetsBasicSample"
+            android:name="com.google.accompanist.sample.insets.InsetsBasicSample"
             android:label="@string/insets_title_basic"
             android:theme="@style/Theme.AccompanistSample.NoActionBar.TransparentBars">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
             </intent-filter>
         </activity>
 
         <activity
-            android:name=".insets.InsetsFragmentSample"
+            android:name="com.google.accompanist.sample.insets.InsetsFragmentSample"
             android:label="@string/insets_title_fragment"
             android:theme="@style/Theme.AccompanistSample.NoActionBar.TransparentBars">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
             </intent-filter>
         </activity>
 
         <activity
-            android:name=".insets.EdgeToEdgeLazyColumn"
+            android:name="com.google.accompanist.sample.insets.EdgeToEdgeLazyColumn"
             android:label="@string/insets_title_list"
             android:theme="@style/Theme.AccompanistSample.NoActionBar.TransparentBars">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
             </intent-filter>
         </activity>
 
         <activity
-            android:name=".insets.ImeAnimationSample"
+            android:name="com.google.accompanist.sample.insets.ImeAnimationSample"
             android:label="@string/insets_title_imeanim"
             android:theme="@style/Theme.AccompanistSample.NoActionBar.TransparentBars"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="dev.chrisbanes.accompanist.sample.SAMPLE_CODE" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
             </intent-filter>
         </activity>
 
