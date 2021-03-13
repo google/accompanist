@@ -24,7 +24,7 @@ android {
     compileSdkVersion 30
 
     defaultConfig {
-        applicationId "dev.chrisbanes.insetter.sample"
+        applicationId "com.google.accompanist.sample"
         minSdkVersion 21
         targetSdkVersion 30
 
