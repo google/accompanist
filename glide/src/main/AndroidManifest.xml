@@ -14,5 +14,5 @@
   ~ limitations under the License.
   -->
 
-<manifest package="dev.chrisbanes.accompanist.glide">
+<manifest package="com.google.accompanist.glide">
 </manifest>

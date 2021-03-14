@@ -65,5 +65,5 @@ limitations under the License.
 
 [appcompat]: https://developer.android.com/jetpack/androidx/releases/appcompat
 [compose]: https://developer.android.com/jetpack/compose
-[snap]: https://oss.sonatype.org/content/repositories/snapshots/dev/chrisbanes/accompanist/
+[snap]: https://oss.sonatype.org/content/repositories/snapshots/com/google/accompanist/
 [mdc]: https://material.io/develop/android/

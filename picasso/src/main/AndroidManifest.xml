@@ -14,5 +14,5 @@
   ~ limitations under the License.
   -->
 
-<manifest package="dev.chrisbanes.accompanist.picasso">
+<manifest package="com.google.accompanist.picasso">
 </manifest>
