@@ -14,5 +14,5 @@
   ~ limitations under the License.
   -->
 
-<manifest package="dev.chrisbanes.accompanist.coil">
+<manifest package="com.google.accompanist.coil">
 </manifest>

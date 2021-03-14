@@ -14,5 +14,5 @@
   ~ limitations under the License.
   -->
 
-<manifest package="dev.chrisbanes.accompanist.appcompattheme">
+<manifest package="com.google.accompanist.appcompattheme">
 </manifest>

@@ -1,4 +1,4 @@
-![Accompanist logo](images/social.svg)
+![Accompanist logo](docs/header.png)
 
 Accompanist is a group of libraries which aim to supplement [Jetpack Compose][compose] with features which are commonly required by developers, but not yet available.
 
@@ -65,5 +65,5 @@ limitations under the License.
 
 [appcompat]: https://developer.android.com/jetpack/androidx/releases/appcompat
 [compose]: https://developer.android.com/jetpack/compose
-[snap]: https://oss.sonatype.org/content/repositories/snapshots/dev/chrisbanes/accompanist/
+[snap]: https://oss.sonatype.org/content/repositories/snapshots/com/google/accompanist/
 [mdc]: https://material.io/develop/android/

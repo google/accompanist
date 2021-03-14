@@ -1,5 +1,7 @@
 # AppCompat Compose Theme Adapter
 
+[![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-appcompat-theme)](https://search.maven.org/search?q=g:com.google.accompanist)
+
 A library that enables reuse of [AppCompat][appcompat] XML themes for theming in [Jetpack Compose][compose].
 
 The basis of theming in [Jetpack Compose][compose] is the [`MaterialTheme`][materialtheme] composable, where you provide [`Colors`][colors], [`Shapes`][shapes] and [`Typography`][typography] instances containing your styling parameters:
@@ -124,13 +126,15 @@ There are some known limitations with the implementation at the moment:
 
 ## Usage
 
+[![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-appcompat-theme)](https://search.maven.org/search?q=g:com.google.accompanist)
+
 ``` groovy
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation "dev.chrisbanes.accompanist:accompanist-appcompat-theme:<version>"
+    implementation "com.google.accompanist:accompanist-appcompat-theme:<version>"
 }
 ```
 
@@ -165,8 +169,8 @@ limitations under the License.
 
  [compose]: https://developer.android.com/jetpack/compose
  [appcompat]: https://developer.android.com/jetpack/androidx/releases/appcompat
- [appcompatheme]: https://google.github.io/accompanist/api/appcompat-theme/appcompat-theme/dev.chrisbanes.accompanist.appcompattheme/-app-compat-theme.html
- [createappcompattheme]: https://google.github.io/accompanist/api/appcompat-theme/appcompat-theme/dev.chrisbanes.accompanist.appcompattheme/create-app-compat-theme.html
+ [appcompatheme]: https://google.github.io/accompanist/api/appcompat-theme/appcompat-theme/com.google.accompanist.appcompattheme/-app-compat-theme.html
+ [createappcompattheme]: https://google.github.io/accompanist/api/appcompat-theme/appcompat-theme/com.google.accompanist.appcompattheme/create-app-compat-theme.html
  [materialtheme]: https://developer.android.com/reference/kotlin/androidx/compose/material/MaterialTheme
  [shapes]: https://developer.android.com/reference/kotlin/androidx/compose/material/Shapes
  [colors]: https://developer.android.com/reference/kotlin/androidx/compose/material/Colors

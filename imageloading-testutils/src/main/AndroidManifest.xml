@@ -16,14 +16,14 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="dev.chrisbanes.accompanist.imageloading.test">
+    package="com.google.accompanist.imageloading.test">
 
     <!-- Needed for MockWebServer -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <!-- usesCleartextTraffic=true because we use MockWebServer -->
     <application
-        android:name=".TestApplication"
+        android:name="com.google.accompanist.imageloading.test.TestApplication"
         android:usesCleartextTraffic="true">
         <activity
             android:name="androidx.activity.ComponentActivity"

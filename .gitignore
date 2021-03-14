@@ -35,6 +35,8 @@ org.eclipse.buildship.core.prefs
 
 # Temporary API docs
 docs/api
+package-list-coil-base
+
 # Mkdocs temporary serving folder
 docs-gen
 site

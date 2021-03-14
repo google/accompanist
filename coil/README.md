@@ -1,6 +1,6 @@
 # Coil for Jetpack Compose
 
-[![Maven Central](https://img.shields.io/maven-central/v/dev.chrisbanes.accompanist/accompanist-coil)](https://search.maven.org/search?q=g:dev.chrisbanes.accompanist)
+[![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-coil)](https://search.maven.org/search?q=g:com.google.accompanist)
 
 This library brings easy-to-use composable which can fetch and display images from external sources, such as network, using the [Coil][coil] image loading library.
 
@@ -122,7 +122,7 @@ For more information on composition locals, see [here](https://developer.android
 
 ## Download
 
-[![Maven Central](https://img.shields.io/maven-central/v/dev.chrisbanes.accompanist/accompanist-coil)](https://search.maven.org/search?q=g:dev.chrisbanes.accompanist)
+[![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-coil)](https://search.maven.org/search?q=g:com.google.accompanist)
 
 ```groovy
 repositories {
@@ -130,7 +130,7 @@ repositories {
 }
 
 dependencies {
-    implementation "dev.chrisbanes.accompanist:accompanist-coil:<version>"
+    implementation "com.google.accompanist:accompanist-coil:<version>"
 }
 ```
 
@@ -141,5 +141,5 @@ Snapshots of the development version are available in [Sonatype's `snapshots` re
 Eventually the goal is to upstream all of this functionality back to [Coil][coil]. [Jetpack Compose][compose]'s development is currently moving very fast, which means that there are frequent API changes between releases. For now, it makes sense to keep this as a seperately released library to track the latest Compose release.
 
 [compose]: https://developer.android.com/jetpack/compose
-[snap]: https://oss.sonatype.org/content/repositories/snapshots/dev/chrisbanes/accompanist/accompanist-coil/
+[snap]: https://oss.sonatype.org/content/repositories/snapshots/com/google/accompanist/accompanist-coil/
 [coil]: https://github.com/coil-kt/coil
