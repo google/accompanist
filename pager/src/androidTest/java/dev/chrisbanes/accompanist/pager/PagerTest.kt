@@ -351,7 +351,7 @@ class PagerTest(
         val pagerState = PagerState(pageCount = pageCount)
 
         composeTestRule.setContent(layoutDirection) {
-            Pager(
+            HorizontalPager(
                 state = pagerState,
                 offscreenLimit = offscreenLimit,
                 modifier = Modifier.fillMaxWidth()

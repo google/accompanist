@@ -21,7 +21,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import dev.chrisbanes.accompanist.pager.ExperimentalPagerApi
-import dev.chrisbanes.accompanist.pager.Pager
+import dev.chrisbanes.accompanist.pager.HorizontalPager
 import dev.chrisbanes.accompanist.pager.rememberPagerState
 
 @OptIn(ExperimentalPagerApi::class)
@@ -30,7 +30,7 @@ fun PagerSample() {
     // Display 10 items
     val pagerState = rememberPagerState(pageCount = 10)
 
-    Pager(state = pagerState) { page ->
+    HorizontalPager(state = pagerState) { page ->
         // Our page content
         Text(
             text = "Page: $page",

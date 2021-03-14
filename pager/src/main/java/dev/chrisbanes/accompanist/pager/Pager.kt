@@ -94,7 +94,7 @@ private val Measurable.page: Int
  */
 @ExperimentalPagerApi
 @Composable
-fun Pager(
+fun HorizontalPager(
     state: PagerState,
     modifier: Modifier = Modifier,
     @IntRange(from = 1) offscreenLimit: Int = 1,
@@ -202,7 +202,7 @@ fun Pager(
 }
 
 /**
- * Scope for [Pager] content.
+ * Scope for [HorizontalPager] content.
  */
 @ExperimentalPagerApi
 @Stable

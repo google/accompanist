@@ -49,7 +49,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.chrisbanes.accompanist.coil.CoilImage
 import dev.chrisbanes.accompanist.pager.ExperimentalPagerApi
-import dev.chrisbanes.accompanist.pager.Pager
+import dev.chrisbanes.accompanist.pager.HorizontalPager
 import dev.chrisbanes.accompanist.pager.PagerState
 import dev.chrisbanes.accompanist.pager.rememberPagerState
 import dev.chrisbanes.accompanist.sample.AccompanistSampleTheme
@@ -57,7 +57,7 @@ import dev.chrisbanes.accompanist.sample.R
 import dev.chrisbanes.accompanist.sample.randomSampleImageUrl
 import kotlinx.coroutines.launch
 
-class PagerBasicSample : ComponentActivity() {
+class HorizontalPagerBasicSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -77,7 +77,7 @@ private fun Sample() {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.pager_title_basics)) },
+                title = { Text(stringResource(R.string.horiz_pager_title_basics)) },
                 backgroundColor = MaterialTheme.colors.surface,
             )
         },
@@ -87,7 +87,7 @@ private fun Sample() {
             // Display 10 items
             val pagerState = rememberPagerState(pageCount = 10)
 
-            Pager(
+            HorizontalPager(
                 state = pagerState,
                 // We increase the offscreen limit, to allow pre-loading of images
                 offscreenLimit = 2,

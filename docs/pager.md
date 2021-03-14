@@ -1,8 +1,8 @@
-# Pager composable
+# Paging layouts
 
 [![Maven Central](https://img.shields.io/maven-central/v/dev.chrisbanes.accompanist/accompanist-pager)](https://search.maven.org/search?q=g:dev.chrisbanes.accompanist)
 
-A library which provides a horizontally paging layout for Jetpack Compose. If you've used Android's [`ViewPager`](https://developer.android.com/reference/kotlin/androidx/viewpager/widget/ViewPager) before, it has similar properties.
+A library which provides paging layouts for Jetpack Compose. If you've used Android's [`ViewPager`](https://developer.android.com/reference/kotlin/androidx/viewpager/widget/ViewPager) before, it has similar properties.
 
 <video width="300" controls loop>
   <source src="demo.mp4" type="video/mp4">
@@ -10,7 +10,7 @@ Your browser does not support the video tag.
 </video>
 
 !!! warning
-    Pager is currently experimental, and it's APIs could change at any time.
+    The pager layouts are currently experimental and the APIs could change at any time.
     All of the APIs are marked with the `@ExperimentalPagerApi` annotation.
 
 The simplest usage looks like the following:
@@ -19,7 +19,7 @@ The simplest usage looks like the following:
 // Display 10 items
 val pagerState = rememberPagerState(pageCount = 10)
 
-Pager(state = pagerState) { page ->
+HorizontalPager(state = pagerState) { page ->
     // Our page content
     Text(
         text = "Page: $page",
@@ -30,14 +30,14 @@ Pager(state = pagerState) { page ->
 
 ## Lazy creation
 
-Pages in a `Pager` are lazily created and laid-out as required by the layout. As the user scrolls through pages, any pages which are no longer required are removed from the content.
+Pages in a `HorizontalPager` are lazily created and laid-out as required by the layout. As the user scrolls through pages, any pages which are no longer required are removed from the content.
 
 ### Offscreen Limit
 
-Pager allows the setting of the `offscreenLimit`, which defines the number of pages that should be retained on either side of the current page. Pages beyond this limit will be removed, and then recreated when needed. This value defaults to `1`, but can be increased to enable pre-loading of more content:
+HorizontalPager allows the setting of the `offscreenLimit`, which defines the number of pages that should be retained on either side of the current page. Pages beyond this limit will be removed, and then recreated when needed. This value defaults to `1`, but can be increased to enable pre-loading of more content:
 
 ```kotlin
-Pager(
+HorizontalPager(
     state = pagerState,
     offscreenLimit = 2,
 ) { page ->

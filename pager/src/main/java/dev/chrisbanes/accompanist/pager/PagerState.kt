@@ -71,7 +71,7 @@ fun rememberPagerState(
 }
 
 /**
- * A state object that can be hoisted to control and observe scrolling for [Pager].
+ * A state object that can be hoisted to control and observe scrolling for [HorizontalPager].
  *
  * In most cases, this will be created via [rememberPagerState].
  *
