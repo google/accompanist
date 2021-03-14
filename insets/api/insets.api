@@ -1,6 +1,7 @@
 public final class com/google/accompanist/insets/ComposeInsets {
 	public static final fun ProvideWindowInsets (ZLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 	public static final fun ProvideWindowInsets (ZZLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun coerceEachDimensionAtLeast (Lcom/google/accompanist/insets/Insets;Lcom/google/accompanist/insets/Insets;)Lcom/google/accompanist/insets/Insets;
 	public static final fun getLocalWindowInsets ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 	public static final fun imePadding (Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
 	public static final fun navigationBarsHeight-3ABfNKs (Landroidx/compose/ui/Modifier;F)Landroidx/compose/ui/Modifier;
