@@ -18,6 +18,7 @@ nav:
   - 'Glide': glide.md
   - 'Picasso': picasso.md
   - 'Insets': insets.md
+  - 'Pager layouts': pager.md
   - 'AppCompat Theme': appcompat-theme.md
   - 'API':
     - 'Coil': api/coil/coil/
@@ -25,6 +26,7 @@ nav:
     - 'Picasso': api/picasso/picasso/
     - 'Image Loading Core': api/imageloading-core/imageloading-core/
     - 'Insets': api/insets/insets/
+    - 'Pager layouts': api/pager/pager
     - 'AppCompat Theme': api/appcompat-theme/appcompat-theme
   - 'Snapshots': using-snapshot-version.md
   - 'Contributing': contributing.md
