@@ -14,5 +14,5 @@
   ~ limitations under the License.
   -->
 
-<manifest package="dev.chrisbanes.accompanist.insets">
+<manifest package="com.google.accompanist.insets">
 </manifest>

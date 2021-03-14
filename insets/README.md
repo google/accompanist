@@ -1,6 +1,6 @@
 # Insets for Jetpack Compose
 
-[![Maven Central](https://img.shields.io/maven-central/v/dev.chrisbanes.accompanist/accompanist-insets)](https://search.maven.org/search?q=g:dev.chrisbanes.accompanist)
+[![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-insets)](https://search.maven.org/search?q=g:com.google.accompanist)
 
 Insets for Jetpack Compose takes a lot of the ideas which drove [Insetter][insetter-view] for views, and applies them for use in composables.
 
@@ -28,11 +28,11 @@ repositories {
 }
 
 dependencies {
-    implementation "dev.chrisbanes.accompanist:accompanist-insets:<version>"
+    implementation "com.google.accompanist:accompanist-insets:<version>"
 }
 ```
 
 Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap]. These are updated on every commit.
 
 
-  [snap]: https://oss.sonatype.org/content/repositories/snapshots/dev/chrisbanes/accompanist/accompanist-insets/
+  [snap]: https://oss.sonatype.org/content/repositories/snapshots/com/google/accompanist/accompanist-insets/

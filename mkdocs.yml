@@ -1,7 +1,7 @@
 # Project information
 site_name: 'Accompanist'
 site_description: 'A group of libraries to help write Jetpack Compose apps.'
-site_author: 'Chris Banes'
+site_author: 'Google'
 site_url: 'https://google.github.io/accompanist/'
 remote_branch: gh-pages
 
