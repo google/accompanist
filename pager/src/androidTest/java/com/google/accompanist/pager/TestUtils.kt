@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package dev.chrisbanes.accompanist.pager
+package com.google.accompanist.pager
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider

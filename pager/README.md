@@ -1,8 +1,8 @@
 # Pager composable for Jetpack Compose
 
-[![Maven Central](https://img.shields.io/maven-central/v/dev.chrisbanes.accompanist/accompanist-pager)](https://search.maven.org/search?q=g:dev.chrisbanes.accompanist)
+[![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-pager)](https://search.maven.org/search?q=g:com.google.accompanist)
 
-For more information, visit the documentation: https://chrisbanes.github.io/accompanist/pager
+For more information, visit the documentation: https://google.github.io/accompanist/pager
 
 ## Download
 
@@ -12,10 +12,10 @@ repositories {
 }
 
 dependencies {
-    implementation "dev.chrisbanes.accompanist:accompanist-pager:<version>"
+    implementation "com.google.accompanist:accompanist-pager:<version>"
 }
 ```
 
 Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap]. These are updated on every commit.
 
-  [snap]: https://oss.sonatype.org/content/repositories/snapshots/dev/chrisbanes/accompanist/accompanist-insets/
+  [snap]: https://oss.sonatype.org/content/repositories/snapshots/com/google/accompanist/accompanist-pager/

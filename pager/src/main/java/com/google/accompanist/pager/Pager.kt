@@ -16,7 +16,7 @@
 
 @file:JvmName("Pager")
 
-package dev.chrisbanes.accompanist.pager
+package com.google.accompanist.pager
 
 import android.util.Log
 import androidx.annotation.IntRange
@@ -83,7 +83,7 @@ private val Measurable.page: Int
  * recreated as needed. This value defaults to `1`, but can be increased to enable pre-loading
  * of more content.
  *
- * @sample dev.chrisbanes.accompanist.sample.pager.PagerSample
+ * @sample com.google.accompanist.sample.pager.PagerSample
  *
  * @param state the state object to be used to control or observe the list's state.
  * @param modifier the modifier to apply to this layout.

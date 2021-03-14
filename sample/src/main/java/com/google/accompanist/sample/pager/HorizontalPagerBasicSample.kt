@@ -48,13 +48,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.coil.CoilImage
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.PagerState
+import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
-import dev.chrisbanes.accompanist.pager.ExperimentalPagerApi
-import dev.chrisbanes.accompanist.pager.HorizontalPager
-import dev.chrisbanes.accompanist.pager.PagerState
-import dev.chrisbanes.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 
 class HorizontalPagerBasicSample : ComponentActivity() {

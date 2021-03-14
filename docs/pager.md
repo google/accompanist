@@ -1,6 +1,6 @@
 # Paging layouts
 
-[![Maven Central](https://img.shields.io/maven-central/v/dev.chrisbanes.accompanist/accompanist-pager)](https://search.maven.org/search?q=g:dev.chrisbanes.accompanist)
+[![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-pager)](https://search.maven.org/search?q=g:com.google.accompanist)
 
 A library which provides paging layouts for Jetpack Compose. If you've used Android's [`ViewPager`](https://developer.android.com/reference/kotlin/androidx/viewpager/widget/ViewPager) before, it has similar properties.
 
@@ -55,7 +55,7 @@ repositories {
 }
 
 dependencies {
-    implementation "dev.chrisbanes.accompanist:accompanist-pager:<version>"
+    implementation "com.google.accompanist:accompanist-pager:<version>"
 }
 ```
 

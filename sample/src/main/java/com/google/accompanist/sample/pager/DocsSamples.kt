@@ -20,9 +20,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import dev.chrisbanes.accompanist.pager.ExperimentalPagerApi
-import dev.chrisbanes.accompanist.pager.HorizontalPager
-import dev.chrisbanes.accompanist.pager.rememberPagerState
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package dev.chrisbanes.accompanist.pager
+package com.google.accompanist.pager
 
 import androidx.compose.ui.test.junit4.createComposeRule
 import org.junit.Rule

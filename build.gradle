@@ -126,7 +126,7 @@ subprojects {
                 noAndroidSdkLink.set(false)
 
                 // Add samples from :sample module
-                samples.from(rootProject.file("sample/src/main/java/dev/chrisbanes/accompanist"))
+                samples.from(rootProject.file("sample/src/main/java/"))
 
                 // AndroidX + Compose docs
                 externalDocumentationLink {

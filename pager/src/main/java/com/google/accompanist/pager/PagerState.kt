@@ -16,7 +16,7 @@
 
 @file:Suppress("MemberVisibilityCanBePrivate")
 
-package dev.chrisbanes.accompanist.pager
+package com.google.accompanist.pager
 
 import android.util.Log
 import androidx.annotation.FloatRange

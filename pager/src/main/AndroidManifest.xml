@@ -14,5 +14,5 @@
   ~ limitations under the License.
   -->
 
-<manifest package="dev.chrisbanes.accompanist.pager">
+<manifest package="com.google.accompanist.pager">
 </manifest>
