@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import dev.chrisbanes.accompanist.buildsrc.Libs
-import dev.chrisbanes.accompanist.buildsrc.Versions
+import com.google.accompanist.buildsrc.Libs
+import com.google.accompanist.buildsrc.Versions
 
 buildscript {
     repositories {
@@ -156,7 +156,7 @@ subprojects {
                 sourceLink {
                     localDirectory.set(project.file("src/main/java"))
                     // URL showing where the source code can be accessed through the web browser
-                    remoteUrl.set(new URL("https://github.com/chrisbanes/accompanist/blob/main/${project.name}/src/main/java"))
+                    remoteUrl.set(new URL("https://github.com/google/accompanist/blob/main/${project.name}/src/main/java"))
                     // Suffix which is used to append the line number to the URL. Use #L for GitHub
                     remoteLineSuffix.set("#L")
                 }

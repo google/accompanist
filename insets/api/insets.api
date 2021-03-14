@@ -1,4 +1,4 @@
-public final class dev/chrisbanes/accompanist/insets/ComposeInsets {
+public final class com/google/accompanist/insets/ComposeInsets {
 	public static final fun ProvideWindowInsets (ZLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 	public static final fun ProvideWindowInsets (ZZLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 	public static final fun getLocalWindowInsets ()Landroidx/compose/runtime/ProvidableCompositionLocal;
@@ -7,29 +7,29 @@ public final class dev/chrisbanes/accompanist/insets/ComposeInsets {
 	public static synthetic fun navigationBarsHeight-3ABfNKs$default (Landroidx/compose/ui/Modifier;FILjava/lang/Object;)Landroidx/compose/ui/Modifier;
 	public static final fun navigationBarsPadding (Landroidx/compose/ui/Modifier;ZZZ)Landroidx/compose/ui/Modifier;
 	public static synthetic fun navigationBarsPadding$default (Landroidx/compose/ui/Modifier;ZZZILjava/lang/Object;)Landroidx/compose/ui/Modifier;
-	public static final fun navigationBarsWidth-wH6b6FI (Landroidx/compose/ui/Modifier;Ldev/chrisbanes/accompanist/insets/HorizontalSide;F)Landroidx/compose/ui/Modifier;
-	public static synthetic fun navigationBarsWidth-wH6b6FI$default (Landroidx/compose/ui/Modifier;Ldev/chrisbanes/accompanist/insets/HorizontalSide;FILjava/lang/Object;)Landroidx/compose/ui/Modifier;
+	public static final fun navigationBarsWidth-wH6b6FI (Landroidx/compose/ui/Modifier;Lcom/google/accompanist/insets/HorizontalSide;F)Landroidx/compose/ui/Modifier;
+	public static synthetic fun navigationBarsWidth-wH6b6FI$default (Landroidx/compose/ui/Modifier;Lcom/google/accompanist/insets/HorizontalSide;FILjava/lang/Object;)Landroidx/compose/ui/Modifier;
 	public static final fun navigationBarsWithImePadding (Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
 	public static final fun statusBarsHeight-3ABfNKs (Landroidx/compose/ui/Modifier;F)Landroidx/compose/ui/Modifier;
 	public static synthetic fun statusBarsHeight-3ABfNKs$default (Landroidx/compose/ui/Modifier;FILjava/lang/Object;)Landroidx/compose/ui/Modifier;
 	public static final fun statusBarsPadding (Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
 	public static final fun systemBarsPadding (Landroidx/compose/ui/Modifier;Z)Landroidx/compose/ui/Modifier;
 	public static synthetic fun systemBarsPadding$default (Landroidx/compose/ui/Modifier;ZILjava/lang/Object;)Landroidx/compose/ui/Modifier;
-	public static final fun toPaddingValues-nbWgWpA (Ldev/chrisbanes/accompanist/insets/Insets;ZZZZFFLandroidx/compose/runtime/Composer;II)Landroidx/compose/foundation/layout/PaddingValues;
-	public static final fun toPaddingValues-s2pLCVw (Ldev/chrisbanes/accompanist/insets/Insets;ZZZZFFFFLandroidx/compose/runtime/Composer;II)Landroidx/compose/foundation/layout/PaddingValues;
+	public static final fun toPaddingValues-nbWgWpA (Lcom/google/accompanist/insets/Insets;ZZZZFFLandroidx/compose/runtime/Composer;II)Landroidx/compose/foundation/layout/PaddingValues;
+	public static final fun toPaddingValues-s2pLCVw (Lcom/google/accompanist/insets/Insets;ZZZZFFFFLandroidx/compose/runtime/Composer;II)Landroidx/compose/foundation/layout/PaddingValues;
 }
 
-public abstract interface annotation class dev/chrisbanes/accompanist/insets/ExperimentalAnimatedInsets : java/lang/annotation/Annotation {
+public abstract interface annotation class com/google/accompanist/insets/ExperimentalAnimatedInsets : java/lang/annotation/Annotation {
 }
 
-public final class dev/chrisbanes/accompanist/insets/HorizontalSide : java/lang/Enum {
-	public static final field Left Ldev/chrisbanes/accompanist/insets/HorizontalSide;
-	public static final field Right Ldev/chrisbanes/accompanist/insets/HorizontalSide;
-	public static fun valueOf (Ljava/lang/String;)Ldev/chrisbanes/accompanist/insets/HorizontalSide;
-	public static fun values ()[Ldev/chrisbanes/accompanist/insets/HorizontalSide;
+public final class com/google/accompanist/insets/HorizontalSide : java/lang/Enum {
+	public static final field Left Lcom/google/accompanist/insets/HorizontalSide;
+	public static final field Right Lcom/google/accompanist/insets/HorizontalSide;
+	public static fun valueOf (Ljava/lang/String;)Lcom/google/accompanist/insets/HorizontalSide;
+	public static fun values ()[Lcom/google/accompanist/insets/HorizontalSide;
 }
 
-public final class dev/chrisbanes/accompanist/insets/ImeNestedScrollConnection : androidx/compose/ui/input/nestedscroll/NestedScrollConnection {
+public final class com/google/accompanist/insets/ImeNestedScrollConnection : androidx/compose/ui/input/nestedscroll/NestedScrollConnection {
 	public static final field $stable I
 	public fun <init> (Landroid/view/View;ZZ)V
 	public fun onPostFling-RZ2iAVY (JJLkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -38,47 +38,47 @@ public final class dev/chrisbanes/accompanist/insets/ImeNestedScrollConnection :
 	public fun onPreScroll-8S9VItk (JLandroidx/compose/ui/input/nestedscroll/NestedScrollSource;)J
 }
 
-public final class dev/chrisbanes/accompanist/insets/ImeNestedScrollConnectionKt {
+public final class com/google/accompanist/insets/ImeNestedScrollConnectionKt {
 	public static final fun rememberImeNestedScrollConnection (ZZLandroidx/compose/runtime/Composer;II)Landroidx/compose/ui/input/nestedscroll/NestedScrollConnection;
 }
 
-public final class dev/chrisbanes/accompanist/insets/Insets {
+public final class com/google/accompanist/insets/Insets {
 	public fun <init> ()V
-	public final fun copy (IIIIZ)Ldev/chrisbanes/accompanist/insets/Insets;
-	public static synthetic fun copy$default (Ldev/chrisbanes/accompanist/insets/Insets;IIIIZILjava/lang/Object;)Ldev/chrisbanes/accompanist/insets/Insets;
+	public final fun copy (IIIIZ)Lcom/google/accompanist/insets/Insets;
+	public static synthetic fun copy$default (Lcom/google/accompanist/insets/Insets;IIIIZILjava/lang/Object;)Lcom/google/accompanist/insets/Insets;
 	public final fun getBottom ()I
 	public final fun getLeft ()I
 	public final fun getRight ()I
 	public final fun getTop ()I
 	public final fun isVisible ()Z
-	public final fun minus (Ldev/chrisbanes/accompanist/insets/Insets;)Ldev/chrisbanes/accompanist/insets/Insets;
-	public final fun plus (Ldev/chrisbanes/accompanist/insets/Insets;)Ldev/chrisbanes/accompanist/insets/Insets;
+	public final fun minus (Lcom/google/accompanist/insets/Insets;)Lcom/google/accompanist/insets/Insets;
+	public final fun plus (Lcom/google/accompanist/insets/Insets;)Lcom/google/accompanist/insets/Insets;
 }
 
-public final class dev/chrisbanes/accompanist/insets/VerticalSide : java/lang/Enum {
-	public static final field Bottom Ldev/chrisbanes/accompanist/insets/VerticalSide;
-	public static final field Top Ldev/chrisbanes/accompanist/insets/VerticalSide;
-	public static fun valueOf (Ljava/lang/String;)Ldev/chrisbanes/accompanist/insets/VerticalSide;
-	public static fun values ()[Ldev/chrisbanes/accompanist/insets/VerticalSide;
+public final class com/google/accompanist/insets/VerticalSide : java/lang/Enum {
+	public static final field Bottom Lcom/google/accompanist/insets/VerticalSide;
+	public static final field Top Lcom/google/accompanist/insets/VerticalSide;
+	public static fun valueOf (Ljava/lang/String;)Lcom/google/accompanist/insets/VerticalSide;
+	public static fun values ()[Lcom/google/accompanist/insets/VerticalSide;
 }
 
-public final class dev/chrisbanes/accompanist/insets/ViewWindowInsetObserver {
+public final class com/google/accompanist/insets/ViewWindowInsetObserver {
 	public static final field $stable I
 	public fun <init> (Landroid/view/View;)V
 	public final fun isObserving ()Z
-	public final fun start (Z)Ldev/chrisbanes/accompanist/insets/WindowInsets;
-	public final fun start (ZZ)Ldev/chrisbanes/accompanist/insets/WindowInsets;
-	public static synthetic fun start$default (Ldev/chrisbanes/accompanist/insets/ViewWindowInsetObserver;ZILjava/lang/Object;)Ldev/chrisbanes/accompanist/insets/WindowInsets;
-	public static synthetic fun start$default (Ldev/chrisbanes/accompanist/insets/ViewWindowInsetObserver;ZZILjava/lang/Object;)Ldev/chrisbanes/accompanist/insets/WindowInsets;
+	public final fun start (Z)Lcom/google/accompanist/insets/WindowInsets;
+	public final fun start (ZZ)Lcom/google/accompanist/insets/WindowInsets;
+	public static synthetic fun start$default (Lcom/google/accompanist/insets/ViewWindowInsetObserver;ZILjava/lang/Object;)Lcom/google/accompanist/insets/WindowInsets;
+	public static synthetic fun start$default (Lcom/google/accompanist/insets/ViewWindowInsetObserver;ZZILjava/lang/Object;)Lcom/google/accompanist/insets/WindowInsets;
 	public final fun stop ()V
 }
 
-public final class dev/chrisbanes/accompanist/insets/WindowInsets {
+public final class com/google/accompanist/insets/WindowInsets {
 	public fun <init> ()V
-	public final fun getIme ()Ldev/chrisbanes/accompanist/insets/Insets;
-	public final fun getNavigationBars ()Ldev/chrisbanes/accompanist/insets/Insets;
-	public final fun getStatusBars ()Ldev/chrisbanes/accompanist/insets/Insets;
-	public final fun getSystemBars ()Ldev/chrisbanes/accompanist/insets/Insets;
-	public final fun getSystemGestures ()Ldev/chrisbanes/accompanist/insets/Insets;
+	public final fun getIme ()Lcom/google/accompanist/insets/Insets;
+	public final fun getNavigationBars ()Lcom/google/accompanist/insets/Insets;
+	public final fun getStatusBars ()Lcom/google/accompanist/insets/Insets;
+	public final fun getSystemBars ()Lcom/google/accompanist/insets/Insets;
+	public final fun getSystemGestures ()Lcom/google/accompanist/insets/Insets;
 }
 

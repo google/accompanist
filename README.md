@@ -1,30 +1,41 @@
-![Accompanist logo](images/social.png)
+![Accompanist logo](docs/header.png)
 
-Accompanist is a group of libraries that contains some utilities which I've found myself copying around projects which use [Jetpack Compose][compose]. Currently, it contains:
+Accompanist is a group of libraries which aim to supplement [Jetpack Compose][compose] with features which are commonly required by developers, but not yet available.
 
-### Image loading
-A number of libraries which integrate popular image loading libraries into Jetpack Compose:
+Currently Accompanist contains:
 
- - 🖼️ [Coil image loading composables](./coil/)
- - 🖼️ [Picasso image loading composables](./picasso/)
- - 🖼️ [Glide image loading composables](./glide/)
+### 🖼️ Image loading
+A number of libraries which integrate popular image loading libraries into Jetpack Compose: [Coil](./coil/), [Picasso](./picasso/) & [Glide](./glide/).
 
 ### 📐 [Insets](./insets/)
 A library which brings [WindowInsets](https://developer.android.com/reference/kotlin/android/view/WindowInsets) support to Jetpack Compose.
 
+### 🎨 [AppCompat Theme Adapter](./appcompat-theme/)
+A library that enables reuse of [AppCompat][appcompat] XML themes for theming in [Jetpack Compose][compose].
+
+### 🌊 [Flow layouts](./flowlayout/)
+A library that adds a 'flexbox'-like layout to [Jetpack Compose][compose].
 
 ---
 
-[Jetpack Compose][compose] is a fast-moving project and I'll be updating these libraries to match the
-latest tagged release as quickly as possible. Each [release listing](https://github.com/chrisbanes/accompanist/releases) will outline what version of Compose libraries it depends on.
+## Updates
 
-### Accompanist Snapshots
+[Jetpack Compose][compose] is a fast-moving project and we aim to keep these these libraries up-to-date with the
+latest tagged release on Compose as quickly as possible. Each [release](https://github.com/google/accompanist/releases)  outlines what version of the Compose libraries it depends on.
+
+## Future?
+
+Any of the features available in this group of libraries may become obsolete in the future, at which point they will (probably) become deprecated. 
+
+We will aim to provide a migration path (where possible), to whatever supercedes the functionality.
+
+## Snapshots
 
 Snapshots of the current development version of Accompanist are available, which track the latest commit. See [here](docs/using-snapshot-version.md) for more information. 
 
 ---
 
-#### Why the name?
+### Why the name?
 
 The library is all about adding some utilities around Compose. Music composing is done by a
 composer, and since this library is about supporting composition, the supporting role of an [accompanist](https://en.wikipedia.org/wiki/Accompaniment) felt like a good name.
@@ -52,6 +63,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ```
 
+[appcompat]: https://developer.android.com/jetpack/androidx/releases/appcompat
 [compose]: https://developer.android.com/jetpack/compose
-[snap]: https://oss.sonatype.org/content/repositories/snapshots/dev/chrisbanes/accompanist/
+[snap]: https://oss.sonatype.org/content/repositories/snapshots/com/google/accompanist/
 [mdc]: https://material.io/develop/android/
