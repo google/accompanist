@@ -31,6 +31,9 @@ nav:
   - 'AppCompat Theme':
     - 'Guide': appcompat-theme.md
     - 'API': api/appcompat-theme/appcompat-theme
+  - 'Pager layouts':
+    - 'Guide': pager.md
+    - 'API': api/pager/pager
   - 'Flow layouts':
     - 'Guide': flowlayout.md
     - 'API': api/flowlayout/flowlayout
