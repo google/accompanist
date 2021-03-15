@@ -1,0 +1,40 @@
+public abstract interface annotation class com/google/accompanist/pager/ExperimentalPagerApi : java/lang/annotation/Annotation {
+}
+
+public final class com/google/accompanist/pager/Pager {
+	public static final fun HorizontalPager (Lcom/google/accompanist/pager/PagerState;Landroidx/compose/ui/Modifier;ILkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
+}
+
+public abstract interface class com/google/accompanist/pager/PagerScope : androidx/compose/foundation/layout/BoxScope {
+	public abstract fun getCurrentPage ()I
+	public abstract fun getCurrentPageOffset ()F
+}
+
+public final class com/google/accompanist/pager/PagerScope$DefaultImpls {
+	public static fun align (Lcom/google/accompanist/pager/PagerScope;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;)Landroidx/compose/ui/Modifier;
+	public static fun matchParentSize (Lcom/google/accompanist/pager/PagerScope;Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
+}
+
+public final class com/google/accompanist/pager/PagerState {
+	public static final field Companion Lcom/google/accompanist/pager/PagerState$Companion;
+	public fun <init> (IIF)V
+	public synthetic fun <init> (IIFILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun animateScrollToPage (IFFLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun animateScrollToPage$default (Lcom/google/accompanist/pager/PagerState;IFFLkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun getCurrentPage ()I
+	public final fun getCurrentPageOffset ()F
+	public final fun getPageCount ()I
+	public final fun scrollToPage (IFLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun scrollToPage$default (Lcom/google/accompanist/pager/PagerState;IFLkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun setPageCount (I)V
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/google/accompanist/pager/PagerState$Companion {
+	public final fun getSaver ()Landroidx/compose/runtime/saveable/Saver;
+}
+
+public final class com/google/accompanist/pager/PagerStateKt {
+	public static final fun rememberPagerState (IIFLandroidx/compose/runtime/Composer;II)Lcom/google/accompanist/pager/PagerState;
+}
+

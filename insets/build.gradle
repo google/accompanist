@@ -73,17 +73,10 @@ android {
 }
 
 dependencies {
-    implementation(Libs.AndroidX.coreAlpha) {
-        // Need to force our version since Compose depends on core:1.5.0-alphaX itself.
-        // We can remove this once Compose depends on the next core version
-        force = true
-    }
+    implementation Libs.AndroidX.core1_5_0
     implementation Libs.AndroidX.dynamicanimation
 
-    implementation Libs.AndroidX.Compose.runtime
     implementation Libs.AndroidX.Compose.foundation
-
-    implementation Libs.Kotlin.stdlib
 
     // ======================
     // Test dependencies

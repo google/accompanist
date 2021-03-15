@@ -49,7 +49,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxWidth = flowWidthDp),
@@ -106,7 +106,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxWidth = flowWidthDp),
@@ -166,7 +166,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxWidth = flowWidthDp),
@@ -226,7 +226,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxWidth = flowWidthDp),
@@ -289,7 +289,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxWidth = flowWidthDp),
@@ -352,7 +352,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxWidth = flowWidthDp),
@@ -415,7 +415,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxWidth = flowWidthDp),
@@ -479,7 +479,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxWidth = flowWidthDp),
@@ -542,7 +542,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxWidth = flowWidthDp),
@@ -606,7 +606,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxWidth = flowWidthDp),
@@ -674,7 +674,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxWidth = flowWidthDp),
@@ -742,7 +742,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxWidth = flowWidthDp),
@@ -812,7 +812,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxWidth = flowWidthDp),
@@ -872,7 +872,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxWidth = flowWidthDp),
@@ -937,7 +937,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxWidth = flowWidthDp),
@@ -1001,7 +1001,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxWidth = flowWidthDp),
@@ -1067,7 +1067,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxWidth = flowWidthDp),
@@ -1127,7 +1127,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxHeight = flowHeightDp),
@@ -1187,7 +1187,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxHeight = flowHeightDp),
@@ -1247,7 +1247,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxHeight = flowHeightDp),
@@ -1307,7 +1307,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxHeight = flowHeightDp),
@@ -1370,7 +1370,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxHeight = flowHeightDp),
@@ -1433,7 +1433,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxHeight = flowHeightDp),
@@ -1496,7 +1496,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxHeight = flowHeightDp),
@@ -1560,7 +1560,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxHeight = flowHeightDp),
@@ -1623,7 +1623,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxHeight = flowHeightDp),
@@ -1687,7 +1687,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxHeight = flowHeightDp),
@@ -1755,7 +1755,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxHeight = flowHeightDp),
@@ -1823,7 +1823,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxHeight = flowHeightDp),
@@ -1893,7 +1893,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxHeight = flowHeightDp),
@@ -1953,7 +1953,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxHeight = flowHeightDp),
@@ -2018,7 +2018,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxHeight = flowHeightDp),
@@ -2079,7 +2079,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxHeight = flowHeightDp),
@@ -2146,7 +2146,7 @@ class FlowTest : LayoutTest() {
         val childPosition = Array(numberOfSquares) { Ref<Offset>() }
         val positionedLatch = CountDownLatch(numberOfSquares + 1)
 
-        show {
+        rule.setContent {
             Box {
                 ConstrainedBox(
                     constraints = DpConstraints(maxHeight = flowHeightDp),

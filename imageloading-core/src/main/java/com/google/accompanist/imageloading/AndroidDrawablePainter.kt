@@ -20,6 +20,7 @@ import android.graphics.drawable.Animatable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.view.View
@@ -39,7 +40,6 @@ import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.withSave
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.core.graphics.drawable.DrawableCompat
 import kotlin.math.roundToInt
 
 private val MAIN_HANDLER by lazy(LazyThreadSafetyMode.NONE) {
@@ -85,13 +85,15 @@ class AndroidDrawablePainter(
     }
 
     override fun applyLayoutDirection(layoutDirection: LayoutDirection): Boolean {
-        return DrawableCompat.setLayoutDirection(
-            drawable,
-            when (layoutDirection) {
-                LayoutDirection.Ltr -> View.LAYOUT_DIRECTION_LTR
-                LayoutDirection.Rtl -> View.LAYOUT_DIRECTION_RTL
-            }
-        )
+        if (Build.VERSION.SDK_INT >= 23) {
+            return drawable.setLayoutDirection(
+                when (layoutDirection) {
+                    LayoutDirection.Ltr -> View.LAYOUT_DIRECTION_LTR
+                    LayoutDirection.Rtl -> View.LAYOUT_DIRECTION_RTL
+                }
+            )
+        }
+        return false
     }
 
     override val intrinsicSize: Size

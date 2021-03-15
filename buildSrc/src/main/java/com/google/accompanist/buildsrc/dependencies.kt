@@ -82,6 +82,7 @@ object Libs {
 
             const val ui = "androidx.compose.ui:ui:${version}"
             const val material = "androidx.compose.material:material:${version}"
+            const val iconsExtended = "androidx.compose.material:material-icons-extended:${version}"
 
             const val util = "androidx.compose.ui:ui-util:${version}"
             const val tooling = "androidx.ui:ui-tooling:${version}"
@@ -95,7 +96,7 @@ object Libs {
 
         const val lifecycleKtx = "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0"
 
-        const val coreAlpha = "androidx.core:core:1.5.0-beta02"
+        const val core1_5_0 = "androidx.core:core:1.5.0-beta02"
 
         object Activity {
             const val activityCompose = "androidx.activity:activity-compose:1.3.0-SNAPSHOT"
