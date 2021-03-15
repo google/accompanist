@@ -18,7 +18,7 @@ package com.google.accompanist.insets
 
 import android.graphics.Rect
 import androidx.core.view.WindowInsetsCompat
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 
 internal fun WindowInsets.assertEqualTo(insets: androidx.core.view.WindowInsetsCompat) {
     systemBars.assertEqualTo(
@@ -42,10 +42,10 @@ internal fun WindowInsets.assertEqualTo(insets: androidx.core.view.WindowInsetsC
     )
 }
 
-internal fun Insets.assertEqualTo(insets: androidx.core.graphics.Insets, visible: Boolean) {
+internal fun InsetsType.assertEqualTo(insets: androidx.core.graphics.Insets, visible: Boolean) {
     // This might look a bit weird, why are we using a Rect? Well, it makes the assertion
     // error message much easier to read, by containing all of the dimensions.
-    Truth.assertThat(Rect(left, top, right, bottom))
+    assertThat(Rect(left, top, right, bottom))
         .isEqualTo(Rect(insets.left, insets.top, insets.right, insets.bottom))
-    Truth.assertThat(this.isVisible).isEqualTo(visible)
+    assertThat(isVisible).isEqualTo(visible)
 }

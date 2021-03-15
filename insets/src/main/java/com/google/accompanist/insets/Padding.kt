@@ -48,7 +48,7 @@ fun Modifier.systemBarsPadding(
     enabled: Boolean = true
 ): Modifier = composed {
     InsetsPaddingModifier(
-        insets = LocalWindowInsets.current.systemBars,
+        insetsType = LocalWindowInsets.current.systemBars,
         applyLeft = enabled,
         applyTop = enabled,
         applyRight = enabled,
@@ -62,7 +62,7 @@ fun Modifier.systemBarsPadding(
  */
 fun Modifier.statusBarsPadding(): Modifier = composed {
     InsetsPaddingModifier(
-        insets = LocalWindowInsets.current.statusBars,
+        insetsType = LocalWindowInsets.current.statusBars,
         applyTop = true
     )
 }
@@ -85,7 +85,7 @@ fun Modifier.navigationBarsPadding(
     right: Boolean = true
 ): Modifier = composed {
     InsetsPaddingModifier(
-        insets = LocalWindowInsets.current.navigationBars,
+        insetsType = LocalWindowInsets.current.navigationBars,
         applyLeft = left,
         applyRight = right,
         applyBottom = bottom
@@ -102,7 +102,7 @@ fun Modifier.navigationBarsPadding(
  */
 fun Modifier.imePadding(): Modifier = composed {
     InsetsPaddingModifier(
-        insets = LocalWindowInsets.current.ime,
+        insetsType = LocalWindowInsets.current.ime,
         applyLeft = true,
         applyRight = true,
         applyBottom = true,
@@ -116,8 +116,8 @@ fun Modifier.imePadding(): Modifier = composed {
  */
 fun Modifier.navigationBarsWithImePadding(): Modifier = composed {
     InsetsPaddingModifier(
-        insets = LocalWindowInsets.current.ime,
-        minimumInsets = LocalWindowInsets.current.navigationBars,
+        insetsType = LocalWindowInsets.current.ime,
+        minimumInsetsType = LocalWindowInsets.current.navigationBars,
         applyLeft = true,
         applyRight = true,
         applyBottom = true,
@@ -125,8 +125,8 @@ fun Modifier.navigationBarsWithImePadding(): Modifier = composed {
 }
 
 private data class InsetsPaddingModifier(
-    private val insets: Insets,
-    private val minimumInsets: Insets? = null,
+    private val insetsType: InsetsType,
+    private val minimumInsetsType: InsetsType? = null,
     private val applyLeft: Boolean = false,
     private val applyTop: Boolean = false,
     private val applyRight: Boolean = false,
@@ -136,10 +136,10 @@ private data class InsetsPaddingModifier(
         measurable: Measurable,
         constraints: Constraints
     ): MeasureResult {
-        val transformedInsets = if (minimumInsets != null) {
+        val transformedInsets = if (minimumInsetsType != null) {
             // If we have a minimum insets, coerce each dimensions
-            insets.coerceEachDimensionAtLeast(minimumInsets)
-        } else insets
+            insetsType.coerceEachDimensionAtLeast(minimumInsetsType)
+        } else insetsType
 
         val left = if (applyLeft) transformedInsets.left else 0
         val top = if (applyTop) transformedInsets.top else 0
@@ -171,7 +171,7 @@ private data class InsetsPaddingModifier(
  * @param additionalVertical Value to add to the top and bottom dimensions.
  */
 @Composable
-inline fun Insets.toPaddingValues(
+inline fun InsetsType.toPaddingValues(
     start: Boolean = true,
     top: Boolean = true,
     end: Boolean = true,
@@ -202,7 +202,7 @@ inline fun Insets.toPaddingValues(
  * @param additionalBottom Value to add to the bottom dimension.
  */
 @Composable
-fun Insets.toPaddingValues(
+fun InsetsType.toPaddingValues(
     start: Boolean = true,
     top: Boolean = true,
     end: Boolean = true,

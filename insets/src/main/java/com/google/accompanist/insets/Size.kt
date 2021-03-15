@@ -64,7 +64,7 @@ fun Modifier.statusBarsHeight(
     additional: Dp = 0.dp
 ): Modifier = composed {
     InsetsSizeModifier(
-        insets = LocalWindowInsets.current.statusBars,
+        insetsType = LocalWindowInsets.current.statusBars,
         heightSide = VerticalSide.Top,
         additionalHeight = additional
     )
@@ -99,7 +99,7 @@ fun Modifier.navigationBarsHeight(
     additional: Dp = 0.dp
 ): Modifier = composed {
     InsetsSizeModifier(
-        insets = LocalWindowInsets.current.navigationBars,
+        insetsType = LocalWindowInsets.current.navigationBars,
         heightSide = VerticalSide.Bottom,
         additionalHeight = additional
     )
@@ -140,7 +140,7 @@ fun Modifier.navigationBarsWidth(
     additional: Dp = 0.dp
 ): Modifier = composed {
     InsetsSizeModifier(
-        insets = LocalWindowInsets.current.navigationBars,
+        insetsType = LocalWindowInsets.current.navigationBars,
         widthSide = side,
         additionalWidth = additional
     )
@@ -154,7 +154,7 @@ fun Modifier.navigationBarsWidth(
  * issue tracker.
  */
 private data class InsetsSizeModifier(
-    private val insets: Insets,
+    private val insetsType: InsetsType,
     private val widthSide: HorizontalSide? = null,
     private val additionalWidth: Dp = 0.dp,
     private val heightSide: VerticalSide? = null,
@@ -166,23 +166,23 @@ private data class InsetsSizeModifier(
             val additionalHeightPx = additionalHeight.roundToPx()
             return Constraints(
                 minWidth = additionalWidthPx + when (widthSide) {
-                    HorizontalSide.Left -> insets.left
-                    HorizontalSide.Right -> insets.right
+                    HorizontalSide.Left -> insetsType.left
+                    HorizontalSide.Right -> insetsType.right
                     null -> 0
                 },
                 minHeight = additionalHeightPx + when (heightSide) {
-                    VerticalSide.Top -> insets.top
-                    VerticalSide.Bottom -> insets.bottom
+                    VerticalSide.Top -> insetsType.top
+                    VerticalSide.Bottom -> insetsType.bottom
                     null -> 0
                 },
                 maxWidth = when (widthSide) {
-                    HorizontalSide.Left -> insets.left + additionalWidthPx
-                    HorizontalSide.Right -> insets.right + additionalWidthPx
+                    HorizontalSide.Left -> insetsType.left + additionalWidthPx
+                    HorizontalSide.Right -> insetsType.right + additionalWidthPx
                     null -> Constraints.Infinity
                 },
                 maxHeight = when (heightSide) {
-                    VerticalSide.Top -> insets.top + additionalHeightPx
-                    VerticalSide.Bottom -> insets.bottom + additionalHeightPx
+                    VerticalSide.Top -> insetsType.top + additionalHeightPx
+                    VerticalSide.Bottom -> insetsType.bottom + additionalHeightPx
                     null -> Constraints.Infinity
                 }
             )
