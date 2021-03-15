@@ -16,24 +16,24 @@ nav:
   - 'Overview': index.md
   - 'Coil':
     - 'Guide': coil.md
-    - 'API': api/coil/coil/
+    - 'API': api/coil/
   - 'Glide':
     - 'Guide': glide.md
-    - 'API': api/glide/glide/
+    - 'API': api/glide/
   - 'Image Loading Core':
-    - 'API': api/imageloading-core/imageloading-core
+    - 'API': api/imageloading-core/
   - 'Insets':
     - 'Guide': insets.md
-    - 'API': api/insets/insets/
+    - 'API': api/insets/
   - 'AppCompat Theme':
     - 'Guide': appcompat-theme.md
-    - 'API': api/appcompat-theme/appcompat-theme
+    - 'API': api/appcompat-theme/
   - 'Pager layouts':
     - 'Guide': pager.md
-    - 'API': api/pager/pager
+    - 'API': api/pager/
   - 'Flow layouts':
     - 'Guide': flowlayout.md
-    - 'API': api/flowlayout/flowlayout
+    - 'API': api/flowlayout/
   - 'Snapshots': using-snapshot-version.md
   - 'Contributing': contributing.md
   - 'Maintainers':
