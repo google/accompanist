@@ -503,16 +503,26 @@ private fun Insets.updateFrom(windowInsets: WindowInsetsCompat, type: Int) {
     isVisible = windowInsets.isVisible(type)
 }
 
-internal fun Insets.coerceEachDimensionAtLeast(other: Insets): Insets {
-    // Fast path, no need to copy if `this` >= `other`
-    if (left >= other.left && top >= other.top && right >= other.right && bottom >= other.bottom) {
+/**
+ * Ensures that each dimension is not less than corresponding dimension in the
+ * specified [minimumValue].
+ *
+ * @return this if every dimension is greater than or equal to the corresponding
+ * dimension value in [minimumValue], otherwise a copy of this with each dimension coerced with the
+ * corresponding dimension value in [minimumValue].
+ */
+fun Insets.coerceEachDimensionAtLeast(minimumValue: Insets): Insets {
+    // Fast path, no need to copy if: this >= minimumValue
+    if (left >= minimumValue.left && top >= minimumValue.top &&
+        right >= minimumValue.right && bottom >= minimumValue.bottom
+    ) {
         return this
     }
     return copy(
-        left = left.coerceAtLeast(other.left),
-        top = top.coerceAtLeast(other.top),
-        right = right.coerceAtLeast(other.right),
-        bottom = bottom.coerceAtLeast(other.bottom),
+        left = left.coerceAtLeast(minimumValue.left),
+        top = top.coerceAtLeast(minimumValue.top),
+        right = right.coerceAtLeast(minimumValue.right),
+        bottom = bottom.coerceAtLeast(minimumValue.bottom),
     )
 }
 
