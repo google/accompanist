@@ -14,20 +14,29 @@ repo_url: 'https://github.com/google/accompanist'
 # Navigation
 nav:
   - 'Overview': index.md
-  - 'Coil': coil.md
-  - 'Glide': glide.md
-  - 'Picasso': picasso.md
-  - 'Insets': insets.md
-  - 'Pager layouts': pager.md
-  - 'AppCompat Theme': appcompat-theme.md
-  - 'API':
-    - 'Coil': api/coil/coil/
-    - 'Glide': api/glide/glide/
-    - 'Picasso': api/picasso/picasso/
-    - 'Image Loading Core': api/imageloading-core/imageloading-core/
-    - 'Insets': api/insets/insets/
-    - 'Pager layouts': api/pager/pager
-    - 'AppCompat Theme': api/appcompat-theme/appcompat-theme
+  - 'Coil':
+    - 'Guide': coil.md
+    - 'API': api/coil/coil/
+  - 'Glide':
+    - 'Guide': glide.md
+    - 'API': api/glide/glide/
+  - 'Image Loading Core':
+    - 'API': api/imageloading-core/imageloading-core
+  - 'Picasso':
+    - 'Guide': picasso.md
+    - 'API': api/picasso/picasso/
+  - 'Insets':
+    - 'Guide': insets.md
+    - 'API': api/insets/insets/
+  - 'AppCompat Theme':
+    - 'Guide': appcompat-theme.md
+    - 'API': api/appcompat-theme/appcompat-theme
+  - 'Pager layouts':
+    - 'Guide': pager.md
+    - 'API': api/pager/pager
+  - 'Flow layouts':
+    - 'Guide': flowlayout.md
+    - 'API': api/flowlayout/flowlayout
   - 'Snapshots': using-snapshot-version.md
   - 'Contributing': contributing.md
   - 'Maintainers':
@@ -43,8 +52,8 @@ theme:
     primary: 'black'
     accent: 'deep orange'
   font:
-    text: 'IBM Plex Sans'
-    code: 'IBM Plex Mono'
+    text: 'Roboto'
+    code: 'JetBrains Mono'
 
 # Extensions
 markdown_extensions:

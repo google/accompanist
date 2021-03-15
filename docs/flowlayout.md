@@ -20,9 +20,9 @@ FlowColumn {
 
 For examples, refer to the [samples](https://github.com/google/accompanist/tree/main/sample/src/main/java/com/google/accompanist/sample/flowlayout).
 
-For more information, visit the documentation: https://google.github.io/accompanist/flowlayout
-
 ## Download
+
+[![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-flowlayout)](https://search.maven.org/search?q=g:com.google.accompanist)
 
 ```groovy
 repositories {
