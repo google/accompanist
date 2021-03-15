@@ -160,8 +160,8 @@ fun CoilImage(
                 // If the size contains an unspecified sized dimension, we don't specify a size
                 // in the Coil request
                 size.width < 0 || size.height < 0 -> r
-                // If we have a non-zero size, we can modify the request to include the size
-                size != IntSize.Zero -> r.newBuilder().size(size.width, size.height).build()
+                // If we have a non-zero size in both dimensions, we can modify the request to include the size
+                size.width > 0 && size.height > 0 -> r.newBuilder().size(size.width, size.height).build()
                 // Otherwise we have a zero size, so no point executing a request
                 else -> null
             }
