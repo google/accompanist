@@ -161,7 +161,7 @@ fun CoilImage(
                 // in the Coil request
                 size.width < 0 || size.height < 0 -> r
                 // If we have a non-zero size in both dimensions, we can modify the request to include the size
-                size.width > 0 || size.height > 0 -> r.newBuilder().size(size.width, size.height).build()
+                size.width > 0 && size.height > 0 -> r.newBuilder().size(size.width, size.height).build()
                 // Otherwise we have a zero size, so no point executing a request
                 else -> null
             }
