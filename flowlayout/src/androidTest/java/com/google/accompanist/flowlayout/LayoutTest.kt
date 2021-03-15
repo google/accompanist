@@ -56,7 +56,7 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import kotlin.math.max
 
-open class LayoutTest {
+abstract class LayoutTest {
     @get:Rule
     val rule = createAndroidComposeRule<TestActivity>()
 
