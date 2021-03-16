@@ -237,9 +237,10 @@ internal class MutableInsets(
     }
 }
 
-val LocalWindowInsets = staticCompositionLocalOf<WindowInsets> {
-    error("LocalWindowInsets value not available. Are you using ProvideWindowInsets?")
-}
+/**
+ * Composition local containing the current [WindowInsets].
+ */
+val LocalWindowInsets = staticCompositionLocalOf { WindowInsets() }
 
 /**
  * This class sets up the necessary listeners on the given [view] to be able to observe
@@ -441,7 +442,7 @@ fun ProvideWindowInsets(
     content: @Composable () -> Unit,
 ) {
     val view = LocalView.current
-    val windowInsets = remember { WindowInsets() }
+    val windowInsets = LocalWindowInsets.current
 
     DisposableEffect(view) {
         val observer = ViewWindowInsetObserver(view)
