@@ -124,10 +124,7 @@ subprojects {
 
                 // Add Android SDK packages
                 noAndroidSdkLink.set(false)
-                // Separate inherited members
-                separateInheritedMembers.set(true)
-                // Suppress obvious functions (toString, etc)
-                suppressObviousFunctions.set(true)
+
                 // Add samples from :sample module
                 samples.from(rootProject.file("sample/src/main/java/"))
 
