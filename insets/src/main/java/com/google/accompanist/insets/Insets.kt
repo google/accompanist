@@ -71,7 +71,7 @@ class WindowInsets {
 }
 
 /**
- * Represents the values for a type of insets, and stored information about the layout insets,
+ * Represents the values for a type of insets, and stores information about the layout insets,
  * animating insets, and visibility of the insets.
  *
  * [InsetsType] instances are commonly stored in a [WindowInsets] instance.
