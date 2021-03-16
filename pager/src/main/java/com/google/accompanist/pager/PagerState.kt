@@ -240,14 +240,17 @@ class PagerState(
     }
 
     private fun determineSpringBackOffset(
+        velocity: Float,
         offset: Float = currentPageOffset,
     ): Float = when {
+        // If the velocity is greater than 1 page per second (velocity is px/s), spring
+        // in the relevant direction
+        velocity >= pageSize -> 1f
+        velocity <= -pageSize -> 0f
         // If the offset exceeds the scroll threshold (in either direction), we want to
         // move to the next/previous item
-        offset < ScrollThreshold -> 0f
-        offset > 1 - ScrollThreshold -> 1f
-        // Otherwise we go back to 0f
-        else -> 0f
+        offset < 0.5f -> 0f
+        else -> 1f
     }
 
     private fun updateFromGlobalPosition(position: Float) {
@@ -270,7 +273,7 @@ class PagerState(
         if (DebugLog) {
             Log.d(
                 LogTag,
-                "dragByOffset. delta:%.4f, new-page:%d, new-offset:%.4f"
+                "scrollByOffset. delta:%.4f, new-page:%d, new-offset:%.4f"
                     .format(deltaOffset, currentPage, currentPageOffset),
             )
         }
@@ -335,16 +338,17 @@ class PagerState(
                 // Keep track of velocity
                 lastVelocity = velocity
 
+                // Now scroll..
                 val coerced = value.coerceIn(0f, pageSize.toFloat())
-                val unconsumed = scrollBy(coerced - (currentPageOffset * pageSize))
+                scrollBy(coerced - (currentPageOffset * pageSize))
 
-                val pastLeftBound = initialVelocity < 0 &&
+                // If we've scroll our target page (or beyond it), cancel the animation
+                val pastStartBound = initialVelocity < 0 &&
                     (currentPage < targetPage || (currentPage == targetPage && currentPageOffset == 0f))
-
-                val pastRightBound = initialVelocity > 0 &&
+                val pastEndBound = initialVelocity > 0 &&
                     (currentPage > targetPage || (currentPage == targetPage && currentPageOffset > 0f))
 
-                if (unconsumed > 0.5f || pastLeftBound || pastRightBound) {
+                if (pastStartBound || pastEndBound) {
                     // If we reach the bounds of the allowed offset, cancel the animation
                     cancelAnimation()
                     currentPage = targetPage
@@ -353,9 +357,13 @@ class PagerState(
             }
         } else {
             // Otherwise we animate to the next item, or spring-back depending on the offset
+            val targetPosition = currentPage + determineSpringBackOffset(
+                velocity = initialVelocity,
+                offset = targetOffset
+            )
             animate(
                 initialValue = globalPosition * pageSize,
-                targetValue = (currentPage + determineSpringBackOffset(targetOffset)) * pageSize,
+                targetValue = targetPosition * pageSize,
                 initialVelocity = initialVelocity,
                 animationSpec = spring()
             ) { value, velocity ->

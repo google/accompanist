@@ -53,12 +53,6 @@ import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 /**
- * The scroll threshold for moving to the next page. The value is used in both directions
- * (so both negative and positive).
- */
-internal const val ScrollThreshold = 0.35f
-
-/**
  * Library-wide switch to turn on debug logging.
  */
 internal const val DebugLog = false
