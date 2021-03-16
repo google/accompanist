@@ -1,7 +1,7 @@
 public final class com/google/accompanist/insets/ComposeInsets {
 	public static final fun ProvideWindowInsets (ZLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 	public static final fun ProvideWindowInsets (ZZLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
-	public static final fun coerceEachDimensionAtLeast (Lcom/google/accompanist/insets/Insets;Lcom/google/accompanist/insets/Insets;)Lcom/google/accompanist/insets/Insets;
+	public static final fun coerceEachDimensionAtLeast (Lcom/google/accompanist/insets/InsetsType;Lcom/google/accompanist/insets/InsetsType;)Lcom/google/accompanist/insets/Insets;
 	public static final fun getLocalWindowInsets ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 	public static final fun imePadding (Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
 	public static final fun navigationBarsHeight-3ABfNKs (Landroidx/compose/ui/Modifier;F)Landroidx/compose/ui/Modifier;
@@ -16,8 +16,8 @@ public final class com/google/accompanist/insets/ComposeInsets {
 	public static final fun statusBarsPadding (Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
 	public static final fun systemBarsPadding (Landroidx/compose/ui/Modifier;Z)Landroidx/compose/ui/Modifier;
 	public static synthetic fun systemBarsPadding$default (Landroidx/compose/ui/Modifier;ZILjava/lang/Object;)Landroidx/compose/ui/Modifier;
-	public static final fun toPaddingValues-nbWgWpA (Lcom/google/accompanist/insets/Insets;ZZZZFFLandroidx/compose/runtime/Composer;II)Landroidx/compose/foundation/layout/PaddingValues;
-	public static final fun toPaddingValues-s2pLCVw (Lcom/google/accompanist/insets/Insets;ZZZZFFFFLandroidx/compose/runtime/Composer;II)Landroidx/compose/foundation/layout/PaddingValues;
+	public static final fun toPaddingValues-nbWgWpA (Lcom/google/accompanist/insets/InsetsType;ZZZZFFLandroidx/compose/runtime/Composer;II)Landroidx/compose/foundation/layout/PaddingValues;
+	public static final fun toPaddingValues-s2pLCVw (Lcom/google/accompanist/insets/InsetsType;ZZZZFFFFLandroidx/compose/runtime/Composer;II)Landroidx/compose/foundation/layout/PaddingValues;
 }
 
 public abstract interface annotation class com/google/accompanist/insets/ExperimentalAnimatedInsets : java/lang/annotation/Annotation {
@@ -43,17 +43,37 @@ public final class com/google/accompanist/insets/ImeNestedScrollConnectionKt {
 	public static final fun rememberImeNestedScrollConnection (ZZLandroidx/compose/runtime/Composer;II)Landroidx/compose/ui/input/nestedscroll/NestedScrollConnection;
 }
 
-public final class com/google/accompanist/insets/Insets {
+public abstract interface class com/google/accompanist/insets/Insets {
+	public abstract fun copy (IIII)Lcom/google/accompanist/insets/Insets;
+	public abstract fun getBottom ()I
+	public abstract fun getLeft ()I
+	public abstract fun getRight ()I
+	public abstract fun getTop ()I
+	public abstract fun minus (Lcom/google/accompanist/insets/Insets;)Lcom/google/accompanist/insets/Insets;
+	public abstract fun plus (Lcom/google/accompanist/insets/Insets;)Lcom/google/accompanist/insets/Insets;
+}
+
+public final class com/google/accompanist/insets/Insets$DefaultImpls {
+	public static fun copy (Lcom/google/accompanist/insets/Insets;IIII)Lcom/google/accompanist/insets/Insets;
+	public static synthetic fun copy$default (Lcom/google/accompanist/insets/Insets;IIIIILjava/lang/Object;)Lcom/google/accompanist/insets/Insets;
+	public static fun minus (Lcom/google/accompanist/insets/Insets;Lcom/google/accompanist/insets/Insets;)Lcom/google/accompanist/insets/Insets;
+	public static fun plus (Lcom/google/accompanist/insets/Insets;Lcom/google/accompanist/insets/Insets;)Lcom/google/accompanist/insets/Insets;
+}
+
+public final class com/google/accompanist/insets/InsetsType : com/google/accompanist/insets/Insets {
 	public fun <init> ()V
-	public final fun copy (IIIIZ)Lcom/google/accompanist/insets/Insets;
-	public static synthetic fun copy$default (Lcom/google/accompanist/insets/Insets;IIIIZILjava/lang/Object;)Lcom/google/accompanist/insets/Insets;
-	public final fun getBottom ()I
-	public final fun getLeft ()I
-	public final fun getRight ()I
-	public final fun getTop ()I
+	public fun copy (IIII)Lcom/google/accompanist/insets/Insets;
+	public final fun getAnimatedInsets ()Lcom/google/accompanist/insets/Insets;
+	public final fun getAnimationFraction ()F
+	public final fun getAnimationInProgress ()Z
+	public fun getBottom ()I
+	public final fun getLayoutInsets ()Lcom/google/accompanist/insets/Insets;
+	public fun getLeft ()I
+	public fun getRight ()I
+	public fun getTop ()I
 	public final fun isVisible ()Z
-	public final fun minus (Lcom/google/accompanist/insets/Insets;)Lcom/google/accompanist/insets/Insets;
-	public final fun plus (Lcom/google/accompanist/insets/Insets;)Lcom/google/accompanist/insets/Insets;
+	public fun minus (Lcom/google/accompanist/insets/Insets;)Lcom/google/accompanist/insets/Insets;
+	public fun plus (Lcom/google/accompanist/insets/Insets;)Lcom/google/accompanist/insets/Insets;
 }
 
 public final class com/google/accompanist/insets/VerticalSide : java/lang/Enum {
@@ -76,10 +96,10 @@ public final class com/google/accompanist/insets/ViewWindowInsetObserver {
 
 public final class com/google/accompanist/insets/WindowInsets {
 	public fun <init> ()V
-	public final fun getIme ()Lcom/google/accompanist/insets/Insets;
-	public final fun getNavigationBars ()Lcom/google/accompanist/insets/Insets;
-	public final fun getStatusBars ()Lcom/google/accompanist/insets/Insets;
-	public final fun getSystemBars ()Lcom/google/accompanist/insets/Insets;
-	public final fun getSystemGestures ()Lcom/google/accompanist/insets/Insets;
+	public final fun getIme ()Lcom/google/accompanist/insets/InsetsType;
+	public final fun getNavigationBars ()Lcom/google/accompanist/insets/InsetsType;
+	public final fun getStatusBars ()Lcom/google/accompanist/insets/InsetsType;
+	public final fun getSystemBars ()Lcom/google/accompanist/insets/InsetsType;
+	public final fun getSystemGestures ()Lcom/google/accompanist/insets/InsetsType;
 }
 
