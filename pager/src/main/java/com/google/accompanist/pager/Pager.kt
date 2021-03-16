@@ -21,7 +21,9 @@ package com.google.accompanist.pager
 import android.util.Log
 import androidx.annotation.IntRange
 import androidx.compose.animation.defaultDecayAnimationSpec
+import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
@@ -59,7 +61,7 @@ internal const val ScrollThreshold = 0.35f
 /**
  * Library-wide switch to turn on debug logging.
  */
-internal const val DebugLog = true
+internal const val DebugLog = false
 
 private const val LogTag = "Pager"
 
@@ -130,11 +132,13 @@ fun HorizontalPager(
         selectableGroup()
     }
 
-    val decay = defaultDecayAnimationSpec()
-    val flingBehavior = remember(state, reverseDirection, decay) {
-        WorkaroundFlingBehavior(reverseDirection) { initialVelocity ->
-            state.fling(-initialVelocity, decay) { deltaPixels ->
-                -scrollBy(-deltaPixels)
+    val decayAnimSpec = defaultDecayAnimationSpec()
+    val flingBehavior = remember(state, decayAnimSpec) {
+        object : FlingBehavior {
+            override suspend fun ScrollScope.performFling(initialVelocity: Float): Float {
+                return state.fling(-initialVelocity, decayAnimSpec) { deltaPixels ->
+                    -scrollBy(-deltaPixels)
+                }
             }
         }
     }

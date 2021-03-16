@@ -62,7 +62,7 @@ object Libs {
         const val appcompat = "androidx.appcompat:appcompat:1.3.0-beta01"
 
         object Compose {
-            const val snapshot = "7205803"
+            const val snapshot = "7212271"
             const val version = "1.0.0-SNAPSHOT"
 
             @JvmStatic

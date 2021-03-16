@@ -53,7 +53,7 @@ private const val LogTag = "PagerState"
  * in the state being recreated or changed in any way if it has already been created.
  * Changes to [pageCount] will result in the [PagerState] being updated.
  *
- * @param pageCount the initial value for [PagerState.pageCount]
+ * @param pageCount the value for [PagerState.pageCount]
  * @param initialPage the initial value for [PagerState.currentPage]
  * @param initialPageOffset the initial value for [PagerState.currentPageOffset]
  */
