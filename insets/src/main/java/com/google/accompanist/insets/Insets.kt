@@ -95,7 +95,7 @@ class InsetsType : Insets {
 
     /**
      * The animated insets for this [InsetsType]. These are the insets which are updated from
-     * any on-going animations. If there are no animations in progress, the return [Insets] will
+     * any on-going animations. If there are no animations in progress, the returned [Insets] will
      * be empty.
      *
      * You should not normally need to use this directly, and instead use [left], [top],
