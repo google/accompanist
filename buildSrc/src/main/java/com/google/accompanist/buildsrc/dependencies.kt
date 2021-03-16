@@ -21,7 +21,7 @@ object Versions {
 }
 
 object Libs {
-    const val androidGradlePlugin = "com.android.tools.build:gradle:7.0.0-alpha09"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:7.0.0-alpha10"
 
     const val gradleMavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.13.0"
 
