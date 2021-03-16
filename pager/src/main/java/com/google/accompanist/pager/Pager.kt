@@ -85,6 +85,9 @@ private val Measurable.page: Int
  *
  * @param state the state object to be used to control or observe the list's state.
  * @param modifier the modifier to apply to this layout.
+ * @param reverseLayout reverse the direction of scrolling and layout, when `true` items will be
+ * composed from the end to the start and [PagerState.currentPage] == 0 will mean
+ * the first item is located at the end.
  * @param offscreenLimit the number of pages that should be retained on either side of the
  * current page. This value is required to be `1` or greater.
  * @param content a block which describes the content. Inside this block you can reference
@@ -95,12 +98,14 @@ private val Measurable.page: Int
 fun HorizontalPager(
     state: PagerState,
     modifier: Modifier = Modifier,
+    reverseLayout: Boolean = false,
     @IntRange(from = 1) offscreenLimit: Int = 1,
     content: @Composable PagerScope.(page: Int) -> Unit
 ) {
     require(offscreenLimit >= 1) { "offscreenLimit is required to be >= 1" }
 
-    val reverseDirection = LocalLayoutDirection.current == LayoutDirection.Rtl
+    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+    val reverseDirection = if (isRtl) !reverseLayout else reverseLayout
 
     val semantics = Modifier.semantics {
         if (state.pageCount > 0) {
