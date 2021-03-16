@@ -22,6 +22,7 @@ import android.util.Log
 import androidx.annotation.IntRange
 import androidx.compose.animation.defaultDecayAnimationSpec
 import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -30,6 +31,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
@@ -45,6 +47,7 @@ import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 /**
@@ -107,19 +110,24 @@ fun HorizontalPager(
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     val reverseDirection = if (isRtl) !reverseLayout else reverseLayout
 
+    val coroutineScope = rememberCoroutineScope()
+    val semanticsAxisRange = remember(state, reverseDirection) {
+        ScrollAxisRange(
+            value = { state.currentPage + state.currentPageOffset },
+            maxValue = { state.lastPageIndex.toFloat() },
+        )
+    }
     val semantics = Modifier.semantics {
-        if (state.pageCount > 0) {
-            horizontalScrollAxisRange = ScrollAxisRange(
-                value = { (state.currentPage + state.currentPageOffset) * state.pageSize },
-                maxValue = { state.lastPageIndex.toFloat() * state.pageSize },
-            )
-            // Hook up scroll actions to our state
-            scrollBy { x: Float, _ ->
-                state.dispatchRawDelta(x) != 0f
+        horizontalScrollAxisRange = semanticsAxisRange
+        // Hook up scroll actions to our state
+        scrollBy { x: Float, _ ->
+            coroutineScope.launch {
+                state.scrollBy(if (reverseDirection) x else -x)
             }
-            // Treat this as a selectable group
-            selectableGroup()
+            true
         }
+        // Treat this as a selectable group
+        selectableGroup()
     }
 
     val decay = defaultDecayAnimationSpec()
