@@ -79,7 +79,7 @@ class WindowInsets {
 @Stable
 @Suppress("MemberVisibilityCanBePrivate")
 class InsetsType : Insets {
-    private var ongoingAnimations by mutableStateOf(0)
+    private var ongoingAnimationsCount by mutableStateOf(0)
     internal val _layoutInsets = MutableInsets()
     internal val _animatedInsets = MutableInsets()
 
@@ -138,7 +138,7 @@ class InsetsType : Insets {
      * Whether this insets type is being animated at this moment.
      */
     val animationInProgress: Boolean
-        get() = ongoingAnimations > 0
+        get() = ongoingAnimationsCount > 0
 
     /**
      * The progress of any ongoing animations, in the range of 0 to 1.
@@ -149,13 +149,13 @@ class InsetsType : Insets {
         internal set
 
     internal fun onAnimationStart() {
-        ongoingAnimations++
+        ongoingAnimationsCount++
     }
 
     internal fun onAnimationEnd() {
-        ongoingAnimations--
+        ongoingAnimationsCount--
 
-        if (ongoingAnimations == 0) {
+        if (ongoingAnimationsCount == 0) {
             // If there are no on-going animations, clear out the animated insets
             _animatedInsets.reset()
             animationFraction = 0f
