@@ -94,6 +94,9 @@ class PagerState(
     private val _currentPageOffset = mutableStateOf(currentPageOffset)
     internal var pageSize by mutableStateOf(0)
 
+    /**
+     * The page position, as a float value between `0 until pageSize`
+     */
     private val globalPosition: Float
         get() = currentPage + currentPageOffset
 
@@ -287,18 +290,20 @@ class PagerState(
      *
      * @param initialVelocity velocity in pixels per second. Values > 0 signify flings
      * towards the end of the pager, and values < 0 sign flings towards the start.
-     * @param animationSpec The decay animation spec to use for decayed flings.
+     * @param decayAnimationSpec The decay animation spec to use for decayed flings.
+     * @param snapAnimationSpec The animation spec to use when snapping.
      * @param scrollBy block which is called when a scroll is required. Positive values passed in
      * signify scrolls towards the end of the pager, and values < 0 towards the start.
      * @return any remaining velocity after the scroll has finished.
      */
     internal suspend fun fling(
         initialVelocity: Float,
-        animationSpec: DecayAnimationSpec<Float> = exponentialDecay(),
+        decayAnimationSpec: DecayAnimationSpec<Float> = exponentialDecay(),
+        snapAnimationSpec: AnimationSpec<Float> = spring(),
         scrollBy: (Float) -> Float,
     ): Float {
         // We calculate the target offset using pixels, rather than using the offset
-        val targetOffset = animationSpec.calculateTargetValue(
+        val targetOffset = decayAnimationSpec.calculateTargetValue(
             initialValue = currentPageOffset * pageSize,
             initialVelocity = initialVelocity
         ) / pageSize
@@ -326,7 +331,7 @@ class PagerState(
             AnimationState(
                 initialValue = currentPageOffset * pageSize,
                 initialVelocity = initialVelocity
-            ).animateDecay(animationSpec) {
+            ).animateDecay(decayAnimationSpec) {
                 if (DebugLog) {
                     Log.d(
                         LogTag,
@@ -365,7 +370,7 @@ class PagerState(
                 initialValue = globalPosition * pageSize,
                 targetValue = targetPosition * pageSize,
                 initialVelocity = initialVelocity,
-                animationSpec = spring()
+                animationSpec = snapAnimationSpec,
             ) { value, velocity ->
                 scrollBy(value - (globalPosition * pageSize))
                 // Keep track of velocity

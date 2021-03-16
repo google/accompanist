@@ -2,7 +2,7 @@ public abstract interface annotation class com/google/accompanist/pager/Experime
 }
 
 public final class com/google/accompanist/pager/Pager {
-	public static final fun HorizontalPager (Lcom/google/accompanist/pager/PagerState;Landroidx/compose/ui/Modifier;ZILkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
+	public static final fun HorizontalPager (Lcom/google/accompanist/pager/PagerState;Landroidx/compose/ui/Modifier;ZILandroidx/compose/animation/core/DecayAnimationSpec;Landroidx/compose/animation/core/AnimationSpec;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
 }
 
 public abstract interface class com/google/accompanist/pager/PagerScope : androidx/compose/foundation/layout/BoxScope {

@@ -20,6 +20,9 @@ package com.google.accompanist.pager
 
 import android.util.Log
 import androidx.annotation.IntRange
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.DecayAnimationSpec
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.defaultDecayAnimationSpec
 import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.gestures.Orientation
@@ -59,6 +62,12 @@ internal const val DebugLog = false
 
 private const val LogTag = "Pager"
 
+/**
+ * This attempts to mimic ViewPager's custom scroll interpolator. It's not a perfect match
+ * (and we may not want it to be), but this seem to match in terms of scroll duration and 'feel'
+ */
+private const val SnapSpringStiffness = 2750f
+
 @RequiresOptIn(message = "Accompanist Pager is experimental. The API may be changed in the future.")
 @Retention(AnnotationRetention.BINARY)
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
@@ -89,6 +98,8 @@ private val Measurable.page: Int
  * the first item is located at the end.
  * @param offscreenLimit the number of pages that should be retained on either side of the
  * current page. This value is required to be `1` or greater.
+ * @param decayAnimationSpec The decay animation spec to use for decayed flings.
+ * @param snapAnimationSpec The animation spec to use when snapping.
  * @param content a block which describes the content. Inside this block you can reference
  * [PagerScope.currentPage] and other properties in [PagerScope].
  */
@@ -99,7 +110,9 @@ fun HorizontalPager(
     modifier: Modifier = Modifier,
     reverseLayout: Boolean = false,
     @IntRange(from = 1) offscreenLimit: Int = 1,
-    content: @Composable PagerScope.(page: Int) -> Unit
+    decayAnimationSpec: DecayAnimationSpec<Float> = defaultDecayAnimationSpec(),
+    snapAnimationSpec: AnimationSpec<Float> = spring(stiffness = SnapSpringStiffness),
+    content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
     require(offscreenLimit >= 1) { "offscreenLimit is required to be >= 1" }
 
@@ -126,13 +139,15 @@ fun HorizontalPager(
         selectableGroup()
     }
 
-    val decayAnimSpec = defaultDecayAnimationSpec()
-    val flingBehavior = remember(state, decayAnimSpec) {
+    val flingBehavior = remember(state, decayAnimationSpec, snapAnimationSpec) {
         object : FlingBehavior {
             override suspend fun ScrollScope.performFling(initialVelocity: Float): Float {
-                return state.fling(-initialVelocity, decayAnimSpec) { deltaPixels ->
-                    -scrollBy(-deltaPixels)
-                }
+                return state.fling(
+                    initialVelocity = -initialVelocity,
+                    decayAnimationSpec = decayAnimationSpec,
+                    snapAnimationSpec = snapAnimationSpec,
+                    scrollBy = { deltaPixels -> -scrollBy(-deltaPixels) },
+                )
             }
         }
     }
