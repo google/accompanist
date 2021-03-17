@@ -141,6 +141,8 @@ fun HorizontalPager(
     reverseLayout: Boolean = false,
     @IntRange(from = 1) offscreenLimit: Int = 1,
     flingBehavior: FlingBehavior = PagerDefaults.defaultPagerFlingConfig(state),
+    verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
+    horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
     Pager(
@@ -150,6 +152,8 @@ fun HorizontalPager(
         reverseLayout = reverseLayout,
         offscreenLimit = offscreenLimit,
         flingBehavior = flingBehavior,
+        verticalAlignment = verticalAlignment,
+        horizontalAlignment = horizontalAlignment,
         content = content
     )
 }
@@ -183,6 +187,8 @@ fun VerticalPager(
     reverseLayout: Boolean = false,
     @IntRange(from = 1) offscreenLimit: Int = 1,
     flingBehavior: FlingBehavior = PagerDefaults.defaultPagerFlingConfig(state),
+    verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
+    horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
     Pager(
@@ -191,6 +197,8 @@ fun VerticalPager(
         isVertical = true,
         reverseLayout = reverseLayout,
         offscreenLimit = offscreenLimit,
+        verticalAlignment = verticalAlignment,
+        horizontalAlignment = horizontalAlignment,
         flingBehavior = flingBehavior,
         content = content
     )
@@ -203,6 +211,8 @@ internal fun Pager(
     modifier: Modifier,
     reverseLayout: Boolean,
     isVertical: Boolean,
+    verticalAlignment: Alignment.Vertical,
+    horizontalAlignment: Alignment.Horizontal,
     @IntRange(from = 1) offscreenLimit: Int,
     flingBehavior: FlingBehavior,
     content: @Composable PagerScope.(page: Int) -> Unit,
@@ -288,10 +298,17 @@ internal fun Pager(
                 val placeable = it.measure(childConstraints)
                 val page = it.page
 
-                // TODO: current this centers each page. We should investigate reading
-                //  gravity modifiers on the child, or maybe as a param to Pager.
-                val xCenterOffset = (constraints.maxWidth - placeable.width) / 2
-                val yCenterOffset = (constraints.maxHeight - placeable.height) / 2
+                val xCenterOffset = horizontalAlignment.align(
+                    size = placeable.width,
+                    space = constraints.maxWidth,
+                    // We pass in Ltr here since we use placeRelative below.  If we use the
+                    // actual layoutDirection, placeRelative() will negate any difference.
+                    layoutDirection = LayoutDirection.Ltr,
+                )
+                val yCenterOffset = verticalAlignment.align(
+                    size = placeable.height,
+                    space = constraints.maxHeight
+                )
 
                 var yItemOffset = 0
                 var xItemOffset = 0
