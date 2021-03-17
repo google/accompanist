@@ -33,6 +33,7 @@ import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.height
 import androidx.compose.ui.unit.width
 import androidx.test.filters.LargeTest
@@ -44,6 +45,7 @@ import org.junit.runners.Parameterized
 @RunWith(Parameterized::class)
 class VerticalPagerTest(
     private val itemWidthFraction: Float,
+    private val verticalAlignment: Alignment.Vertical,
     offscreenLimit: Int,
 ) : PagerTest(
     offscreenLimit = offscreenLimit,
@@ -53,12 +55,15 @@ class VerticalPagerTest(
         @JvmStatic
         @Parameterized.Parameters
         fun data(): Collection<Array<Any>> = listOf(
-            // itemWidthFraction, offscreenLimit
+            // itemWidthFraction, verticalAlignment, offscreenLimit
 
             // Test typical full-width items
-            arrayOf(1f, 2),
+            arrayOf(1f, Alignment.CenterVertically, 2),
+            arrayOf(1f, Alignment.Top, 2),
+            arrayOf(1f, Alignment.Bottom, 2),
+
             // Test an increased offscreenLimit
-            arrayOf(1f, 4),
+            arrayOf(1f, Alignment.CenterVertically, 4),
         )
     }
 
@@ -77,10 +82,15 @@ class VerticalPagerTest(
         val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
         val expectedItemSize = rootBounds.width * itemWidthFraction
 
-        // The expected coordinates. This uses the implicit fact that Pager
-        // centers items horizontally, and that we're using items with an aspect ratio of 1:1
+        // The expected coordinates. This uses the implicit fact that VerticalPager by
+        // use Alignment.CenterVertically by default, and that we're using items
+        // with an aspect ratio of 1:1
         val expectedLeft = (rootBounds.width - expectedItemSize) / 2
-        val expectedFirstItemTop = (rootBounds.height - expectedItemSize) / 2
+        val expectedFirstItemTop = when (verticalAlignment) {
+            Alignment.Top -> 0.dp
+            Alignment.Bottom -> rootBounds.height - expectedItemSize
+            else /* Alignment.CenterVertically */ -> (rootBounds.height - expectedItemSize) / 2
+        }
 
         return assertWidthIsEqualTo(expectedItemSize)
             .assertHeightIsAtLeast(expectedItemSize)
@@ -100,6 +110,7 @@ class VerticalPagerTest(
             VerticalPager(
                 state = pagerState,
                 offscreenLimit = offscreenLimit,
+                verticalAlignment = verticalAlignment,
                 modifier = Modifier.fillMaxSize()
             ) { page ->
                 Box(
