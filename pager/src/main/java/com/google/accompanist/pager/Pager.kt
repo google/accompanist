@@ -89,7 +89,7 @@ private val Measurable.page: Int
  * recreated as needed. This value defaults to `1`, but can be increased to enable pre-loading
  * of more content.
  *
- * @sample com.google.accompanist.sample.pager.PagerSample
+ * @sample com.google.accompanist.sample.pager.HorizontalPagerSample
  *
  * @param state the state object to be used to control or observe the list's state.
  * @param modifier the modifier to apply to this layout.
@@ -134,7 +134,7 @@ fun HorizontalPager(
  * recreated as needed. This value defaults to `1`, but can be increased to enable pre-loading
  * of more content.
  *
- * @sample com.google.accompanist.sample.pager.PagerSample
+ * @sample com.google.accompanist.sample.pager.VerticalPagerSample
  *
  * @param state the state object to be used to control or observe the list's state.
  * @param modifier the modifier to apply to this layout.
