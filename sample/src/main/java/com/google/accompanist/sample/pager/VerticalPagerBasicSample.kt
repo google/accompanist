@@ -91,7 +91,6 @@ private fun Sample() {
                 state = pagerState,
                 // We increase the offscreen limit, to allow pre-loading of images
                 offscreenLimit = 2,
-                verticalAlignment = Alignment.Bottom,
                 modifier = Modifier.weight(1f)
             ) { page ->
                 Box {

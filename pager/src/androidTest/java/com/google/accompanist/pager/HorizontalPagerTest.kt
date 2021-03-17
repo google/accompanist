@@ -33,6 +33,7 @@ import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.height
 import androidx.compose.ui.unit.width
 import androidx.test.filters.LargeTest
@@ -44,6 +45,7 @@ import org.junit.runners.Parameterized
 @RunWith(Parameterized::class)
 class HorizontalPagerTest(
     private val itemWidthFraction: Float,
+    private val horizontalAlignment: Alignment.Horizontal,
     offscreenLimit: Int,
     layoutDirection: LayoutDirection,
 ) : PagerTest(
@@ -54,19 +56,27 @@ class HorizontalPagerTest(
         @JvmStatic
         @Parameterized.Parameters
         fun data(): Collection<Array<Any>> = listOf(
-            // itemWidthFraction, offscreenLimit, layoutDirection
+            // itemWidthFraction, horizontalAlignment, offscreenLimit, layoutDirection,
 
             // Test typical full-width items
-            arrayOf(1f, 2, LayoutDirection.Ltr),
-            arrayOf(1f, 2, LayoutDirection.Rtl),
+            arrayOf(1f, Alignment.Start, 2, LayoutDirection.Ltr),
+            arrayOf(1f, Alignment.CenterHorizontally, 2, LayoutDirection.Ltr),
+            arrayOf(1f, Alignment.End, 2, LayoutDirection.Ltr),
+            arrayOf(1f, Alignment.Start, 2, LayoutDirection.Rtl),
+            arrayOf(1f, Alignment.CenterHorizontally, 2, LayoutDirection.Rtl),
+            arrayOf(1f, Alignment.End, 2, LayoutDirection.Rtl),
 
             // Test an increased offscreenLimit
-            arrayOf(1f, 4, LayoutDirection.Ltr),
-            arrayOf(1f, 4, LayoutDirection.Rtl),
+            arrayOf(1f, Alignment.CenterHorizontally, 4, LayoutDirection.Ltr),
+            arrayOf(1f, Alignment.CenterHorizontally, 4, LayoutDirection.Rtl),
 
             // Test items with 80% widths
-            arrayOf(0.8f, 2, LayoutDirection.Ltr),
-            arrayOf(0.8f, 2, LayoutDirection.Rtl),
+            arrayOf(0.8f, Alignment.Start, 2, LayoutDirection.Ltr),
+            arrayOf(0.8f, Alignment.CenterHorizontally, 2, LayoutDirection.Ltr),
+            arrayOf(0.8f, Alignment.End, 2, LayoutDirection.Ltr),
+            arrayOf(0.8f, Alignment.Start, 2, LayoutDirection.Rtl),
+            arrayOf(0.8f, Alignment.CenterHorizontally, 2, LayoutDirection.Rtl),
+            arrayOf(0.8f, Alignment.End, 2, LayoutDirection.Rtl),
         )
     }
 
@@ -88,10 +98,25 @@ class HorizontalPagerTest(
         val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
         val expectedItemSize = rootBounds.width * itemWidthFraction
 
-        // The expected coordinates. This uses the implicit fact that Pager
-        // centers items horizontally, and that we're using items with an aspect ratio of 1:1
+        // The expected coordinates. This uses the implicit fact that VerticalPager by
+        // use Alignment.CenterVertically by default, and that we're using items
+        // with an aspect ratio of 1:1
         val expectedTop = (rootBounds.height - expectedItemSize) / 2
-        val expectedFirstItemLeft = (rootBounds.width - expectedItemSize) / 2
+        val expectedFirstItemLeft = when (horizontalAlignment) {
+            Alignment.Start -> {
+                when (layoutDirection) {
+                    LayoutDirection.Ltr -> 0.dp
+                    else -> rootBounds.width - expectedItemSize
+                }
+            }
+            Alignment.End -> {
+                when (layoutDirection) {
+                    LayoutDirection.Ltr -> rootBounds.width - expectedItemSize
+                    else -> 0.dp
+                }
+            }
+            else /* Alignment.CenterVertically */ -> (rootBounds.width - expectedItemSize) / 2
+        }
 
         return assertWidthIsEqualTo(expectedItemSize)
             .assertHeightIsAtLeast(expectedItemSize)
@@ -119,6 +144,7 @@ class HorizontalPagerTest(
             HorizontalPager(
                 state = pagerState,
                 offscreenLimit = offscreenLimit,
+                horizontalAlignment = horizontalAlignment,
                 modifier = Modifier.fillMaxSize()
             ) { page ->
                 Box(
