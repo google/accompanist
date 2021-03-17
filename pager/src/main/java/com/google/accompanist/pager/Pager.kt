@@ -114,6 +114,75 @@ fun HorizontalPager(
     snapAnimationSpec: AnimationSpec<Float> = spring(stiffness = SnapSpringStiffness),
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
+    Pager(
+        state = state,
+        modifier = modifier,
+        isVertical = false,
+        reverseLayout = reverseLayout,
+        offscreenLimit = offscreenLimit,
+        decayAnimationSpec = decayAnimationSpec,
+        snapAnimationSpec = snapAnimationSpec,
+        content = content
+    )
+}
+
+/**
+ * A vertically scrolling layout that allows users to flip between items to the top and bottom.
+ *
+ * This layout allows the setting of the [offscreenLimit], which defines the number of pages that
+ * should be retained on either side of the current page. Pages beyond this limit will be
+ * recreated as needed. This value defaults to `1`, but can be increased to enable pre-loading
+ * of more content.
+ *
+ * @sample com.google.accompanist.sample.pager.PagerSample
+ *
+ * @param state the state object to be used to control or observe the list's state.
+ * @param modifier the modifier to apply to this layout.
+ * @param reverseLayout reverse the direction of scrolling and layout, when `true` items will be
+ * composed from the end to the start and [PagerState.currentPage] == 0 will mean
+ * the first item is located at the end.
+ * @param offscreenLimit the number of pages that should be retained on either side of the
+ * current page. This value is required to be `1` or greater.
+ * @param decayAnimationSpec The decay animation spec to use for decayed flings.
+ * @param snapAnimationSpec The animation spec to use when snapping.
+ * @param content a block which describes the content. Inside this block you can reference
+ * [PagerScope.currentPage] and other properties in [PagerScope].
+ */
+@ExperimentalPagerApi
+@Composable
+fun VerticalPager(
+    state: PagerState,
+    modifier: Modifier = Modifier,
+    reverseLayout: Boolean = false,
+    @IntRange(from = 1) offscreenLimit: Int = 1,
+    decayAnimationSpec: DecayAnimationSpec<Float> = defaultDecayAnimationSpec(),
+    snapAnimationSpec: AnimationSpec<Float> = spring(stiffness = SnapSpringStiffness),
+    content: @Composable PagerScope.(page: Int) -> Unit,
+) {
+    Pager(
+        state = state,
+        modifier = modifier,
+        isVertical = true,
+        reverseLayout = reverseLayout,
+        offscreenLimit = offscreenLimit,
+        decayAnimationSpec = decayAnimationSpec,
+        snapAnimationSpec = snapAnimationSpec,
+        content = content
+    )
+}
+
+@ExperimentalPagerApi
+@Composable
+internal fun Pager(
+    state: PagerState,
+    modifier: Modifier,
+    reverseLayout: Boolean,
+    isVertical: Boolean,
+    @IntRange(from = 1) offscreenLimit: Int,
+    decayAnimationSpec: DecayAnimationSpec<Float>,
+    snapAnimationSpec: AnimationSpec<Float>,
+    content: @Composable PagerScope.(page: Int) -> Unit,
+) {
     require(offscreenLimit >= 1) { "offscreenLimit is required to be >= 1" }
 
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
@@ -129,9 +198,13 @@ fun HorizontalPager(
     val semantics = Modifier.semantics {
         horizontalScrollAxisRange = semanticsAxisRange
         // Hook up scroll actions to our state
-        scrollBy { x: Float, _ ->
+        scrollBy { x, y ->
             coroutineScope.launch {
-                state.scrollBy(if (reverseDirection) x else -x)
+                if (isVertical) {
+                    state.scrollBy(if (reverseDirection) y else -y)
+                } else {
+                    state.scrollBy(if (reverseDirection) x else -x)
+                }
             }
             true
         }
@@ -153,7 +226,7 @@ fun HorizontalPager(
     }
 
     val scrollable = Modifier.scrollable(
-        orientation = Orientation.Horizontal,
+        orientation = if (isVertical) Orientation.Vertical else Orientation.Horizontal,
         flingBehavior = flingBehavior,
         reverseDirection = reverseDirection,
         state = state,
@@ -209,14 +282,24 @@ fun HorizontalPager(
                 val xCenterOffset = (constraints.maxWidth - placeable.width) / 2
                 val yCenterOffset = (constraints.maxHeight - placeable.height) / 2
 
-                if (currentPage == page) {
-                    state.pageSize = placeable.width
+                var yItemOffset = 0
+                var xItemOffset = 0
+
+                if (isVertical) {
+                    if (currentPage == page) {
+                        state.pageSize = placeable.height
+                    }
+                    yItemOffset = ((page - currentPage - offset) * placeable.height).roundToInt()
+                } else {
+                    if (currentPage == page) {
+                        state.pageSize = placeable.width
+                    }
+                    xItemOffset = ((page - currentPage - offset) * placeable.width).roundToInt()
                 }
 
-                val xItemOffset = ((page - currentPage - offset) * placeable.width).roundToInt()
                 placeable.placeRelative(
                     x = xCenterOffset + xItemOffset,
-                    y = yCenterOffset
+                    y = yCenterOffset + yItemOffset,
                 )
             }
         }
