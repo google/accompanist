@@ -91,7 +91,7 @@ private val Measurable.page: Int
  *
  * @sample com.google.accompanist.sample.pager.HorizontalPagerSample
  *
- * @param state the state object to be used to control or observe the list's state.
+ * @param state the state object to be used to control or observe the pager's state.
  * @param modifier the modifier to apply to this layout.
  * @param reverseLayout reverse the direction of scrolling and layout, when `true` items will be
  * composed from the end to the start and [PagerState.currentPage] == 0 will mean
@@ -136,11 +136,11 @@ fun HorizontalPager(
  *
  * @sample com.google.accompanist.sample.pager.VerticalPagerSample
  *
- * @param state the state object to be used to control or observe the list's state.
+ * @param state the state object to be used to control or observe the pager's state.
  * @param modifier the modifier to apply to this layout.
  * @param reverseLayout reverse the direction of scrolling and layout, when `true` items will be
- * composed from the end to the start and [PagerState.currentPage] == 0 will mean
- * the first item is located at the end.
+ * composed from the bottom to the top and [PagerState.currentPage] == 0 will mean
+ * the first item is located at the bottom.
  * @param offscreenLimit the number of pages that should be retained on either side of the
  * current page. This value is required to be `1` or greater.
  * @param decayAnimationSpec The decay animation spec to use for decayed flings.
