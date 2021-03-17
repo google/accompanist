@@ -26,7 +26,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.SemanticsNodeInteraction
+import androidx.compose.ui.test.assertHeightIsAtLeast
+import androidx.compose.ui.test.assertLeftPositionInRootIsEqualTo
+import androidx.compose.ui.test.assertTopPositionInRootIsEqualTo
+import androidx.compose.ui.test.assertWidthIsEqualTo
+import androidx.compose.ui.test.getUnclippedBoundsInRoot
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.height
+import androidx.compose.ui.unit.width
 import androidx.test.filters.LargeTest
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
@@ -62,6 +70,26 @@ class VerticalPagerTest(
         velocity = velocity,
     )
 
+    override fun SemanticsNodeInteraction.assertLaidOutItemPosition(
+        page: Int,
+        currentPage: Int
+    ): SemanticsNodeInteraction {
+        val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
+        val expectedItemSize = rootBounds.width * itemWidthFraction
+
+        // The expected coordinates. This uses the implicit fact that Pager
+        // centers items horizontally, and that we're using items with an aspect ratio of 1:1
+        val expectedLeft = (rootBounds.width - expectedItemSize) / 2
+        val expectedFirstItemTop = (rootBounds.height - expectedItemSize) / 2
+
+        return assertWidthIsEqualTo(expectedItemSize)
+            .assertHeightIsAtLeast(expectedItemSize)
+            .assertLeftPositionInRootIsEqualTo(expectedLeft)
+            .assertTopPositionInRootIsEqualTo(
+                expectedFirstItemTop + (expectedItemSize * (page - currentPage))
+            )
+    }
+
     override fun setPagerContent(
         layoutDirection: LayoutDirection,
         pageCount: Int,
@@ -69,7 +97,7 @@ class VerticalPagerTest(
     ): PagerState {
         val pagerState = PagerState(pageCount = pageCount)
         composeTestRule.setContent(layoutDirection) {
-            HorizontalPager(
+            VerticalPager(
                 state = pagerState,
                 offscreenLimit = offscreenLimit,
                 modifier = Modifier.fillMaxSize()

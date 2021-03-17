@@ -26,11 +26,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.SemanticsNodeInteraction
+import androidx.compose.ui.test.assertHeightIsAtLeast
 import androidx.compose.ui.test.assertLeftPositionInRootIsEqualTo
+import androidx.compose.ui.test.assertTopPositionInRootIsEqualTo
 import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.height
 import androidx.compose.ui.unit.width
 import androidx.test.filters.LargeTest
 import org.junit.runner.RunWith
@@ -83,21 +86,24 @@ class HorizontalPagerTest(
         currentPage: Int,
     ): SemanticsNodeInteraction {
         val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
-        val expectedItemWidth = rootBounds.width * itemWidthFraction
+        val expectedItemSize = rootBounds.width * itemWidthFraction
 
-        // The expected left of the first item. This uses the implicit fact that Pager
-        // centers items horizontally
-        val firstItemLeft = (rootBounds.width - expectedItemWidth) / 2
+        // The expected coordinates. This uses the implicit fact that Pager
+        // centers items horizontally, and that we're using items with an aspect ratio of 1:1
+        val expectedTop = (rootBounds.height - expectedItemSize) / 2
+        val expectedFirstItemLeft = (rootBounds.width - expectedItemSize) / 2
 
-        return assertWidthIsEqualTo(expectedItemWidth)
+        return assertWidthIsEqualTo(expectedItemSize)
+            .assertHeightIsAtLeast(expectedItemSize)
+            .assertTopPositionInRootIsEqualTo(expectedTop)
             .run {
                 if (layoutDirection == LayoutDirection.Ltr) {
                     assertLeftPositionInRootIsEqualTo(
-                        firstItemLeft + (expectedItemWidth * (page - currentPage))
+                        expectedFirstItemLeft + (expectedItemSize * (page - currentPage))
                     )
                 } else { // layoutDirection = RTL
                     assertLeftPositionInRootIsEqualTo(
-                        firstItemLeft - (expectedItemWidth * (page - currentPage))
+                        expectedFirstItemLeft - (expectedItemSize * (page - currentPage))
                     )
                 }
             }

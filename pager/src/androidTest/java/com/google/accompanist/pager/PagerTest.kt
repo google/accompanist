@@ -253,10 +253,10 @@ abstract class PagerTest(
         }
     }
 
-    protected open fun SemanticsNodeInteraction.assertLaidOutItemPosition(
+    protected abstract fun SemanticsNodeInteraction.assertLaidOutItemPosition(
         page: Int,
         currentPage: Int,
-    ): SemanticsNodeInteraction = this
+    ): SemanticsNodeInteraction
 
     protected abstract fun setPagerContent(
         layoutDirection: LayoutDirection,
