@@ -59,7 +59,6 @@ sed -i.bak 's/docs\/header.png/header.png/' $DOCS_ROOT/index.md
 sed -i.bak 's/docs\/\([a-zA-Z-]*\).md/\1/' $DOCS_ROOT/index.md
 
 copyReadme coil
-copyReadme picasso
 copyReadme glide
 
 # Finally delete all of the backup files

@@ -22,9 +22,6 @@ nav:
     - 'API': api/glide/glide/
   - 'Image Loading Core':
     - 'API': api/imageloading-core/imageloading-core
-  - 'Picasso':
-    - 'Guide': picasso.md
-    - 'API': api/picasso/picasso/
   - 'Insets':
     - 'Guide': insets.md
     - 'API': api/insets/insets/

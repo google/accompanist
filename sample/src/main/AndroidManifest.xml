@@ -69,35 +69,6 @@
         </activity>
 
         <activity
-            android:name="com.google.accompanist.sample.picasso.PicassoBasicSample"
-            android:label="@string/picasso_title_basic">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name="com.google.accompanist.sample.picasso.PicassoLazyColumnSample"
-            android:label="@string/picasso_title_lazy_row">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-
-        <activity
-            android:name="com.google.accompanist.sample.picasso.PicassoLazyGridSample"
-            android:label="@string/picasso_title_lazy_grid"
-            android:theme="@style/Theme.AccompanistSample.NoActionBar.TransparentBars">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
             android:name="com.google.accompanist.sample.glide.GlideBasicSample"
             android:label="@string/glide_title_basic">
             <intent-filter>
