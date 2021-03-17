@@ -82,6 +82,37 @@ private val Measurable.page: Int
     get() = (parentData as? PageData)?.page ?: error("No PageData for measurable $this")
 
 /**
+ * Contains the default values used by [HorizontalPager] and [VerticalPager].
+ */
+@ExperimentalPagerApi
+object PagerDefaults {
+    /**
+     * Create and remember default [FlingBehavior] that will represent the scroll curve.
+     *
+     * @param state The [PagerState] to update.
+     * @param decayAnimationSpec The decay animation spec to use for decayed flings.
+     * @param snapAnimationSpec The animation spec to use when snapping.
+     */
+    @Composable
+    fun defaultPagerFlingConfig(
+        state: PagerState,
+        decayAnimationSpec: DecayAnimationSpec<Float> = defaultDecayAnimationSpec(),
+        snapAnimationSpec: AnimationSpec<Float> = spring(stiffness = SnapSpringStiffness),
+    ): FlingBehavior = remember(state, decayAnimationSpec, snapAnimationSpec) {
+        object : FlingBehavior {
+            override suspend fun ScrollScope.performFling(
+                initialVelocity: Float
+            ): Float = state.fling(
+                initialVelocity = -initialVelocity,
+                decayAnimationSpec = decayAnimationSpec,
+                snapAnimationSpec = snapAnimationSpec,
+                scrollBy = { deltaPixels -> -scrollBy(-deltaPixels) },
+            )
+        }
+    }
+}
+
+/**
  * A horizontally scrolling layout that allows users to flip between items to the left and right.
  *
  * This layout allows the setting of the [offscreenLimit], which defines the number of pages that
@@ -98,8 +129,7 @@ private val Measurable.page: Int
  * the first item is located at the end.
  * @param offscreenLimit the number of pages that should be retained on either side of the
  * current page. This value is required to be `1` or greater.
- * @param decayAnimationSpec The decay animation spec to use for decayed flings.
- * @param snapAnimationSpec The animation spec to use when snapping.
+ * @param flingBehavior logic describing fling behavior.
  * @param content a block which describes the content. Inside this block you can reference
  * [PagerScope.currentPage] and other properties in [PagerScope].
  */
@@ -110,8 +140,7 @@ fun HorizontalPager(
     modifier: Modifier = Modifier,
     reverseLayout: Boolean = false,
     @IntRange(from = 1) offscreenLimit: Int = 1,
-    decayAnimationSpec: DecayAnimationSpec<Float> = defaultDecayAnimationSpec(),
-    snapAnimationSpec: AnimationSpec<Float> = spring(stiffness = SnapSpringStiffness),
+    flingBehavior: FlingBehavior = PagerDefaults.defaultPagerFlingConfig(state),
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
     Pager(
@@ -120,8 +149,7 @@ fun HorizontalPager(
         isVertical = false,
         reverseLayout = reverseLayout,
         offscreenLimit = offscreenLimit,
-        decayAnimationSpec = decayAnimationSpec,
-        snapAnimationSpec = snapAnimationSpec,
+        flingBehavior = flingBehavior,
         content = content
     )
 }
@@ -143,8 +171,7 @@ fun HorizontalPager(
  * the first item is located at the bottom.
  * @param offscreenLimit the number of pages that should be retained on either side of the
  * current page. This value is required to be `1` or greater.
- * @param decayAnimationSpec The decay animation spec to use for decayed flings.
- * @param snapAnimationSpec The animation spec to use when snapping.
+ * @param flingBehavior logic describing fling behavior.
  * @param content a block which describes the content. Inside this block you can reference
  * [PagerScope.currentPage] and other properties in [PagerScope].
  */
@@ -155,8 +182,7 @@ fun VerticalPager(
     modifier: Modifier = Modifier,
     reverseLayout: Boolean = false,
     @IntRange(from = 1) offscreenLimit: Int = 1,
-    decayAnimationSpec: DecayAnimationSpec<Float> = defaultDecayAnimationSpec(),
-    snapAnimationSpec: AnimationSpec<Float> = spring(stiffness = SnapSpringStiffness),
+    flingBehavior: FlingBehavior = PagerDefaults.defaultPagerFlingConfig(state),
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
     Pager(
@@ -165,8 +191,7 @@ fun VerticalPager(
         isVertical = true,
         reverseLayout = reverseLayout,
         offscreenLimit = offscreenLimit,
-        decayAnimationSpec = decayAnimationSpec,
-        snapAnimationSpec = snapAnimationSpec,
+        flingBehavior = flingBehavior,
         content = content
     )
 }
@@ -179,8 +204,7 @@ internal fun Pager(
     reverseLayout: Boolean,
     isVertical: Boolean,
     @IntRange(from = 1) offscreenLimit: Int,
-    decayAnimationSpec: DecayAnimationSpec<Float>,
-    snapAnimationSpec: AnimationSpec<Float>,
+    flingBehavior: FlingBehavior,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
     require(offscreenLimit >= 1) { "offscreenLimit is required to be >= 1" }
@@ -210,19 +234,6 @@ internal fun Pager(
         }
         // Treat this as a selectable group
         selectableGroup()
-    }
-
-    val flingBehavior = remember(state, decayAnimationSpec, snapAnimationSpec) {
-        object : FlingBehavior {
-            override suspend fun ScrollScope.performFling(initialVelocity: Float): Float {
-                return state.fling(
-                    initialVelocity = -initialVelocity,
-                    decayAnimationSpec = decayAnimationSpec,
-                    snapAnimationSpec = snapAnimationSpec,
-                    scrollBy = { deltaPixels -> -scrollBy(-deltaPixels) },
-                )
-            }
-        }
     }
 
     val scrollable = Modifier.scrollable(
