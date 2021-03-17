@@ -177,6 +177,16 @@
         </activity>
 
         <activity
+            android:name=".pager.HorizontalPagerTabsSample"
+            android:label="@string/horiz_pager_title_tabs"
+            android:theme="@style/Theme.AccompanistSample">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".pager.VerticalPagerBasicSample"
             android:label="@string/vertical_pager_title_basics"
             android:theme="@style/Theme.AccompanistSample">

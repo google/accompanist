@@ -65,6 +65,20 @@ VerticalPager(state = pagerState) { page ->
 
 Pages in both `HorizontalPager` & `VerticalPager` are lazily created and laid-out as required by the layout. As the user scrolls through pages, any pages which are no longer required are removed from the content.
 
+## Integration with Tabs
+
+A common use-case for `HorizontalPager` is when used in conjunction with a `TabRow`.
+
+The [HorizontalPagerTabsSample](https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/pager/HorizontalPagerTabsSample.kt) demonstrates how this can be done:
+
+<figure>
+    <video width="300" controls loop>
+    <source src="tabs.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <figcaption>HorizontalPager + TabRow</figcaption>
+</figure>
+
 ### Offscreen Limit
 
 Both `HorizontalPager` & `VerticalPager` allow the setting of the `offscreenLimit`, which defines the number of pages that should be retained on either side of the current page. Pages beyond this limit will be removed, and then recreated when needed. This value defaults to `1`, but can be increased to enable pre-loading of more content:
