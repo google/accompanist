@@ -2,7 +2,14 @@ public abstract interface annotation class com/google/accompanist/pager/Experime
 }
 
 public final class com/google/accompanist/pager/Pager {
-	public static final fun HorizontalPager (Lcom/google/accompanist/pager/PagerState;Landroidx/compose/ui/Modifier;ZILandroidx/compose/animation/core/DecayAnimationSpec;Landroidx/compose/animation/core/AnimationSpec;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
+	public static final fun HorizontalPager (Lcom/google/accompanist/pager/PagerState;Landroidx/compose/ui/Modifier;ZILandroidx/compose/foundation/gestures/FlingBehavior;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
+	public static final fun VerticalPager (Lcom/google/accompanist/pager/PagerState;Landroidx/compose/ui/Modifier;ZILandroidx/compose/foundation/gestures/FlingBehavior;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class com/google/accompanist/pager/PagerDefaults {
+	public static final field $stable I
+	public static final field INSTANCE Lcom/google/accompanist/pager/PagerDefaults;
+	public final fun defaultPagerFlingConfig (Lcom/google/accompanist/pager/PagerState;Landroidx/compose/animation/core/DecayAnimationSpec;Landroidx/compose/animation/core/AnimationSpec;Landroidx/compose/runtime/Composer;II)Landroidx/compose/foundation/gestures/FlingBehavior;
 }
 
 public abstract interface class com/google/accompanist/pager/PagerScope : androidx/compose/foundation/layout/BoxScope {

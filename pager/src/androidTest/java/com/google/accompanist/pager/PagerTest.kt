@@ -16,86 +16,47 @@
 
 package com.google.accompanist.pager
 
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.text.BasicText
-import androidx.compose.ui.Modifier
+import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertIsNotSelected
 import androidx.compose.ui.test.assertIsSelectable
 import androidx.compose.ui.test.assertIsSelected
-import androidx.compose.ui.test.assertLeftPositionInRootIsEqualTo
-import androidx.compose.ui.test.assertWidthIsEqualTo
-import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.onRoot
-import androidx.compose.ui.test.performGesture
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performScrollTo
-import androidx.compose.ui.test.swipeLeft
-import androidx.compose.ui.test.swipeRight
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.width
-import androidx.test.filters.LargeTest
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
 
+private const val LongSwipeDistance = 0.95f
 private const val MediumSwipeDistance = 0.8f
 private const val ShortSwipeDistance = 0.45f
 
 private const val FastVelocity = 4000f
+private const val MediumVelocity = 1700f
 private const val SlowVelocity = 600f
 
 @OptIn(ExperimentalPagerApi::class) // Pager is currently experimental
-@LargeTest
-@RunWith(Parameterized::class)
-class PagerTest(
-    private val itemWidthFraction: Float,
-    private val offscreenLimit: Int,
-    private val layoutDirection: LayoutDirection,
+abstract class PagerTest(
+    protected val offscreenLimit: Int,
+    protected val layoutDirection: LayoutDirection,
 ) {
     @get:Rule
     val composeTestRule = createComposeRule()
-
-    companion object {
-        @JvmStatic
-        @Parameterized.Parameters
-        fun data(): Collection<Array<Any>> = listOf(
-            // itemWidthFraction, offscreenLimit, layoutDirection
-
-            // Test typical full-width items
-            arrayOf(1f, 2, LayoutDirection.Ltr),
-            arrayOf(1f, 2, LayoutDirection.Rtl),
-
-            // Test an increased offscreenLimit
-            arrayOf(1f, 4, LayoutDirection.Ltr),
-            arrayOf(1f, 4, LayoutDirection.Rtl),
-
-            // Test items with 80% widths
-            arrayOf(0.8f, 2, LayoutDirection.Ltr),
-            arrayOf(0.8f, 2, LayoutDirection.Rtl),
-        )
-    }
 
     @Test
     fun layout() {
         setPagerContent(
             layoutDirection = layoutDirection,
-            pageModifier = Modifier.fillMaxWidth(itemWidthFraction),
             pageCount = 10,
             offscreenLimit = offscreenLimit,
         )
-
-        val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
 
         assertPagerLayout(
             currentPage = 0,
             pageCount = 10,
             offscreenLimit = offscreenLimit,
-            expectedItemWidth = rootBounds.width * itemWidthFraction,
-            layoutDirection = layoutDirection,
         )
     }
 
@@ -103,45 +64,34 @@ class PagerTest(
     fun swipe() {
         setPagerContent(
             layoutDirection = layoutDirection,
-            pageModifier = Modifier.fillMaxWidth(itemWidthFraction),
             pageCount = 10,
             offscreenLimit = offscreenLimit,
         )
 
-        val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
-
-        // First test swiping from 0 to -1, which should no-op
-        composeTestRule.onNodeWithText("0")
-            .performGesture {
-                when (layoutDirection) {
-                    LayoutDirection.Ltr -> swipeRight()
-                    else -> swipeLeft()
-                }
-            }
+        // First test swiping towards end, from 0 to -1, which should no-op
+        composeTestRule.onNodeWithTag("0")
+            .swipeAcrossCenter(
+                distancePercentage = LongSwipeDistance,
+                velocity = MediumVelocity,
+            )
         // ...and assert that nothing happened
         assertPagerLayout(
             currentPage = 0,
             pageCount = 10,
             offscreenLimit = offscreenLimit,
-            expectedItemWidth = rootBounds.width * itemWidthFraction,
-            layoutDirection = layoutDirection,
         )
 
-        // Now swipe from page 0 to page 1
-        composeTestRule.onNodeWithText("0")
-            .performGesture {
-                when (layoutDirection) {
-                    LayoutDirection.Ltr -> swipeLeft()
-                    else -> swipeRight()
-                }
-            }
+        // Now swipe towards start, from page 0 to page 1
+        composeTestRule.onNodeWithTag("0")
+            .swipeAcrossCenter(
+                distancePercentage = -LongSwipeDistance,
+                velocity = MediumVelocity,
+            )
         // ...and assert that we now laid out from page 1
         assertPagerLayout(
             currentPage = 1,
             pageCount = 10,
             offscreenLimit = offscreenLimit,
-            expectedItemWidth = rootBounds.width * itemWidthFraction,
-            layoutDirection = layoutDirection,
         )
     }
 
@@ -149,83 +99,15 @@ class PagerTest(
     fun mediumDistance_fastSwipe_toFling() {
         setPagerContent(
             layoutDirection = layoutDirection,
-            pageModifier = Modifier.fillMaxWidth(itemWidthFraction),
             pageCount = 10,
             offscreenLimit = offscreenLimit,
         )
 
-        val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
-
-        // Now swipe from page 0 to page 1, over a medium distance of the item width.
+        // Now swipe towards start, from page 0 to page 1, over a medium distance of the item width.
         // This should trigger a fling()
-        composeTestRule.onNodeWithText("0")
-            .swipeHorizontalAcrossCenter(
-                distancePercentageX = when (layoutDirection) {
-                    LayoutDirection.Rtl -> MediumSwipeDistance
-                    else -> -MediumSwipeDistance
-                },
-                velocity = FastVelocity
-            )
-        // ...and assert that we now laid out from page 1
-        assertPagerLayout(
-            currentPage = 1,
-            pageCount = 10,
-            offscreenLimit = offscreenLimit,
-            expectedItemWidth = rootBounds.width * itemWidthFraction,
-            layoutDirection = layoutDirection,
-        )
-    }
-
-    @Test
-    fun mediumDistance_slowSwipe_toSnapForward() {
-        setPagerContent(
-            layoutDirection = layoutDirection,
-            pageModifier = Modifier.fillMaxWidth(itemWidthFraction),
-            pageCount = 10,
-            offscreenLimit = offscreenLimit,
-        )
-
-        val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
-
-        // Now slowly swipe from page 0 to page 1, over a medium distance of the item width.
-        // This should trigger a spring to position 1
-        composeTestRule.onNodeWithText("0")
-            .swipeHorizontalAcrossCenter(
-                distancePercentageX = when (layoutDirection) {
-                    LayoutDirection.Rtl -> MediumSwipeDistance
-                    else -> -MediumSwipeDistance
-                },
-                velocity = SlowVelocity,
-            )
-        // ...and assert that we now laid out from page 1
-        assertPagerLayout(
-            currentPage = 1,
-            pageCount = 10,
-            offscreenLimit = offscreenLimit,
-            expectedItemWidth = rootBounds.width * itemWidthFraction,
-            layoutDirection = layoutDirection,
-        )
-    }
-
-    @Test
-    fun shortDistance_fastSwipe_toFling() {
-        setPagerContent(
-            layoutDirection = layoutDirection,
-            pageModifier = Modifier.fillMaxWidth(itemWidthFraction),
-            pageCount = 10,
-            offscreenLimit = offscreenLimit,
-        )
-
-        val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
-
-        // Now swipe from page 0 to page 1, over a short distance of the item width.
-        // This should trigger a fling to page 1
-        composeTestRule.onNodeWithText("0")
-            .swipeHorizontalAcrossCenter(
-                distancePercentageX = when (layoutDirection) {
-                    LayoutDirection.Rtl -> ShortSwipeDistance
-                    else -> -ShortSwipeDistance
-                },
+        composeTestRule.onNodeWithTag("0")
+            .swipeAcrossCenter(
+                distancePercentage = -MediumSwipeDistance,
                 velocity = FastVelocity,
             )
         // ...and assert that we now laid out from page 1
@@ -233,8 +115,54 @@ class PagerTest(
             currentPage = 1,
             pageCount = 10,
             offscreenLimit = offscreenLimit,
-            expectedItemWidth = rootBounds.width * itemWidthFraction,
+        )
+    }
+
+    @Test
+    fun mediumDistance_slowSwipe_toSnapForward() {
+        setPagerContent(
             layoutDirection = layoutDirection,
+
+            pageCount = 10,
+            offscreenLimit = offscreenLimit,
+        )
+
+        // Now swipe towards start, from page 0 to page 1, over a medium distance of the item width.
+        // This should trigger a spring to position 1
+        composeTestRule.onNodeWithTag("0")
+            .swipeAcrossCenter(
+                distancePercentage = -MediumSwipeDistance,
+                velocity = SlowVelocity,
+            )
+        // ...and assert that we now laid out from page 1
+        assertPagerLayout(
+            currentPage = 1,
+            pageCount = 10,
+            offscreenLimit = offscreenLimit,
+        )
+    }
+
+    @Test
+    fun shortDistance_fastSwipe_toFling() {
+        setPagerContent(
+            layoutDirection = layoutDirection,
+
+            pageCount = 10,
+            offscreenLimit = offscreenLimit,
+        )
+
+        // Now swipe towards start, from page 0 to page 1, over a short distance of the item width.
+        // This should trigger a fling to page 1
+        composeTestRule.onNodeWithTag("0")
+            .swipeAcrossCenter(
+                distancePercentage = -ShortSwipeDistance,
+                velocity = FastVelocity,
+            )
+        // ...and assert that we now laid out from page 1
+        assertPagerLayout(
+            currentPage = 1,
+            pageCount = 10,
+            offscreenLimit = offscreenLimit,
         )
     }
 
@@ -242,21 +170,15 @@ class PagerTest(
     fun shortDistance_slowSwipe_toSnapBack() {
         setPagerContent(
             layoutDirection = layoutDirection,
-            pageModifier = Modifier.fillMaxWidth(itemWidthFraction),
             pageCount = 10,
             offscreenLimit = offscreenLimit,
         )
 
-        val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
-
-        // Now slowly swipe from page 0 to page 1, over a short distance of the item width.
+        // Now swipe towards start, from page 0 to page 1, over a short distance of the item width.
         // This should trigger a spring back to the original position
-        composeTestRule.onNodeWithText("0")
-            .swipeHorizontalAcrossCenter(
-                distancePercentageX = when (layoutDirection) {
-                    LayoutDirection.Rtl -> ShortSwipeDistance
-                    else -> -ShortSwipeDistance
-                },
+        composeTestRule.onNodeWithTag("0")
+            .swipeAcrossCenter(
+                distancePercentage = -ShortSwipeDistance,
                 velocity = SlowVelocity,
             )
         // ...and assert that we 'sprang back' to page 0
@@ -264,8 +186,6 @@ class PagerTest(
             currentPage = 0,
             pageCount = 10,
             offscreenLimit = offscreenLimit,
-            expectedItemWidth = rootBounds.width * itemWidthFraction,
-            layoutDirection = layoutDirection,
         )
     }
 
@@ -274,41 +194,41 @@ class PagerTest(
     fun a11yScroll() {
         setPagerContent(
             layoutDirection = layoutDirection,
-            pageModifier = Modifier.fillMaxWidth(itemWidthFraction),
             pageCount = 10,
             offscreenLimit = offscreenLimit,
         )
 
-        val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
-
         // Perform a scroll to item 1
-        composeTestRule.onNodeWithText("1").performScrollTo()
+        composeTestRule.onNodeWithTag("1").performScrollTo()
 
         // ...and assert that we scrolled to page 1
         assertPagerLayout(
             currentPage = 1,
             pageCount = 10,
             offscreenLimit = offscreenLimit,
-            expectedItemWidth = rootBounds.width * itemWidthFraction,
-            layoutDirection = layoutDirection,
         )
     }
+
+    /**
+     * Swipe across the center of the node. The major axis of the swipe is defined by the
+     * overriding test.
+     *
+     * @param velocity Target end velocity for the swipe.
+     * @param distancePercentage The swipe distance in percentage of the node's size.
+     * Negative numbers mean swipe towards the start, positive towards the end.
+     */
+    abstract fun SemanticsNodeInteraction.swipeAcrossCenter(
+        velocity: Float,
+        distancePercentage: Float = 0f,
+    ): SemanticsNodeInteraction
 
     // TODO: add test for state restoration?
 
     private fun assertPagerLayout(
         currentPage: Int,
         pageCount: Int,
-        expectedItemWidth: Dp,
         offscreenLimit: Int,
-        layoutDirection: LayoutDirection,
     ) {
-        val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
-
-        // The expected left of the first item. This uses the implicit fact that Pager
-        // centers items horizontally.
-        val firstItemLeft = (rootBounds.width - expectedItemWidth) / 2
-
         // The pages which are expected to be laid out, using the given current page,
         // offscreenLimit and page limit
         val expectedLaidOutPages = (currentPage - offscreenLimit)..(currentPage + offscreenLimit)
@@ -319,46 +239,28 @@ class PagerTest(
             if (page in expectedLaidOutPages) {
                 // If this page is expected to be laid out, assert that it exists and is
                 // laid out in the correct position
-                composeTestRule.onNodeWithText(page.toString())
+                composeTestRule.onNodeWithTag(page.toString())
                     .assertExists()
-                    .assertWidthIsEqualTo(expectedItemWidth)
-                    .assertWhen(layoutDirection == LayoutDirection.Ltr) {
-                        assertLeftPositionInRootIsEqualTo(
-                            firstItemLeft + (expectedItemWidth * (page - currentPage))
-                        )
-                    }
-                    .assertWhen(layoutDirection == LayoutDirection.Rtl) {
-                        assertLeftPositionInRootIsEqualTo(
-                            firstItemLeft - (expectedItemWidth * (page - currentPage))
-                        )
-                    }
+                    .assertLaidOutItemPosition(page, currentPage)
+                    .onParent()
                     .assertIsSelectable()
                     .assertWhen(page == currentPage) { assertIsSelected() }
                     .assertWhen(page != currentPage) { assertIsNotSelected() }
             } else {
                 // If this page is not expected to be laid out, assert that it doesn't exist
-                composeTestRule.onNodeWithText(page.toString()).assertDoesNotExist()
+                composeTestRule.onNodeWithTag(page.toString()).assertDoesNotExist()
             }
         }
     }
 
-    private fun setPagerContent(
+    protected abstract fun SemanticsNodeInteraction.assertLaidOutItemPosition(
+        page: Int,
+        currentPage: Int,
+    ): SemanticsNodeInteraction
+
+    protected abstract fun setPagerContent(
         layoutDirection: LayoutDirection,
-        pageModifier: Modifier,
         pageCount: Int,
         offscreenLimit: Int,
-    ): PagerState {
-        val pagerState = PagerState(pageCount = pageCount)
-
-        composeTestRule.setContent(layoutDirection) {
-            HorizontalPager(
-                state = pagerState,
-                offscreenLimit = offscreenLimit,
-                modifier = Modifier.fillMaxWidth()
-            ) { page ->
-                BasicText(page.toString(), pageModifier)
-            }
-        }
-        return pagerState
-    }
+    ): PagerState
 }

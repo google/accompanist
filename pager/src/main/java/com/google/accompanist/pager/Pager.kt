@@ -82,6 +82,37 @@ private val Measurable.page: Int
     get() = (parentData as? PageData)?.page ?: error("No PageData for measurable $this")
 
 /**
+ * Contains the default values used by [HorizontalPager] and [VerticalPager].
+ */
+@ExperimentalPagerApi
+object PagerDefaults {
+    /**
+     * Create and remember default [FlingBehavior] that will represent the scroll curve.
+     *
+     * @param state The [PagerState] to update.
+     * @param decayAnimationSpec The decay animation spec to use for decayed flings.
+     * @param snapAnimationSpec The animation spec to use when snapping.
+     */
+    @Composable
+    fun defaultPagerFlingConfig(
+        state: PagerState,
+        decayAnimationSpec: DecayAnimationSpec<Float> = defaultDecayAnimationSpec(),
+        snapAnimationSpec: AnimationSpec<Float> = spring(stiffness = SnapSpringStiffness),
+    ): FlingBehavior = remember(state, decayAnimationSpec, snapAnimationSpec) {
+        object : FlingBehavior {
+            override suspend fun ScrollScope.performFling(
+                initialVelocity: Float
+            ): Float = state.fling(
+                initialVelocity = -initialVelocity,
+                decayAnimationSpec = decayAnimationSpec,
+                snapAnimationSpec = snapAnimationSpec,
+                scrollBy = { deltaPixels -> -scrollBy(-deltaPixels) },
+            )
+        }
+    }
+}
+
+/**
  * A horizontally scrolling layout that allows users to flip between items to the left and right.
  *
  * This layout allows the setting of the [offscreenLimit], which defines the number of pages that
@@ -89,17 +120,16 @@ private val Measurable.page: Int
  * recreated as needed. This value defaults to `1`, but can be increased to enable pre-loading
  * of more content.
  *
- * @sample com.google.accompanist.sample.pager.PagerSample
+ * @sample com.google.accompanist.sample.pager.HorizontalPagerSample
  *
- * @param state the state object to be used to control or observe the list's state.
+ * @param state the state object to be used to control or observe the pager's state.
  * @param modifier the modifier to apply to this layout.
  * @param reverseLayout reverse the direction of scrolling and layout, when `true` items will be
  * composed from the end to the start and [PagerState.currentPage] == 0 will mean
  * the first item is located at the end.
  * @param offscreenLimit the number of pages that should be retained on either side of the
  * current page. This value is required to be `1` or greater.
- * @param decayAnimationSpec The decay animation spec to use for decayed flings.
- * @param snapAnimationSpec The animation spec to use when snapping.
+ * @param flingBehavior logic describing fling behavior.
  * @param content a block which describes the content. Inside this block you can reference
  * [PagerScope.currentPage] and other properties in [PagerScope].
  */
@@ -110,8 +140,71 @@ fun HorizontalPager(
     modifier: Modifier = Modifier,
     reverseLayout: Boolean = false,
     @IntRange(from = 1) offscreenLimit: Int = 1,
-    decayAnimationSpec: DecayAnimationSpec<Float> = defaultDecayAnimationSpec(),
-    snapAnimationSpec: AnimationSpec<Float> = spring(stiffness = SnapSpringStiffness),
+    flingBehavior: FlingBehavior = PagerDefaults.defaultPagerFlingConfig(state),
+    content: @Composable PagerScope.(page: Int) -> Unit,
+) {
+    Pager(
+        state = state,
+        modifier = modifier,
+        isVertical = false,
+        reverseLayout = reverseLayout,
+        offscreenLimit = offscreenLimit,
+        flingBehavior = flingBehavior,
+        content = content
+    )
+}
+
+/**
+ * A vertically scrolling layout that allows users to flip between items to the top and bottom.
+ *
+ * This layout allows the setting of the [offscreenLimit], which defines the number of pages that
+ * should be retained on either side of the current page. Pages beyond this limit will be
+ * recreated as needed. This value defaults to `1`, but can be increased to enable pre-loading
+ * of more content.
+ *
+ * @sample com.google.accompanist.sample.pager.VerticalPagerSample
+ *
+ * @param state the state object to be used to control or observe the pager's state.
+ * @param modifier the modifier to apply to this layout.
+ * @param reverseLayout reverse the direction of scrolling and layout, when `true` items will be
+ * composed from the bottom to the top and [PagerState.currentPage] == 0 will mean
+ * the first item is located at the bottom.
+ * @param offscreenLimit the number of pages that should be retained on either side of the
+ * current page. This value is required to be `1` or greater.
+ * @param flingBehavior logic describing fling behavior.
+ * @param content a block which describes the content. Inside this block you can reference
+ * [PagerScope.currentPage] and other properties in [PagerScope].
+ */
+@ExperimentalPagerApi
+@Composable
+fun VerticalPager(
+    state: PagerState,
+    modifier: Modifier = Modifier,
+    reverseLayout: Boolean = false,
+    @IntRange(from = 1) offscreenLimit: Int = 1,
+    flingBehavior: FlingBehavior = PagerDefaults.defaultPagerFlingConfig(state),
+    content: @Composable PagerScope.(page: Int) -> Unit,
+) {
+    Pager(
+        state = state,
+        modifier = modifier,
+        isVertical = true,
+        reverseLayout = reverseLayout,
+        offscreenLimit = offscreenLimit,
+        flingBehavior = flingBehavior,
+        content = content
+    )
+}
+
+@ExperimentalPagerApi
+@Composable
+internal fun Pager(
+    state: PagerState,
+    modifier: Modifier,
+    reverseLayout: Boolean,
+    isVertical: Boolean,
+    @IntRange(from = 1) offscreenLimit: Int,
+    flingBehavior: FlingBehavior,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
     require(offscreenLimit >= 1) { "offscreenLimit is required to be >= 1" }
@@ -129,9 +222,13 @@ fun HorizontalPager(
     val semantics = Modifier.semantics {
         horizontalScrollAxisRange = semanticsAxisRange
         // Hook up scroll actions to our state
-        scrollBy { x: Float, _ ->
+        scrollBy { x, y ->
             coroutineScope.launch {
-                state.scrollBy(if (reverseDirection) x else -x)
+                if (isVertical) {
+                    state.scrollBy(if (reverseDirection) y else -y)
+                } else {
+                    state.scrollBy(if (reverseDirection) x else -x)
+                }
             }
             true
         }
@@ -139,21 +236,8 @@ fun HorizontalPager(
         selectableGroup()
     }
 
-    val flingBehavior = remember(state, decayAnimationSpec, snapAnimationSpec) {
-        object : FlingBehavior {
-            override suspend fun ScrollScope.performFling(initialVelocity: Float): Float {
-                return state.fling(
-                    initialVelocity = -initialVelocity,
-                    decayAnimationSpec = decayAnimationSpec,
-                    snapAnimationSpec = snapAnimationSpec,
-                    scrollBy = { deltaPixels -> -scrollBy(-deltaPixels) },
-                )
-            }
-        }
-    }
-
     val scrollable = Modifier.scrollable(
-        orientation = Orientation.Horizontal,
+        orientation = if (isVertical) Orientation.Vertical else Orientation.Horizontal,
         flingBehavior = flingBehavior,
         reverseDirection = reverseDirection,
         state = state,
@@ -179,7 +263,7 @@ fun HorizontalPager(
 
             for (page in firstPage..lastPage) {
                 key(page) {
-                    val itemSemantics = Modifier.semantics(mergeDescendants = true) {
+                    val itemSemantics = Modifier.semantics {
                         this.selected = page == state.currentPage
                     }
                     Box(
@@ -209,14 +293,24 @@ fun HorizontalPager(
                 val xCenterOffset = (constraints.maxWidth - placeable.width) / 2
                 val yCenterOffset = (constraints.maxHeight - placeable.height) / 2
 
-                if (currentPage == page) {
-                    state.pageSize = placeable.width
+                var yItemOffset = 0
+                var xItemOffset = 0
+
+                if (isVertical) {
+                    if (currentPage == page) {
+                        state.pageSize = placeable.height
+                    }
+                    yItemOffset = ((page - currentPage - offset) * placeable.height).roundToInt()
+                } else {
+                    if (currentPage == page) {
+                        state.pageSize = placeable.width
+                    }
+                    xItemOffset = ((page - currentPage - offset) * placeable.width).roundToInt()
                 }
 
-                val xItemOffset = ((page - currentPage - offset) * placeable.width).roundToInt()
                 placeable.placeRelative(
                     x = xCenterOffset + xItemOffset,
-                    y = yCenterOffset
+                    y = yCenterOffset + yItemOffset,
                 )
             }
         }
