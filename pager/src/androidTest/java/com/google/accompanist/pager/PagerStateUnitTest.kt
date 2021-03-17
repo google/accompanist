@@ -24,7 +24,7 @@ import org.junit.runners.JUnit4
 
 @OptIn(ExperimentalPagerApi::class) // Pager is currently experimental
 @RunWith(JUnit4::class)
-class PagerUnitTest {
+class PagerStateUnitTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 

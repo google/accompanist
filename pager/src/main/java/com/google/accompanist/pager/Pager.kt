@@ -252,7 +252,7 @@ internal fun Pager(
 
             for (page in firstPage..lastPage) {
                 key(page) {
-                    val itemSemantics = Modifier.semantics(mergeDescendants = true) {
+                    val itemSemantics = Modifier.semantics {
                         this.selected = page == state.currentPage
                     }
                     Box(
