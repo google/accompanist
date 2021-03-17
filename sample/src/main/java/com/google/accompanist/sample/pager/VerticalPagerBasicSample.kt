@@ -135,6 +135,7 @@ private fun ActionsRow(
         val scope = rememberCoroutineScope()
 
         IconButton(
+            enabled = pagerState.currentPage > 0,
             onClick = {
                 scope.launch {
                     pagerState.animateScrollToPage(0)
@@ -145,6 +146,7 @@ private fun ActionsRow(
         }
 
         IconButton(
+            enabled = pagerState.currentPage > 0,
             onClick = {
                 scope.launch {
                     pagerState.animateScrollToPage(pagerState.currentPage - 1)
@@ -155,6 +157,7 @@ private fun ActionsRow(
         }
 
         IconButton(
+            enabled = pagerState.currentPage < pagerState.pageCount - 1,
             onClick = {
                 scope.launch {
                     pagerState.animateScrollToPage(pagerState.currentPage + 1)
@@ -165,6 +168,7 @@ private fun ActionsRow(
         }
 
         IconButton(
+            enabled = pagerState.currentPage < pagerState.pageCount - 1,
             onClick = {
                 scope.launch {
                     pagerState.animateScrollToPage(pagerState.pageCount - 1)
