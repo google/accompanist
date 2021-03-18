@@ -39,15 +39,11 @@ import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.LayoutModifier
-import androidx.compose.ui.layout.Measurable
-import androidx.compose.ui.layout.MeasureResult
-import androidx.compose.ui.layout.MeasureScope
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.IntSize
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -220,27 +216,22 @@ private class ImageLoader<R : Any>(
 
     private val scope = CoroutineScope(Dispatchers.Main)
 
-    val layoutModifier = object : LayoutModifier {
-        override fun MeasureScope.measure(
-            measurable: Measurable,
-            constraints: Constraints
-        ): MeasureResult {
-            // NOTE: this is where the interesting logic is, but there shouldn't be anything here that
-            // you can't do that you're doing using BoxWithConstraints currently.
-            val size = IntSize(
-                width = if (constraints.hasBoundedWidth) constraints.maxWidth else -1,
-                height = if (constraints.hasBoundedHeight) constraints.maxHeight else -1
-            )
-            if (requestSize == null ||
-                (requestSize != size && shouldRefetchOnSizeChange(loadState, size))
-            ) {
-                requestSize = size
-            }
+    val layoutModifier = Modifier.layout { measurable, constraints ->
+        // NOTE: this is where the interesting logic is, but there shouldn't be anything here that
+        // you can't do that you're doing using BoxWithConstraints currently.
+        val size = IntSize(
+            width = if (constraints.hasBoundedWidth) constraints.maxWidth else -1,
+            height = if (constraints.hasBoundedHeight) constraints.maxHeight else -1
+        )
+        if (requestSize == null ||
+            (requestSize != size && shouldRefetchOnSizeChange(loadState, size))
+        ) {
+            requestSize = size
+        }
 
-            val placeable = measurable.measure(constraints)
-            return layout(width = placeable.width, height = placeable.height) {
-                placeable.place(0, 0)
-            }
+        val placeable = measurable.measure(constraints)
+        layout(width = placeable.width, height = placeable.height) {
+            placeable.place(0, 0)
         }
     }
 
@@ -284,8 +275,8 @@ private class ImageLoader<R : Any>(
     override fun onRemembered() {
         // you can use a coroutine scope that is scoped to the composable, or something more custom like
         // the imageLoader or whatever. The main point is, here is where you would start your loading
-        scope.launch {
-            requestSize?.also { size ->
+        requestSize?.also { size ->
+            scope.launch {
                 loadState = request.execute(size)
             }
         }
