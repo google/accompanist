@@ -156,11 +156,6 @@ subprojects {
                     }
                 }
 
-                // Picasso docs
-                externalDocumentationLink {
-                    url.set(new URL("https://square.github.io/picasso/2.x/picasso/"))
-                }
-
                 // Glide docs
                 externalDocumentationLink {
                     url.set(new URL("https://bumptech.github.io/glide/javadocs/4110/"))

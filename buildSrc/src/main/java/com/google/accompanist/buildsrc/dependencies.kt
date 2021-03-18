@@ -36,7 +36,7 @@ object Libs {
     }
 
     object Dokka {
-        private const val version = "1.4.20"
+        private const val version = "1.4.30"
         const val gradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:$version"
     }
 
@@ -108,8 +108,6 @@ object Libs {
         const val coil = "io.coil-kt:coil:$version"
         const val gif = "io.coil-kt:coil-gif:$version"
     }
-
-    const val picasso = "com.squareup.picasso:picasso:2.8"
 
     const val glide = "com.github.bumptech.glide:glide:4.11.0"
 
