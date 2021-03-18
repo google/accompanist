@@ -19,16 +19,34 @@ package com.google.accompanist.sample.swiperefresh
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import com.google.accompanist.coil.CoilImage
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
+import com.google.accompanist.sample.randomSampleImageUrl
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.defaultSwipeRefreshIndicator
+import kotlinx.coroutines.delay
 
 class SwipeRefreshBasicSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +71,41 @@ private fun Sample() {
         },
         modifier = Modifier.fillMaxSize()
     ) {
-        // TODO
+        var refreshing by remember { mutableStateOf(false) }
+
+        LaunchedEffect(refreshing) {
+            if (refreshing) {
+                delay(1000)
+                refreshing = false
+            }
+        }
+
+        SwipeRefresh(
+            isRefreshing = refreshing,
+            onRefresh = { refreshing = true },
+            indicator = { defaultSwipeRefreshIndicator() }
+        ) {
+            LazyColumn {
+                items(30) { index ->
+                    Row(Modifier.padding(16.dp)) {
+                        CoilImage(
+                            data = randomSampleImageUrl(index),
+                            contentDescription = null,
+                            modifier = Modifier.size(64.dp)
+                        )
+
+                        Spacer(Modifier.width(8.dp))
+
+                        Text(
+                            text = "Text",
+                            style = MaterialTheme.typography.subtitle2,
+                            modifier = Modifier
+                                .weight(1f)
+                                .align(Alignment.CenterVertically)
+                        )
+                    }
+                }
+            }
+        }
     }
 }

@@ -1,20 +1,14 @@
 public final class com/google/accompanist/swiperefresh/ComposableSingletons$SwipeRefreshKt {
 	public static final field INSTANCE Lcom/google/accompanist/swiperefresh/ComposableSingletons$SwipeRefreshKt;
-	public static field lambda-1 Lkotlin/jvm/functions/Function2;
+	public static field lambda-1 Lkotlin/jvm/functions/Function3;
 	public static field lambda-2 Lkotlin/jvm/functions/Function2;
 	public fun <init> ()V
-	public final fun getLambda-1$swiperefresh_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda-1$swiperefresh_release ()Lkotlin/jvm/functions/Function3;
 	public final fun getLambda-2$swiperefresh_release ()Lkotlin/jvm/functions/Function2;
 }
 
-public final class com/google/accompanist/swiperefresh/SwipeRefreshDefaults {
-	public static final field $stable I
-	public static final field INSTANCE Lcom/google/accompanist/swiperefresh/SwipeRefreshDefaults;
-	public final fun defaultSwipeRefreshIndicator (Lcom/google/accompanist/swiperefresh/SwipeRefreshIndicatorScope;Landroidx/compose/runtime/Composer;I)V
-}
-
 public abstract interface class com/google/accompanist/swiperefresh/SwipeRefreshIndicatorScope {
-	public abstract fun getSwipeFraction ()F
+	public abstract fun getIndicatorOffset ()F
 	public abstract fun isRefreshing ()Z
 	public abstract fun isSwipeInProgress ()Z
 }
@@ -23,9 +17,22 @@ public final class com/google/accompanist/swiperefresh/SwipeRefreshKt {
 	public static final fun PreviewSwipeRefreshIndicator (Landroidx/compose/runtime/Composer;I)V
 	public static final fun SwipeRefresh (ZLkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Lcom/google/accompanist/swiperefresh/SwipeRefreshState;Lkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
 	public static final fun SwipeRefreshIndicator (ZFZLandroidx/compose/runtime/Composer;I)V
+	public static final fun defaultSwipeRefreshIndicator (Lcom/google/accompanist/swiperefresh/SwipeRefreshIndicatorScope;Landroidx/compose/runtime/Composer;I)V
 }
 
 public final class com/google/accompanist/swiperefresh/SwipeRefreshState {
 	public fun <init> ()V
+	public final fun animateOffsetTo (FLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun dragOffsetBy (FLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getIndicatorOffset ()F
+	public final fun getRefreshState ()Lcom/google/accompanist/swiperefresh/SwipeRefreshState2;
+}
+
+public final class com/google/accompanist/swiperefresh/SwipeRefreshState2 : java/lang/Enum {
+	public static final field Dragging Lcom/google/accompanist/swiperefresh/SwipeRefreshState2;
+	public static final field Idle Lcom/google/accompanist/swiperefresh/SwipeRefreshState2;
+	public static final field Refreshing Lcom/google/accompanist/swiperefresh/SwipeRefreshState2;
+	public static fun valueOf (Ljava/lang/String;)Lcom/google/accompanist/swiperefresh/SwipeRefreshState2;
+	public static fun values ()[Lcom/google/accompanist/swiperefresh/SwipeRefreshState2;
 }
 

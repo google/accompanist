@@ -53,9 +53,9 @@ dependencies {
     implementation project(':glide')
     implementation project(':insets')
     implementation project(':pager')
-    implementation project(':pager-indicators')
     implementation project(':flowlayout')
     implementation project(':systemuicontroller')
+    implementation project(':swiperefresh')
 
     implementation Libs.AndroidX.appcompat
 
