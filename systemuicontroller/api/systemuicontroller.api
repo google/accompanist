@@ -1,0 +1,20 @@
+public abstract interface class com/google/accompanist/systemuicontroller/SystemUiController {
+	public abstract fun setNavigationBarColor-ek8zF_U (JZLkotlin/jvm/functions/Function1;)V
+	public abstract fun setStatusBarColor-ek8zF_U (JZLkotlin/jvm/functions/Function1;)V
+	public abstract fun setSystemBarsColor-ek8zF_U (JZLkotlin/jvm/functions/Function1;)V
+}
+
+public final class com/google/accompanist/systemuicontroller/SystemUiController$DefaultImpls {
+	public static fun setNavigationBarColor-ek8zF_U (Lcom/google/accompanist/systemuicontroller/SystemUiController;JZLkotlin/jvm/functions/Function1;)V
+	public static synthetic fun setNavigationBarColor-ek8zF_U$default (Lcom/google/accompanist/systemuicontroller/SystemUiController;JZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static fun setStatusBarColor-ek8zF_U (Lcom/google/accompanist/systemuicontroller/SystemUiController;JZLkotlin/jvm/functions/Function1;)V
+	public static synthetic fun setStatusBarColor-ek8zF_U$default (Lcom/google/accompanist/systemuicontroller/SystemUiController;JZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static fun setSystemBarsColor-ek8zF_U (Lcom/google/accompanist/systemuicontroller/SystemUiController;JZLkotlin/jvm/functions/Function1;)V
+	public static synthetic fun setSystemBarsColor-ek8zF_U$default (Lcom/google/accompanist/systemuicontroller/SystemUiController;JZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+}
+
+public final class com/google/accompanist/systemuicontroller/SystemUiControllerKt {
+	public static final fun androidSystemUiController (Landroid/view/View;)Lcom/google/accompanist/systemuicontroller/SystemUiController;
+	public static final fun getLocalSystemUiController ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+}
+

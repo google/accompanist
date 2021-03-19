@@ -28,14 +28,17 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.view.ViewCompat
 
+/**
+ * A class which provides easy-to-use utilities for updating the System UI bar
+ * colors within Jetpack Compose.
+ */
 interface SystemUiController {
     /**
      * Set the status bar color.
      *
      * @param color The **desired** [Color] to set. This may require modification if running on an
      * API level that only supports white status bar icons.
-     * @param darkIcons Whether dark status bar icons would be preferable. Only available on
-     * API 23+.
+     * @param darkIcons Whether dark status bar icons would be preferable.
      * @param transformColorForLightContent A lambda which will be invoked to transform [color] if
      * dark icons were requested but are not available. Defaults to applying a black scrim.
      */
@@ -52,8 +55,7 @@ interface SystemUiController {
      * API level that only supports white navigation bar icons. Additionally this will be ignored
      * and [Color.Transparent] will be used on API 29+ where gesture navigation is preferred or the
      * system UI automatically applies background protection in other navigation modes.
-     * @param darkIcons Whether dark navigation bar icons would be preferable. Only available on
-     * API 26+.
+     * @param darkIcons Whether dark navigation bar icons would be preferable.
      * @param transformColorForLightContent A lambda which will be invoked to transform [color] if
      * dark icons were requested but are not available. Defaults to applying a black scrim.
      */
@@ -79,6 +81,9 @@ interface SystemUiController {
     }
 }
 
+/**
+ * Creates a [SystemUiController] which supports Android devices.
+ */
 fun androidSystemUiController(view: View): SystemUiController {
     return AndroidSystemUiControllerImpl(view)
 }
