@@ -1,3 +1,11 @@
+public final class com/google/accompanist/systemuicontroller/AndroidSystemUiController : com/google/accompanist/systemuicontroller/SystemUiController {
+	public static final field $stable I
+	public fun <init> (Landroid/view/View;)V
+	public fun setNavigationBarColor-ek8zF_U (JZLkotlin/jvm/functions/Function1;)V
+	public fun setStatusBarColor-ek8zF_U (JZLkotlin/jvm/functions/Function1;)V
+	public fun setSystemBarsColor-ek8zF_U (JZLkotlin/jvm/functions/Function1;)V
+}
+
 public abstract interface class com/google/accompanist/systemuicontroller/SystemUiController {
 	public abstract fun setNavigationBarColor-ek8zF_U (JZLkotlin/jvm/functions/Function1;)V
 	public abstract fun setStatusBarColor-ek8zF_U (JZLkotlin/jvm/functions/Function1;)V
@@ -14,7 +22,7 @@ public final class com/google/accompanist/systemuicontroller/SystemUiController$
 }
 
 public final class com/google/accompanist/systemuicontroller/SystemUiControllerKt {
-	public static final fun androidSystemUiController (Landroid/view/View;)Lcom/google/accompanist/systemuicontroller/SystemUiController;
 	public static final fun getLocalSystemUiController ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+	public static final fun rememberAndroidSystemUiController (Landroid/view/View;Landroidx/compose/runtime/Composer;II)Lcom/google/accompanist/systemuicontroller/SystemUiController;
 }
 

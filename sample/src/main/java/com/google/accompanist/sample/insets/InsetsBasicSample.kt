@@ -35,7 +35,6 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
@@ -44,7 +43,7 @@ import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.systemuicontroller.LocalSystemUiController
-import com.google.accompanist.systemuicontroller.androidSystemUiController
+import com.google.accompanist.systemuicontroller.rememberAndroidSystemUiController
 
 class InsetsBasicSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +57,7 @@ class InsetsBasicSample : ComponentActivity() {
             AccompanistSampleTheme {
                 // We need to use ProvideWindowInsets to setup the necessary listeners which
                 // power the library
-                val controller = androidSystemUiController(LocalView.current)
+                val controller = rememberAndroidSystemUiController()
                 CompositionLocalProvider(LocalSystemUiController provides controller) {
                     ProvideWindowInsets {
                         Sample()

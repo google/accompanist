@@ -48,7 +48,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -62,7 +61,7 @@ import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
 import com.google.accompanist.systemuicontroller.LocalSystemUiController
-import com.google.accompanist.systemuicontroller.androidSystemUiController
+import com.google.accompanist.systemuicontroller.rememberAndroidSystemUiController
 
 class EdgeToEdgeLazyColumn : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,7 +73,7 @@ class EdgeToEdgeLazyColumn : ComponentActivity() {
 
         setContent {
             AccompanistSampleTheme {
-                val controller = androidSystemUiController(LocalView.current)
+                val controller = rememberAndroidSystemUiController()
                 CompositionLocalProvider(LocalSystemUiController provides controller) {
                     ProvideWindowInsets {
                         Sample()

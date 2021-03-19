@@ -21,17 +21,22 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.view.View
 import android.view.Window
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalView
 import androidx.core.view.ViewCompat
 
 /**
  * A class which provides easy-to-use utilities for updating the System UI bar
  * colors within Jetpack Compose.
  */
+@Stable
 interface SystemUiController {
     /**
      * Set the status bar color.
@@ -82,22 +87,22 @@ interface SystemUiController {
 }
 
 /**
- * Creates a [SystemUiController] which supports Android devices.
+ * Remembers a [SystemUiController] which supports Android devices.
  */
-fun androidSystemUiController(view: View): SystemUiController {
-    return AndroidSystemUiControllerImpl(view)
+@Composable
+fun rememberAndroidSystemUiController(
+    view: View = LocalView.current
+): SystemUiController = remember(view) {
+    AndroidSystemUiController(view)
 }
 
 /**
  * A helper class for setting the navigation and status bar colors for a [View], gracefully
  * degrading behavior based upon API level.
  */
-private class AndroidSystemUiControllerImpl(
-    view: View,
-) : SystemUiController {
-
-    val window = view.context.findWindow()
-    val windowInsetsController = ViewCompat.getWindowInsetsController(view)
+class AndroidSystemUiController(view: View) : SystemUiController {
+    private val window = view.context.findWindow()
+    private val windowInsetsController = ViewCompat.getWindowInsetsController(view)
 
     override fun setStatusBarColor(
         color: Color,
@@ -149,15 +154,16 @@ private class AndroidSystemUiControllerImpl(
  * An [androidx.compose.runtime.CompositionLocalProvider] holding the current [LocalSystemUiController]. Defaults to a
  * no-op controller; consumers should [provide][androidx.compose.runtime.CompositionLocalProvider] a real one.
  */
-val LocalSystemUiController = staticCompositionLocalOf<SystemUiController> { NoOpSystemUiController }
+val LocalSystemUiController = staticCompositionLocalOf<SystemUiController> {
+    NoOpSystemUiController
+}
 
-private val BlackScrim = Color(0f, 0f, 0f, 0.33f) // 33% opaque black
-private val BlackScrimmed: (Color) -> Color = {
-    original ->
+private val BlackScrim = Color(0f, 0f, 0f, 0.3f) // 30% opaque black
+private val BlackScrimmed: (Color) -> Color = { original ->
     BlackScrim.compositeOver(original)
 }
 
 /**
- * A fake implementation, useful as a default or used in Previews.
+ * A no-op implementation, useful as the default value for [LocalSystemUiController].
  */
 private object NoOpSystemUiController : SystemUiController

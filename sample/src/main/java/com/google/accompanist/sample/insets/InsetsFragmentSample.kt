@@ -41,7 +41,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
@@ -54,7 +53,7 @@ import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.systemuicontroller.LocalSystemUiController
-import com.google.accompanist.systemuicontroller.androidSystemUiController
+import com.google.accompanist.systemuicontroller.rememberAndroidSystemUiController
 
 class InsetsFragmentSample : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,7 +91,7 @@ class InsetsFragment : Fragment() {
             AccompanistSampleTheme {
                 // Instead of calling ProvideWindowInsets, we use CompositionLocalProvider to provide
                 // the WindowInsets instance from above to LocalWindowInsets
-                val controller = androidSystemUiController(LocalView.current)
+                val controller = rememberAndroidSystemUiController()
                 CompositionLocalProvider(
                     LocalWindowInsets provides windowInsets,
                     LocalSystemUiController provides controller

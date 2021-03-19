@@ -11,7 +11,7 @@ composition local. This would typically be done near the top level of your compo
 ``` kotlin
 setContent {
     // Create a controller, and provide it to the LocalSystemUiController
-    val controller = androidSystemUiController(LocalView.current)
+    val controller = rememberAndroidSystemUiController()
     CompositionLocalProvider(LocalSystemUiController provides controller) {
         MyHomeScreen()
     }
@@ -25,14 +25,14 @@ Then in your layouts, you can update the system bar colors as necessary like so:
 fun MyHomeScreen() {
     // Get the current SystemUiController
     val systemUiController = LocalSystemUiController.current
-    val isSystemInDarkTheme = isSystemInDarkTheme()
+    val useDarkIcons = MaterialTheme.colors.isLight
 
     SideEffect {
         // Update all ofthe system bar colors to be transparent, and use
         // dark icons if we're in light theme
         systemUiController.setSystemBarsColor(
             color = Color.Transparent,
-            darkIcons = !isSystemInDarkTheme
+            darkIcons = useDarkIcons
         )
 
         // setStatusBarsColor() and setNavigationBarsColor() also exist
