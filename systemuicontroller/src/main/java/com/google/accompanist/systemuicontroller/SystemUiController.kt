@@ -151,7 +151,7 @@ private class AndroidSystemUiControllerImpl(
  */
 val LocalSystemUiController = staticCompositionLocalOf<SystemUiController> { NoOpSystemUiController }
 
-private val BlackScrim = Color(0f, 0f, 0f, 0.33f) // 20% opaque black
+private val BlackScrim = Color(0f, 0f, 0f, 0.33f) // 33% opaque black
 private val BlackScrimmed: (Color) -> Color = {
     original ->
     BlackScrim.compositeOver(original)

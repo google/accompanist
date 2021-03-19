@@ -19,7 +19,6 @@ package com.google.accompanist.sample.insets
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -82,9 +81,9 @@ private val listItems = List(40) { randomSampleImageUrl(it) }
 @Composable
 private fun Sample() {
     val systemUiController = LocalSystemUiController.current
-    val isSystemInDarkTheme = isSystemInDarkTheme()
+    val useDarkIcons = MaterialTheme.colors.isLight
     SideEffect {
-        systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = !isSystemInDarkTheme)
+        systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = useDarkIcons)
     }
 
     Scaffold(

@@ -23,7 +23,6 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -108,9 +107,9 @@ class InsetsFragment : Fragment() {
 @Composable
 private fun Sample() {
     val systemUiController = LocalSystemUiController.current
-    val isSystemInDarkTheme = isSystemInDarkTheme()
+    val useDarkIcons = MaterialTheme.colors.isLight
     SideEffect {
-        systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = !isSystemInDarkTheme)
+        systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = useDarkIcons)
     }
 
     Surface {
