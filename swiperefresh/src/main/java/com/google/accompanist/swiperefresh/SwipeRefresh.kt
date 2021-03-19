@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("UNUSED_PARAMETER", "unused", "RedundantOverride")
+@file:Suppress("unused")
 
 package com.google.accompanist.swiperefresh
 
@@ -22,16 +22,7 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.MutatorMutex
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
@@ -44,13 +35,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
@@ -58,13 +47,9 @@ import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 
-private const val DRAG_RATE = 0.5f
-private const val MAX_ALPHA = 1f
-private const val STARTING_PROGRESS_ALPHA = 0.3f
-private const val MAX_PROGRESS_ANGLE = .8f
-
-private val IDLE_OFFSET = 16.dp
-private val REFRESH_TRIGGER_OFFSET = 60.dp
+private const val DragMultiplier = 0.5f
+private val IndicatorIdleOffset = 16.dp
+private val RefreshTriggerOffset = 60.dp
 
 @Stable
 class SwipeRefreshState {
@@ -90,15 +75,6 @@ class SwipeRefreshState {
     }
 }
 
-@Composable
-fun SwipeRefreshIndicatorScope.defaultSwipeRefreshIndicator() {
-    SwipeRefreshIndicator(
-        isRefreshing = isRefreshing,
-        swipeFraction = indicatorOffset,
-        isSwipeInProgress = isSwipeInProgress
-    )
-}
-
 enum class SwipeRefreshState2 {
     Idle,
     Dragging,
@@ -111,7 +87,13 @@ fun SwipeRefresh(
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
     state: SwipeRefreshState = remember { SwipeRefreshState() },
-    indicator: @Composable SwipeRefreshIndicatorScope.() -> Unit = { defaultSwipeRefreshIndicator() },
+    indicator: @Composable SwipeRefreshIndicatorScope.() -> Unit = {
+        SwipeRefreshIndicator(
+            isRefreshing = isRefreshing,
+            currentOffset = indicatorOffset,
+            isSwipeInProgress = isSwipeInProgress
+        )
+    },
     content: @Composable BoxScope.() -> Unit,
 ) {
     if (isRefreshing) {
@@ -123,9 +105,9 @@ fun SwipeRefresh(
     val density = LocalDensity.current
     val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(state.refreshState) {
+    LaunchedEffect(state.refreshState, density) {
         if (state.refreshState == SwipeRefreshState2.Refreshing) {
-            state.animateOffsetTo(with(density) { REFRESH_TRIGGER_OFFSET.toPx() })
+            state.animateOffsetTo(with(density) { RefreshTriggerOffset.toPx() })
         } else if (state.refreshState == SwipeRefreshState2.Idle) {
             state.animateOffsetTo(0f)
         }
@@ -138,7 +120,7 @@ fun SwipeRefresh(
                 source: NestedScrollSource
             ): Offset = when {
                 source == NestedScrollSource.Drag && available.y < 0 -> {
-                    val drag = available.y * DRAG_RATE
+                    val drag = available.y * DragMultiplier
                     val distanceAvailable = maxOf(drag, -state.indicatorOffset)
                     if (distanceAvailable.absoluteValue > 0.5f) {
                         coroutineScope.launch {
@@ -146,7 +128,7 @@ fun SwipeRefresh(
                         }
                     }
                     // Consume the consumed Y
-                    Offset(x = 0f, y = distanceAvailable)
+                    Offset(x = 0f, y = distanceAvailable / DragMultiplier)
                 }
                 else -> Offset.Zero
             }
@@ -160,7 +142,7 @@ fun SwipeRefresh(
                     state.refreshState = SwipeRefreshState2.Dragging
 
                     coroutineScope.launch {
-                        state.dragOffsetBy(available.y * DRAG_RATE)
+                        state.dragOffsetBy(available.y * DragMultiplier)
                     }
                     // Consume the entire Y delta
                     Offset(x = 0f, y = available.y)
@@ -169,7 +151,7 @@ fun SwipeRefresh(
             }
 
             override suspend fun onPreFling(available: Velocity): Velocity {
-                val trigger = with(density) { REFRESH_TRIGGER_OFFSET.toPx() }
+                val trigger = with(density) { RefreshTriggerOffset.toPx() }
                 return when {
                     state.refreshState == SwipeRefreshState2.Refreshing -> {
                         // If we're currently refreshing, just animate back to the resting position
@@ -238,45 +220,4 @@ interface SwipeRefreshIndicatorScope {
     val isRefreshing: Boolean
     val indicatorOffset: Float
     val isSwipeInProgress: Boolean
-}
-
-@Composable
-fun SwipeRefreshIndicator(
-    isRefreshing: Boolean,
-    swipeFraction: Float,
-    isSwipeInProgress: Boolean,
-) {
-    // TODO
-
-    Surface(
-        shape = CircleShape,
-        elevation = 6.dp,
-        modifier = Modifier.size(40.dp)
-    ) {
-        Icon(
-            imageVector = Icons.Default.Refresh,
-            contentDescription = "Refreshing",
-            modifier = Modifier
-                .graphicsLayer {
-
-                    val circumference = 20.dp.toPx() * Math.PI * 2f
-
-                    rotationZ = (swipeFraction / circumference.toFloat()) * 360f
-                }
-                .fillMaxSize()
-                .wrapContentSize()
-        )
-    }
-}
-
-@Preview
-@Composable
-fun PreviewSwipeRefreshIndicator() {
-    MaterialTheme {
-        SwipeRefreshIndicator(
-            isRefreshing = false,
-            swipeFraction = 0f,
-            isSwipeInProgress = true
-        )
-    }
 }

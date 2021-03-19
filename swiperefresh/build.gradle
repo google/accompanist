@@ -75,6 +75,7 @@ android {
 dependencies {
     implementation Libs.AndroidX.Compose.material
     implementation Libs.AndroidX.Compose.tooling
+    implementation Libs.AndroidX.Compose.util
 
     // ======================
     // Test dependencies
