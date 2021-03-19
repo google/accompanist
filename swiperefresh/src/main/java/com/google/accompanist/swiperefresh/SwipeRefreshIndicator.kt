@@ -20,18 +20,16 @@ package com.google.accompanist.swiperefresh
 
 import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Icon
 import androidx.compose.material.LocalAbsoluteElevation
 import androidx.compose.material.LocalElevationOverlay
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -88,16 +86,23 @@ fun SwipeRefreshIndicator(
         .clip(CircleShape)
 
     Box(modifier) {
-        Icon(
-            imageVector = Icons.Default.Refresh,
+        val ringPainter = remember {
+            ProgressRingPainter()
+        }
+
+        ringPainter.colors = listOf(
+            MaterialTheme.colors.primary
+        )
+
+        val circumference = Math.PI * 2f * with(LocalDensity.current) { (size / 2).toPx() }
+        ringPainter.endTrim = (currentOffset / circumference.toFloat()).coerceAtMost(1f)
+
+        Image(
+            painter = ringPainter,
             contentDescription = "Refreshing",
             modifier = Modifier
-                .graphicsLayer {
-                    val circumference = (size / 2).toPx() * Math.PI * 2f
-                    rotationZ = (currentOffset / circumference.toFloat()) * 360f
-                }
                 .align(Alignment.Center)
-                .wrapContentSize()
+                .size(24.dp)
         )
     }
 }
