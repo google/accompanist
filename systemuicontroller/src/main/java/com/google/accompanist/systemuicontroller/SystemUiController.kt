@@ -21,7 +21,6 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.view.View
 import android.view.Window
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
@@ -80,7 +79,6 @@ interface SystemUiController {
     }
 }
 
-@Composable
 fun androidSystemUiController(view: View): SystemUiController {
     return AndroidSystemUiControllerImpl(view)
 }
@@ -122,7 +120,7 @@ private class AndroidSystemUiControllerImpl(
         windowInsetsController?.isAppearanceLightNavigationBars = darkIcons
 
         window?.navigationBarColor = when {
-            darkIcons && windowInsetsController?.isAppearanceLightStatusBars != true -> {
+            darkIcons && windowInsetsController?.isAppearanceLightNavigationBars != true -> {
                 // If we're set to use dark icons, but our windowInsetsController call didn't
                 // succeed (usually to API level), we instead transform the color to maintain
                 // contrast
