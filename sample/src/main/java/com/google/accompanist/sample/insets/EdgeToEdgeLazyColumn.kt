@@ -19,6 +19,7 @@ package com.google.accompanist.sample.insets
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,6 +38,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,6 +49,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -58,6 +62,8 @@ import com.google.accompanist.insets.toPaddingValues
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
+import com.google.accompanist.systemuicontroller.LocalSystemUiController
+import com.google.accompanist.systemuicontroller.androidSystemUiController
 
 class EdgeToEdgeLazyColumn : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,73 +75,76 @@ class EdgeToEdgeLazyColumn : ComponentActivity() {
 
         setContent {
             AccompanistSampleTheme {
-                Surface {
-                    Sample()
-                }
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalStdlibApi::class)
-@Composable
-private fun Sample() {
-    ProvideWindowInsets {
-        Surface {
-            Box(Modifier.fillMaxSize()) {
-                // A state instance which allows us to track the size of the top app bar
-                var topAppBarSize by remember { mutableStateOf(0) }
-
-                // We use the systemBar insets as the source of our content padding.
-                // We add on the topAppBarSize, so that the content is displayed below
-                // the app bar. Since the top inset is already contained within the app
-                // bar height, we disable handling it in toPaddingValues().
-                LazyColumn(
-                    contentPadding = LocalWindowInsets.current.systemBars.toPaddingValues(
-                        top = false,
-                        additionalTop = with(LocalDensity.current) { topAppBarSize.toDp() }
-                    )
-                ) {
-                    items(items = listItems) { imageUrl ->
-                        ListItem(imageUrl, Modifier.fillMaxWidth())
+                val controller = androidSystemUiController(LocalView.current)
+                CompositionLocalProvider(LocalSystemUiController provides controller) {
+                    ProvideWindowInsets {
+                        Sample()
                     }
                 }
-
-                /**
-                 * We show a translucent app bar above which floats about the content. Our
-                 * [InsetAwareTopAppBar] below automatically draws behind the status bar too.
-                 */
-                InsetAwareTopAppBar(
-                    title = { Text(stringResource(R.string.insets_title_list)) },
-                    backgroundColor = MaterialTheme.colors.surface.copy(alpha = 0.9f),
-                    modifier = Modifier.fillMaxWidth()
-                        // We use onSizeChanged to track the app bar height, and update
-                        // our state above
-                        .onSizeChanged { topAppBarSize = it.height }
-                )
-
-                FloatingActionButton(
-                    onClick = { /* TODO */ },
-                    modifier = Modifier.align(Alignment.BottomEnd)
-                        .navigationBarsPadding()
-                        .padding(16.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Face,
-                        contentDescription = "Face icon"
-                    )
-                }
             }
         }
     }
 }
 
-@OptIn(ExperimentalStdlibApi::class)
-private val listItems = buildList {
-    repeat(40) {
-        add(randomSampleImageUrl(it))
+@Composable
+private fun Sample() {
+    val systemUiController = LocalSystemUiController.current
+    val isSystemInDarkTheme = isSystemInDarkTheme()
+    SideEffect {
+        systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = !isSystemInDarkTheme)
+    }
+
+    Surface {
+        Box(Modifier.fillMaxSize()) {
+            // A state instance which allows us to track the size of the top app bar
+            var topAppBarSize by remember { mutableStateOf(0) }
+
+            // We use the systemBar insets as the source of our content padding.
+            // We add on the topAppBarSize, so that the content is displayed below
+            // the app bar. Since the top inset is already contained within the app
+            // bar height, we disable handling it in toPaddingValues().
+            LazyColumn(
+                contentPadding = LocalWindowInsets.current.systemBars.toPaddingValues(
+                    top = false,
+                    additionalTop = with(LocalDensity.current) { topAppBarSize.toDp() }
+                )
+            ) {
+                items(items = listItems) { imageUrl ->
+                    ListItem(imageUrl, Modifier.fillMaxWidth())
+                }
+            }
+
+            /**
+             * We show a translucent app bar above which floats about the content. Our
+             * [InsetAwareTopAppBar] below automatically draws behind the status bar too.
+             */
+            InsetAwareTopAppBar(
+                title = { Text(stringResource(R.string.insets_title_list)) },
+                backgroundColor = MaterialTheme.colors.surface.copy(alpha = 0.9f),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    // We use onSizeChanged to track the app bar height, and update
+                    // our state above
+                    .onSizeChanged { topAppBarSize = it.height }
+            )
+
+            FloatingActionButton(
+                onClick = { /* TODO */ },
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .navigationBarsPadding()
+                    .padding(16.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Face,
+                    contentDescription = "Face icon"
+                )
+            }
+        }
     }
 }
+
+private val listItems = List(40) { randomSampleImageUrl(it) }
 
 /**
  * A wrapper around [TopAppBar] which uses [Modifier.statusBarsPadding] to shift the app bar's
