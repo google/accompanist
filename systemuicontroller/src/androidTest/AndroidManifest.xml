@@ -15,13 +15,13 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.google.accompanist.insets.test">
+    package="com.google.accompanist.systemuicontroller.test">
 
     <uses-sdk android:targetSdkVersion="30" />
 
     <application>
         <activity
-            android:name="com.google.accompanist.insets.InsetsTestActivity"
+            android:name="com.google.accompanist.systemuicontroller.SystemUIControllerTestActivity"
             android:theme="@android:style/Theme.Material.NoActionBar" />
     </application>
 

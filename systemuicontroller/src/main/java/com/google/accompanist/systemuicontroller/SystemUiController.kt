@@ -109,7 +109,7 @@ private class AndroidSystemUiControllerImpl(
         window?.statusBarColor = when {
             darkIcons && windowInsetsController?.isAppearanceLightStatusBars != true -> {
                 // If we're set to use dark icons, but our windowInsetsController call didn't
-                // succeed (usually to API level), we instead transform the color to maintain
+                // succeed (usually due to API level), we instead transform the color to maintain
                 // contrast
                 transformColorForLightContent(color)
             }
@@ -127,7 +127,7 @@ private class AndroidSystemUiControllerImpl(
         window?.navigationBarColor = when {
             darkIcons && windowInsetsController?.isAppearanceLightNavigationBars != true -> {
                 // If we're set to use dark icons, but our windowInsetsController call didn't
-                // succeed (usually to API level), we instead transform the color to maintain
+                // succeed (usually due to API level), we instead transform the color to maintain
                 // contrast
                 transformColorForLightContent(color)
             }

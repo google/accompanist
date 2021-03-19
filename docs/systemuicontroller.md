@@ -5,7 +5,7 @@
 System UI Controller provides easy-to-use utilities for updating the System UI bar colors within Jetpack Compose.
 
 ## Usage
-To setup Insets in your composables, you need to call the provide an instance to the `LocalSystemUiController`
+To control system UI in your composables, you must provide an instance to the `LocalSystemUiController`
 composition local. This would typically be done near the top level of your composable hierarchy:
 
 ``` kotlin
@@ -42,7 +42,7 @@ fun MyHomeScreen() {
 
 ## System bar icon colors
 The library automatically handles API level differences when running on Android devices. If we look at the example
-of status bar icons, Android only natively handles dark icons there on API 23+. This library handles this by automatically
+of status bar icons, Android only natively supports dark icons on API 23+. This library handles this by automatically
 altering the requested color with a scrim, to maintain contrast:
 
 ![](api-scrim.png)
@@ -51,7 +51,7 @@ Similar happens on navigation bar color, which is only available on API 26+.
 
 ### Modifying scrim logic
 
-The scrim logic can be modified as needed by your needs:
+The scrim logic can be modified if needed:
 
 ``` kotlin
 systemUiController.setStatusBarsColor(
