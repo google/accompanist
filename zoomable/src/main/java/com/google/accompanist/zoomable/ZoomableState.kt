@@ -54,7 +54,6 @@ fun rememberZoomableState(
     )
 }
 
-
 /**
  * A state object that can be hoisted to observe scale and translate for [Zoomable].
  *
