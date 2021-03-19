@@ -35,4 +35,5 @@
     <string name="flowlayout_title_column">Flow Layout: Column</string>
     <string name="flowlayout_title_row">Flow Layout: Row</string>
 
+    <string name="zoomable_title">Zoomable</string>
 </resources>

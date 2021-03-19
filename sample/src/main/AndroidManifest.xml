@@ -169,6 +169,16 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".zoomable.ZoomableSample"
+            android:label="@string/zoomable_title"
+            android:theme="@style/Theme.AccompanistSample">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>
