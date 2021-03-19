@@ -42,10 +42,9 @@ import kotlinx.coroutines.launch
  *
  * @sample com.google.accompanist.sample.zoomable.ZoomableSample
  *
- * @param state the state object to be used to control or observe the list's state.
+ * @param state the state object to be used to observe the [Zoomable] state.
  * @param modifier the modifier to apply to this layout.
- * @param content a block which describes the content. Inside this block you can reference
- * [PagerScope.currentPage] and other properties in [PagerScope].
+ * @param content a block which describes the content.
  */
 @Composable
 fun Zoomable(
