@@ -31,16 +31,66 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
+/**
+ * Contains default values used for [PagerIndicator].
+ */
+object PagerDefaults {
+    /**
+     * Default spacing used for [PagerIndicator].
+     */
+    val Spacing = 8.dp
+
+    /**
+     * Default indicator size used for [PagerIndicator].
+     */
+    val Size = 8.dp
+
+    /**
+     * Default shape used for [PagerIndicator].
+     */
+    val Shape = CircleShape
+
+    /**
+     * Default Indicator color value used for [PagerIndicator].
+     */
+    val IndicatorColor = Color.White
+
+    /**
+     * Default alpha value used for generating the inactive indicators color for [PagerIndicator].
+     */
+    val InactiveIndicatorColorAlpha = 0.6f
+}
+
+/**
+ * A Indicator for a [Pager] representing the currently active page and total pages using a [Shape].
+ *
+ * This Element allows the setting of both the [shape] and [indicatorShape], which defines how the
+ * Indicator is visually represented. By default Indicators are represented as [CircleShape].
+ * When changing the [shape] by default the [indicatorShape] adjusts accordingly. If you want the
+ * active page indicator to have a different appearance override [indicatorShape].
+ *
+ * @sample com.google.accompanist.sample.pager.PagerIndicatorSample
+ *
+ * @param pagerState the state object of your [Pager] to be used to observe the list's state.
+ * @param modifier the modifier to apply to this layout.
+ * @param indicatorColor the color of the active Page indicator
+ * @param color the color of page indicators that are inactive. This defaults to [indicatorColor]
+ * with an alpha of 60% as defined in [PagerDefaults.InactiveIndicatorColorAlpha].
+ * @param size the size of both indicators in dp.
+ * @param spacing the spacing added between each indicator in dp.
+ * @param shape the shape representing inactive pages.
+ * @param indicatorShape the shape representing the active page. This defaults to [shape]
+ */
 @ExperimentalPagerApi
 @Composable
 fun PagerIndicator(
-    modifier: Modifier = Modifier,
     pagerState: PagerState,
-    color: Color,
-    indicatorColor: Color,
-    size: Dp = 8.dp,
-    spacing: Dp = size,
-    shape: Shape = CircleShape,
+    modifier: Modifier = Modifier,
+    color: Color = PagerDefaults.IndicatorColor,
+    indicatorColor: Color = color.copy(PagerDefaults.InactiveIndicatorColorAlpha),
+    size: Dp = PagerDefaults.Size,
+    spacing: Dp = PagerDefaults.Spacing,
+    shape: Shape = PagerDefaults.Shape,
     indicatorShape: Shape = shape
 ) {
     Box(modifier = modifier, contentAlignment = Alignment.CenterStart) {
