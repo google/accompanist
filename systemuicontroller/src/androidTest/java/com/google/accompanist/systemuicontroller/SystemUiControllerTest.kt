@@ -22,6 +22,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.core.view.ViewCompat
 import androidx.test.annotation.UiThreadTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
@@ -55,8 +56,8 @@ class SystemUiControllerTest {
         val view = composeTestRule.contentView
         val window = composeTestRule.activity.window
 
-        // Now create a androidSystemUiController() and set the status bar color
-        val controller = androidSystemUiController(view)
+        // Now create an AndroidSystemUiController() and set the status bar color
+        val controller = AndroidSystemUiController(view)
         controller.setStatusBarColor(Color.Blue, darkIcons = false)
 
         // Assert that the color was set
@@ -69,8 +70,8 @@ class SystemUiControllerTest {
         val view = composeTestRule.contentView
         val window = composeTestRule.activity.window
 
-        // Now create a androidSystemUiController() and set the status bar color
-        val controller = androidSystemUiController(view)
+        // Now create an AndroidSystemUiController() and set the status bar color
+        val controller = AndroidSystemUiController(view)
         controller.setNavigationBarColor(Color.Green, darkIcons = false)
 
         assertThat(Color(window.navigationBarColor)).isEqualTo(Color.Green)
@@ -82,8 +83,8 @@ class SystemUiControllerTest {
         val view = composeTestRule.contentView
         val window = composeTestRule.activity.window
 
-        // Now create a androidSystemUiController() and set the system bar colors
-        val controller = androidSystemUiController(view)
+        // Now create an AndroidSystemUiController() and set the system bar colors
+        val controller = AndroidSystemUiController(view)
         controller.setSystemBarsColor(Color.Red, darkIcons = false)
 
         // Assert that the colors were set
@@ -98,8 +99,8 @@ class SystemUiControllerTest {
         val view = composeTestRule.contentView
         val window = composeTestRule.activity.window
 
-        // Now create a androidSystemUiController() and set the navigation bar with dark icons
-        val controller = androidSystemUiController(view)
+        // Now create an AndroidSystemUiController() and set the navigation bar with dark icons
+        val controller = AndroidSystemUiController(view)
         controller.setStatusBarColor(Color.White, darkIcons = true) {
             // Here we can provide custom logic to 'darken' the color to maintain contrast.
             // We return red just to assert below.
@@ -108,6 +109,10 @@ class SystemUiControllerTest {
 
         // Assert that the colors were set to our 'darkened' color
         assertThat(Color(window.statusBarColor)).isEqualTo(Color.Red)
+
+        // Assert that the system couldn't apply the native light icons
+        val windowInsetsController = ViewCompat.getWindowInsetsController(view)!!
+        assertThat(windowInsetsController.isAppearanceLightStatusBars).isFalse()
     }
 
     @Test
@@ -117,8 +122,8 @@ class SystemUiControllerTest {
         val view = composeTestRule.contentView
         val window = composeTestRule.activity.window
 
-        // Now create a androidSystemUiController() and set the status bar with dark icons
-        val controller = androidSystemUiController(view)
+        // Now create an AndroidSystemUiController() and set the status bar with dark icons
+        val controller = AndroidSystemUiController(view)
         controller.setStatusBarColor(Color.White, darkIcons = true) {
             // Here we can provide custom logic to 'darken' the color to maintain contrast.
             // We return red just to assert below.
@@ -127,6 +132,10 @@ class SystemUiControllerTest {
 
         // Assert that the colors were darkened color is not used
         assertThat(Color(window.statusBarColor)).isEqualTo(Color.White)
+
+        // Assert that the system applied the native light icons
+        val windowInsetsController = ViewCompat.getWindowInsetsController(view)!!
+        assertThat(windowInsetsController.isAppearanceLightStatusBars).isTrue()
     }
 
     @Test
@@ -136,8 +145,8 @@ class SystemUiControllerTest {
         val view = composeTestRule.contentView
         val window = composeTestRule.activity.window
 
-        // Now create a androidSystemUiController() and set the navigation bar with dark icons
-        val controller = androidSystemUiController(view)
+        // Now create an AndroidSystemUiController() and set the navigation bar with dark icons
+        val controller = AndroidSystemUiController(view)
         controller.setNavigationBarColor(Color.White, darkIcons = true) {
             // Here we can provide custom logic to 'darken' the color to maintain contrast.
             // We return red just to assert below.
@@ -146,6 +155,10 @@ class SystemUiControllerTest {
 
         // Assert that the colors were set to our 'darkened' color
         assertThat(Color(window.navigationBarColor)).isEqualTo(Color.Red)
+
+        // Assert that the system couldn't apply the native light icons
+        val windowInsetsController = ViewCompat.getWindowInsetsController(view)!!
+        assertThat(windowInsetsController.isAppearanceLightNavigationBars).isFalse()
     }
 
     @Test
@@ -155,8 +168,8 @@ class SystemUiControllerTest {
         val view = composeTestRule.contentView
         val window = composeTestRule.activity.window
 
-        // Now create a androidSystemUiController() and set the navigation bar with dark icons
-        val controller = androidSystemUiController(view)
+        // Now create an AndroidSystemUiController() and set the navigation bar with dark icons
+        val controller = AndroidSystemUiController(view)
         controller.setNavigationBarColor(Color.White, darkIcons = true) {
             // Here we can provide custom logic to 'darken' the color to maintain contrast.
             // We return red just to assert below.
@@ -165,6 +178,10 @@ class SystemUiControllerTest {
 
         // Assert that the colors were darkened color is not used
         assertThat(Color(window.navigationBarColor)).isEqualTo(Color.White)
+
+        // Assert that the system applied the native light icons
+        val windowInsetsController = ViewCompat.getWindowInsetsController(view)!!
+        assertThat(windowInsetsController.isAppearanceLightNavigationBars).isTrue()
     }
 }
 
