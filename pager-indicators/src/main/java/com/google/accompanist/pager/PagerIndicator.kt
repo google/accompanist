@@ -50,8 +50,8 @@ import androidx.compose.ui.unit.dp
  * @param activeColor the color of the active Page indicator
  * @param inactiveColor the color of page indicators that are inactive. This defaults to
  * [activeColor] with the alpha component set to the [ContentAlpha.disabled].
- * @param indicatorHeight the height of each indicator in [Dp].
  * @param indicatorWidth the width of each indicator in [Dp].
+ * @param indicatorHeight the height of each indicator in [Dp]. Defaults to [indicatorWidth].
  * @param spacing the spacing between each indicator in [Dp].
  * @param indicatorShape the shape representing each indicator. This defaults to [CircleShape].
  */
@@ -63,7 +63,7 @@ fun HorizontalPagerIndicator(
     activeColor: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
     inactiveColor: Color = activeColor.copy(ContentAlpha.disabled),
     indicatorWidth: Dp = 8.dp,
-    indicatorHeight: Dp = 8.dp,
+    indicatorHeight: Dp = indicatorWidth,
     spacing: Dp = indicatorWidth,
     indicatorShape: Shape = CircleShape,
 ) {
@@ -117,7 +117,7 @@ fun HorizontalPagerIndicator(
  * @param inactiveColor the color of page indicators that are inactive. This defaults to
  * [activeColor] with the alpha component set to the [ContentAlpha.disabled].
  * @param indicatorHeight the height of each indicator in [Dp].
- * @param indicatorWidth the width of each indicator in [Dp].
+ * @param indicatorWidth the width of each indicator in [Dp]. Defaults to [indicatorHeight].
  * @param spacing the spacing between each indicator in [Dp].
  * @param indicatorShape the shape representing each indicator. This defaults to [CircleShape].
  */
@@ -128,8 +128,8 @@ fun VerticalPagerIndicator(
     modifier: Modifier = Modifier,
     activeColor: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
     inactiveColor: Color = activeColor.copy(ContentAlpha.disabled),
-    indicatorWidth: Dp = 8.dp,
     indicatorHeight: Dp = 8.dp,
+    indicatorWidth: Dp = indicatorHeight,
     spacing: Dp = indicatorHeight,
     indicatorShape: Shape = CircleShape,
 ) {
