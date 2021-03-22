@@ -142,8 +142,7 @@
 
         <activity
             android:name=".pager.HorizontalPagerWithIndicatorSample"
-            android:label="@string/horiz_pager_with_indicator_title"
-            android:theme="@style/Theme.AccompanistSample">
+            android:label="@string/horiz_pager_with_indicator_title">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
