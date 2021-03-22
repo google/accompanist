@@ -30,8 +30,10 @@
     <string name="insets_title_list">Insets: Edge-to-edge list</string>
     <string name="insets_title_imeanim">Insets: IME Animations</string>
 
-    <string name="horiz_pager_title_basics">HorizontalPager: Basic</string>
+    <string name="horiz_pager_title_basics">Horizontal Pager: Basic</string>
+    <string name="horiz_pager_with_indicator_title">Horizontal Pager: Indicator</string>
     <string name="horiz_pager_title_tabs">HorizontalPager: Tabs</string>
+
     <string name="vertical_pager_title_basics">VerticalPager: Basic</string>
 
     <string name="flowlayout_title_column">Flow Layout: Column</string>

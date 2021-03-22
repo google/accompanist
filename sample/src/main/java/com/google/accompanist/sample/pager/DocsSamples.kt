@@ -16,12 +16,15 @@
 
 package com.google.accompanist.sample.pager
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.PagerIndicator
 import com.google.accompanist.pager.VerticalPager
 import com.google.accompanist.pager.rememberPagerState
 
@@ -52,5 +55,22 @@ fun VerticalPagerSample() {
             text = "Page: $page",
             modifier = Modifier.fillMaxWidth()
         )
+    }
+}
+
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+fun PagerIndicatorSample() {
+    // Display 10 items
+    val pagerState = rememberPagerState(pageCount = 10)
+    Column {
+        HorizontalPager(state = pagerState) { page ->
+            // Our page content
+            Text(
+                text = "Page: $page",
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+        PagerIndicator(pagerState = pagerState, color = Color.Gray, indicatorColor = Color.White)
     }
 }
