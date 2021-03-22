@@ -54,6 +54,7 @@ dependencies {
     implementation project(':insets')
     implementation project(':pager')
     implementation project(':flowlayout')
+    implementation project(':systemuicontroller')
 
     implementation Libs.AndroidX.appcompat
 
