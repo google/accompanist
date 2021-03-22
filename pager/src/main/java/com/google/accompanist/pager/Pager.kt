@@ -349,6 +349,11 @@ interface PagerScope : BoxScope {
      * Returns the current selected page offset
      */
     val currentPageOffset: Float
+
+    /**
+     * The current scroll position, as a float value between `0 until pageSize`
+     */
+    val scrollPosition: Float
 }
 
 @ExperimentalPagerApi
@@ -361,4 +366,7 @@ private class PagerScopeImpl(
 
     override val currentPageOffset: Float
         get() = state.currentPageOffset
+
+    override val scrollPosition: Float
+        get() = state.scrollPosition
 }

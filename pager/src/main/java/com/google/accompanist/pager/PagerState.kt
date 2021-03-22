@@ -95,9 +95,9 @@ class PagerState(
     internal var pageSize by mutableStateOf(0)
 
     /**
-     * The page position, as a float value between `0 until pageSize`
+     * The current scroll position, as a float value between `0 until pageSize`
      */
-    private val globalPosition: Float
+    val scrollPosition: Float
         get() = currentPage + currentPageOffset
 
     /**
@@ -232,12 +232,12 @@ class PagerState(
         initialVelocity: Float = 0f,
     ) {
         animate(
-            initialValue = globalPosition,
+            initialValue = scrollPosition,
             targetValue = page + pageOffset,
             initialVelocity = initialVelocity,
             animationSpec = animationSpec
         ) { value, _ ->
-            updateFromGlobalPosition(value)
+            updateFromScrollPosition(value)
         }
         snapToNearestPage()
     }
@@ -256,7 +256,7 @@ class PagerState(
         else -> 1f
     }
 
-    private fun updateFromGlobalPosition(position: Float) {
+    private fun updateFromScrollPosition(position: Float) {
         currentPage = floor(position).toInt()
         currentPageOffset = position - currentPage
     }
@@ -269,9 +269,9 @@ class PagerState(
      * @return any unconsumed [deltaOffset]
      */
     private fun scrollByOffset(deltaOffset: Float): Float {
-        val current = globalPosition
+        val current = scrollPosition
         val target = (current + deltaOffset).coerceIn(0f, lastPageIndex.toFloat())
-        updateFromGlobalPosition(target)
+        updateFromScrollPosition(target)
 
         if (DebugLog) {
             Log.d(
@@ -367,12 +367,12 @@ class PagerState(
                 offset = targetOffset
             )
             animate(
-                initialValue = globalPosition * pageSize,
+                initialValue = scrollPosition * pageSize,
                 targetValue = targetPosition * pageSize,
                 initialVelocity = initialVelocity,
                 animationSpec = snapAnimationSpec,
             ) { value, velocity ->
-                scrollBy(value - (globalPosition * pageSize))
+                scrollBy(value - (scrollPosition * pageSize))
                 // Keep track of velocity
                 lastVelocity = velocity
             }
