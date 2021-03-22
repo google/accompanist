@@ -28,7 +28,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AccompanistSample.NoActionBar">
+        android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
 
         <activity
             android:name="com.google.accompanist.sample.MainActivity"
@@ -60,8 +60,7 @@
 
         <activity
             android:name="com.google.accompanist.sample.coil.CoilLazyGridSample"
-            android:label="@string/coil_title_lazy_grid"
-            android:theme="@style/Theme.AccompanistSample.NoActionBar.TransparentBars">
+            android:label="@string/coil_title_lazy_grid">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -88,8 +87,7 @@
 
         <activity
             android:name="com.google.accompanist.sample.glide.GlideLazyGridSample"
-            android:label="@string/glide_title_lazy_grid"
-            android:theme="@style/Theme.AccompanistSample.NoActionBar.TransparentBars">
+            android:label="@string/glide_title_lazy_grid">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -98,8 +96,7 @@
 
         <activity
             android:name="com.google.accompanist.sample.insets.InsetsBasicSample"
-            android:label="@string/insets_title_basic"
-            android:theme="@style/Theme.AccompanistSample.NoActionBar.TransparentBars">
+            android:label="@string/insets_title_basic">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -108,8 +105,7 @@
 
         <activity
             android:name="com.google.accompanist.sample.insets.InsetsFragmentSample"
-            android:label="@string/insets_title_fragment"
-            android:theme="@style/Theme.AccompanistSample.NoActionBar.TransparentBars">
+            android:label="@string/insets_title_fragment">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -118,8 +114,7 @@
 
         <activity
             android:name="com.google.accompanist.sample.insets.EdgeToEdgeLazyColumn"
-            android:label="@string/insets_title_list"
-            android:theme="@style/Theme.AccompanistSample.NoActionBar.TransparentBars">
+            android:label="@string/insets_title_list">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -129,7 +124,6 @@
         <activity
             android:name="com.google.accompanist.sample.insets.ImeAnimationSample"
             android:label="@string/insets_title_imeanim"
-            android:theme="@style/Theme.AccompanistSample.NoActionBar.TransparentBars"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -139,8 +133,7 @@
 
         <activity
             android:name=".pager.HorizontalPagerBasicSample"
-            android:label="@string/horiz_pager_title_basics"
-            android:theme="@style/Theme.AccompanistSample">
+            android:label="@string/horiz_pager_title_basics">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -160,7 +153,6 @@
         <activity
             android:name=".flowlayout.FlowColumnSample"
             android:label="@string/flowlayout_title_column"
-            android:theme="@style/Theme.AccompanistSample.NoActionBar.TransparentBars"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -171,7 +163,6 @@
         <activity
             android:name=".flowlayout.FlowRowSample"
             android:label="@string/flowlayout_title_row"
-            android:theme="@style/Theme.AccompanistSample.NoActionBar.TransparentBars"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
