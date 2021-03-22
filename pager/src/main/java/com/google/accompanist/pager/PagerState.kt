@@ -43,7 +43,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.map
 import kotlin.math.absoluteValue
 import kotlin.math.floor
@@ -455,6 +455,6 @@ class PagerState(
 inline val PagerState.pageChanges: Flow<Int>
     get() = snapshotFlow { isScrollInProgress }
         // Only emit when the scroll has finished
-        .filter { isScrollInProgress -> !isScrollInProgress }
+        .filterNot { it }
         .map { currentPage }
         .distinctUntilChanged()
