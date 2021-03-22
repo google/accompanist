@@ -443,7 +443,7 @@ class PagerState(
 }
 
 /**
- * A flow which emits the [PagerState.currentPage] as it changes due after completed scrolls.
+ * A flow which emits the [PagerState.currentPage] as it changes due to a scroll completing.
  *
  * This flow is not meant to be used for updating any UI within the attached [HorizontalPager]
  * or [VerticalPager]. For that use-case, you should read
