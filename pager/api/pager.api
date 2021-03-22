@@ -4,6 +4,7 @@ public abstract interface annotation class com/google/accompanist/pager/Experime
 public final class com/google/accompanist/pager/Pager {
 	public static final fun HorizontalPager (Lcom/google/accompanist/pager/PagerState;Landroidx/compose/ui/Modifier;ZILandroidx/compose/foundation/gestures/FlingBehavior;Landroidx/compose/ui/Alignment$Vertical;Landroidx/compose/ui/Alignment$Horizontal;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
 	public static final fun VerticalPager (Lcom/google/accompanist/pager/PagerState;Landroidx/compose/ui/Modifier;ZILandroidx/compose/foundation/gestures/FlingBehavior;Landroidx/compose/ui/Alignment$Vertical;Landroidx/compose/ui/Alignment$Horizontal;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
+	public static final fun calculateCurrentOffsetForPage (Lcom/google/accompanist/pager/PagerScope;I)F
 }
 
 public final class com/google/accompanist/pager/PagerDefaults {
@@ -30,7 +31,6 @@ public final class com/google/accompanist/pager/PagerIndicatorKt {
 public abstract interface class com/google/accompanist/pager/PagerScope : androidx/compose/foundation/layout/BoxScope {
 	public abstract fun getCurrentPage ()I
 	public abstract fun getCurrentPageOffset ()F
-	public abstract fun getScrollPosition ()F
 }
 
 public final class com/google/accompanist/pager/PagerScope$DefaultImpls {
@@ -48,7 +48,6 @@ public final class com/google/accompanist/pager/PagerState : androidx/compose/fo
 	public final fun getCurrentPage ()I
 	public final fun getCurrentPageOffset ()F
 	public final fun getPageCount ()I
-	public final fun getScrollPosition ()F
 	public fun isScrollInProgress ()Z
 	public fun scroll (Landroidx/compose/foundation/MutatePriority;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun scrollToPage (IFLkotlin/coroutines/Continuation;)Ljava/lang/Object;

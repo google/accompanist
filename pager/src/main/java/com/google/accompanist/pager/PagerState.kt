@@ -97,7 +97,7 @@ class PagerState(
     /**
      * The current scroll position, as a float value between `0 until pageSize`
      */
-    val scrollPosition: Float
+    private val absolutePosition: Float
         get() = currentPage + currentPageOffset
 
     /**
@@ -232,7 +232,7 @@ class PagerState(
         initialVelocity: Float = 0f,
     ) {
         animate(
-            initialValue = scrollPosition,
+            initialValue = absolutePosition,
             targetValue = page + pageOffset,
             initialVelocity = initialVelocity,
             animationSpec = animationSpec
@@ -269,7 +269,7 @@ class PagerState(
      * @return any unconsumed [deltaOffset]
      */
     private fun scrollByOffset(deltaOffset: Float): Float {
-        val current = scrollPosition
+        val current = absolutePosition
         val target = (current + deltaOffset).coerceIn(0f, lastPageIndex.toFloat())
         updateFromScrollPosition(target)
 
@@ -367,12 +367,12 @@ class PagerState(
                 offset = targetOffset
             )
             animate(
-                initialValue = scrollPosition * pageSize,
+                initialValue = absolutePosition * pageSize,
                 targetValue = targetPosition * pageSize,
                 initialVelocity = initialVelocity,
                 animationSpec = snapAnimationSpec,
             ) { value, velocity ->
-                scrollBy(value - (scrollPosition * pageSize))
+                scrollBy(value - (absolutePosition * pageSize))
                 // Keep track of velocity
                 lastVelocity = velocity
             }
