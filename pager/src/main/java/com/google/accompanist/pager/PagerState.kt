@@ -449,6 +449,8 @@ class PagerState(
  * This flow is not meant to be used for updating any UI within the attached [HorizontalPager]
  * or [VerticalPager]. For that use-case, you should read
  * [PagerScope.currentPage] and [PagerScope.currentPageOffset] from the content scope.
+ *
+ * @sample com.google.accompanist.sample.pager.PageChangedFlowSample
  */
 @ExperimentalPagerApi
 inline val PagerState.pageChangedFlow: Flow<Int>

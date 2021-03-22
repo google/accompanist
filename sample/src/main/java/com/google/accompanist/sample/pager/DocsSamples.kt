@@ -22,13 +22,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.VerticalPager
 import com.google.accompanist.pager.VerticalPagerIndicator
+import com.google.accompanist.pager.pageChangedFlow
 import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.flow.collect
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -99,5 +102,27 @@ fun VerticalPagerIndicatorSample() {
             pagerState = pagerState,
             indicatorColor = LocalContentColor.current
         )
+    }
+}
+
+object AnalyticsService {
+    fun sendPageSelectedEvent(page: Int) = Unit
+}
+
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+fun PageChangedFlowSample() {
+    val pagerState = rememberPagerState(pageCount = 10)
+
+    LaunchedEffect(pagerState) {
+        // Collect from the PageState's pageChangedFlow, which emits when the
+        // current page has changed
+        pagerState.pageChangedFlow.collect { page ->
+            AnalyticsService.sendPageSelectedEvent(page)
+        }
+    }
+
+    VerticalPager(state = pagerState) { page ->
+        Text(text = "Page: $page")
     }
 }
