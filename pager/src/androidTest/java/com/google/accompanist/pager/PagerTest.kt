@@ -198,7 +198,7 @@ abstract class PagerTest(
 
     @OptIn(FlowPreview::class)
     @Test
-    fun pageChangedFlow() {
+    fun pageChangesSample() {
         val pagerState = setPagerContent(
             layoutDirection = layoutDirection,
             pageCount = 10,
@@ -206,8 +206,8 @@ abstract class PagerTest(
         )
 
         val coroutineScope = CoroutineScope(Dispatchers.Main)
-        // Collect the pageChangedFlow into a Channel, allowing us to poll values
-        val pageChangedChannel = pagerState.pageChangedFlow.produceIn(coroutineScope)
+        // Collect the pageChanges flow into a Channel, allowing us to poll values
+        val pageChangedChannel = pagerState.pageChanges.produceIn(coroutineScope)
 
         // Assert that the first emission is 0
         coroutineScope.launch {

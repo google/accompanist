@@ -60,7 +60,7 @@ public final class com/google/accompanist/pager/PagerState$Companion {
 }
 
 public final class com/google/accompanist/pager/PagerStateKt {
-	public static final fun getPageChangedFlow (Lcom/google/accompanist/pager/PagerState;)Lkotlinx/coroutines/flow/Flow;
+	public static final fun getPageChanges (Lcom/google/accompanist/pager/PagerState;)Lkotlinx/coroutines/flow/Flow;
 	public static final fun rememberPagerState (IIFLandroidx/compose/runtime/Composer;II)Lcom/google/accompanist/pager/PagerState;
 }
 

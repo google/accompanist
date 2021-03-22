@@ -443,17 +443,16 @@ class PagerState(
 }
 
 /**
- * A flow which emits the [PagerState.currentPage] if it changes due a scroll
- * has completed.
+ * A flow which emits the [PagerState.currentPage] as it changes due after completed scrolls.
  *
  * This flow is not meant to be used for updating any UI within the attached [HorizontalPager]
  * or [VerticalPager]. For that use-case, you should read
  * [PagerScope.currentPage] and [PagerScope.currentPageOffset] from the content scope.
  *
- * @sample com.google.accompanist.sample.pager.PageChangedFlowSample
+ * @sample com.google.accompanist.sample.pager.PageChangesSample
  */
 @ExperimentalPagerApi
-inline val PagerState.pageChangedFlow: Flow<Int>
+inline val PagerState.pageChanges: Flow<Int>
     get() = snapshotFlow { isScrollInProgress }
         // Only emit when the scroll has finished
         .filter { isScrollInProgress -> !isScrollInProgress }

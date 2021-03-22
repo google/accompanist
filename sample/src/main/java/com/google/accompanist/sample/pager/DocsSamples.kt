@@ -29,7 +29,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.VerticalPager
 import com.google.accompanist.pager.VerticalPagerIndicator
-import com.google.accompanist.pager.pageChangedFlow
+import com.google.accompanist.pager.pageChanges
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.flow.collect
 
@@ -112,13 +112,13 @@ object AnalyticsService {
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun PageChangedFlowSample() {
+fun PageChangesSample() {
     val pagerState = rememberPagerState(pageCount = 10)
 
     LaunchedEffect(pagerState) {
-        // Collect from the PageState's pageChangedFlow, which emits when the
+        // Collect from the PageState's pageChanges flow, which emits when the
         // current page has changed
-        pagerState.pageChangedFlow.collect { page ->
+        pagerState.pageChanges.collect { page ->
             AnalyticsService.sendPageSelectedEvent(page)
         }
     }
