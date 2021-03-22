@@ -70,7 +70,6 @@ private const val SnapSpringStiffness = 2750f
 
 @RequiresOptIn(message = "Accompanist Pager is experimental. The API may be changed in the future.")
 @Retention(AnnotationRetention.BINARY)
-@Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
 annotation class ExperimentalPagerApi
 
 @Immutable

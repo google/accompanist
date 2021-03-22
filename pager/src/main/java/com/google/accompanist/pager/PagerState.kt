@@ -40,6 +40,11 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNot
+import kotlinx.coroutines.flow.map
 import kotlin.math.absoluteValue
 import kotlin.math.floor
 import kotlin.math.roundToInt
@@ -436,3 +441,20 @@ class PagerState(
         )
     }
 }
+
+/**
+ * A flow which emits the [PagerState.currentPage] as it changes due to a scroll completing.
+ *
+ * This flow is not meant to be used for updating any UI within the attached [HorizontalPager]
+ * or [VerticalPager]. For that use-case, you should read
+ * [PagerScope.currentPage] and [PagerScope.currentPageOffset] from the content scope.
+ *
+ * @sample com.google.accompanist.sample.pager.PageChangesSample
+ */
+@ExperimentalPagerApi
+inline val PagerState.pageChanges: Flow<Int>
+    get() = snapshotFlow { isScrollInProgress }
+        // Only emit when the scroll has finished
+        .filterNot { it }
+        .map { currentPage }
+        .distinctUntilChanged()

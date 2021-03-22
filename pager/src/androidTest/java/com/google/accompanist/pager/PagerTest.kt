@@ -25,6 +25,13 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.unit.LayoutDirection
+import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.produceIn
+import kotlinx.coroutines.launch
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
@@ -187,6 +194,61 @@ abstract class PagerTest(
             pageCount = 10,
             offscreenLimit = offscreenLimit,
         )
+    }
+
+    @OptIn(FlowPreview::class)
+    @Test
+    fun pageChangesSample() {
+        val pagerState = setPagerContent(
+            layoutDirection = layoutDirection,
+            pageCount = 10,
+            offscreenLimit = offscreenLimit,
+        )
+
+        val coroutineScope = CoroutineScope(Dispatchers.Main)
+        // Collect the pageChanges flow into a Channel, allowing us to poll values
+        val pageChangedChannel = pagerState.pageChanges.produceIn(coroutineScope)
+
+        // Assert that the first emission is 0
+        coroutineScope.launch {
+            assertThat(pageChangedChannel.receive()).isEqualTo(0)
+        }
+
+        // Now swipe to page 1..
+        composeTestRule.onNodeWithTag("0").swipeAcrossCenter(
+            distancePercentage = -MediumSwipeDistance,
+            velocity = MediumVelocity,
+        )
+        // ...and assert that the page 2 is emitted
+        coroutineScope.launch {
+            assertThat(pageChangedChannel.receive()).isEqualTo(1)
+        }
+
+        // Now swipe to page 2...
+        composeTestRule.onNodeWithTag("1").swipeAcrossCenter(
+            distancePercentage = -MediumSwipeDistance,
+            velocity = MediumVelocity,
+        )
+        // ...and assert that the page 2 is emitted
+        coroutineScope.launch {
+            assertThat(pageChangedChannel.receive()).isEqualTo(2)
+        }
+
+        // Now swipe back to page 1...
+        composeTestRule.onNodeWithTag("2").swipeAcrossCenter(
+            distancePercentage = MediumSwipeDistance,
+            velocity = MediumVelocity,
+        )
+        // ...and assert that the page 1 is emitted
+        coroutineScope.launch {
+            assertThat(pageChangedChannel.receive()).isEqualTo(1)
+        }
+
+        composeTestRule.waitForIdle()
+
+        // Cancel the channel and coroutine scope
+        pageChangedChannel.cancel()
+        coroutineScope.cancel()
     }
 
     @Test
