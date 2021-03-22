@@ -105,6 +105,7 @@ fun VerticalPagerIndicatorSample() {
     }
 }
 
+@Suppress("UNUSED_PARAMETER")
 object AnalyticsService {
     fun sendPageSelectedEvent(page: Int) = Unit
 }
