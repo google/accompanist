@@ -150,6 +150,16 @@
         </activity>
 
         <activity
+            android:name=".pager.HorizontalPagerTransitionSample"
+            android:label="@string/horiz_pager_with_transition_title">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+
+        <activity
             android:name=".pager.HorizontalPagerTabsSample"
             android:label="@string/horiz_pager_title_tabs">
             <intent-filter>

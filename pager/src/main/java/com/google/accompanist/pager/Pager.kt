@@ -362,3 +362,17 @@ private class PagerScopeImpl(
     override val currentPageOffset: Float
         get() = state.currentPageOffset
 }
+
+/**
+ * Calculate the offset for the given [page] from the current scroll position. This is useful
+ * when using the scroll position to apply effects or animations to items.
+ *
+ * The returned offset can positive or negative, depending on whether which direction the [page] is
+ * compared to the current scroll position.
+ *
+ * @sample com.google.accompanist.sample.pager.HorizontalPagerTransitionSample
+ */
+@ExperimentalPagerApi
+fun PagerScope.calculateCurrentOffsetForPage(page: Int): Float {
+    return (currentPage + currentPageOffset) - page
+}
