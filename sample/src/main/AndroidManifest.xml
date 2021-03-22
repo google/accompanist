@@ -178,6 +178,16 @@
         </activity>
 
         <activity
+            android:name=".pager.VerticalPagerWithIndicatorSample"
+            android:label="@string/vertical_pager_with_indicator_title"
+            android:theme="@style/Theme.AccompanistSample">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".flowlayout.FlowColumnSample"
             android:label="@string/flowlayout_title_column"
             android:theme="@style/Theme.AccompanistSample.NoActionBar.TransparentBars"

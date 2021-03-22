@@ -19,13 +19,17 @@ package com.google.accompanist.sample.pager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.LocalContentColor
@@ -47,16 +51,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.coil.CoilImage
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.PagerState
+import com.google.accompanist.pager.VerticalPager
+import com.google.accompanist.pager.VerticalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
 import kotlinx.coroutines.launch
 
-class HorizontalPagerWithIndicatorSample : ComponentActivity() {
+class VerticalPagerWithIndicatorSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -76,7 +80,7 @@ private fun Sample() {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.horiz_pager_with_indicator_title)) },
+                title = { Text(stringResource(R.string.vertical_pager_with_indicator_title)) },
                 backgroundColor = MaterialTheme.colors.surface,
             )
         },
@@ -86,32 +90,45 @@ private fun Sample() {
             // Display 10 items
             val pagerState = rememberPagerState(pageCount = 10)
 
-            HorizontalPager(
-                state = pagerState,
-                // We increase the offscreen limit, to allow pre-loading of images
-                offscreenLimit = 2,
-                modifier = Modifier.weight(1f),
-            ) { page ->
-                Box {
-                    // Our page content, displaying a random image
-                    CoilImage(
-                        data = randomSampleImageUrl(page + 100),
-                        contentDescription = null,
-                        fadeIn = true,
-                        modifier = Modifier
-                            .fillMaxWidth(0.8f)
-                            .aspectRatio(1f)
-                    )
-                }
-            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                VerticalPager(
+                    state = pagerState,
+                    // We increase the offscreen limit, to allow pre-loading of images
+                    offscreenLimit = 2,
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                ) { page ->
+                    Box {
+                        // Our page content, displaying a random image
+                        CoilImage(
+                            data = randomSampleImageUrl(page + 100),
+                            contentDescription = null,
+                            fadeIn = true,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .aspectRatio(1f)
+                        )
 
-            HorizontalPagerIndicator(
-                pagerState = pagerState,
-                indicatorColor = LocalContentColor.current,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(16.dp),
-            )
+                        // Displays the page index
+                        Text(
+                            text = page.toString(),
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .padding(16.dp)
+                                .background(MaterialTheme.colors.surface, RoundedCornerShape(4.dp))
+                                .padding(4.dp)
+                                .wrapContentSize(Alignment.Center)
+                        )
+                    }
+                }
+
+                VerticalPagerIndicator(
+                    pagerState = pagerState,
+                    indicatorColor = LocalContentColor.current,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
 
             ActionsRow(
                 pagerState = pagerState,

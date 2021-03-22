@@ -34,7 +34,8 @@
     <string name="horiz_pager_with_indicator_title">Horizontal Pager: Indicator</string>
     <string name="horiz_pager_title_tabs">HorizontalPager: Tabs</string>
 
-    <string name="vertical_pager_title_basics">VerticalPager: Basic</string>
+    <string name="vertical_pager_title_basics">Vertical Pager: Basic</string>
+    <string name="vertical_pager_with_indicator_title">Vertical Pager Pager: Indicator</string>
 
     <string name="flowlayout_title_column">Flow Layout: Column</string>
     <string name="flowlayout_title_row">Flow Layout: Row</string>
