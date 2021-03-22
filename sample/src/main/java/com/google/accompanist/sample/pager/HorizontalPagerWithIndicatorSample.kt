@@ -28,7 +28,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -107,7 +106,6 @@ private fun Sample() {
 
             HorizontalPagerIndicator(
                 pagerState = pagerState,
-                indicatorColor = LocalContentColor.current,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(16.dp),

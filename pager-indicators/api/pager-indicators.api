@@ -1,15 +1,5 @@
-public final class com/google/accompanist/pager/PagerIndicatorDefaults {
-	public static final field $stable I
-	public static final field INSTANCE Lcom/google/accompanist/pager/PagerIndicatorDefaults;
-	public static final field InactiveIndicatorColorAlpha F
-	public final fun getIndicatorColor-0d7_KjU ()J
-	public final fun getShape ()Landroidx/compose/foundation/shape/RoundedCornerShape;
-	public final fun getSize-D9Ej5fM ()F
-	public final fun getSpacing-D9Ej5fM ()F
-}
-
 public final class com/google/accompanist/pager/PagerIndicatorKt {
-	public static final fun HorizontalPagerIndicator-T9BRK9s (Lcom/google/accompanist/pager/PagerState;Landroidx/compose/ui/Modifier;JJFFLandroidx/compose/ui/graphics/Shape;Landroidx/compose/ui/graphics/Shape;Landroidx/compose/runtime/Composer;II)V
-	public static final fun VerticalPagerIndicator-T9BRK9s (Lcom/google/accompanist/pager/PagerState;Landroidx/compose/ui/Modifier;JJFFLandroidx/compose/ui/graphics/Shape;Landroidx/compose/ui/graphics/Shape;Landroidx/compose/runtime/Composer;II)V
+	public static final fun HorizontalPagerIndicator-RfBtt3o (Lcom/google/accompanist/pager/PagerState;Landroidx/compose/ui/Modifier;JJFFFLandroidx/compose/ui/graphics/Shape;Landroidx/compose/runtime/Composer;II)V
+	public static final fun VerticalPagerIndicator-RfBtt3o (Lcom/google/accompanist/pager/PagerState;Landroidx/compose/ui/Modifier;JJFFFLandroidx/compose/ui/graphics/Shape;Landroidx/compose/runtime/Composer;II)V
 }
 

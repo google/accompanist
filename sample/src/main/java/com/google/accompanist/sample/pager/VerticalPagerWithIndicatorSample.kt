@@ -32,7 +32,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -90,7 +89,10 @@ private fun Sample() {
             // Display 10 items
             val pagerState = rememberPagerState(pageCount = 10)
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.weight(1f),
+            ) {
                 VerticalPager(
                     state = pagerState,
                     // We increase the offscreen limit, to allow pre-loading of images
@@ -125,7 +127,6 @@ private fun Sample() {
 
                 VerticalPagerIndicator(
                     pagerState = pagerState,
-                    indicatorColor = LocalContentColor.current,
                     modifier = Modifier.padding(16.dp)
                 )
             }

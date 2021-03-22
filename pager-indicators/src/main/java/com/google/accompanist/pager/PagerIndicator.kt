@@ -24,6 +24,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,163 +37,133 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 
 /**
- * Contains default values used for [HorizontalPagerIndicator].
- */
-object PagerIndicatorDefaults {
-    /**
-     * Default spacing used for [HorizontalPagerIndicator].
-     */
-    val Spacing = 8.dp
-
-    /**
-     * Default indicator size used for [HorizontalPagerIndicator].
-     */
-    val Size = 8.dp
-
-    /**
-     * Default shape used for [HorizontalPagerIndicator].
-     */
-    val Shape = CircleShape
-
-    /**
-     * Default Indicator color value used for [HorizontalPagerIndicator].
-     */
-    val IndicatorColor = Color.White
-
-    /**
-     * Default alpha value used for generating the inactive indicators color for [HorizontalPagerIndicator].
-     */
-    const val InactiveIndicatorColorAlpha = 0.4f
-}
-
-/**
- * An indicator for a [HorizontalPager] representing the currently active page and total pages
- * drawn using a [Shape].
+ * An horizontally laid out indicator for a [HorizontalPager] or [VerticalPager], representing
+ * the currently active page and total pages drawn using a [Shape].
  *
- * This element allows the setting of both the [shape] and [indicatorShape], which defines how the
- * Indicator is visually represented. By default Indicators are represented as [CircleShape].
- * When changing the [shape] by default the [indicatorShape] adjusts accordingly. If you want the
- * active page indicator to have a different appearance override [indicatorShape].
+ * This element allows the setting of the [indicatorShape], which defines how the
+ * indicator is visually represented.
  *
  * @sample com.google.accompanist.sample.pager.HorizontalPagerIndicatorSample
  *
  * @param pagerState the state object of your [Pager] to be used to observe the list's state.
  * @param modifier the modifier to apply to this layout.
- * @param indicatorColor the color of the active Page indicator
- * @param color the color of page indicators that are inactive. This defaults to [indicatorColor]
- * with an alpha value as defined in [PagerIndicatorDefaults.InactiveIndicatorColorAlpha].
- * @param size the size of both indicators in dp.
- * @param spacing the spacing added between each indicator in dp.
- * @param shape the shape representing inactive pages.
- * @param indicatorShape the shape representing the active page. This defaults to [shape]
+ * @param activeColor the color of the active Page indicator
+ * @param inactiveColor the color of page indicators that are inactive. This defaults to
+ * [activeColor] with the alpha component set to the [ContentAlpha.disabled].
+ * @param indicatorHeight the height of each indicator in [Dp].
+ * @param indicatorWidth the width of each indicator in [Dp].
+ * @param spacing the spacing between each indicator in [Dp].
+ * @param indicatorShape the shape representing each indicator. This defaults to [CircleShape].
  */
 @ExperimentalPagerApi
 @Composable
 fun HorizontalPagerIndicator(
     pagerState: PagerState,
     modifier: Modifier = Modifier,
-    indicatorColor: Color = PagerIndicatorDefaults.IndicatorColor,
-    color: Color = indicatorColor.copy(PagerIndicatorDefaults.InactiveIndicatorColorAlpha),
-    size: Dp = PagerIndicatorDefaults.Size,
-    spacing: Dp = PagerIndicatorDefaults.Spacing,
-    shape: Shape = PagerIndicatorDefaults.Shape,
-    indicatorShape: Shape = shape
+    activeColor: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
+    inactiveColor: Color = activeColor.copy(ContentAlpha.disabled),
+    indicatorWidth: Dp = 8.dp,
+    indicatorHeight: Dp = 8.dp,
+    spacing: Dp = indicatorWidth,
+    indicatorShape: Shape = CircleShape,
 ) {
-    Box(modifier = modifier, contentAlignment = Alignment.CenterStart) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.CenterStart
+    ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(spacing),
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            val indicatorModifier = Modifier
+                .size(width = indicatorWidth, height = indicatorHeight)
+                .background(color = inactiveColor, shape = indicatorShape)
+
             repeat(pagerState.pageCount) {
-                Box(
-                    modifier = Modifier
-                        .size(size)
-                        .background(
-                            color = color,
-                            shape = shape,
-                        )
-                )
+                Box(indicatorModifier)
             }
         }
 
         Box(
-            modifier = Modifier
+            Modifier
                 .offset {
                     val scrollPosition = pagerState.currentPage + pagerState.currentPageOffset
-                    IntOffset(x = ((spacing + size) * scrollPosition).roundToPx(), y = 0)
+                    IntOffset(
+                        x = ((spacing + indicatorWidth) * scrollPosition).roundToPx(),
+                        y = 0
+                    )
                 }
-                .size(size)
+                .size(width = indicatorHeight, height = indicatorHeight)
                 .background(
-                    color = indicatorColor,
+                    color = activeColor,
                     shape = indicatorShape,
                 )
-
         )
     }
 }
 
 /**
- * An indicator for a [VerticalPager] representing the currently active page and total pages
- * drawn using a [Shape].
+ * An vertically laid out indicator for a [VerticalPager] or [HorizontalPager], representing
+ * the currently active page and total pages drawn using a [Shape].
  *
- * This element allows the setting of both the [shape] and [indicatorShape], which defines how the
- * Indicator is visually represented. By default Indicators are represented as [CircleShape].
- * When changing the [shape] by default the [indicatorShape] adjusts accordingly. If you want the
- * active page indicator to have a different appearance override [indicatorShape].
+ * This element allows the setting of the [indicatorShape], which defines how the
+ * indicator is visually represented.
  *
- * @sample com.google.accompanist.sample.pager.HorizontalPagerIndicatorSample
+ * @sample com.google.accompanist.sample.pager.VerticalPagerIndicatorSample
  *
  * @param pagerState the state object of your [Pager] to be used to observe the list's state.
  * @param modifier the modifier to apply to this layout.
- * @param indicatorColor the color of the active Page indicator
- * @param color the color of page indicators that are inactive. This defaults to [indicatorColor]
- * with an alpha value as defined in [PagerIndicatorDefaults.InactiveIndicatorColorAlpha].
- * @param size the size of both indicators in dp.
- * @param spacing the spacing added between each indicator in dp.
- * @param shape the shape representing inactive pages.
- * @param indicatorShape the shape representing the active page. This defaults to [shape]
+ * @param activeColor the color of the active Page indicator
+ * @param inactiveColor the color of page indicators that are inactive. This defaults to
+ * [activeColor] with the alpha component set to the [ContentAlpha.disabled].
+ * @param indicatorHeight the height of each indicator in [Dp].
+ * @param indicatorWidth the width of each indicator in [Dp].
+ * @param spacing the spacing between each indicator in [Dp].
+ * @param indicatorShape the shape representing each indicator. This defaults to [CircleShape].
  */
 @ExperimentalPagerApi
 @Composable
 fun VerticalPagerIndicator(
     pagerState: PagerState,
     modifier: Modifier = Modifier,
-    indicatorColor: Color = PagerIndicatorDefaults.IndicatorColor,
-    color: Color = indicatorColor.copy(PagerIndicatorDefaults.InactiveIndicatorColorAlpha),
-    size: Dp = PagerIndicatorDefaults.Size,
-    spacing: Dp = PagerIndicatorDefaults.Spacing,
-    shape: Shape = PagerIndicatorDefaults.Shape,
-    indicatorShape: Shape = shape
+    activeColor: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
+    inactiveColor: Color = activeColor.copy(ContentAlpha.disabled),
+    indicatorWidth: Dp = 8.dp,
+    indicatorHeight: Dp = 8.dp,
+    spacing: Dp = indicatorHeight,
+    indicatorShape: Shape = CircleShape,
 ) {
-    Box(modifier = modifier, contentAlignment = Alignment.TopCenter) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.TopCenter
+    ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(spacing),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            val indicatorModifier = Modifier
+                .size(width = indicatorWidth, height = indicatorHeight)
+                .background(color = inactiveColor, shape = indicatorShape)
+
             repeat(pagerState.pageCount) {
-                Box(
-                    modifier = Modifier
-                        .size(size)
-                        .background(
-                            color = color,
-                            shape = shape,
-                        )
-                )
+                Box(indicatorModifier)
             }
         }
 
         Box(
-            modifier = Modifier
+            Modifier
                 .offset {
                     val scrollPosition = pagerState.currentPage + pagerState.currentPageOffset
-                    IntOffset(x = 0, y = ((spacing + size) * scrollPosition).roundToPx())
+                    IntOffset(
+                        x = 0,
+                        y = ((spacing + indicatorHeight) * scrollPosition).roundToPx(),
+                    )
                 }
-                .size(size)
+                .size(width = indicatorHeight, height = indicatorHeight)
                 .background(
-                    color = indicatorColor,
+                    color = activeColor,
                     shape = indicatorShape,
                 )
-
         )
     }
 }
