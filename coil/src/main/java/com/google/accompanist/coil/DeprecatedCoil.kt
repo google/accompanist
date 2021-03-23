@@ -60,7 +60,26 @@ import com.google.accompanist.imageloading.MaterialLoadingImage
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
  * @param content Content to be displayed for the given state.
  */
-@Deprecated("Replaced with ImageLoad() and rememberCoilImageLoadRequest()")
+@Deprecated(
+    message = "Replaced with ImageLoad() and rememberCoilImageLoadRequest()",
+    ReplaceWith(
+        expression = """
+            ImageLoad(
+                request = rememberCoilImageLoadRequest(
+                    data = data,
+                    imageLoader = imageLoader,
+                    requestBuilder = requestBuilder,
+                    onRequestCompleted = onRequestCompleted,
+                ),
+                contentDescription = contentDescription,
+                modifier = modifier,
+                shouldRefetchOnSizeChange= shouldRefetchOnSizeChange,
+            )
+        """,
+        "com.google.accompanist.coil.rememberCoilImageLoadRequest",
+        "import com.google.accompanist.imageloading.ImageLoad",
+    )
+)
 @Composable
 fun CoilImage(
     data: Any,
@@ -113,7 +132,26 @@ fun CoilImage(
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
  * @param content Content to be displayed for the given state.
  */
-@Deprecated("Replaced with ImageLoad() and rememberCoilImageLoadRequest()")
+@Deprecated(
+    message = "Replaced with ImageLoad() and rememberCoilImageLoadRequest()",
+    ReplaceWith(
+        expression = """
+            ImageLoad(
+                request = rememberCoilImageLoadRequest(
+                    request = request,
+                    imageLoader = imageLoader,
+                    requestBuilder = requestBuilder,
+                    onRequestCompleted = onRequestCompleted,
+                ),
+                contentDescription = contentDescription,
+                modifier = modifier,
+                shouldRefetchOnSizeChange= shouldRefetchOnSizeChange,
+            )
+        """,
+        "com.google.accompanist.coil.rememberCoilImageLoadRequest",
+        "import com.google.accompanist.imageloading.ImageLoad",
+    )
+)
 @Composable
 fun CoilImage(
     request: ImageRequest,
@@ -184,7 +222,30 @@ fun CoilImage(
  * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
  */
-@Deprecated("Replaced with ImageLoad() and rememberCoilImageLoadRequest()")
+@Deprecated(
+    message = "Replaced with ImageLoad() and rememberCoilImageLoadRequest()",
+    ReplaceWith(
+        expression = """
+            ImageLoad(
+                request = rememberCoilImageLoadRequest(
+                    data = data,
+                    imageLoader = imageLoader,
+                    requestBuilder = requestBuilder,
+                    onRequestCompleted = onRequestCompleted,
+                ),
+                contentDescription = contentDescription,
+                modifier = modifier,
+                alignment: alignment,,
+                contentScale = contentScale,
+                colorFilter = colorFilter,
+                fadeIn = fadeIn,
+                shouldRefetchOnSizeChange= shouldRefetchOnSizeChange,
+            )
+        """,
+        "com.google.accompanist.coil.rememberCoilImageLoadRequest",
+        "import com.google.accompanist.imageloading.ImageLoad",
+    )
+)
 @Composable
 fun CoilImage(
     data: Any,
@@ -276,7 +337,30 @@ fun CoilImage(
  * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
  */
-@Deprecated("Replaced with ImageLoad() and rememberCoilImageLoadRequest()")
+@Deprecated(
+    message = "Replaced with ImageLoad() and rememberCoilImageLoadRequest()",
+    ReplaceWith(
+        expression = """
+            ImageLoad(
+                request = rememberCoilImageLoadRequest(
+                    request = request,
+                    imageLoader = imageLoader,
+                    requestBuilder = requestBuilder,
+                    onRequestCompleted = onRequestCompleted,
+                ),
+                contentDescription = contentDescription,
+                modifier = modifier,
+                alignment: alignment,,
+                contentScale = contentScale,
+                colorFilter = colorFilter,
+                fadeIn = fadeIn,
+                shouldRefetchOnSizeChange= shouldRefetchOnSizeChange,
+            )
+        """,
+        "com.google.accompanist.coil.rememberCoilImageLoadRequest",
+        "import com.google.accompanist.imageloading.ImageLoad",
+    )
+)
 @Composable
 fun CoilImage(
     request: ImageRequest,
