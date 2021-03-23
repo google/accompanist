@@ -5,10 +5,13 @@ Accompanist is a group of libraries which aim to supplement [Jetpack Compose][co
 Currently Accompanist contains:
 
 ### 🖼️ Image loading
-A number of libraries which integrate popular image loading libraries into Jetpack Compose: [Coil](./coil/), [Picasso](./picasso/) & [Glide](./glide/).
+A number of libraries which integrate popular image loading libraries into Jetpack Compose: [Coil](./coil/) and [Glide](./glide/).
 
 ### 📐 [Insets](./insets/)
 A library which brings [WindowInsets](https://developer.android.com/reference/kotlin/android/view/WindowInsets) support to Jetpack Compose.
+
+### 🍫 [System UI Controller](./systemuicontroller/)
+A library which provides easy-to-use utilities for updating the System UI (status and navigation bars) colors from Jetpack Compose.
 
 ### 🎨 [AppCompat Theme Adapter](./appcompat-theme/)
 A library that enables reuse of [AppCompat][appcompat] XML themes for theming in [Jetpack Compose][compose].

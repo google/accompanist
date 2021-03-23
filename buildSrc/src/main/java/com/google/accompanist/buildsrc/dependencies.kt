@@ -21,7 +21,7 @@ object Versions {
 }
 
 object Libs {
-    const val androidGradlePlugin = "com.android.tools.build:gradle:7.0.0-alpha09"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:7.0.0-alpha10"
 
     const val gradleMavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.13.0"
 
@@ -36,7 +36,7 @@ object Libs {
     }
 
     object Dokka {
-        private const val version = "1.4.20"
+        private const val version = "1.4.30"
         const val gradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:$version"
     }
 
@@ -82,6 +82,7 @@ object Libs {
 
             const val ui = "androidx.compose.ui:ui:${version}"
             const val material = "androidx.compose.material:material:${version}"
+            const val iconsExtended = "androidx.compose.material:material-icons-extended:${version}"
 
             const val util = "androidx.compose.ui:ui-util:${version}"
             const val tooling = "androidx.ui:ui-tooling:${version}"
@@ -95,7 +96,7 @@ object Libs {
 
         const val lifecycleKtx = "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0"
 
-        const val coreAlpha = "androidx.core:core:1.5.0-beta02"
+        const val core1_5_0 = "androidx.core:core:1.5.0-beta03"
 
         object Activity {
             const val activityCompose = "androidx.activity:activity-compose:1.3.0-alpha04"
@@ -107,8 +108,6 @@ object Libs {
         const val coil = "io.coil-kt:coil:$version"
         const val gif = "io.coil-kt:coil-gif:$version"
     }
-
-    const val picasso = "com.squareup.picasso:picasso:2.8"
 
     const val glide = "com.github.bumptech.glide:glide:4.11.0"
 

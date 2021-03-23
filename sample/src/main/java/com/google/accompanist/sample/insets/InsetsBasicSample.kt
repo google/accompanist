@@ -25,22 +25,25 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
-import androidx.compose.material.Surface
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
-import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
+import com.google.accompanist.systemuicontroller.LocalSystemUiController
+import com.google.accompanist.systemuicontroller.rememberAndroidSystemUiController
 
 class InsetsBasicSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,8 +57,9 @@ class InsetsBasicSample : ComponentActivity() {
             AccompanistSampleTheme {
                 // We need to use ProvideWindowInsets to setup the necessary listeners which
                 // power the library
-                ProvideWindowInsets {
-                    Surface {
+                val controller = rememberAndroidSystemUiController()
+                CompositionLocalProvider(LocalSystemUiController provides controller) {
+                    ProvideWindowInsets {
                         Sample()
                     }
                 }
@@ -66,20 +70,25 @@ class InsetsBasicSample : ComponentActivity() {
 
 @Composable
 private fun Sample() {
+    val systemUiController = LocalSystemUiController.current
+    val useDarkIcons = MaterialTheme.colors.isLight
+    SideEffect {
+        systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = useDarkIcons)
+    }
+
     Box(Modifier.fillMaxSize()) {
-        TopAppBar(
+        InsetAwareTopAppBar(
             title = {
                 Text(stringResource(R.string.insets_title_basic))
             },
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .fillMaxWidth()
-                .statusBarsPadding()
+            backgroundColor = MaterialTheme.colors.surface,
+            modifier = Modifier.fillMaxWidth()
         )
 
         FloatingActionButton(
             onClick = { /* */ },
-            modifier = Modifier.align(Alignment.BottomEnd)
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
                 .navigationBarsPadding()
                 .padding(16.dp)
         ) {

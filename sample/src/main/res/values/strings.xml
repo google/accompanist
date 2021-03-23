@@ -21,10 +21,6 @@
     <string name="coil_title_lazy_row">Coil: Lazy row</string>
     <string name="coil_title_lazy_grid">Coil: Lazy grid</string>
 
-    <string name="picasso_title_basic">Picasso: Basic</string>
-    <string name="picasso_title_lazy_row">Picasso: Lazy row</string>
-    <string name="picasso_title_lazy_grid">Picasso: Lazy grid</string>
-
     <string name="glide_title_basic">Glide: Basic</string>
     <string name="glide_title_lazy_row">Glide: Lazy row</string>
     <string name="glide_title_lazy_grid">Glide: Lazy grid</string>
@@ -34,6 +30,10 @@
     <string name="insets_title_list">Insets: Edge-to-edge list</string>
     <string name="insets_title_imeanim">Insets: IME Animations</string>
 
+    <string name="horiz_pager_title_basics">Horizontal Pager: Basic</string>
+    <string name="horiz_pager_with_indicator_title">Horizontal Pager: Indicator</string>
+
     <string name="flowlayout_title_column">Flow Layout: Column</string>
     <string name="flowlayout_title_row">Flow Layout: Row</string>
+
 </resources>

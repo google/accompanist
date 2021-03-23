@@ -77,10 +77,8 @@ dependencies {
     api Libs.Coil.coil
 
     implementation Libs.AndroidX.coreKtx
-    implementation Libs.AndroidX.Compose.runtime
     implementation Libs.AndroidX.Compose.foundation
 
-    implementation Libs.Kotlin.stdlib
     implementation Libs.Coroutines.android
 
     // ======================

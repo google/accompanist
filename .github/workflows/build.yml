@@ -56,14 +56,15 @@ jobs:
   test:
     runs-on: macOS-latest
     needs: build
-    timeout-minutes: 30
+    timeout-minutes: 60
     
     strategy:
       # Allow tests to continue on other devices if they fail on one device.
       fail-fast: false
       matrix:
-        api-level: [21, 23, 26, 29]
-    
+        # Disable 21-23 for now as the devices seem to be flakey on CI
+        api-level: [24, 26, 29]
+
     env:
       TERM: dumb
 
@@ -92,27 +93,35 @@ jobs:
             ~/.gradle/caches/build-cache-*
           key: gradle-${{ hashFiles('checksum.txt') }}
 
+      - name: Build tests
+        run: ./gradlew assembleDebugAndroidTest --scan
+
       - name: Run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          script: ./gradlew --scan connectedCheck
+          profile: Nexus 5X
+          script: |
+            adb logcat > logcat.txt &
+            ./gradlew --scan connectedCheck
 
       - name: Clean secrets
         if: always()
         run: release/signing-cleanup.sh
 
-      - name: Copy test results
+      - name: Upload logs
         if: always()
-        run: |
-          mkdir -p junit
-          find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} junit/ \;
+        uses: actions/upload-artifact@v2
+        with:
+          name: logs-${{ matrix.api-level }}
+          path: logcat.txt
+
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
-          name: junit-results
-          path: junit
+          name: test-results-${{ matrix.api-level }}
+          path: "**/build/outputs/*/connected/*.xml"
 
   deploy:
     if: github.event_name == 'push' # only deploy for pushed commits (not PRs)

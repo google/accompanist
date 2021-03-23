@@ -1,7 +1,0 @@
-public final class com/google/accompanist/picasso/PicassoImage {
-	public static final fun PicassoImage (Ljava/lang/Object;Landroidx/compose/ui/Modifier;Lcom/squareup/picasso/Picasso;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
-	public static final fun PicassoImage (Ljava/lang/Object;Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;ZLcom/squareup/picasso/Picasso;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;III)V
-	public static final fun getLocalPicasso ()Landroidx/compose/runtime/ProvidableCompositionLocal;
-	public static final fun rememberPicassoImageLoadRequest (Ljava/lang/Object;Lcom/squareup/picasso/Picasso;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;I)Lcom/google/accompanist/imageloading/ImageLoadRequest;
-}
-

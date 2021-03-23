@@ -102,7 +102,9 @@ private class CoilImageLoadRequest(
             // in the Coil request
             size.width < 0 || size.height < 0 -> request
             // If we have a non-zero size, we can modify the request to include the size
-            size != IntSize.Zero -> request.newBuilder().size(size.width, size.height).build()
+            size.width > 0 && size.height > 0 -> {
+                request.newBuilder().size(size.width, size.height).build()
+            }
             // Otherwise we have a zero size, so no point executing a request so return empty now
             else -> return ImageLoadState.Empty
         }

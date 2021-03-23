@@ -125,6 +125,9 @@ subprojects {
                 // Add Android SDK packages
                 noAndroidSdkLink.set(false)
 
+                // Add samples from :sample module
+                samples.from(rootProject.file("sample/src/main/java/"))
+
                 // AndroidX + Compose docs
                 externalDocumentationLink {
                     url.set(new URL("https://developer.android.com/reference/"))
@@ -141,11 +144,6 @@ subprojects {
                         url.set(new URL("https://coil-kt.github.io/coil/api/coil-base/"))
                         packageListUrl.set(new URL("file://$rootDir/package-list-coil-base"))
                     }
-                }
-
-                // Picasso docs
-                externalDocumentationLink {
-                    url.set(new URL("https://square.github.io/picasso/2.x/picasso/"))
                 }
 
                 // Glide docs

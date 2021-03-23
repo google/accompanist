@@ -275,8 +275,8 @@ private class ImageLoader<R : Any>(
     override fun onRemembered() {
         // you can use a coroutine scope that is scoped to the composable, or something more custom like
         // the imageLoader or whatever. The main point is, here is where you would start your loading
-        requestSize?.also { size ->
-            scope.launch {
+        scope.launch {
+            requestSize?.also { size ->
                 loadState = request.execute(size)
             }
         }
