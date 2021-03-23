@@ -369,7 +369,7 @@ private class PagerScopeImpl(
  * The returned offset can positive or negative, depending on whether which direction the [page] is
  * compared to the current scroll position.
  *
- * @sample com.google.accompanist.sample.pager.HorizontalPagerTransitionSample
+ * @sample com.google.accompanist.sample.pager.HorizontalPagerWithOffsetTransition
  */
 @ExperimentalPagerApi
 fun PagerScope.calculateCurrentOffsetForPage(page: Int): Float {
