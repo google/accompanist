@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("UNUSED_ANONYMOUS_PARAMETER")
+
 package com.google.accompanist.sample.pager
 
 import android.os.Bundle
@@ -94,7 +96,7 @@ private fun Sample() {
                 Box {
                     // Our page content, displaying a random image
                     CoilImage(
-                        data = randomSampleImageUrl(page + 100),
+                        data = randomSampleImageUrl(width = 600),
                         contentDescription = null,
                         fadeIn = true,
                         modifier = Modifier

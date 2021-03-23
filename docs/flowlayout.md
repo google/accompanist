@@ -2,9 +2,9 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-flowlayout)](https://search.maven.org/search?q=g:com.google.accompanist)
 
-Flow layouts adapted from the [Jetpack Compose][compose] alpha versions.
+Flow layouts adapted from the versions which were available in [Jetpack Compose][compose] until they were removed.
 
-Unlike the standard Row and Column composables, these lay out children in multiple rows/columns if they exceed the available space.
+Unlike the standard `Row` and `Column` composables, these layout children across multiple rows/columns if they exceed the available space.
 
 ## Usage
 

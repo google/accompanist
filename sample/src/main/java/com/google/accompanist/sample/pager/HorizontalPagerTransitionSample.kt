@@ -123,7 +123,7 @@ fun HorizontalPagerWithOffsetTransition() {
         ) {
             Box {
                 CoilImage(
-                    data = randomSampleImageUrl(),
+                    data = randomSampleImageUrl(width = 600),
                     contentDescription = null,
                     fadeIn = true,
                     modifier = Modifier.fillMaxSize()

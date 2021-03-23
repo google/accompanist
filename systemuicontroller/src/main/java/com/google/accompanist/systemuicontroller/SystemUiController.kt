@@ -35,6 +35,8 @@ import androidx.core.view.ViewCompat
 /**
  * A class which provides easy-to-use utilities for updating the System UI bar
  * colors within Jetpack Compose.
+ *
+ * @sample com.google.accompanist.sample.systemuicontroller.MyHomeScreen
  */
 @Stable
 interface SystemUiController {
@@ -99,6 +101,8 @@ fun rememberAndroidSystemUiController(
 /**
  * A helper class for setting the navigation and status bar colors for a [View], gracefully
  * degrading behavior based upon API level.
+ *
+ * Typically you would use [rememberAndroidSystemUiController] to remember an instance of this.
  */
 class AndroidSystemUiController(view: View) : SystemUiController {
     private val window = view.context.findWindow()
@@ -151,8 +155,11 @@ class AndroidSystemUiController(view: View) : SystemUiController {
 }
 
 /**
- * An [androidx.compose.runtime.CompositionLocalProvider] holding the current [LocalSystemUiController]. Defaults to a
- * no-op controller; consumers should [provide][androidx.compose.runtime.CompositionLocalProvider] a real one.
+ * An [androidx.compose.runtime.CompositionLocalProvider] holding the current
+ * [LocalSystemUiController]. Defaults to a no-op controller; consumers should
+ * [provide][androidx.compose.runtime.CompositionLocalProvider] a real one.
+ *
+ * @sample com.google.accompanist.sample.systemuicontroller.MyApp
  */
 val LocalSystemUiController = staticCompositionLocalOf<SystemUiController> {
     NoOpSystemUiController

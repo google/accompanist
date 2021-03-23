@@ -16,6 +16,9 @@ A library which provides easy-to-use utilities for updating the System UI (statu
 ### 🎨 [AppCompat Theme Adapter](./appcompat-theme/)
 A library that enables reuse of [AppCompat][appcompat] XML themes for theming in [Jetpack Compose][compose].
 
+### 📖 [Pager](./pager/)
+A library which provides paging layouts for Jetpack Compose, similar to Android's [`ViewPager`](https://developer.android.com/reference/kotlin/androidx/viewpager/widget/ViewPager).
+
 ### 🌊 [Flow layouts](./flowlayout/)
 A library that adds a 'flexbox'-like layout to [Jetpack Compose][compose].
 
