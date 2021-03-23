@@ -5,12 +5,14 @@
 System UI Controller provides easy-to-use utilities for updating the System UI bar colors within Jetpack Compose.
 
 ## Usage
-To control system UI in your composables, you must provide an instance to the `LocalSystemUiController`
-composition local. This would typically be done near the top level of your composable hierarchy:
+To control the system UI in your composables, you must provide a [`SystemUiController`](../api/systemuicontroller/systemuicontroller/com.google.accompanist.systemuicontroller/-system-ui-controller/) instance to the [`LocalSystemUiController`](../api/systemuicontroller/systemuicontroller/com.google.accompanist.systemuicontroller/-local-system-ui-controller.html)
+composition local. We provide the [`AndroidSystemUiController`](../api/systemuicontroller/systemuicontroller/com.google.accompanist.systemuicontroller/-android-system-ui-controller/index.html) implementation and an associated [remember function](../api/systemuicontroller/systemuicontroller/com.google.accompanist.systemuicontroller/remember-android-system-ui-controller.html).
+
+This would typically be done near the top level of your composable hierarchy:
 
 ``` kotlin
 setContent {
-    // Create a controller, and provide it to the LocalSystemUiController
+    // Remember a controller, and provide it to the LocalSystemUiController
     val controller = rememberAndroidSystemUiController()
     CompositionLocalProvider(LocalSystemUiController provides controller) {
         MyHomeScreen()
@@ -21,22 +23,19 @@ setContent {
 Then in your layouts, you can update the system bar colors as necessary like so:
 
 ``` kotlin
-@Composable
-fun MyHomeScreen() {
-    // Get the current SystemUiController
-    val systemUiController = LocalSystemUiController.current
-    val useDarkIcons = MaterialTheme.colors.isLight
+// Get the current SystemUiController
+val systemUiController = LocalSystemUiController.current
+val useDarkIcons = MaterialTheme.colors.isLight
 
-    SideEffect {
-        // Update all ofthe system bar colors to be transparent, and use
-        // dark icons if we're in light theme
-        systemUiController.setSystemBarsColor(
-            color = Color.Transparent,
-            darkIcons = useDarkIcons
-        )
+SideEffect {
+    // Update all of the system bar colors to be transparent, and use
+    // dark icons if we're in light theme
+    systemUiController.setSystemBarsColor(
+        color = Color.Transparent,
+        darkIcons = useDarkIcons
+    )
 
-        // setStatusBarsColor() and setNavigationBarsColor() also exist
-    }
+    // setStatusBarsColor() and setNavigationBarsColor() also exist
 }
 ```
 
@@ -62,6 +61,10 @@ systemUiController.setStatusBarsColor(
     // natively support dark icons
 }
 ```
+
+## Samples
+
+For complete samples, check out the [Insets samples](https://github.com/google/accompanist/tree/main/sample/src/main/java/com/google/accompanist/sample/insets) which all use `SystemUiController` to set transparent system bars.
 
 ## Download
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-systemuicontroller)](https://search.maven.org/search?q=g:com.google.accompanist)
