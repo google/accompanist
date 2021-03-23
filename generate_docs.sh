@@ -42,14 +42,8 @@ find docs/api/ -type f -name '*.html' -exec sed -i -e 's/© [0-9]* Copyright//' 
 # Clean up the temp Coil package list
 rm package-list-coil-base
 
-# Create a shadow copy of our docs at our $DOCS_ROOT
-if command -v gcp &> /dev/null
-then
-  # gcp is provided by coreutils in Homebrew for Mac
-  gcp -rs docs/ $DOCS_ROOT
-else
-  cp -rs docs/ $DOCS_ROOT || cp -r docs/ $DOCS_ROOT
-fi
+# Create a copy of our docs at our $DOCS_ROOT
+cp -r docs/ $DOCS_ROOT
 
 cp README.md $DOCS_ROOT/index.md
 cp CONTRIBUTING.md $DOCS_ROOT/contributing.md
