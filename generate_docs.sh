@@ -46,12 +46,12 @@ find docs/api/ -type f -name '*.html' -exec sed -i -e 's/© [0-9]* Copyright//' 
 rm package-list-coil-base
 
 # Create a shadow copy of our docs at our $DOCS_ROOT
-if ! command -v gcp &> /dev/null
+if command -v gcp &> /dev/null
 then
   # gcp is provided by coreutils in Homebrew for Mac
-  gcp -rs docs $DOCS_ROOT
+  gcp -rs docs/ $DOCS_ROOT
 else
-  cp -rs docs $DOCS_ROOT
+  cp -rs docs/ $DOCS_ROOT || cp -r docs/ $DOCS_ROOT
 fi
 
 cp README.md $DOCS_ROOT/index.md
