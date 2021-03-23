@@ -17,8 +17,6 @@
 @file:JvmName("ImageLoad")
 @file:JvmMultifileClass
 
-@file:Suppress("UNUSED_PARAMETER")
-
 package com.google.accompanist.imageloading
 
 import androidx.compose.foundation.layout.Box
@@ -26,6 +24,7 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -61,7 +60,7 @@ abstract class ImageLoadRequest<R : Any> {
     suspend fun execute(size: IntSize): ImageLoadState {
         onRequestCompleted(ImageLoadState.Loading)
         return try {
-            doExecute(request, size)
+            executeRequest(request, size)
         } catch (ce: CancellationException) {
             // We specifically don't do anything for the request coroutine being
             // cancelled: https://github.com/chrisbanes/accompanist/issues/217
@@ -71,7 +70,10 @@ abstract class ImageLoadRequest<R : Any> {
         }.also(onRequestCompleted)
     }
 
-    protected abstract suspend fun doExecute(request: R, size: IntSize): ImageLoadState
+    /**
+     * TODO
+     */
+    protected abstract suspend fun executeRequest(request: R, size: IntSize): ImageLoadState
 }
 
 /**
@@ -130,7 +132,7 @@ fun <R : Any> ImageLoad(
                 ColorFilter.colorMatrix(matrix)
             }
     } else {
-        // If fade in isn't enable, just use the provided `colorFilter`
+        // If fade in isn't enabled, just use the provided `colorFilter`
         colorFilter
     }
 
@@ -167,12 +169,15 @@ fun <R : Any> ImageLoad(
     )
 }
 
+/**
+ * @hide
+ */
 @Deprecated("Only used to help migration. DO NOT USE.")
 @Composable
 fun <R : Any> ImageLoad(
     request: ImageLoadRequest<R>,
-    modifier: Modifier = Modifier,
-    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
+    modifier: Modifier,
+    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean,
     content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
 ) {
     val imageMgr = remember(request) {
@@ -193,7 +198,7 @@ fun <R : Any> ImageLoad(
     }
 }
 
-// This class holds all of the state for the image and manages the request.
+@Stable
 private class ImageLoader<R : Any>(
     val request: ImageLoadRequest<R>,
     var shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean,

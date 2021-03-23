@@ -85,7 +85,7 @@ private class GlideImageLoadRequest(
     private val requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)?,
     override val onRequestCompleted: (ImageLoadState) -> Unit = {},
 ) : ImageLoadRequest<Any>() {
-    override suspend fun doExecute(request: Any, size: IntSize): ImageLoadState {
+    override suspend fun executeRequest(request: Any, size: IntSize): ImageLoadState {
         val r = requestManager.load(checkData(request))
         return requestManager.execute(requestBuilder?.invoke(r, size) ?: r, size)
     }

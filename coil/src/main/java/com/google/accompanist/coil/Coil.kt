@@ -94,7 +94,7 @@ private class CoilImageLoadRequest(
     private val requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)?,
     override val onRequestCompleted: (ImageLoadState) -> Unit = {},
 ) : ImageLoadRequest<ImageRequest>() {
-    override suspend fun doExecute(request: ImageRequest, size: IntSize): ImageLoadState {
+    override suspend fun executeRequest(request: ImageRequest, size: IntSize): ImageLoadState {
         val sizedRequest = when {
             // If the request has a size resolver set we just execute the request as-is
             request.defined.sizeResolver != null -> request

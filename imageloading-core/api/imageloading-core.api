@@ -17,7 +17,7 @@ public final class com/google/accompanist/imageloading/DataSource : java/lang/En
 }
 
 public final class com/google/accompanist/imageloading/ImageLoad {
-	public static final fun ImageLoad (Lcom/google/accompanist/imageloading/ImageLoadRequest;Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
+	public static final fun ImageLoad (Lcom/google/accompanist/imageloading/ImageLoadRequest;Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;I)V
 	public static final fun ImageLoad (Lcom/google/accompanist/imageloading/ImageLoadRequest;Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;ZILkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 	public static final fun getDefaultRefetchOnSizeChangeLambda ()Lkotlin/jvm/functions/Function2;
 }
@@ -25,8 +25,8 @@ public final class com/google/accompanist/imageloading/ImageLoad {
 public abstract class com/google/accompanist/imageloading/ImageLoadRequest {
 	public static final field $stable I
 	public fun <init> ()V
-	protected abstract fun doExecute-JVtK1S4 (Ljava/lang/Object;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun execute-viCIZxY (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	protected abstract fun executeRequest-JVtK1S4 (Ljava/lang/Object;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	protected abstract fun getOnRequestCompleted ()Lkotlin/jvm/functions/Function1;
 	protected abstract fun getRequest ()Ljava/lang/Object;
 }
