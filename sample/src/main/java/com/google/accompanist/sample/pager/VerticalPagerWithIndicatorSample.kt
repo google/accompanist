@@ -104,7 +104,7 @@ private fun Sample() {
                     Box {
                         // Our page content, displaying a random image
                         CoilImage(
-                            data = randomSampleImageUrl(page + 100),
+                            data = randomSampleImageUrl(width = 600),
                             contentDescription = null,
                             fadeIn = true,
                             modifier = Modifier
