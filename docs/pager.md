@@ -20,7 +20,6 @@ A library which provides paging layouts for Jetpack Compose. If you've used Andr
     <figcaption>HorizontalPager demo</figcaption>
 </figure>
 
-
 The simplest usage looks like the following:
 
 ``` kotlin
@@ -84,7 +83,14 @@ A common use-case is to apply effects to your pager items, using the scroll posi
 
 The [HorizontalPagerTransitionSample](https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/pager/HorizontalPagerTransitionSample.kt) demonstrates how this can be done:
 
-TODO insert video
+<figure>
+    <video width="300" controls loop>
+    <source src="transition_demo.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <figcaption>Item effects demo</figcaption>
+</figure>
+
 
 The scope provided to your pager content allows apps to easily reference the [`currentPage`][currentpage-api] and [`currentPageOffset`][currentpageoffset-api]. The effects can then be calculated using those values. We provide the [`calculateCurrentOffsetForPage()`][calcoffsetpage] extension functions to support calculation of the 'offset' for a given page:
 
@@ -143,6 +149,14 @@ LaunchedEffect(pagerState) {
 
 We also publish a sibling library called `pager-indicators` which provides some simple indicator composables for use with [`HorizontalPager`][api-horizpager] and [`VerticalPager`][api-vertpager].
 
+<figure>
+    <video width="300" controls loop>
+    <source src="indicators_demo.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <figcaption>Pager indicators demo</figcaption>
+</figure>
+
 The [HorizontalPagerWithIndicatorSample](https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/pager/HorizontalPagerWithIndicatorSample.kt) and [VerticalPagerWithIndicatorSample](https://github.com/google/accompanist/blob/snapshot/sample/src/main/java/com/google/accompanist/sample/pager/VerticalPagerWithIndicatorSample.kt) show you how to use these.
 
 
@@ -154,7 +168,7 @@ The [HorizontalPagerTabsSample](https://github.com/google/accompanist/blob/main/
 
 <figure>
     <video width="300" controls loop>
-    <source src="tabs.mp4" type="video/mp4">
+    <source src="tabs_demo.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
     <figcaption>HorizontalPager + TabRow</figcaption>
