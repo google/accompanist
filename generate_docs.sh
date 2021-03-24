@@ -43,7 +43,7 @@ find docs/api/ -type f -name '*.html' -exec sed -i -e 's/© [0-9]* Copyright//' 
 rm package-list-coil-base
 
 # Create a copy of our docs at our $DOCS_ROOT
-cp -r docs/ $DOCS_ROOT
+cp -a docs/* $DOCS_ROOT
 
 cp README.md $DOCS_ROOT/index.md
 cp CONTRIBUTING.md $DOCS_ROOT/contributing.md
