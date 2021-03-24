@@ -1,5 +1,73 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
-
-dev.chrisbanes.accompanist.insets
+$dokka.location:com.google.accompanist.insets////PointingToDeclaration/insets/com.google.accompanist.insets/index.html
+$dokka.location:com.google.accompanist.insets//LocalWindowInsets/#/PointingToDeclaration/insets/com.google.accompanist.insets/-local-window-insets.html
+$dokka.location:com.google.accompanist.insets//ProvideWindowInsets/#kotlin.Boolean#kotlin.Boolean#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/insets/com.google.accompanist.insets/-provide-window-insets.html
+$dokka.location:com.google.accompanist.insets//ProvideWindowInsets/#kotlin.Boolean#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/insets/com.google.accompanist.insets/-provide-window-insets.html
+$dokka.location:com.google.accompanist.insets//coerceEachDimensionAtLeast/com.google.accompanist.insets.InsetsType#com.google.accompanist.insets.InsetsType/PointingToDeclaration/insets/com.google.accompanist.insets/coerce-each-dimension-at-least.html
+$dokka.location:com.google.accompanist.insets//imePadding/androidx.compose.ui.Modifier#/PointingToDeclaration/insets/com.google.accompanist.insets/ime-padding.html
+$dokka.location:com.google.accompanist.insets//navigationBarsHeight/androidx.compose.ui.Modifier#androidx.compose.ui.unit.Dp/PointingToDeclaration/insets/com.google.accompanist.insets/navigation-bars-height.html
+$dokka.location:com.google.accompanist.insets//navigationBarsPadding/androidx.compose.ui.Modifier#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean/PointingToDeclaration/insets/com.google.accompanist.insets/navigation-bars-padding.html
+$dokka.location:com.google.accompanist.insets//navigationBarsWidth/androidx.compose.ui.Modifier#com.google.accompanist.insets.HorizontalSide#androidx.compose.ui.unit.Dp/PointingToDeclaration/insets/com.google.accompanist.insets/navigation-bars-width.html
+$dokka.location:com.google.accompanist.insets//navigationBarsWithImePadding/androidx.compose.ui.Modifier#/PointingToDeclaration/insets/com.google.accompanist.insets/navigation-bars-with-ime-padding.html
+$dokka.location:com.google.accompanist.insets//rememberImeNestedScrollConnection/#kotlin.Boolean#kotlin.Boolean/PointingToDeclaration/insets/com.google.accompanist.insets/remember-ime-nested-scroll-connection.html
+$dokka.location:com.google.accompanist.insets//statusBarsHeight/androidx.compose.ui.Modifier#androidx.compose.ui.unit.Dp/PointingToDeclaration/insets/com.google.accompanist.insets/status-bars-height.html
+$dokka.location:com.google.accompanist.insets//statusBarsPadding/androidx.compose.ui.Modifier#/PointingToDeclaration/insets/com.google.accompanist.insets/status-bars-padding.html
+$dokka.location:com.google.accompanist.insets//systemBarsPadding/androidx.compose.ui.Modifier#kotlin.Boolean/PointingToDeclaration/insets/com.google.accompanist.insets/system-bars-padding.html
+$dokka.location:com.google.accompanist.insets//toPaddingValues/com.google.accompanist.insets.InsetsType#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#androidx.compose.ui.unit.Dp#androidx.compose.ui.unit.Dp#androidx.compose.ui.unit.Dp#androidx.compose.ui.unit.Dp/PointingToDeclaration/insets/com.google.accompanist.insets/to-padding-values.html
+$dokka.location:com.google.accompanist.insets//toPaddingValues/com.google.accompanist.insets.InsetsType#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#androidx.compose.ui.unit.Dp#androidx.compose.ui.unit.Dp/PointingToDeclaration/insets/com.google.accompanist.insets/to-padding-values.html
+$dokka.location:com.google.accompanist.insets/ExperimentalAnimatedInsets///PointingToDeclaration/insets/com.google.accompanist.insets/-experimental-animated-insets/index.html
+$dokka.location:com.google.accompanist.insets/ExperimentalAnimatedInsets/ExperimentalAnimatedInsets/#/PointingToDeclaration/insets/com.google.accompanist.insets/-experimental-animated-insets/-experimental-animated-insets.html
+$dokka.location:com.google.accompanist.insets/HorizontalSide.Left///PointingToDeclaration/insets/com.google.accompanist.insets/-horizontal-side/-left/index.html
+$dokka.location:com.google.accompanist.insets/HorizontalSide.Left/name/#/PointingToDeclaration/insets/com.google.accompanist.insets/-horizontal-side/-left/name.html
+$dokka.location:com.google.accompanist.insets/HorizontalSide.Left/ordinal/#/PointingToDeclaration/insets/com.google.accompanist.insets/-horizontal-side/-left/ordinal.html
+$dokka.location:com.google.accompanist.insets/HorizontalSide.Right///PointingToDeclaration/insets/com.google.accompanist.insets/-horizontal-side/-right/index.html
+$dokka.location:com.google.accompanist.insets/HorizontalSide.Right/name/#/PointingToDeclaration/insets/com.google.accompanist.insets/-horizontal-side/-right/name.html
+$dokka.location:com.google.accompanist.insets/HorizontalSide.Right/ordinal/#/PointingToDeclaration/insets/com.google.accompanist.insets/-horizontal-side/-right/ordinal.html
+$dokka.location:com.google.accompanist.insets/HorizontalSide///PointingToDeclaration/insets/com.google.accompanist.insets/-horizontal-side/index.html
+$dokka.location:com.google.accompanist.insets/ImeNestedScrollConnection///PointingToDeclaration/insets/com.google.accompanist.insets/-ime-nested-scroll-connection/index.html
+$dokka.location:com.google.accompanist.insets/ImeNestedScrollConnection/ImeNestedScrollConnection/#android.view.View#kotlin.Boolean#kotlin.Boolean/PointingToDeclaration/insets/com.google.accompanist.insets/-ime-nested-scroll-connection/-ime-nested-scroll-connection.html
+$dokka.location:com.google.accompanist.insets/ImeNestedScrollConnection/onPostFling/#androidx.compose.ui.unit.Velocity#androidx.compose.ui.unit.Velocity/PointingToDeclaration/insets/com.google.accompanist.insets/-ime-nested-scroll-connection/on-post-fling.html
+$dokka.location:com.google.accompanist.insets/ImeNestedScrollConnection/onPostScroll/#androidx.compose.ui.geometry.Offset#androidx.compose.ui.geometry.Offset#androidx.compose.ui.input.nestedscroll.NestedScrollSource/PointingToDeclaration/insets/com.google.accompanist.insets/-ime-nested-scroll-connection/on-post-scroll.html
+$dokka.location:com.google.accompanist.insets/ImeNestedScrollConnection/onPreScroll/#androidx.compose.ui.geometry.Offset#androidx.compose.ui.input.nestedscroll.NestedScrollSource/PointingToDeclaration/insets/com.google.accompanist.insets/-ime-nested-scroll-connection/on-pre-scroll.html
+$dokka.location:com.google.accompanist.insets/Insets///PointingToDeclaration/insets/com.google.accompanist.insets/-insets/index.html
+$dokka.location:com.google.accompanist.insets/Insets/bottom/#/PointingToDeclaration/insets/com.google.accompanist.insets/-insets/bottom.html
+$dokka.location:com.google.accompanist.insets/Insets/copy/#kotlin.Int#kotlin.Int#kotlin.Int#kotlin.Int/PointingToDeclaration/insets/com.google.accompanist.insets/-insets/copy.html
+$dokka.location:com.google.accompanist.insets/Insets/left/#/PointingToDeclaration/insets/com.google.accompanist.insets/-insets/left.html
+$dokka.location:com.google.accompanist.insets/Insets/minus/#com.google.accompanist.insets.Insets/PointingToDeclaration/insets/com.google.accompanist.insets/-insets/minus.html
+$dokka.location:com.google.accompanist.insets/Insets/plus/#com.google.accompanist.insets.Insets/PointingToDeclaration/insets/com.google.accompanist.insets/-insets/plus.html
+$dokka.location:com.google.accompanist.insets/Insets/right/#/PointingToDeclaration/insets/com.google.accompanist.insets/-insets/right.html
+$dokka.location:com.google.accompanist.insets/Insets/top/#/PointingToDeclaration/insets/com.google.accompanist.insets/-insets/top.html
+$dokka.location:com.google.accompanist.insets/InsetsType///PointingToDeclaration/insets/com.google.accompanist.insets/-insets-type/index.html
+$dokka.location:com.google.accompanist.insets/InsetsType/InsetsType/#/PointingToDeclaration/insets/com.google.accompanist.insets/-insets-type/-insets-type.html
+$dokka.location:com.google.accompanist.insets/InsetsType/animatedInsets/#/PointingToDeclaration/insets/com.google.accompanist.insets/-insets-type/animated-insets.html
+$dokka.location:com.google.accompanist.insets/InsetsType/animationFraction/#/PointingToDeclaration/insets/com.google.accompanist.insets/-insets-type/animation-fraction.html
+$dokka.location:com.google.accompanist.insets/InsetsType/animationInProgress/#/PointingToDeclaration/insets/com.google.accompanist.insets/-insets-type/animation-in-progress.html
+$dokka.location:com.google.accompanist.insets/InsetsType/bottom/#/PointingToDeclaration/insets/com.google.accompanist.insets/-insets-type/bottom.html
+$dokka.location:com.google.accompanist.insets/InsetsType/isVisible/#/PointingToDeclaration/insets/com.google.accompanist.insets/-insets-type/is-visible.html
+$dokka.location:com.google.accompanist.insets/InsetsType/layoutInsets/#/PointingToDeclaration/insets/com.google.accompanist.insets/-insets-type/layout-insets.html
+$dokka.location:com.google.accompanist.insets/InsetsType/left/#/PointingToDeclaration/insets/com.google.accompanist.insets/-insets-type/left.html
+$dokka.location:com.google.accompanist.insets/InsetsType/right/#/PointingToDeclaration/insets/com.google.accompanist.insets/-insets-type/right.html
+$dokka.location:com.google.accompanist.insets/InsetsType/top/#/PointingToDeclaration/insets/com.google.accompanist.insets/-insets-type/top.html
+$dokka.location:com.google.accompanist.insets/VerticalSide.Bottom///PointingToDeclaration/insets/com.google.accompanist.insets/-vertical-side/-bottom/index.html
+$dokka.location:com.google.accompanist.insets/VerticalSide.Bottom/name/#/PointingToDeclaration/insets/com.google.accompanist.insets/-vertical-side/-bottom/name.html
+$dokka.location:com.google.accompanist.insets/VerticalSide.Bottom/ordinal/#/PointingToDeclaration/insets/com.google.accompanist.insets/-vertical-side/-bottom/ordinal.html
+$dokka.location:com.google.accompanist.insets/VerticalSide.Top///PointingToDeclaration/insets/com.google.accompanist.insets/-vertical-side/-top/index.html
+$dokka.location:com.google.accompanist.insets/VerticalSide.Top/name/#/PointingToDeclaration/insets/com.google.accompanist.insets/-vertical-side/-top/name.html
+$dokka.location:com.google.accompanist.insets/VerticalSide.Top/ordinal/#/PointingToDeclaration/insets/com.google.accompanist.insets/-vertical-side/-top/ordinal.html
+$dokka.location:com.google.accompanist.insets/VerticalSide///PointingToDeclaration/insets/com.google.accompanist.insets/-vertical-side/index.html
+$dokka.location:com.google.accompanist.insets/ViewWindowInsetObserver///PointingToDeclaration/insets/com.google.accompanist.insets/-view-window-inset-observer/index.html
+$dokka.location:com.google.accompanist.insets/ViewWindowInsetObserver/ViewWindowInsetObserver/#android.view.View/PointingToDeclaration/insets/com.google.accompanist.insets/-view-window-inset-observer/-view-window-inset-observer.html
+$dokka.location:com.google.accompanist.insets/ViewWindowInsetObserver/isObserving/#/PointingToDeclaration/insets/com.google.accompanist.insets/-view-window-inset-observer/is-observing.html
+$dokka.location:com.google.accompanist.insets/ViewWindowInsetObserver/start/#kotlin.Boolean#kotlin.Boolean/PointingToDeclaration/insets/com.google.accompanist.insets/-view-window-inset-observer/start.html
+$dokka.location:com.google.accompanist.insets/ViewWindowInsetObserver/start/#kotlin.Boolean/PointingToDeclaration/insets/com.google.accompanist.insets/-view-window-inset-observer/start.html
+$dokka.location:com.google.accompanist.insets/ViewWindowInsetObserver/stop/#/PointingToDeclaration/insets/com.google.accompanist.insets/-view-window-inset-observer/stop.html
+$dokka.location:com.google.accompanist.insets/WindowInsets///PointingToDeclaration/insets/com.google.accompanist.insets/-window-insets/index.html
+$dokka.location:com.google.accompanist.insets/WindowInsets/WindowInsets/#/PointingToDeclaration/insets/com.google.accompanist.insets/-window-insets/-window-insets.html
+$dokka.location:com.google.accompanist.insets/WindowInsets/ime/#/PointingToDeclaration/insets/com.google.accompanist.insets/-window-insets/ime.html
+$dokka.location:com.google.accompanist.insets/WindowInsets/navigationBars/#/PointingToDeclaration/insets/com.google.accompanist.insets/-window-insets/navigation-bars.html
+$dokka.location:com.google.accompanist.insets/WindowInsets/statusBars/#/PointingToDeclaration/insets/com.google.accompanist.insets/-window-insets/status-bars.html
+$dokka.location:com.google.accompanist.insets/WindowInsets/systemBars/#/PointingToDeclaration/insets/com.google.accompanist.insets/-window-insets/system-bars.html
+$dokka.location:com.google.accompanist.insets/WindowInsets/systemGestures/#/PointingToDeclaration/insets/com.google.accompanist.insets/-window-insets/system-gestures.html
+com.google.accompanist.insets
 

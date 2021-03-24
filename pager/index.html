@@ -1,0 +1,1249 @@
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A group of libraries to help write Jetpack Compose apps.">
+      
+      
+        <link rel="canonical" href="https://google.github.io/accompanist/pager/">
+      
+      
+        <meta name="author" content="Google">
+      
+      <link rel="shortcut icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.5.6">
+    
+    
+      
+        <title>Guide - Accompanist</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.63b94e9e.min.css">
+      
+        <link rel="stylesheet" href="../assets/stylesheets/palette.7f672a1f.min.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="">
+      
+    
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CJetBrains+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"JetBrains Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="black" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#pager-layouts" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="https://google.github.io/accompanist/" title="Accompanist" class="md-header-nav__button md-logo" aria-label="Accompanist">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 11V7.5l2.2-2.21c.8-.79.95-2.05.39-3.03A2.467 2.467 0 0013.45 1c-.21 0-.45.03-.64.09C11.73 1.38 11 2.38 11 3.5v3.24L7.86 9.91a5.946 5.946 0 00-1.25 6.43c.77 1.9 2.45 3.21 4.39 3.55v.61c0 .26-.23.5-.5.5H9v2h1.5c1.35 0 2.5-1.11 2.5-2.5V20c2.03 0 4.16-1.92 4.16-4.75 0-2.3-1.92-4.25-4.16-4.25m0-7.5c0-.23.11-.41.32-.47.22-.06.45.03.56.23a.5.5 0 01-.08.61l-.8.86V3.5m-2 8c-.97.64-1.7 1.74-1.96 2.76l1.96.52v3.05a3.86 3.86 0 01-2.57-2.26c-.59-1.46-.27-3.12.83-4.24L11 9.5v2m2 6.5v-5.06c1.17 0 2.18 1.1 2.18 2.31C15.18 17 13.91 18 13 18z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            Accompanist
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              Guide
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/google/accompanist/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Accompanist
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+        
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://google.github.io/accompanist/" title="Accompanist" class="md-nav__button md-logo" aria-label="Accompanist">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 11V7.5l2.2-2.21c.8-.79.95-2.05.39-3.03A2.467 2.467 0 0013.45 1c-.21 0-.45.03-.64.09C11.73 1.38 11 2.38 11 3.5v3.24L7.86 9.91a5.946 5.946 0 00-1.25 6.43c.77 1.9 2.45 3.21 4.39 3.55v.61c0 .26-.23.5-.5.5H9v2h1.5c1.35 0 2.5-1.11 2.5-2.5V20c2.03 0 4.16-1.92 4.16-4.75 0-2.3-1.92-4.25-4.16-4.25m0-7.5c0-.23.11-.41.32-.47.22-.06.45.03.56.23a.5.5 0 01-.08.61l-.8.86V3.5m-2 8c-.97.64-1.7 1.74-1.96 2.76l1.96.52v3.05a3.86 3.86 0 01-2.57-2.26c-.59-1.46-.27-3.12.83-4.24L11 9.5v2m2 6.5v-5.06c1.17 0 2.18 1.1 2.18 2.31C15.18 17 13.91 18 13 18z"/></svg>
+
+    </a>
+    Accompanist
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/google/accompanist/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Accompanist
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+    
+    <label class="md-nav__link" for="nav-2">
+      Coil
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Coil" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Coil
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../coil/" title="Guide" class="md-nav__link">
+      Guide
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../api/coil/" title="API" class="md-nav__link">
+      API
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      Glide
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Glide" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Glide
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../glide/" title="Guide" class="md-nav__link">
+      Guide
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../api/glide/" title="API" class="md-nav__link">
+      API
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      Image Loading Core
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Image Loading Core" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Image Loading Core
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../api/imageloading-core/" title="API" class="md-nav__link">
+      API
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Insets
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Insets" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Insets
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../insets/" title="Guide" class="md-nav__link">
+      Guide
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../api/insets/" title="API" class="md-nav__link">
+      API
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+    
+    <label class="md-nav__link" for="nav-6">
+      System UI Controller
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="System UI Controller" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        System UI Controller
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../systemuicontroller/" title="Guide" class="md-nav__link">
+      Guide
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../api/systemuicontroller/" title="API" class="md-nav__link">
+      API
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
+    
+    <label class="md-nav__link" for="nav-7">
+      AppCompat Theme
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="AppCompat Theme" data-md-level="1">
+      <label class="md-nav__title" for="nav-7">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        AppCompat Theme
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../appcompat-theme/" title="Guide" class="md-nav__link">
+      Guide
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../api/appcompat-theme/" title="API" class="md-nav__link">
+      API
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-8" type="checkbox" id="nav-8" checked>
+    
+    <label class="md-nav__link" for="nav-8">
+      Pager layouts
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Pager layouts" data-md-level="1">
+      <label class="md-nav__title" for="nav-8">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Pager layouts
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Guide
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"/></svg>
+        </span>
+      </label>
+    
+    <a href="./" title="Guide" class="md-nav__link md-nav__link--active">
+      Guide
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#horizontalpager" class="md-nav__link">
+    HorizontalPager
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verticalpager" class="md-nav__link">
+    VerticalPager
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lazy-creation" class="md-nav__link">
+    Lazy creation
+  </a>
+  
+    <nav class="md-nav" aria-label="Lazy creation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#offscreen-limit" class="md-nav__link">
+    Offscreen Limit
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#item-scroll-effects" class="md-nav__link">
+    Item scroll effects
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reacting-to-page-changes" class="md-nav__link">
+    Reacting to page changes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#indicators" class="md-nav__link">
+    Indicators
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-with-tabs" class="md-nav__link">
+    Integration with Tabs
+  </a>
+  
+    <nav class="md-nav" aria-label="Integration with Tabs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+    <nav class="md-nav" aria-label="Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#library-snapshots" class="md-nav__link">
+    Library Snapshots
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contributions" class="md-nav__link">
+    Contributions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" class="md-nav__link">
+    License
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../api/pager/" title="API" class="md-nav__link">
+      API
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-9" type="checkbox" id="nav-9">
+    
+    <label class="md-nav__link" for="nav-9">
+      Flow layouts
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Flow layouts" data-md-level="1">
+      <label class="md-nav__title" for="nav-9">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Flow layouts
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../flowlayout/" title="Guide" class="md-nav__link">
+      Guide
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../api/flowlayout/" title="API" class="md-nav__link">
+      API
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../using-snapshot-version/" title="Snapshots" class="md-nav__link">
+      Snapshots
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../contributing/" title="Contributing" class="md-nav__link">
+      Contributing
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-12" type="checkbox" id="nav-12">
+    
+    <label class="md-nav__link" for="nav-12">
+      Maintainers
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Maintainers" data-md-level="1">
+      <label class="md-nav__title" for="nav-12">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Maintainers
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../updating/" title="Update guide" class="md-nav__link">
+      Update guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#horizontalpager" class="md-nav__link">
+    HorizontalPager
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verticalpager" class="md-nav__link">
+    VerticalPager
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lazy-creation" class="md-nav__link">
+    Lazy creation
+  </a>
+  
+    <nav class="md-nav" aria-label="Lazy creation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#offscreen-limit" class="md-nav__link">
+    Offscreen Limit
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#item-scroll-effects" class="md-nav__link">
+    Item scroll effects
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reacting-to-page-changes" class="md-nav__link">
+    Reacting to page changes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#indicators" class="md-nav__link">
+    Indicators
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-with-tabs" class="md-nav__link">
+    Integration with Tabs
+  </a>
+  
+    <nav class="md-nav" aria-label="Integration with Tabs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+    <nav class="md-nav" aria-label="Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#library-snapshots" class="md-nav__link">
+    Library Snapshots
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contributions" class="md-nav__link">
+    Contributions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" class="md-nav__link">
+    License
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/google/accompanist/edit/master/docs/pager.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  
+                
+                
+                <h1 id="pager-layouts">Pager layouts<a class="headerlink" href="#pager-layouts" title="Permanent link">&para;</a></h1>
+<p><a href="https://search.maven.org/search?q=g:com.google.accompanist"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-pager" /></a></p>
+<p>A library which provides paging layouts for Jetpack Compose. If you've used Android's <a href="https://developer.android.com/reference/kotlin/androidx/viewpager/widget/ViewPager"><code>ViewPager</code></a> before, it has similar properties.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The pager layouts are currently experimental and the APIs could change at any time.
+All of the APIs are marked with the <code>@ExperimentalPagerApi</code> annotation.</p>
+</div>
+<h2 id="horizontalpager">HorizontalPager<a class="headerlink" href="#horizontalpager" title="Permanent link">&para;</a></h2>
+<p><a href="../api/pager/pager/com.google.accompanist.pager/-horizontal-pager.html"><code>HorizontalPager</code></a> is a layout which lays out items in a horizontal row, and allows the user to horizontally swipe between pages.</p>
+<figure>
+    <video width="300" controls loop>
+    <source src="horiz_demo.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <figcaption>HorizontalPager demo</figcaption>
+</figure>
+
+<p>The simplest usage looks like the following:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Display 10 items</span>
+<span class="k">val</span> <span class="py">pagerState</span> <span class="p">=</span> <span class="n">rememberPagerState</span><span class="p">(</span><span class="n">pageCount</span> <span class="p">=</span> <span class="m">10</span><span class="p">)</span>
+
+<span class="n">HorizontalPager</span><span class="p">(</span><span class="n">state</span> <span class="p">=</span> <span class="n">pagerState</span><span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="p">-&gt;</span>
+    <span class="c1">// Our page content</span>
+    <span class="n">Text</span><span class="p">(</span>
+        <span class="n">text</span> <span class="p">=</span> <span class="s">&quot;Page: $page&quot;</span><span class="p">,</span>
+        <span class="n">modifier</span> <span class="p">=</span> <span class="n">Modifier</span><span class="p">.</span><span class="n">fillMaxWidth</span><span class="p">()</span>
+    <span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2 id="verticalpager">VerticalPager<a class="headerlink" href="#verticalpager" title="Permanent link">&para;</a></h2>
+<p><a href="../api/pager/pager/com.google.accompanist.pager/-vertical-pager.html"><code>VerticalPager</code></a> is very similar to <a href="../api/pager/pager/com.google.accompanist.pager/-horizontal-pager.html"><code>HorizontalPager</code></a> but items are laid out vertically, and react to vertical swipes:</p>
+<figure>
+    <video width="300" controls loop>
+    <source src="vert_demo.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <figcaption>VerticalPager demo</figcaption>
+</figure>
+
+<div class="highlight"><pre><span></span><code><span class="c1">// Display 10 items</span>
+<span class="k">val</span> <span class="py">pagerState</span> <span class="p">=</span> <span class="n">rememberPagerState</span><span class="p">(</span><span class="n">pageCount</span> <span class="p">=</span> <span class="m">10</span><span class="p">)</span>
+
+<span class="n">VerticalPager</span><span class="p">(</span><span class="n">state</span> <span class="p">=</span> <span class="n">pagerState</span><span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="p">-&gt;</span>
+    <span class="c1">// Our page content</span>
+    <span class="n">Text</span><span class="p">(</span>
+        <span class="n">text</span> <span class="p">=</span> <span class="s">&quot;Page: $page&quot;</span><span class="p">,</span>
+        <span class="n">modifier</span> <span class="p">=</span> <span class="n">Modifier</span><span class="p">.</span><span class="n">fillMaxWidth</span><span class="p">()</span>
+    <span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2 id="lazy-creation">Lazy creation<a class="headerlink" href="#lazy-creation" title="Permanent link">&para;</a></h2>
+<p>Pages in both <a href="../api/pager/pager/com.google.accompanist.pager/-horizontal-pager.html"><code>HorizontalPager</code></a> and <a href="../api/pager/pager/com.google.accompanist.pager/-vertical-pager.html"><code>VerticalPager</code></a> are lazily composed and laid-out as required by the layout. As the user scrolls through pages, any pages which are no longer required are removed from the content.</p>
+<h3 id="offscreen-limit">Offscreen Limit<a class="headerlink" href="#offscreen-limit" title="Permanent link">&para;</a></h3>
+<p>Both <a href="../api/pager/pager/com.google.accompanist.pager/-horizontal-pager.html"><code>HorizontalPager</code></a> &amp; <a href="../api/pager/pager/com.google.accompanist.pager/-vertical-pager.html"><code>VerticalPager</code></a> allow the setting of the <code>offscreenLimit</code>, which defines the number of pages that should be retained on either side of the current page. Pages beyond this limit will be removed, and then recreated when needed. This value defaults to <code>1</code>, but can be increased to enable pre-loading of more content:</p>
+<div class="highlight"><pre><span></span><code><span class="n">HorizontalPager</span><span class="p">(</span>
+    <span class="n">state</span> <span class="p">=</span> <span class="n">pagerState</span><span class="p">,</span>
+    <span class="n">offscreenLimit</span> <span class="p">=</span> <span class="m">2</span><span class="p">,</span>
+<span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="p">-&gt;</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2 id="item-scroll-effects">Item scroll effects<a class="headerlink" href="#item-scroll-effects" title="Permanent link">&para;</a></h2>
+<p>A common use-case is to apply effects to your pager items, using the scroll position to drive those effects.</p>
+<p>The <a href="https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/pager/HorizontalPagerTransitionSample.kt">HorizontalPagerTransitionSample</a> demonstrates how this can be done:</p>
+<figure>
+    <video width="300" controls loop>
+    <source src="transition_demo.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <figcaption>Item effects demo</figcaption>
+</figure>
+
+<p>The scope provided to your pager content allows apps to easily reference the <a href="../api/pager/pager/com.google.accompanist.pager/-pager-state/current-page.html"><code>currentPage</code></a> and <a href="../api/pager/pager/com.google.accompanist.pager/-pager-state/current-page-offset.html"><code>currentPageOffset</code></a>. The effects can then be calculated using those values. We provide the <a href="../api/pager/pager/com.google.accompanist.pager/calculate-current-offset-for-page.html)"><code>calculateCurrentOffsetForPage()</code></a> extension functions to support calculation of the 'offset' for a given page:</p>
+<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">com.google.accompanist.pager.calculateCurrentOffsetForPage</span>
+
+<span class="n">HorizontalPager</span><span class="p">(</span><span class="n">state</span> <span class="p">=</span> <span class="n">pagerState</span><span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="p">-&gt;</span>
+    <span class="n">Card</span><span class="p">(</span>
+        <span class="n">Modifier</span>
+            <span class="p">.</span><span class="n">graphicsLayer</span> <span class="p">{</span>
+                <span class="c1">// Calculate the absolute offset for the current page from the</span>
+                <span class="c1">// scroll position. We use the absolute value which allows us to mirror</span>
+                <span class="c1">// any effects for both directions</span>
+                <span class="k">val</span> <span class="py">pageOffset</span> <span class="p">=</span> <span class="n">calculateCurrentOffsetForPage</span><span class="p">(</span><span class="n">page</span><span class="p">).</span><span class="n">absoluteValue</span>
+
+                <span class="c1">// We animate the scaleX + scaleY, between 85% and 100%</span>
+                <span class="n">lerp</span><span class="p">(</span>
+                    <span class="n">start</span> <span class="p">=</span> <span class="m">0.85f</span><span class="p">,</span>
+                    <span class="n">stop</span> <span class="p">=</span> <span class="m">1f</span><span class="p">,</span>
+                    <span class="n">fraction</span> <span class="p">=</span> <span class="m">1f</span> <span class="p">-</span> <span class="n">pageOffset</span><span class="p">.</span><span class="n">coerceIn</span><span class="p">(</span><span class="m">0f</span><span class="p">,</span> <span class="m">1f</span><span class="p">)</span>
+                <span class="p">).</span><span class="n">also</span> <span class="p">{</span> <span class="n">scale</span> <span class="p">-&gt;</span>
+                    <span class="n">scaleX</span> <span class="p">=</span> <span class="n">scale</span>
+                    <span class="n">scaleY</span> <span class="p">=</span> <span class="n">scale</span>
+                <span class="p">}</span>
+
+                <span class="c1">// We animate the alpha, between 50% and 100%</span>
+                <span class="n">alpha</span> <span class="p">=</span> <span class="n">lerp</span><span class="p">(</span>
+                    <span class="n">start</span> <span class="p">=</span> <span class="m">0.5f</span><span class="p">,</span>
+                    <span class="n">stop</span> <span class="p">=</span> <span class="m">1f</span><span class="p">,</span>
+                    <span class="n">fraction</span> <span class="p">=</span> <span class="m">1f</span> <span class="p">-</span> <span class="n">pageOffset</span><span class="p">.</span><span class="n">coerceIn</span><span class="p">(</span><span class="m">0f</span><span class="p">,</span> <span class="m">1f</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">}</span>
+    <span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Card content</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2 id="reacting-to-page-changes">Reacting to page changes<a class="headerlink" href="#reacting-to-page-changes" title="Permanent link">&para;</a></h2>
+<p>From reading above, you might be thinking that reading <a href="../api/pager/pager/com.google.accompanist.pager/-pager-state/current-page.html"><code>PagerState.currentPage</code></a> is a good way to know when the selected page changes. Unfortunately <code>currentPage</code> does not tell you the currently selected page, but instead tells you which page is (mostly) displayed on screen.</p>
+<p>To know when the selected page changes, you can use the <a href="../api/pager/pager/com.google.accompanist.pager/page-changes.html"><code>pageChanges</code></a> flow:</p>
+<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">com.google.accompanist.pager.pageChanges</span>
+
+<span class="n">LaunchedEffect</span><span class="p">(</span><span class="n">pagerState</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">pagerState</span><span class="p">.</span><span class="n">pageChanges</span><span class="p">.</span><span class="n">collect</span> <span class="p">{</span> <span class="n">page</span> <span class="p">-&gt;</span>
+        <span class="c1">// Selected page has changed...</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2 id="indicators">Indicators<a class="headerlink" href="#indicators" title="Permanent link">&para;</a></h2>
+<p>We also publish a sibling library called <code>pager-indicators</code> which provides some simple indicator composables for use with <a href="../api/pager/pager/com.google.accompanist.pager/-horizontal-pager.html"><code>HorizontalPager</code></a> and <a href="../api/pager/pager/com.google.accompanist.pager/-vertical-pager.html"><code>VerticalPager</code></a>.</p>
+<figure>
+    <video width="300" controls loop>
+    <source src="indicators_demo.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <figcaption>Pager indicators demo</figcaption>
+</figure>
+
+<p>The <a href="https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/pager/HorizontalPagerWithIndicatorSample.kt">HorizontalPagerWithIndicatorSample</a> and <a href="https://github.com/google/accompanist/blob/snapshot/sample/src/main/java/com/google/accompanist/sample/pager/VerticalPagerWithIndicatorSample.kt">VerticalPagerWithIndicatorSample</a> show you how to use these.</p>
+<h2 id="integration-with-tabs">Integration with Tabs<a class="headerlink" href="#integration-with-tabs" title="Permanent link">&para;</a></h2>
+<p>A common use-case for <a href="../api/pager/pager/com.google.accompanist.pager/-horizontal-pager.html"><code>HorizontalPager</code></a> is to be used in conjunction with a <a href="https://developer.android.com/reference/kotlin/androidx/compose/material/package-summary#tabrow"><code>TabRow</code></a>.</p>
+<p>The <a href="https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/pager/HorizontalPagerTabsSample.kt">HorizontalPagerTabsSample</a> demonstrates how this can be done:</p>
+<figure>
+    <video width="300" controls loop>
+    <source src="tabs_demo.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <figcaption>HorizontalPager + TabRow</figcaption>
+</figure>
+
+<h3 id="_1"><a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<hr />
+<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">repositories</span> <span class="o">{</span>
+    <span class="n">mavenCentral</span><span class="o">()</span>
+<span class="o">}</span>
+
+<span class="n">dependencies</span> <span class="o">{</span>
+    <span class="n">implementation</span> <span class="s2">&quot;com.google.accompanist:accompanist-pager:&lt;version&gt;&quot;</span>
+
+    <span class="c1">// If using indicators, also depend on </span>
+    <span class="n">implementation</span> <span class="s2">&quot;com.google.accompanist:accompanist-pager-indicators:&lt;version&gt;&quot;</span>
+<span class="o">}</span>
+</code></pre></div>
+
+<h3 id="library-snapshots">Library Snapshots<a class="headerlink" href="#library-snapshots" title="Permanent link">&para;</a></h3>
+<p>Snapshots of the current development version of this library are available, which track the latest commit. See <a href="../using-snapshot-version">here</a> for more information on how to use them.</p>
+<hr />
+<h2 id="contributions">Contributions<a class="headerlink" href="#contributions" title="Permanent link">&para;</a></h2>
+<p>Please contribute! We will gladly review any pull requests.
+Make sure to read the <a href="../contributing">Contributing</a> page first though.</p>
+<h2 id="license">License<a class="headerlink" href="#license" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>Copyright 2021 The Android Open Source Project
+
+Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+</code></pre></div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../appcompat-theme/" title="Guide" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Guide
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../flowlayout/" title="Guide" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Guide
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/vendor.d1f5a259.min.js"></script>
+      <script src="../assets/javascripts/bundle.d5fec882.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      
+      <script>
+        app = initialize({
+          base: "..",
+          features: [],
+          search: Object.assign({
+            worker: "../assets/javascripts/worker/search.fae956e7.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+    
+  </body>
+</html>

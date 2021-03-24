@@ -1,0 +1,152 @@
+<html><head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>calculateCurrentOffsetForPage</title>
+</head><body><link href="../../../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script><script src="https://unpkg.com/kotlin-playground@1" data-selector="code.runnablesample"></script><script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../../scripts/main.js" async></script>
+  
+    <div id="container">
+      <div id="leftColumn"><a href="../../../index.html">
+            <div id="logo"></div>
+          </a>
+        <div id="paneSearch"></div>
+        <div id="sideMenu"></div>
+      </div>
+      <div id="main">
+        <script type="text/javascript" src="../../../scripts/main.js"></script><div id="leftToggler"><span class="icon-toggler"></span></div>
+
+        <div class="main-content" id="content" pageids="pager::com.google.accompanist.pager//calculateCurrentOffsetForPage/com.google.accompanist.pager.PagerScope#kotlin.Int/PointingToDeclaration//1013354257">
+          <div class="navigation-wrapper" id="navigation-wrapper">
+            <div class="breadcrumbs"><a href="../../index.html">pager</a>/<a href="index.html">com.google.accompanist.pager</a>/<a href="calculate-current-offset-for-page.html">calculateCurrentOffsetForPage</a></div>
+            <div class="pull-right d-flex">
+              <div id="searchBar"></div>
+            </div>
+          </div>
+          <div class="cover ">
+            <h1 class="cover"><span>calculate</span><wbr><span>Current</span><wbr><span>Offset</span><wbr><span>For</span><wbr><span>Page</span></h1>
+          </div>
+<div class="divergent-group" data-filterable-current=":pager:dokkaHtmlPartial/release" data-filterable-set=":pager:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":pager:dokkaHtmlPartial/release"><div class="symbol monospace">fun <a href="-pager-scope/index.html">PagerScope</a>.<a href="calculate-current-offset-for-page.html">calculateCurrentOffsetForPage</a>(page: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html">Float</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+<p class="paragraph">Calculate the offset for the given <a href="calculate-current-offset-for-page.html">page</a> from the current scroll position. This is useful when using the scroll position to apply effects or animations to items.</p><p class="paragraph">The returned offset can positive or negative, depending on whether which direction the <a href="calculate-current-offset-for-page.html">page</a> is compared to the current scroll position.</p><h2 class="">Samples</h2><div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Samples"><div class="content sourceset-depenent-content" data-active="" data-togglable=":pager:dokkaHtmlPartial/release"><div class="sample-container"><code class="runnablesample monospace" theme="idea"><pre>import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.lerp
+import com.google.accompanist.coil.CoilImage
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.calculateCurrentOffsetForPage
+import com.google.accompanist.pager.rememberPagerState
+import com.google.accompanist.sample.AccompanistSampleTheme
+import com.google.accompanist.sample.R
+import com.google.accompanist.sample.randomSampleImageUrl
+import kotlin.math.absoluteValue
+fun main() { 
+   //sampleStart 
+   val pagerState = rememberPagerState(pageCount = 10)
+
+HorizontalPager(
+    state = pagerState,
+    offscreenLimit = 2,
+    modifier = Modifier.fillMaxSize()
+) { page -&gt;
+    Card(
+        Modifier
+            .graphicsLayer {
+                // Calculate the absolute offset for the current page from the
+                // scroll position. We use the absolute value which allows us to mirror
+                // any effects for both directions
+                val pageOffset = calculateCurrentOffsetForPage(page).absoluteValue
+
+                // We animate the scaleX + scaleY, between 85% and 100%
+                lerp(
+                    start = 0.85f,
+                    stop = 1f,
+                    fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                ).also { scale -&gt;
+                    scaleX = scale
+                    scaleY = scale
+                }
+
+                // We animate the alpha, between 50% and 100%
+                alpha = lerp(
+                    start = 0.5f,
+                    stop = 1f,
+                    fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                )
+            }
+            .fillMaxWidth(0.8f)
+            .aspectRatio(1f)
+
+    ) {
+        Box {
+            CoilImage(
+                data = randomSampleImageUrl(width = 600),
+                contentDescription = null,
+                fadeIn = true,
+                modifier = Modifier.fillMaxSize()
+            )
+
+            ProfilePicture(
+                Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(16.dp)
+                    // We add an offset lambda, to apply a light parallax effect
+                    .offset {
+                        // Calculate the offset for the current page from the
+                        // scroll position
+                        val pageOffset =
+                            this@HorizontalPager.calculateCurrentOffsetForPage(page)
+                        // Then use it as a multiplier to apply an offset
+                        IntOffset(
+                            x = (36.dp * pageOffset).roundToPx(),
+                            y = 0
+                        )
+                    }
+            )
+        }
+    }
+} 
+   //sampleEnd
+}</pre></code></div></div></div></div>
+          <h2 class="">Sources</h2>
+          <div class="table" data-togglable="Sources"><a data-name="%5Bcom.google.accompanist.pager%2F%2FcalculateCurrentOffsetForPage%2Fcom.google.accompanist.pager.PagerScope%23kotlin.Int%2FPointingToDeclaration%2F%5D%2FSource%2F-157824957" anchor-label="https://github.com/google/accompanist/blob/main/pager/src/main/java/com/google/accompanist/pager/Pager.kt#L365" id="%5Bcom.google.accompanist.pager%2F%2FcalculateCurrentOffsetForPage%2Fcom.google.accompanist.pager.PagerScope%23kotlin.Int%2FPointingToDeclaration%2F%5D%2FSource%2F-157824957" data-filterable-set=":pager:dokkaHtmlPartial/main"></a>
+            <div class="table-row" data-filterable-current=":pager:dokkaHtmlPartial/main" data-filterable-set=":pager:dokkaHtmlPartial/main">
+              <div class="main-subrow keyValue ">
+                <div class=""><span class="inline-flex"><a href="https://github.com/google/accompanist/blob/main/pager/src/main/java/com/google/accompanist/pager/Pager.kt#L365">androidJvm source</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bcom.google.accompanist.pager%2F%2FcalculateCurrentOffsetForPage%2Fcom.google.accompanist.pager.PagerScope%23kotlin.Int%2FPointingToDeclaration%2F%5D%2FSource%2F-157824957"></span>
+                      <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                    </span></span></div>
+                <div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="footer"><span class="go-to-top-icon"><a href="#content"></a></span><span></span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+      </div>
+    </div>
+  
+
+
+</body></html>

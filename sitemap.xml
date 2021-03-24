@@ -1,39 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url>
      <loc>https://google.github.io/accompanist/</loc>
-     <lastmod>2021-03-11</lastmod>
+     <lastmod>2021-03-24</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://google.github.io/accompanist/coil/</loc>
-     <lastmod>2021-03-11</lastmod>
+     <lastmod>2021-03-24</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://google.github.io/accompanist/glide/</loc>
-     <lastmod>2021-03-11</lastmod>
-     <changefreq>daily</changefreq>
-    </url><url>
-     <loc>https://google.github.io/accompanist/picasso/</loc>
-     <lastmod>2021-03-11</lastmod>
+     <lastmod>2021-03-24</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://google.github.io/accompanist/insets/</loc>
-     <lastmod>2021-03-11</lastmod>
+     <lastmod>2021-03-24</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://google.github.io/accompanist/systemuicontroller/</loc>
+     <lastmod>2021-03-24</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://google.github.io/accompanist/appcompat-theme/</loc>
-     <lastmod>2021-03-11</lastmod>
+     <lastmod>2021-03-24</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://google.github.io/accompanist/pager/</loc>
+     <lastmod>2021-03-24</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://google.github.io/accompanist/flowlayout/</loc>
+     <lastmod>2021-03-24</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://google.github.io/accompanist/using-snapshot-version/</loc>
-     <lastmod>2021-03-11</lastmod>
+     <lastmod>2021-03-24</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://google.github.io/accompanist/contributing/</loc>
-     <lastmod>2021-03-11</lastmod>
+     <lastmod>2021-03-24</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://google.github.io/accompanist/updating/</loc>
-     <lastmod>2021-03-11</lastmod>
+     <lastmod>2021-03-24</lastmod>
      <changefreq>daily</changefreq>
     </url>
 </urlset>

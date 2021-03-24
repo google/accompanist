@@ -247,6 +247,7 @@ html ::-webkit-scrollbar-thumb {
     padding-left: 24px;
     padding-top: 24px;
     height: 48px;
+    cursor: pointer;
 }
 
 .monospace,
@@ -416,7 +417,7 @@ code.paragraph {
     box-sizing: border-box;
 }
 
-.sideMenuPart .hidden > .overview .navButtonContent::before {
+.sideMenuPart.hidden > .overview .navButtonContent::before {
     transform: rotate(0deg);
 }
 
@@ -1107,6 +1108,10 @@ td.content {
 
 .footer > span {
     padding: 0 16px;
+}
+
+.footer a {
+    color: var(--breadcrumb-font-color);
 }
 
 .footer .padded-icon {
