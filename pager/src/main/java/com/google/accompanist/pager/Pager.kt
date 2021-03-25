@@ -126,6 +126,8 @@ object PagerDefaults {
  * @param reverseLayout reverse the direction of scrolling and layout, when `true` items will be
  * composed from the end to the start and [PagerState.currentPage] == 0 will mean
  * the first item is located at the end.
+ * @param dragEnabled toggle manual scrolling, when `false` the user can not drag the view to a
+ * different page
  * @param offscreenLimit the number of pages that should be retained on either side of the
  * current page. This value is required to be `1` or greater.
  * @param flingBehavior logic describing fling behavior.
@@ -174,6 +176,8 @@ fun HorizontalPager(
  * @param reverseLayout reverse the direction of scrolling and layout, when `true` items will be
  * composed from the bottom to the top and [PagerState.currentPage] == 0 will mean
  * the first item is located at the bottom.
+ * @param dragEnabled toggle manual scrolling, when `false` the user can not drag the view to a
+ * different page
  * @param offscreenLimit the number of pages that should be retained on either side of the
  * current page. This value is required to be `1` or greater.
  * @param flingBehavior logic describing fling behavior.
