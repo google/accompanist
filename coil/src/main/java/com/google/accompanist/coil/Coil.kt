@@ -167,6 +167,7 @@ fun CoilImage(
             painter = painterResource(previewPlaceholder),
             contentDescription = null,
             modifier = modifier,
+            contentScale = ContentScale.Crop,
         )
         return
     }
