@@ -38,6 +38,8 @@
     <string name="vertical_pager_title_basics">Vertical Pager: Basic</string>
     <string name="vertical_pager_with_indicator_title">Vertical Pager: Indicator</string>
 
+    <string name="pagers_title_nested">Pagers: Nested</string>
+
     <string name="flowlayout_title_column">Flow Layout: Column</string>
     <string name="flowlayout_title_row">Flow Layout: Row</string>
 
