@@ -91,6 +91,8 @@ private fun Sample() {
                 state = pagerState,
                 // We increase the offscreen limit, to allow pre-loading of images
                 offscreenLimit = 2,
+                // Add some vertical spacing between items
+                itemSpacing = 8.dp,
                 modifier = Modifier.weight(1f)
             ) { page ->
                 Box {

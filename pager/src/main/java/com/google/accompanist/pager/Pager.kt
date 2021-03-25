@@ -51,7 +51,9 @@ import androidx.compose.ui.semantics.selectableGroup
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -126,10 +128,11 @@ object PagerDefaults {
  * @param reverseLayout reverse the direction of scrolling and layout, when `true` items will be
  * composed from the end to the start and [PagerState.currentPage] == 0 will mean
  * the first item is located at the end.
- * @param dragEnabled toggle manual scrolling, when `false` the user can not drag the view to a
- * different page
+ * @param itemSpacing horizontal spacing to add between items.
  * @param offscreenLimit the number of pages that should be retained on either side of the
  * current page. This value is required to be `1` or greater.
+ * @param dragEnabled toggle manual scrolling, when `false` the user can not drag the view to a
+ * different page.
  * @param flingBehavior logic describing fling behavior.
  * @param content a block which describes the content. Inside this block you can reference
  * [PagerScope.currentPage] and other properties in [PagerScope].
@@ -140,8 +143,9 @@ fun HorizontalPager(
     state: PagerState,
     modifier: Modifier = Modifier,
     reverseLayout: Boolean = false,
-    dragEnabled: Boolean = true,
+    itemSpacing: Dp = 0.dp,
     @IntRange(from = 1) offscreenLimit: Int = 1,
+    dragEnabled: Boolean = true,
     flingBehavior: FlingBehavior = PagerDefaults.defaultPagerFlingConfig(state),
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
@@ -152,11 +156,12 @@ fun HorizontalPager(
         modifier = modifier,
         isVertical = false,
         reverseLayout = reverseLayout,
-        dragEnabled = dragEnabled,
-        offscreenLimit = offscreenLimit,
-        flingBehavior = flingBehavior,
+        itemSpacing = itemSpacing,
         verticalAlignment = verticalAlignment,
         horizontalAlignment = horizontalAlignment,
+        offscreenLimit = offscreenLimit,
+        dragEnabled = dragEnabled,
+        flingBehavior = flingBehavior,
         content = content
     )
 }
@@ -176,10 +181,11 @@ fun HorizontalPager(
  * @param reverseLayout reverse the direction of scrolling and layout, when `true` items will be
  * composed from the bottom to the top and [PagerState.currentPage] == 0 will mean
  * the first item is located at the bottom.
- * @param dragEnabled toggle manual scrolling, when `false` the user can not drag the view to a
- * different page
+ * @param itemSpacing vertical spacing to add between items.
  * @param offscreenLimit the number of pages that should be retained on either side of the
  * current page. This value is required to be `1` or greater.
+ * @param dragEnabled toggle manual scrolling, when `false` the user can not drag the view to a
+ * different page.
  * @param flingBehavior logic describing fling behavior.
  * @param content a block which describes the content. Inside this block you can reference
  * [PagerScope.currentPage] and other properties in [PagerScope].
@@ -190,8 +196,9 @@ fun VerticalPager(
     state: PagerState,
     modifier: Modifier = Modifier,
     reverseLayout: Boolean = false,
-    dragEnabled: Boolean = true,
+    itemSpacing: Dp = 0.dp,
     @IntRange(from = 1) offscreenLimit: Int = 1,
+    dragEnabled: Boolean = true,
     flingBehavior: FlingBehavior = PagerDefaults.defaultPagerFlingConfig(state),
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
@@ -202,10 +209,11 @@ fun VerticalPager(
         modifier = modifier,
         isVertical = true,
         reverseLayout = reverseLayout,
-        dragEnabled = dragEnabled,
-        offscreenLimit = offscreenLimit,
+        itemSpacing = itemSpacing,
         verticalAlignment = verticalAlignment,
         horizontalAlignment = horizontalAlignment,
+        offscreenLimit = offscreenLimit,
+        dragEnabled = dragEnabled,
         flingBehavior = flingBehavior,
         content = content
     )
@@ -217,11 +225,12 @@ internal fun Pager(
     state: PagerState,
     modifier: Modifier,
     reverseLayout: Boolean,
-    dragEnabled: Boolean,
+    itemSpacing: Dp,
     isVertical: Boolean,
     verticalAlignment: Alignment.Vertical,
     horizontalAlignment: Alignment.Horizontal,
     @IntRange(from = 1) offscreenLimit: Int,
+    dragEnabled: Boolean,
     flingBehavior: FlingBehavior,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
@@ -302,6 +311,7 @@ internal fun Pager(
             val currentPage = state.currentPage
             val offset = state.currentPageOffset
             val childConstraints = constraints.copy(minWidth = 0, minHeight = 0)
+            val itemSpacingPx = itemSpacing.roundToPx()
 
             measurables.forEach {
                 val placeable = it.measure(childConstraints)
@@ -321,17 +331,18 @@ internal fun Pager(
 
                 var yItemOffset = 0
                 var xItemOffset = 0
+                val offsetForPage = page - currentPage - offset
 
                 if (isVertical) {
                     if (currentPage == page) {
                         state.pageSize = placeable.height
                     }
-                    yItemOffset = ((page - currentPage - offset) * placeable.height).roundToInt()
+                    yItemOffset = (offsetForPage * (placeable.height + itemSpacingPx)).roundToInt()
                 } else {
                     if (currentPage == page) {
                         state.pageSize = placeable.width
                     }
-                    xItemOffset = ((page - currentPage - offset) * placeable.width).roundToInt()
+                    xItemOffset = (offsetForPage * (placeable.width + itemSpacingPx)).roundToInt()
                 }
 
                 placeable.placeRelative(
