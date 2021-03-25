@@ -126,6 +126,8 @@ object PagerDefaults {
  * @param reverseLayout reverse the direction of scrolling and layout, when `true` items will be
  * composed from the end to the start and [PagerState.currentPage] == 0 will mean
  * the first item is located at the end.
+ * @param dragEnabled toggle manual scrolling, when `false` the user can not drag the view to a
+ * different page
  * @param offscreenLimit the number of pages that should be retained on either side of the
  * current page. This value is required to be `1` or greater.
  * @param flingBehavior logic describing fling behavior.
@@ -138,6 +140,7 @@ fun HorizontalPager(
     state: PagerState,
     modifier: Modifier = Modifier,
     reverseLayout: Boolean = false,
+    dragEnabled: Boolean = true,
     @IntRange(from = 1) offscreenLimit: Int = 1,
     flingBehavior: FlingBehavior = PagerDefaults.defaultPagerFlingConfig(state),
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
@@ -149,6 +152,7 @@ fun HorizontalPager(
         modifier = modifier,
         isVertical = false,
         reverseLayout = reverseLayout,
+        dragEnabled = dragEnabled,
         offscreenLimit = offscreenLimit,
         flingBehavior = flingBehavior,
         verticalAlignment = verticalAlignment,
@@ -172,6 +176,8 @@ fun HorizontalPager(
  * @param reverseLayout reverse the direction of scrolling and layout, when `true` items will be
  * composed from the bottom to the top and [PagerState.currentPage] == 0 will mean
  * the first item is located at the bottom.
+ * @param dragEnabled toggle manual scrolling, when `false` the user can not drag the view to a
+ * different page
  * @param offscreenLimit the number of pages that should be retained on either side of the
  * current page. This value is required to be `1` or greater.
  * @param flingBehavior logic describing fling behavior.
@@ -184,6 +190,7 @@ fun VerticalPager(
     state: PagerState,
     modifier: Modifier = Modifier,
     reverseLayout: Boolean = false,
+    dragEnabled: Boolean = true,
     @IntRange(from = 1) offscreenLimit: Int = 1,
     flingBehavior: FlingBehavior = PagerDefaults.defaultPagerFlingConfig(state),
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
@@ -195,6 +202,7 @@ fun VerticalPager(
         modifier = modifier,
         isVertical = true,
         reverseLayout = reverseLayout,
+        dragEnabled = dragEnabled,
         offscreenLimit = offscreenLimit,
         verticalAlignment = verticalAlignment,
         horizontalAlignment = horizontalAlignment,
@@ -209,6 +217,7 @@ internal fun Pager(
     state: PagerState,
     modifier: Modifier,
     reverseLayout: Boolean,
+    dragEnabled: Boolean,
     isVertical: Boolean,
     verticalAlignment: Alignment.Vertical,
     horizontalAlignment: Alignment.Horizontal,
@@ -250,6 +259,7 @@ internal fun Pager(
         flingBehavior = flingBehavior,
         reverseDirection = reverseDirection,
         state = state,
+        enabled = dragEnabled,
     )
 
     Layout(
