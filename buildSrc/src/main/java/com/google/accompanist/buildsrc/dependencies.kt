@@ -85,7 +85,7 @@ object Libs {
             const val iconsExtended = "androidx.compose.material:material-icons-extended:${version}"
 
             const val util = "androidx.compose.ui:ui-util:${version}"
-            const val tooling = "androidx.ui:ui-tooling:${version}"
+            const val tooling = "androidx.compose.ui:ui-tooling:${version}"
             const val test = "androidx.compose.ui:ui-test-junit4:${version}"
         }
 
