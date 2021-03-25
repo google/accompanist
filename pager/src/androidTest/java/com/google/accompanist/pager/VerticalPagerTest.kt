@@ -46,11 +46,10 @@ import org.junit.runners.Parameterized
 class VerticalPagerTest(
     private val itemWidthFraction: Float,
     private val verticalAlignment: Alignment.Vertical,
-    offscreenLimit: Int,
-) : PagerTest(
-    offscreenLimit = offscreenLimit,
-    layoutDirection = LayoutDirection.Ltr, // Stick to LTR for vertical tests
-) {
+    // We don't use the Dp type due to https://youtrack.jetbrains.com/issue/KT-35523
+    private val itemSpacingDp: Int,
+    override val offscreenLimit: Int,
+) : PagerTest() {
     companion object {
         @JvmStatic
         @Parameterized.Parameters
@@ -58,14 +57,22 @@ class VerticalPagerTest(
             // itemWidthFraction, verticalAlignment, offscreenLimit
 
             // Test typical full-width items
-            arrayOf(1f, Alignment.CenterVertically, 2),
-            arrayOf(1f, Alignment.Top, 2),
-            arrayOf(1f, Alignment.Bottom, 2),
+            arrayOf(1f, Alignment.CenterVertically, 0, 2),
+            arrayOf(1f, Alignment.Top, 0, 2),
+            arrayOf(1f, Alignment.Bottom, 0, 2),
+
+            // Full-width items with spacing
+            arrayOf(1f, Alignment.CenterVertically, 4, 2),
+            arrayOf(1f, Alignment.Top, 4, 2),
+            arrayOf(1f, Alignment.Bottom, 4, 2),
 
             // Test an increased offscreenLimit
-            arrayOf(1f, Alignment.CenterVertically, 4),
+            arrayOf(1f, Alignment.CenterVertically, 0, 4),
         )
     }
+
+    override val pageCount: Int
+        get() = 10
 
     override fun SemanticsNodeInteraction.swipeAcrossCenter(
         velocity: Float,
@@ -96,20 +103,18 @@ class VerticalPagerTest(
             .assertHeightIsAtLeast(expectedItemSize)
             .assertLeftPositionInRootIsEqualTo(expectedLeft)
             .assertTopPositionInRootIsEqualTo(
-                expectedFirstItemTop + (expectedItemSize * (page - currentPage))
+                expectedFirstItemTop + ((expectedItemSize + itemSpacingDp.dp) * (page - currentPage))
             )
     }
 
-    override fun setPagerContent(
-        layoutDirection: LayoutDirection,
-        pageCount: Int,
-        offscreenLimit: Int,
-    ): PagerState {
+    override fun setPagerContent(pageCount: Int): PagerState {
         val pagerState = PagerState(pageCount = pageCount)
-        composeTestRule.setContent(layoutDirection) {
+        // Stick to LTR for vertical tests
+        composeTestRule.setContent(LayoutDirection.Ltr) {
             VerticalPager(
                 state = pagerState,
                 offscreenLimit = offscreenLimit,
+                itemSpacing = itemSpacingDp.dp,
                 verticalAlignment = verticalAlignment,
                 modifier = Modifier.fillMaxSize()
             ) { page ->

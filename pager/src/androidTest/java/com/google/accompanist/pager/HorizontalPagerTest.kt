@@ -46,39 +46,49 @@ import org.junit.runners.Parameterized
 class HorizontalPagerTest(
     private val itemWidthFraction: Float,
     private val horizontalAlignment: Alignment.Horizontal,
-    offscreenLimit: Int,
-    layoutDirection: LayoutDirection,
-) : PagerTest(
-    offscreenLimit = offscreenLimit,
-    layoutDirection = layoutDirection,
-) {
+    // We don't use the Dp type due to https://youtrack.jetbrains.com/issue/KT-35523
+    private val itemSpacingDp: Int,
+    override val offscreenLimit: Int,
+    private val layoutDirection: LayoutDirection,
+) : PagerTest() {
     companion object {
         @JvmStatic
         @Parameterized.Parameters
         fun data(): Collection<Array<Any>> = listOf(
-            // itemWidthFraction, horizontalAlignment, offscreenLimit, layoutDirection,
+            // itemWidthFraction, horizontalAlignment, itemSpacing, offscreenLimit, layoutDirection,
 
             // Test typical full-width items
-            arrayOf(1f, Alignment.Start, 2, LayoutDirection.Ltr),
-            arrayOf(1f, Alignment.CenterHorizontally, 2, LayoutDirection.Ltr),
-            arrayOf(1f, Alignment.End, 2, LayoutDirection.Ltr),
-            arrayOf(1f, Alignment.Start, 2, LayoutDirection.Rtl),
-            arrayOf(1f, Alignment.CenterHorizontally, 2, LayoutDirection.Rtl),
-            arrayOf(1f, Alignment.End, 2, LayoutDirection.Rtl),
+            arrayOf(1f, Alignment.Start, 0, 2, LayoutDirection.Ltr),
+            arrayOf(1f, Alignment.CenterHorizontally, 0, 2, LayoutDirection.Ltr),
+            arrayOf(1f, Alignment.End, 0, 2, LayoutDirection.Ltr),
+            arrayOf(1f, Alignment.Start, 0, 2, LayoutDirection.Rtl),
+            arrayOf(1f, Alignment.CenterHorizontally, 0, 2, LayoutDirection.Rtl),
+            arrayOf(1f, Alignment.End, 0, 2, LayoutDirection.Rtl),
+
+            // Full-width items with item spacing
+            arrayOf(1f, Alignment.Start, 4, 2, LayoutDirection.Ltr),
+            arrayOf(1f, Alignment.CenterHorizontally, 4, 2, LayoutDirection.Ltr),
+            arrayOf(1f, Alignment.End, 4, 2, LayoutDirection.Ltr),
+            arrayOf(1f, Alignment.Start, 4, 2, LayoutDirection.Rtl),
+            arrayOf(1f, Alignment.CenterHorizontally, 4, 2, LayoutDirection.Rtl),
+            arrayOf(1f, Alignment.End, 4, 2, LayoutDirection.Rtl),
 
             // Test an increased offscreenLimit
-            arrayOf(1f, Alignment.CenterHorizontally, 4, LayoutDirection.Ltr),
-            arrayOf(1f, Alignment.CenterHorizontally, 4, LayoutDirection.Rtl),
+            arrayOf(1f, Alignment.CenterHorizontally, 0, 4, LayoutDirection.Ltr),
+            arrayOf(1f, Alignment.CenterHorizontally, 0, 4, LayoutDirection.Rtl),
 
             // Test items with 80% widths
-            arrayOf(0.8f, Alignment.Start, 2, LayoutDirection.Ltr),
-            arrayOf(0.8f, Alignment.CenterHorizontally, 2, LayoutDirection.Ltr),
-            arrayOf(0.8f, Alignment.End, 2, LayoutDirection.Ltr),
-            arrayOf(0.8f, Alignment.Start, 2, LayoutDirection.Rtl),
-            arrayOf(0.8f, Alignment.CenterHorizontally, 2, LayoutDirection.Rtl),
-            arrayOf(0.8f, Alignment.End, 2, LayoutDirection.Rtl),
+            arrayOf(0.8f, Alignment.Start, 0, 2, LayoutDirection.Ltr),
+            arrayOf(0.8f, Alignment.CenterHorizontally, 0, 2, LayoutDirection.Ltr),
+            arrayOf(0.8f, Alignment.End, 0, 2, LayoutDirection.Ltr),
+            arrayOf(0.8f, Alignment.Start, 0, 2, LayoutDirection.Rtl),
+            arrayOf(0.8f, Alignment.CenterHorizontally, 0, 2, LayoutDirection.Rtl),
+            arrayOf(0.8f, Alignment.End, 0, 2, LayoutDirection.Rtl),
         )
     }
+
+    override val pageCount: Int
+        get() = 10
 
     override fun SemanticsNodeInteraction.swipeAcrossCenter(
         velocity: Float,
@@ -124,25 +134,24 @@ class HorizontalPagerTest(
             .run {
                 if (layoutDirection == LayoutDirection.Ltr) {
                     assertLeftPositionInRootIsEqualTo(
-                        expectedFirstItemLeft + (expectedItemSize * (page - currentPage))
+                        expectedFirstItemLeft + ((expectedItemSize + itemSpacingDp.dp) * (page - currentPage))
                     )
                 } else { // layoutDirection = RTL
                     assertLeftPositionInRootIsEqualTo(
-                        expectedFirstItemLeft - (expectedItemSize * (page - currentPage))
+                        expectedFirstItemLeft - ((expectedItemSize + itemSpacingDp.dp) * (page - currentPage))
                     )
                 }
             }
     }
 
     override fun setPagerContent(
-        layoutDirection: LayoutDirection,
         pageCount: Int,
-        offscreenLimit: Int,
     ): PagerState {
         val pagerState = PagerState(pageCount = pageCount)
         composeTestRule.setContent(layoutDirection) {
             HorizontalPager(
                 state = pagerState,
+                itemSpacing = itemSpacingDp.dp,
                 offscreenLimit = offscreenLimit,
                 horizontalAlignment = horizontalAlignment,
                 modifier = Modifier.fillMaxSize()
