@@ -138,6 +138,7 @@ fun HorizontalPager(
     state: PagerState,
     modifier: Modifier = Modifier,
     reverseLayout: Boolean = false,
+    isDraggable: Boolean = true,
     @IntRange(from = 1) offscreenLimit: Int = 1,
     flingBehavior: FlingBehavior = PagerDefaults.defaultPagerFlingConfig(state),
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
@@ -149,6 +150,7 @@ fun HorizontalPager(
         modifier = modifier,
         isVertical = false,
         reverseLayout = reverseLayout,
+        isDraggable = isDraggable,
         offscreenLimit = offscreenLimit,
         flingBehavior = flingBehavior,
         verticalAlignment = verticalAlignment,
@@ -184,6 +186,7 @@ fun VerticalPager(
     state: PagerState,
     modifier: Modifier = Modifier,
     reverseLayout: Boolean = false,
+    isDraggable: Boolean = true,
     @IntRange(from = 1) offscreenLimit: Int = 1,
     flingBehavior: FlingBehavior = PagerDefaults.defaultPagerFlingConfig(state),
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
@@ -195,6 +198,7 @@ fun VerticalPager(
         modifier = modifier,
         isVertical = true,
         reverseLayout = reverseLayout,
+        isDraggable = isDraggable,
         offscreenLimit = offscreenLimit,
         verticalAlignment = verticalAlignment,
         horizontalAlignment = horizontalAlignment,
@@ -209,6 +213,7 @@ internal fun Pager(
     state: PagerState,
     modifier: Modifier,
     reverseLayout: Boolean,
+    isDraggable: Boolean,
     isVertical: Boolean,
     verticalAlignment: Alignment.Vertical,
     horizontalAlignment: Alignment.Horizontal,
@@ -245,12 +250,16 @@ internal fun Pager(
         selectableGroup()
     }
 
-    val scrollable = Modifier.scrollable(
-        orientation = if (isVertical) Orientation.Vertical else Orientation.Horizontal,
-        flingBehavior = flingBehavior,
-        reverseDirection = reverseDirection,
-        state = state,
-    )
+    val scrollable = if(isDraggable) { 
+        Modifier.scrollable(
+            orientation = if (isVertical) Orientation.Vertical else Orientation.Horizontal,
+            flingBehavior = flingBehavior,
+            reverseDirection = reverseDirection,
+            state = state,
+        ) 
+    } else { 
+        Modifier 
+    }
 
     Layout(
         modifier = modifier
