@@ -22,14 +22,13 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.google.accompanist.insets.Insets.Companion.Insets
 
 /**
- * Interface which represents a single set of insets. Each instance holds four integer offsets
- * which describe changes to the four edges of a rectangle.
+ * Interface which represents a single set of inset values. Each instance holds four integer
+ * offsets which describe changes to the four edges of a rectangle.
  */
 @Stable
-interface Insets {
+interface InsetValues {
     /**
      * The left dimension of these insets in pixels.
      */
@@ -62,16 +61,16 @@ interface Insets {
         top: Int = this.top,
         right: Int = this.right,
         bottom: Int = this.bottom,
-    ): Insets = ImmutableInsets(left, top, right, bottom)
+    ): InsetValues = ImmutableInsetValues(left, top, right, bottom)
 
-    operator fun minus(other: Insets): Insets = copy(
+    operator fun minus(other: InsetValues): InsetValues = copy(
         left = this.left - other.left,
         top = this.top - other.top,
         right = this.right - other.right,
         bottom = this.bottom - other.bottom,
     )
 
-    operator fun plus(other: Insets): Insets = copy(
+    operator fun plus(other: InsetValues): InsetValues = copy(
         left = this.left + other.left,
         top = this.top + other.top,
         right = this.right + other.right,
@@ -80,42 +79,42 @@ interface Insets {
 
     companion object {
         /**
-         * Creates an [Insets] instance with the given values.
+         * Creates an [InsetValues] instance with the given values.
          */
-        fun Insets(
+        fun InsetValues(
             left: Int = 0,
             top: Int = 0,
             right: Int = 0,
             bottom: Int = 0,
-        ): Insets = ImmutableInsets(left, top, right, bottom)
+        ): InsetValues = ImmutableInsetValues(left, top, right, bottom)
 
         /**
-         * An empty [Insets] instance, with each dimension set to a value of 0.
+         * An empty [InsetValues] instance, with each dimension set to a value of 0.
          */
-        val Empty: Insets = ImmutableInsets()
+        val Empty: InsetValues = ImmutableInsetValues()
     }
 }
 
 /**
- * Immutable implementation of [Insets].
+ * Immutable implementation of [InsetValues].
  */
 @Immutable
-internal class ImmutableInsets(
+internal class ImmutableInsetValues(
     override val left: Int = 0,
     override val top: Int = 0,
     override val right: Int = 0,
     override val bottom: Int = 0,
-) : Insets
+) : InsetValues
 
 /**
- * Mutable [androidx.compose.runtime.State] backed implementation of [Insets].
+ * Mutable [androidx.compose.runtime.State] backed implementation of [InsetValues].
  */
-internal class MutableInsets(
+internal class MutableInsetValues(
     left: Int = 0,
     top: Int = 0,
     right: Int = 0,
     bottom: Int = 0,
-) : Insets {
+) : InsetValues {
     override var left by mutableStateOf(left)
         internal set
 
@@ -139,7 +138,7 @@ internal class MutableInsets(
 /**
  * Updates our mutable state backed [InsetsType] from an Android system insets.
  */
-internal fun MutableInsets.updateFrom(insets: androidx.core.graphics.Insets) {
+internal fun MutableInsetValues.updateFrom(insets: androidx.core.graphics.Insets) {
     left = insets.left
     top = insets.top
     right = insets.right

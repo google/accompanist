@@ -114,10 +114,10 @@ private fun Sample() {
             val newWindowInsets = LocalWindowInsets.current.run {
                 copy(
                     statusBars = statusBars.copy(
-                        layoutInsets = statusBars.layoutInsets.copy(top = topAppBarSize)
+                        layoutInsets = statusBars.layoutInsetValues.copy(top = topAppBarSize)
                     ),
                     navigationBars = navigationBars.copy(
-                        layoutInsets = navigationBars.layoutInsets.copy(bottom = bottomBarSize)
+                        layoutInsets = navigationBars.layoutInsetValues.copy(bottom = bottomBarSize)
                     )
                 )
             }
