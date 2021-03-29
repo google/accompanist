@@ -170,9 +170,7 @@ internal class MutableInsetsType : InsetsType {
     }
 }
 
-internal class CalculatedInsetsType(
-    vararg types: InsetsType
-) : InsetsType {
+internal class CalculatedInsetsType(vararg types: InsetsType) : InsetsType {
     override val layoutInsets: Insets by derivedStateOf {
         types.fold(Insets.Empty) { acc, insetsType ->
             // TODO: Probably want to coerce rather than add
@@ -189,6 +187,7 @@ internal class CalculatedInsetsType(
     override val isVisible: Boolean by derivedStateOf {
         types.any { it.isVisible }
     }
+
     override val animationInProgress: Boolean by derivedStateOf {
         types.any { it.animationInProgress }
     }
@@ -205,4 +204,4 @@ internal class CalculatedInsetsType(
     }
 }
 
-internal fun InsetsType.asMutable(): MutableInsetsType = this as MutableInsetsType
+internal fun InsetsType.toMutableInsetsType(): MutableInsetsType = this as MutableInsetsType

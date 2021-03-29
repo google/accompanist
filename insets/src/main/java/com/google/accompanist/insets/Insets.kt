@@ -264,19 +264,19 @@ class ViewWindowInsetObserver(private val view: View) {
         ViewCompat.setOnApplyWindowInsetsListener(view) { _, wic ->
             // Go through each inset type and update its layoutInsets from the
             // WindowInsetsCompat values
-            windowInsets.statusBars.asMutable().run {
+            windowInsets.statusBars.toMutableInsetsType().run {
                 _layoutInsets.updateFrom(wic.getInsets(WindowInsetsCompat.Type.statusBars()))
                 isVisible = wic.isVisible(WindowInsetsCompat.Type.statusBars())
             }
-            windowInsets.navigationBars.asMutable().run {
+            windowInsets.navigationBars.toMutableInsetsType().run {
                 _layoutInsets.updateFrom(wic.getInsets(WindowInsetsCompat.Type.navigationBars()))
                 isVisible = wic.isVisible(WindowInsetsCompat.Type.navigationBars())
             }
-            windowInsets.systemGestures.asMutable().run {
+            windowInsets.systemGestures.toMutableInsetsType().run {
                 _layoutInsets.updateFrom(wic.getInsets(WindowInsetsCompat.Type.systemGestures()))
                 isVisible = wic.isVisible(WindowInsetsCompat.Type.systemGestures())
             }
-            windowInsets.ime.asMutable().run {
+            windowInsets.ime.toMutableInsetsType().run {
                 _layoutInsets.updateFrom(wic.getInsets(WindowInsetsCompat.Type.ime()))
                 isVisible = wic.isVisible(WindowInsetsCompat.Type.ime())
             }
@@ -419,16 +419,16 @@ private class InnerWindowInsetsAnimationCallback(
     override fun onPrepare(animation: WindowInsetsAnimationCompat) {
         // Go through each type and flag that an animation has started
         if (animation.typeMask and WindowInsetsCompat.Type.ime() != 0) {
-            windowInsets.ime.asMutable().onAnimationStart()
+            windowInsets.ime.toMutableInsetsType().onAnimationStart()
         }
         if (animation.typeMask and WindowInsetsCompat.Type.statusBars() != 0) {
-            windowInsets.statusBars.asMutable().onAnimationStart()
+            windowInsets.statusBars.toMutableInsetsType().onAnimationStart()
         }
         if (animation.typeMask and WindowInsetsCompat.Type.navigationBars() != 0) {
-            windowInsets.navigationBars.asMutable().onAnimationStart()
+            windowInsets.navigationBars.toMutableInsetsType().onAnimationStart()
         }
         if (animation.typeMask and WindowInsetsCompat.Type.systemGestures() != 0) {
-            windowInsets.systemGestures.asMutable().onAnimationStart()
+            windowInsets.systemGestures.toMutableInsetsType().onAnimationStart()
         }
     }
 
@@ -437,22 +437,22 @@ private class InnerWindowInsetsAnimationCallback(
         runningAnimations: List<WindowInsetsAnimationCompat>
     ): WindowInsetsCompat {
         // Update each inset type with the given parameters
-        windowInsets.ime.asMutable().updateAnimation(
+        windowInsets.ime.toMutableInsetsType().updateAnimation(
             platformInsets = platformInsets,
             runningAnimations = runningAnimations,
             type = WindowInsetsCompat.Type.ime()
         )
-        windowInsets.statusBars.asMutable().updateAnimation(
+        windowInsets.statusBars.toMutableInsetsType().updateAnimation(
             platformInsets = platformInsets,
             runningAnimations = runningAnimations,
             type = WindowInsetsCompat.Type.statusBars()
         )
-        windowInsets.navigationBars.asMutable().updateAnimation(
+        windowInsets.navigationBars.toMutableInsetsType().updateAnimation(
             platformInsets = platformInsets,
             runningAnimations = runningAnimations,
             type = WindowInsetsCompat.Type.navigationBars()
         )
-        windowInsets.systemBars.asMutable().updateAnimation(
+        windowInsets.systemBars.toMutableInsetsType().updateAnimation(
             platformInsets = platformInsets,
             runningAnimations = runningAnimations,
             type = WindowInsetsCompat.Type.systemGestures()
@@ -478,19 +478,19 @@ private class InnerWindowInsetsAnimationCallback(
     override fun onEnd(animation: WindowInsetsAnimationCompat) {
         // Go through each type and flag that an animation has ended
         if (animation.typeMask and WindowInsetsCompat.Type.ime() != 0) {
-            windowInsets.ime.asMutable().onAnimationEnd()
+            windowInsets.ime.toMutableInsetsType().onAnimationEnd()
         }
         if (animation.typeMask and WindowInsetsCompat.Type.statusBars() != 0) {
-            windowInsets.statusBars.asMutable().onAnimationEnd()
+            windowInsets.statusBars.toMutableInsetsType().onAnimationEnd()
         }
         if (animation.typeMask and WindowInsetsCompat.Type.navigationBars() != 0) {
-            windowInsets.navigationBars.asMutable().onAnimationEnd()
+            windowInsets.navigationBars.toMutableInsetsType().onAnimationEnd()
         }
         if (animation.typeMask and WindowInsetsCompat.Type.systemBars() != 0) {
-            windowInsets.systemBars.asMutable().onAnimationEnd()
+            windowInsets.systemBars.toMutableInsetsType().onAnimationEnd()
         }
         if (animation.typeMask and WindowInsetsCompat.Type.systemGestures() != 0) {
-            windowInsets.systemGestures.asMutable().onAnimationEnd()
+            windowInsets.systemGestures.toMutableInsetsType().onAnimationEnd()
         }
     }
 }

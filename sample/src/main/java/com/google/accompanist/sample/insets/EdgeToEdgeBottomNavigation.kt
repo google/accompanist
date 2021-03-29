@@ -18,6 +18,7 @@
 
 package com.google.accompanist.sample.insets
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -71,6 +72,13 @@ class EdgeToEdgeBottomNavigation : ComponentActivity() {
         // insets
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
+        // We turn off the platform's contrast enforcement (scrim) as we provide enough
+        // contrast ourselves
+        if (Build.VERSION.SDK_INT >= 29) {
+            window.isNavigationBarContrastEnforced = false
+            window.isStatusBarContrastEnforced = false
+        }
+
         setContent {
             AccompanistSampleTheme {
                 val controller = rememberAndroidSystemUiController()
@@ -83,6 +91,11 @@ class EdgeToEdgeBottomNavigation : ComponentActivity() {
         }
     }
 }
+
+/**
+ * The alpha value applied to the surface color for app bar backgrounds.
+ */
+private const val TranslucentAppBarAlpha = 0.93f
 
 @Composable
 private fun Sample() {
@@ -127,7 +140,7 @@ private fun Sample() {
              */
             InsetAwareTopAppBar(
                 title = { Text(stringResource(R.string.insets_title_bottomnav)) },
-                backgroundColor = MaterialTheme.colors.surface.copy(alpha = 0.9f),
+                backgroundColor = MaterialTheme.colors.surface.copy(alpha = TranslucentAppBarAlpha),
                 modifier = Modifier
                     .fillMaxWidth()
                     // We use onSizeChanged to track the app bar height, and update
@@ -140,7 +153,7 @@ private fun Sample() {
              * [InsetAwareBottomNavigation] below automatically draws behind the status bar too.
              */
             InsetAwareBottomNavigation(
-                backgroundColor = MaterialTheme.colors.surface.copy(alpha = 0.9f),
+                backgroundColor = MaterialTheme.colors.surface.copy(alpha = TranslucentAppBarAlpha),
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth()
