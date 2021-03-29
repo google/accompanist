@@ -25,8 +25,6 @@ import androidx.compose.runtime.setValue
 
 @Stable
 interface InsetsType : Insets {
-    val appendLayoutInsets: Insets
-
     /**
      * The layout insets for this [InsetsType]. These are the insets which are defined from the
      * current window layout.
@@ -87,7 +85,29 @@ interface InsetsType : Insets {
     @get:FloatRange(from = 0.0, to = 1.0)
     val animationFraction: Float
 
-    fun copyWithAppend(appendLayoutInsets: Insets = Insets.Empty): InsetsType
+    /**
+     * TODO
+     */
+    fun copy(
+        layoutInsets: Insets = this.layoutInsets,
+        isVisible: Boolean = this.isVisible,
+        animatedInsets: Insets = this.animatedInsets,
+        animationInProgress: Boolean = this.animationInProgress,
+        animationFraction: Float = this.animationFraction,
+    ): InsetsType = ImmutableInsetsType(
+        layoutInsets = layoutInsets,
+        animatedInsets = animatedInsets,
+        isVisible = isVisible,
+        animationInProgress = animationInProgress,
+        animationFraction = animationFraction,
+    )
+
+    companion object {
+        /**
+         * TODO
+         */
+        val Empty: InsetsType = ImmutableInsetsType()
+    }
 }
 
 /**
@@ -99,21 +119,8 @@ interface InsetsType : Insets {
 @Suppress("MemberVisibilityCanBePrivate")
 internal class MutableInsetsType : InsetsType {
     private var ongoingAnimationsCount by mutableStateOf(0)
-    var _layoutInsets = MutableInsets()
-    var _animatedInsets = MutableInsets()
-
-    override var appendLayoutInsets by mutableStateOf(Insets.Empty)
-        private set
-
-    override fun copyWithAppend(
-        appendLayoutInsets: Insets
-    ): InsetsType {
-        val new = MutableInsetsType()
-        new._animatedInsets = _animatedInsets
-        new._layoutInsets = _layoutInsets
-        new.appendLayoutInsets = appendLayoutInsets
-        return new
-    }
+    internal val _layoutInsets = MutableInsets()
+    internal val _animatedInsets = MutableInsets()
 
     /**
      * The layout insets for this [InsetsType]. These are the insets which are defined from the
@@ -122,9 +129,8 @@ internal class MutableInsetsType : InsetsType {
      * You should not normally need to use this directly, and instead use [left], [top],
      * [right], and [bottom] to return the correct value for the current state.
      */
-    override val layoutInsets: Insets by derivedStateOf {
-        _layoutInsets + appendLayoutInsets
-    }
+    override val layoutInsets: Insets
+        get() = _layoutInsets
 
     /**
      * The animated insets for this [InsetsType]. These are the insets which are updated from
@@ -170,6 +176,14 @@ internal class MutableInsetsType : InsetsType {
     }
 }
 
+internal class ImmutableInsetsType(
+    override val layoutInsets: Insets = Insets.Empty,
+    override val animatedInsets: Insets = Insets.Empty,
+    override val isVisible: Boolean = false,
+    override val animationInProgress: Boolean = false,
+    override val animationFraction: Float = 0f,
+) : InsetsType
+
 internal class CalculatedInsetsType(vararg types: InsetsType) : InsetsType {
     override val layoutInsets: Insets by derivedStateOf {
         types.fold(Insets.Empty) { acc, insetsType ->
@@ -195,13 +209,4 @@ internal class CalculatedInsetsType(vararg types: InsetsType) : InsetsType {
     override val animationFraction: Float by derivedStateOf {
         types.maxOf { it.animationFraction }
     }
-
-    override val appendLayoutInsets: Insets
-        get() = Insets.Empty
-
-    override fun copyWithAppend(appendLayoutInsets: Insets): InsetsType {
-        return this
-    }
 }
-
-internal fun InsetsType.toMutableInsetsType(): MutableInsetsType = this as MutableInsetsType

@@ -53,8 +53,6 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
-import com.google.accompanist.insets.Insets
-import com.google.accompanist.insets.Insets.Companion.Insets
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.toPaddingValues
@@ -113,20 +111,17 @@ private fun Sample() {
 
             var selectedBottomNavIndex by remember { mutableStateOf(0) }
 
-            val currentWindowInsets = LocalWindowInsets.current
-            val newWindowInsets = currentWindowInsets.copy(
-                statusBars = currentWindowInsets.statusBars.copyWithAppend(
-                    Insets(top = topAppBarSize)
-                ),
-                navigationBars = currentWindowInsets.navigationBars.copyWithAppend(
-                    Insets(bottom = bottomBarSize)
+            val newWindowInsets = LocalWindowInsets.current.run {
+                copy(
+                    statusBars = statusBars.copy(
+                        layoutInsets = statusBars.layoutInsets.copy(top = topAppBarSize)
+                    ),
+                    navigationBars = navigationBars.copy(
+                        layoutInsets = navigationBars.layoutInsets.copy(bottom = bottomBarSize)
+                    )
                 )
-            )
+            }
 
-            // We use the systemBar insets as the source of our content padding.
-            // We add on the topAppBarSize, so that the content is displayed below
-            // the app bar. Since the top inset is already contained within the app
-            // bar height, we disable handling it in toPaddingValues().
             CompositionLocalProvider(LocalWindowInsets provides newWindowInsets) {
                 AppPage(
                     pageTitle = "Page: $selectedBottomNavIndex",
@@ -218,4 +213,4 @@ fun AppPage(
     }
 }
 
-private val listItems = List(40) { randomSampleImageUrl(it) }
+private val listItems = List(30) { randomSampleImageUrl(it) }
