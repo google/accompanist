@@ -19,7 +19,6 @@ package com.google.accompanist.swiperefresh
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.MutatorMutex
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -89,7 +88,7 @@ fun SwipeRefresh(
             size = indicatorSize
         )
     },
-    content: @Composable BoxScope.() -> Unit,
+    content: @Composable () -> Unit,
 ) {
     if (isRefreshing) {
         state.refreshState = SwipeRefreshState2.Refreshing

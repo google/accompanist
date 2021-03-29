@@ -45,7 +45,7 @@ public abstract interface class com/google/accompanist/swiperefresh/SwipeRefresh
 }
 
 public final class com/google/accompanist/swiperefresh/SwipeRefreshKt {
-	public static final fun SwipeRefresh (ZLkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Lcom/google/accompanist/swiperefresh/SwipeRefreshState;Lcom/google/accompanist/swiperefresh/IndicatorSize;Lkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+	public static final fun SwipeRefresh (ZLkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Lcom/google/accompanist/swiperefresh/SwipeRefreshState;Lcom/google/accompanist/swiperefresh/IndicatorSize;Lkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 }
 
 public final class com/google/accompanist/swiperefresh/SwipeRefreshState {
