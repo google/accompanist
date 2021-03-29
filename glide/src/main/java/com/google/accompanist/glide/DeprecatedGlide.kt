@@ -20,6 +20,7 @@
 package com.google.accompanist.glide
 
 import android.graphics.drawable.Drawable
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
@@ -60,6 +61,8 @@ import com.google.accompanist.imageloading.MaterialLoadingImage
  * @param requestBuilder Optional builder for the [RequestBuilder].
  * @param requestManager The [RequestManager] to use when requesting the image. Defaults to the
  * current value of [LocalRequestManager].
+ * @param previewPlaceholder Drawable resource ID which will be displayed when this function is
+ * ran in preview mode.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
@@ -72,6 +75,7 @@ fun GlideImage(
     modifier: Modifier = Modifier,
     requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)? = null,
     requestManager: RequestManager = GlideImageDefaults.defaultRequestManager(),
+    @DrawableRes previewPlaceholder: Int = 0,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = {},
     content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
@@ -84,6 +88,7 @@ fun GlideImage(
             requestBuilder = requestBuilder,
             onRequestCompleted = onRequestCompleted,
         ),
+        previewPlaceholder = previewPlaceholder,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         modifier = modifier,
         content = content
@@ -132,6 +137,8 @@ fun GlideImage(
  * @param requestBuilder Optional builder for the [RequestBuilder].
  * @param requestManager The [RequestManager] to use when requesting the image. Defaults to the
  * current value of [LocalRequestManager].
+ * @param previewPlaceholder Drawable resource ID which will be displayed when this function is
+ * ran in preview mode.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
@@ -148,6 +155,7 @@ fun GlideImage(
     fadeIn: Boolean = false,
     requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)? = null,
     requestManager: RequestManager = GlideImageDefaults.defaultRequestManager(),
+    @DrawableRes previewPlaceholder: Int = 0,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = {},
     error: @Composable (BoxScope.(ImageLoadState.Error) -> Unit)? = null,
@@ -161,6 +169,7 @@ fun GlideImage(
             requestBuilder = requestBuilder,
             onRequestCompleted = onRequestCompleted,
         ),
+        previewPlaceholder = previewPlaceholder,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         modifier = modifier,
     ) { imageState ->

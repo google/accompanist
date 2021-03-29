@@ -17,8 +17,8 @@ public final class com/google/accompanist/imageloading/DataSource : java/lang/En
 }
 
 public final class com/google/accompanist/imageloading/ImageLoad {
-	public static final fun ImageLoad (Lcom/google/accompanist/imageloading/ImageLoadRequest;Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;I)V
-	public static final fun ImageLoad (Lcom/google/accompanist/imageloading/ImageLoadRequest;Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;ZILkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun ImageLoad (Lcom/google/accompanist/imageloading/ImageLoadRequest;Landroidx/compose/ui/Modifier;ILkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
+	public static final fun ImageLoad (Lcom/google/accompanist/imageloading/ImageLoadRequest;Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;ZIILkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 	public static final fun getDefaultRefetchOnSizeChangeLambda ()Lkotlin/jvm/functions/Function2;
 }
 

@@ -19,6 +19,8 @@
 
 package com.google.accompanist.coil
 
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -55,6 +57,8 @@ import com.google.accompanist.imageloading.MaterialLoadingImage
  * @param requestBuilder Optional builder for the [ImageRequest].
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to
  * [CoilImageDefaults.defaultImageLoader].
+ * @param previewPlaceholder Drawable resource ID which will be displayed when this function is
+ * ran in preview mode.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
@@ -86,6 +90,7 @@ fun CoilImage(
     modifier: Modifier = Modifier,
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
     imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
+    @DrawableRes previewPlaceholder: Int = 0,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = {},
     content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
@@ -98,6 +103,7 @@ fun CoilImage(
             imageLoader = imageLoader,
             onRequestCompleted = onRequestCompleted,
         ),
+        previewPlaceholder = previewPlaceholder,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         modifier = modifier,
         content = content
@@ -127,6 +133,8 @@ fun CoilImage(
  * @param requestBuilder Optional builder for the [ImageRequest].
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to
  * [CoilImageDefaults.defaultImageLoader].
+ * @param previewPlaceholder Drawable resource ID which will be displayed when this function is
+ * ran in preview mode.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
@@ -158,6 +166,7 @@ fun CoilImage(
     modifier: Modifier = Modifier,
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
     imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
+    @DrawableRes previewPlaceholder: Int = 0,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = {},
     content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
@@ -170,6 +179,7 @@ fun CoilImage(
             imageLoader = imageLoader,
             onRequestCompleted = onRequestCompleted,
         ),
+        previewPlaceholder = previewPlaceholder,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         modifier = modifier,
         content = content
@@ -218,6 +228,8 @@ fun CoilImage(
  * @param requestBuilder Optional builder for the [ImageRequest].
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to
  * [CoilImageDefaults.defaultImageLoader].
+ * @param previewPlaceholder Drawable resource ID which will be displayed when this function is
+ * ran in preview mode.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
@@ -257,6 +269,7 @@ fun CoilImage(
     fadeIn: Boolean = false,
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
     imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
+    @DrawableRes previewPlaceholder: Int = 0,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = {},
     error: @Composable (BoxScope.(ImageLoadState.Error) -> Unit)? = null,
@@ -270,6 +283,7 @@ fun CoilImage(
             imageLoader = imageLoader,
             onRequestCompleted = onRequestCompleted,
         ),
+        previewPlaceholder = previewPlaceholder,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         modifier = modifier,
     ) { imageState ->
@@ -333,6 +347,8 @@ fun CoilImage(
  * @param requestBuilder Optional builder for the [ImageRequest].
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to
  * [CoilImageDefaults.defaultImageLoader].
+ * @param previewPlaceholder Drawable resource ID which will be displayed when this function is
+ * ran in preview mode.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
@@ -372,6 +388,7 @@ fun CoilImage(
     fadeIn: Boolean = false,
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
     imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
+    @DrawableRes previewPlaceholder: Int = 0,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
     onRequestCompleted: (ImageLoadState) -> Unit = {},
     error: @Composable (BoxScope.(ImageLoadState.Error) -> Unit)? = null,
@@ -385,6 +402,7 @@ fun CoilImage(
             imageLoader = imageLoader,
             onRequestCompleted = onRequestCompleted,
         ),
+        previewPlaceholder = previewPlaceholder,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         modifier = modifier,
     ) { imageState ->

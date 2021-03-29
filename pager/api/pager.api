@@ -2,8 +2,8 @@ public abstract interface annotation class com/google/accompanist/pager/Experime
 }
 
 public final class com/google/accompanist/pager/Pager {
-	public static final fun HorizontalPager (Lcom/google/accompanist/pager/PagerState;Landroidx/compose/ui/Modifier;ZILandroidx/compose/foundation/gestures/FlingBehavior;Landroidx/compose/ui/Alignment$Vertical;Landroidx/compose/ui/Alignment$Horizontal;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
-	public static final fun VerticalPager (Lcom/google/accompanist/pager/PagerState;Landroidx/compose/ui/Modifier;ZILandroidx/compose/foundation/gestures/FlingBehavior;Landroidx/compose/ui/Alignment$Vertical;Landroidx/compose/ui/Alignment$Horizontal;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
+	public static final fun HorizontalPager-7vwJh_E (Lcom/google/accompanist/pager/PagerState;Landroidx/compose/ui/Modifier;ZFIZLandroidx/compose/foundation/gestures/FlingBehavior;Landroidx/compose/ui/Alignment$Vertical;Landroidx/compose/ui/Alignment$Horizontal;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
+	public static final fun VerticalPager-7vwJh_E (Lcom/google/accompanist/pager/PagerState;Landroidx/compose/ui/Modifier;ZFIZLandroidx/compose/foundation/gestures/FlingBehavior;Landroidx/compose/ui/Alignment$Vertical;Landroidx/compose/ui/Alignment$Horizontal;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
 	public static final fun calculateCurrentOffsetForPage (Lcom/google/accompanist/pager/PagerScope;I)F
 }
 

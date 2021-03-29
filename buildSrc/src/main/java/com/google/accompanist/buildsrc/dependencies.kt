@@ -59,11 +59,11 @@ object Libs {
 
         const val dynamicanimation = "androidx.dynamicanimation:dynamicanimation-ktx:1.0.0-alpha03"
 
-        const val appcompat = "androidx.appcompat:appcompat:1.3.0-beta01"
+        const val appcompat = "androidx.appcompat:appcompat:1.3.0-rc01"
 
         object Compose {
-            const val snapshot = "7217131"
-            const val version = "1.0.0-SNAPSHOT"
+            const val snapshot = ""
+            const val version = "1.0.0-beta03"
 
             @JvmStatic
             val snapshotUrl: String
@@ -85,7 +85,7 @@ object Libs {
             const val iconsExtended = "androidx.compose.material:material-icons-extended:${version}"
 
             const val util = "androidx.compose.ui:ui-util:${version}"
-            const val tooling = "androidx.ui:ui-tooling:${version}"
+            const val tooling = "androidx.compose.ui:ui-tooling:${version}"
             const val test = "androidx.compose.ui:ui-test-junit4:${version}"
         }
 
@@ -99,7 +99,7 @@ object Libs {
         const val core1_5_0 = "androidx.core:core:1.5.0-beta03"
 
         object Activity {
-            const val activityCompose = "androidx.activity:activity-compose:1.3.0-SNAPSHOT"
+            const val activityCompose = "androidx.activity:activity-compose:1.3.0-alpha05"
         }
     }
 

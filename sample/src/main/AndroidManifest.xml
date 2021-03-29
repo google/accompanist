@@ -158,7 +158,6 @@
             </intent-filter>
         </activity>
 
-
         <activity
             android:name=".pager.HorizontalPagerTabsSample"
             android:label="@string/horiz_pager_title_tabs">
@@ -180,6 +179,16 @@
         <activity
             android:name=".pager.VerticalPagerWithIndicatorSample"
             android:label="@string/vertical_pager_with_indicator_title">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+
+        <activity
+            android:name=".pager.NestedPagersSample"
+            android:label="@string/pagers_title_nested">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />

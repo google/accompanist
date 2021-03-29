@@ -19,6 +19,8 @@
 
 package com.google.accompanist.imageloading
 
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
@@ -39,6 +41,8 @@ import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
@@ -108,8 +112,20 @@ fun <R : Any> ImageLoad(
     colorFilter: ColorFilter? = null,
     fadeIn: Boolean = false,
     fadeInDurationMs: Int = DefaultTransitionDuration,
+    @DrawableRes previewPlaceholder: Int = 0,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
 ) {
+    if (LocalInspectionMode.current && previewPlaceholder != 0) {
+        // If we're in inspection mode (preview) and we have a preview placeholder, just draw
+        // that using an Image and return
+        Image(
+            painter = painterResource(previewPlaceholder),
+            contentDescription = null,
+            modifier = modifier,
+        )
+        return
+    }
+
     val imageMgr = remember(request) {
         ImageLoader(
             request = request,
@@ -177,9 +193,21 @@ fun <R : Any> ImageLoad(
 fun <R : Any> ImageLoad(
     request: ImageLoadRequest<R>,
     modifier: Modifier,
+    @DrawableRes previewPlaceholder: Int = 0,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean,
     content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
 ) {
+    if (LocalInspectionMode.current && previewPlaceholder != 0) {
+        // If we're in inspection mode (preview) and we have a preview placeholder, just draw
+        // that using an Image and return
+        Image(
+            painter = painterResource(previewPlaceholder),
+            contentDescription = null,
+            modifier = modifier,
+        )
+        return
+    }
+
     val imageMgr = remember(request) {
         ImageLoader(
             request = request,
