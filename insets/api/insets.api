@@ -1,17 +1,8 @@
 public final class com/google/accompanist/insets/ComposeInsets {
-	public static final fun ProvideWindowInsets (ZLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
-	public static final fun ProvideWindowInsets (ZZLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
-	public static final fun coerceEachDimensionAtLeast (Lcom/google/accompanist/insets/InsetsType;Lcom/google/accompanist/insets/InsetsType;)Lcom/google/accompanist/insets/Insets;
 	public static final fun imePadding (Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
-	public static final fun navigationBarsHeight-3ABfNKs (Landroidx/compose/ui/Modifier;F)Landroidx/compose/ui/Modifier;
-	public static synthetic fun navigationBarsHeight-3ABfNKs$default (Landroidx/compose/ui/Modifier;FILjava/lang/Object;)Landroidx/compose/ui/Modifier;
 	public static final fun navigationBarsPadding (Landroidx/compose/ui/Modifier;ZZZ)Landroidx/compose/ui/Modifier;
 	public static synthetic fun navigationBarsPadding$default (Landroidx/compose/ui/Modifier;ZZZILjava/lang/Object;)Landroidx/compose/ui/Modifier;
-	public static final fun navigationBarsWidth-wH6b6FI (Landroidx/compose/ui/Modifier;Lcom/google/accompanist/insets/HorizontalSide;F)Landroidx/compose/ui/Modifier;
-	public static synthetic fun navigationBarsWidth-wH6b6FI$default (Landroidx/compose/ui/Modifier;Lcom/google/accompanist/insets/HorizontalSide;FILjava/lang/Object;)Landroidx/compose/ui/Modifier;
 	public static final fun navigationBarsWithImePadding (Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
-	public static final fun statusBarsHeight-3ABfNKs (Landroidx/compose/ui/Modifier;F)Landroidx/compose/ui/Modifier;
-	public static synthetic fun statusBarsHeight-3ABfNKs$default (Landroidx/compose/ui/Modifier;FILjava/lang/Object;)Landroidx/compose/ui/Modifier;
 	public static final fun statusBarsPadding (Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
 	public static final fun systemBarsPadding (Landroidx/compose/ui/Modifier;Z)Landroidx/compose/ui/Modifier;
 	public static synthetic fun systemBarsPadding$default (Landroidx/compose/ui/Modifier;ZILjava/lang/Object;)Landroidx/compose/ui/Modifier;
@@ -96,6 +87,19 @@ public final class com/google/accompanist/insets/InsetsType$DefaultImpls {
 	public static fun plus (Lcom/google/accompanist/insets/InsetsType;Lcom/google/accompanist/insets/Insets;)Lcom/google/accompanist/insets/Insets;
 }
 
+public final class com/google/accompanist/insets/InsetsTypeKt {
+	public static final fun coerceEachDimensionAtLeast (Lcom/google/accompanist/insets/InsetsType;Lcom/google/accompanist/insets/InsetsType;)Lcom/google/accompanist/insets/Insets;
+}
+
+public final class com/google/accompanist/insets/SizeKt {
+	public static final fun navigationBarsHeight-3ABfNKs (Landroidx/compose/ui/Modifier;F)Landroidx/compose/ui/Modifier;
+	public static synthetic fun navigationBarsHeight-3ABfNKs$default (Landroidx/compose/ui/Modifier;FILjava/lang/Object;)Landroidx/compose/ui/Modifier;
+	public static final fun navigationBarsWidth-wH6b6FI (Landroidx/compose/ui/Modifier;Lcom/google/accompanist/insets/HorizontalSide;F)Landroidx/compose/ui/Modifier;
+	public static synthetic fun navigationBarsWidth-wH6b6FI$default (Landroidx/compose/ui/Modifier;Lcom/google/accompanist/insets/HorizontalSide;FILjava/lang/Object;)Landroidx/compose/ui/Modifier;
+	public static final fun statusBarsHeight-3ABfNKs (Landroidx/compose/ui/Modifier;F)Landroidx/compose/ui/Modifier;
+	public static synthetic fun statusBarsHeight-3ABfNKs$default (Landroidx/compose/ui/Modifier;FILjava/lang/Object;)Landroidx/compose/ui/Modifier;
+}
+
 public final class com/google/accompanist/insets/VerticalSide : java/lang/Enum {
 	public static final field Bottom Lcom/google/accompanist/insets/VerticalSide;
 	public static final field Top Lcom/google/accompanist/insets/VerticalSide;
@@ -134,6 +138,8 @@ public final class com/google/accompanist/insets/WindowInsets$DefaultImpls {
 }
 
 public final class com/google/accompanist/insets/WindowInsetsKt {
+	public static final fun ProvideWindowInsets (ZLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun ProvideWindowInsets (ZZLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 	public static final fun getLocalWindowInsets ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 }
 

@@ -22,7 +22,14 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.google.accompanist.insets.Insets.Companion.Insets
 
+/**
+ * Represents the values for a type of insets, and stores information about the layout insets,
+ * animating insets, and visibility of the insets.
+ *
+ * [InsetsType] instances are commonly stored in a [WindowInsets] instance.
+ */
 @Stable
 interface InsetsType : Insets {
     /**
@@ -104,23 +111,19 @@ interface InsetsType : Insets {
 
     companion object {
         /**
-         * TODO
+         * Empty and immutable instance of [InsetsType].
          */
         val Empty: InsetsType = ImmutableInsetsType()
     }
 }
 
 /**
- * Represents the values for a type of insets, and stores information about the layout insets,
- * animating insets, and visibility of the insets.
- *
- * [InsetsType] instances are commonly stored in a [WindowInsets] instance.
+ * Mutable [androidx.compose.runtime.State] backed implementation of [InsetsType].
  */
-@Suppress("MemberVisibilityCanBePrivate")
 internal class MutableInsetsType : InsetsType {
     private var ongoingAnimationsCount by mutableStateOf(0)
-    internal val _layoutInsets = MutableInsets()
-    internal val _animatedInsets = MutableInsets()
+    internal val mutableLayoutInsets = MutableInsets()
+    internal val mutableAnimatedInsets = MutableInsets()
 
     /**
      * The layout insets for this [InsetsType]. These are the insets which are defined from the
@@ -130,7 +133,7 @@ internal class MutableInsetsType : InsetsType {
      * [right], and [bottom] to return the correct value for the current state.
      */
     override val layoutInsets: Insets
-        get() = _layoutInsets
+        get() = mutableLayoutInsets
 
     /**
      * The animated insets for this [InsetsType]. These are the insets which are updated from
@@ -141,7 +144,7 @@ internal class MutableInsetsType : InsetsType {
      * [right], and [bottom] to return the correct value for the current state.
      */
     override val animatedInsets: Insets
-        get() = _animatedInsets
+        get() = mutableAnimatedInsets
 
     /**
      * Whether the insets are currently visible.
@@ -151,8 +154,7 @@ internal class MutableInsetsType : InsetsType {
     /**
      * Whether this insets type is being animated at this moment.
      */
-    override val animationInProgress: Boolean
-        get() = ongoingAnimationsCount > 0
+    override val animationInProgress: Boolean by derivedStateOf { ongoingAnimationsCount > 0 }
 
     /**
      * The progress of any ongoing animations, in the range of 0 to 1.
@@ -170,12 +172,15 @@ internal class MutableInsetsType : InsetsType {
 
         if (ongoingAnimationsCount == 0) {
             // If there are no on-going animations, clear out the animated insets
-            _animatedInsets.reset()
+            mutableAnimatedInsets.reset()
             animationFraction = 0f
         }
     }
 }
 
+/**
+ * Shallow-immutable implementation of [InsetsType].
+ */
 internal class ImmutableInsetsType(
     override val layoutInsets: Insets = Insets.Empty,
     override val animatedInsets: Insets = Insets.Empty,
@@ -184,6 +189,10 @@ internal class ImmutableInsetsType(
     override val animationFraction: Float = 0f,
 ) : InsetsType
 
+/**
+ * Implementation of [InsetsType] whose values are calculated and derived from the [InsetsType]
+ * instances passed in to [types].
+ */
 internal class CalculatedInsetsType(vararg types: InsetsType) : InsetsType {
     override val layoutInsets: Insets by derivedStateOf {
         types.fold(Insets.Empty) { acc, insetsType ->
@@ -209,4 +218,27 @@ internal class CalculatedInsetsType(vararg types: InsetsType) : InsetsType {
     override val animationFraction: Float by derivedStateOf {
         types.maxOf { it.animationFraction }
     }
+}
+
+/**
+ * Ensures that each dimension is not less than corresponding dimension in the
+ * specified [minimumValue].
+ *
+ * @return this if every dimension is greater than or equal to the corresponding
+ * dimension value in [minimumValue], otherwise a copy of this with each dimension coerced with the
+ * corresponding dimension value in [minimumValue].
+ */
+fun InsetsType.coerceEachDimensionAtLeast(minimumValue: InsetsType): Insets {
+    // Fast path, no need to copy if: this >= minimumValue
+    if (left >= minimumValue.left && top >= minimumValue.top &&
+        right >= minimumValue.right && bottom >= minimumValue.bottom
+    ) {
+        return this
+    }
+    return MutableInsets(
+        left = left.coerceAtLeast(minimumValue.left),
+        top = top.coerceAtLeast(minimumValue.top),
+        right = right.coerceAtLeast(minimumValue.right),
+        bottom = bottom.coerceAtLeast(minimumValue.bottom),
+    )
 }
