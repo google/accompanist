@@ -28,6 +28,7 @@
     <string name="insets_title_basic">Insets: Basic</string>
     <string name="insets_title_fragment">Insets: Fragment</string>
     <string name="insets_title_list">Insets: Edge-to-edge list</string>
+    <string name="insets_title_bottomnav">Insets: Bottom Navigation</string>
     <string name="insets_title_imeanim">Insets: IME Animations</string>
 
     <string name="horiz_pager_title_basics">Horizontal Pager: Basic</string>

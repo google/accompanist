@@ -121,6 +121,16 @@
             </intent-filter>
         </activity>
 
+
+        <activity
+            android:name="com.google.accompanist.sample.insets.EdgeToEdgeBottomNavigation"
+            android:label="@string/insets_title_bottomnav">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name="com.google.accompanist.sample.insets.ImeAnimationSample"
             android:label="@string/insets_title_imeanim"

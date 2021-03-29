@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE")
+
 package com.google.accompanist.sample.insets
 
 import android.os.Bundle
@@ -22,17 +24,20 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Contacts
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.VideoCall
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,18 +49,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.toPaddingValues
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.google.accompanist.systemuicontroller.LocalSystemUiController
+import com.google.accompanist.systemuicontroller.rememberAndroidSystemUiController
 
-class EdgeToEdgeLazyColumn : ComponentActivity() {
+class EdgeToEdgeBottomNavigation : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -65,8 +69,11 @@ class EdgeToEdgeLazyColumn : ComponentActivity() {
 
         setContent {
             AccompanistSampleTheme {
-                ProvideWindowInsets {
-                    Sample()
+                val controller = rememberAndroidSystemUiController()
+                CompositionLocalProvider(LocalSystemUiController provides controller) {
+                    ProvideWindowInsets {
+                        Sample()
+                    }
                 }
             }
         }
@@ -75,7 +82,7 @@ class EdgeToEdgeLazyColumn : ComponentActivity() {
 
 @Composable
 private fun Sample() {
-    val systemUiController = rememberSystemUiController()
+    val systemUiController = LocalSystemUiController.current
     val useDarkIcons = MaterialTheme.colors.isLight
     SideEffect {
         systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = useDarkIcons)
@@ -85,6 +92,9 @@ private fun Sample() {
         Box(Modifier.fillMaxSize()) {
             // A state instance which allows us to track the size of the top app bar
             var topAppBarSize by remember { mutableStateOf(0) }
+            var bottomBarSize by remember { mutableStateOf(0) }
+
+            var selectedIndex by remember { mutableStateOf(0) }
 
             // We use the systemBar insets as the source of our content padding.
             // We add on the topAppBarSize, so that the content is displayed below
@@ -106,7 +116,7 @@ private fun Sample() {
              * [InsetAwareTopAppBar] below automatically draws behind the status bar too.
              */
             InsetAwareTopAppBar(
-                title = { Text(stringResource(R.string.insets_title_list)) },
+                title = { Text(stringResource(R.string.insets_title_bottomnav)) },
                 backgroundColor = MaterialTheme.colors.surface.copy(alpha = 0.9f),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -115,16 +125,45 @@ private fun Sample() {
                     .onSizeChanged { topAppBarSize = it.height }
             )
 
-            FloatingActionButton(
-                onClick = { /* TODO */ },
+            /**
+             * We show a translucent bottom navigation bar above which floats about the content. Our
+             * [InsetAwareBottomNavigation] below automatically draws behind the status bar too.
+             */
+            InsetAwareBottomNavigation(
+                backgroundColor = MaterialTheme.colors.surface.copy(alpha = 0.9f),
                 modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .navigationBarsPadding()
-                    .padding(16.dp)
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    // We use onSizeChanged to track the bottom nav bar height, and update
+                    // our state above
+                    .onSizeChanged { bottomBarSize = it.height }
             ) {
-                Icon(
-                    imageVector = Icons.Default.Face,
-                    contentDescription = "Face icon"
+                BottomNavigationItem(
+                    selected = selectedIndex == 0,
+                    onClick = { selectedIndex = 0 },
+                    label = { Text("Home") },
+                    icon = { Icon(Icons.Default.Home, null) },
+                )
+
+                BottomNavigationItem(
+                    selected = selectedIndex == 1,
+                    onClick = { selectedIndex = 1 },
+                    label = { Text("Phone") },
+                    icon = { Icon(Icons.Default.Phone, null) },
+                )
+
+                BottomNavigationItem(
+                    selected = selectedIndex == 2,
+                    onClick = { selectedIndex = 2 },
+                    label = { Text("Contacts") },
+                    icon = { Icon(Icons.Default.Contacts, null) },
+                )
+
+                BottomNavigationItem(
+                    selected = selectedIndex == 3,
+                    onClick = { selectedIndex = 3 },
+                    label = { Text("Video") },
+                    icon = { Icon(Icons.Default.VideoCall, null) },
                 )
             }
         }
