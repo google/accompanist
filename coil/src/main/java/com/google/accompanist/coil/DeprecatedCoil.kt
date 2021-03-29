@@ -17,6 +17,8 @@
 @file:JvmName("CoilImage")
 @file:JvmMultifileClass
 
+@file:Suppress("DEPRECATION")
+
 package com.google.accompanist.coil
 
 import androidx.annotation.DrawableRes

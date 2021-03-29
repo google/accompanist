@@ -17,6 +17,8 @@
 @file:JvmName("GlideImage")
 @file:JvmMultifileClass
 
+@file:Suppress("DEPRECATION")
+
 package com.google.accompanist.glide
 
 import android.graphics.drawable.Drawable

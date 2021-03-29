@@ -120,7 +120,7 @@ fun <R : Any> ImageLoad(
     fadeIn: Boolean = false,
     fadeInDurationMs: Int = DefaultTransitionDuration,
     @DrawableRes previewPlaceholder: Int = 0,
-    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
+    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
 ) {
     if (LocalInspectionMode.current && previewPlaceholder != 0) {
         // If we're in inspection mode (preview) and we have a preview placeholder, just draw
@@ -326,4 +326,5 @@ private class ImageLoader<R : Any>(
 /**
  * Default lamdba for use in the `shouldRefetchOnSizeChange` parameter.
  */
+@Deprecated("Create your own lambda instead", ReplaceWith("{ _, _ -> false }"))
 val DefaultRefetchOnSizeChangeLambda: (ImageLoadState, IntSize) -> Boolean = { _, _ -> false }
