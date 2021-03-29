@@ -129,13 +129,17 @@ internal class ProgressRingPainter : Painter() {
                 transformBlock = {
                     scale(scale = arrowScale)
                     translate(
-                        left = size.width - arcOffset - (arrowWidth.toPx() / 2),
+                        left = size.width - arcOffset - with(this@onDraw) { arrowWidth.toPx() / 2 },
                         top = arcOffset + arcSize.center.y
                     )
                     rotate(degrees = startAngle + sweepAngle)
                 }
             ) {
-                drawPath(arrow, color = currentColor, alpha = alpha)
+                drawPath(
+                    path = arrow,
+                    color = currentColor,
+                    alpha = alpha
+                )
             }
         }
     }
