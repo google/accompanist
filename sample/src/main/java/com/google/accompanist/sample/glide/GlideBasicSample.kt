@@ -19,9 +19,9 @@ package com.google.accompanist.sample.glide
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -37,7 +37,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.glide.GlideImage
+import com.google.accompanist.glide.rememberGlideImageLoadRequest
+import com.google.accompanist.imageloading.ImageLoad
+import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
@@ -53,7 +55,6 @@ class GlideBasicSample : ComponentActivity() {
     }
 }
 
-@Suppress("DEPRECATION")
 @Composable
 private fun Sample() {
     Scaffold(
@@ -66,74 +67,95 @@ private fun Sample() {
         LazyColumn(Modifier.padding(16.dp)) {
             item {
                 // GlideImage with data parameter
-                GlideImage(
-                    data = randomSampleImageUrl(),
+                ImageLoad(
+                    request = rememberGlideImageLoadRequest(randomSampleImageUrl()),
                     contentDescription = null,
+                    modifier = Modifier.size(128.dp),
                     previewPlaceholder = R.drawable.placeholder,
-                    modifier = Modifier.size(128.dp)
                 )
             }
 
             item {
                 // GlideImage with loading slot
-                GlideImage(
-                    data = randomSampleImageUrl(),
-                    loading = {
-                        Box(Modifier.fillMaxSize()) {
-                            CircularProgressIndicator(Modifier.align(Alignment.Center))
+                Box {
+                    val request = rememberGlideImageLoadRequest(randomSampleImageUrl())
+
+                    ImageLoad(
+                        request = request,
+                        contentDescription = null,
+                        modifier = Modifier.size(128.dp),
+                    )
+
+                    Crossfade(
+                        targetState = request.loadState,
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .padding(16.dp)
+                    ) { state ->
+                        if (state == ImageLoadState.Loading) {
+                            CircularProgressIndicator()
                         }
-                    },
-                    contentDescription = null,
-                    modifier = Modifier.size(128.dp)
-                )
+                    }
+                }
             }
 
             item {
                 // GlideImage with crossfade and data parameter
-                GlideImage(
-                    data = randomSampleImageUrl(),
-                    fadeIn = true,
+                ImageLoad(
+                    request = rememberGlideImageLoadRequest(randomSampleImageUrl()),
                     contentDescription = null,
-                    modifier = Modifier.size(128.dp)
+                    modifier = Modifier.size(128.dp),
+                    fadeIn = true,
                 )
             }
 
             item {
-                // GlideImage with crossfade and loading slot
-                GlideImage(
-                    data = randomSampleImageUrl(),
-                    fadeIn = true,
-                    loading = {
-                        Box(Modifier.fillMaxSize()) {
+                // GlideImage with fadeIn and loading slot
+                Box {
+                    val request = rememberGlideImageLoadRequest(randomSampleImageUrl())
+
+                    ImageLoad(
+                        request = request,
+                        contentDescription = null,
+                        fadeIn = true,
+                        modifier = Modifier.size(128.dp),
+                    )
+
+                    Crossfade(request.loadState) { state ->
+                        if (state == ImageLoadState.Loading) {
                             CircularProgressIndicator(Modifier.align(Alignment.Center))
                         }
-                    },
-                    contentDescription = null,
-                    modifier = Modifier.size(128.dp)
-                )
+                    }
+                }
             }
 
             item {
                 // GlideImage with an implicit size
-                GlideImage(
-                    data = randomSampleImageUrl(),
-                    loading = {
-                        Box(Modifier.fillMaxSize()) {
+                Box {
+                    val request = rememberGlideImageLoadRequest(randomSampleImageUrl())
+
+                    ImageLoad(
+                        request = request,
+                        contentDescription = null,
+                    )
+
+                    Crossfade(request.loadState) { state ->
+                        if (state == ImageLoadState.Loading) {
                             CircularProgressIndicator(Modifier.align(Alignment.Center))
                         }
-                    },
-                    contentDescription = null,
-                )
+                    }
+                }
             }
 
             item {
                 // GlideImage with an aspect ratio
-                GlideImage(
-                    data = randomSampleImageUrl(),
-                    contentScale = ContentScale.Crop,
+                ImageLoad(
+                    request = rememberGlideImageLoadRequest(randomSampleImageUrl()),
                     contentDescription = null,
-                    modifier = Modifier.width(256.dp)
-                        .aspectRatio(16 / 9f)
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .width(256.dp)
+                        .aspectRatio(16 / 9f),
                 )
             }
         }

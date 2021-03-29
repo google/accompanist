@@ -73,7 +73,24 @@ import kotlinx.coroutines.flow.collect
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
  * @param content Content to be displayed for the given state.
  */
-@Deprecated("Replaced with ImageLoad() and rememberGlideImageLoadRequest()")
+@Deprecated(
+    message = "Replaced with ImageLoad() and rememberGlideImageLoadRequest()",
+    ReplaceWith(
+        expression = """ImageLoad(
+            request = rememberGlideImageLoadRequest(
+                data = data,
+                requestManager = requestManager,
+                requestBuilder = requestBuilder,
+            ),
+            contentDescription = contentDescription,
+            modifier = modifier,
+            previewPlaceholder = previewPlaceholder,
+            shouldRefetchOnSizeChange= shouldRefetchOnSizeChange,
+        )""",
+        "com.google.accompanist.imageloading.ImageLoad",
+        "com.google.accompanist.glide.rememberGlideImageLoadRequest",
+    )
+)
 @Composable
 fun GlideImage(
     data: Any,
@@ -86,7 +103,7 @@ fun GlideImage(
     content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
 ) {
     val request = rememberGlideImageLoadRequest(
-        request = data,
+        data = data,
         requestManager = requestManager,
         requestBuilder = requestBuilder,
     )
@@ -153,7 +170,28 @@ fun GlideImage(
  * optional re-fetching of the image. Return true to re-fetch the image.
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
  */
-@Deprecated("Replaced with ImageLoad() and rememberGlideImageLoadRequest()")
+@Deprecated(
+    "Replaced with ImageLoad() and rememberGlideImageLoadRequest()",
+    ReplaceWith(
+        expression = """ImageLoad(
+            request = rememberGlideImageLoadRequest(
+                data = data,
+                requestManager = requestManager,
+                requestBuilder = requestBuilder,
+            ),
+            contentDescription = contentDescription,
+            modifier = modifier,
+            alignment = alignment,
+            contentScale = contentScale,
+            colorFilter = colorFilter,
+            fadeIn = fadeIn,
+            previewPlaceholder = previewPlaceholder,
+            shouldRefetchOnSizeChange= shouldRefetchOnSizeChange,
+        )""",
+        "com.google.accompanist.imageloading.ImageLoad",
+        "com.google.accompanist.glide.rememberGlideImageLoadRequest",
+    )
+)
 @Composable
 fun GlideImage(
     data: Any,
@@ -172,7 +210,7 @@ fun GlideImage(
     loading: @Composable (BoxScope.() -> Unit)? = null,
 ) {
     val request = rememberGlideImageLoadRequest(
-        request = data,
+        data = data,
         requestManager = requestManager,
         requestBuilder = requestBuilder,
     )

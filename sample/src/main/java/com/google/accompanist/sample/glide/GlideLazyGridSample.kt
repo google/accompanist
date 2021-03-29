@@ -32,7 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
-import com.google.accompanist.glide.GlideImage
+import com.google.accompanist.glide.rememberGlideImageLoadRequest
+import com.google.accompanist.imageloading.ImageLoad
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.toPaddingValues
@@ -58,11 +59,7 @@ class GlideLazyGridSample : ComponentActivity() {
 
 private const val NumberItems = 60
 
-@Suppress("DEPRECATION")
-@OptIn(
-    ExperimentalStdlibApi::class,
-    ExperimentalFoundationApi::class
-)
+@OptIn(ExperimentalStdlibApi::class, ExperimentalFoundationApi::class)
 @Composable
 private fun Sample() {
     Scaffold(
@@ -79,13 +76,13 @@ private fun Sample() {
                 .toPaddingValues(additionalVertical = 16.dp, additionalHorizontal = 16.dp),
         ) {
             items(NumberItems) { index ->
-                GlideImage(
-                    data = randomSampleImageUrl(index),
+                ImageLoad(
+                    request = rememberGlideImageLoadRequest(randomSampleImageUrl(index)),
                     contentDescription = null,
                     fadeIn = true,
                     modifier = Modifier
                         .aspectRatio(1f)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
                 )
             }
         }

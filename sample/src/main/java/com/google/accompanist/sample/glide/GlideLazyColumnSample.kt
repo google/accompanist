@@ -35,7 +35,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.glide.GlideImage
+import com.google.accompanist.glide.rememberGlideImageLoadRequest
+import com.google.accompanist.imageloading.ImageLoad
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
@@ -53,7 +54,6 @@ class GlideLazyColumnSample : ComponentActivity() {
 
 private const val NumberItems = 60
 
-@Suppress("DEPRECATION")
 @OptIn(ExperimentalStdlibApi::class)
 @Composable
 private fun Sample() {
@@ -70,10 +70,10 @@ private fun Sample() {
         LazyColumn(Modifier.padding(16.dp)) {
             items(items) { imageUrl ->
                 Row(Modifier.padding(16.dp)) {
-                    GlideImage(
-                        data = imageUrl,
+                    ImageLoad(
+                        request = rememberGlideImageLoadRequest(imageUrl),
                         contentDescription = null,
-                        modifier = Modifier.size(64.dp)
+                        modifier = Modifier.size(64.dp),
                     )
 
                     Spacer(Modifier.width(8.dp))

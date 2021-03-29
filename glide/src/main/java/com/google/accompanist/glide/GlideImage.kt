@@ -66,12 +66,12 @@ object GlideImageDefaults {
 
 @Composable
 fun rememberGlideImageLoadRequest(
-    request: Any,
+    data: Any,
     requestManager: RequestManager = GlideImageDefaults.defaultRequestManager(),
     requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)? = null,
-): ImageLoadRequest<Any> = remember(request, requestManager) {
+): ImageLoadRequest<Any> = remember(data, requestManager) {
     GlideImageLoadRequest(
-        request = request,
+        request = data,
         requestManager = requestManager,
         requestBuilder = requestBuilder,
     )
