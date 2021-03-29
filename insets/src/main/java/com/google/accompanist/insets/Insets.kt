@@ -416,6 +416,11 @@ private class InnerWindowInsetsAnimationCallback(
             runningAnimations = runningAnimations,
             type = WindowInsetsCompat.Type.navigationBars()
         )
+        windowInsets.systemGestures.updateAnimation(
+            platformInsets = platformInsets,
+            runningAnimations = runningAnimations,
+            type = WindowInsetsCompat.Type.systemGestures()
+        )
         return platformInsets
     }
 
