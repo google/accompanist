@@ -18,6 +18,7 @@ package com.google.accompanist.pager
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
@@ -27,7 +28,9 @@ import androidx.compose.ui.test.swipe
 import androidx.compose.ui.test.swipeWithVelocity
 import androidx.compose.ui.unit.LayoutDirection
 import kotlin.math.absoluteValue
+import kotlin.math.hypot
 import kotlin.math.roundToLong
+import kotlin.random.Random
 
 fun ComposeContentTestRule.setContent(
     layoutDirection: LayoutDirection? = null,
@@ -41,12 +44,19 @@ fun ComposeContentTestRule.setContent(
     }
 }
 
-internal fun SemanticsNodeInteraction.swipeHorizontalAcrossCenter(
+internal fun SemanticsNodeInteraction.swipeAcrossCenterWithVelocity(
     velocity: Float,
     distancePercentageX: Float = 0f,
+    distancePercentageY: Float = 0f,
 ): SemanticsNodeInteraction = performGesture {
-    val startOffset = percentOffset(x = 0.5f - distancePercentageX / 2, y = 0.5f)
-    val endOffset = percentOffset(x = 0.5f + distancePercentageX / 2, y = 0.5f)
+    val startOffset = percentOffset(
+        x = 0.5f - distancePercentageX / 2,
+        y = 0.5f - distancePercentageY / 2
+    )
+    val endOffset = percentOffset(
+        x = 0.5f + distancePercentageX / 2,
+        y = 0.5f + distancePercentageY / 2
+    )
     try {
         swipeWithVelocity(
             start = startOffset,
@@ -58,7 +68,10 @@ internal fun SemanticsNodeInteraction.swipeHorizontalAcrossCenter(
         // https://issuetracker.google.com/182477143. To work around this, we catch the exception
         // and instead run a swipe() with a computed duration instead. This is not perfect,
         // but good enough.
-        val distance = visibleSize.width * distancePercentageX
+        val distance = hypot(
+            x = (endOffset.x - startOffset.x).absoluteValue * visibleSize.width,
+            y = (endOffset.y - startOffset.y).absoluteValue * visibleSize.height,
+        )
         swipe(
             start = startOffset,
             end = endOffset,
@@ -71,3 +84,10 @@ fun SemanticsNodeInteraction.assertWhen(
     condition: Boolean,
     block: SemanticsNodeInteraction.() -> SemanticsNodeInteraction
 ): SemanticsNodeInteraction = if (condition) block(this) else this
+
+fun randomColor() = Color(
+    alpha = 1f,
+    red = Random.nextFloat(),
+    green = Random.nextFloat(),
+    blue = Random.nextFloat(),
+)

@@ -81,6 +81,16 @@ subprojects {
         }
     }
 
+    // FIXME: Only needed for Compose 1.0.0-beta03 snapshots
+    configurations.configureEach {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            if (details.requested.group == 'androidx.lifecycle'
+                    && details.requested.version == '2.3.1') {
+                details.useVersion('2.4.0-SNAPSHOT')
+            }
+        }
+    }
+
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach { compile ->
         kotlinOptions {
             // Treat all Kotlin warnings as errors
@@ -115,7 +125,12 @@ subprojects {
     // Must be afterEvaluate or else com.vanniktech.maven.publish will overwrite our
     // dokka and version configuration.
     afterEvaluate {
-        tasks.withType(org.jetbrains.dokka.gradle.DokkaTask).configureEach {
+        if (tasks.findByName('dokkaHtmlPartial') == null) {
+            // If dokka isn't enabled on this module, skip
+            return
+        }
+
+        tasks.named('dokkaHtmlPartial') {
             dokkaSourceSets.configureEach {
                 reportUndocumented.set(true)
                 skipEmptyPackages.set(true)

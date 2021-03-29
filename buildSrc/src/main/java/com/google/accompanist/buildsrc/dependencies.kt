@@ -62,8 +62,8 @@ object Libs {
         const val appcompat = "androidx.appcompat:appcompat:1.3.0-beta01"
 
         object Compose {
-            const val snapshot = ""
-            const val version = "1.0.0-beta02"
+            const val snapshot = "7217131"
+            const val version = "1.0.0-SNAPSHOT"
 
             @JvmStatic
             val snapshotUrl: String
@@ -99,7 +99,7 @@ object Libs {
         const val core1_5_0 = "androidx.core:core:1.5.0-beta03"
 
         object Activity {
-            const val activityCompose = "androidx.activity:activity-compose:1.3.0-alpha04"
+            const val activityCompose = "androidx.activity:activity-compose:1.3.0-SNAPSHOT"
         }
     }
 

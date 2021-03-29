@@ -34,9 +34,6 @@ sed -i.bak 's/$dokka.linkExtension:md/$dokka.linkExtension:html/g' package-list-
 # Build the docs with dokka
 ./gradlew clean dokkaHtmlMultiModule
 
-# Dokka doesn't currently allow us to change the index page name so move it manually
-mv docs/api/-modules.html docs/api/index.html
-
 # Re-word the Dokka call out
 find docs/api/ -type f -name '*.html' -exec sed -i -e 's/Sponsored and developed/Documentation generated/g' {} \;
 # Remove the copyright declaration
@@ -45,8 +42,8 @@ find docs/api/ -type f -name '*.html' -exec sed -i -e 's/© [0-9]* Copyright//' 
 # Clean up the temp Coil package list
 rm package-list-coil-base
 
-# Copy over any static + API docs to our $DOCS_ROOT
-cp -R docs/* $DOCS_ROOT
+# Create a copy of our docs at our $DOCS_ROOT
+cp -r docs/ $DOCS_ROOT
 
 cp README.md $DOCS_ROOT/index.md
 cp CONTRIBUTING.md $DOCS_ROOT/contributing.md

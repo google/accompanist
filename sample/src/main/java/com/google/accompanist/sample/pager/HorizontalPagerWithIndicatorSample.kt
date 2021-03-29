@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("UNUSED_ANONYMOUS_PARAMETER")
+
 package com.google.accompanist.sample.pager
 
 import android.os.Bundle
@@ -47,7 +49,7 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.coil.CoilImage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerIndicator
+import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.sample.AccompanistSampleTheme
@@ -95,7 +97,7 @@ private fun Sample() {
                 Box {
                     // Our page content, displaying a random image
                     CoilImage(
-                        data = randomSampleImageUrl(page + 100),
+                        data = randomSampleImageUrl(width = 600),
                         contentDescription = null,
                         fadeIn = true,
                         modifier = Modifier
@@ -105,10 +107,8 @@ private fun Sample() {
                 }
             }
 
-            PagerIndicator(
+            HorizontalPagerIndicator(
                 pagerState = pagerState,
-                indicatorColor = MaterialTheme.colors.onSurface,
-                color = MaterialTheme.colors.onSurface.copy(0.6f),
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(16.dp),

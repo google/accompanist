@@ -97,7 +97,7 @@ private fun Sample() {
                 Box {
                     // Our page content, displaying a random image
                     CoilImage(
-                        data = randomSampleImageUrl(page + 100),
+                        data = randomSampleImageUrl(width = 600),
                         contentDescription = null,
                         fadeIn = true,
                         modifier = Modifier
@@ -136,6 +136,7 @@ private fun ActionsRow(
         val scope = rememberCoroutineScope()
 
         IconButton(
+            enabled = pagerState.currentPage > 0,
             onClick = {
                 scope.launch {
                     pagerState.animateScrollToPage(0)
@@ -146,6 +147,7 @@ private fun ActionsRow(
         }
 
         IconButton(
+            enabled = pagerState.currentPage > 0,
             onClick = {
                 scope.launch {
                     pagerState.animateScrollToPage(pagerState.currentPage - 1)
@@ -156,6 +158,7 @@ private fun ActionsRow(
         }
 
         IconButton(
+            enabled = pagerState.currentPage < pagerState.pageCount - 1,
             onClick = {
                 scope.launch {
                     pagerState.animateScrollToPage(pagerState.currentPage + 1)
@@ -166,6 +169,7 @@ private fun ActionsRow(
         }
 
         IconButton(
+            enabled = pagerState.currentPage < pagerState.pageCount - 1,
             onClick = {
                 scope.launch {
                     pagerState.animateScrollToPage(pagerState.pageCount - 1)

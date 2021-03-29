@@ -53,6 +53,7 @@ dependencies {
     implementation project(':glide')
     implementation project(':insets')
     implementation project(':pager')
+    implementation project(':pager-indicators')
     implementation project(':flowlayout')
     implementation project(':systemuicontroller')
 
@@ -63,6 +64,7 @@ dependencies {
     implementation Libs.AndroidX.Compose.material
     implementation Libs.AndroidX.Compose.iconsExtended
     implementation Libs.AndroidX.Compose.layout
+    implementation Libs.AndroidX.Compose.util
 
     implementation Libs.AndroidX.Activity.activityCompose
 
