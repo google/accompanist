@@ -21,9 +21,11 @@ package com.google.accompanist.sample.insets
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.BottomNavigationItem
@@ -47,9 +49,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
+import com.google.accompanist.insets.Insets
+import com.google.accompanist.insets.Insets.Companion.Insets
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.toPaddingValues
@@ -94,21 +98,27 @@ private fun Sample() {
             var topAppBarSize by remember { mutableStateOf(0) }
             var bottomBarSize by remember { mutableStateOf(0) }
 
-            var selectedIndex by remember { mutableStateOf(0) }
+            var selectedBottomNavIndex by remember { mutableStateOf(0) }
+
+            val currentWindowInsets = LocalWindowInsets.current
+            val newWindowInsets = currentWindowInsets.copy(
+                statusBars = currentWindowInsets.statusBars.copyWithAppend(
+                    Insets(top = topAppBarSize)
+                ),
+                navigationBars = currentWindowInsets.navigationBars.copyWithAppend(
+                    Insets(bottom = bottomBarSize)
+                )
+            )
 
             // We use the systemBar insets as the source of our content padding.
             // We add on the topAppBarSize, so that the content is displayed below
             // the app bar. Since the top inset is already contained within the app
             // bar height, we disable handling it in toPaddingValues().
-            LazyColumn(
-                contentPadding = LocalWindowInsets.current.systemBars.toPaddingValues(
-                    top = false,
-                    additionalTop = with(LocalDensity.current) { topAppBarSize.toDp() }
+            CompositionLocalProvider(LocalWindowInsets provides newWindowInsets) {
+                AppPage(
+                    pageTitle = "Page: $selectedBottomNavIndex",
+                    modifier = Modifier.fillMaxSize()
                 )
-            ) {
-                items(items = listItems) { imageUrl ->
-                    ListItem(imageUrl, Modifier.fillMaxWidth())
-                }
             }
 
             /**
@@ -139,33 +149,58 @@ private fun Sample() {
                     .onSizeChanged { bottomBarSize = it.height }
             ) {
                 BottomNavigationItem(
-                    selected = selectedIndex == 0,
-                    onClick = { selectedIndex = 0 },
+                    selected = selectedBottomNavIndex == 0,
+                    onClick = { selectedBottomNavIndex = 0 },
                     label = { Text("Home") },
                     icon = { Icon(Icons.Default.Home, null) },
                 )
 
                 BottomNavigationItem(
-                    selected = selectedIndex == 1,
-                    onClick = { selectedIndex = 1 },
+                    selected = selectedBottomNavIndex == 1,
+                    onClick = { selectedBottomNavIndex = 1 },
                     label = { Text("Phone") },
                     icon = { Icon(Icons.Default.Phone, null) },
                 )
 
                 BottomNavigationItem(
-                    selected = selectedIndex == 2,
-                    onClick = { selectedIndex = 2 },
+                    selected = selectedBottomNavIndex == 2,
+                    onClick = { selectedBottomNavIndex = 2 },
                     label = { Text("Contacts") },
                     icon = { Icon(Icons.Default.Contacts, null) },
                 )
 
                 BottomNavigationItem(
-                    selected = selectedIndex == 3,
-                    onClick = { selectedIndex = 3 },
+                    selected = selectedBottomNavIndex == 3,
+                    onClick = { selectedBottomNavIndex = 3 },
                     label = { Text("Video") },
                     icon = { Icon(Icons.Default.VideoCall, null) },
                 )
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun AppPage(
+    pageTitle: String,
+    modifier: Modifier = Modifier,
+) {
+    // We use the systemBar insets as the source of our content padding.
+    // We add on the topAppBarSize, so that the content is displayed below
+    // the app bar. Since the top inset is already contained within the app
+    // bar height, we disable handling it in toPaddingValues().
+    LazyColumn(
+        contentPadding = LocalWindowInsets.current.systemBars.toPaddingValues(),
+        modifier = modifier,
+    ) {
+        item {
+            Surface(Modifier.fillMaxWidth()) {
+                Text(text = pageTitle, Modifier.padding(16.dp))
+            }
+        }
+        items(items = listItems) { imageUrl ->
+            ListItem(imageUrl, Modifier.fillMaxWidth())
         }
     }
 }

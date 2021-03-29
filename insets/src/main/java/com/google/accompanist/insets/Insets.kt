@@ -23,7 +23,6 @@ package com.google.accompanist.insets
 
 import android.view.View
 import android.view.WindowInsetsAnimation
-import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -43,124 +42,31 @@ import androidx.core.view.WindowInsetsCompat
  * Main holder of our inset values.
  */
 @Stable
-class WindowInsets {
-    /**
-     * Inset values which match [WindowInsetsCompat.Type.systemBars]
-     */
-    val systemBars: InsetsType = InsetsType()
-
+data class WindowInsets(
     /**
      * Inset values which match [WindowInsetsCompat.Type.systemGestures]
      */
-    val systemGestures: InsetsType = InsetsType()
+    val systemGestures: InsetsType = MutableInsetsType(),
 
     /**
      * Inset values which match [WindowInsetsCompat.Type.navigationBars]
      */
-    val navigationBars: InsetsType = InsetsType()
+    val navigationBars: InsetsType = MutableInsetsType(),
 
     /**
      * Inset values which match [WindowInsetsCompat.Type.statusBars]
      */
-    val statusBars: InsetsType = InsetsType()
+    val statusBars: InsetsType = MutableInsetsType(),
 
     /**
      * Inset values which match [WindowInsetsCompat.Type.ime]
      */
-    val ime: InsetsType = InsetsType()
-}
-
-/**
- * Represents the values for a type of insets, and stores information about the layout insets,
- * animating insets, and visibility of the insets.
- *
- * [InsetsType] instances are commonly stored in a [WindowInsets] instance.
- */
-@Stable
-@Suppress("MemberVisibilityCanBePrivate")
-class InsetsType : Insets {
-    private var ongoingAnimationsCount by mutableStateOf(0)
-    internal val _layoutInsets = MutableInsets()
-    internal val _animatedInsets = MutableInsets()
-
+    val ime: InsetsType = MutableInsetsType(),
+) {
     /**
-     * The layout insets for this [InsetsType]. These are the insets which are defined from the
-     * current window layout.
-     *
-     * You should not normally need to use this directly, and instead use [left], [top],
-     * [right], and [bottom] to return the correct value for the current state.
+     * Inset values which match [WindowInsetsCompat.Type.systemBars]
      */
-    val layoutInsets: Insets
-        get() = _layoutInsets
-
-    /**
-     * The animated insets for this [InsetsType]. These are the insets which are updated from
-     * any on-going animations. If there are no animations in progress, the returned [Insets] will
-     * be empty.
-     *
-     * You should not normally need to use this directly, and instead use [left], [top],
-     * [right], and [bottom] to return the correct value for the current state.
-     */
-    val animatedInsets: Insets
-        get() = _animatedInsets
-
-    /**
-     * The left dimension of the insets in pixels.
-     */
-    override val left: Int
-        get() = (if (animationInProgress) animatedInsets else layoutInsets).left
-
-    /**
-     * The top dimension of the insets in pixels.
-     */
-    override val top: Int
-        get() = (if (animationInProgress) animatedInsets else layoutInsets).top
-
-    /**
-     * The right dimension of the insets in pixels.
-     */
-    override val right: Int
-        get() = (if (animationInProgress) animatedInsets else layoutInsets).right
-
-    /**
-     * The bottom dimension of the insets in pixels.
-     */
-    override val bottom: Int
-        get() = (if (animationInProgress) animatedInsets else layoutInsets).bottom
-
-    /**
-     * Whether the insets are currently visible.
-     */
-    var isVisible by mutableStateOf(true)
-        internal set
-
-    /**
-     * Whether this insets type is being animated at this moment.
-     */
-    val animationInProgress: Boolean
-        get() = ongoingAnimationsCount > 0
-
-    /**
-     * The progress of any ongoing animations, in the range of 0 to 1.
-     * If there is no animation in progress, this will return 0.
-     */
-    @get:FloatRange(from = 0.0, to = 1.0)
-    var animationFraction by mutableStateOf(0f)
-        internal set
-
-    internal fun onAnimationStart() {
-        ongoingAnimationsCount++
-    }
-
-    internal fun onAnimationEnd() {
-        ongoingAnimationsCount--
-
-        if (ongoingAnimationsCount == 0) {
-            // If there are no on-going animations, clear out the animated insets
-            _animatedInsets.reset()
-            animationFraction = 0f
-        }
-    }
+    val systemBars: InsetsType = CalculatedInsetsType(statusBars, navigationBars)
 }
 
 @Stable
@@ -209,6 +115,17 @@ interface Insets {
         right = this.right + other.right,
         bottom = this.bottom + other.bottom,
     )
+
+    companion object {
+        fun Insets(
+            left: Int = 0,
+            top: Int = 0,
+            right: Int = 0,
+            bottom: Int = 0,
+        ): Insets = MutableInsets(left, top, right, bottom)
+
+        val Empty = Insets()
+    }
 }
 
 internal class MutableInsets(
@@ -347,23 +264,19 @@ class ViewWindowInsetObserver(private val view: View) {
         ViewCompat.setOnApplyWindowInsetsListener(view) { _, wic ->
             // Go through each inset type and update its layoutInsets from the
             // WindowInsetsCompat values
-            windowInsets.statusBars.run {
+            windowInsets.statusBars.asMutable().run {
                 _layoutInsets.updateFrom(wic.getInsets(WindowInsetsCompat.Type.statusBars()))
                 isVisible = wic.isVisible(WindowInsetsCompat.Type.statusBars())
             }
-            windowInsets.navigationBars.run {
+            windowInsets.navigationBars.asMutable().run {
                 _layoutInsets.updateFrom(wic.getInsets(WindowInsetsCompat.Type.navigationBars()))
                 isVisible = wic.isVisible(WindowInsetsCompat.Type.navigationBars())
             }
-            windowInsets.systemBars.run {
-                _layoutInsets.updateFrom(wic.getInsets(WindowInsetsCompat.Type.systemBars()))
-                isVisible = wic.isVisible(WindowInsetsCompat.Type.systemBars())
-            }
-            windowInsets.systemGestures.run {
+            windowInsets.systemGestures.asMutable().run {
                 _layoutInsets.updateFrom(wic.getInsets(WindowInsetsCompat.Type.systemGestures()))
                 isVisible = wic.isVisible(WindowInsetsCompat.Type.systemGestures())
             }
-            windowInsets.ime.run {
+            windowInsets.ime.asMutable().run {
                 _layoutInsets.updateFrom(wic.getInsets(WindowInsetsCompat.Type.ime()))
                 isVisible = wic.isVisible(WindowInsetsCompat.Type.ime())
             }
@@ -506,19 +419,16 @@ private class InnerWindowInsetsAnimationCallback(
     override fun onPrepare(animation: WindowInsetsAnimationCompat) {
         // Go through each type and flag that an animation has started
         if (animation.typeMask and WindowInsetsCompat.Type.ime() != 0) {
-            windowInsets.ime.onAnimationStart()
+            windowInsets.ime.asMutable().onAnimationStart()
         }
         if (animation.typeMask and WindowInsetsCompat.Type.statusBars() != 0) {
-            windowInsets.statusBars.onAnimationStart()
+            windowInsets.statusBars.asMutable().onAnimationStart()
         }
         if (animation.typeMask and WindowInsetsCompat.Type.navigationBars() != 0) {
-            windowInsets.navigationBars.onAnimationStart()
-        }
-        if (animation.typeMask and WindowInsetsCompat.Type.systemBars() != 0) {
-            windowInsets.systemBars.onAnimationStart()
+            windowInsets.navigationBars.asMutable().onAnimationStart()
         }
         if (animation.typeMask and WindowInsetsCompat.Type.systemGestures() != 0) {
-            windowInsets.systemGestures.onAnimationStart()
+            windowInsets.systemGestures.asMutable().onAnimationStart()
         }
     }
 
@@ -527,27 +437,22 @@ private class InnerWindowInsetsAnimationCallback(
         runningAnimations: List<WindowInsetsAnimationCompat>
     ): WindowInsetsCompat {
         // Update each inset type with the given parameters
-        windowInsets.ime.updateAnimation(
+        windowInsets.ime.asMutable().updateAnimation(
             platformInsets = platformInsets,
             runningAnimations = runningAnimations,
             type = WindowInsetsCompat.Type.ime()
         )
-        windowInsets.statusBars.updateAnimation(
+        windowInsets.statusBars.asMutable().updateAnimation(
             platformInsets = platformInsets,
             runningAnimations = runningAnimations,
             type = WindowInsetsCompat.Type.statusBars()
         )
-        windowInsets.navigationBars.updateAnimation(
+        windowInsets.navigationBars.asMutable().updateAnimation(
             platformInsets = platformInsets,
             runningAnimations = runningAnimations,
             type = WindowInsetsCompat.Type.navigationBars()
         )
-        windowInsets.systemBars.updateAnimation(
-            platformInsets = platformInsets,
-            runningAnimations = runningAnimations,
-            type = WindowInsetsCompat.Type.systemBars()
-        )
-        windowInsets.systemBars.updateAnimation(
+        windowInsets.systemBars.asMutable().updateAnimation(
             platformInsets = platformInsets,
             runningAnimations = runningAnimations,
             type = WindowInsetsCompat.Type.systemGestures()
@@ -555,7 +460,7 @@ private class InnerWindowInsetsAnimationCallback(
         return platformInsets
     }
 
-    private inline fun InsetsType.updateAnimation(
+    private inline fun MutableInsetsType.updateAnimation(
         platformInsets: WindowInsetsCompat,
         runningAnimations: List<WindowInsetsAnimationCompat>,
         type: Int,
@@ -573,19 +478,19 @@ private class InnerWindowInsetsAnimationCallback(
     override fun onEnd(animation: WindowInsetsAnimationCompat) {
         // Go through each type and flag that an animation has ended
         if (animation.typeMask and WindowInsetsCompat.Type.ime() != 0) {
-            windowInsets.ime.onAnimationEnd()
+            windowInsets.ime.asMutable().onAnimationEnd()
         }
         if (animation.typeMask and WindowInsetsCompat.Type.statusBars() != 0) {
-            windowInsets.statusBars.onAnimationEnd()
+            windowInsets.statusBars.asMutable().onAnimationEnd()
         }
         if (animation.typeMask and WindowInsetsCompat.Type.navigationBars() != 0) {
-            windowInsets.navigationBars.onAnimationEnd()
+            windowInsets.navigationBars.asMutable().onAnimationEnd()
         }
         if (animation.typeMask and WindowInsetsCompat.Type.systemBars() != 0) {
-            windowInsets.systemBars.onAnimationEnd()
+            windowInsets.systemBars.asMutable().onAnimationEnd()
         }
         if (animation.typeMask and WindowInsetsCompat.Type.systemGestures() != 0) {
-            windowInsets.systemGestures.onAnimationEnd()
+            windowInsets.systemGestures.asMutable().onAnimationEnd()
         }
     }
 }

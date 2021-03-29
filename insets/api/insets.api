@@ -44,6 +44,7 @@ public final class com/google/accompanist/insets/ImeNestedScrollConnectionKt {
 }
 
 public abstract interface class com/google/accompanist/insets/Insets {
+	public static final field Companion Lcom/google/accompanist/insets/Insets$Companion;
 	public abstract fun copy (IIII)Lcom/google/accompanist/insets/Insets;
 	public abstract fun getBottom ()I
 	public abstract fun getLeft ()I
@@ -53,6 +54,12 @@ public abstract interface class com/google/accompanist/insets/Insets {
 	public abstract fun plus (Lcom/google/accompanist/insets/Insets;)Lcom/google/accompanist/insets/Insets;
 }
 
+public final class com/google/accompanist/insets/Insets$Companion {
+	public final fun Insets (IIII)Lcom/google/accompanist/insets/Insets;
+	public static synthetic fun Insets$default (Lcom/google/accompanist/insets/Insets$Companion;IIIIILjava/lang/Object;)Lcom/google/accompanist/insets/Insets;
+	public final fun getEmpty ()Lcom/google/accompanist/insets/Insets;
+}
+
 public final class com/google/accompanist/insets/Insets$DefaultImpls {
 	public static fun copy (Lcom/google/accompanist/insets/Insets;IIII)Lcom/google/accompanist/insets/Insets;
 	public static synthetic fun copy$default (Lcom/google/accompanist/insets/Insets;IIIIILjava/lang/Object;)Lcom/google/accompanist/insets/Insets;
@@ -60,20 +67,29 @@ public final class com/google/accompanist/insets/Insets$DefaultImpls {
 	public static fun plus (Lcom/google/accompanist/insets/Insets;Lcom/google/accompanist/insets/Insets;)Lcom/google/accompanist/insets/Insets;
 }
 
-public final class com/google/accompanist/insets/InsetsType : com/google/accompanist/insets/Insets {
-	public fun <init> ()V
-	public fun copy (IIII)Lcom/google/accompanist/insets/Insets;
-	public final fun getAnimatedInsets ()Lcom/google/accompanist/insets/Insets;
-	public final fun getAnimationFraction ()F
-	public final fun getAnimationInProgress ()Z
-	public fun getBottom ()I
-	public final fun getLayoutInsets ()Lcom/google/accompanist/insets/Insets;
-	public fun getLeft ()I
-	public fun getRight ()I
-	public fun getTop ()I
-	public final fun isVisible ()Z
-	public fun minus (Lcom/google/accompanist/insets/Insets;)Lcom/google/accompanist/insets/Insets;
-	public fun plus (Lcom/google/accompanist/insets/Insets;)Lcom/google/accompanist/insets/Insets;
+public abstract interface class com/google/accompanist/insets/InsetsType : com/google/accompanist/insets/Insets {
+	public abstract fun copyWithAppend (Lcom/google/accompanist/insets/Insets;)Lcom/google/accompanist/insets/InsetsType;
+	public abstract fun getAnimatedInsets ()Lcom/google/accompanist/insets/Insets;
+	public abstract fun getAnimationFraction ()F
+	public abstract fun getAnimationInProgress ()Z
+	public abstract fun getAppendLayoutInsets ()Lcom/google/accompanist/insets/Insets;
+	public abstract fun getBottom ()I
+	public abstract fun getLayoutInsets ()Lcom/google/accompanist/insets/Insets;
+	public abstract fun getLeft ()I
+	public abstract fun getRight ()I
+	public abstract fun getTop ()I
+	public abstract fun isVisible ()Z
+}
+
+public final class com/google/accompanist/insets/InsetsType$DefaultImpls {
+	public static fun copy (Lcom/google/accompanist/insets/InsetsType;IIII)Lcom/google/accompanist/insets/Insets;
+	public static synthetic fun copyWithAppend$default (Lcom/google/accompanist/insets/InsetsType;Lcom/google/accompanist/insets/Insets;ILjava/lang/Object;)Lcom/google/accompanist/insets/InsetsType;
+	public static fun getBottom (Lcom/google/accompanist/insets/InsetsType;)I
+	public static fun getLeft (Lcom/google/accompanist/insets/InsetsType;)I
+	public static fun getRight (Lcom/google/accompanist/insets/InsetsType;)I
+	public static fun getTop (Lcom/google/accompanist/insets/InsetsType;)I
+	public static fun minus (Lcom/google/accompanist/insets/InsetsType;Lcom/google/accompanist/insets/Insets;)Lcom/google/accompanist/insets/Insets;
+	public static fun plus (Lcom/google/accompanist/insets/InsetsType;Lcom/google/accompanist/insets/Insets;)Lcom/google/accompanist/insets/Insets;
 }
 
 public final class com/google/accompanist/insets/VerticalSide : java/lang/Enum {
@@ -96,10 +112,21 @@ public final class com/google/accompanist/insets/ViewWindowInsetObserver {
 
 public final class com/google/accompanist/insets/WindowInsets {
 	public fun <init> ()V
+	public fun <init> (Lcom/google/accompanist/insets/InsetsType;Lcom/google/accompanist/insets/InsetsType;Lcom/google/accompanist/insets/InsetsType;Lcom/google/accompanist/insets/InsetsType;)V
+	public synthetic fun <init> (Lcom/google/accompanist/insets/InsetsType;Lcom/google/accompanist/insets/InsetsType;Lcom/google/accompanist/insets/InsetsType;Lcom/google/accompanist/insets/InsetsType;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcom/google/accompanist/insets/InsetsType;
+	public final fun component2 ()Lcom/google/accompanist/insets/InsetsType;
+	public final fun component3 ()Lcom/google/accompanist/insets/InsetsType;
+	public final fun component4 ()Lcom/google/accompanist/insets/InsetsType;
+	public final fun copy (Lcom/google/accompanist/insets/InsetsType;Lcom/google/accompanist/insets/InsetsType;Lcom/google/accompanist/insets/InsetsType;Lcom/google/accompanist/insets/InsetsType;)Lcom/google/accompanist/insets/WindowInsets;
+	public static synthetic fun copy$default (Lcom/google/accompanist/insets/WindowInsets;Lcom/google/accompanist/insets/InsetsType;Lcom/google/accompanist/insets/InsetsType;Lcom/google/accompanist/insets/InsetsType;Lcom/google/accompanist/insets/InsetsType;ILjava/lang/Object;)Lcom/google/accompanist/insets/WindowInsets;
+	public fun equals (Ljava/lang/Object;)Z
 	public final fun getIme ()Lcom/google/accompanist/insets/InsetsType;
 	public final fun getNavigationBars ()Lcom/google/accompanist/insets/InsetsType;
 	public final fun getStatusBars ()Lcom/google/accompanist/insets/InsetsType;
 	public final fun getSystemBars ()Lcom/google/accompanist/insets/InsetsType;
 	public final fun getSystemGestures ()Lcom/google/accompanist/insets/InsetsType;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
