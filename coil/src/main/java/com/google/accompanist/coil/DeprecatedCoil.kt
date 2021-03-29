@@ -23,6 +23,8 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -34,6 +36,7 @@ import com.google.accompanist.imageloading.DefaultRefetchOnSizeChangeLambda
 import com.google.accompanist.imageloading.ImageLoad
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.MaterialLoadingImage
+import kotlinx.coroutines.flow.collect
 
 /**
  * Creates a composable that will attempt to load the given [data] using [Coil], and provides
@@ -67,21 +70,19 @@ import com.google.accompanist.imageloading.MaterialLoadingImage
 @Deprecated(
     message = "Replaced with ImageLoad() and rememberCoilImageLoadRequest()",
     ReplaceWith(
-        expression = """
-            ImageLoad(
-                request = rememberCoilImageLoadRequest(
-                    data = data,
-                    imageLoader = imageLoader,
-                    requestBuilder = requestBuilder,
-                    onRequestCompleted = onRequestCompleted,
-                ),
-                contentDescription = contentDescription,
-                modifier = modifier,
-                shouldRefetchOnSizeChange= shouldRefetchOnSizeChange,
-            )
-        """,
+        expression = """ImageLoad(
+            request = rememberCoilImageLoadRequest(
+                data = data,
+                imageLoader = imageLoader,
+                requestBuilder = requestBuilder,
+            ),
+            contentDescription = contentDescription,
+            modifier = modifier,
+            previewPlaceholder = previewPlaceholder,
+            shouldRefetchOnSizeChange= shouldRefetchOnSizeChange,
+        )""",
         "com.google.accompanist.coil.rememberCoilImageLoadRequest",
-        "import com.google.accompanist.imageloading.ImageLoad",
+        "com.google.accompanist.imageloading.ImageLoad"
     )
 )
 @Composable
@@ -95,14 +96,19 @@ fun CoilImage(
     onRequestCompleted: (ImageLoadState) -> Unit = {},
     content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
 ) {
+    val request = rememberCoilImageLoadRequest(
+        data = data,
+        requestBuilder = requestBuilder,
+        imageLoader = imageLoader,
+    )
+
+    LaunchedEffect(request) {
+        snapshotFlow { request.loadState }.collect { onRequestCompleted(it) }
+    }
+
     @Suppress("DEPRECATION")
     ImageLoad(
-        request = rememberCoilImageLoadRequest(
-            data = data,
-            requestBuilder = requestBuilder,
-            imageLoader = imageLoader,
-            onRequestCompleted = onRequestCompleted,
-        ),
+        request = request,
         previewPlaceholder = previewPlaceholder,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         modifier = modifier,
@@ -141,23 +147,20 @@ fun CoilImage(
  * @param content Content to be displayed for the given state.
  */
 @Deprecated(
-    message = "Replaced with ImageLoad() and rememberCoilImageLoadRequest()",
+    "Replaced with ImageLoad() and rememberCoilImageLoadRequest()",
     ReplaceWith(
-        expression = """
-            ImageLoad(
-                request = rememberCoilImageLoadRequest(
-                    request = request,
-                    imageLoader = imageLoader,
-                    requestBuilder = requestBuilder,
-                    onRequestCompleted = onRequestCompleted,
-                ),
-                contentDescription = contentDescription,
-                modifier = modifier,
-                shouldRefetchOnSizeChange= shouldRefetchOnSizeChange,
-            )
-        """,
+        expression = """ImageLoad(
+            request = rememberCoilImageLoadRequest(
+                request = request,
+                imageLoader = imageLoader,
+                requestBuilder = requestBuilder,
+            ),
+            modifier = modifier,
+            previewPlaceholder = previewPlaceholder,
+            shouldRefetchOnSizeChange= shouldRefetchOnSizeChange,
+        )""",
+        "com.google.accompanist.imageloading.ImageLoad",
         "com.google.accompanist.coil.rememberCoilImageLoadRequest",
-        "import com.google.accompanist.imageloading.ImageLoad",
     )
 )
 @Composable
@@ -171,14 +174,19 @@ fun CoilImage(
     onRequestCompleted: (ImageLoadState) -> Unit = {},
     content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
 ) {
+    val loadRequest = rememberCoilImageLoadRequest(
+        request = request,
+        requestBuilder = requestBuilder,
+        imageLoader = imageLoader,
+    )
+
+    LaunchedEffect(loadRequest) {
+        snapshotFlow { loadRequest.loadState }.collect { onRequestCompleted(it) }
+    }
+
     @Suppress("DEPRECATION")
     ImageLoad(
-        request = rememberCoilImageLoadRequest(
-            request = request,
-            requestBuilder = requestBuilder,
-            imageLoader = imageLoader,
-            onRequestCompleted = onRequestCompleted,
-        ),
+        request = loadRequest,
         previewPlaceholder = previewPlaceholder,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         modifier = modifier,
@@ -235,27 +243,25 @@ fun CoilImage(
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
  */
 @Deprecated(
-    message = "Replaced with ImageLoad() and rememberCoilImageLoadRequest()",
+    "Replaced with ImageLoad() and rememberCoilImageLoadRequest()",
     ReplaceWith(
-        expression = """
-            ImageLoad(
-                request = rememberCoilImageLoadRequest(
-                    data = data,
-                    imageLoader = imageLoader,
-                    requestBuilder = requestBuilder,
-                    onRequestCompleted = onRequestCompleted,
-                ),
-                contentDescription = contentDescription,
-                modifier = modifier,
-                alignment: alignment,,
-                contentScale = contentScale,
-                colorFilter = colorFilter,
-                fadeIn = fadeIn,
-                shouldRefetchOnSizeChange= shouldRefetchOnSizeChange,
-            )
-        """,
+        expression = """ImageLoad(
+            request = rememberCoilImageLoadRequest(
+                data = data,
+                imageLoader = imageLoader,
+                requestBuilder = requestBuilder,
+            ),
+            contentDescription = contentDescription,
+            modifier = modifier,
+            alignment = alignment,
+            contentScale = contentScale,
+            colorFilter = colorFilter,
+            fadeIn = fadeIn,
+            previewPlaceholder = previewPlaceholder,
+            shouldRefetchOnSizeChange= shouldRefetchOnSizeChange,
+        )""",
+        "com.google.accompanist.imageloading.ImageLoad",
         "com.google.accompanist.coil.rememberCoilImageLoadRequest",
-        "import com.google.accompanist.imageloading.ImageLoad",
     )
 )
 @Composable
@@ -275,14 +281,20 @@ fun CoilImage(
     error: @Composable (BoxScope.(ImageLoadState.Error) -> Unit)? = null,
     loading: @Composable (BoxScope.() -> Unit)? = null,
 ) {
+    val request = rememberCoilImageLoadRequest(
+        data = data,
+        requestBuilder = requestBuilder,
+        imageLoader = imageLoader,
+    )
+
+    LaunchedEffect(request) {
+        snapshotFlow { request.loadState }
+            .collect { onRequestCompleted(it) }
+    }
+
     @Suppress("DEPRECATION")
     ImageLoad(
-        request = rememberCoilImageLoadRequest(
-            data = data,
-            requestBuilder = requestBuilder,
-            imageLoader = imageLoader,
-            onRequestCompleted = onRequestCompleted,
-        ),
+        request = request,
         previewPlaceholder = previewPlaceholder,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         modifier = modifier,
@@ -354,27 +366,25 @@ fun CoilImage(
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
  */
 @Deprecated(
-    message = "Replaced with ImageLoad() and rememberCoilImageLoadRequest()",
+    "Replaced with ImageLoad() and rememberCoilImageLoadRequest()",
     ReplaceWith(
-        expression = """
-            ImageLoad(
-                request = rememberCoilImageLoadRequest(
-                    request = request,
-                    imageLoader = imageLoader,
-                    requestBuilder = requestBuilder,
-                    onRequestCompleted = onRequestCompleted,
-                ),
-                contentDescription = contentDescription,
-                modifier = modifier,
-                alignment: alignment,,
-                contentScale = contentScale,
-                colorFilter = colorFilter,
-                fadeIn = fadeIn,
-                shouldRefetchOnSizeChange= shouldRefetchOnSizeChange,
-            )
-        """,
+        expression = """ImageLoad(
+            request = rememberCoilImageLoadRequest(
+                request = request,
+                imageLoader = imageLoader,
+                requestBuilder = requestBuilder,
+            ),
+            contentDescription = contentDescription,
+            modifier = modifier,
+            alignment = alignment,
+            contentScale = contentScale,
+            colorFilter = colorFilter,
+            fadeIn = fadeIn,
+            previewPlaceholder = previewPlaceholder,
+            shouldRefetchOnSizeChange= shouldRefetchOnSizeChange,
+        )""",
+        "com.google.accompanist.imageloading.ImageLoad",
         "com.google.accompanist.coil.rememberCoilImageLoadRequest",
-        "import com.google.accompanist.imageloading.ImageLoad",
     )
 )
 @Composable
@@ -394,14 +404,20 @@ fun CoilImage(
     error: @Composable (BoxScope.(ImageLoadState.Error) -> Unit)? = null,
     loading: @Composable (BoxScope.() -> Unit)? = null,
 ) {
+    val loadRequest = rememberCoilImageLoadRequest(
+        request = request,
+        requestBuilder = requestBuilder,
+        imageLoader = imageLoader,
+    )
+
+    LaunchedEffect(loadRequest) {
+        snapshotFlow { loadRequest.loadState }
+            .collect { onRequestCompleted(it) }
+    }
+
     @Suppress("DEPRECATION")
     ImageLoad(
-        request = rememberCoilImageLoadRequest(
-            request = request,
-            requestBuilder = requestBuilder,
-            imageLoader = imageLoader,
-            onRequestCompleted = onRequestCompleted,
-        ),
+        request = loadRequest,
         previewPlaceholder = previewPlaceholder,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         modifier = modifier,

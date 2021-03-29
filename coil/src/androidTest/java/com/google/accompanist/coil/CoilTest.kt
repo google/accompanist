@@ -18,6 +18,7 @@ package com.google.accompanist.coil
 
 import android.graphics.drawable.ShapeDrawable
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
 import androidx.compose.runtime.CompositionLocalProvider
@@ -39,6 +40,7 @@ import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.test.filters.LargeTest
 import androidx.test.filters.SdkSuppress
@@ -51,6 +53,7 @@ import coil.fetch.Fetcher
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.google.accompanist.coil.test.R
+import com.google.accompanist.imageloading.ImageLoad
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.test.ImageMockWebServer
 import com.google.accompanist.imageloading.test.assertPixels
@@ -127,14 +130,16 @@ class CoilTest {
         var requestCompleted by mutableStateOf(false)
 
         composeTestRule.setContent {
-            CoilImage(
-                data = server.url("/image"),
-                requestBuilder = {
-                    listener { _, _ -> requestCompleted = true }
-                },
+            ImageLoad(
+                request = rememberCoilImageLoadRequest(
+                    data = server.url("/image"),
+                    requestBuilder = fun ImageRequest.Builder.(it: IntSize): ImageRequest.Builder {
+                        return listener { _, _ -> requestCompleted = true }
+                    },
+                    onRequestCompleted = { it: ImageLoadState -> results += it },
+                ),
                 contentDescription = null,
                 modifier = Modifier.size(128.dp, 128.dp),
-                onRequestCompleted = { results += it }
             )
         }
 
@@ -153,11 +158,13 @@ class CoilTest {
         var requestCompleted by mutableStateOf(false)
 
         composeTestRule.setContent {
-            CoilImage(
-                data = server.url("/image"),
+            ImageLoad(
+                request = rememberCoilImageLoadRequest(
+                    data = server.url("/image"),
+                    onRequestCompleted = { it: ImageLoadState -> requestCompleted = true },
+                ),
                 contentDescription = null,
                 modifier = Modifier.size(128.dp, 128.dp).testTag(CoilTestTags.Image),
-                onRequestCompleted = { requestCompleted = true }
             )
         }
 
@@ -176,11 +183,13 @@ class CoilTest {
         var requestCompleted by mutableStateOf(false)
 
         composeTestRule.setContent {
-            CoilImage(
-                data = resourceUri(R.drawable.red_rectangle),
+            ImageLoad(
+                request = rememberCoilImageLoadRequest(
+                    data = resourceUri(R.drawable.red_rectangle),
+                    onRequestCompleted = { it: ImageLoadState -> requestCompleted = true },
+                ),
                 contentDescription = null,
                 modifier = Modifier.size(128.dp, 128.dp).testTag(CoilTestTags.Image),
-                onRequestCompleted = { requestCompleted = true }
             )
         }
 
@@ -214,12 +223,14 @@ class CoilTest {
             .build()
 
         composeTestRule.setContent {
-            CoilImage(
-                data = server.url("/image"),
+            ImageLoad(
+                request = rememberCoilImageLoadRequest(
+                    data = server.url("/image"),
+                    imageLoader = imageLoader,
+                    onRequestCompleted = { it: ImageLoadState -> requestCompleted = true },
+                ),
                 contentDescription = null,
                 modifier = Modifier.size(128.dp, 128.dp),
-                imageLoader = imageLoader,
-                onRequestCompleted = { requestCompleted = true }
             )
         }
 
@@ -250,11 +261,13 @@ class CoilTest {
 
         composeTestRule.setContent {
             CompositionLocalProvider(LocalImageLoader provides imageLoader) {
-                CoilImage(
-                    data = server.url("/image"),
+                ImageLoad(
+                    request = rememberCoilImageLoadRequest(
+                        data = server.url("/image"),
+                        onRequestCompleted = { it: ImageLoadState -> requestCompleted = true },
+                    ),
                     contentDescription = null,
                     modifier = Modifier.size(128.dp, 128.dp),
-                    onRequestCompleted = { requestCompleted = true }
                 )
             }
         }
@@ -274,13 +287,15 @@ class CoilTest {
         var data by mutableStateOf(server.url("/red"))
 
         composeTestRule.setContent {
-            CoilImage(
-                data = data,
+            ImageLoad(
+                request = rememberCoilImageLoadRequest(
+                    data = data,
+                    onRequestCompleted = { it: ImageLoadState -> loadCompleteSignal = true },
+                ),
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
                     .testTag(CoilTestTags.Image),
-                onRequestCompleted = { loadCompleteSignal = true }
             )
         }
 
@@ -318,13 +333,15 @@ class CoilTest {
         var size by mutableStateOf(128.dp)
 
         composeTestRule.setContent {
-            CoilImage(
-                data = server.url("/red"),
+            ImageLoad(
+                request = rememberCoilImageLoadRequest(
+                    data = server.url("/red"),
+                    onRequestCompleted = { it: ImageLoadState -> loadCompleteSignal.offer(it) },
+                ),
                 contentDescription = null,
                 modifier = Modifier
                     .size(size)
                     .testTag(CoilTestTags.Image),
-                onRequestCompleted = { loadCompleteSignal.offer(it) }
             )
         }
 
@@ -350,11 +367,13 @@ class CoilTest {
         var requestCompleted by mutableStateOf(false)
 
         composeTestRule.setContent {
-            CoilImage(
-                data = server.url("/image"),
+            ImageLoad(
+                request = rememberCoilImageLoadRequest(
+                    data = server.url("/image"),
+                    onRequestCompleted = { it: ImageLoadState -> requestCompleted = true },
+                ),
                 contentDescription = null,
                 modifier = Modifier.testTag(CoilTestTags.Image),
-                onRequestCompleted = { requestCompleted = true }
             )
         }
 
@@ -372,13 +391,15 @@ class CoilTest {
         var requestCompleted by mutableStateOf(false)
 
         composeTestRule.setContent {
-            CoilImage(
-                data = server.url("/noimage"),
+            ImageLoad(
+                request = rememberCoilImageLoadRequest(
+                    data = server.url("/noimage"),
+                    onRequestCompleted = { it: ImageLoadState -> requestCompleted = true },
+                ),
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
                     .testTag(CoilTestTags.Image),
-                onRequestCompleted = { requestCompleted = true }
             )
         }
 
@@ -500,13 +521,17 @@ class CoilTest {
             .build()
 
         composeTestRule.setContent {
-            CoilImage(
-                data = server.url("/image"),
-                imageLoader = imageLoader,
+            fun BoxScope.() {
+                Text(text = "Loading")
+            }
+            ImageLoad(
+                request = rememberCoilImageLoadRequest(
+                    data = server.url("/image"),
+                    imageLoader = imageLoader,
+                    onRequestCompleted = { it: ImageLoadState -> loadLatch.countDown() },
+                ),
                 contentDescription = null,
                 modifier = Modifier.size(128.dp, 128.dp),
-                loading = { Text(text = "Loading") },
-                onRequestCompleted = { loadLatch.countDown() }
             )
         }
 
@@ -531,21 +556,24 @@ class CoilTest {
         var requestCompleted by mutableStateOf(false)
 
         composeTestRule.setContent {
-            CoilImage(
-                data = server.url("/noimage"),
-                error = {
-                    // Return failure content which just draws red
-                    Image(
-                        painter = ColorPainter(Color.Red),
-                        contentDescription = null,
-                        modifier = Modifier.matchParentSize()
-                    )
-                },
+            fun BoxScope.(it: ImageLoadState.Error) {
+                // Return failure content which just draws red
+                Image(
+                    painter = ColorPainter(Color.Red),
+                    contentDescription = null,
+                    modifier = Modifier.matchParentSize()
+                )
+            }
+            // Return failure content which just draws red
+            ImageLoad(
+                request = rememberCoilImageLoadRequest(
+                    data = server.url("/noimage"),
+                    onRequestCompleted = { it: ImageLoadState -> requestCompleted = true },
+                ),
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
                     .testTag(CoilTestTags.Image),
-                onRequestCompleted = { requestCompleted = true }
             )
         }
 
@@ -562,8 +590,10 @@ class CoilTest {
     @Test(expected = IllegalArgumentException::class)
     fun data_drawable_throws() {
         composeTestRule.setContent {
-            CoilImage(
-                data = ShapeDrawable(),
+            ImageLoad(
+                request = rememberCoilImageLoadRequest(
+                    data = ShapeDrawable(),
+                ),
                 contentDescription = null,
                 modifier = Modifier.size(128.dp, 128.dp),
             )
@@ -573,8 +603,10 @@ class CoilTest {
     @Test(expected = IllegalArgumentException::class)
     fun data_imagebitmap_throws() {
         composeTestRule.setContent {
-            CoilImage(
-                data = painterResource(android.R.drawable.ic_delete),
+            ImageLoad(
+                request = rememberCoilImageLoadRequest(
+                    data = painterResource(android.R.drawable.ic_delete),
+                ),
                 contentDescription = null,
                 modifier = Modifier.size(128.dp, 128.dp),
             )
@@ -584,8 +616,10 @@ class CoilTest {
     @Test(expected = IllegalArgumentException::class)
     fun data_imagevector_throws() {
         composeTestRule.setContent {
-            CoilImage(
-                data = painterResource(R.drawable.ic_android_black_24dp),
+            ImageLoad(
+                request = rememberCoilImageLoadRequest(
+                    data = painterResource(R.drawable.ic_android_black_24dp),
+                ),
                 contentDescription = null,
                 modifier = Modifier.size(128.dp, 128.dp),
             )
@@ -595,8 +629,10 @@ class CoilTest {
     @Test(expected = IllegalArgumentException::class)
     fun data_painter_throws() {
         composeTestRule.setContent {
-            CoilImage(
-                data = ColorPainter(Color.Magenta),
+            ImageLoad(
+                request = rememberCoilImageLoadRequest(
+                    data = ColorPainter(Color.Magenta),
+                ),
                 contentDescription = null,
                 modifier = Modifier.size(128.dp, 128.dp),
             )

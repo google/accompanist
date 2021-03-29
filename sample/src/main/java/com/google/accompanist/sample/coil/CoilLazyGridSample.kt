@@ -32,7 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
-import com.google.accompanist.coil.CoilImage
+import com.google.accompanist.coil.rememberCoilImageLoadRequest
+import com.google.accompanist.imageloading.ImageLoad
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.toPaddingValues
@@ -78,14 +79,13 @@ private fun Sample() {
                 .toPaddingValues(additionalVertical = 16.dp, additionalHorizontal = 16.dp),
         ) {
             items(NumberItems) { index ->
-                @Suppress("DEPRECATION")
-                CoilImage(
-                    data = randomSampleImageUrl(index),
+                ImageLoad(
+                    request = rememberCoilImageLoadRequest(randomSampleImageUrl(index)),
                     contentDescription = null,
                     fadeIn = true,
                     modifier = Modifier
                         .aspectRatio(1f)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
                 )
             }
         }

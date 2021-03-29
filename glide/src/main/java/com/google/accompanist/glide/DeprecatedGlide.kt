@@ -24,6 +24,8 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -38,6 +40,7 @@ import com.google.accompanist.imageloading.DefaultRefetchOnSizeChangeLambda
 import com.google.accompanist.imageloading.ImageLoad
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.MaterialLoadingImage
+import kotlinx.coroutines.flow.collect
 
 /**
  * Creates a composable that will attempt to load the given [data] using [Glide], and provides
@@ -80,14 +83,19 @@ fun GlideImage(
     onRequestCompleted: (ImageLoadState) -> Unit = {},
     content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
 ) {
+    val request = rememberGlideImageLoadRequest(
+        request = data,
+        requestManager = requestManager,
+        requestBuilder = requestBuilder,
+    )
+
+    LaunchedEffect(request) {
+        snapshotFlow { request.loadState }.collect { onRequestCompleted(it) }
+    }
+
     @Suppress("DEPRECATION")
     ImageLoad(
-        request = rememberGlideImageLoadRequest(
-            request = data,
-            requestManager = requestManager,
-            requestBuilder = requestBuilder,
-            onRequestCompleted = onRequestCompleted,
-        ),
+        request = request,
         previewPlaceholder = previewPlaceholder,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         modifier = modifier,
@@ -161,14 +169,19 @@ fun GlideImage(
     error: @Composable (BoxScope.(ImageLoadState.Error) -> Unit)? = null,
     loading: @Composable (BoxScope.() -> Unit)? = null,
 ) {
+    val request = rememberGlideImageLoadRequest(
+        request = data,
+        requestManager = requestManager,
+        requestBuilder = requestBuilder,
+    )
+
+    LaunchedEffect(request) {
+        snapshotFlow { request.loadState }.collect { onRequestCompleted(it) }
+    }
+
     @Suppress("DEPRECATION")
     ImageLoad(
-        request = rememberGlideImageLoadRequest(
-            request = data,
-            requestManager = requestManager,
-            requestBuilder = requestBuilder,
-            onRequestCompleted = onRequestCompleted,
-        ),
+        request = request,
         previewPlaceholder = previewPlaceholder,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         modifier = modifier,

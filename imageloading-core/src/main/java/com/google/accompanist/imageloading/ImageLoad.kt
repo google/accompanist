@@ -59,10 +59,15 @@ import kotlin.coroutines.cancellation.CancellationException
  */
 abstract class ImageLoadRequest<R : Any> {
     protected abstract val request: R
-    protected abstract val onRequestCompleted: (ImageLoadState) -> Unit
+
+    /**
+     * TODO
+     */
+    var loadState by mutableStateOf<ImageLoadState>(ImageLoadState.Empty)
+        private set
 
     suspend fun execute(size: IntSize): ImageLoadState {
-        onRequestCompleted(ImageLoadState.Loading)
+        loadState = ImageLoadState.Loading
         return try {
             executeRequest(request, size)
         } catch (ce: CancellationException) {
@@ -71,7 +76,9 @@ abstract class ImageLoadRequest<R : Any> {
             throw ce
         } catch (throwable: Throwable) {
             ImageLoadState.Error(painter = null, throwable = throwable)
-        }.also(onRequestCompleted)
+        }.also {
+            loadState = it
+        }
     }
 
     /**

@@ -27,7 +27,7 @@ public abstract class com/google/accompanist/imageloading/ImageLoadRequest {
 	public fun <init> ()V
 	public final fun execute-viCIZxY (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	protected abstract fun executeRequest-JVtK1S4 (Ljava/lang/Object;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	protected abstract fun getOnRequestCompleted ()Lkotlin/jvm/functions/Function1;
+	public final fun getLoadState ()Lcom/google/accompanist/imageloading/ImageLoadState;
 	protected abstract fun getRequest ()Ljava/lang/Object;
 }
 

@@ -60,28 +60,24 @@ object CoilImageDefaults {
 @Composable
 fun rememberCoilImageLoadRequest(
     data: Any,
-    imageLoader: ImageLoader,
-    requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)?,
-    onRequestCompleted: (ImageLoadState) -> Unit = {},
+    imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
+    requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
 ): ImageLoadRequest<ImageRequest> = rememberCoilImageLoadRequest(
     request = data.toImageRequest(),
     imageLoader = imageLoader,
     requestBuilder = requestBuilder,
-    onRequestCompleted = onRequestCompleted
 )
 
 @Composable
 fun rememberCoilImageLoadRequest(
     request: ImageRequest,
-    imageLoader: ImageLoader,
-    requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)?,
-    onRequestCompleted: (ImageLoadState) -> Unit = {},
+    imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
+    requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
 ): ImageLoadRequest<ImageRequest> = remember(request, imageLoader) {
     CoilImageLoadRequest(
         request = request,
         imageLoader = imageLoader,
         requestBuilder = requestBuilder,
-        onRequestCompleted = onRequestCompleted
     )
 }
 
@@ -92,7 +88,6 @@ private class CoilImageLoadRequest(
     override val request: ImageRequest,
     private val imageLoader: ImageLoader,
     private val requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)?,
-    override val onRequestCompleted: (ImageLoadState) -> Unit = {},
 ) : ImageLoadRequest<ImageRequest>() {
     override suspend fun executeRequest(request: ImageRequest, size: IntSize): ImageLoadState {
         val sizedRequest = when {

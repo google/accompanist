@@ -21,9 +21,9 @@ import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -45,7 +45,9 @@ import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
-import com.google.accompanist.coil.CoilImage
+import com.google.accompanist.coil.rememberCoilImageLoadRequest
+import com.google.accompanist.imageloading.ImageLoad
+import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
@@ -61,7 +63,6 @@ class CoilBasicSample : ComponentActivity() {
     }
 }
 
-@Suppress("DEPRECATION")
 @Composable
 private fun Sample() {
     Scaffold(
@@ -74,122 +75,123 @@ private fun Sample() {
         LazyColumn(Modifier.padding(16.dp)) {
             item {
                 // CoilImage with data parameter
-                CoilImage(
-                    data = randomSampleImageUrl(),
+                ImageLoad(
+                    request = rememberCoilImageLoadRequest(randomSampleImageUrl()),
                     contentDescription = null,
-                    previewPlaceholder = R.drawable.placeholder,
-                    modifier = Modifier.size(128.dp)
+                    modifier = Modifier.size(128.dp),
                 )
             }
 
             item {
                 // CoilImage with GIF
-                CoilImage(
-                    data = "https://cataas.com/cat/gif",
+                ImageLoad(
+                    request = rememberCoilImageLoadRequest(
+                        data = "https://cataas.com/cat/gif",
+                        imageLoader = gifImageLoader(LocalContext.current),
+                    ),
                     contentDescription = "Cat animation",
-                    imageLoader = gifImageLoader(LocalContext.current),
-                    modifier = Modifier.size(128.dp)
+                    modifier = Modifier.size(128.dp),
                 )
             }
 
             item {
                 // CoilImage with ImageRequest parameter
-                CoilImage(
-                    request = ImageRequest.Builder(LocalContext.current)
-                        .data(randomSampleImageUrl())
-                        .transformations(CircleCropTransformation())
-                        .build(),
+                ImageLoad(
+                    request = rememberCoilImageLoadRequest(
+                        request = ImageRequest.Builder(LocalContext.current)
+                            .data(randomSampleImageUrl())
+                            .transformations(CircleCropTransformation())
+                            .build(),
+                    ),
                     contentDescription = null,
-                    modifier = Modifier.size(128.dp)
+                    modifier = Modifier.size(128.dp),
                 )
             }
 
             item {
                 // CoilImage with ImageRequest builder parameter
-                CoilImage(
-                    data = randomSampleImageUrl(),
-                    requestBuilder = {
+                ImageLoad(
+                    request = rememberCoilImageLoadRequest(randomSampleImageUrl()) {
                         transformations(CircleCropTransformation())
                     },
                     contentDescription = null,
-                    modifier = Modifier.size(128.dp)
+                    modifier = Modifier.size(128.dp),
                 )
             }
 
             item {
-                // CoilImage with loading slot
-                CoilImage(
-                    data = randomSampleImageUrl(),
-                    contentDescription = null,
-                    loading = {
-                        Box(Modifier.fillMaxSize()) {
+                // CoilImage with loading content
+                Box {
+                    val request = rememberCoilImageLoadRequest(randomSampleImageUrl())
+
+                    ImageLoad(
+                        request = request,
+                        contentDescription = null,
+                        modifier = Modifier.size(128.dp),
+                    )
+
+                    Crossfade(request.loadState) { state ->
+                        if (state == ImageLoadState.Loading) {
                             CircularProgressIndicator(Modifier.align(Alignment.Center))
                         }
-                    },
-                    modifier = Modifier.size(128.dp)
-                )
+                    }
+                }
             }
 
             item {
                 // CoilImage with crossfade and data parameter
-                CoilImage(
-                    data = randomSampleImageUrl(),
-                    fadeIn = true,
+                ImageLoad(
+                    request = rememberCoilImageLoadRequest(randomSampleImageUrl()),
                     contentDescription = null,
-                    modifier = Modifier.size(128.dp)
+                    modifier = Modifier.size(128.dp),
+                    fadeIn = true,
                 )
             }
 
             item {
                 // CoilImage with crossfade and ImageRequest parameter
-                CoilImage(
-                    request = ImageRequest.Builder(LocalContext.current)
-                        .data(randomSampleImageUrl())
-                        .transformations(CircleCropTransformation())
-                        .build(),
-                    fadeIn = true,
+                ImageLoad(
+                    request = rememberCoilImageLoadRequest(
+                        request = ImageRequest.Builder(LocalContext.current)
+                            .data(randomSampleImageUrl())
+                            .transformations(CircleCropTransformation())
+                            .build(),
+                    ),
                     contentDescription = null,
-                    modifier = Modifier.size(128.dp)
+                    modifier = Modifier.size(128.dp),
+                    fadeIn = true,
                 )
             }
 
             item {
-                // CoilImage with crossfade and loading slot
-                CoilImage(
-                    data = randomSampleImageUrl(),
-                    fadeIn = true,
-                    loading = {
-                        Box(Modifier.fillMaxSize()) {
-                            CircularProgressIndicator(Modifier.align(Alignment.Center))
-                        }
-                    },
+                // CoilImage with crossfade
+                ImageLoad(
+                    request = rememberCoilImageLoadRequest(randomSampleImageUrl()),
                     contentDescription = null,
-                    modifier = Modifier.size(128.dp)
+                    modifier = Modifier.size(128.dp),
+                    fadeIn = true,
                 )
             }
 
             item {
                 // CoilImage with an implicit size
-                CoilImage(
-                    data = randomSampleImageUrl(),
-                    loading = {
-                        Box(Modifier.fillMaxSize()) {
-                            CircularProgressIndicator(Modifier.align(Alignment.Center))
-                        }
-                    },
+                ImageLoad(
+                    request = rememberCoilImageLoadRequest(
+                        data = randomSampleImageUrl(),
+                    ),
                     contentDescription = null,
                 )
             }
 
             item {
                 // CoilImage with an aspect ratio and crop scale
-                CoilImage(
-                    data = randomSampleImageUrl(),
-                    contentScale = ContentScale.Crop,
+                ImageLoad(
+                    request = rememberCoilImageLoadRequest(randomSampleImageUrl()),
                     contentDescription = null,
                     modifier = Modifier
                         .width(256.dp)
-                        .aspectRatio(16 / 9f)
+                        .aspectRatio(16 / 9f),
+                    contentScale = ContentScale.Crop,
                 )
             }
         }
