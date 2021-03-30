@@ -19,6 +19,7 @@
 
 package com.google.accompanist.imageloading
 
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -27,9 +28,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -50,8 +53,7 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.IntSize
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
@@ -63,14 +65,14 @@ import kotlin.coroutines.cancellation.CancellationException
  */
 abstract class ImageLoadRequest<R : Any> {
     /**
-     * TODO
+     * This should be [androidx.compose.runtime.State] backed.
      */
-    var request by mutableStateOf<R?>(null)
+    abstract var request: R?
 
     /**
      * TODO
      */
-    var loadState by mutableStateOf<ImageLoadState>(ImageLoadState.Empty)
+    var loadState by mutableStateOf<ImageLoadState>(ImageLoadState.Loading)
         internal set
 
     internal suspend fun execute(request: R, size: IntSize): ImageLoadState {
@@ -129,14 +131,17 @@ fun <R : Any> ImageLoad(
         return
     }
 
-    val imageMgr = remember(request) {
+    val coroutineScope = rememberCoroutineScope()
+
+    val imageMgr = remember(request, coroutineScope) {
         ImageLoader(
             requestState = request,
+            coroutineScope = coroutineScope,
             shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         )
     }
 
-    val cf = if (fadeIn && imageMgr.loadState is ImageLoadState.Success) {
+    val cf = if (fadeIn && request.loadState is ImageLoadState.Success) {
         val fadeInTransition = updateFadeInTransition(
             key = imageMgr.requestState,
             durationMs = fadeInDurationMs
@@ -211,9 +216,12 @@ fun <R : Any> ImageLoadSuchDeprecated(
         return
     }
 
-    val imageMgr = remember(request) {
+    val coroutineScope = rememberCoroutineScope()
+
+    val imageMgr = remember(request, coroutineScope) {
         ImageLoader(
             requestState = request,
+            coroutineScope = coroutineScope,
             shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         )
     }
@@ -228,13 +236,14 @@ fun <R : Any> ImageLoadSuchDeprecated(
         propagateMinConstraints = true,
         modifier = modifier.then(imageMgr.layoutModifier)
     ) {
-        content(imageMgr.loadState)
+        content(request.loadState)
     }
 }
 
 @Stable
 private class ImageLoader<R : Any>(
     val requestState: ImageLoadRequest<R>,
+    val coroutineScope: CoroutineScope,
     var shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean,
 ) : RememberObserver {
 
@@ -243,29 +252,24 @@ private class ImageLoader<R : Any>(
     // This value will be read during layout
     private var requestSize by mutableStateOf<IntSize?>(null)
 
-    // The actual image state, populated by the image request.
-    //
-    // This value will be read during draw only
-    var loadState by mutableStateOf<ImageLoadState>(ImageLoadState.Loading)
-        private set
-
     var colorFilter by mutableStateOf<ColorFilter?>(null)
     var contentScale by mutableStateOf(ContentScale.Fit)
     var alignment by mutableStateOf(Alignment.Center)
 
-    private val scope = CoroutineScope(Dispatchers.Main)
+    private var job: Job? = null
 
     val layoutModifier = Modifier.layout { measurable, constraints ->
         // NOTE: this is where the interesting logic is, but there shouldn't be anything here that
         // you can't do that you're doing using BoxWithConstraints currently.
-        val size = IntSize(
+        val newSize = IntSize(
             width = if (constraints.hasBoundedWidth) constraints.maxWidth else -1,
             height = if (constraints.hasBoundedHeight) constraints.maxHeight else -1
         )
+
         if (requestSize == null ||
-            (requestSize != size && shouldRefetchOnSizeChange(loadState, size))
+            (requestSize != newSize && shouldRefetchOnSizeChange(requestState.loadState, newSize))
         ) {
-            requestSize = size
+            requestSize = newSize
         }
 
         val placeable = measurable.measure(constraints)
@@ -274,16 +278,14 @@ private class ImageLoader<R : Any>(
         }
     }
 
-    private val emptyPainter = ColorPainter(Color.Transparent)
-
     val paintModifier = object : PainterModifier() {
-        override val painter: Painter
-            get() = loadState.let { state ->
-                when (state) {
-                    is ImageLoadState.Success -> state.painter
-                    else -> emptyPainter
-                }
+        override val painter: Painter by derivedStateOf {
+            requestState.loadState.let { state ->
+                if (state is ImageLoadState.Success) {
+                    state.painter
+                } else EmptyPainter
             }
+        }
 
         override val alignment: Alignment
             get() = this@ImageLoader.alignment
@@ -301,26 +303,27 @@ private class ImageLoader<R : Any>(
             get() = true
     }
 
-    // NOTE: both onAbandoned and onForgotten are where we should cancel any image requests and dispose
-    // of things
     override fun onAbandoned() {
-        scope.cancel()
+        job?.cancel()
+        job = null
     }
 
     override fun onForgotten() {
-        scope.cancel()
+        job?.cancel()
+        job = null
     }
 
     override fun onRemembered() {
-        // you can use a coroutine scope that is scoped to the composable, or something more custom like
-        // the imageLoader or whatever. The main point is, here is where you would start your loading
-        scope.launch {
-            // TODO: double check the filterNotNull()s
+        job?.cancel()
+        job = coroutineScope.launch {
             combine(
                 snapshotFlow { requestState.request }.filterNotNull(),
-                snapshotFlow { requestSize }.filterNotNull(),
-                transform = { request, size -> request to size }
-            ).collectLatest { (request, size) ->
+                snapshotFlow { requestSize }.filterNotNull()
+            ) { request, size ->
+                request to size
+            }.collectLatest { (request, size) ->
+                Log.d("ImageLoader", "Executing. Request: $request, size: $size")
+
                 requestState.loadState = ImageLoadState.Loading
 
                 requestState.loadState = try {
@@ -329,11 +332,25 @@ private class ImageLoader<R : Any>(
                     // We specifically don't do anything for the request coroutine being
                     // cancelled: https://github.com/chrisbanes/accompanist/issues/217
                     throw ce
-                } catch (throwable: Throwable) {
-                    ImageLoadState.Error(painter = null, throwable = throwable)
+                } catch (e: Error) {
+                    // Re-throw all Errors
+                    throw e
+                } catch (e: IllegalStateException) {
+                    // Re-throw all IllegalStateExceptions
+                    throw e
+                } catch (e: IllegalArgumentException) {
+                    // Re-throw all IllegalArgumentExceptions
+                    throw e
+                } catch (t: Throwable) {
+                    // Anything else, we wrap in a Error state instance
+                    ImageLoadState.Error(painter = null, throwable = t)
                 }
             }
         }
+    }
+
+    companion object {
+        private val EmptyPainter = ColorPainter(Color.Transparent)
     }
 }
 

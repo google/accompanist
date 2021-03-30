@@ -27,7 +27,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.test.assertHeightIsAtLeast
@@ -101,10 +100,10 @@ class DeprecatedCoilTest {
 
         composeTestRule.setContent {
             CoilImage(
-                request = ImageRequest.Builder(LocalContext.current)
-                    .data(server.url("/image"))
-                    .listener { _, _ -> requestCompleted = true }
-                    .build(),
+                data = server.url("/image"),
+                requestBuilder = {
+                    listener { _, _ -> requestCompleted = true }
+                },
                 contentDescription = null,
                 modifier = Modifier.size(128.dp, 128.dp),
                 onRequestCompleted = { results += it }
@@ -156,7 +155,9 @@ class DeprecatedCoilTest {
             CoilImage(
                 data = server.url("/image"),
                 contentDescription = null,
-                modifier = Modifier.size(128.dp, 128.dp).testTag(CoilTestTags.Image),
+                modifier = Modifier
+                    .size(128.dp, 128.dp)
+                    .testTag(CoilTestTags.Image),
                 onRequestCompleted = { requestCompleted = true }
             )
         }
@@ -179,7 +180,9 @@ class DeprecatedCoilTest {
             CoilImage(
                 data = resourceUri(R.drawable.red_rectangle),
                 contentDescription = null,
-                modifier = Modifier.size(128.dp, 128.dp).testTag(CoilTestTags.Image),
+                modifier = Modifier
+                    .size(128.dp, 128.dp)
+                    .testTag(CoilTestTags.Image),
                 onRequestCompleted = { requestCompleted = true }
             )
         }

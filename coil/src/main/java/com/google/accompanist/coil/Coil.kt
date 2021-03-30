@@ -19,8 +19,12 @@
 
 package com.google.accompanist.coil
 
+import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
@@ -61,27 +65,16 @@ object CoilImageDefaults {
 fun rememberCoilImageLoadRequest(
     data: Any,
     imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
+    context: Context = LocalContext.current,
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
-): ImageLoadRequest<ImageRequest> {
-    return rememberCoilImageLoadRequest(
-        request = toImageRequest(data),
-        requestBuilder = requestBuilder,
-        imageLoader = imageLoader,
-    )
-}
-
-@Composable
-fun rememberCoilImageLoadRequest(
-    request: ImageRequest,
-    imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
-    requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
-): ImageLoadRequest<ImageRequest> = remember(imageLoader) {
+): ImageLoadRequest<Any> = remember(imageLoader, context) {
     CoilImageLoadRequest(
-        requestBuilder = requestBuilder,
         imageLoader = imageLoader,
-    ).apply {
-        this.request = request
-    }
+        context = context,
+        requestBuilder = requestBuilder,
+    )
+}.apply {
+    this.request = data
 }
 
 /**
@@ -89,25 +82,45 @@ fun rememberCoilImageLoadRequest(
  */
 private class CoilImageLoadRequest(
     private val imageLoader: ImageLoader,
+    private val context: Context,
     private val requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
-) : ImageLoadRequest<ImageRequest>() {
-    override suspend fun executeRequest(request: ImageRequest, size: IntSize): ImageLoadState {
+) : ImageLoadRequest<Any>() {
+
+    private var requestState by mutableStateOf<Any?>(null)
+
+    override var request: Any?
+        get() = requestState
+        set(value) {
+            requestState = checkData(value)
+        }
+
+    override suspend fun executeRequest(request: Any, size: IntSize): ImageLoadState {
+        val baseRequest = when (request) {
+            // If we've been given an ImageRequest instance, use it...
+            is ImageRequest -> request.newBuilder()
+            // Otherwise we construct a request from the data
+            else -> ImageRequest.Builder(context).data(request)
+        }
+            // Apply the request builder
+            .apply { requestBuilder?.invoke(this, size) }
+            // And build the request
+            .build()
+
         val sizedRequest = when {
             // If the request has a size resolver set we just execute the request as-is
-            request.defined.sizeResolver != null -> request
+            baseRequest.defined.sizeResolver != null -> baseRequest
             // If the size contains an unspecified sized dimension, we don't specify a size
             // in the Coil request
-            size.width < 0 || size.height < 0 -> request
+            size.width < 0 || size.height < 0 -> baseRequest
             // If we have a non-zero size, we can modify the request to include the size
             size.width > 0 && size.height > 0 -> {
-                request.newBuilder().size(size.width, size.height).build()
+                baseRequest.newBuilder().size(size.width, size.height).build()
             }
             // Otherwise we have a zero size, so no point executing a request so return empty now
             else -> return ImageLoadState.Empty
         }
 
-        val r = requestBuilder?.invoke(sizedRequest.newBuilder(), size)?.build() ?: sizedRequest
-        return imageLoader.execute(r).toResult()
+        return imageLoader.execute(sizedRequest).toResult()
     }
 }
 
@@ -133,8 +146,7 @@ private fun coil.decode.DataSource.toDataSource(): DataSource = when (this) {
     coil.decode.DataSource.DISK -> DataSource.DISK
 }
 
-@Composable
-internal fun toImageRequest(data: Any): ImageRequest {
+private fun checkData(data: Any?): Any? {
     when (data) {
         is android.graphics.drawable.Drawable -> {
             throw IllegalArgumentException(
@@ -160,13 +172,6 @@ internal fun toImageRequest(data: Any): ImageRequest {
                     " If you wish to draw this Painter, use androidx.compose.foundation.Image()"
             )
         }
-        // If the developer is accidentally using the wrong function (data vs request), just
-        // pass the request through
-        is ImageRequest -> return data
-        else -> {
-            // Otherwise we construct a GetRequest using the data parameter
-            val context = LocalContext.current
-            return remember(data) { ImageRequest.Builder(context).data(data).build() }
-        }
     }
+    return data
 }

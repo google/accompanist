@@ -43,7 +43,6 @@ import androidx.compose.ui.unit.dp
 import coil.ImageLoader
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
-import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
 import com.google.accompanist.coil.rememberCoilImageLoadRequest
 import com.google.accompanist.imageloading.ImageLoad
@@ -95,13 +94,13 @@ private fun Sample() {
             }
 
             item {
-                // CoilImage with ImageRequest parameter
+                // CoilImage with ImageRequest Builder parameter
                 ImageLoad(
                     request = rememberCoilImageLoadRequest(
-                        request = ImageRequest.Builder(LocalContext.current)
-                            .data(randomSampleImageUrl())
-                            .transformations(CircleCropTransformation())
-                            .build(),
+                        data = randomSampleImageUrl(),
+                        requestBuilder = {
+                            transformations(CircleCropTransformation())
+                        }
                     ),
                     contentDescription = null,
                     modifier = Modifier.size(128.dp),
@@ -149,21 +148,6 @@ private fun Sample() {
             }
 
             item {
-                // CoilImage with crossfade and ImageRequest parameter
-                ImageLoad(
-                    request = rememberCoilImageLoadRequest(
-                        request = ImageRequest.Builder(LocalContext.current)
-                            .data(randomSampleImageUrl())
-                            .transformations(CircleCropTransformation())
-                            .build(),
-                    ),
-                    contentDescription = null,
-                    modifier = Modifier.size(128.dp),
-                    fadeIn = true,
-                )
-            }
-
-            item {
                 // CoilImage with crossfade
                 ImageLoad(
                     request = rememberCoilImageLoadRequest(randomSampleImageUrl()),
@@ -176,9 +160,7 @@ private fun Sample() {
             item {
                 // CoilImage with an implicit size
                 ImageLoad(
-                    request = rememberCoilImageLoadRequest(
-                        data = randomSampleImageUrl(),
-                    ),
+                    request = rememberCoilImageLoadRequest(randomSampleImageUrl()),
                     contentDescription = null,
                 )
             }

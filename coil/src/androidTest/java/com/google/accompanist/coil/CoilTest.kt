@@ -288,7 +288,7 @@ class CoilTest {
             }
 
             // Await the first load
-            assertThat(loadStates.receive()).isInstanceOf(ImageLoadState.Empty::class.java)
+            assertThat(loadStates.receive()).isInstanceOf(ImageLoadState.Loading::class.java)
             assertThat(loadStates.receive()).isInstanceOf(ImageLoadState.Success::class.java)
 
             // Now change the size

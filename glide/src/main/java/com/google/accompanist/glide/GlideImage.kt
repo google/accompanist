@@ -21,7 +21,10 @@ package com.google.accompanist.glide
 
 import android.graphics.drawable.Drawable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
@@ -82,6 +85,13 @@ private class GlideImageLoadRequest(
     private val requestManager: RequestManager,
     private val requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)?,
 ) : ImageLoadRequest<Any>() {
+
+    private var requestState by mutableStateOf<Any?>(null)
+
+    override var request: Any?
+        get() = requestState
+        set(value) { requestState = checkData(value) }
+
     override suspend fun executeRequest(request: Any, size: IntSize): ImageLoadState {
         val r = requestManager.load(checkData(request))
         return requestManager.execute(requestBuilder?.invoke(r, size) ?: r, size)
@@ -180,7 +190,7 @@ private fun com.bumptech.glide.load.DataSource.toDataSource(): DataSource = when
     com.bumptech.glide.load.DataSource.MEMORY_CACHE -> DataSource.MEMORY
 }
 
-private fun checkData(data: Any): Any {
+private fun checkData(data: Any?): Any? {
     when (data) {
         is Drawable -> {
             throw IllegalArgumentException(
