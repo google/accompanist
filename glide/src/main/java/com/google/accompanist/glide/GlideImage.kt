@@ -71,14 +71,14 @@ fun rememberGlideImageLoadRequest(
     requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)? = null,
 ): ImageLoadRequest<Any> = remember(data, requestManager) {
     GlideImageLoadRequest(
-        request = data,
         requestManager = requestManager,
         requestBuilder = requestBuilder,
-    )
+    ).apply {
+        request = data
+    }
 }
 
 private class GlideImageLoadRequest(
-    override val request: Any,
     private val requestManager: RequestManager,
     private val requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)?,
 ) : ImageLoadRequest<Any>() {

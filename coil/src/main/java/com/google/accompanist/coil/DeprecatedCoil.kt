@@ -35,10 +35,11 @@ import androidx.compose.ui.unit.IntSize
 import coil.ImageLoader
 import coil.request.ImageRequest
 import com.google.accompanist.imageloading.DefaultRefetchOnSizeChangeLambda
-import com.google.accompanist.imageloading.ImageLoad
 import com.google.accompanist.imageloading.ImageLoadState
+import com.google.accompanist.imageloading.ImageLoadSuchDeprecated
 import com.google.accompanist.imageloading.MaterialLoadingImage
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filter
 
 /**
  * Creates a composable that will attempt to load the given [data] using [Coil], and provides
@@ -81,7 +82,7 @@ import kotlinx.coroutines.flow.collect
             contentDescription = contentDescription,
             modifier = modifier,
             previewPlaceholder = previewPlaceholder,
-            shouldRefetchOnSizeChange= shouldRefetchOnSizeChange,
+            shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         )""",
         "com.google.accompanist.coil.rememberCoilImageLoadRequest",
         "com.google.accompanist.imageloading.ImageLoad"
@@ -109,7 +110,7 @@ fun CoilImage(
     }
 
     @Suppress("DEPRECATION")
-    ImageLoad(
+    ImageLoadSuchDeprecated(
         request = request,
         previewPlaceholder = previewPlaceholder,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
@@ -159,7 +160,7 @@ fun CoilImage(
             ),
             modifier = modifier,
             previewPlaceholder = previewPlaceholder,
-            shouldRefetchOnSizeChange= shouldRefetchOnSizeChange,
+            shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         )""",
         "com.google.accompanist.imageloading.ImageLoad",
         "com.google.accompanist.coil.rememberCoilImageLoadRequest",
@@ -183,11 +184,13 @@ fun CoilImage(
     )
 
     LaunchedEffect(loadRequest) {
-        snapshotFlow { loadRequest.loadState }.collect { onRequestCompleted(it) }
+        snapshotFlow { loadRequest.loadState }
+            .filter { it is ImageLoadState.Success || it is ImageLoadState.Error }
+            .collect { onRequestCompleted(it) }
     }
 
     @Suppress("DEPRECATION")
-    ImageLoad(
+    ImageLoadSuchDeprecated(
         request = loadRequest,
         previewPlaceholder = previewPlaceholder,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
@@ -260,7 +263,7 @@ fun CoilImage(
             colorFilter = colorFilter,
             fadeIn = fadeIn,
             previewPlaceholder = previewPlaceholder,
-            shouldRefetchOnSizeChange= shouldRefetchOnSizeChange,
+            shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         )""",
         "com.google.accompanist.imageloading.ImageLoad",
         "com.google.accompanist.coil.rememberCoilImageLoadRequest",
@@ -291,11 +294,12 @@ fun CoilImage(
 
     LaunchedEffect(request) {
         snapshotFlow { request.loadState }
+            .filter { it is ImageLoadState.Success || it is ImageLoadState.Error }
             .collect { onRequestCompleted(it) }
     }
 
     @Suppress("DEPRECATION")
-    ImageLoad(
+    ImageLoadSuchDeprecated(
         request = request,
         previewPlaceholder = previewPlaceholder,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
@@ -383,7 +387,7 @@ fun CoilImage(
             colorFilter = colorFilter,
             fadeIn = fadeIn,
             previewPlaceholder = previewPlaceholder,
-            shouldRefetchOnSizeChange= shouldRefetchOnSizeChange,
+            shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         )""",
         "com.google.accompanist.imageloading.ImageLoad",
         "com.google.accompanist.coil.rememberCoilImageLoadRequest",
@@ -414,11 +418,12 @@ fun CoilImage(
 
     LaunchedEffect(loadRequest) {
         snapshotFlow { loadRequest.loadState }
+            .filter { it is ImageLoadState.Success || it is ImageLoadState.Error }
             .collect { onRequestCompleted(it) }
     }
 
     @Suppress("DEPRECATION")
-    ImageLoad(
+    ImageLoadSuchDeprecated(
         request = loadRequest,
         previewPlaceholder = previewPlaceholder,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,

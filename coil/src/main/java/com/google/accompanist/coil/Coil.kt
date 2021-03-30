@@ -62,32 +62,34 @@ fun rememberCoilImageLoadRequest(
     data: Any,
     imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
-): ImageLoadRequest<ImageRequest> = rememberCoilImageLoadRequest(
-    request = data.toImageRequest(),
-    imageLoader = imageLoader,
-    requestBuilder = requestBuilder,
-)
+): ImageLoadRequest<ImageRequest> {
+    return rememberCoilImageLoadRequest(
+        request = toImageRequest(data),
+        requestBuilder = requestBuilder,
+        imageLoader = imageLoader,
+    )
+}
 
 @Composable
 fun rememberCoilImageLoadRequest(
     request: ImageRequest,
     imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
-): ImageLoadRequest<ImageRequest> = remember(request, imageLoader) {
+): ImageLoadRequest<ImageRequest> = remember(imageLoader) {
     CoilImageLoadRequest(
-        request = request,
-        imageLoader = imageLoader,
         requestBuilder = requestBuilder,
-    )
+        imageLoader = imageLoader,
+    ).apply {
+        this.request = request
+    }
 }
 
 /**
  * TODO
  */
 private class CoilImageLoadRequest(
-    override val request: ImageRequest,
     private val imageLoader: ImageLoader,
-    private val requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)?,
+    private val requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
 ) : ImageLoadRequest<ImageRequest>() {
     override suspend fun executeRequest(request: ImageRequest, size: IntSize): ImageLoadState {
         val sizedRequest = when {
@@ -132,8 +134,8 @@ private fun coil.decode.DataSource.toDataSource(): DataSource = when (this) {
 }
 
 @Composable
-internal fun Any.toImageRequest(): ImageRequest {
-    when (this) {
+internal fun toImageRequest(data: Any): ImageRequest {
+    when (data) {
         is android.graphics.drawable.Drawable -> {
             throw IllegalArgumentException(
                 "Unsupported type: Drawable." +
@@ -160,11 +162,11 @@ internal fun Any.toImageRequest(): ImageRequest {
         }
         // If the developer is accidentally using the wrong function (data vs request), just
         // pass the request through
-        is ImageRequest -> return this
+        is ImageRequest -> return data
         else -> {
             // Otherwise we construct a GetRequest using the data parameter
             val context = LocalContext.current
-            return remember(this) { ImageRequest.Builder(context).data(this).build() }
+            return remember(data) { ImageRequest.Builder(context).data(data).build() }
         }
     }
 }

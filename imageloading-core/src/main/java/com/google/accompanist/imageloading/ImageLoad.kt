@@ -31,6 +31,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
@@ -51,6 +52,9 @@ import androidx.compose.ui.unit.IntSize
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 
@@ -58,27 +62,19 @@ import kotlin.coroutines.cancellation.CancellationException
  * TODO
  */
 abstract class ImageLoadRequest<R : Any> {
-    protected abstract val request: R
+    /**
+     * TODO
+     */
+    var request by mutableStateOf<R?>(null)
 
     /**
      * TODO
      */
     var loadState by mutableStateOf<ImageLoadState>(ImageLoadState.Empty)
-        private set
+        internal set
 
-    suspend fun execute(size: IntSize): ImageLoadState {
-        loadState = ImageLoadState.Loading
-        return try {
-            executeRequest(request, size)
-        } catch (ce: CancellationException) {
-            // We specifically don't do anything for the request coroutine being
-            // cancelled: https://github.com/chrisbanes/accompanist/issues/217
-            throw ce
-        } catch (throwable: Throwable) {
-            ImageLoadState.Error(painter = null, throwable = throwable)
-        }.also {
-            loadState = it
-        }
+    internal suspend fun execute(request: R, size: IntSize): ImageLoadState {
+        return executeRequest(request, size)
     }
 
     /**
@@ -135,14 +131,14 @@ fun <R : Any> ImageLoad(
 
     val imageMgr = remember(request) {
         ImageLoader(
-            request = request,
+            requestState = request,
             shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         )
     }
 
     val cf = if (fadeIn && imageMgr.loadState is ImageLoadState.Success) {
         val fadeInTransition = updateFadeInTransition(
-            key = imageMgr.request,
+            key = imageMgr.requestState,
             durationMs = fadeInDurationMs
         )
         remember { ColorMatrix() }
@@ -197,7 +193,7 @@ fun <R : Any> ImageLoad(
  */
 @Deprecated("Only used to help migration. DO NOT USE.")
 @Composable
-fun <R : Any> ImageLoad(
+fun <R : Any> ImageLoadSuchDeprecated(
     request: ImageLoadRequest<R>,
     modifier: Modifier,
     @DrawableRes previewPlaceholder: Int = 0,
@@ -217,7 +213,7 @@ fun <R : Any> ImageLoad(
 
     val imageMgr = remember(request) {
         ImageLoader(
-            request = request,
+            requestState = request,
             shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         )
     }
@@ -228,14 +224,17 @@ fun <R : Any> ImageLoad(
         imageMgr.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
     }
 
-    Box(modifier.then(imageMgr.layoutModifier)) {
+    Box(
+        propagateMinConstraints = true,
+        modifier = modifier.then(imageMgr.layoutModifier)
+    ) {
         content(imageMgr.loadState)
     }
 }
 
 @Stable
 private class ImageLoader<R : Any>(
-    val request: ImageLoadRequest<R>,
+    val requestState: ImageLoadRequest<R>,
     var shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean,
 ) : RememberObserver {
 
@@ -316,8 +315,23 @@ private class ImageLoader<R : Any>(
         // you can use a coroutine scope that is scoped to the composable, or something more custom like
         // the imageLoader or whatever. The main point is, here is where you would start your loading
         scope.launch {
-            requestSize?.also { size ->
-                loadState = request.execute(size)
+            // TODO: double check the filterNotNull()s
+            combine(
+                snapshotFlow { requestState.request }.filterNotNull(),
+                snapshotFlow { requestSize }.filterNotNull(),
+                transform = { request, size -> request to size }
+            ).collectLatest { (request, size) ->
+                requestState.loadState = ImageLoadState.Loading
+
+                requestState.loadState = try {
+                    requestState.execute(request, size)
+                } catch (ce: CancellationException) {
+                    // We specifically don't do anything for the request coroutine being
+                    // cancelled: https://github.com/chrisbanes/accompanist/issues/217
+                    throw ce
+                } catch (throwable: Throwable) {
+                    ImageLoadState.Error(painter = null, throwable = throwable)
+                }
             }
         }
     }

@@ -24,7 +24,7 @@ import com.google.common.truth.Truth.assertThat
 /**
  * Assert that all of the pixels in this image as of the [expected] color.
  */
-fun ImageBitmap.assertPixels(expected: Color, tolerance: Float = 0.0001f) {
+fun ImageBitmap.assertPixels(expected: Color, tolerance: Float = 0.03f) {
     toPixelMap().buffer.forEach { pixel ->
         val color = Color(pixel)
         assertThat(color.red).isWithin(tolerance).of(expected.red)

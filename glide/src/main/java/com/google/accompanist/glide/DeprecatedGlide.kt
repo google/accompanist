@@ -39,10 +39,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.RequestManager
 import com.google.accompanist.imageloading.DefaultRefetchOnSizeChangeLambda
-import com.google.accompanist.imageloading.ImageLoad
 import com.google.accompanist.imageloading.ImageLoadState
+import com.google.accompanist.imageloading.ImageLoadSuchDeprecated
 import com.google.accompanist.imageloading.MaterialLoadingImage
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filter
 
 /**
  * Creates a composable that will attempt to load the given [data] using [Glide], and provides
@@ -109,11 +110,13 @@ fun GlideImage(
     )
 
     LaunchedEffect(request) {
-        snapshotFlow { request.loadState }.collect { onRequestCompleted(it) }
+        snapshotFlow { request.loadState }
+            .filter { it is ImageLoadState.Success || it is ImageLoadState.Error }
+            .collect { onRequestCompleted(it) }
     }
 
     @Suppress("DEPRECATION")
-    ImageLoad(
+    ImageLoadSuchDeprecated(
         request = request,
         previewPlaceholder = previewPlaceholder,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
@@ -216,11 +219,13 @@ fun GlideImage(
     )
 
     LaunchedEffect(request) {
-        snapshotFlow { request.loadState }.collect { onRequestCompleted(it) }
+        snapshotFlow { request.loadState }
+            .filter { it is ImageLoadState.Success || it is ImageLoadState.Error }
+            .collect { onRequestCompleted(it) }
     }
 
     @Suppress("DEPRECATION")
-    ImageLoad(
+    ImageLoadSuchDeprecated(
         request = request,
         previewPlaceholder = previewPlaceholder,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
