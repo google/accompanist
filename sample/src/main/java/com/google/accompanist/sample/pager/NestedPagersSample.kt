@@ -66,7 +66,7 @@ private fun Sample() {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.vertical_pager_title_basics)) },
+                title = { Text(stringResource(R.string.pagers_title_nested)) },
                 backgroundColor = MaterialTheme.colors.surface,
             )
         },
