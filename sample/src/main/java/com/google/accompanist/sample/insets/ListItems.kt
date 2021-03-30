@@ -29,7 +29,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.glide.GlideImage
+import com.google.accompanist.glide.rememberGlideImageLoadRequest
+import com.google.accompanist.imageloading.ImageLoad
 
 /**
  * Simple list item row which displays an image and text.
@@ -40,12 +41,12 @@ fun ListItem(
     modifier: Modifier = Modifier
 ) {
     Row(modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-        @Suppress("DEPRECATION")
-        GlideImage(
-            data = imageUrl,
+        ImageLoad(
+            request = rememberGlideImageLoadRequest(imageUrl),
             contentDescription = null,
-            modifier = Modifier.size(64.dp)
-                .clip(RoundedCornerShape(4.dp))
+            modifier = Modifier
+                .size(64.dp)
+                .clip(RoundedCornerShape(4.dp)),
         )
 
         Spacer(Modifier.width(16.dp))

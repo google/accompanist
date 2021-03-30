@@ -72,7 +72,6 @@ class HorizontalPagerBasicSample : ComponentActivity() {
     }
 }
 
-@Suppress("DEPRECATION")
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun Sample() {

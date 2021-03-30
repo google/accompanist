@@ -22,6 +22,9 @@ import coil.annotation.ExperimentalCoilApi
 import coil.request.ImageRequest
 import coil.request.ImageResult
 
+/**
+ * An [IdlingResource] which works for using a Coil [EventListener].
+ */
 @OptIn(ExperimentalCoilApi::class)
 class CoilIdlingResource : EventListener, IdlingResource {
     private val ongoingRequests = mutableSetOf<ImageRequest>()
