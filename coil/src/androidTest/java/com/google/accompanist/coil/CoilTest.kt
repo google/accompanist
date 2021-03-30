@@ -20,8 +20,63 @@ import android.graphics.drawable.ShapeDrawable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Text
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.test.assertHeightIsAtLeast
+import androidx.compose.ui.test.assertHeightIsEqualTo
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertWidthIsAtLeast
+import androidx.compose.ui.test.assertWidthIsEqualTo
+import androidx.compose.ui.test.captureToImage
+import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.unit.dp
+import androidx.test.filters.LargeTest
+import androidx.test.filters.SdkSuppress
+import androidx.test.platform.app.InstrumentationRegistry
+import coil.EventListener
+import coil.ImageLoader
+import coil.annotation.ExperimentalCoilApi
+import coil.decode.Options
+import coil.fetch.Fetcher
+import coil.request.CachePolicy
+import coil.request.ImageRequest
+import com.google.accompanist.coil.test.R
+import com.google.accompanist.imageloading.ImageLoad
+import com.google.accompanist.imageloading.ImageLoadState
+import com.google.accompanist.imageloading.test.ImageMockWebServer
+import com.google.accompanist.imageloading.test.assertPixels
+import com.google.accompanist.imageloading.test.resourceUri
+import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.withTimeoutOrNull
+import org.junit.After
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicInteger
+
+androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -61,7 +116,7 @@ import com.google.accompanist.imageloading.test.receiveBlocking
 import com.google.accompanist.imageloading.test.resourceUri
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.Channelimportimportimport kotlinx.coroutines.flow.collect kotlinx.coroutines.flow.collect kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.withTimeoutOrNull
@@ -130,17 +185,22 @@ class CoilTest {
         var requestCompleted by mutableStateOf(false)
 
         composeTestRule.setContent {
+            val request = rememberCoilImageLoadRequest(
+                data = server.url("/image"),
+                requestBuilder = {
+                    listener { _, _ -> requestCompleted = true }
+                },
+            )
+
             ImageLoad(
-                request = rememberCoilImageLoadRequest(
-                    data = server.url("/image"),
-                    requestBuilder = fun ImageRequest.Builder.(it: IntSize): ImageRequest.Builder {
-                        return listener { _, _ -> requestCompleted = true }
-                    },
-                    onRequestCompleted = { it: ImageLoadState -> results += it },
-                ),
+                request = request,
                 contentDescription = null,
                 modifier = Modifier.size(128.dp, 128.dp),
             )
+
+            LaunchedEffect(request) {
+                snapshotFlow { request.loadState }.toList(results)
+            }
         }
 
         // Wait for the Coil request listener to run
@@ -264,13 +324,13 @@ class CoilTest {
                 ImageLoad(
                     request = rememberCoilImageLoadRequest(
                         data = server.url("/image"),
-                        onRequestCompleted = { it: ImageLoadState -> requestCompleted = true },
+
                     ),
                     contentDescription = null,
                     modifier = Modifier.size(128.dp, 128.dp),
                 )
             }
-        }
+        }onRequestCompleted = { it: ImageLoadState -> requestCompleted = true },
 
         // Wait for the onRequestCompleted to run
         composeTestRule.waitUntil(10_000) { requestCompleted }
