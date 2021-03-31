@@ -42,7 +42,7 @@ import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.toPainter
 
 /**
- * Composition local containing the preferred [ImageLoader] to use for
+ * Composition local containing the preferred [ImageLoader] to be used by
  * [rememberCoilAsyncImageState].
  */
 val LocalImageLoader = staticCompositionLocalOf<ImageLoader?> { null }
