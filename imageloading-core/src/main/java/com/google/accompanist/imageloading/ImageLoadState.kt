@@ -54,3 +54,10 @@ sealed class ImageLoadState {
         val throwable: Throwable
     ) : ImageLoadState()
 }
+
+/**
+ * Returns true if this state represents the final state for the current request.
+ */
+fun ImageLoadState.isFinalState(): Boolean {
+    return this is ImageLoadState.Success || this is ImageLoadState.Error
+}

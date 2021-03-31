@@ -51,6 +51,7 @@ import coil.request.ImageResult
 import com.google.accompanist.coil.test.R
 import com.google.accompanist.imageloading.AsyncImage
 import com.google.accompanist.imageloading.ImageLoadState
+import com.google.accompanist.imageloading.isFinalState
 import com.google.accompanist.imageloading.test.ImageMockWebServer
 import com.google.accompanist.imageloading.test.assertPixels
 import com.google.accompanist.imageloading.test.resourceUri
@@ -58,6 +59,7 @@ import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestCoroutineScope
@@ -282,14 +284,14 @@ class CoilTest {
 
                 LaunchedEffect(state) {
                     snapshotFlow { state.loadState }
+                        .filter { it.isFinalState() }
                         .onCompletion { loadStates.cancel() }
                         .collect { loadStates.send(it) }
                 }
             }
 
             // Await the first load
-            assertThat(loadStates.receive()).isInstanceOf(ImageLoadState.Loading::class.java)
-            assertThat(loadStates.receive()).isInstanceOf(ImageLoadState.Success::class.java)
+            assertThat(loadStates.receive()).isNotNull()
 
             // Now change the size
             size = 256.dp
