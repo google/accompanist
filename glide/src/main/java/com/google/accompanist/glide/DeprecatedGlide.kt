@@ -38,7 +38,6 @@ import androidx.compose.ui.unit.IntSize
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.RequestManager
-import com.google.accompanist.imageloading.DefaultRefetchOnSizeChangeLambda
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.ImageLoadSuchDeprecated
 import com.google.accompanist.imageloading.MaterialLoadingImage
@@ -99,7 +98,7 @@ fun GlideImage(
     requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)? = null,
     requestManager: RequestManager = GlideImageDefaults.defaultRequestManager(),
     @DrawableRes previewPlaceholder: Int = 0,
-    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
+    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
     onRequestCompleted: (ImageLoadState) -> Unit = {},
     content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
 ) {
@@ -207,7 +206,7 @@ fun GlideImage(
     requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)? = null,
     requestManager: RequestManager = GlideImageDefaults.defaultRequestManager(),
     @DrawableRes previewPlaceholder: Int = 0,
-    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = DefaultRefetchOnSizeChangeLambda,
+    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
     onRequestCompleted: (ImageLoadState) -> Unit = {},
     error: @Composable (BoxScope.(ImageLoadState.Error) -> Unit)? = null,
     loading: @Composable (BoxScope.() -> Unit)? = null,
