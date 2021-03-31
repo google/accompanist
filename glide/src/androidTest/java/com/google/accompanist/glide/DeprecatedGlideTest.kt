@@ -384,10 +384,8 @@ class DeprecatedGlideTest {
         composeTestRule.waitUntil(10_000) { requestCompleted }
 
         composeTestRule.runOnIdle {
-            assertThat(states).hasSize(3)
-            assertThat(states[0]).isEqualTo(ImageLoadState.Empty)
-            assertThat(states[1]).isEqualTo(ImageLoadState.Loading)
-            assertThat(states[2]).isInstanceOf(ImageLoadState.Error::class.java)
+            // Check that the final state is an Error
+            assertThat(states.last()).isInstanceOf(ImageLoadState.Error::class.java)
         }
     }
 
@@ -415,10 +413,8 @@ class DeprecatedGlideTest {
         composeTestRule.waitUntil(10_000) { requestCompleted }
 
         composeTestRule.runOnIdle {
-            assertThat(states).hasSize(3)
-            assertThat(states[0]).isEqualTo(ImageLoadState.Empty)
-            assertThat(states[1]).isEqualTo(ImageLoadState.Loading)
-            assertThat(states[2]).isInstanceOf(ImageLoadState.Success::class.java)
+            // Check that the final state is a Success
+            assertThat(states.last()).isInstanceOf(ImageLoadState.Success::class.java)
         }
     }
 
