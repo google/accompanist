@@ -89,15 +89,22 @@ class GlideTest {
 
     @Test
     fun basicLoad_http() {
+        var requestCompleted by mutableStateOf(false)
+
         composeTestRule.setContent {
+            val request = rememberGlideImageLoadRequest(server.url("/image").toString())
+            request.onRequestComplete { requestCompleted = true }
+
             ImageLoad(
-                request = rememberGlideImageLoadRequest(server.url("/image").toString()),
+                request = request,
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
                     .testTag(GlideTestTags.Image),
             )
         }
+
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         composeTestRule.onNodeWithTag(GlideTestTags.Image)
             .assertIsDisplayed()
@@ -108,15 +115,22 @@ class GlideTest {
     @Test
     @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
     fun basicLoad_drawableId() {
+        var requestCompleted by mutableStateOf(false)
+
         composeTestRule.setContent {
+            val request = rememberGlideImageLoadRequest(R.drawable.red_rectangle)
+            request.onRequestComplete { requestCompleted = true }
+
             ImageLoad(
-                request = rememberGlideImageLoadRequest(R.drawable.red_rectangle),
+                request = request,
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
                     .testTag(GlideTestTags.Image),
             )
         }
+
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         composeTestRule.onNodeWithTag(GlideTestTags.Image)
             .assertWidthIsEqualTo(128.dp)
@@ -129,15 +143,22 @@ class GlideTest {
     @Test
     @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
     fun basicLoad_drawableUri() {
+        var requestCompleted by mutableStateOf(false)
+
         composeTestRule.setContent {
+            val request = rememberGlideImageLoadRequest(resourceUri(R.drawable.red_rectangle))
+            request.onRequestComplete { requestCompleted = true }
+
             ImageLoad(
-                request = rememberGlideImageLoadRequest(resourceUri(R.drawable.red_rectangle)),
+                request = request,
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
                     .testTag(GlideTestTags.Image),
             )
         }
+
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         composeTestRule.onNodeWithTag(GlideTestTags.Image)
             .assertWidthIsEqualTo(128.dp)
@@ -197,12 +218,11 @@ class GlideTest {
     @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
     fun basicLoad_switchData() {
         var data by mutableStateOf(server.url("/red"))
-        var requestComplete by mutableStateOf(false)
+        var requestCompleted by mutableStateOf(false)
 
         composeTestRule.setContent {
             val request = rememberGlideImageLoadRequest(data.toString())
-
-            request.onRequestComplete { requestComplete = true }
+            request.onRequestComplete { requestCompleted = true }
 
             ImageLoad(
                 request = request,
@@ -214,7 +234,7 @@ class GlideTest {
         }
 
         // Wait until the first image loads
-        composeTestRule.waitUntil(10_000) { requestComplete }
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         // Assert that the content is completely Red
         composeTestRule.onNodeWithTag(GlideTestTags.Image)
@@ -225,11 +245,11 @@ class GlideTest {
             .assertPixels(Color.Red)
 
         // Now switch the data URI to the blue drawable
-        requestComplete = false
+        requestCompleted = false
         data = server.url("/blue")
 
         // Wait until the second image loads
-        composeTestRule.waitUntil(10_000) { requestComplete }
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         // Assert that the content is completely Blue
         composeTestRule.onNodeWithTag(GlideTestTags.Image)
@@ -286,13 +306,21 @@ class GlideTest {
 
     @Test
     fun basicLoad_nosize() {
+        var requestCompleted by mutableStateOf(false)
+
         composeTestRule.setContent {
+            val request = rememberGlideImageLoadRequest(server.url("/image").toString())
+            request.onRequestComplete { requestCompleted = true }
+
             ImageLoad(
-                request = rememberGlideImageLoadRequest(server.url("/image").toString()),
+                request = request,
                 contentDescription = null,
                 modifier = Modifier.testTag(GlideTestTags.Image),
             )
         }
+
+        // Wait until the first image loads
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         composeTestRule.onNodeWithTag(GlideTestTags.Image)
             .assertWidthIsAtLeast(1.dp)
@@ -302,15 +330,23 @@ class GlideTest {
 
     @Test
     fun errorStillHasSize() {
+        var requestCompleted by mutableStateOf(false)
+
         composeTestRule.setContent {
+            val request = rememberGlideImageLoadRequest(server.url("/noimage").toString())
+            request.onRequestComplete { requestCompleted = true }
+
             ImageLoad(
-                request = rememberGlideImageLoadRequest(server.url("/noimage").toString()),
+                request = request,
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
                     .testTag(GlideTestTags.Image),
             )
         }
+
+        // Wait until the first image loads
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         // Assert that the layout is in the tree and has the correct size
         composeTestRule.onNodeWithTag(GlideTestTags.Image)
