@@ -331,6 +331,33 @@ class GlideTest {
     }
 
     @Test
+    fun basicLoad_error() {
+        composeTestRule.setContent {
+            AsyncImage(
+                state = rememberGlideAsyncImageState(
+                    data = server.url("/noimage"),
+                    requestBuilder = {
+                        // Display a red rectangle when errors occur
+                        error(R.drawable.red_rectangle)
+                    }
+                ),
+                contentDescription = null,
+                modifier = Modifier
+                    .testTag(GlideTestTags.Image)
+                    .size(128.dp),
+            )
+        }
+
+        // Assert that the error drawable was drawn
+        composeTestRule.onNodeWithTag(GlideTestTags.Image)
+            .assertWidthIsEqualTo(128.dp)
+            .assertHeightIsEqualTo(128.dp)
+            .assertIsDisplayed()
+            .captureToImage()
+            .assertPixels(Color.Red)
+    }
+
+    @Test
     fun errorStillHasSize() {
         var requestCompleted by mutableStateOf(false)
 

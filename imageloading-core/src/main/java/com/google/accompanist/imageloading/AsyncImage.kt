@@ -277,47 +277,60 @@ private class ImageLoader<R : Any>(
     val coroutineScope: CoroutineScope,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean,
 ) : RememberObserver {
+    // Our size to use when performing the image load request
+    var requestSize by mutableStateOf<IntSize?>(null)
 
-    // the size of the image, as informed by the layout system and the request.
-    //
-    // This value will be read during layout
-    private var requestSize by mutableStateOf<IntSize?>(null)
+    // Our updated shouldRefetchOnSizeChange
+    var shouldRefetchOnSizeChange by mutableStateOf(shouldRefetchOnSizeChange)
 
+    // Properties used for drawing and layout
     var colorFilter by mutableStateOf<ColorFilter?>(null)
     var contentScale by mutableStateOf(ContentScale.Fit)
     var alignment by mutableStateOf(Alignment.Center)
     var alpha by mutableStateOf(1f)
-    var shouldRefetchOnSizeChange by mutableStateOf(shouldRefetchOnSizeChange)
 
     // Current request job
     private var job: Job? = null
 
+    // Our layout modifier, which allows us to receive the incoming constraints to update
+    // requestSize. Using a modifier allows us to avoid using BoxWithConstraints and the cost of
+    // subcomposition. For most usages subcomposition is fine, but AsyncImage's tend to be used
+    // in large quantities which multiplies the cost.
     val layoutModifier = Modifier.layout { measurable, constraints ->
-        // NOTE: this is where the interesting logic is, but there shouldn't be anything here that
-        // you can't do that you're doing using BoxWithConstraints currently.
         val newSize = IntSize(
             width = if (constraints.hasBoundedWidth) constraints.maxWidth else -1,
             height = if (constraints.hasBoundedHeight) constraints.maxHeight else -1
         )
 
         if (requestSize == null ||
-            (requestSize != newSize && shouldRefetchOnSizeChange(state.loadState, newSize))
+            (
+                requestSize != newSize &&
+                    this@ImageLoader.shouldRefetchOnSizeChange(state.loadState, newSize)
+                )
         ) {
             requestSize = newSize
         }
 
+        // No-op measure + layout
         val placeable = measurable.measure(constraints)
         layout(width = placeable.width, height = placeable.height) {
             placeable.place(0, 0)
         }
     }
 
+    // Our paint modifier. We use a sub-class of [PainterModifier] which delegates the parameter
+    // values to be state reads. The properties will be read during layout and drawing, which means
+    // that any values changes will automatically re-trigger layout/draw as necessary.
+    // This allows us to avoid needing to recreate the modifier if any of the values change, which
+    // is what would need to happen if we used Modifier.paint().
     val paintModifier = object : PainterModifier() {
         override val painter: Painter by derivedStateOf {
             state.loadState.let { state ->
-                if (state is ImageLoadState.Success) {
-                    state.painter
-                } else EmptyPainter
+                when (state) {
+                    is ImageLoadState.Success -> state.painter
+                    is ImageLoadState.Error -> state.painter ?: EmptyPainter
+                    else -> EmptyPainter
+                }
             }
         }
 
@@ -338,17 +351,24 @@ private class ImageLoader<R : Any>(
     }
 
     override fun onAbandoned() {
+        // We've been abandoned from composition, so cancel our request handling coroutine
         job?.cancel()
         job = null
     }
 
     override fun onForgotten() {
+        // We've been forgotten from composition, so cancel our request handling coroutine
         job?.cancel()
         job = null
     }
 
     override fun onRemembered() {
+        // Cancel any on-going job (this shouldn't really happen anyway)
         job?.cancel()
+
+        // We've been remembered, so launch a coroutine to observe the current request object,
+        // and the request size. Whenever either of these values change, the collectLatest block
+        // will run and execute the image load (with any on-going request cancelled).
         job = coroutineScope.launch {
             combine(
                 state.requestFlow,

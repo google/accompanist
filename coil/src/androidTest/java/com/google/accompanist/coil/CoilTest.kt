@@ -324,6 +324,33 @@ class CoilTest {
     }
 
     @Test
+    fun basicLoad_error() {
+        composeTestRule.setContent {
+            AsyncImage(
+                state = rememberCoilAsyncImageState(
+                    data = server.url("/noimage"),
+                    requestBuilder = {
+                        // Display a red rectangle when errors occur
+                        error(R.drawable.red_rectangle)
+                    }
+                ),
+                contentDescription = null,
+                modifier = Modifier
+                    .testTag(CoilTestTags.Image)
+                    .size(128.dp),
+            )
+        }
+
+        // Assert that the error drawable was drawn
+        composeTestRule.onNodeWithTag(CoilTestTags.Image)
+            .assertWidthIsEqualTo(128.dp)
+            .assertHeightIsEqualTo(128.dp)
+            .assertIsDisplayed()
+            .captureToImage()
+            .assertPixels(Color.Red)
+    }
+
+    @Test
     fun errorStillHasSize() {
         composeTestRule.setContent {
             AsyncImage(
