@@ -23,7 +23,7 @@ import coil.request.ImageRequest
 import coil.request.ImageResult
 
 /**
- * An [IdlingResource] which works for using a Coil [EventListener].
+ * An [IdlingResource] implemented as a Coil [EventListener].
  */
 @OptIn(ExperimentalCoilApi::class)
 class CoilIdlingResource : EventListener, IdlingResource {
