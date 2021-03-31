@@ -324,6 +324,7 @@ class CoilTest {
     }
 
     @Test
+    @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
     fun basicLoad_error() {
         composeTestRule.setContent {
             AsyncImage(
