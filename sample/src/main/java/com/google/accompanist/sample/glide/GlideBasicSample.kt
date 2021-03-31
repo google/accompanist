@@ -42,7 +42,7 @@ import com.google.accompanist.imageloading.AsyncImage
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
-import com.google.accompanist.sample.randomSampleImageUrl
+import com.google.accompanist.sample.rememberRandomSampleImageUrl
 
 class GlideBasicSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,7 +68,7 @@ private fun Sample() {
             item {
                 // Data parameter
                 AsyncImage(
-                    state = rememberGlideAsyncImageState(randomSampleImageUrl()),
+                    state = rememberGlideAsyncImageState(rememberRandomSampleImageUrl()),
                     contentDescription = null,
                     modifier = Modifier.size(128.dp),
                     previewPlaceholder = R.drawable.placeholder,
@@ -78,7 +78,7 @@ private fun Sample() {
             item {
                 // Loading content
                 Box {
-                    val request = rememberGlideAsyncImageState(randomSampleImageUrl())
+                    val request = rememberGlideAsyncImageState(rememberRandomSampleImageUrl())
 
                     AsyncImage(
                         state = request,
@@ -102,7 +102,7 @@ private fun Sample() {
             item {
                 // Fade in
                 AsyncImage(
-                    state = rememberGlideAsyncImageState(randomSampleImageUrl()),
+                    state = rememberGlideAsyncImageState(rememberRandomSampleImageUrl()),
                     contentDescription = null,
                     modifier = Modifier.size(128.dp),
                     fadeIn = true,
@@ -112,7 +112,7 @@ private fun Sample() {
             item {
                 // Fade in and loading content
                 Box {
-                    val request = rememberGlideAsyncImageState(randomSampleImageUrl())
+                    val request = rememberGlideAsyncImageState(rememberRandomSampleImageUrl())
 
                     AsyncImage(
                         state = request,
@@ -132,7 +132,7 @@ private fun Sample() {
             item {
                 // Implicit size
                 Box {
-                    val request = rememberGlideAsyncImageState(randomSampleImageUrl())
+                    val request = rememberGlideAsyncImageState(rememberRandomSampleImageUrl())
 
                     AsyncImage(
                         state = request,
@@ -150,7 +150,7 @@ private fun Sample() {
             item {
                 // Aspect ratio and crop
                 AsyncImage(
-                    state = rememberGlideAsyncImageState(randomSampleImageUrl()),
+                    state = rememberGlideAsyncImageState(rememberRandomSampleImageUrl()),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier

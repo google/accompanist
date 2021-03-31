@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -39,7 +38,7 @@ import com.google.accompanist.glide.rememberGlideAsyncImageState
 import com.google.accompanist.imageloading.AsyncImage
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
-import com.google.accompanist.sample.randomSampleImageUrl
+import com.google.accompanist.sample.rememberRandomSampleImageUrl
 
 class GlideLazyColumnSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,14 +63,11 @@ private fun Sample() {
             )
         }
     ) {
-        val items = buildList {
-            repeat(NumberItems) { add(randomSampleImageUrl(it)) }
-        }
         LazyColumn(Modifier.padding(16.dp)) {
-            items(items) { imageUrl ->
+            items(NumberItems) { index ->
                 Row(Modifier.padding(16.dp)) {
                     AsyncImage(
-                        state = rememberGlideAsyncImageState(imageUrl),
+                        state = rememberGlideAsyncImageState(rememberRandomSampleImageUrl(index)),
                         contentDescription = null,
                         modifier = Modifier.size(64.dp),
                     )
@@ -81,7 +77,9 @@ private fun Sample() {
                     Text(
                         text = "Text",
                         style = MaterialTheme.typography.subtitle2,
-                        modifier = Modifier.weight(1f).align(Alignment.CenterVertically)
+                        modifier = Modifier
+                            .weight(1f)
+                            .align(Alignment.CenterVertically)
                     )
                 }
             }

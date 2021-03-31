@@ -55,7 +55,7 @@ import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
-import com.google.accompanist.sample.randomSampleImageUrl
+import com.google.accompanist.sample.rememberRandomSampleImageUrl
 import kotlinx.coroutines.launch
 
 class HorizontalPagerWithIndicatorSample : ComponentActivity() {
@@ -97,7 +97,9 @@ private fun Sample() {
                 Box {
                     // Our page content, displaying a random image
                     AsyncImage(
-                        state = rememberCoilAsyncImageState(randomSampleImageUrl(width = 600)),
+                        state = rememberCoilAsyncImageState(
+                            rememberRandomSampleImageUrl(width = 600)
+                        ),
                         contentDescription = null,
                         modifier = Modifier
                             .fillMaxWidth(0.8f)

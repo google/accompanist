@@ -40,7 +40,7 @@ import com.google.accompanist.insets.toPaddingValues
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.insets.InsetAwareTopAppBar
-import com.google.accompanist.sample.randomSampleImageUrl
+import com.google.accompanist.sample.rememberRandomSampleImageUrl
 
 class CoilLazyGridSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,7 +80,7 @@ private fun Sample() {
         ) {
             items(NumberItems) { index ->
                 AsyncImage(
-                    state = rememberCoilAsyncImageState(randomSampleImageUrl(index)),
+                    state = rememberCoilAsyncImageState(rememberRandomSampleImageUrl(index)),
                     contentDescription = null,
                     fadeIn = true,
                     modifier = Modifier

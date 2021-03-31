@@ -49,7 +49,7 @@ import com.google.accompanist.imageloading.AsyncImage
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
-import com.google.accompanist.sample.randomSampleImageUrl
+import com.google.accompanist.sample.rememberRandomSampleImageUrl
 
 class CoilBasicSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,7 +75,7 @@ private fun Sample() {
             item {
                 // Data parameter
                 AsyncImage(
-                    state = rememberCoilAsyncImageState(randomSampleImageUrl()),
+                    state = rememberCoilAsyncImageState(rememberRandomSampleImageUrl()),
                     contentDescription = null,
                     modifier = Modifier.size(128.dp),
                 )
@@ -97,7 +97,7 @@ private fun Sample() {
                 // Request builder parameter
                 AsyncImage(
                     state = rememberCoilAsyncImageState(
-                        data = randomSampleImageUrl(),
+                        data = rememberRandomSampleImageUrl(),
                         requestBuilder = {
                             transformations(CircleCropTransformation())
                         }
@@ -110,7 +110,7 @@ private fun Sample() {
             item {
                 // Loading content
                 Box {
-                    val request = rememberCoilAsyncImageState(randomSampleImageUrl())
+                    val request = rememberCoilAsyncImageState(rememberRandomSampleImageUrl())
 
                     AsyncImage(
                         state = request,
@@ -129,7 +129,7 @@ private fun Sample() {
             item {
                 // Fade in
                 AsyncImage(
-                    state = rememberCoilAsyncImageState(randomSampleImageUrl()),
+                    state = rememberCoilAsyncImageState(rememberRandomSampleImageUrl()),
                     contentDescription = null,
                     modifier = Modifier.size(128.dp),
                     fadeIn = true,
@@ -139,7 +139,7 @@ private fun Sample() {
             item {
                 // Implicit size
                 AsyncImage(
-                    state = rememberCoilAsyncImageState(randomSampleImageUrl()),
+                    state = rememberCoilAsyncImageState(rememberRandomSampleImageUrl()),
                     contentDescription = null,
                 )
             }
@@ -147,7 +147,7 @@ private fun Sample() {
             item {
                 // Aspect ratio and crop scale
                 AsyncImage(
-                    state = rememberCoilAsyncImageState(randomSampleImageUrl()),
+                    state = rememberCoilAsyncImageState(rememberRandomSampleImageUrl()),
                     contentDescription = null,
                     modifier = Modifier
                         .width(256.dp)

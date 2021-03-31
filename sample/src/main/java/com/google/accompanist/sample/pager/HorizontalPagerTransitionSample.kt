@@ -50,7 +50,7 @@ import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
-import com.google.accompanist.sample.randomSampleImageUrl
+import com.google.accompanist.sample.rememberRandomSampleImageUrl
 import kotlin.math.absoluteValue
 
 class HorizontalPagerTransitionSample : ComponentActivity() {
@@ -124,7 +124,9 @@ fun HorizontalPagerWithOffsetTransition() {
         ) {
             Box {
                 AsyncImage(
-                    state = rememberCoilAsyncImageState(randomSampleImageUrl(width = 600)),
+                    state = rememberCoilAsyncImageState(
+                        rememberRandomSampleImageUrl(width = 600)
+                    ),
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize(),
                     fadeIn = true,
@@ -161,7 +163,7 @@ private fun ProfilePicture(modifier: Modifier = Modifier) {
     ) {
         AsyncImage(
             state = rememberCoilAsyncImageState(
-                data = randomSampleImageUrl(),
+                data = rememberRandomSampleImageUrl(),
             ),
             contentDescription = null,
             modifier = Modifier.size(72.dp),
