@@ -19,7 +19,6 @@
 
 package com.google.accompanist.imageloading
 
-import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -63,6 +62,7 @@ import kotlin.coroutines.cancellation.CancellationException
 /**
  * TODO
  */
+@Stable
 abstract class ImageLoadRequest<R : Any> {
     /**
      * This should be [androidx.compose.runtime.State] backed.
@@ -70,17 +70,42 @@ abstract class ImageLoadRequest<R : Any> {
     abstract var request: R?
 
     /**
-     * TODO
+     * The current [ImageLoadState].
      */
     var loadState by mutableStateOf<ImageLoadState>(ImageLoadState.Loading)
-        internal set
+        private set
 
-    internal suspend fun execute(request: R, size: IntSize): ImageLoadState {
-        return executeRequest(request, size)
+    /**
+     * The function which executes the requests, and update [loadState] as appropriate with the
+     * result.
+     */
+    internal suspend fun execute(request: R, size: IntSize) {
+        loadState = ImageLoadState.Loading
+
+        loadState = try {
+            executeRequest(request, size)
+        } catch (ce: CancellationException) {
+            // We specifically don't do anything for the request coroutine being
+            // cancelled: https://github.com/chrisbanes/accompanist/issues/217
+            throw ce
+        } catch (e: Error) {
+            // Re-throw all Errors
+            throw e
+        } catch (e: IllegalStateException) {
+            // Re-throw all IllegalStateExceptions
+            throw e
+        } catch (e: IllegalArgumentException) {
+            // Re-throw all IllegalArgumentExceptions
+            throw e
+        } catch (t: Throwable) {
+            // Anything else, we wrap in a Error state instance
+            ImageLoadState.Error(painter = null, throwable = t)
+        }
     }
 
     /**
-     * TODO
+     * Extending classes should implement this function to execute the [request] with the given
+     * [size] constraints.
      */
     protected abstract suspend fun executeRequest(request: R, size: IntSize): ImageLoadState
 }
@@ -133,7 +158,7 @@ fun <R : Any> ImageLoad(
 
     val coroutineScope = rememberCoroutineScope()
 
-    val imageMgr = remember(request, coroutineScope) {
+    val imageLoader = remember(request, coroutineScope) {
         ImageLoader(
             requestState = request,
             coroutineScope = coroutineScope,
@@ -143,7 +168,7 @@ fun <R : Any> ImageLoad(
 
     val cf = if (fadeIn && request.loadState is ImageLoadState.Success) {
         val fadeInTransition = updateFadeInTransition(
-            key = imageMgr.requestState,
+            key = imageLoader.requestState,
             durationMs = fadeInDurationMs
         )
         remember { ColorMatrix() }
@@ -163,10 +188,10 @@ fun <R : Any> ImageLoad(
     // NOTE: All of the things that we want to be able to change without recreating the whole object
     // we want to do inside of here.
     SideEffect {
-        imageMgr.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
-        imageMgr.contentScale = contentScale
-        imageMgr.colorFilter = cf
-        imageMgr.alignment = alignment
+        imageLoader.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
+        imageLoader.contentScale = contentScale
+        imageLoader.colorFilter = cf
+        imageLoader.alignment = alignment
     }
 
     // NOTE: It's important that this is Box and not BoxWithConstraints. This is dramatically cheaper,
@@ -188,8 +213,8 @@ fun <R : Any> ImageLoad(
         modifier
             .then(semantics)
             .clipToBounds()
-            .then(imageMgr.paintModifier)
-            .then(imageMgr.layoutModifier)
+            .then(imageLoader.paintModifier)
+            .then(imageLoader.layoutModifier)
     )
 }
 
@@ -218,7 +243,7 @@ fun <R : Any> ImageLoadSuchDeprecated(
 
     val coroutineScope = rememberCoroutineScope()
 
-    val imageMgr = remember(request, coroutineScope) {
+    val imageLoader = remember(request, coroutineScope) {
         ImageLoader(
             requestState = request,
             coroutineScope = coroutineScope,
@@ -229,12 +254,12 @@ fun <R : Any> ImageLoadSuchDeprecated(
     // NOTE: All of the things that we want to be able to change without recreating the whole object
     // we want to do inside of here.
     SideEffect {
-        imageMgr.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
+        imageLoader.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
     }
 
     Box(
         propagateMinConstraints = true,
-        modifier = modifier.then(imageMgr.layoutModifier)
+        modifier = modifier.then(imageLoader.layoutModifier)
     ) {
         content(request.loadState)
     }
@@ -244,7 +269,7 @@ fun <R : Any> ImageLoadSuchDeprecated(
 private class ImageLoader<R : Any>(
     val requestState: ImageLoadRequest<R>,
     val coroutineScope: CoroutineScope,
-    var shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean,
+    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean,
 ) : RememberObserver {
 
     // the size of the image, as informed by the layout system and the request.
@@ -255,7 +280,9 @@ private class ImageLoader<R : Any>(
     var colorFilter by mutableStateOf<ColorFilter?>(null)
     var contentScale by mutableStateOf(ContentScale.Fit)
     var alignment by mutableStateOf(Alignment.Center)
+    var shouldRefetchOnSizeChange by mutableStateOf(shouldRefetchOnSizeChange)
 
+    // Current request job
     private var job: Job? = null
 
     val layoutModifier = Modifier.layout { measurable, constraints ->
@@ -318,33 +345,10 @@ private class ImageLoader<R : Any>(
         job = coroutineScope.launch {
             combine(
                 snapshotFlow { requestState.request }.filterNotNull(),
-                snapshotFlow { requestSize }.filterNotNull()
-            ) { request, size ->
-                request to size
-            }.collectLatest { (request, size) ->
-                Log.d("ImageLoader", "Executing. Request: $request, size: $size")
-
-                requestState.loadState = ImageLoadState.Loading
-
-                requestState.loadState = try {
-                    requestState.execute(request, size)
-                } catch (ce: CancellationException) {
-                    // We specifically don't do anything for the request coroutine being
-                    // cancelled: https://github.com/chrisbanes/accompanist/issues/217
-                    throw ce
-                } catch (e: Error) {
-                    // Re-throw all Errors
-                    throw e
-                } catch (e: IllegalStateException) {
-                    // Re-throw all IllegalStateExceptions
-                    throw e
-                } catch (e: IllegalArgumentException) {
-                    // Re-throw all IllegalArgumentExceptions
-                    throw e
-                } catch (t: Throwable) {
-                    // Anything else, we wrap in a Error state instance
-                    ImageLoadState.Error(painter = null, throwable = t)
-                }
+                snapshotFlow { requestSize }.filterNotNull(),
+                transform = { request, size -> request to size }
+            ).collectLatest { (request, size) ->
+                requestState.execute(request, size)
             }
         }
     }
@@ -353,9 +357,3 @@ private class ImageLoader<R : Any>(
         private val EmptyPainter = ColorPainter(Color.Transparent)
     }
 }
-
-/**
- * Default lamdba for use in the `shouldRefetchOnSizeChange` parameter.
- */
-@Deprecated("Create your own lambda instead", ReplaceWith("{ _, _ -> false }"))
-val DefaultRefetchOnSizeChangeLambda: (ImageLoadState, IntSize) -> Boolean = { _, _ -> false }

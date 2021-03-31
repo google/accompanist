@@ -71,11 +71,13 @@ fun rememberCoilImageLoadRequest(
     CoilImageLoadRequest(
         imageLoader = imageLoader,
         context = context,
-        requestBuilder = requestBuilder,
     )
 }.apply {
     this.request = data
+    this.requestBuilder = requestBuilder
 }
+
+private typealias RequestBuilder = (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)
 
 /**
  * TODO
@@ -83,16 +85,14 @@ fun rememberCoilImageLoadRequest(
 private class CoilImageLoadRequest(
     private val imageLoader: ImageLoader,
     private val context: Context,
-    private val requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
 ) : ImageLoadRequest<Any>() {
 
-    private var requestState by mutableStateOf<Any?>(null)
+    var requestState by mutableStateOf<Any?>(null)
+    var requestBuilder by mutableStateOf<RequestBuilder?>(null)
 
     override var request: Any?
         get() = requestState
-        set(value) {
-            requestState = checkData(value)
-        }
+        set(value) { requestState = checkData(value) }
 
     override suspend fun executeRequest(request: Any, size: IntSize): ImageLoadState {
         val baseRequest = when (request) {
