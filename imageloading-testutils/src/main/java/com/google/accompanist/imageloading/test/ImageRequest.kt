@@ -19,7 +19,7 @@ package com.google.accompanist.imageloading.test
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
-import com.google.accompanist.imageloading.ImageLoadRequest
+import com.google.accompanist.imageloading.AsyncImageState
 import com.google.accompanist.imageloading.ImageLoadState
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.filter
  * Useful callback wrapper for tests.
  */
 @Composable
-fun ImageLoadRequest<*>.onRequestComplete(
+fun AsyncImageState<*>.onRequestComplete(
     block: () -> Unit
 ) {
     LaunchedEffect(this) {

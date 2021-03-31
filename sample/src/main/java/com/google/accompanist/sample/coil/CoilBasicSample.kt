@@ -44,8 +44,8 @@ import coil.ImageLoader
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.transform.CircleCropTransformation
-import com.google.accompanist.coil.rememberCoilImageLoadRequest
-import com.google.accompanist.imageloading.ImageLoad
+import com.google.accompanist.coil.rememberCoilAsyncImageState
+import com.google.accompanist.imageloading.AsyncImage
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
@@ -73,18 +73,18 @@ private fun Sample() {
     ) {
         LazyColumn(Modifier.padding(16.dp)) {
             item {
-                // CoilImage with data parameter
-                ImageLoad(
-                    request = rememberCoilImageLoadRequest(randomSampleImageUrl()),
+                // Data parameter
+                AsyncImage(
+                    state = rememberCoilAsyncImageState(randomSampleImageUrl()),
                     contentDescription = null,
                     modifier = Modifier.size(128.dp),
                 )
             }
 
             item {
-                // CoilImage with GIF
-                ImageLoad(
-                    request = rememberCoilImageLoadRequest(
+                // Load GIF
+                AsyncImage(
+                    state = rememberCoilAsyncImageState(
                         data = "https://cataas.com/cat/gif",
                         imageLoader = gifImageLoader(LocalContext.current),
                     ),
@@ -94,9 +94,9 @@ private fun Sample() {
             }
 
             item {
-                // CoilImage with ImageRequest Builder parameter
-                ImageLoad(
-                    request = rememberCoilImageLoadRequest(
+                // Request builder parameter
+                AsyncImage(
+                    state = rememberCoilAsyncImageState(
                         data = randomSampleImageUrl(),
                         requestBuilder = {
                             transformations(CircleCropTransformation())
@@ -108,23 +108,12 @@ private fun Sample() {
             }
 
             item {
-                // CoilImage with ImageRequest builder parameter
-                ImageLoad(
-                    request = rememberCoilImageLoadRequest(randomSampleImageUrl()) {
-                        transformations(CircleCropTransformation())
-                    },
-                    contentDescription = null,
-                    modifier = Modifier.size(128.dp),
-                )
-            }
-
-            item {
-                // CoilImage with loading content
+                // Loading content
                 Box {
-                    val request = rememberCoilImageLoadRequest(randomSampleImageUrl())
+                    val request = rememberCoilAsyncImageState(randomSampleImageUrl())
 
-                    ImageLoad(
-                        request = request,
+                    AsyncImage(
+                        state = request,
                         contentDescription = null,
                         modifier = Modifier.size(128.dp),
                     )
@@ -138,9 +127,9 @@ private fun Sample() {
             }
 
             item {
-                // CoilImage with crossfade and data parameter
-                ImageLoad(
-                    request = rememberCoilImageLoadRequest(randomSampleImageUrl()),
+                // Fade in
+                AsyncImage(
+                    state = rememberCoilAsyncImageState(randomSampleImageUrl()),
                     contentDescription = null,
                     modifier = Modifier.size(128.dp),
                     fadeIn = true,
@@ -148,27 +137,17 @@ private fun Sample() {
             }
 
             item {
-                // CoilImage with crossfade
-                ImageLoad(
-                    request = rememberCoilImageLoadRequest(randomSampleImageUrl()),
-                    contentDescription = null,
-                    modifier = Modifier.size(128.dp),
-                    fadeIn = true,
-                )
-            }
-
-            item {
-                // CoilImage with an implicit size
-                ImageLoad(
-                    request = rememberCoilImageLoadRequest(randomSampleImageUrl()),
+                // Implicit size
+                AsyncImage(
+                    state = rememberCoilAsyncImageState(randomSampleImageUrl()),
                     contentDescription = null,
                 )
             }
 
             item {
-                // CoilImage with an aspect ratio and crop scale
-                ImageLoad(
-                    request = rememberCoilImageLoadRequest(randomSampleImageUrl()),
+                // Aspect ratio and crop scale
+                AsyncImage(
+                    state = rememberCoilAsyncImageState(randomSampleImageUrl()),
                     contentDescription = null,
                     modifier = Modifier
                         .width(256.dp)

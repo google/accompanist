@@ -35,8 +35,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.coil.rememberCoilImageLoadRequest
-import com.google.accompanist.imageloading.ImageLoad
+import com.google.accompanist.coil.rememberCoilAsyncImageState
+import com.google.accompanist.imageloading.AsyncImage
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
@@ -70,8 +70,8 @@ private fun Sample() {
         LazyColumn(Modifier.padding(16.dp)) {
             items(items) { imageUrl ->
                 Row(Modifier.padding(16.dp)) {
-                    ImageLoad(
-                        request = rememberCoilImageLoadRequest(imageUrl),
+                    AsyncImage(
+                        state = rememberCoilAsyncImageState(imageUrl),
                         contentDescription = null,
                         modifier = Modifier.size(64.dp),
                     )

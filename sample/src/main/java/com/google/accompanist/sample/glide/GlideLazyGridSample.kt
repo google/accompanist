@@ -32,8 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
-import com.google.accompanist.glide.rememberGlideImageLoadRequest
-import com.google.accompanist.imageloading.ImageLoad
+import com.google.accompanist.glide.rememberGlideAsyncImageState
+import com.google.accompanist.imageloading.AsyncImage
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.toPaddingValues
@@ -76,8 +76,8 @@ private fun Sample() {
                 .toPaddingValues(additionalVertical = 16.dp, additionalHorizontal = 16.dp),
         ) {
             items(NumberItems) { index ->
-                ImageLoad(
-                    request = rememberGlideImageLoadRequest(randomSampleImageUrl(index)),
+                AsyncImage(
+                    state = rememberGlideAsyncImageState(randomSampleImageUrl(index)),
                     contentDescription = null,
                     fadeIn = true,
                     modifier = Modifier

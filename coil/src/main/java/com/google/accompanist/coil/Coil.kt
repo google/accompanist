@@ -35,8 +35,8 @@ import coil.ImageLoader
 import coil.imageLoader
 import coil.request.ImageRequest
 import coil.request.ImageResult
+import com.google.accompanist.imageloading.AsyncImageState
 import com.google.accompanist.imageloading.DataSource
-import com.google.accompanist.imageloading.ImageLoadRequest
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.toPainter
 
@@ -62,13 +62,13 @@ object CoilImageDefaults {
  * TODO
  */
 @Composable
-fun rememberCoilImageLoadRequest(
+fun rememberCoilAsyncImageState(
     data: Any,
     imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
     context: Context = LocalContext.current,
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
-): ImageLoadRequest<Any> = remember(imageLoader, context) {
-    CoilImageLoadRequest(
+): AsyncImageState<Any> = remember(imageLoader, context) {
+    CoilAsyncImageState(
         imageLoader = imageLoader,
         context = context,
     )
@@ -82,10 +82,10 @@ private typealias RequestBuilder = (ImageRequest.Builder.(size: IntSize) -> Imag
 /**
  * TODO
  */
-private class CoilImageLoadRequest(
+private class CoilAsyncImageState(
     private val imageLoader: ImageLoader,
     private val context: Context,
-) : ImageLoadRequest<Any>() {
+) : AsyncImageState<Any>() {
 
     var requestState by mutableStateOf<Any?>(null)
     var requestBuilder by mutableStateOf<RequestBuilder?>(null)

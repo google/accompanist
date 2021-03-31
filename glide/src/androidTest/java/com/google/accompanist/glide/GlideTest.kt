@@ -45,7 +45,7 @@ import androidx.test.filters.LargeTest
 import androidx.test.filters.SdkSuppress
 import com.bumptech.glide.Glide
 import com.google.accompanist.glide.test.R
-import com.google.accompanist.imageloading.ImageLoad
+import com.google.accompanist.imageloading.AsyncImage
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.test.ImageMockWebServer
 import com.google.accompanist.imageloading.test.assertPixels
@@ -92,11 +92,11 @@ class GlideTest {
         var requestCompleted by mutableStateOf(false)
 
         composeTestRule.setContent {
-            val request = rememberGlideImageLoadRequest(server.url("/image").toString())
-            request.onRequestComplete { requestCompleted = true }
+            val state = rememberGlideAsyncImageState(server.url("/image").toString())
+            state.onRequestComplete { requestCompleted = true }
 
-            ImageLoad(
-                request = request,
+            AsyncImage(
+                state = state,
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -118,11 +118,11 @@ class GlideTest {
         var requestCompleted by mutableStateOf(false)
 
         composeTestRule.setContent {
-            val request = rememberGlideImageLoadRequest(R.drawable.red_rectangle)
-            request.onRequestComplete { requestCompleted = true }
+            val state = rememberGlideAsyncImageState(R.drawable.red_rectangle)
+            state.onRequestComplete { requestCompleted = true }
 
-            ImageLoad(
-                request = request,
+            AsyncImage(
+                state = state,
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -146,11 +146,11 @@ class GlideTest {
         var requestCompleted by mutableStateOf(false)
 
         composeTestRule.setContent {
-            val request = rememberGlideImageLoadRequest(resourceUri(R.drawable.red_rectangle))
-            request.onRequestComplete { requestCompleted = true }
+            val state = rememberGlideAsyncImageState(resourceUri(R.drawable.red_rectangle))
+            state.onRequestComplete { requestCompleted = true }
 
-            ImageLoad(
-                request = request,
+            AsyncImage(
+                state = state,
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -177,8 +177,8 @@ class GlideTest {
             val glide = Glide.with(LocalView.current)
                 .addDefaultRequestListener(SimpleRequestListener { requestCompleted = true })
 
-            ImageLoad(
-                request = rememberGlideImageLoadRequest(
+            AsyncImage(
+                state = rememberGlideAsyncImageState(
                     server.url("/image").toString(),
                     requestManager = glide,
                 ),
@@ -201,8 +201,8 @@ class GlideTest {
                 .addDefaultRequestListener(SimpleRequestListener { requestCompleted = true })
 
             CompositionLocalProvider(LocalRequestManager provides glide) {
-                ImageLoad(
-                    request = rememberGlideImageLoadRequest(server.url("/image").toString()),
+                AsyncImage(
+                    state = rememberGlideAsyncImageState(server.url("/image").toString()),
                     contentDescription = null,
                     modifier = Modifier.size(128.dp, 128.dp),
                 )
@@ -221,11 +221,11 @@ class GlideTest {
         var requestCompleted by mutableStateOf(false)
 
         composeTestRule.setContent {
-            val request = rememberGlideImageLoadRequest(data.toString())
-            request.onRequestComplete { requestCompleted = true }
+            val state = rememberGlideAsyncImageState(data.toString())
+            state.onRequestComplete { requestCompleted = true }
 
-            ImageLoad(
-                request = request,
+            AsyncImage(
+                state = state,
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -269,18 +269,18 @@ class GlideTest {
             var size by mutableStateOf(128.dp)
 
             composeTestRule.setContent {
-                val request = rememberGlideImageLoadRequest(server.url("/red").toString())
+                val state = rememberGlideAsyncImageState(server.url("/red").toString())
 
-                ImageLoad(
-                    request = request,
+                AsyncImage(
+                    state = state,
                     contentDescription = null,
                     modifier = Modifier
                         .size(size)
                         .testTag(GlideTestTags.Image),
                 )
 
-                LaunchedEffect(request) {
-                    snapshotFlow { request.loadState }
+                LaunchedEffect(state) {
+                    snapshotFlow { state.loadState }
                         .onCompletion { loadStates.cancel() }
                         .collect { loadStates.send(it) }
                 }
@@ -309,11 +309,11 @@ class GlideTest {
         var requestCompleted by mutableStateOf(false)
 
         composeTestRule.setContent {
-            val request = rememberGlideImageLoadRequest(server.url("/image").toString())
-            request.onRequestComplete { requestCompleted = true }
+            val state = rememberGlideAsyncImageState(server.url("/image").toString())
+            state.onRequestComplete { requestCompleted = true }
 
-            ImageLoad(
-                request = request,
+            AsyncImage(
+                state = state,
                 contentDescription = null,
                 modifier = Modifier.testTag(GlideTestTags.Image),
             )
@@ -333,11 +333,11 @@ class GlideTest {
         var requestCompleted by mutableStateOf(false)
 
         composeTestRule.setContent {
-            val request = rememberGlideImageLoadRequest(server.url("/noimage").toString())
-            request.onRequestComplete { requestCompleted = true }
+            val state = rememberGlideAsyncImageState(server.url("/noimage").toString())
+            state.onRequestComplete { requestCompleted = true }
 
-            ImageLoad(
-                request = request,
+            AsyncImage(
+                state = state,
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -358,8 +358,8 @@ class GlideTest {
     @Test(expected = IllegalArgumentException::class)
     fun data_drawable_throws() {
         composeTestRule.setContent {
-            ImageLoad(
-                request = rememberGlideImageLoadRequest(
+            AsyncImage(
+                state = rememberGlideAsyncImageState(
                     data = ShapeDrawable(),
                 ),
                 contentDescription = null,
@@ -371,8 +371,8 @@ class GlideTest {
     @Test(expected = IllegalArgumentException::class)
     fun data_imagebitmap_throws() {
         composeTestRule.setContent {
-            ImageLoad(
-                request = rememberGlideImageLoadRequest(
+            AsyncImage(
+                state = rememberGlideAsyncImageState(
                     painterResource(android.R.drawable.ic_delete),
                 ),
                 contentDescription = null,
@@ -384,8 +384,8 @@ class GlideTest {
     @Test(expected = IllegalArgumentException::class)
     fun data_imagevector_throws() {
         composeTestRule.setContent {
-            ImageLoad(
-                request = rememberGlideImageLoadRequest(
+            AsyncImage(
+                state = rememberGlideAsyncImageState(
                     painterResource(R.drawable.ic_android_black_24dp),
                 ),
                 contentDescription = null,
@@ -397,8 +397,8 @@ class GlideTest {
     @Test(expected = IllegalArgumentException::class)
     fun data_painter_throws() {
         composeTestRule.setContent {
-            ImageLoad(
-                request = rememberGlideImageLoadRequest(ColorPainter(Color.Magenta)),
+            AsyncImage(
+                state = rememberGlideAsyncImageState(ColorPainter(Color.Magenta)),
                 contentDescription = null,
                 modifier = Modifier.size(128.dp, 128.dp),
             )
@@ -408,8 +408,8 @@ class GlideTest {
     @Test
     fun error_stoppedThenResumed() {
         composeTestRule.setContent {
-            ImageLoad(
-                request = rememberGlideImageLoadRequest(data = ""),
+            AsyncImage(
+                state = rememberGlideAsyncImageState(data = ""),
                 contentDescription = null,
                 modifier = Modifier.size(128.dp, 128.dp),
             )

@@ -37,8 +37,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.glide.rememberGlideImageLoadRequest
-import com.google.accompanist.imageloading.ImageLoad
+import com.google.accompanist.glide.rememberGlideAsyncImageState
+import com.google.accompanist.imageloading.AsyncImage
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
@@ -66,9 +66,9 @@ private fun Sample() {
     ) {
         LazyColumn(Modifier.padding(16.dp)) {
             item {
-                // GlideImage with data parameter
-                ImageLoad(
-                    request = rememberGlideImageLoadRequest(randomSampleImageUrl()),
+                // Data parameter
+                AsyncImage(
+                    state = rememberGlideAsyncImageState(randomSampleImageUrl()),
                     contentDescription = null,
                     modifier = Modifier.size(128.dp),
                     previewPlaceholder = R.drawable.placeholder,
@@ -76,12 +76,12 @@ private fun Sample() {
             }
 
             item {
-                // GlideImage with loading slot
+                // Loading content
                 Box {
-                    val request = rememberGlideImageLoadRequest(randomSampleImageUrl())
+                    val request = rememberGlideAsyncImageState(randomSampleImageUrl())
 
-                    ImageLoad(
-                        request = request,
+                    AsyncImage(
+                        state = request,
                         contentDescription = null,
                         modifier = Modifier.size(128.dp),
                     )
@@ -100,9 +100,9 @@ private fun Sample() {
             }
 
             item {
-                // GlideImage with crossfade and data parameter
-                ImageLoad(
-                    request = rememberGlideImageLoadRequest(randomSampleImageUrl()),
+                // Fade in
+                AsyncImage(
+                    state = rememberGlideAsyncImageState(randomSampleImageUrl()),
                     contentDescription = null,
                     modifier = Modifier.size(128.dp),
                     fadeIn = true,
@@ -110,12 +110,12 @@ private fun Sample() {
             }
 
             item {
-                // GlideImage with fadeIn and loading slot
+                // Fade in and loading content
                 Box {
-                    val request = rememberGlideImageLoadRequest(randomSampleImageUrl())
+                    val request = rememberGlideAsyncImageState(randomSampleImageUrl())
 
-                    ImageLoad(
-                        request = request,
+                    AsyncImage(
+                        state = request,
                         contentDescription = null,
                         fadeIn = true,
                         modifier = Modifier.size(128.dp),
@@ -130,12 +130,12 @@ private fun Sample() {
             }
 
             item {
-                // GlideImage with an implicit size
+                // Implicit size
                 Box {
-                    val request = rememberGlideImageLoadRequest(randomSampleImageUrl())
+                    val request = rememberGlideAsyncImageState(randomSampleImageUrl())
 
-                    ImageLoad(
-                        request = request,
+                    AsyncImage(
+                        state = request,
                         contentDescription = null,
                     )
 
@@ -148,9 +148,9 @@ private fun Sample() {
             }
 
             item {
-                // GlideImage with an aspect ratio
-                ImageLoad(
-                    request = rememberGlideImageLoadRequest(randomSampleImageUrl()),
+                // Aspect ratio and crop
+                AsyncImage(
+                    state = rememberGlideAsyncImageState(randomSampleImageUrl()),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier

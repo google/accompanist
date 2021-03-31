@@ -32,8 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
-import com.google.accompanist.coil.rememberCoilImageLoadRequest
-import com.google.accompanist.imageloading.ImageLoad
+import com.google.accompanist.coil.rememberCoilAsyncImageState
+import com.google.accompanist.imageloading.AsyncImage
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.toPaddingValues
@@ -79,8 +79,8 @@ private fun Sample() {
                 .toPaddingValues(additionalVertical = 16.dp, additionalHorizontal = 16.dp),
         ) {
             items(NumberItems) { index ->
-                ImageLoad(
-                    request = rememberCoilImageLoadRequest(randomSampleImageUrl(index)),
+                AsyncImage(
+                    state = rememberCoilAsyncImageState(randomSampleImageUrl(index)),
                     contentDescription = null,
                     fadeIn = true,
                     modifier = Modifier

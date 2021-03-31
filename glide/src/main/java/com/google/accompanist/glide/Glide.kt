@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-@file:JvmName("GlideImage")
-@file:JvmMultifileClass
-
 package com.google.accompanist.glide
 
 import android.graphics.drawable.Drawable
@@ -37,8 +34,8 @@ import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.google.accompanist.imageloading.AsyncImageState
 import com.google.accompanist.imageloading.DataSource
-import com.google.accompanist.imageloading.ImageLoadRequest
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.toPainter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -67,13 +64,16 @@ object GlideImageDefaults {
     }
 }
 
+/**
+ * TODO
+ */
 @Composable
-fun rememberGlideImageLoadRequest(
+fun rememberGlideAsyncImageState(
     data: Any,
     requestManager: RequestManager = GlideImageDefaults.defaultRequestManager(),
     requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)? = null,
-): ImageLoadRequest<Any> = remember(data, requestManager) {
-    GlideImageLoadRequest(
+): AsyncImageState<Any> = remember(data, requestManager) {
+    GlideAsyncImageState(
         requestManager = requestManager,
         requestBuilder = requestBuilder,
     )
@@ -81,16 +81,21 @@ fun rememberGlideImageLoadRequest(
     request = data
 }
 
-private class GlideImageLoadRequest(
+/**
+ * TODO: Make public?
+ */
+private class GlideAsyncImageState(
     private val requestManager: RequestManager,
     private val requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)?,
-) : ImageLoadRequest<Any>() {
+) : AsyncImageState<Any>() {
 
     private var requestState by mutableStateOf<Any?>(null)
 
     override var request: Any?
         get() = requestState
-        set(value) { requestState = checkData(value) }
+        set(value) {
+            requestState = checkData(value)
+        }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun executeRequest(

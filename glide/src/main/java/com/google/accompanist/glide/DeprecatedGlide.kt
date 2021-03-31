@@ -38,8 +38,8 @@ import androidx.compose.ui.unit.IntSize
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.RequestManager
+import com.google.accompanist.imageloading.AsyncImageSuchDeprecated
 import com.google.accompanist.imageloading.ImageLoadState
-import com.google.accompanist.imageloading.ImageLoadSuchDeprecated
 import com.google.accompanist.imageloading.MaterialLoadingImage
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
@@ -74,7 +74,7 @@ import kotlinx.coroutines.flow.filter
  * @param content Content to be displayed for the given state.
  */
 @Deprecated(
-    message = "Replaced with ImageLoad() and rememberGlideImageLoadRequest()",
+    message = "Replaced with AsyncImage() and rememberGlideAsyncImageState()",
     ReplaceWith(
         expression = """ImageLoad(
             request = rememberGlideImageLoadRequest(
@@ -102,7 +102,7 @@ fun GlideImage(
     onRequestCompleted: (ImageLoadState) -> Unit = {},
     content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
 ) {
-    val request = rememberGlideImageLoadRequest(
+    val request = rememberGlideAsyncImageState(
         data = data,
         requestManager = requestManager,
         requestBuilder = requestBuilder,
@@ -115,7 +115,7 @@ fun GlideImage(
     }
 
     @Suppress("DEPRECATION")
-    ImageLoadSuchDeprecated(
+    AsyncImageSuchDeprecated(
         request = request,
         previewPlaceholder = previewPlaceholder,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
@@ -173,7 +173,7 @@ fun GlideImage(
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
  */
 @Deprecated(
-    "Replaced with ImageLoad() and rememberGlideImageLoadRequest()",
+    "Replaced with AsyncImage() and rememberGlideAsyncImageState()",
     ReplaceWith(
         expression = """ImageLoad(
             request = rememberGlideImageLoadRequest(
@@ -211,7 +211,7 @@ fun GlideImage(
     error: @Composable (BoxScope.(ImageLoadState.Error) -> Unit)? = null,
     loading: @Composable (BoxScope.() -> Unit)? = null,
 ) {
-    val request = rememberGlideImageLoadRequest(
+    val request = rememberGlideAsyncImageState(
         data = data,
         requestManager = requestManager,
         requestBuilder = requestBuilder,
@@ -224,7 +224,7 @@ fun GlideImage(
     }
 
     @Suppress("DEPRECATION")
-    ImageLoadSuchDeprecated(
+    AsyncImageSuchDeprecated(
         request = request,
         previewPlaceholder = previewPlaceholder,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,

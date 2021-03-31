@@ -39,6 +39,10 @@ import androidx.compose.ui.unit.constrainWidth
 import kotlin.math.max
 import kotlin.math.roundToInt
 
+/**
+ * Copy of PainterModifier:
+ * https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:compose/ui/ui/src/commonMain/kotlin/androidx/compose/ui/draw/PainterModifier.kt
+ */
 internal abstract class PainterModifier : LayoutModifier, DrawModifier {
     abstract val painter: Painter
     abstract val sizeToIntrinsics: Boolean
@@ -151,9 +155,9 @@ internal abstract class PainterModifier : LayoutModifier, DrawModifier {
     }
 
     private fun modifyConstraints(constraints: Constraints): Constraints {
-        if ((!useIntrinsicSize && constraints.hasBoundedHeight && constraints.hasBoundedWidth) ||
-            (constraints.hasFixedWidth && constraints.hasFixedHeight)
-        ) {
+        val hasBoundedDimens = constraints.hasBoundedWidth && constraints.hasBoundedHeight
+        val hasFixedDimens = constraints.hasFixedWidth && constraints.hasFixedHeight
+        if ((!useIntrinsicSize && hasBoundedDimens) || hasFixedDimens) {
             // If we have fixed constraints or we are not attempting to size the
             // composable based on the size of the Painter, do not attempt to
             // modify them. Otherwise rely on Alignment and ContentScale

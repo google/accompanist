@@ -34,8 +34,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.IntSize
 import coil.ImageLoader
 import coil.request.ImageRequest
+import com.google.accompanist.imageloading.AsyncImageSuchDeprecated
 import com.google.accompanist.imageloading.ImageLoadState
-import com.google.accompanist.imageloading.ImageLoadSuchDeprecated
 import com.google.accompanist.imageloading.MaterialLoadingImage
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
@@ -70,7 +70,7 @@ import kotlinx.coroutines.flow.filter
  * @param content Content to be displayed for the given state.
  */
 @Deprecated(
-    message = "Replaced with ImageLoad() and rememberCoilImageLoadRequest()",
+    message = "Replaced with AsyncImage() and rememberCoilAsyncImageState()",
     ReplaceWith(
         expression = """ImageLoad(
             request = rememberCoilImageLoadRequest(
@@ -98,7 +98,7 @@ fun CoilImage(
     onRequestCompleted: (ImageLoadState) -> Unit = {},
     content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
 ) {
-    val request = rememberCoilImageLoadRequest(
+    val request = rememberCoilAsyncImageState(
         data = data,
         requestBuilder = requestBuilder,
         imageLoader = imageLoader,
@@ -111,7 +111,7 @@ fun CoilImage(
     }
 
     @Suppress("DEPRECATION")
-    ImageLoadSuchDeprecated(
+    AsyncImageSuchDeprecated(
         request = request,
         previewPlaceholder = previewPlaceholder,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
@@ -151,7 +151,7 @@ fun CoilImage(
  * @param content Content to be displayed for the given state.
  */
 @Deprecated(
-    message = "Replaced with ImageLoad() and rememberCoilImageLoadRequest()",
+    message = "Replaced with AsyncImage() and rememberCoilAsyncImageState()",
     ReplaceWith(
         expression = """ImageLoad(
             request = rememberCoilImageLoadRequest(
@@ -240,7 +240,7 @@ fun CoilImage(
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
  */
 @Deprecated(
-    "Replaced with ImageLoad() and rememberCoilImageLoadRequest()",
+    "Replaced with AsyncImage() and rememberCoilAsyncImageState()",
     ReplaceWith(
         expression = """ImageLoad(
             request = rememberCoilImageLoadRequest(
@@ -278,7 +278,7 @@ fun CoilImage(
     error: @Composable (BoxScope.(ImageLoadState.Error) -> Unit)? = null,
     loading: @Composable (BoxScope.() -> Unit)? = null,
 ) {
-    val request = rememberCoilImageLoadRequest(
+    val request = rememberCoilAsyncImageState(
         data = data,
         requestBuilder = requestBuilder,
         imageLoader = imageLoader,
@@ -291,7 +291,7 @@ fun CoilImage(
     }
 
     @Suppress("DEPRECATION")
-    ImageLoadSuchDeprecated(
+    AsyncImageSuchDeprecated(
         request = request,
         previewPlaceholder = previewPlaceholder,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
@@ -365,7 +365,7 @@ fun CoilImage(
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
  */
 @Deprecated(
-    "Replaced with ImageLoad() and rememberCoilImageLoadRequest()",
+    "Replaced with AsyncImage() and rememberCoilAsyncImageState()",
     ReplaceWith(
         expression = """ImageLoad(
             request = rememberCoilImageLoadRequest(

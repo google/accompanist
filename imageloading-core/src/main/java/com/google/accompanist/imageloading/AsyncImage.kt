@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-@file:JvmName("ImageLoad")
-@file:JvmMultifileClass
+@file:JvmName("AsyncImage")
 
 package com.google.accompanist.imageloading
 
@@ -40,6 +39,7 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
@@ -63,7 +63,7 @@ import kotlin.coroutines.cancellation.CancellationException
  * TODO
  */
 @Stable
-abstract class ImageLoadRequest<R : Any> {
+abstract class AsyncImageState<R : Any> {
     /**
      * This should be [androidx.compose.runtime.State] backed.
      */
@@ -113,28 +113,26 @@ abstract class ImageLoadRequest<R : Any> {
 /**
  * A generic image loading composable, which provides hooks for image loading libraries to use.
  * Apps shouldn't generally use this function, instead preferring one of the extension libraries
- * which build upon this, such as the Coil library.
+ * which build upon this, such as the Coil and Glide libraries.
  *
- * The [executeRequest] parameters allows providing of a lambda to execute the 'image load'.
- * The [R] type and [request] parameter should be whatever primitive the library uses to
- * model a request. The [TR] type would normally be the same as [R], but allows transforming of
- * the request for execution (say to wrap with extra information).
- *
- * @param request The request to execute.
- * @param executeRequest Suspending lambda to execute an image loading request.
+ * @param state The request to execute.
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
- * @param requestKey The object to key this request on. If the request type supports equality then
- * the default value will work. Otherwise pass in the `data` value.
- * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
- * @param transformRequestForSize Optionally transform [request] for the given [IntSize].
+ * @param alignment Optional alignment parameter used to place the loaded [ImageBitmap] in the
+ * given bounds defined by the width and height.
+ * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
+ * used if the bounds are a different size from the intrinsic size of the loaded [ImageBitmap].
+ * @param colorFilter Optional colorFilter to apply for the [Painter] when it is rendered onscreen.
+ * @param fadeIn Whether to run a fade-in animation when images are successfully loaded.
+ * Default: `false`.
+ * @param fadeInDurationMs Duration for the fade animation in milliseconds when [fadeIn] is enabled.
+ * @param previewPlaceholder Drawable resource ID which will be displayed when this function is
+ * ran in preview mode.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
  * optional re-fetching of the image. Return true to re-fetch the image.
- * @param onRequestCompleted Listener which will be called when the loading request has finished.
- * @param content Content to be displayed for the given state.
  */
 @Composable
-fun <R : Any> ImageLoad(
-    request: ImageLoadRequest<R>,
+fun <R : Any> AsyncImage(
+    state: AsyncImageState<R>,
     contentDescription: String?,
     modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
@@ -158,17 +156,17 @@ fun <R : Any> ImageLoad(
 
     val coroutineScope = rememberCoroutineScope()
 
-    val imageLoader = remember(request, coroutineScope) {
+    val imageLoader = remember(state, coroutineScope) {
         ImageLoader(
-            requestState = request,
+            state = state,
             coroutineScope = coroutineScope,
             shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         )
     }
 
-    val cf = if (fadeIn && request.loadState is ImageLoadState.Success) {
+    val cf = if (fadeIn && state.loadState is ImageLoadState.Success) {
         val fadeInTransition = updateFadeInTransition(
-            key = imageLoader.requestState,
+            key = imageLoader.state,
             durationMs = fadeInDurationMs
         )
         remember { ColorMatrix() }
@@ -185,19 +183,13 @@ fun <R : Any> ImageLoad(
         colorFilter
     }
 
-    // NOTE: All of the things that we want to be able to change without recreating the whole object
-    // we want to do inside of here.
+    // Update our ImageLoader with any parameter values changes
     SideEffect {
         imageLoader.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
         imageLoader.contentScale = contentScale
         imageLoader.colorFilter = cf
         imageLoader.alignment = alignment
     }
-
-    // NOTE: It's important that this is Box and not BoxWithConstraints. This is dramatically cheaper,
-    // and also has not children. You could use Box(modifier, content) here if you want, and add a
-    // content lambda, but that would be for content inside / on top of the image, and not for the
-    // image itself like the current implementation.
 
     val semantics = if (contentDescription != null) {
         Modifier.semantics {
@@ -206,7 +198,7 @@ fun <R : Any> ImageLoad(
         }
     } else Modifier
 
-    // NOTE: We build a modifier once, for each ImageManager, which handles everything. We
+    // NOTE: We build a modifier once, for each ImageLoader, which handles everything. We
     // ensure that no state objects are used in its construction, so that all state
     // observations are limited to the layout and drawing phases.
     Box(
@@ -223,8 +215,8 @@ fun <R : Any> ImageLoad(
  */
 @Deprecated("Only used to help migration. DO NOT USE.")
 @Composable
-fun <R : Any> ImageLoadSuchDeprecated(
-    request: ImageLoadRequest<R>,
+fun <R : Any> AsyncImageSuchDeprecated(
+    request: AsyncImageState<R>,
     modifier: Modifier,
     @DrawableRes previewPlaceholder: Int = 0,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean,
@@ -245,7 +237,7 @@ fun <R : Any> ImageLoadSuchDeprecated(
 
     val imageLoader = remember(request, coroutineScope) {
         ImageLoader(
-            requestState = request,
+            state = request,
             coroutineScope = coroutineScope,
             shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         )
@@ -267,7 +259,7 @@ fun <R : Any> ImageLoadSuchDeprecated(
 
 @Stable
 private class ImageLoader<R : Any>(
-    val requestState: ImageLoadRequest<R>,
+    val state: AsyncImageState<R>,
     val coroutineScope: CoroutineScope,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean,
 ) : RememberObserver {
@@ -280,6 +272,7 @@ private class ImageLoader<R : Any>(
     var colorFilter by mutableStateOf<ColorFilter?>(null)
     var contentScale by mutableStateOf(ContentScale.Fit)
     var alignment by mutableStateOf(Alignment.Center)
+    var alpha by mutableStateOf(1f)
     var shouldRefetchOnSizeChange by mutableStateOf(shouldRefetchOnSizeChange)
 
     // Current request job
@@ -294,7 +287,7 @@ private class ImageLoader<R : Any>(
         )
 
         if (requestSize == null ||
-            (requestSize != newSize && shouldRefetchOnSizeChange(requestState.loadState, newSize))
+            (requestSize != newSize && shouldRefetchOnSizeChange(state.loadState, newSize))
         ) {
             requestSize = newSize
         }
@@ -307,7 +300,7 @@ private class ImageLoader<R : Any>(
 
     val paintModifier = object : PainterModifier() {
         override val painter: Painter by derivedStateOf {
-            requestState.loadState.let { state ->
+            state.loadState.let { state ->
                 if (state is ImageLoadState.Success) {
                     state.painter
                 } else EmptyPainter
@@ -324,7 +317,7 @@ private class ImageLoader<R : Any>(
             get() = this@ImageLoader.colorFilter
 
         override val alpha: Float
-            get() = 1f
+            get() = this@ImageLoader.alpha
 
         override val sizeToIntrinsics: Boolean
             get() = true
@@ -344,11 +337,11 @@ private class ImageLoader<R : Any>(
         job?.cancel()
         job = coroutineScope.launch {
             combine(
-                snapshotFlow { requestState.request }.filterNotNull(),
+                snapshotFlow { state.request }.filterNotNull(),
                 snapshotFlow { requestSize }.filterNotNull(),
                 transform = { request, size -> request to size }
             ).collectLatest { (request, size) ->
-                requestState.execute(request, size)
+                state.execute(request, size)
             }
         }
     }

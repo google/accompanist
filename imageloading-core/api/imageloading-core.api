@@ -8,6 +8,19 @@ public final class com/google/accompanist/imageloading/AndroidDrawablePainterKt 
 	public static final fun toPainter (Landroid/graphics/drawable/Drawable;)Landroidx/compose/ui/graphics/painter/Painter;
 }
 
+public final class com/google/accompanist/imageloading/AsyncImage {
+	public static final fun AsyncImage (Lcom/google/accompanist/imageloading/AsyncImageState;Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;ZIILkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun AsyncImageSuchDeprecated (Lcom/google/accompanist/imageloading/AsyncImageState;Landroidx/compose/ui/Modifier;ILkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
+}
+
+public abstract class com/google/accompanist/imageloading/AsyncImageState {
+	public fun <init> ()V
+	protected abstract fun executeRequest-JVtK1S4 (Ljava/lang/Object;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getLoadState ()Lcom/google/accompanist/imageloading/ImageLoadState;
+	public abstract fun getRequest ()Ljava/lang/Object;
+	public abstract fun setRequest (Ljava/lang/Object;)V
+}
+
 public final class com/google/accompanist/imageloading/DataSource : java/lang/Enum {
 	public static final field DISK Lcom/google/accompanist/imageloading/DataSource;
 	public static final field MEMORY Lcom/google/accompanist/imageloading/DataSource;
@@ -18,19 +31,6 @@ public final class com/google/accompanist/imageloading/DataSource : java/lang/En
 
 public final class com/google/accompanist/imageloading/DeprecatedKt {
 	public static final fun getDefaultRefetchOnSizeChangeLambda ()Lkotlin/jvm/functions/Function2;
-}
-
-public final class com/google/accompanist/imageloading/ImageLoad {
-	public static final fun ImageLoad (Lcom/google/accompanist/imageloading/ImageLoadRequest;Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;ZIILkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
-	public static final fun ImageLoadSuchDeprecated (Lcom/google/accompanist/imageloading/ImageLoadRequest;Landroidx/compose/ui/Modifier;ILkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
-}
-
-public abstract class com/google/accompanist/imageloading/ImageLoadRequest {
-	public fun <init> ()V
-	protected abstract fun executeRequest-JVtK1S4 (Ljava/lang/Object;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public final fun getLoadState ()Lcom/google/accompanist/imageloading/ImageLoadState;
-	public abstract fun getRequest ()Ljava/lang/Object;
-	public abstract fun setRequest (Ljava/lang/Object;)V
 }
 
 public abstract class com/google/accompanist/imageloading/ImageLoadState {

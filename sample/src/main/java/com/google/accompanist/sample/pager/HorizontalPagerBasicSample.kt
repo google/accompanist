@@ -47,8 +47,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.coil.rememberCoilImageLoadRequest
-import com.google.accompanist.imageloading.ImageLoad
+import com.google.accompanist.coil.rememberCoilAsyncImageState
+import com.google.accompanist.imageloading.AsyncImage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
@@ -98,8 +98,8 @@ private fun Sample() {
             ) { page ->
                 Box {
                     // Our page content, displaying a random image
-                    ImageLoad(
-                        request = rememberCoilImageLoadRequest(randomSampleImageUrl(width = 600)),
+                    AsyncImage(
+                        state = rememberCoilAsyncImageState(randomSampleImageUrl(width = 600)),
                         contentDescription = null,
                         modifier = Modifier
                             .fillMaxWidth(0.8f)
