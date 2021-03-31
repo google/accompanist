@@ -48,7 +48,7 @@ import com.google.accompanist.imageloading.toPainter
 val LocalImageLoader = staticCompositionLocalOf<ImageLoader?> { null }
 
 /**
- * Contains some default values used for [rememberCoilAsyncImageState].
+ * Contains some default values used by [rememberCoilAsyncImageState].
  */
 object CoilImageDefaults {
     /**
