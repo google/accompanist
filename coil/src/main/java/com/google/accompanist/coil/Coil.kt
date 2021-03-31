@@ -21,6 +21,7 @@ package com.google.accompanist.coil
 
 import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,12 +42,13 @@ import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.toPainter
 
 /**
- * Composition local containing the preferred [ImageLoader] to use in [CoilImage].
+ * Composition local containing the preferred [ImageLoader] to use for
+ * [rememberCoilAsyncImageState].
  */
 val LocalImageLoader = staticCompositionLocalOf<ImageLoader?> { null }
 
 /**
- * Contains some default values used for [CoilImage].
+ * Contains some default values used for [rememberCoilAsyncImageState].
  */
 object CoilImageDefaults {
     /**
@@ -59,11 +61,20 @@ object CoilImageDefaults {
 }
 
 /**
- * TODO
+ * Creates a [CoilAsyncImageState] that is remembered across compositions.
+ *
+ * Changes to the provided values for [imageLoader] and [context] will **not** result
+ * in the state being recreated or changed in any way if it has already been created.
+ * Changes to [data] and [requestBuilder] will result in the [CoilAsyncImageState] being updated.
+ *
+ * @param data the value for [CoilAsyncImageState.data]
+ * @param imageLoader the value for [CoilAsyncImageState.imageLoader]
+ * @param context the initial value for [CoilAsyncImageState.context]
+ * @param requestBuilder the value for [CoilAsyncImageState.requestBuilder]
  */
 @Composable
 fun rememberCoilAsyncImageState(
-    data: Any,
+    data: Any?,
     imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
     context: Context = LocalContext.current,
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
@@ -73,26 +84,45 @@ fun rememberCoilAsyncImageState(
         context = context,
     )
 }.apply {
-    this.request = data
+    this.data = data
     this.requestBuilder = requestBuilder
 }
 
 private typealias RequestBuilder = (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)
 
 /**
- * TODO
+ * A state object that can be hoisted for [com.google.accompanist.imageloading.AsyncImage]
+ * to load images using [coil.Coil].
+ *
+ * In most cases, this will be created via [rememberCoilAsyncImageState].
+ *
+ * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to
+ * [CoilImageDefaults.defaultImageLoader].
+ * @param context The Android [Context] to use when creating [ImageRequest]s.
  */
-private class CoilAsyncImageState(
-    private val imageLoader: ImageLoader,
+@Stable
+class CoilAsyncImageState(
+    val imageLoader: ImageLoader,
     private val context: Context,
 ) : AsyncImageState<Any>() {
+    private var currentData by mutableStateOf<Any?>(null)
 
-    var requestState by mutableStateOf<Any?>(null)
+    override val request: Any?
+        get() = currentData
+
+    /**
+     * Holds an optional builder for every created [ImageRequest].
+     */
     var requestBuilder by mutableStateOf<RequestBuilder?>(null)
 
-    override var request: Any?
-        get() = requestState
-        set(value) { requestState = checkData(value) }
+    /**
+     * The data to load. See [ImageRequest.Builder.data] for the types supported.
+     */
+    var data: Any?
+        get() = currentData
+        set(value) {
+            currentData = checkData(value)
+        }
 
     override suspend fun executeRequest(request: Any, size: IntSize): ImageLoadState {
         val baseRequest = when (request) {

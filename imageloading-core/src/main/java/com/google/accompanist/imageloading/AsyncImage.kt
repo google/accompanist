@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Android Open Source Project
+ * Copyright 2021 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,6 +53,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.IntSize
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
@@ -60,33 +61,43 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 
 /**
- * TODO
+ * A state base class that can be hoisted to control image loads for [AsyncImage].
  */
 @Stable
 abstract class AsyncImageState<R : Any> {
     /**
-     * This should be [androidx.compose.runtime.State] backed.
+     * The current request object.
+     *
+     * Extending classes should return the current request object, which should be backed by
+     * a [androidx.compose.runtime.State] instance.
      */
-    abstract var request: R?
+    protected abstract val request: R?
 
     /**
      * The current [ImageLoadState].
      */
-    var loadState by mutableStateOf<ImageLoadState>(ImageLoadState.Loading)
+    var loadState by mutableStateOf<ImageLoadState>(ImageLoadState.Empty)
         private set
 
     /**
      * The function which executes the requests, and update [loadState] as appropriate with the
      * result.
      */
-    internal suspend fun execute(request: R, size: IntSize) {
+    internal suspend fun execute(request: R?, size: IntSize) {
+        if (request == null) {
+            // If we don't have a request, set our state to Empty and return
+            loadState = ImageLoadState.Empty
+            return
+        }
+
+        // Otherwise we're about to start a request, so set us to 'Loading'
         loadState = ImageLoadState.Loading
 
         loadState = try {
             executeRequest(request, size)
         } catch (ce: CancellationException) {
             // We specifically don't do anything for the request coroutine being
-            // cancelled: https://github.com/chrisbanes/accompanist/issues/217
+            // cancelled: https://github.com/google/accompanist/issues/217
             throw ce
         } catch (e: Error) {
             // Re-throw all Errors
@@ -108,6 +119,9 @@ abstract class AsyncImageState<R : Any> {
      * [size] constraints.
      */
     protected abstract suspend fun executeRequest(request: R, size: IntSize): ImageLoadState
+
+    internal val requestFlow: Flow<R?>
+        get() = snapshotFlow { request }
 }
 
 /**
@@ -337,7 +351,7 @@ private class ImageLoader<R : Any>(
         job?.cancel()
         job = coroutineScope.launch {
             combine(
-                snapshotFlow { state.request }.filterNotNull(),
+                state.requestFlow,
                 snapshotFlow { requestSize }.filterNotNull(),
                 transform = { request, size -> request to size }
             ).collectLatest { (request, size) ->

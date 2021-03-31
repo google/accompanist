@@ -1,3 +1,12 @@
+public final class com/google/accompanist/glide/GlideAsyncImageState : com/google/accompanist/imageloading/AsyncImageState {
+	public fun <init> (Lcom/bumptech/glide/RequestManager;)V
+	public final fun getData ()Ljava/lang/Object;
+	public final fun getRequestBuilder ()Lkotlin/jvm/functions/Function2;
+	public final fun getRequestManager ()Lcom/bumptech/glide/RequestManager;
+	public final fun setData (Ljava/lang/Object;)V
+	public final fun setRequestBuilder (Lkotlin/jvm/functions/Function2;)V
+}
+
 public final class com/google/accompanist/glide/GlideImage {
 	public static final fun GlideImage (Ljava/lang/Object;Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function2;Lcom/bumptech/glide/RequestManager;ILkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
 	public static final fun GlideImage (Ljava/lang/Object;Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;ZLkotlin/jvm/functions/Function2;Lcom/bumptech/glide/RequestManager;ILkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;III)V

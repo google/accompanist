@@ -17,8 +17,7 @@ public abstract class com/google/accompanist/imageloading/AsyncImageState {
 	public fun <init> ()V
 	protected abstract fun executeRequest-JVtK1S4 (Ljava/lang/Object;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun getLoadState ()Lcom/google/accompanist/imageloading/ImageLoadState;
-	public abstract fun getRequest ()Ljava/lang/Object;
-	public abstract fun setRequest (Ljava/lang/Object;)V
+	protected abstract fun getRequest ()Ljava/lang/Object;
 }
 
 public final class com/google/accompanist/imageloading/DataSource : java/lang/Enum {

@@ -18,6 +18,7 @@ package com.google.accompanist.glide
 
 import android.graphics.drawable.Drawable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,12 +43,13 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 
 /**
- * Composition local containing the preferred [RequestManager] to use in [GlideImage].
+ * Composition local containing the preferred [RequestManager] to use
+ * for [rememberGlideAsyncImageState].
  */
 val LocalRequestManager = staticCompositionLocalOf<RequestManager?> { null }
 
 /**
- * Contains some default values used for [GlideImage].
+ * Contains some default values used for [GlideAsyncImageState].
  */
 object GlideImageDefaults {
     /**
@@ -56,46 +58,68 @@ object GlideImageDefaults {
      */
     @Composable
     fun defaultRequestManager(): RequestManager {
-        return LocalRequestManager.current
-            // By default Glide tries to install lifecycle listeners to automatically re-trigger
-            // requests when resumed. We don't want that with Compose, since we rely on composition
-            // for our 'lifecycle'. We can stop Glide doing this by using the application context.
-            ?: Glide.with(LocalContext.current.applicationContext)
+        // By default Glide tries to install lifecycle listeners to automatically re-trigger
+        // requests when resumed. We don't want that with Compose, since we rely on composition
+        // for our 'lifecycle'. We can stop Glide doing this by using the application context.
+        return LocalRequestManager.current ?: Glide.with(LocalContext.current.applicationContext)
     }
 }
 
 /**
- * TODO
+ * Creates a [GlideAsyncImageState] that is remembered across compositions.
+ *
+ * Changes to the provided values for [requestManager] will **not** result
+ * in the state being recreated or changed in any way if it has already been created.
+ * Changes to [data] and [requestBuilder] will result in the [GlideAsyncImageState] being updated.
+ *
+ * @param data the value for [GlideAsyncImageState.data]
+ * @param requestManager the initial value for [GlideAsyncImageState.requestManager]
+ * @param requestBuilder the value for [GlideAsyncImageState.requestBuilder]
  */
 @Composable
 fun rememberGlideAsyncImageState(
-    data: Any,
+    data: Any?,
     requestManager: RequestManager = GlideImageDefaults.defaultRequestManager(),
     requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)? = null,
-): AsyncImageState<Any> = remember(data, requestManager) {
-    GlideAsyncImageState(
-        requestManager = requestManager,
-        requestBuilder = requestBuilder,
-    )
+): AsyncImageState<Any> = remember(requestManager) {
+    GlideAsyncImageState(requestManager = requestManager)
 }.apply {
-    request = data
+    this.data = data
+    this.requestBuilder = requestBuilder
 }
 
+private typealias AsyncImageRequestBuilder = (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)
+
 /**
- * TODO: Make public?
+ * A state object that can be hoisted for [com.google.accompanist.imageloading.AsyncImage]
+ * to load images using [Glide].
+ *
+ * In most cases, this will be created via [rememberGlideAsyncImageState].
+ *
+ * @param requestManager The [RequestManager] to use when requesting the image.
  */
-private class GlideAsyncImageState(
-    private val requestManager: RequestManager,
-    private val requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)?,
+@Stable
+class GlideAsyncImageState(
+    val requestManager: RequestManager
 ) : AsyncImageState<Any>() {
+    private var currentData by mutableStateOf<Any?>(null)
 
-    private var requestState by mutableStateOf<Any?>(null)
+    override val request: Any?
+        get() = currentData
 
-    override var request: Any?
-        get() = requestState
+    /**
+     * The data to load. See [RequestManager.load] for the types supported.
+     */
+    var data: Any?
+        get() = currentData
         set(value) {
-            requestState = checkData(value)
+            currentData = checkData(value)
         }
+
+    /**
+     * Holds an optional builder for every created [RequestBuilder].
+     */
+    var requestBuilder by mutableStateOf<AsyncImageRequestBuilder?>(null)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun executeRequest(
