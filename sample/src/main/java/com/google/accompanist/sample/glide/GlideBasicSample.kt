@@ -76,6 +76,15 @@ private fun Sample() {
             }
 
             item {
+                // Load GIF
+                AsyncImage(
+                    state = rememberGlideAsyncImageState("https://cataas.com/cat/gif"),
+                    contentDescription = "Cat animation",
+                    modifier = Modifier.size(128.dp),
+                )
+            }
+
+            item {
                 // Loading content
                 Box {
                     val request = rememberGlideAsyncImageState(rememberRandomSampleImageUrl())
