@@ -93,7 +93,7 @@ fun HorizontalPagerIndicator(
                         y = 0
                     )
                 }
-                .size(width = indicatorHeight, height = indicatorHeight)
+                .size(width = indicatorWidth, height = indicatorHeight)
                 .background(
                     color = activeColor,
                     shape = indicatorShape,
@@ -159,7 +159,7 @@ fun VerticalPagerIndicator(
                         y = ((spacing + indicatorHeight) * scrollPosition).roundToPx(),
                     )
                 }
-                .size(width = indicatorHeight, height = indicatorHeight)
+                .size(width = indicatorWidth, height = indicatorHeight)
                 .background(
                     color = activeColor,
                     shape = indicatorShape,
