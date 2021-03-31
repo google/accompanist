@@ -20,20 +20,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import com.google.accompanist.imageloading.AsyncImageState
-import com.google.accompanist.imageloading.ImageLoadState
+import com.google.accompanist.imageloading.isFinalState
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 
 /**
- * Useful callback wrapper for tests.
+ * Callback wrapper for tests.
+ *
+ * Don't copy this in apps, it's purely for tests.
  */
 @Composable
-fun AsyncImageState<*>.onRequestComplete(
-    block: () -> Unit
+inline fun LaunchedOnRequestComplete(
+    state: AsyncImageState<*>,
+    crossinline block: () -> Unit
 ) {
-    LaunchedEffect(this) {
-        snapshotFlow { loadState }
-            .filter { it is ImageLoadState.Success || it is ImageLoadState.Error }
+    LaunchedEffect(state) {
+        snapshotFlow { state.loadState }
+            .filter { it.isFinalState() }
             .collect { block() }
     }
 }

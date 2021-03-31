@@ -49,8 +49,8 @@ import com.google.accompanist.imageloading.AsyncImage
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.isFinalState
 import com.google.accompanist.imageloading.test.ImageMockWebServer
+import com.google.accompanist.imageloading.test.LaunchedOnRequestComplete
 import com.google.accompanist.imageloading.test.assertPixels
-import com.google.accompanist.imageloading.test.onRequestComplete
 import com.google.accompanist.imageloading.test.resourceUri
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -95,7 +95,7 @@ class GlideTest {
 
         composeTestRule.setContent {
             val state = rememberGlideAsyncImageState(server.url("/image").toString())
-            state.onRequestComplete { requestCompleted = true }
+            LaunchedOnRequestComplete(state) { requestCompleted = true }
 
             AsyncImage(
                 state = state,
@@ -121,7 +121,7 @@ class GlideTest {
 
         composeTestRule.setContent {
             val state = rememberGlideAsyncImageState(R.drawable.red_rectangle)
-            state.onRequestComplete { requestCompleted = true }
+            LaunchedOnRequestComplete(state) { requestCompleted = true }
 
             AsyncImage(
                 state = state,
@@ -149,7 +149,7 @@ class GlideTest {
 
         composeTestRule.setContent {
             val state = rememberGlideAsyncImageState(resourceUri(R.drawable.red_rectangle))
-            state.onRequestComplete { requestCompleted = true }
+            LaunchedOnRequestComplete(state) { requestCompleted = true }
 
             AsyncImage(
                 state = state,
@@ -224,7 +224,7 @@ class GlideTest {
 
         composeTestRule.setContent {
             val state = rememberGlideAsyncImageState(data.toString())
-            state.onRequestComplete { requestCompleted = true }
+            LaunchedOnRequestComplete(state) { requestCompleted = true }
 
             AsyncImage(
                 state = state,
@@ -312,7 +312,7 @@ class GlideTest {
 
         composeTestRule.setContent {
             val state = rememberGlideAsyncImageState(server.url("/image").toString())
-            state.onRequestComplete { requestCompleted = true }
+            LaunchedOnRequestComplete(state) { requestCompleted = true }
 
             AsyncImage(
                 state = state,
@@ -336,7 +336,7 @@ class GlideTest {
 
         composeTestRule.setContent {
             val state = rememberGlideAsyncImageState(server.url("/noimage").toString())
-            state.onRequestComplete { requestCompleted = true }
+            LaunchedOnRequestComplete(state) { requestCompleted = true }
 
             AsyncImage(
                 state = state,
