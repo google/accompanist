@@ -117,7 +117,7 @@ private fun Sample() {
 
             HorizontalPager(
                 state = pagerState,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f).fillMaxWidth()
             ) { page ->
                 // Our content for each page
                 Box(modifier = Modifier.fillMaxSize()) {

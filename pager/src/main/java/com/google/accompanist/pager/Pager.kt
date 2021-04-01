@@ -307,26 +307,37 @@ internal fun Pager(
             }
         },
     ) { measurables, constraints ->
-        layout(constraints.maxWidth, constraints.maxHeight) {
+        if (measurables.isEmpty()) {
+            // If we have no measurables, no-op and return
+            return@Layout layout(constraints.minWidth, constraints.minHeight) {}
+        }
+
+        val childConstraints = constraints.copy(minWidth = 0, minHeight = 0)
+
+        val placeables = measurables.map { it.measure(childConstraints) }
+        // Our pager width/height is the maximum pager content width/height, and coerce
+        // each by our minimum constraints
+        val pagerWidth = placeables.maxOf { it.width }.coerceAtLeast(constraints.minWidth)
+        val pagerHeight = placeables.maxOf { it.height }.coerceAtLeast(constraints.minHeight)
+
+        layout(width = pagerWidth, height = pagerHeight) {
             val currentPage = state.currentPage
             val offset = state.currentPageOffset
-            val childConstraints = constraints.copy(minWidth = 0, minHeight = 0)
             val itemSpacingPx = itemSpacing.roundToPx()
 
-            measurables.forEach {
-                val placeable = it.measure(childConstraints)
-                val page = it.page
+            placeables.forEachIndexed { index, placeable ->
+                val page = measurables[index].page
 
                 val xCenterOffset = horizontalAlignment.align(
                     size = placeable.width,
-                    space = constraints.maxWidth,
+                    space = pagerWidth,
                     // We pass in Ltr here since we use placeRelative below.  If we use the
                     // actual layoutDirection, placeRelative() will negate any difference.
                     layoutDirection = LayoutDirection.Ltr,
                 )
                 val yCenterOffset = verticalAlignment.align(
                     size = placeable.height,
-                    space = constraints.maxHeight
+                    space = pagerHeight,
                 )
 
                 var yItemOffset = 0
