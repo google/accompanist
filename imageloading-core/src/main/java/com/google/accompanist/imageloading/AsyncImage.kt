@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,12 +35,11 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.draw.paint
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layout
@@ -121,8 +121,8 @@ abstract class AsyncImageState<R : Any> {
      */
     protected abstract suspend fun executeRequest(request: R, size: IntSize): ImageLoadState
 
-    internal val requestFlow: Flow<R?>
-        get() = snapshotFlow { request }
+    internal val internalRequestFlow: Flow<R?> get() = snapshotFlow { request }
+    internal val internalRequest get() = request
 }
 
 /**
@@ -136,7 +136,9 @@ abstract class AsyncImageState<R : Any> {
  * given bounds defined by the width and height.
  * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be
  * used if the bounds are a different size from the intrinsic size of the loaded [ImageBitmap].
- * @param colorFilter Optional colorFilter to apply for the [Painter] when it is rendered onscreen.
+ * @param colorFilter Optional [ColorFilter] to apply for the [Painter] when it is rendered onscreen.
+ * If you provide a color filter and enable [fadeIn], the content will be drawn in a off-screen
+ * layer whilst the animation is running, which is known is cause performance issues.
  * @param fadeIn Whether to run a fade-in animation when images are successfully loaded.
  * Default: `false`.
  * @param fadeInDurationMs Duration for the fade animation in milliseconds when [fadeIn] is enabled.
@@ -181,24 +183,12 @@ fun <R : Any> AsyncImage(
         this.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
     }
 
-    val cf = if (fadeIn && state.loadState is ImageLoadState.Success) {
-        val fadeInTransition = updateFadeInTransition(
-            key = imageLoader.state,
-            durationMs = fadeInDurationMs
-        )
-        remember { ColorMatrix() }
-            .apply {
-                updateAlpha(fadeInTransition.alpha)
-                updateBrightness(fadeInTransition.brightness)
-                updateSaturation(fadeInTransition.saturation)
-            }
-            .let { matrix ->
-                ColorFilter.colorMatrix(matrix)
-            }
-    } else {
-        // If fade in isn't enabled, just use the provided `colorFilter`
-        colorFilter
-    }
+    // This runs our fade in animation
+    val fadeInColorFilter by fadeInAsState(
+        imageState = state,
+        enabled = fadeIn,
+        durationMs = fadeInDurationMs
+    )
 
     val semantics = if (contentDescription != null) {
         Modifier.semantics {
@@ -206,6 +196,24 @@ fun <R : Any> AsyncImage(
             this.role = Role.Image
         }
     } else Modifier
+
+    // We only use the saveLayer path IF a ColorFilter has been provided to AsyncImage.
+    // A layer is needed for both the specified filter, and our fade in filter to be applied,
+    // but this is slow.
+    // Otherwise we return null, and rely on setting the color matrix on the paint below.
+    val fadeInLayerDrawModifier = ColorFilterLayerDrawModifier {
+        if (colorFilter != null) fadeInColorFilter else null
+    }
+
+    // Our paint modifier. We need to use a sub-class of PainterModifier to optimize our
+    // animating color filter, so that our instance performs state reads rather than needing to be
+    // recreated
+    val paintModifier = object : PainterModifier() {
+        override val painter: Painter get() = imageLoader.painter
+        override val colorFilter: ColorFilter? get() = colorFilter ?: fadeInColorFilter
+        override val alignment: Alignment get() = alignment
+        override val contentScale: ContentScale get() = contentScale
+    }
 
     // We build a modifier once, for each ImageLoader, which handles everything. We
     // ensure that no state objects are used in its construction, so that all state
@@ -215,15 +223,38 @@ fun <R : Any> AsyncImage(
     Box(
         modifier
             .then(semantics)
+            .then(fadeInLayerDrawModifier)
             .clipToBounds()
-            .paint(
-                painter = imageLoader.painter,
-                alignment = alignment,
-                contentScale = contentScale,
-                colorFilter = cf,
-            )
+            .then(paintModifier)
             .then(imageLoader.layoutModifier)
     )
+}
+
+@Composable
+private fun fadeInAsState(
+    imageState: AsyncImageState<*>,
+    enabled: Boolean,
+    durationMs: Int,
+): State<ColorFilter?> {
+    val colorFilter = remember(imageState.internalRequest) { mutableStateOf<ColorFilter?>(null) }
+
+    if (enabled && imageState.loadState is ImageLoadState.Success) {
+        val colorMatrix = remember { ColorMatrix() }
+        val fadeInTransition = updateFadeInTransition(imageState, durationMs = durationMs)
+
+        colorFilter.value = if (!fadeInTransition.isFinished) {
+            colorMatrix.apply {
+                updateAlpha(fadeInTransition.alpha)
+                updateBrightness(fadeInTransition.brightness)
+                updateSaturation(fadeInTransition.saturation)
+            }.let { ColorFilter.colorMatrix(it) }
+        } else {
+            // If the fade-in isn't running, reset the color matrix
+            null
+        }
+    }
+
+    return colorFilter
 }
 
 /**
@@ -337,7 +368,7 @@ private class ImageLoader<R : Any>(
         // will run and execute the image load (with any on-going request cancelled).
         job = coroutineScope.launch {
             combine(
-                state.requestFlow,
+                state.internalRequestFlow,
                 snapshotFlow { requestSize }
                     .filterNotNull()
                     // We use filterSubsequent() so that the first emitted size skips the predicate
@@ -348,15 +379,16 @@ private class ImageLoader<R : Any>(
             }
         }
     }
+}
 
-    companion object {
-        private val EmptyPainter = ColorPainter(Color.Transparent)
-    }
+private object EmptyPainter : Painter() {
+    override val intrinsicSize: Size get() = Size.Unspecified
+    override fun DrawScope.onDraw() {}
 }
 
 /**
- * A variant of [Flow.filter] which always emits the first value, then uses [predicate] as
- * expected for subsequent emissions.
+ * A variant of [kotlinx.coroutines.flow.Flow.filter] which always emits the first value,
+ * then uses [predicate] as expected for subsequent emissions.
  */
 private fun <T> Flow<T>.filterSubsequent(
     predicate: suspend (T) -> Boolean

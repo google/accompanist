@@ -29,11 +29,17 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.DrawModifier
+import androidx.compose.ui.geometry.toRect
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.drawscope.ContentDrawScope
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
@@ -199,27 +205,37 @@ internal fun updateFadeInTransition(key: Any, durationMs: Int): FadeInTransition
     }
 
     // Our actual transition, which reads our transitionState
-    val transition = updateTransition(transitionState)
+    val transition = updateTransition(
+        transitionState = transitionState,
+        label = "AsyncImage fadeIn"
+    )
 
     // Alpha animates over the first 50%
     val alpha = transition.animateFloat(
         transitionSpec = { tween(durationMillis = durationMs / 2) },
-        targetValueByState = { if (it == ImageLoadTransitionState.Loaded) 1f else 0f }
+        targetValueByState = { if (it == ImageLoadTransitionState.Loaded) 1f else 0f },
+        label = "AsyncImage fadeIn alpha",
     )
 
     // Brightness animates over the first 75%
     val brightness = transition.animateFloat(
         transitionSpec = { tween(durationMillis = durationMs * 3 / 4) },
-        targetValueByState = { if (it == ImageLoadTransitionState.Loaded) 1f else 0.8f }
+        targetValueByState = { if (it == ImageLoadTransitionState.Loaded) 1f else 0.8f },
+        label = "AsyncImage fadeIn brightness",
     )
 
     // Saturation animates over whole duration
     val saturation = transition.animateFloat(
         transitionSpec = { tween(durationMillis = durationMs) },
-        targetValueByState = { if (it == ImageLoadTransitionState.Loaded) 1f else 0f }
+        targetValueByState = { if (it == ImageLoadTransitionState.Loaded) 1f else 0f },
+        label = "AsyncImage fadeIn saturation",
     )
 
-    return remember(transition) { FadeInTransition(alpha, brightness, saturation) }
+    return remember(transition) {
+        FadeInTransition(alpha, brightness, saturation)
+    }.apply {
+        this.isFinished = transitionState.currentState == ImageLoadTransitionState.Loaded
+    }
 }
 
 @Stable
@@ -231,6 +247,36 @@ internal class FadeInTransition(
     val alpha by alpha
     val brightness by brightness
     val saturation by saturation
+    var isFinished by mutableStateOf(false)
+}
+
+/**
+ * A [DrawModifier] which reads the [colorFilter] block during draw. If a [ColorFilter]
+ * is returned, the content is drawn in a layer using that color filter. Otherwise the content
+ * is drawn directly.
+ */
+internal class ColorFilterLayerDrawModifier(
+    private val colorFilter: () -> ColorFilter?
+) : DrawModifier {
+    private val paint by lazy(LazyThreadSafetyMode.NONE) { Paint() }
+
+    override fun ContentDrawScope.draw() {
+        val cf = colorFilter()
+        if (cf != null) {
+            // If we have a fade in color matrix, we draw our content using a layer.
+            // This allows us to maintain any ColorFilters passed in to AsyncImage.
+            // See https://github.com/google/accompanist/issues/262
+            drawIntoCanvas { canvas ->
+                paint.colorFilter = cf
+                canvas.saveLayer(bounds = size.toRect(), paint = paint)
+                drawContent()
+                canvas.restore()
+            }
+        } else {
+            // Otherwise we just directly draw our content
+            drawContent()
+        }
+    }
 }
 
 private enum class ImageLoadTransitionState { Loaded, Empty }
