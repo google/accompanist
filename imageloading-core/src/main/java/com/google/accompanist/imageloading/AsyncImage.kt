@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.RememberObserver
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -54,9 +53,11 @@ import androidx.compose.ui.unit.IntSize
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 
@@ -174,8 +175,10 @@ fun <R : Any> AsyncImage(
         ImageLoader(
             state = state,
             coroutineScope = coroutineScope,
-            shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
+            initialShouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         )
+    }.apply {
+        this.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
     }
 
     val cf = if (fadeIn && state.loadState is ImageLoadState.Success) {
@@ -195,11 +198,6 @@ fun <R : Any> AsyncImage(
     } else {
         // If fade in isn't enabled, just use the provided `colorFilter`
         colorFilter
-    }
-
-    // Update our ImageLoader with any parameter values changes
-    SideEffect {
-        imageLoader.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
     }
 
     val semantics = if (contentDescription != null) {
@@ -257,14 +255,10 @@ fun <R : Any> AsyncImageSuchDeprecated(
         ImageLoader(
             state = request,
             coroutineScope = coroutineScope,
-            shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
+            initialShouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         )
-    }
-
-    // NOTE: All of the things that we want to be able to change without recreating the whole object
-    // we want to do inside of here.
-    SideEffect {
-        imageLoader.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
+    }.apply {
+        this.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
     }
 
     Box(
@@ -279,13 +273,13 @@ fun <R : Any> AsyncImageSuchDeprecated(
 private class ImageLoader<R : Any>(
     val state: AsyncImageState<R>,
     val coroutineScope: CoroutineScope,
-    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean,
+    initialShouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean,
 ) : RememberObserver {
     // Our size to use when performing the image load request
     var requestSize by mutableStateOf<IntSize?>(null)
 
     // Our updated shouldRefetchOnSizeChange
-    var shouldRefetchOnSizeChange by mutableStateOf(shouldRefetchOnSizeChange)
+    var shouldRefetchOnSizeChange by mutableStateOf(initialShouldRefetchOnSizeChange)
 
     // Current request job
     private var job: Job? = null
@@ -309,19 +303,11 @@ private class ImageLoader<R : Any>(
     // subcomposition. For most usages subcomposition is fine, but AsyncImage's tend to be used
     // in large quantities which multiplies the cost.
     val layoutModifier = Modifier.layout { measurable, constraints ->
-        val newSize = IntSize(
+        // Update our request size. The observing flow below checks shouldRefetchOnSizeChange
+        requestSize = IntSize(
             width = if (constraints.hasBoundedWidth) constraints.maxWidth else -1,
             height = if (constraints.hasBoundedHeight) constraints.maxHeight else -1
         )
-
-        if (requestSize == null ||
-            (
-                requestSize != newSize &&
-                    this@ImageLoader.shouldRefetchOnSizeChange(state.loadState, newSize)
-                )
-        ) {
-            requestSize = newSize
-        }
 
         // No-op measure + layout
         val placeable = measurable.measure(constraints)
@@ -352,7 +338,10 @@ private class ImageLoader<R : Any>(
         job = coroutineScope.launch {
             combine(
                 state.requestFlow,
-                snapshotFlow { requestSize }.filterNotNull(),
+                snapshotFlow { requestSize }
+                    .filterNotNull()
+                    // We use filterSubsequent() so that the first emitted size skips the predicate
+                    .filterSubsequent { shouldRefetchOnSizeChange(state.loadState, it) },
                 transform = { request, size -> request to size }
             ).collectLatest { (request, size) ->
                 state.execute(request, size)
@@ -362,5 +351,22 @@ private class ImageLoader<R : Any>(
 
     companion object {
         private val EmptyPainter = ColorPainter(Color.Transparent)
+    }
+}
+
+/**
+ * A variant of [Flow.filter] which always emits the first value, then uses [predicate] as
+ * expected for subsequent emissions.
+ */
+private fun <T> Flow<T>.filterSubsequent(
+    predicate: suspend (T) -> Boolean
+): Flow<T> = flow {
+    var hasEmitted = false
+    collect { value ->
+        // Emit the value if this is the first value, or predicate returns true
+        if (!hasEmitted || predicate(value)) {
+            hasEmitted = true
+            return@collect emit(value)
+        }
     }
 }
