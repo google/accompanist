@@ -21,14 +21,14 @@ object Versions {
 }
 
 object Libs {
-    const val androidGradlePlugin = "com.android.tools.build:gradle:7.0.0-alpha10"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:7.0.0-alpha11"
 
     const val gradleMavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.13.0"
 
     const val junit = "junit:junit:4.13"
 
     object Kotlin {
-        private const val version = "1.4.31"
+        private const val version = "1.4.32"
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib:$version"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
 
@@ -62,8 +62,8 @@ object Libs {
         const val appcompat = "androidx.appcompat:appcompat:1.3.0-rc01"
 
         object Compose {
-            const val snapshot = ""
-            const val version = "1.0.0-beta03"
+            const val snapshot = "7249939"
+            const val version = "1.0.0-SNAPSHOT"
 
             @JvmStatic
             val snapshotUrl: String
