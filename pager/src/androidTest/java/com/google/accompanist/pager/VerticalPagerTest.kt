@@ -49,6 +49,7 @@ class VerticalPagerTest(
     // We don't use the Dp type due to https://youtrack.jetbrains.com/issue/KT-35523
     private val itemSpacingDp: Int,
     override val offscreenLimit: Int,
+    private val reverseLayout: Boolean,
 ) : PagerTest() {
     companion object {
         @JvmStatic
@@ -57,17 +58,22 @@ class VerticalPagerTest(
             // itemWidthFraction, verticalAlignment, offscreenLimit
 
             // Test typical full-width items
-            arrayOf(1f, Alignment.CenterVertically, 0, 2),
-            arrayOf(1f, Alignment.Top, 0, 2),
-            arrayOf(1f, Alignment.Bottom, 0, 2),
+            arrayOf(1f, Alignment.CenterVertically, 0, 2, false),
+            arrayOf(1f, Alignment.Top, 0, 2, false),
+            arrayOf(1f, Alignment.Bottom, 0, 2, false),
 
             // Full-width items with spacing
-            arrayOf(1f, Alignment.CenterVertically, 4, 2),
-            arrayOf(1f, Alignment.Top, 4, 2),
-            arrayOf(1f, Alignment.Bottom, 4, 2),
+            arrayOf(1f, Alignment.CenterVertically, 4, 2, false),
+            arrayOf(1f, Alignment.Top, 4, 2, false),
+            arrayOf(1f, Alignment.Bottom, 4, 2, false),
+
+            // Full-width items with reverseLayout = true
+            arrayOf(1f, Alignment.CenterVertically, 0, 2, true),
+            arrayOf(1f, Alignment.Top, 0, 2, true),
+            arrayOf(1f, Alignment.Bottom, 0, 2, true),
 
             // Test an increased offscreenLimit
-            arrayOf(1f, Alignment.CenterVertically, 0, 4),
+            arrayOf(1f, Alignment.CenterVertically, 0, 4, false),
         )
     }
 
@@ -78,7 +84,7 @@ class VerticalPagerTest(
         velocity: Float,
         distancePercentage: Float
     ): SemanticsNodeInteraction = swipeAcrossCenterWithVelocity(
-        distancePercentageY = distancePercentage,
+        distancePercentageY = if (reverseLayout) -distancePercentage else distancePercentage,
         velocity = velocity,
     )
 
@@ -102,9 +108,14 @@ class VerticalPagerTest(
         return assertWidthIsEqualTo(expectedItemSize)
             .assertHeightIsAtLeast(expectedItemSize)
             .assertLeftPositionInRootIsEqualTo(expectedLeft)
-            .assertTopPositionInRootIsEqualTo(
-                expectedFirstItemTop + ((expectedItemSize + itemSpacingDp.dp) * (page - currentPage))
-            )
+            .run {
+                val pageDelta = ((expectedItemSize + itemSpacingDp.dp) * (page - currentPage))
+                if (reverseLayout) {
+                    assertTopPositionInRootIsEqualTo(expectedFirstItemTop - pageDelta)
+                } else {
+                    assertTopPositionInRootIsEqualTo(expectedFirstItemTop + pageDelta)
+                }
+            }
     }
 
     override fun setPagerContent(pageCount: Int): PagerState {
@@ -115,6 +126,7 @@ class VerticalPagerTest(
                 state = pagerState,
                 offscreenLimit = offscreenLimit,
                 itemSpacing = itemSpacingDp.dp,
+                reverseLayout = reverseLayout,
                 verticalAlignment = verticalAlignment,
                 modifier = Modifier.fillMaxSize()
             ) { page ->
