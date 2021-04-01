@@ -236,8 +236,15 @@ internal fun Pager(
 ) {
     require(offscreenLimit >= 1) { "offscreenLimit is required to be >= 1" }
 
-    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-    val reverseDirection = if (isRtl) !reverseLayout else reverseLayout
+    // True if the scroll direction is RTL, false for LTR
+    val reverseDirection = when {
+        // If we're vertical, just use reverseLayout as-is
+        isVertical -> reverseLayout
+        // If we're horizontal in RTL, flip reverseLayout
+        LocalLayoutDirection.current == LayoutDirection.Rtl -> !reverseLayout
+        // Else (horizontal in LTR), use reverseLayout as-is
+        else -> reverseLayout
+    }
 
     val coroutineScope = rememberCoroutineScope()
     val semanticsAxisRange = remember(state, reverseDirection) {
@@ -331,9 +338,7 @@ internal fun Pager(
                 val xCenterOffset = horizontalAlignment.align(
                     size = placeable.width,
                     space = pagerWidth,
-                    // We pass in Ltr here since we use placeRelative below.  If we use the
-                    // actual layoutDirection, placeRelative() will negate any difference.
-                    layoutDirection = LayoutDirection.Ltr,
+                    layoutDirection = layoutDirection,
                 )
                 val yCenterOffset = verticalAlignment.align(
                     size = placeable.height,
@@ -356,9 +361,12 @@ internal fun Pager(
                     xItemOffset = (offsetForPage * (placeable.width + itemSpacingPx)).roundToInt()
                 }
 
-                placeable.placeRelative(
-                    x = xCenterOffset + xItemOffset,
-                    y = yCenterOffset + yItemOffset,
+                // We can't rely on placeRelative() since that only uses the LayoutDirection, and
+                // we need to cater for our reverseLayout param too. reverseDirection contains
+                // the resolved direction, so we use that to flip the offset direction...
+                placeable.place(
+                    x = xCenterOffset + if (reverseDirection) -xItemOffset else xItemOffset,
+                    y = yCenterOffset + if (reverseDirection) -yItemOffset else yItemOffset,
                 )
             }
         }
