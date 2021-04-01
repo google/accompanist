@@ -50,42 +50,58 @@ class HorizontalPagerTest(
     private val itemSpacingDp: Int,
     override val offscreenLimit: Int,
     private val layoutDirection: LayoutDirection,
+    private val reverseLayout: Boolean,
 ) : PagerTest() {
     companion object {
         @JvmStatic
         @Parameterized.Parameters
         fun data(): Collection<Array<Any>> = listOf(
-            // itemWidthFraction, horizontalAlignment, itemSpacing, offscreenLimit, layoutDirection,
+            // itemWidthFraction, horizontalAlignment, itemSpacing,
+            // offscreenLimit, layoutDirection, reverseLayout
 
             // Test typical full-width items
-            arrayOf(1f, Alignment.Start, 0, 2, LayoutDirection.Ltr),
-            arrayOf(1f, Alignment.CenterHorizontally, 0, 2, LayoutDirection.Ltr),
-            arrayOf(1f, Alignment.End, 0, 2, LayoutDirection.Ltr),
-            arrayOf(1f, Alignment.Start, 0, 2, LayoutDirection.Rtl),
-            arrayOf(1f, Alignment.CenterHorizontally, 0, 2, LayoutDirection.Rtl),
-            arrayOf(1f, Alignment.End, 0, 2, LayoutDirection.Rtl),
+            arrayOf(1f, Alignment.Start, 0, 2, LayoutDirection.Ltr, false),
+            arrayOf(1f, Alignment.CenterHorizontally, 0, 2, LayoutDirection.Ltr, false),
+            arrayOf(1f, Alignment.End, 0, 2, LayoutDirection.Ltr, false),
+            arrayOf(1f, Alignment.Start, 0, 2, LayoutDirection.Rtl, false),
+            arrayOf(1f, Alignment.CenterHorizontally, 0, 2, LayoutDirection.Rtl, false),
+            arrayOf(1f, Alignment.End, 0, 2, LayoutDirection.Rtl, false),
 
             // Full-width items with item spacing
-            arrayOf(1f, Alignment.Start, 4, 2, LayoutDirection.Ltr),
-            arrayOf(1f, Alignment.CenterHorizontally, 4, 2, LayoutDirection.Ltr),
-            arrayOf(1f, Alignment.End, 4, 2, LayoutDirection.Ltr),
-            arrayOf(1f, Alignment.Start, 4, 2, LayoutDirection.Rtl),
-            arrayOf(1f, Alignment.CenterHorizontally, 4, 2, LayoutDirection.Rtl),
-            arrayOf(1f, Alignment.End, 4, 2, LayoutDirection.Rtl),
+            arrayOf(1f, Alignment.Start, 4, 2, LayoutDirection.Ltr, false),
+            arrayOf(1f, Alignment.CenterHorizontally, 4, 2, LayoutDirection.Ltr, false),
+            arrayOf(1f, Alignment.End, 4, 2, LayoutDirection.Ltr, false),
+            arrayOf(1f, Alignment.Start, 4, 2, LayoutDirection.Rtl, false),
+            arrayOf(1f, Alignment.CenterHorizontally, 4, 2, LayoutDirection.Rtl, false),
+            arrayOf(1f, Alignment.End, 4, 2, LayoutDirection.Rtl, false),
+
+            // Full-width items with reverseLayout = true
+            arrayOf(1f, Alignment.Start, 0, 2, LayoutDirection.Ltr, true),
+            arrayOf(1f, Alignment.CenterHorizontally, 0, 2, LayoutDirection.Ltr, true),
+            arrayOf(1f, Alignment.End, 0, 2, LayoutDirection.Ltr, true),
+            arrayOf(1f, Alignment.Start, 0, 2, LayoutDirection.Rtl, true),
+            arrayOf(1f, Alignment.CenterHorizontally, 0, 2, LayoutDirection.Rtl, true),
+            arrayOf(1f, Alignment.End, 0, 2, LayoutDirection.Rtl, true),
 
             // Test an increased offscreenLimit
-            arrayOf(1f, Alignment.CenterHorizontally, 0, 4, LayoutDirection.Ltr),
-            arrayOf(1f, Alignment.CenterHorizontally, 0, 4, LayoutDirection.Rtl),
+            arrayOf(1f, Alignment.CenterHorizontally, 0, 4, LayoutDirection.Ltr, false),
+            arrayOf(1f, Alignment.CenterHorizontally, 0, 4, LayoutDirection.Rtl, false),
 
             // Test items with 80% widths
-            arrayOf(0.8f, Alignment.Start, 0, 2, LayoutDirection.Ltr),
-            arrayOf(0.8f, Alignment.CenterHorizontally, 0, 2, LayoutDirection.Ltr),
-            arrayOf(0.8f, Alignment.End, 0, 2, LayoutDirection.Ltr),
-            arrayOf(0.8f, Alignment.Start, 0, 2, LayoutDirection.Rtl),
-            arrayOf(0.8f, Alignment.CenterHorizontally, 0, 2, LayoutDirection.Rtl),
-            arrayOf(0.8f, Alignment.End, 0, 2, LayoutDirection.Rtl),
+            arrayOf(0.8f, Alignment.Start, 0, 2, LayoutDirection.Ltr, false),
+            arrayOf(0.8f, Alignment.CenterHorizontally, 0, 2, LayoutDirection.Ltr, false),
+            arrayOf(0.8f, Alignment.End, 0, 2, LayoutDirection.Ltr, false),
+            arrayOf(0.8f, Alignment.Start, 0, 2, LayoutDirection.Rtl, false),
+            arrayOf(0.8f, Alignment.CenterHorizontally, 0, 2, LayoutDirection.Rtl, false),
+            arrayOf(0.8f, Alignment.End, 0, 2, LayoutDirection.Rtl, false),
         )
     }
+
+    /**
+     * Returns the expected resolved layout direction for pages
+     */
+    private val reverseDirection: Boolean
+        get() = if (layoutDirection == LayoutDirection.Rtl) !reverseLayout else reverseLayout
 
     override val pageCount: Int
         get() = 10
@@ -94,10 +110,7 @@ class HorizontalPagerTest(
         velocity: Float,
         distancePercentage: Float
     ): SemanticsNodeInteraction = swipeAcrossCenterWithVelocity(
-        distancePercentageX = when (layoutDirection) {
-            LayoutDirection.Rtl -> -distancePercentage
-            else -> distancePercentage
-        },
+        distancePercentageX = if (reverseDirection) -distancePercentage else distancePercentage,
         velocity = velocity,
     )
 
@@ -132,14 +145,11 @@ class HorizontalPagerTest(
             .assertHeightIsAtLeast(expectedItemSize)
             .assertTopPositionInRootIsEqualTo(expectedTop)
             .run {
-                if (layoutDirection == LayoutDirection.Ltr) {
-                    assertLeftPositionInRootIsEqualTo(
-                        expectedFirstItemLeft + ((expectedItemSize + itemSpacingDp.dp) * (page - currentPage))
-                    )
-                } else { // layoutDirection = RTL
-                    assertLeftPositionInRootIsEqualTo(
-                        expectedFirstItemLeft - ((expectedItemSize + itemSpacingDp.dp) * (page - currentPage))
-                    )
+                val pageDelta = ((expectedItemSize + itemSpacingDp.dp) * (page - currentPage))
+                if (reverseDirection) {
+                    assertLeftPositionInRootIsEqualTo(expectedFirstItemLeft - pageDelta)
+                } else {
+                    assertLeftPositionInRootIsEqualTo(expectedFirstItemLeft + pageDelta)
                 }
             }
     }
@@ -153,6 +163,7 @@ class HorizontalPagerTest(
                 state = pagerState,
                 itemSpacing = itemSpacingDp.dp,
                 offscreenLimit = offscreenLimit,
+                reverseLayout = reverseLayout,
                 horizontalAlignment = horizontalAlignment,
                 modifier = Modifier.fillMaxSize()
             ) { page ->
