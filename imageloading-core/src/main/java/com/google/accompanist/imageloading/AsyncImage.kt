@@ -26,7 +26,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,6 +35,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
@@ -200,9 +200,6 @@ fun <R : Any> AsyncImage(
     // Update our ImageLoader with any parameter values changes
     SideEffect {
         imageLoader.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
-        imageLoader.contentScale = contentScale
-        imageLoader.colorFilter = cf
-        imageLoader.alignment = alignment
     }
 
     val semantics = if (contentDescription != null) {
@@ -212,14 +209,21 @@ fun <R : Any> AsyncImage(
         }
     } else Modifier
 
-    // NOTE: We build a modifier once, for each ImageLoader, which handles everything. We
+    // We build a modifier once, for each ImageLoader, which handles everything. We
     // ensure that no state objects are used in its construction, so that all state
     // observations are limited to the layout and drawing phases.
+    // We do read some values from the function parameters for the paint() modifier, but they are
+    // limited to less-commonly modified values (alignment + contentScale).
     Box(
         modifier
             .then(semantics)
             .clipToBounds()
-            .then(imageLoader.paintModifier)
+            .paint(
+                painter = imageLoader.painter,
+                alignment = alignment,
+                contentScale = contentScale,
+                colorFilter = cf,
+            )
             .then(imageLoader.layoutModifier)
     )
 }
@@ -283,14 +287,23 @@ private class ImageLoader<R : Any>(
     // Our updated shouldRefetchOnSizeChange
     var shouldRefetchOnSizeChange by mutableStateOf(shouldRefetchOnSizeChange)
 
-    // Properties used for drawing and layout
-    var colorFilter by mutableStateOf<ColorFilter?>(null)
-    var contentScale by mutableStateOf(ContentScale.Fit)
-    var alignment by mutableStateOf(Alignment.Center)
-    var alpha by mutableStateOf(1f)
-
     // Current request job
     private var job: Job? = null
+
+    // Our painter. We use a sub-class of [PainterModifier] which delegates the parameter
+    // values to be state reads. The properties will be read during layout and drawing, which means
+    // that any values changes will automatically re-trigger layout/draw as necessary.
+    // This allows us to avoid needing to recreate the modifier if any of the values change, which
+    // is what would need to happen if we used Modifier.paint().
+    val painter: Painter = DelegatingPainter {
+        state.loadState.let { state ->
+            when (state) {
+                is ImageLoadState.Success -> state.painter
+                is ImageLoadState.Error -> state.painter ?: EmptyPainter
+                else -> EmptyPainter
+            }
+        }
+    }
 
     // Our layout modifier, which allows us to receive the incoming constraints to update
     // requestSize. Using a modifier allows us to avoid using BoxWithConstraints and the cost of
@@ -316,38 +329,6 @@ private class ImageLoader<R : Any>(
         layout(width = placeable.width, height = placeable.height) {
             placeable.place(0, 0)
         }
-    }
-
-    // Our paint modifier. We use a sub-class of [PainterModifier] which delegates the parameter
-    // values to be state reads. The properties will be read during layout and drawing, which means
-    // that any values changes will automatically re-trigger layout/draw as necessary.
-    // This allows us to avoid needing to recreate the modifier if any of the values change, which
-    // is what would need to happen if we used Modifier.paint().
-    val paintModifier = object : PainterModifier() {
-        override val painter: Painter by derivedStateOf {
-            state.loadState.let { state ->
-                when (state) {
-                    is ImageLoadState.Success -> state.painter
-                    is ImageLoadState.Error -> state.painter ?: EmptyPainter
-                    else -> EmptyPainter
-                }
-            }
-        }
-
-        override val alignment: Alignment
-            get() = this@ImageLoader.alignment
-
-        override val contentScale: ContentScale
-            get() = this@ImageLoader.contentScale
-
-        override val colorFilter: ColorFilter?
-            get() = this@ImageLoader.colorFilter
-
-        override val alpha: Float
-            get() = this@ImageLoader.alpha
-
-        override val sizeToIntrinsics: Boolean
-            get() = true
     }
 
     override fun onAbandoned() {
