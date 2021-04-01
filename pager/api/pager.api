@@ -18,11 +18,6 @@ public abstract interface class com/google/accompanist/pager/PagerScope : androi
 	public abstract fun getCurrentPageOffset ()F
 }
 
-public final class com/google/accompanist/pager/PagerScope$DefaultImpls {
-	public static fun align (Lcom/google/accompanist/pager/PagerScope;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;)Landroidx/compose/ui/Modifier;
-	public static fun matchParentSize (Lcom/google/accompanist/pager/PagerScope;Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
-}
-
 public final class com/google/accompanist/pager/PagerState : androidx/compose/foundation/gestures/ScrollableState {
 	public static final field Companion Lcom/google/accompanist/pager/PagerState$Companion;
 	public fun <init> (IIF)V
