@@ -57,6 +57,13 @@ android {
         // Not much we can do about unsafe lint rules from libraries
         disable "UnsafeExperimentalUsageError", "UnsafeExperimentalUsageWarning"
     }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+        animationsDisabled true
+    }
 }
 
 dependencies {
