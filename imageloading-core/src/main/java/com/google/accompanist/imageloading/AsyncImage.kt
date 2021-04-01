@@ -35,6 +35,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
@@ -197,23 +198,22 @@ fun <R : Any> AsyncImage(
         }
     } else Modifier
 
-    // We only use the saveLayer path IF a ColorFilter has been provided to AsyncImage.
-    // A layer is needed for both the specified filter, and our fade in filter to be applied,
-    // but this is slow.
-    // Otherwise we return null, and rely on setting the color matrix on the paint below.
-    val fadeInLayerDrawModifier = ColorFilterLayerDrawModifier {
-        if (colorFilter != null) fadeInColorFilter else null
-    }
-
-    // Our paint modifier. We need to use a sub-class of PainterModifier to optimize our
-    // animating color filter, so that our instance performs state reads rather than needing to be
-    // recreated
-    val paintModifier = object : PainterModifier() {
-        override val painter: Painter get() = imageLoader.painter
-        override val colorFilter: ColorFilter? get() = colorFilter ?: fadeInColorFilter
-        override val alignment: Alignment get() = alignment
-        override val contentScale: ContentScale get() = contentScale
-    }
+    // Our painter. We use a DelegatingPainter which delegates the actual drawn/laid-out painter
+    // to a lambda block. That block will be called during layout and drawing, which means
+    // that any changes to `state.loadState` will automatically re-trigger layout/draw.
+    // This allows us to use a single Painter instance, and usually a single Modifier.paint().
+    val painter = AsyncImageDelegatingPainter(
+        painter = {
+            state.loadState.let { state ->
+                when (state) {
+                    is ImageLoadState.Success -> state.painter
+                    is ImageLoadState.Error -> state.painter ?: EmptyPainter
+                    else -> EmptyPainter
+                }
+            }
+        },
+        transitionColorFilter = { fadeInColorFilter }
+    )
 
     // We build a modifier once, for each ImageLoader, which handles everything. We
     // ensure that no state objects are used in its construction, so that all state
@@ -223,9 +223,13 @@ fun <R : Any> AsyncImage(
     Box(
         modifier
             .then(semantics)
-            .then(fadeInLayerDrawModifier)
             .clipToBounds()
-            .then(paintModifier)
+            .paint(
+                painter = painter,
+                alignment = alignment,
+                contentScale = contentScale,
+                colorFilter = colorFilter,
+            )
             .then(imageLoader.layoutModifier)
     )
 }
@@ -315,20 +319,6 @@ private class ImageLoader<R : Any>(
     // Current request job
     private var job: Job? = null
 
-    // Our painter. We use a DelegatingPainter which delegates the actual drawn/laid-out painter
-    // to a lambda block. That block will be called during layout and drawing, which means
-    // that any changes to `state.loadState` will automatically re-trigger layout/draw.
-    // This allows us to use a single Painter instance, and usually a single Modifier.paint().
-    val painter: Painter = DelegatingPainter {
-        state.loadState.let { state ->
-            when (state) {
-                is ImageLoadState.Success -> state.painter
-                is ImageLoadState.Error -> state.painter ?: EmptyPainter
-                else -> EmptyPainter
-            }
-        }
-    }
-
     // Our layout modifier, which allows us to receive the incoming constraints to update
     // requestSize. Using a modifier allows us to avoid using BoxWithConstraints and the cost of
     // subcomposition. For most usages subcomposition is fine, but AsyncImage's tend to be used
@@ -387,7 +377,7 @@ private object EmptyPainter : Painter() {
 }
 
 /**
- * A variant of [kotlinx.coroutines.flow.Flow.filter] which always emits the first value,
+ * A variant of [kotlinx.coroutines.flow.filter] which always emits the first value,
  * then uses [predicate] as expected for subsequent emissions.
  */
 private fun <T> Flow<T>.filterSubsequent(
