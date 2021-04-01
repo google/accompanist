@@ -290,11 +290,10 @@ private class ImageLoader<R : Any>(
     // Current request job
     private var job: Job? = null
 
-    // Our painter. We use a sub-class of [PainterModifier] which delegates the parameter
-    // values to be state reads. The properties will be read during layout and drawing, which means
-    // that any values changes will automatically re-trigger layout/draw as necessary.
-    // This allows us to avoid needing to recreate the modifier if any of the values change, which
-    // is what would need to happen if we used Modifier.paint().
+    // Our painter. We use a DelegatingPainter which delegates the actual drawn/laid-out painter
+    // to a lambda block. That block will be called during layout and drawing, which means
+    // that any changes to `state.loadState` will automatically re-trigger layout/draw.
+    // This allows us to use a single Painter instance, and usually a single Modifier.paint().
     val painter: Painter = DelegatingPainter {
         state.loadState.let { state ->
             when (state) {
