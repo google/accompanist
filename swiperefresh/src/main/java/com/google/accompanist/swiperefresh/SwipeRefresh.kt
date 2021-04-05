@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused")
-
 package com.google.accompanist.swiperefresh
 
 import androidx.compose.animation.core.Animatable
@@ -42,14 +40,11 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.Velocity
-import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
-import kotlin.math.roundToInt
+import kotlin.math.max
 
 private const val DragMultiplier = 0.5f
-private val IndicatorIdleOffset = 16.dp
-private val RefreshTriggerOffset = 60.dp
 
 @Stable
 class SwipeRefreshState {
@@ -87,11 +82,12 @@ fun SwipeRefresh(
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
     state: SwipeRefreshState = remember { SwipeRefreshState() },
+    indicatorSize: IndicatorSize = IndicatorSize.DEFAULT,
     indicator: @Composable SwipeRefreshIndicatorScope.() -> Unit = {
         SwipeRefreshIndicator(
             isRefreshing = isRefreshing,
-            currentOffset = indicatorOffset,
-            isSwipeInProgress = isSwipeInProgress
+            offset = indicatorOffset,
+            size = indicatorSize
         )
     },
     content: @Composable BoxScope.() -> Unit,
@@ -105,9 +101,11 @@ fun SwipeRefresh(
     val density = LocalDensity.current
     val coroutineScope = rememberCoroutineScope()
 
+    val refreshTriggerOffsetPx = with(LocalDensity.current) { indicatorSize.refreshTrigger.toPx() }
+
     LaunchedEffect(state.refreshState, density) {
         if (state.refreshState == SwipeRefreshState2.Refreshing) {
-            state.animateOffsetTo(with(density) { RefreshTriggerOffset.toPx() })
+            state.animateOffsetTo(refreshTriggerOffsetPx)
         } else if (state.refreshState == SwipeRefreshState2.Idle) {
             state.animateOffsetTo(0f)
         }
@@ -121,7 +119,7 @@ fun SwipeRefresh(
             ): Offset = when {
                 source == NestedScrollSource.Drag && available.y < 0 -> {
                     val drag = available.y * DragMultiplier
-                    val distanceAvailable = maxOf(drag, -state.indicatorOffset)
+                    val distanceAvailable = max(drag, -state.indicatorOffset)
                     if (distanceAvailable.absoluteValue > 0.5f) {
                         coroutineScope.launch {
                             state.dragOffsetBy(distanceAvailable)
@@ -151,18 +149,17 @@ fun SwipeRefresh(
             }
 
             override suspend fun onPreFling(available: Velocity): Velocity {
-                val trigger = with(density) { RefreshTriggerOffset.toPx() }
                 return when {
                     state.refreshState == SwipeRefreshState2.Refreshing -> {
                         // If we're currently refreshing, just animate back to the resting position
                         coroutineScope.launch {
-                            state.animateOffsetTo(trigger)
+                            state.animateOffsetTo(refreshTriggerOffsetPx)
                         }
                         // Consume the entire velocity
                         available
                     }
                     state.refreshState == SwipeRefreshState2.Dragging &&
-                        state.indicatorOffset >= trigger -> {
+                        state.indicatorOffset >= refreshTriggerOffsetPx -> {
                         // If we're dragging and scrolled past the trigger point, refresh!
                         onRefresh()
                         // Consume the entire velocity
@@ -192,7 +189,14 @@ fun SwipeRefresh(
 
         Box(
             Modifier
-                .offset { IntOffset(x = 0, y = state.indicatorOffset.roundToInt()) }
+                .offset {
+                    val slingshot = calculateSlingshot(
+                        offsetY = state.indicatorOffset,
+                        maxOffsetY = refreshTriggerOffsetPx,
+                        height = indicatorHeight
+                    )
+                    IntOffset(x = 0, y = slingshot.offset)
+                }
                 .offset { IntOffset(x = 0, y = -indicatorHeight) }
                 .onSizeChanged { indicatorHeight = it.height }
                 .align(Alignment.TopCenter)
