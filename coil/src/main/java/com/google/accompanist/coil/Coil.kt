@@ -36,6 +36,7 @@ import coil.ImageLoader
 import coil.imageLoader
 import coil.request.ImageRequest
 import coil.request.ImageResult
+import coil.size.Precision
 import com.google.accompanist.imageloading.AsyncImageState
 import com.google.accompanist.imageloading.DataSource
 import com.google.accompanist.imageloading.ImageLoadState
@@ -129,12 +130,17 @@ class CoilAsyncImageState(
             // If we've been given an ImageRequest instance, use it...
             is ImageRequest -> request.newBuilder()
             // Otherwise we construct a request from the data
-            else -> ImageRequest.Builder(context).data(request)
-        }
+            else -> {
+                ImageRequest.Builder(context)
+                    .data(request)
+                    // We force in-exact precision as AUTOMATIC only works when used from views.
+                    // INEXACT is correct as we can scale the result appropriately.
+                    .precision(Precision.INEXACT)
+            }
+        }.apply {
             // Apply the request builder
-            .apply { requestBuilder?.invoke(this, size) }
-            // And build the request
-            .build()
+            requestBuilder?.invoke(this, size)
+        }.build()
 
         val sizedRequest = when {
             // If the request has a size resolver set we just execute the request as-is
