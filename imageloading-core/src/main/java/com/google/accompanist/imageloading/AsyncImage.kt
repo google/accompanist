@@ -187,7 +187,11 @@ fun <R : Any> AsyncImage(
     // This runs our fade in animation
     val fadeInColorFilter by fadeInAsState(
         imageState = state,
-        enabled = fadeIn,
+        enabled = { result ->
+            // We run the fade in animation is the result is loaded from disk/network. This allows
+            // us to approximate only running the animation on 'first load'
+            fadeIn && result is ImageLoadState.Success && result.source != DataSource.MEMORY
+        },
         durationMs = fadeInDurationMs
     )
 
@@ -237,14 +241,15 @@ fun <R : Any> AsyncImage(
 @Composable
 private fun fadeInAsState(
     imageState: AsyncImageState<*>,
-    enabled: Boolean,
+    enabled: (ImageLoadState) -> Boolean,
     durationMs: Int,
 ): State<ColorFilter?> {
     val colorFilter = remember(imageState.internalRequest) { mutableStateOf<ColorFilter?>(null) }
 
-    if (enabled && imageState.loadState is ImageLoadState.Success) {
+    val loadState = imageState.loadState
+    if (enabled(loadState)) {
         val colorMatrix = remember { ColorMatrix() }
-        val fadeInTransition = updateFadeInTransition(imageState, durationMs = durationMs)
+        val fadeInTransition = updateFadeInTransition(loadState, durationMs)
 
         colorFilter.value = if (!fadeInTransition.isFinished) {
             colorMatrix.apply {
@@ -256,6 +261,9 @@ private fun fadeInAsState(
             // If the fade-in isn't running, reset the color matrix
             null
         }
+    } else {
+        // If the fade in is not enabled, we don't use a fade in transition
+        colorFilter.value = null
     }
 
     return colorFilter
