@@ -95,7 +95,7 @@ internal class CircularProgressPainter : Painter() {
         }
     }
 
-    private fun DrawScope.drawArrow(startAngle: Float, sweepAngle: Float, bounds: Rect)  {
+    private fun DrawScope.drawArrow(startAngle: Float, sweepAngle: Float, bounds: Rect) {
         arrow.reset()
         arrow.moveTo(0f, 0f)
         arrow.lineTo(

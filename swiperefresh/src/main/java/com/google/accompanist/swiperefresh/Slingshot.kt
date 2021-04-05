@@ -42,8 +42,10 @@ internal fun calculateSlingshot(
     val tensionSlingshotPercent = max(
         0f, min(extraOffset, slingshotDistance * 2) / slingshotDistance
     )
-    val tensionPercent = ((tensionSlingshotPercent / 4)
-        - (tensionSlingshotPercent / 4).pow(2)) * 2
+    val tensionPercent = (
+        (tensionSlingshotPercent / 4) -
+            (tensionSlingshotPercent / 4).pow(2)
+        ) * 2
     val extraMove = slingshotDistance * tensionPercent * 2
     val targetY = height + ((slingshotDistance * offsetPercent) + extraMove).toInt()
     val offset = targetY - height
