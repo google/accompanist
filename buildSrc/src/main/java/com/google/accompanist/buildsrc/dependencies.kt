@@ -104,7 +104,7 @@ object Libs {
     }
 
     object Coil {
-        private const val version = "1.0.0"
+        private const val version = "1.1.1"
         const val coil = "io.coil-kt:coil:$version"
         const val gif = "io.coil-kt:coil-gif:$version"
     }
