@@ -11,12 +11,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          # 0 == fetch all history history
+          fetch-depth: '0'
+          ref: 'snapshot'
         
       - run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           git fetch origin
-          git checkout main
-          git checkout snapshot
-          git merge main --no-edit
+          git merge origin/main --no-edit
           git push
