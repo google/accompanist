@@ -1,0 +1,24 @@
+name: main to snapshot auto merger
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  automerge:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          # 0 == fetch all history history
+          fetch-depth: '0'
+          ref: 'snapshot'
+        
+      - run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git fetch origin
+          git merge origin/main --no-edit
+          git push
