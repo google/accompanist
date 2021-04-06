@@ -236,8 +236,15 @@ internal fun Pager(
 ) {
     require(offscreenLimit >= 1) { "offscreenLimit is required to be >= 1" }
 
-    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-    val reverseDirection = if (isRtl) !reverseLayout else reverseLayout
+    // True if the scroll direction is RTL, false for LTR
+    val reverseDirection = when {
+        // If we're vertical, just use reverseLayout as-is
+        isVertical -> reverseLayout
+        // If we're horizontal in RTL, flip reverseLayout
+        LocalLayoutDirection.current == LayoutDirection.Rtl -> !reverseLayout
+        // Else (horizontal in LTR), use reverseLayout as-is
+        else -> reverseLayout
+    }
 
     val coroutineScope = rememberCoroutineScope()
     val semanticsAxisRange = remember(state, reverseDirection) {
@@ -307,26 +314,35 @@ internal fun Pager(
             }
         },
     ) { measurables, constraints ->
-        layout(constraints.maxWidth, constraints.maxHeight) {
+        if (measurables.isEmpty()) {
+            // If we have no measurables, no-op and return
+            return@Layout layout(constraints.minWidth, constraints.minHeight) {}
+        }
+
+        val childConstraints = constraints.copy(minWidth = 0, minHeight = 0)
+
+        val placeables = measurables.map { it.measure(childConstraints) }
+        // Our pager width/height is the maximum pager content width/height, and coerce
+        // each by our minimum constraints
+        val pagerWidth = placeables.maxOf { it.width }.coerceAtLeast(constraints.minWidth)
+        val pagerHeight = placeables.maxOf { it.height }.coerceAtLeast(constraints.minHeight)
+
+        layout(width = pagerWidth, height = pagerHeight) {
             val currentPage = state.currentPage
             val offset = state.currentPageOffset
-            val childConstraints = constraints.copy(minWidth = 0, minHeight = 0)
             val itemSpacingPx = itemSpacing.roundToPx()
 
-            measurables.forEach {
-                val placeable = it.measure(childConstraints)
-                val page = it.page
+            placeables.forEachIndexed { index, placeable ->
+                val page = measurables[index].page
 
                 val xCenterOffset = horizontalAlignment.align(
                     size = placeable.width,
-                    space = constraints.maxWidth,
-                    // We pass in Ltr here since we use placeRelative below.  If we use the
-                    // actual layoutDirection, placeRelative() will negate any difference.
-                    layoutDirection = LayoutDirection.Ltr,
+                    space = pagerWidth,
+                    layoutDirection = layoutDirection,
                 )
                 val yCenterOffset = verticalAlignment.align(
                     size = placeable.height,
-                    space = constraints.maxHeight
+                    space = pagerHeight,
                 )
 
                 var yItemOffset = 0
@@ -345,9 +361,12 @@ internal fun Pager(
                     xItemOffset = (offsetForPage * (placeable.width + itemSpacingPx)).roundToInt()
                 }
 
-                placeable.placeRelative(
-                    x = xCenterOffset + xItemOffset,
-                    y = yCenterOffset + yItemOffset,
+                // We can't rely on placeRelative() since that only uses the LayoutDirection, and
+                // we need to cater for our reverseLayout param too. reverseDirection contains
+                // the resolved direction, so we use that to flip the offset direction...
+                placeable.place(
+                    x = xCenterOffset + if (reverseDirection) -xItemOffset else xItemOffset,
+                    y = yCenterOffset + if (reverseDirection) -yItemOffset else yItemOffset,
                 )
             }
         }

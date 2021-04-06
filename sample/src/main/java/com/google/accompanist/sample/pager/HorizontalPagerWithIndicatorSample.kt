@@ -92,7 +92,7 @@ private fun Sample() {
                 state = pagerState,
                 // We increase the offscreen limit, to allow pre-loading of images
                 offscreenLimit = 2,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f).fillMaxWidth(),
             ) { page ->
                 Box {
                     // Our page content, displaying a random image
