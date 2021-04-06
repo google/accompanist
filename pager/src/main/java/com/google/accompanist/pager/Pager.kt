@@ -249,7 +249,7 @@ internal fun Pager(
     val coroutineScope = rememberCoroutineScope()
     val semanticsAxisRange = remember(state, reverseDirection) {
         ScrollAxisRange(
-            value = { state.currentPage + state.currentPageOffset },
+            value = { state.currentLayoutPage + state.currentLayoutPageOffset },
             maxValue = { state.lastPageIndex.toFloat() },
         )
     }
@@ -284,14 +284,15 @@ internal fun Pager(
             .then(scrollable)
             .clipToBounds(),
         content = {
-            val firstPage = (state.currentPage - offscreenLimit).coerceAtLeast(0)
-            val lastPage = (state.currentPage + offscreenLimit).coerceAtMost(state.lastPageIndex)
+            val firstPage = (state.currentLayoutPage - offscreenLimit).coerceAtLeast(0)
+            val lastPage = (state.currentLayoutPage + offscreenLimit).coerceAtMost(state.lastPageIndex)
 
             if (DebugLog) {
                 Log.d(
                     LogTag,
                     "Content: firstPage:$firstPage, " +
-                        "current:${state.currentPage}, " +
+                        "layoutPage:${state.currentLayoutPage}, " +
+                        "currentPage:${state.currentPage}, " +
                         "lastPage:$lastPage"
                 )
             }
@@ -328,8 +329,8 @@ internal fun Pager(
         val pagerHeight = placeables.maxOf { it.height }.coerceAtLeast(constraints.minHeight)
 
         layout(width = pagerWidth, height = pagerHeight) {
-            val currentPage = state.currentPage
-            val offset = state.currentPageOffset
+            val layoutPage = state.currentLayoutPage
+            val offset = state.currentLayoutPageOffset
             val itemSpacingPx = itemSpacing.roundToPx()
 
             placeables.forEachIndexed { index, placeable ->
@@ -347,16 +348,16 @@ internal fun Pager(
 
                 var yItemOffset = 0
                 var xItemOffset = 0
-                val offsetForPage = page - currentPage - offset
+                val offsetForPage = page - layoutPage - offset
 
                 if (isVertical) {
-                    if (currentPage == page) {
-                        state.pageSize = placeable.height
+                    if (layoutPage == page) {
+                        state.currentLayoutPageSize = placeable.height
                     }
                     yItemOffset = (offsetForPage * (placeable.height + itemSpacingPx)).roundToInt()
                 } else {
-                    if (currentPage == page) {
-                        state.pageSize = placeable.width
+                    if (layoutPage == page) {
+                        state.currentLayoutPageSize = placeable.width
                     }
                     xItemOffset = (offsetForPage * (placeable.width + itemSpacingPx)).roundToInt()
                 }
@@ -395,11 +396,8 @@ private class PagerScopeImpl(
     private val boxScope: BoxScope,
     private val state: PagerState,
 ) : PagerScope, BoxScope by boxScope {
-    override val currentPage: Int
-        get() = state.currentPage
-
-    override val currentPageOffset: Float
-        get() = state.currentPageOffset
+    override val currentPage: Int get() = state.currentPage
+    override val currentPageOffset: Float get() = state.currentPageOffset
 }
 
 /**

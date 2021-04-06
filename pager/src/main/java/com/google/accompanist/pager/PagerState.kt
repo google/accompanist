@@ -41,10 +41,6 @@ import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filterNot
-import kotlinx.coroutines.flow.map
 import kotlin.math.absoluteValue
 import kotlin.math.floor
 import kotlin.math.roundToInt
@@ -96,14 +92,30 @@ class PagerState(
 ) : ScrollableState {
     private var _pageCount by mutableStateOf(pageCount)
     private var _currentPage by mutableStateOf(currentPage)
-    private val _currentPageOffset = mutableStateOf(currentPageOffset)
-    internal var pageSize by mutableStateOf(0)
+    private var _currentLayoutPageOffset by mutableStateOf(currentPageOffset)
+
+    internal var currentLayoutPage by mutableStateOf(currentPage)
+        private set
+
+    internal var currentLayoutPageOffset: Float
+        get() = _currentLayoutPageOffset
+        private set(value) {
+            _currentLayoutPageOffset = value.coerceIn(
+                minimumValue = 0f,
+                maximumValue = if (currentLayoutPage == lastPageIndex) 0f else 1f,
+            )
+        }
+
+    internal var currentLayoutPageSize by mutableStateOf(0)
 
     /**
      * The current scroll position, as a float value between `0 until pageSize`
      */
-    private val absolutePosition: Float
-        get() = currentPage + currentPageOffset
+    private inline val absolutePosition: Float
+        get() = currentLayoutPage + currentLayoutPageOffset
+
+    internal inline val lastPageIndex: Int
+        get() = (pageCount - 1).coerceAtLeast(0)
 
     /**
      * The ScrollableController instance. We keep it as we need to call stopAnimation on it once
@@ -112,7 +124,7 @@ class PagerState(
     private val scrollableState = ScrollableState { deltaPixels ->
         // scrollByOffset expects values in an opposite sign to what we're passed, so we need
         // to negate the value passed in, and the value returned.
-        val size = pageSize.coerceAtLeast(1)
+        val size = currentLayoutPageSize.coerceAtLeast(1)
         -scrollByOffset(-deltaPixels / size) * size
     }
 
@@ -134,11 +146,9 @@ class PagerState(
             currentPage = currentPage.coerceIn(0, lastPageIndex)
         }
 
-    internal val lastPageIndex: Int
-        get() = (pageCount - 1).coerceAtLeast(0)
-
     /**
-     * The index of the currently selected page.
+     * The index of the currently selected page. This may not be the page which is
+     * currently displayed on screen.
      *
      * To update the scroll position, use [scrollToPage] or [animateScrollToPage].
      */
@@ -147,6 +157,8 @@ class PagerState(
         get() = _currentPage
         private set(value) {
             _currentPage = value.coerceIn(0, lastPageIndex)
+            // If the current page is changed, update the layout page too
+            currentLayoutPage = _currentPage
         }
 
     /**
@@ -154,14 +166,26 @@ class PagerState(
      *
      * To update the scroll position, use [scrollToPage] or [animateScrollToPage].
      */
-    @get:FloatRange(from = 0.0, to = 1.0)
-    var currentPageOffset: Float
-        get() = _currentPageOffset.value
-        private set(value) {
-            _currentPageOffset.value = value.coerceIn(
-                minimumValue = 0f,
-                maximumValue = if (currentPage == lastPageIndex) 0f else 1f,
-            )
+    val currentPageOffset: Float
+        get() = absolutePosition - currentPage
+
+    /**
+     * The target page for any on-going animations.
+     */
+    private var _animationTargetPage: Int? by mutableStateOf(null)
+
+    /**
+     * The target page for any on-going animations or scrolls by the user.
+     * Returns null if a scroll or animation is not currently in progress.
+     */
+    val targetPage: Int?
+        get() = _animationTargetPage ?: when {
+            // If a scroll isn't in progress, return null
+            !isScrollInProgress -> null
+            // If we're offset towards the start, guess the previous page
+            currentPageOffset < 0 -> (currentPage - 1).coerceAtLeast(0)
+            // If we're offset towards the end, guess the next page
+            else -> (currentPage + 1).coerceAtMost(lastPageIndex)
         }
 
     /**
@@ -217,17 +241,25 @@ class PagerState(
         // We don't specifically use the ScrollScope's scrollBy(), but
         // we do want to use it's mutex
         scroll {
-            currentPage = page
-            currentPageOffset = pageOffset
+            currentLayoutPage = page
+            currentLayoutPageOffset = pageOffset
         }
     }
 
     private fun snapToNearestPage() {
         if (DebugLog) {
-            Log.d(LogTag, "snapToNearestPage. currentPage:$currentPage, offset:$currentPageOffset")
+            Log.d(
+                LogTag,
+                "snapToNearestPage. page:$currentLayoutPage, offset:$currentLayoutPageOffset"
+            )
         }
-        currentPage += currentPageOffset.roundToInt()
-        currentPageOffset = 0f
+        // Snap the layout
+        currentLayoutPage += currentLayoutPageOffset.roundToInt()
+        currentLayoutPageOffset = 0f
+        // Then update the current page to match
+        currentPage = currentLayoutPage
+        // Clear the target page
+        _animationTargetPage = null
     }
 
     private suspend fun animateToPage(
@@ -236,34 +268,37 @@ class PagerState(
         animationSpec: AnimationSpec<Float> = spring(),
         initialVelocity: Float = 0f,
     ) {
+        // Set our target page
+        _animationTargetPage = page
+
         animate(
             initialValue = absolutePosition,
             targetValue = page + pageOffset,
             initialVelocity = initialVelocity,
             animationSpec = animationSpec
         ) { value, _ ->
-            updateFromScrollPosition(value)
+            updateLayoutForScrollPosition(value)
         }
         snapToNearestPage()
     }
 
     private fun determineSpringBackOffset(
         velocity: Float,
-        offset: Float = currentPageOffset,
-    ): Float = when {
+        offset: Float = currentLayoutPageOffset,
+    ): Int = when {
         // If the velocity is greater than 1 page per second (velocity is px/s), spring
         // in the relevant direction
-        velocity >= pageSize -> 1f
-        velocity <= -pageSize -> 0f
+        velocity >= currentLayoutPageSize -> 1
+        velocity <= -currentLayoutPageSize -> 0
         // If the offset exceeds the scroll threshold (in either direction), we want to
         // move to the next/previous item
-        offset < 0.5f -> 0f
-        else -> 1f
+        offset < 0.5f -> 0
+        else -> 1
     }
 
-    private fun updateFromScrollPosition(position: Float) {
-        currentPage = floor(position).toInt()
-        currentPageOffset = position - currentPage
+    private fun updateLayoutForScrollPosition(position: Float) {
+        currentLayoutPage = floor(position).toInt()
+        currentLayoutPageOffset = position - currentLayoutPage
     }
 
     /**
@@ -276,13 +311,13 @@ class PagerState(
     private fun scrollByOffset(deltaOffset: Float): Float {
         val current = absolutePosition
         val target = (current + deltaOffset).coerceIn(0f, lastPageIndex.toFloat())
-        updateFromScrollPosition(target)
+        updateLayoutForScrollPosition(target)
 
         if (DebugLog) {
             Log.d(
                 LogTag,
                 "scrollByOffset. delta:%.4f, new-page:%d, new-offset:%.4f"
-                    .format(deltaOffset, currentPage, currentPageOffset),
+                    .format(deltaOffset, currentLayoutPage, currentLayoutPageOffset),
             )
         }
 
@@ -309,15 +344,20 @@ class PagerState(
     ): Float {
         // We calculate the target offset using pixels, rather than using the offset
         val targetOffset = decayAnimationSpec.calculateTargetValue(
-            initialValue = currentPageOffset * pageSize,
+            initialValue = currentLayoutPageOffset * currentLayoutPageSize,
             initialVelocity = initialVelocity
-        ) / pageSize
+        ) / currentLayoutPageSize
 
         if (DebugLog) {
             Log.d(
                 LogTag,
                 "fling. velocity:%.4f, page: %d, offset:%.4f, targetOffset:%.4f"
-                    .format(initialVelocity, currentPage, currentPageOffset, targetOffset)
+                    .format(
+                        initialVelocity,
+                        currentLayoutPage,
+                        currentLayoutPageOffset,
+                        targetOffset
+                    )
             )
         }
 
@@ -328,13 +368,15 @@ class PagerState(
         if (targetOffset.absoluteValue >= 1) {
             // Animate with the decay animation spec using the fling velocity
 
-            val targetPage = when {
-                targetOffset > 0 -> (currentPage + 1).coerceAtMost(lastPageIndex)
-                else -> currentPage
+            val target = when {
+                targetOffset > 0 -> (currentLayoutPage + 1).coerceAtMost(lastPageIndex)
+                else -> currentLayoutPage
             }
+            // Update the external state too
+            _animationTargetPage = target
 
             AnimationState(
-                initialValue = currentPageOffset * pageSize,
+                initialValue = currentLayoutPageOffset * currentLayoutPageSize,
                 initialVelocity = initialVelocity
             ).animateDecay(decayAnimationSpec) {
                 if (DebugLog) {
@@ -349,35 +391,38 @@ class PagerState(
                 lastVelocity = velocity
 
                 // Now scroll..
-                val coerced = value.coerceIn(0f, pageSize.toFloat())
-                scrollBy(coerced - (currentPageOffset * pageSize))
+                val coerced = value.coerceIn(0f, currentLayoutPageSize.toFloat())
+                scrollBy(coerced - (currentLayoutPageOffset * currentLayoutPageSize))
 
                 // If we've scroll our target page (or beyond it), cancel the animation
                 val pastStartBound = initialVelocity < 0 &&
-                    (currentPage < targetPage || (currentPage == targetPage && currentPageOffset == 0f))
+                    (currentLayoutPage < target || (currentLayoutPage == target && currentLayoutPageOffset == 0f))
                 val pastEndBound = initialVelocity > 0 &&
-                    (currentPage > targetPage || (currentPage == targetPage && currentPageOffset > 0f))
+                    (currentLayoutPage > target || (currentLayoutPage == target && currentLayoutPageOffset > 0f))
 
                 if (pastStartBound || pastEndBound) {
                     // If we reach the bounds of the allowed offset, cancel the animation
                     cancelAnimation()
-                    currentPage = targetPage
-                    currentPageOffset = 0f
+                    currentLayoutPage = target
+                    currentLayoutPageOffset = 0f
                 }
             }
         } else {
             // Otherwise we animate to the next item, or spring-back depending on the offset
-            val targetPosition = currentPage + determineSpringBackOffset(
+            val target = currentLayoutPage + determineSpringBackOffset(
                 velocity = initialVelocity,
                 offset = targetOffset
             )
+            // Update the external state too
+            _animationTargetPage = target
+
             animate(
-                initialValue = absolutePosition * pageSize,
-                targetValue = targetPosition * pageSize,
+                initialValue = absolutePosition * currentLayoutPageSize,
+                targetValue = target.toFloat() * currentLayoutPageSize,
                 initialVelocity = initialVelocity,
                 animationSpec = snapAnimationSpec,
             ) { value, velocity ->
-                scrollBy(value - (absolutePosition * pageSize))
+                scrollBy(value - (absolutePosition * currentLayoutPageSize))
                 // Keep track of velocity
                 lastVelocity = velocity
             }
@@ -443,18 +488,17 @@ class PagerState(
 }
 
 /**
- * A flow which emits the [PagerState.currentPage] as it changes due to a scroll completing.
- *
- * This flow is not meant to be used for updating any UI within the attached [HorizontalPager]
- * or [VerticalPager]. For that use-case, you should read
- * [PagerScope.currentPage] and [PagerScope.currentPageOffset] from the content scope.
+ * A flow which emits the currently selected page.
  *
  * @sample com.google.accompanist.sample.pager.PageChangesSample
  */
+@Deprecated(
+    message = "Use snapshotFlow directly",
+    ReplaceWith(
+        expression = "snapshotFlow { this.currentPage }",
+        "androidx.compose.runtime.snapshotFlow"
+    )
+)
 @ExperimentalPagerApi
-inline val PagerState.pageChanges: Flow<Int>
-    get() = snapshotFlow { isScrollInProgress }
-        // Only emit when the scroll has finished
-        .filterNot { it }
-        .map { currentPage }
-        .distinctUntilChanged()
+inline val PagerState.pageChanges
+    get() = snapshotFlow { currentPage }
