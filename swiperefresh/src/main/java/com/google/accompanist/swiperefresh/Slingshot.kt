@@ -25,6 +25,8 @@ import kotlin.math.pow
  * A utility function that calculates various aspects of 'slingshot' behavior.
  * Adapted from SwipeRefreshLayout#moveSpinner method.
  *
+ * TODO: Investigate replacing this with a spring.
+ *
  * @param offsetY The current y offset.
  * @param maxOffsetY The max y offset.
  * @param height The height of the item to slingshot.
