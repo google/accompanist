@@ -137,9 +137,10 @@ abstract class PagerTest {
         assertPagerLayout(currentPage = 0)
     }
 
+    @Suppress("DEPRECATION") // pageChanges
     @OptIn(FlowPreview::class)
     @Test
-    fun pageChangesSample() = suspendTest {
+    fun pageChanges() = suspendTest {
         val pagerState = setPagerContent(pageCount = 10)
 
         // Collect the pageChanges flow into a Channel, allowing us to poll values

@@ -28,6 +28,7 @@ public final class com/google/accompanist/pager/PagerState : androidx/compose/fo
 	public final fun getCurrentPage ()I
 	public final fun getCurrentPageOffset ()F
 	public final fun getPageCount ()I
+	public final fun getTargetPage ()Ljava/lang/Integer;
 	public fun isScrollInProgress ()Z
 	public fun scroll (Landroidx/compose/foundation/MutatePriority;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun scrollToPage (IFLkotlin/coroutines/Continuation;)Ljava/lang/Object;
