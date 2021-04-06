@@ -5,9 +5,37 @@ public final class com/google/accompanist/swiperefresh/ComposableSingletons$Swip
 	public final fun getLambda-1$swiperefresh_release ()Lkotlin/jvm/functions/Function2;
 }
 
+public final class com/google/accompanist/swiperefresh/IndicatorSize {
+	public static final field $stable I
+	public static final field Companion Lcom/google/accompanist/swiperefresh/IndicatorSize$Companion;
+	public synthetic fun <init> (FFFFFFLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-D9Ej5fM ()F
+	public final fun component2-D9Ej5fM ()F
+	public final fun component3-D9Ej5fM ()F
+	public final fun component4-D9Ej5fM ()F
+	public final fun component5-D9Ej5fM ()F
+	public final fun component6-D9Ej5fM ()F
+	public final fun copy-erZIsFM (FFFFFF)Lcom/google/accompanist/swiperefresh/IndicatorSize;
+	public static synthetic fun copy-erZIsFM$default (Lcom/google/accompanist/swiperefresh/IndicatorSize;FFFFFFILjava/lang/Object;)Lcom/google/accompanist/swiperefresh/IndicatorSize;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getArcRadius-D9Ej5fM ()F
+	public final fun getArrowHeight-D9Ej5fM ()F
+	public final fun getArrowWidth-D9Ej5fM ()F
+	public final fun getRefreshTrigger-D9Ej5fM ()F
+	public final fun getSize-D9Ej5fM ()F
+	public final fun getStrokeWidth-D9Ej5fM ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/google/accompanist/swiperefresh/IndicatorSize$Companion {
+	public final fun getDEFAULT ()Lcom/google/accompanist/swiperefresh/IndicatorSize;
+	public final fun getLARGE ()Lcom/google/accompanist/swiperefresh/IndicatorSize;
+}
+
 public final class com/google/accompanist/swiperefresh/SwipeRefreshIndicatorKt {
 	public static final fun PreviewSwipeRefreshIndicator (Landroidx/compose/runtime/Composer;I)V
-	public static final fun SwipeRefreshIndicator-q9LK7_k (ZFZJFLandroidx/compose/runtime/Composer;II)V
+	public static final fun SwipeRefreshIndicator-7eC1SuE (ZFZZJJLandroidx/compose/foundation/shape/CornerBasedShape;Lcom/google/accompanist/swiperefresh/IndicatorSize;FLandroidx/compose/runtime/Composer;II)V
 }
 
 public abstract interface class com/google/accompanist/swiperefresh/SwipeRefreshIndicatorScope {
@@ -17,7 +45,7 @@ public abstract interface class com/google/accompanist/swiperefresh/SwipeRefresh
 }
 
 public final class com/google/accompanist/swiperefresh/SwipeRefreshKt {
-	public static final fun SwipeRefresh (ZLkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Lcom/google/accompanist/swiperefresh/SwipeRefreshState;Lkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+	public static final fun SwipeRefresh (ZLkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Lcom/google/accompanist/swiperefresh/SwipeRefreshState;Lcom/google/accompanist/swiperefresh/IndicatorSize;Lkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
 }
 
 public final class com/google/accompanist/swiperefresh/SwipeRefreshState {
