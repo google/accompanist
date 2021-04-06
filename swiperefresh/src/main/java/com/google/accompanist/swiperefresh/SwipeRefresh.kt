@@ -43,7 +43,7 @@ import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 import kotlin.math.max
 
-private const val DragMultiplier = 0.5f
+private const val DRAG_MULTIPLIER = 0.5f
 
 @Stable
 class SwipeRefreshState {
@@ -118,7 +118,7 @@ fun SwipeRefresh(
                 source: NestedScrollSource
             ): Offset = when {
                 source == NestedScrollSource.Drag && available.y < 0 -> {
-                    val drag = available.y * DragMultiplier
+                    val drag = available.y * DRAG_MULTIPLIER
                     val distanceAvailable = max(drag, -state.indicatorOffset)
                     if (distanceAvailable.absoluteValue > 0.5f) {
                         coroutineScope.launch {
@@ -126,7 +126,7 @@ fun SwipeRefresh(
                         }
                     }
                     // Consume the consumed Y
-                    Offset(x = 0f, y = distanceAvailable / DragMultiplier)
+                    Offset(x = 0f, y = distanceAvailable / DRAG_MULTIPLIER)
                 }
                 else -> Offset.Zero
             }
@@ -140,7 +140,7 @@ fun SwipeRefresh(
                     state.refreshState = SwipeRefreshState2.Dragging
 
                     coroutineScope.launch {
-                        state.dragOffsetBy(available.y * DragMultiplier)
+                        state.dragOffsetBy(available.y * DRAG_MULTIPLIER)
                     }
                     // Consume the entire Y delta
                     Offset(x = 0f, y = available.y)
