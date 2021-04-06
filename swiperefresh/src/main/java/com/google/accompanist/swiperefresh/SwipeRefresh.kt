@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused")
-
 package com.google.accompanist.swiperefresh
 
 import androidx.compose.animation.core.Animatable
@@ -38,18 +36,14 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.Velocity
-import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
-import kotlin.math.roundToInt
+import kotlin.math.max
 
-private const val DragMultiplier = 0.5f
-private val IndicatorIdleOffset = 16.dp
-private val RefreshTriggerOffset = 60.dp
+private const val DRAG_MULTIPLIER = 0.5f
 
 @Stable
 class SwipeRefreshState {
@@ -87,11 +81,12 @@ fun SwipeRefresh(
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
     state: SwipeRefreshState = remember { SwipeRefreshState() },
+    indicatorSize: IndicatorSize = IndicatorSize.DEFAULT,
     indicator: @Composable SwipeRefreshIndicatorScope.() -> Unit = {
         SwipeRefreshIndicator(
             isRefreshing = isRefreshing,
-            currentOffset = indicatorOffset,
-            isSwipeInProgress = isSwipeInProgress
+            offset = indicatorOffset,
+            size = indicatorSize
         )
     },
     content: @Composable BoxScope.() -> Unit,
@@ -105,9 +100,12 @@ fun SwipeRefresh(
     val density = LocalDensity.current
     val coroutineScope = rememberCoroutineScope()
 
+    val indicatorSizePx = with(LocalDensity.current) { indicatorSize.size.roundToPx() }
+    val refreshTriggerPx = with(LocalDensity.current) { indicatorSize.refreshTrigger.toPx() }
+
     LaunchedEffect(state.refreshState, density) {
         if (state.refreshState == SwipeRefreshState2.Refreshing) {
-            state.animateOffsetTo(with(density) { RefreshTriggerOffset.toPx() })
+            state.animateOffsetTo(refreshTriggerPx)
         } else if (state.refreshState == SwipeRefreshState2.Idle) {
             state.animateOffsetTo(0f)
         }
@@ -120,15 +118,15 @@ fun SwipeRefresh(
                 source: NestedScrollSource
             ): Offset = when {
                 source == NestedScrollSource.Drag && available.y < 0 -> {
-                    val drag = available.y * DragMultiplier
-                    val distanceAvailable = maxOf(drag, -state.indicatorOffset)
+                    val drag = available.y * DRAG_MULTIPLIER
+                    val distanceAvailable = max(drag, -state.indicatorOffset)
                     if (distanceAvailable.absoluteValue > 0.5f) {
                         coroutineScope.launch {
                             state.dragOffsetBy(distanceAvailable)
                         }
                     }
                     // Consume the consumed Y
-                    Offset(x = 0f, y = distanceAvailable / DragMultiplier)
+                    Offset(x = 0f, y = distanceAvailable / DRAG_MULTIPLIER)
                 }
                 else -> Offset.Zero
             }
@@ -142,7 +140,7 @@ fun SwipeRefresh(
                     state.refreshState = SwipeRefreshState2.Dragging
 
                     coroutineScope.launch {
-                        state.dragOffsetBy(available.y * DragMultiplier)
+                        state.dragOffsetBy(available.y * DRAG_MULTIPLIER)
                     }
                     // Consume the entire Y delta
                     Offset(x = 0f, y = available.y)
@@ -151,18 +149,17 @@ fun SwipeRefresh(
             }
 
             override suspend fun onPreFling(available: Velocity): Velocity {
-                val trigger = with(density) { RefreshTriggerOffset.toPx() }
                 return when {
                     state.refreshState == SwipeRefreshState2.Refreshing -> {
                         // If we're currently refreshing, just animate back to the resting position
                         coroutineScope.launch {
-                            state.animateOffsetTo(trigger)
+                            state.animateOffsetTo(refreshTriggerPx)
                         }
                         // Consume the entire velocity
                         available
                     }
                     state.refreshState == SwipeRefreshState2.Dragging &&
-                        state.indicatorOffset >= trigger -> {
+                        state.indicatorOffset >= refreshTriggerPx -> {
                         // If we're dragging and scrolled past the trigger point, refresh!
                         onRefresh()
                         // Consume the entire velocity
@@ -187,14 +184,17 @@ fun SwipeRefresh(
     ) {
         content()
 
-        // FIXME: think of a better way to offset the indicator off-screen initially
-        var indicatorHeight by remember { mutableStateOf(0) }
-
         Box(
             Modifier
-                .offset { IntOffset(x = 0, y = state.indicatorOffset.roundToInt()) }
-                .offset { IntOffset(x = 0, y = -indicatorHeight) }
-                .onSizeChanged { indicatorHeight = it.height }
+                .offset {
+                    val slingshot = calculateSlingshot(
+                        offsetY = state.indicatorOffset,
+                        maxOffsetY = refreshTriggerPx,
+                        height = indicatorSizePx
+                    )
+                    IntOffset(x = 0, y = slingshot.offset)
+                }
+                .offset { IntOffset(x = 0, y = -indicatorSizePx) }
                 .align(Alignment.TopCenter)
         ) {
             indicatorScope.indicator()
