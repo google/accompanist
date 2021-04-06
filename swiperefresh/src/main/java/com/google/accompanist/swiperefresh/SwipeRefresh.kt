@@ -36,7 +36,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.Velocity
@@ -101,11 +100,12 @@ fun SwipeRefresh(
     val density = LocalDensity.current
     val coroutineScope = rememberCoroutineScope()
 
-    val refreshTriggerOffsetPx = with(LocalDensity.current) { indicatorSize.refreshTrigger.toPx() }
+    val indicatorSizePx = with(LocalDensity.current) { indicatorSize.size.roundToPx() }
+    val refreshTriggerPx = with(LocalDensity.current) { indicatorSize.refreshTrigger.toPx() }
 
     LaunchedEffect(state.refreshState, density) {
         if (state.refreshState == SwipeRefreshState2.Refreshing) {
-            state.animateOffsetTo(refreshTriggerOffsetPx)
+            state.animateOffsetTo(refreshTriggerPx)
         } else if (state.refreshState == SwipeRefreshState2.Idle) {
             state.animateOffsetTo(0f)
         }
@@ -153,13 +153,13 @@ fun SwipeRefresh(
                     state.refreshState == SwipeRefreshState2.Refreshing -> {
                         // If we're currently refreshing, just animate back to the resting position
                         coroutineScope.launch {
-                            state.animateOffsetTo(refreshTriggerOffsetPx)
+                            state.animateOffsetTo(refreshTriggerPx)
                         }
                         // Consume the entire velocity
                         available
                     }
                     state.refreshState == SwipeRefreshState2.Dragging &&
-                        state.indicatorOffset >= refreshTriggerOffsetPx -> {
+                        state.indicatorOffset >= refreshTriggerPx -> {
                         // If we're dragging and scrolled past the trigger point, refresh!
                         onRefresh()
                         // Consume the entire velocity
@@ -184,21 +184,17 @@ fun SwipeRefresh(
     ) {
         content()
 
-        // FIXME: think of a better way to offset the indicator off-screen initially
-        var indicatorHeight by remember { mutableStateOf(0) }
-
         Box(
             Modifier
                 .offset {
                     val slingshot = calculateSlingshot(
                         offsetY = state.indicatorOffset,
-                        maxOffsetY = refreshTriggerOffsetPx,
-                        height = indicatorHeight
+                        maxOffsetY = refreshTriggerPx,
+                        height = indicatorSizePx
                     )
                     IntOffset(x = 0, y = slingshot.offset)
                 }
-                .offset { IntOffset(x = 0, y = -indicatorHeight) }
-                .onSizeChanged { indicatorHeight = it.height }
+                .offset { IntOffset(x = 0, y = -indicatorSizePx) }
                 .align(Alignment.TopCenter)
         ) {
             indicatorScope.indicator()
