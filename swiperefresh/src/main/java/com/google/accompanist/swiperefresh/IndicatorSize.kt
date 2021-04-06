@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 /**
- * A enumerated class to encapsulate details of different indicator sizes.
+ * A class to encapsulate details of different indicator sizes.
  *
  * @param size The overall size of the indicator.
  * @param arcRadius The radius of the arc.
@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
  * @param arrowWidth The width of the arrow.
  * @param arrowHeight The height of the arrow.
  */
-enum class IndicatorSize(
+data class IndicatorSize(
     val size: Dp,
     val arcRadius: Dp,
     val strokeWidth: Dp,
@@ -36,22 +36,24 @@ enum class IndicatorSize(
     val arrowHeight: Dp,
     val refreshTrigger: Dp
 ) {
-    DEFAULT(
-        size = SIZE_DEFAULT,
-        arcRadius = CENTER_RADIUS_DEFAULT,
-        strokeWidth = STROKE_WIDTH_DEFAULT,
-        arrowWidth = ARROW_WIDTH_DEFAULT,
-        arrowHeight = ARROW_HEIGHT_DEFAULT,
-        refreshTrigger = REFRESH_TRIGGER_DEFAULT
-    ),
-    LARGE(
-        size = SIZE_LARGE,
-        arcRadius = CENTER_RADIUS_LARGE,
-        strokeWidth = STROKE_WIDTH_LARGE,
-        arrowWidth = ARROW_WIDTH_LARGE,
-        arrowHeight = ARROW_HEIGHT_LARGE,
-        refreshTrigger = REFRESH_TRIGGER_LARGE
-    )
+    companion object {
+        val DEFAULT = IndicatorSize(
+            size = SIZE_DEFAULT,
+            arcRadius = CENTER_RADIUS_DEFAULT,
+            strokeWidth = STROKE_WIDTH_DEFAULT,
+            arrowWidth = ARROW_WIDTH_DEFAULT,
+            arrowHeight = ARROW_HEIGHT_DEFAULT,
+            refreshTrigger = REFRESH_TRIGGER_DEFAULT
+        )
+        val LARGE = IndicatorSize(
+            size = SIZE_LARGE,
+            arcRadius = CENTER_RADIUS_LARGE,
+            strokeWidth = STROKE_WIDTH_LARGE,
+            arrowWidth = ARROW_WIDTH_LARGE,
+            arrowHeight = ARROW_HEIGHT_LARGE,
+            refreshTrigger = REFRESH_TRIGGER_LARGE
+        )
+    }
 }
 
 private val SIZE_DEFAULT = 40.dp
