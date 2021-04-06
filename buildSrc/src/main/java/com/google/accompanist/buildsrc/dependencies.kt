@@ -109,7 +109,7 @@ object Libs {
         const val gif = "io.coil-kt:coil-gif:$version"
     }
 
-    const val glide = "com.github.bumptech.glide:glide:4.11.0"
+    const val glide = "com.github.bumptech.glide:glide:4.12.0"
 
     const val truth = "com.google.truth:truth:1.0.1"
 
