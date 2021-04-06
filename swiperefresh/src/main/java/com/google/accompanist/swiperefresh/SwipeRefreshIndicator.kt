@@ -91,6 +91,8 @@ fun SwipeRefreshIndicator(
         painter.endTrim = slingshot.endTrim
         painter.rotation = slingshot.rotation
         painter.arrowScale = slingshot.arrowScale
+        // This shows either an Image with CircularProgressPainter or a CircularProgressIndicator,
+        // depending on refresh state
         Crossfade(
             targetState = isRefreshing,
             animationSpec = tween(durationMillis = CROSSFADE_DURATION)
