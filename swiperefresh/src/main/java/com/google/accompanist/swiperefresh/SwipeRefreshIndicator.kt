@@ -17,9 +17,7 @@
 package com.google.accompanist.swiperefresh
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -56,13 +54,10 @@ fun SwipeRefreshIndicator(
     size: IndicatorSize = IndicatorSize.DEFAULT,
     elevation: Dp = 4.dp
 ) {
-    val animatedElevation by animateDpAsState(
-        targetValue = when (offset) {
-            0f -> 0.dp
-            else -> elevation
-        },
-        animationSpec = snap()
-    )
+    val adjustedElevation = when (offset) {
+        0f -> 0.dp
+        else -> elevation
+    }
     val maxOffset = with(LocalDensity.current) { size.refreshTrigger.toPx() }
     val animatedAlpha by animateFloatAsState(
         targetValue = if (offset >= maxOffset) MAX_ALPHA else MIN_ALPHA,
@@ -75,7 +70,7 @@ fun SwipeRefreshIndicator(
             .scale(adjustedScale),
         shape = shape,
         color = color,
-        elevation = animatedElevation
+        elevation = adjustedElevation
     ) {
         val painter = remember {
             CircularProgressPainter()
