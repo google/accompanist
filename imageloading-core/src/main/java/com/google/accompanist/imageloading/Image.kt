@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:JvmName("Image")
-
 package com.google.accompanist.imageloading
 
 import androidx.annotation.DrawableRes
