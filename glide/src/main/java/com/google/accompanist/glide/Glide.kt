@@ -35,21 +35,21 @@ import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.google.accompanist.imageloading.AsyncImageState
 import com.google.accompanist.imageloading.DataSource
 import com.google.accompanist.imageloading.ImageLoadState
+import com.google.accompanist.imageloading.ImageState
 import com.google.accompanist.imageloading.toPainter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 
 /**
  * Composition local containing the preferred [RequestManager] to use
- * for [rememberGlideAsyncImageState].
+ * for [rememberGlideImageState].
  */
 val LocalRequestManager = staticCompositionLocalOf<RequestManager?> { null }
 
 /**
- * Contains some default values used for [GlideAsyncImageState].
+ * Contains some default values used for [GlideImageState].
  */
 object GlideImageDefaults {
     /**
@@ -66,42 +66,42 @@ object GlideImageDefaults {
 }
 
 /**
- * Creates a [GlideAsyncImageState] that is remembered across compositions.
+ * Creates a [GlideImageState] that is remembered across compositions.
  *
  * Changes to the provided values for [requestManager] will **not** result
  * in the state being recreated or changed in any way if it has already been created.
- * Changes to [data] and [requestBuilder] will result in the [GlideAsyncImageState] being updated.
+ * Changes to [data] and [requestBuilder] will result in the [GlideImageState] being updated.
  *
- * @param data the value for [GlideAsyncImageState.data]
- * @param requestManager the initial value for [GlideAsyncImageState.requestManager]
- * @param requestBuilder the value for [GlideAsyncImageState.requestBuilder]
+ * @param data the value for [GlideImageState.data]
+ * @param requestManager the initial value for [GlideImageState.requestManager]
+ * @param requestBuilder the value for [GlideImageState.requestBuilder]
  */
 @Composable
-fun rememberGlideAsyncImageState(
+fun rememberGlideImageState(
     data: Any?,
     requestManager: RequestManager = GlideImageDefaults.defaultRequestManager(),
     requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)? = null,
-): AsyncImageState<Any> = remember(requestManager) {
-    GlideAsyncImageState(requestManager = requestManager)
+): ImageState<Any> = remember(requestManager) {
+    GlideImageState(requestManager = requestManager)
 }.apply {
     this.data = data
     this.requestBuilder = requestBuilder
 }
 
-private typealias AsyncImageRequestBuilder = (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)
+private typealias ImageRequestBuilder = (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)
 
 /**
- * A state object that can be hoisted for [com.google.accompanist.imageloading.AsyncImage]
+ * A state object that can be hoisted for [com.google.accompanist.imageloading.Image]
  * to load images using [Glide].
  *
- * In most cases, this will be created via [rememberGlideAsyncImageState].
+ * In most cases, this will be created via [rememberGlideImageState].
  *
  * @param requestManager The [RequestManager] to use when requesting the image.
  */
 @Stable
-class GlideAsyncImageState(
+class GlideImageState(
     val requestManager: RequestManager
-) : AsyncImageState<Any>() {
+) : ImageState<Any>() {
     private var currentData by mutableStateOf<Any?>(null)
 
     override val request: Any?
@@ -119,7 +119,7 @@ class GlideAsyncImageState(
     /**
      * Holds an optional builder for every created [RequestBuilder].
      */
-    var requestBuilder by mutableStateOf<AsyncImageRequestBuilder?>(null)
+    var requestBuilder by mutableStateOf<ImageRequestBuilder?>(null)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun executeRequest(

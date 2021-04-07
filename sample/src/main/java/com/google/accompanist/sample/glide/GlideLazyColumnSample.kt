@@ -34,8 +34,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.glide.rememberGlideAsyncImageState
-import com.google.accompanist.imageloading.AsyncImage
+import com.google.accompanist.glide.rememberGlideImageState
+import com.google.accompanist.imageloading.Image
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.rememberRandomSampleImageUrl
@@ -66,8 +66,8 @@ private fun Sample() {
         LazyColumn(Modifier.padding(16.dp)) {
             items(NumberItems) { index ->
                 Row(Modifier.padding(16.dp)) {
-                    AsyncImage(
-                        state = rememberGlideAsyncImageState(rememberRandomSampleImageUrl(index)),
+                    Image(
+                        state = rememberGlideImageState(rememberRandomSampleImageUrl(index)),
                         contentDescription = null,
                         modifier = Modifier.size(64.dp),
                     )

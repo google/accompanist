@@ -31,7 +31,7 @@ import androidx.compose.ui.graphics.painter.Painter
  *
  * Similarly, this applies the transition [ColorFilter] as appropriate, again through state reads.
  */
-internal class AsyncImageDelegatingPainter(
+internal class DelegatingPainter(
     private val painter: () -> Painter,
     private val transitionColorFilter: () -> ColorFilter?,
 ) : Painter() {

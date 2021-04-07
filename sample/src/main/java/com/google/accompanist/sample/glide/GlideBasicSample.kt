@@ -37,8 +37,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.glide.rememberGlideAsyncImageState
-import com.google.accompanist.imageloading.AsyncImage
+import com.google.accompanist.glide.rememberGlideImageState
+import com.google.accompanist.imageloading.Image
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
@@ -67,8 +67,8 @@ private fun Sample() {
         LazyColumn(Modifier.padding(16.dp)) {
             item {
                 // Data parameter
-                AsyncImage(
-                    state = rememberGlideAsyncImageState(rememberRandomSampleImageUrl()),
+                Image(
+                    state = rememberGlideImageState(rememberRandomSampleImageUrl()),
                     contentDescription = null,
                     modifier = Modifier.size(128.dp),
                     previewPlaceholder = R.drawable.placeholder,
@@ -77,8 +77,8 @@ private fun Sample() {
 
             item {
                 // Load GIF
-                AsyncImage(
-                    state = rememberGlideAsyncImageState("https://cataas.com/cat/gif"),
+                Image(
+                    state = rememberGlideImageState("https://cataas.com/cat/gif"),
                     contentDescription = "Cat animation",
                     modifier = Modifier.size(128.dp),
                 )
@@ -87,9 +87,9 @@ private fun Sample() {
             item {
                 // Loading content
                 Box {
-                    val request = rememberGlideAsyncImageState(rememberRandomSampleImageUrl())
+                    val request = rememberGlideImageState(rememberRandomSampleImageUrl())
 
-                    AsyncImage(
+                    Image(
                         state = request,
                         contentDescription = null,
                         modifier = Modifier.size(128.dp),
@@ -110,8 +110,8 @@ private fun Sample() {
 
             item {
                 // Fade in
-                AsyncImage(
-                    state = rememberGlideAsyncImageState(rememberRandomSampleImageUrl()),
+                Image(
+                    state = rememberGlideImageState(rememberRandomSampleImageUrl()),
                     contentDescription = null,
                     modifier = Modifier.size(128.dp),
                     fadeIn = true,
@@ -121,9 +121,9 @@ private fun Sample() {
             item {
                 // Fade in and loading content
                 Box {
-                    val request = rememberGlideAsyncImageState(rememberRandomSampleImageUrl())
+                    val request = rememberGlideImageState(rememberRandomSampleImageUrl())
 
-                    AsyncImage(
+                    Image(
                         state = request,
                         contentDescription = null,
                         fadeIn = true,
@@ -141,9 +141,9 @@ private fun Sample() {
             item {
                 // Implicit size
                 Box {
-                    val request = rememberGlideAsyncImageState(rememberRandomSampleImageUrl())
+                    val request = rememberGlideImageState(rememberRandomSampleImageUrl())
 
-                    AsyncImage(
+                    Image(
                         state = request,
                         contentDescription = null,
                     )
@@ -158,8 +158,8 @@ private fun Sample() {
 
             item {
                 // Aspect ratio and crop
-                AsyncImage(
-                    state = rememberGlideAsyncImageState(rememberRandomSampleImageUrl()),
+                Image(
+                    state = rememberGlideImageState(rememberRandomSampleImageUrl()),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier

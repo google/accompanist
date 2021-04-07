@@ -202,28 +202,28 @@ internal fun updateFadeInTransition(key: Any, durationMs: Int): FadeInTransition
     // Our actual transition, which reads our transitionState
     val transition = updateTransition(
         transitionState = transitionState,
-        label = "AsyncImage fadeIn"
+        label = "Image fadeIn"
     )
 
     // Alpha animates over the first 50%
     val alpha = transition.animateFloat(
         transitionSpec = { tween(durationMillis = durationMs / 2) },
         targetValueByState = { if (it == ImageLoadTransitionState.Loaded) 1f else 0f },
-        label = "AsyncImage fadeIn alpha",
+        label = "Image fadeIn alpha",
     )
 
     // Brightness animates over the first 75%
     val brightness = transition.animateFloat(
         transitionSpec = { tween(durationMillis = durationMs * 3 / 4) },
         targetValueByState = { if (it == ImageLoadTransitionState.Loaded) 1f else 0.8f },
-        label = "AsyncImage fadeIn brightness",
+        label = "Image fadeIn brightness",
     )
 
     // Saturation animates over whole duration
     val saturation = transition.animateFloat(
         transitionSpec = { tween(durationMillis = durationMs) },
         targetValueByState = { if (it == ImageLoadTransitionState.Loaded) 1f else 0f },
-        label = "AsyncImage fadeIn saturation",
+        label = "Image fadeIn saturation",
     )
 
     return remember(transition) {

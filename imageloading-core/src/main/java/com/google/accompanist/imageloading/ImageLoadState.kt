@@ -19,7 +19,7 @@ package com.google.accompanist.imageloading
 import androidx.compose.ui.graphics.painter.Painter
 
 /**
- * Represents the state of a [AsyncImage]
+ * Represents the state of a [Image]
  */
 sealed class ImageLoadState {
     /**

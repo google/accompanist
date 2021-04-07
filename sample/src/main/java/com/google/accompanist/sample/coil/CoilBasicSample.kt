@@ -44,8 +44,8 @@ import coil.ImageLoader
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.transform.CircleCropTransformation
-import com.google.accompanist.coil.rememberCoilAsyncImageState
-import com.google.accompanist.imageloading.AsyncImage
+import com.google.accompanist.coil.rememberCoilImageState
+import com.google.accompanist.imageloading.Image
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
@@ -74,8 +74,8 @@ private fun Sample() {
         LazyColumn(Modifier.padding(16.dp)) {
             item {
                 // Data parameter
-                AsyncImage(
-                    state = rememberCoilAsyncImageState(rememberRandomSampleImageUrl()),
+                Image(
+                    state = rememberCoilImageState(rememberRandomSampleImageUrl()),
                     contentDescription = null,
                     modifier = Modifier.size(128.dp),
                 )
@@ -83,8 +83,8 @@ private fun Sample() {
 
             item {
                 // Load GIF
-                AsyncImage(
-                    state = rememberCoilAsyncImageState(
+                Image(
+                    state = rememberCoilImageState(
                         data = "https://cataas.com/cat/gif",
                         imageLoader = gifImageLoader(LocalContext.current),
                     ),
@@ -95,8 +95,8 @@ private fun Sample() {
 
             item {
                 // Request builder parameter
-                AsyncImage(
-                    state = rememberCoilAsyncImageState(
+                Image(
+                    state = rememberCoilImageState(
                         data = rememberRandomSampleImageUrl(),
                         requestBuilder = {
                             transformations(CircleCropTransformation())
@@ -110,9 +110,9 @@ private fun Sample() {
             item {
                 // Loading content
                 Box {
-                    val request = rememberCoilAsyncImageState(rememberRandomSampleImageUrl())
+                    val request = rememberCoilImageState(rememberRandomSampleImageUrl())
 
-                    AsyncImage(
+                    Image(
                         state = request,
                         contentDescription = null,
                         modifier = Modifier.size(128.dp),
@@ -128,8 +128,8 @@ private fun Sample() {
 
             item {
                 // Fade in
-                AsyncImage(
-                    state = rememberCoilAsyncImageState(rememberRandomSampleImageUrl()),
+                Image(
+                    state = rememberCoilImageState(rememberRandomSampleImageUrl()),
                     contentDescription = null,
                     modifier = Modifier.size(128.dp),
                     fadeIn = true,
@@ -138,16 +138,16 @@ private fun Sample() {
 
             item {
                 // Implicit size
-                AsyncImage(
-                    state = rememberCoilAsyncImageState(rememberRandomSampleImageUrl()),
+                Image(
+                    state = rememberCoilImageState(rememberRandomSampleImageUrl()),
                     contentDescription = null,
                 )
             }
 
             item {
                 // Aspect ratio and crop scale
-                AsyncImage(
-                    state = rememberCoilAsyncImageState(rememberRandomSampleImageUrl()),
+                Image(
+                    state = rememberCoilImageState(rememberRandomSampleImageUrl()),
                     contentDescription = null,
                     modifier = Modifier
                         .width(256.dp)

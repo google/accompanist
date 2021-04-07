@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:JvmName("AsyncImage")
+@file:JvmName("Image")
 
 package com.google.accompanist.imageloading
 
@@ -63,10 +63,10 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 
 /**
- * A state base class that can be hoisted to control image loads for [AsyncImage].
+ * A state base class that can be hoisted to control image loads for [Image].
  */
 @Stable
-abstract class AsyncImageState<R : Any> {
+abstract class ImageState<R : Any> {
     /**
      * The current request object.
      *
@@ -149,8 +149,8 @@ abstract class AsyncImageState<R : Any> {
  * optional re-fetching of the image. Return true to re-fetch the image.
  */
 @Composable
-fun <R : Any> AsyncImage(
-    state: AsyncImageState<R>,
+fun <R : Any> Image(
+    state: ImageState<R>,
     contentDescription: String?,
     modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
@@ -206,7 +206,7 @@ fun <R : Any> AsyncImage(
     // to a lambda block. That block will be called during layout and drawing, which means
     // that any changes to `state.loadState` will automatically re-trigger layout/draw.
     // This allows us to use a single Painter instance, and usually a single Modifier.paint().
-    val painter = AsyncImageDelegatingPainter(
+    val painter = DelegatingPainter(
         painter = {
             state.loadState.let { state ->
                 when (state) {
@@ -240,7 +240,7 @@ fun <R : Any> AsyncImage(
 
 @Composable
 private fun fadeInAsState(
-    imageState: AsyncImageState<*>,
+    imageState: ImageState<*>,
     enabled: (ImageLoadState) -> Boolean,
     durationMs: Int,
 ): State<ColorFilter?> {
@@ -274,8 +274,8 @@ private fun fadeInAsState(
  */
 @Deprecated("Only used to help migration. DO NOT USE.")
 @Composable
-fun <R : Any> AsyncImageSuchDeprecated(
-    request: AsyncImageState<R>,
+fun <R : Any> ImageSuchDeprecated(
+    request: ImageState<R>,
     modifier: Modifier,
     @DrawableRes previewPlaceholder: Int = 0,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean,
@@ -314,7 +314,7 @@ fun <R : Any> AsyncImageSuchDeprecated(
 
 @Stable
 private class ImageLoader<R : Any>(
-    val state: AsyncImageState<R>,
+    val state: ImageState<R>,
     val coroutineScope: CoroutineScope,
     initialShouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean,
 ) : RememberObserver {
@@ -329,7 +329,7 @@ private class ImageLoader<R : Any>(
 
     // Our layout modifier, which allows us to receive the incoming constraints to update
     // requestSize. Using a modifier allows us to avoid using BoxWithConstraints and the cost of
-    // subcomposition. For most usages subcomposition is fine, but AsyncImage's tend to be used
+    // subcomposition. For most usages subcomposition is fine, but Image's tend to be used
     // in large quantities which multiplies the cost.
     val layoutModifier = Modifier.layout { measurable, constraints ->
         // Update our request size. The observing flow below checks shouldRefetchOnSizeChange

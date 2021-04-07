@@ -29,8 +29,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.glide.rememberGlideAsyncImageState
-import com.google.accompanist.imageloading.AsyncImage
+import com.google.accompanist.glide.rememberGlideImageState
+import com.google.accompanist.imageloading.Image
 
 /**
  * Simple list item row which displays an image and text.
@@ -41,8 +41,8 @@ fun ListItem(
     modifier: Modifier = Modifier
 ) {
     Row(modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-        AsyncImage(
-            state = rememberGlideAsyncImageState(imageUrl),
+        Image(
+            state = rememberGlideImageState(imageUrl),
             contentDescription = null,
             modifier = Modifier
                 .size(64.dp)

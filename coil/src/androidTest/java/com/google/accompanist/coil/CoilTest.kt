@@ -49,7 +49,7 @@ import coil.request.CachePolicy
 import coil.request.ImageRequest
 import coil.request.ImageResult
 import com.google.accompanist.coil.test.R
-import com.google.accompanist.imageloading.AsyncImage
+import com.google.accompanist.imageloading.Image
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.isFinalState
 import com.google.accompanist.imageloading.test.ImageMockWebServer
@@ -110,8 +110,8 @@ class CoilTest {
     @Test
     fun basicLoad_http() {
         composeTestRule.setContent {
-            AsyncImage(
-                state = rememberCoilAsyncImageState(server.url("/image")),
+            Image(
+                state = rememberCoilImageState(server.url("/image")),
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -129,8 +129,8 @@ class CoilTest {
     @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
     fun basicLoad_drawableId() {
         composeTestRule.setContent {
-            AsyncImage(
-                state = rememberCoilAsyncImageState(R.drawable.red_rectangle),
+            Image(
+                state = rememberCoilImageState(R.drawable.red_rectangle),
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -150,8 +150,8 @@ class CoilTest {
     @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
     fun basicLoad_drawableUri() {
         composeTestRule.setContent {
-            AsyncImage(
-                state = rememberCoilAsyncImageState(resourceUri(R.drawable.red_rectangle)),
+            Image(
+                state = rememberCoilImageState(resourceUri(R.drawable.red_rectangle)),
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -183,8 +183,8 @@ class CoilTest {
             .build()
 
         composeTestRule.setContent {
-            AsyncImage(
-                state = rememberCoilAsyncImageState(
+            Image(
+                state = rememberCoilImageState(
                     data = server.url("/image"),
                     imageLoader = imageLoader,
                 ),
@@ -215,8 +215,8 @@ class CoilTest {
 
         composeTestRule.setContent {
             CompositionLocalProvider(LocalImageLoader provides imageLoader) {
-                AsyncImage(
-                    state = rememberCoilAsyncImageState(server.url("/image")),
+                Image(
+                    state = rememberCoilImageState(server.url("/image")),
                     contentDescription = null,
                     modifier = Modifier.size(128.dp, 128.dp),
                 )
@@ -234,8 +234,8 @@ class CoilTest {
         var data by mutableStateOf(server.url("/red"))
 
         composeTestRule.setContent {
-            AsyncImage(
-                state = rememberCoilAsyncImageState(data),
+            Image(
+                state = rememberCoilImageState(data),
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -272,9 +272,9 @@ class CoilTest {
             var size by mutableStateOf(128.dp)
 
             composeTestRule.setContent {
-                val state = rememberCoilAsyncImageState(server.url("/red"))
+                val state = rememberCoilImageState(server.url("/red"))
 
-                AsyncImage(
+                Image(
                     state = state,
                     contentDescription = null,
                     modifier = Modifier
@@ -310,8 +310,8 @@ class CoilTest {
     @Test
     fun basicLoad_nosize() {
         composeTestRule.setContent {
-            AsyncImage(
-                state = rememberCoilAsyncImageState(server.url("/image")),
+            Image(
+                state = rememberCoilImageState(server.url("/image")),
                 contentDescription = null,
                 modifier = Modifier.testTag(CoilTestTags.Image),
             )
@@ -327,8 +327,8 @@ class CoilTest {
     @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
     fun basicLoad_error() {
         composeTestRule.setContent {
-            AsyncImage(
-                state = rememberCoilAsyncImageState(
+            Image(
+                state = rememberCoilImageState(
                     data = server.url("/noimage"),
                     requestBuilder = {
                         // Display a red rectangle when errors occur
@@ -354,8 +354,8 @@ class CoilTest {
     @Test
     fun errorStillHasSize() {
         composeTestRule.setContent {
-            AsyncImage(
-                state = rememberCoilAsyncImageState(server.url("/noimage")),
+            Image(
+                state = rememberCoilImageState(server.url("/noimage")),
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -373,8 +373,8 @@ class CoilTest {
     @Test(expected = IllegalArgumentException::class)
     fun data_drawable_throws() {
         composeTestRule.setContent {
-            AsyncImage(
-                state = rememberCoilAsyncImageState(
+            Image(
+                state = rememberCoilImageState(
                     data = ShapeDrawable(),
                 ),
                 contentDescription = null,
@@ -386,8 +386,8 @@ class CoilTest {
     @Test(expected = IllegalArgumentException::class)
     fun data_imagebitmap_throws() {
         composeTestRule.setContent {
-            AsyncImage(
-                state = rememberCoilAsyncImageState(
+            Image(
+                state = rememberCoilImageState(
                     painterResource(android.R.drawable.ic_delete),
                 ),
                 contentDescription = null,
@@ -399,8 +399,8 @@ class CoilTest {
     @Test(expected = IllegalArgumentException::class)
     fun data_imagevector_throws() {
         composeTestRule.setContent {
-            AsyncImage(
-                state = rememberCoilAsyncImageState(
+            Image(
+                state = rememberCoilImageState(
                     painterResource(R.drawable.ic_android_black_24dp),
                 ),
                 contentDescription = null,
@@ -412,8 +412,8 @@ class CoilTest {
     @Test(expected = IllegalArgumentException::class)
     fun data_painter_throws() {
         composeTestRule.setContent {
-            AsyncImage(
-                state = rememberCoilAsyncImageState(ColorPainter(Color.Magenta)),
+            Image(
+                state = rememberCoilImageState(ColorPainter(Color.Magenta)),
                 contentDescription = null,
                 modifier = Modifier.size(128.dp, 128.dp),
             )
