@@ -55,7 +55,7 @@ internal fun calculateSlingshot(
     val strokeStart = adjustedPercent * 0.8f
 
     val startTrim = 0f
-    val endTrim = min(MAX_PROGRESS_ARC, strokeStart)
+    val endTrim = strokeStart.coerceAtLeast(MaxProgressArc)
 
     val rotation = (-0.25f + 0.4f * adjustedPercent + tensionPercent * 2) * 0.5f
     val arrowScale = min(1f, adjustedPercent)
@@ -77,4 +77,4 @@ internal data class Slingshot(
     val arrowScale: Float
 )
 
-internal const val MAX_PROGRESS_ARC = 0.8f
+internal const val MaxProgressArc = 0.8f
