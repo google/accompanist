@@ -93,7 +93,7 @@ private fun Sample() {
                 offscreenLimit = 2,
                 // Add some horizontal spacing between items
                 itemSpacing = 4.dp,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f).fillMaxWidth()
             ) { page ->
                 Box {
                     // Our page content, displaying a random image

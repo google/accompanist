@@ -131,15 +131,11 @@ HorizontalPager(state = pagerState) { page ->
 
 ## Reacting to page changes
 
-From reading above, you might be thinking that reading [`PagerState.currentPage`][currentpage-api] is a good way to know when the selected page changes. Unfortunately `currentPage` does not tell you the currently selected page, but instead tells you which page is (mostly) displayed on screen.
-
-To know when the selected page changes, you can use the [`pageChanges`](../api/pager/pager/com.google.accompanist.pager/page-changes.html) flow:
+The [`PagerState.currentPage`][currentpage-api] property is updated whenever the selected page changes. You can use the `snapshowFlow` function to observe changes in a flow:
 
 ``` kotlin
-import com.google.accompanist.pager.pageChanges
-
 LaunchedEffect(pagerState) {
-    pagerState.pageChanges.collect { page ->
+    snapshotFlow { pagerState.currentPage }.collect { page ->
         // Selected page has changed...
     }
 }
@@ -160,11 +156,9 @@ We also publish a sibling library called `pager-indicators` which provides some 
 The [HorizontalPagerWithIndicatorSample](https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/pager/HorizontalPagerWithIndicatorSample.kt) and [VerticalPagerWithIndicatorSample](https://github.com/google/accompanist/blob/snapshot/sample/src/main/java/com/google/accompanist/sample/pager/VerticalPagerWithIndicatorSample.kt) show you how to use these.
 
 
-## Integration with Tabs
+### Integration with Tabs
 
-A common use-case for [`HorizontalPager`][api-horizpager] is to be used in conjunction with a [`TabRow`](https://developer.android.com/reference/kotlin/androidx/compose/material/package-summary#tabrow).
-
-The [HorizontalPagerTabsSample](https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/pager/HorizontalPagerTabsSample.kt) demonstrates how this can be done:
+A common use-case for [`HorizontalPager`][api-horizpager] is to be used in conjunction with a [`TabRow`](https://developer.android.com/reference/kotlin/androidx/compose/material/package-summary#tabrow) or [`ScrollableTabRow`](https://developer.android.com/reference/kotlin/androidx/compose/material/package-summary#scrollabletabrow).
 
 <figure>
     <video width="300" controls loop>
@@ -174,7 +168,36 @@ The [HorizontalPagerTabsSample](https://github.com/google/accompanist/blob/main/
     <figcaption>HorizontalPager + TabRow</figcaption>
 </figure>
 
-### 
+
+Provided in the `pager-indicators` library is a modifier which can be used on a tab indicator like so:
+
+``` kotlin
+val pagerState = rememberPagerState(pageCount = pages.size)
+
+TabRow(
+    // Our selected tab is our current page
+    selectedTabIndex = pagerState.currentPage,
+    // Override the indicator, using the provided pagerTabIndicatorOffset modifier
+    indicator = { tabPositions ->
+        TabRowDefaults.Indicator(
+            Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
+        )
+    }
+) {
+    // Add tabs for all of our pages
+    pages.forEachIndexed { index, title ->
+        Tab(
+            text = { Text(title) },
+            selected = pagerState.currentPage == index,
+            onClick = { /* TODO */ },
+        )
+    }
+}
+
+HorizontalPager(state = pagerState) { page ->
+    // TODO: page content
+}
+```
 
 ---
 
