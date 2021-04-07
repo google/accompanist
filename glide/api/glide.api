@@ -20,6 +20,6 @@ public final class com/google/accompanist/glide/GlideImageState : com/google/acc
 
 public final class com/google/accompanist/glide/GlideKt {
 	public static final fun getLocalRequestManager ()Landroidx/compose/runtime/ProvidableCompositionLocal;
-	public static final fun rememberGlideImageState (Ljava/lang/Object;Lcom/bumptech/glide/RequestManager;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)Lcom/google/accompanist/imageloading/ImageState;
+	public static final fun rememberGlideImageState (Ljava/lang/Object;Lcom/bumptech/glide/RequestManager;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)Lcom/google/accompanist/glide/GlideImageState;
 }
 

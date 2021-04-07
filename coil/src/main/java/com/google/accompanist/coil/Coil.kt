@@ -79,7 +79,7 @@ fun rememberCoilImageState(
     imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
     context: Context = LocalContext.current,
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
-): ImageState<Any> = remember(imageLoader, context) {
+): CoilImageState = remember(imageLoader, context) {
     CoilImageState(
         imageLoader = imageLoader,
         context = context,

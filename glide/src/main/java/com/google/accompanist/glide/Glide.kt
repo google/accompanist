@@ -81,7 +81,7 @@ fun rememberGlideImageState(
     data: Any?,
     requestManager: RequestManager = GlideImageDefaults.defaultRequestManager(),
     requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)? = null,
-): ImageState<Any> = remember(requestManager) {
+): GlideImageState = remember(requestManager) {
     GlideImageState(requestManager = requestManager)
 }.apply {
     this.data = data
