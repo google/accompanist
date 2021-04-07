@@ -44,5 +44,6 @@
     <string name="flowlayout_title_row">Flow Layout: Row</string>
 
     <string name="swiperefresh_title_basics">Swipe Refresh: Basic</string>
+    <string name="swiperefresh_title_verticalpager">Swipe Refresh: VerticalPager</string>
 
 </resources>
