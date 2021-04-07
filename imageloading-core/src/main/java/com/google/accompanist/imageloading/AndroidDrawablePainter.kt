@@ -26,7 +26,6 @@ import android.os.Looper
 import android.view.View
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.neverEqualPolicy
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -55,13 +54,14 @@ private val MAIN_HANDLER by lazy(LazyThreadSafetyMode.NONE) {
 class AndroidDrawablePainter(
     private val drawable: Drawable
 ) : Painter() {
-    private var invalidateTick by mutableStateOf(Unit, neverEqualPolicy())
+    private var invalidateTick by mutableStateOf(0)
+    private var startedAnimatable = drawable is Animatable && drawable.isRunning
 
     init {
         drawable.callback = object : Drawable.Callback {
             override fun invalidateDrawable(d: Drawable) {
                 // Update the tick so that we get re-drawn
-                invalidateTick = Unit
+                invalidateTick++
             }
 
             override fun scheduleDrawable(d: Drawable, what: Runnable, time: Long) {
@@ -75,11 +75,6 @@ class AndroidDrawablePainter(
 
         // Update the drawable's bounds to match the intrinsic size
         drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
-
-        // If this is animatable, start it now
-        if (drawable is Animatable && !drawable.isRunning) {
-            drawable.start()
-        }
     }
 
     override fun applyAlpha(alpha: Float): Boolean {
@@ -111,17 +106,27 @@ class AndroidDrawablePainter(
         )
 
     override fun DrawScope.onDraw() {
+        if (!startedAnimatable && drawable is Animatable && !drawable.isRunning) {
+            // If the drawable is Animatable, start it on the first draw
+            drawable.start()
+            startedAnimatable = true
+        }
+
         drawIntoCanvas { canvas ->
             // Reading this ensures that we invalidate when invalidateDrawable() is called
             invalidateTick
 
             canvas.withSave {
-                // Painters are responsible for scaling content to meet the canvas size
                 if (drawable.intrinsicWidth > 0 && drawable.intrinsicHeight > 0) {
+                    // Painters are responsible for scaling content to meet the canvas size
                     canvas.scale(
                         sx = size.width / drawable.intrinsicWidth,
                         sy = size.height / drawable.intrinsicHeight
                     )
+                } else {
+                    // If the drawable has no intrinsic bounds, set its bounds to be the
+                    // canvas size
+                    drawable.setBounds(0, 0, size.width.roundToInt(), size.height.roundToInt())
                 }
                 drawable.draw(canvas.nativeCanvas)
             }

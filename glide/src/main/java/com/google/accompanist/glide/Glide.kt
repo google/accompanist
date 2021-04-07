@@ -147,6 +147,7 @@ class GlideImageState(
 
                 val result = ImageLoadState.Error(
                     painter = errorDrawable?.toPainter(),
+                    request = request,
                     throwable = failException
                         ?: IllegalArgumentException("Error while loading $request")
                 )
@@ -173,6 +174,7 @@ class GlideImageState(
 
                 val result = ImageLoadState.Success(
                     painter = drawable.toPainter(),
+                    request = request,
                     source = dataSource.toDataSource()
                 )
 

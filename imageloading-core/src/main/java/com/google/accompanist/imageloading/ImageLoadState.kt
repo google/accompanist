@@ -37,10 +37,12 @@ sealed class ImageLoadState {
      *
      * @param painter The result image.
      * @param source The data source that the image was loaded from.
+     * @param request The original request for this result.
      */
     data class Success(
         val painter: Painter,
-        val source: DataSource
+        val source: DataSource,
+        val request: Any,
     ) : ImageLoadState()
 
     /**
@@ -48,9 +50,11 @@ sealed class ImageLoadState {
      *
      * @param painter The error image.
      * @param throwable The optional throwable that caused the request failure.
+     * @param request The original request for this result.
      */
     data class Error(
         val painter: Painter? = null,
+        val request: Any,
         val throwable: Throwable
     ) : ImageLoadState()
 }
@@ -61,3 +65,10 @@ sealed class ImageLoadState {
 fun ImageLoadState.isFinalState(): Boolean {
     return this is ImageLoadState.Success || this is ImageLoadState.Error
 }
+
+internal val ImageLoadState.request: Any?
+    get() = when (this) {
+        is ImageLoadState.Success -> request
+        is ImageLoadState.Error -> request
+        else -> null
+    }

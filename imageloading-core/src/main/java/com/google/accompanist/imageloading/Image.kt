@@ -102,9 +102,12 @@ abstract class ImageState<R : Any>(
             return
         }
 
-        if (loadState != ImageLoadState.Empty && !shouldRefetchOnSizeChange(loadState, size)) {
-            // If we're not empty, and shouldRefetchOnSizeChange() returns false, return now to
-            // skip this size
+        if (loadState != ImageLoadState.Empty &&
+            request == loadState.request &&
+            !shouldRefetchOnSizeChange(loadState, size)
+        ) {
+            // If we're not empty, the request is the same and shouldRefetchOnSizeChange()
+            // returns false, return now to skip this request
             return
         }
 
@@ -128,7 +131,7 @@ abstract class ImageState<R : Any>(
             throw e
         } catch (t: Throwable) {
             // Anything else, we wrap in a Error state instance
-            ImageLoadState.Error(painter = null, throwable = t)
+            ImageLoadState.Error(painter = null, throwable = t, request = request)
         }
     }
 

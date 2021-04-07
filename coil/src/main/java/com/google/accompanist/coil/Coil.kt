@@ -164,20 +164,22 @@ class CoilImageState(
             else -> return ImageLoadState.Empty
         }
 
-        return imageLoader.execute(sizedRequest).toResult()
+        return imageLoader.execute(sizedRequest).toResult(request)
     }
 }
 
-private fun ImageResult.toResult(): ImageLoadState = when (this) {
+private fun ImageResult.toResult(request: Any): ImageLoadState = when (this) {
     is coil.request.SuccessResult -> {
         ImageLoadState.Success(
             painter = drawable.toPainter(),
+            request = request,
             source = metadata.dataSource.toDataSource()
         )
     }
     is coil.request.ErrorResult -> {
         ImageLoadState.Error(
             painter = drawable?.toPainter(),
+            request = request,
             throwable = throwable
         )
     }
