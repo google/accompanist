@@ -202,6 +202,7 @@ class PagerState(
     suspend fun animateScrollToPage(
         @IntRange(from = 0) page: Int,
         @FloatRange(from = 0.0, to = 1.0) pageOffset: Float = 0f,
+        animationSpec: AnimationSpec<Float> = spring(),
         initialVelocity: Float = 0f,
     ) {
         requireCurrentPage(page, "page")
@@ -215,6 +216,7 @@ class PagerState(
             animateToPage(
                 page = page.coerceIn(0, lastPageIndex),
                 pageOffset = pageOffset.coerceIn(0f, 1f),
+                animationSpec = animationSpec,
                 initialVelocity = initialVelocity,
             )
         }
