@@ -19,27 +19,23 @@ package com.google.accompanist.swiperefresh
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.MutatorMutex
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.unit.Velocity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -227,12 +223,7 @@ fun SwipeRefresh(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val updatedOnRefresh = rememberUpdatedState(onRefresh)
-    var indicatorHeight by remember { mutableStateOf(0) }
-
-    // TODO: make this configurable?
-    val refreshTrigger by remember {
-        derivedStateOf { indicatorHeight * 1.5f }
-    }
+    var refreshTrigger by remember { mutableStateOf(0f) }
 
     // Our LaunchedEffect, which animates the indicator to an appropriate resting position
     LaunchedEffect(state.isRefreshing, state.isSwipeInProgress, refreshTrigger) {
@@ -254,40 +245,56 @@ fun SwipeRefresh(
         this.enabled = swipeEnabled
     }
 
-    // TODO: convert this to be a custom layout
-    Box(
-        modifier
+    val indicatorContentScope = remember(state) {
+        SwipeRefreshIndicatorScopeImpl(state)
+    }.apply {
+        this.indicatorTriggerOffset = refreshTrigger
+    }
+
+    Layout(
+        content = {
+            Box(Modifier.layoutId(LayoutContentTag)) { content() }
+            Box(Modifier.layoutId(LayoutIndicatorTag)) { indicatorContentScope.indicator() }
+        },
+        modifier = modifier
             .nestedScroll(connection = nestedScrollConnection)
             .clipToBounds()
-    ) {
-        content()
+    ) { measurables, constraints ->
+        val noMinConstraints = constraints.copy(minWidth = 0, minHeight = 0)
 
-        val indicatorScope = remember(state) {
-            SwipeRefreshIndicatorScopeImpl(state)
-        }.apply {
-            this.indicatorTriggerOffset = refreshTrigger
-        }
-        Box(
-            Modifier
-                .composed {
-                    offset {
-                        val slingshot = calculateSlingshot(
-                            offsetY = state.indicatorOffset,
-                            maxOffsetY = refreshTrigger,
-                            height = indicatorHeight
-                        )
-                        IntOffset(x = 0, y = slingshot.offset)
-                    }
-                }
-                // Offset the indicator offscreen as the baseline position
-                .offset { IntOffset(x = 0, y = -indicatorHeight) }
-                .onSizeChanged { indicatorHeight = it.height }
-                .align(Alignment.TopCenter)
-        ) {
-            indicatorScope.indicator()
+        // Measure both the content and the indicator
+        val contentPlaceable = measurables.first { it.layoutId == LayoutContentTag }
+            .measure(noMinConstraints)
+        val indicatorPlaceable = measurables.first { it.layoutId == LayoutIndicatorTag }
+            .measure(noMinConstraints)
+
+        // TODO: make this configurable?
+        val trigger = indicatorPlaceable.height * 1.5f
+        refreshTrigger = trigger
+
+        // Our layout is the size of the content, coerced by the min constraints
+        val layoutWidth = contentPlaceable.width.coerceAtLeast(constraints.minWidth)
+        val layoutHeight = contentPlaceable.height.coerceAtLeast(constraints.minHeight)
+
+        layout(layoutWidth, layoutHeight) {
+            // Place our content at x = center, y = top
+            contentPlaceable.place(x = (layoutWidth - contentPlaceable.width) / 2, y = 0)
+
+            val slingshot = calculateSlingshot(
+                offsetY = state.indicatorOffset,
+                maxOffsetY = trigger,
+                height = indicatorPlaceable.height
+            )
+            indicatorPlaceable.place(
+                x = (layoutWidth - indicatorPlaceable.width) / 2,
+                y = -indicatorPlaceable.height + slingshot.offset,
+            )
         }
     }
 }
+
+private const val LayoutContentTag = "swiperefresh_content"
+private const val LayoutIndicatorTag = "swiperefresh_indicator"
 
 @Stable
 private class SwipeRefreshIndicatorScopeImpl(
