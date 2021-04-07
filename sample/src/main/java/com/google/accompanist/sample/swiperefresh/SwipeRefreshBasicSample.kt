@@ -45,6 +45,7 @@ import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
 import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.delay
 
 class SwipeRefreshBasicSample : ComponentActivity() {
@@ -80,7 +81,7 @@ private fun Sample() {
         }
 
         SwipeRefresh(
-            isRefreshing = refreshing,
+            state = rememberSwipeRefreshState(isRefreshing = refreshing),
             onRefresh = { refreshing = true },
         ) {
             LazyColumn {

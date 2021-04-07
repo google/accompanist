@@ -40,7 +40,6 @@ import kotlin.math.min
  * Adapted from CircularProgressDrawable.
  */
 internal class CircularProgressPainter : Painter() {
-
     var color by mutableStateOf(Color.Unspecified)
     var alpha by mutableStateOf(1f)
     var arcRadius by mutableStateOf(0.dp)
@@ -49,9 +48,11 @@ internal class CircularProgressPainter : Painter() {
     var arrowWidth by mutableStateOf(0.dp)
     var arrowHeight by mutableStateOf(0.dp)
     var arrowScale by mutableStateOf(1f)
+
     private val arrow: Path by lazy {
         Path().apply { fillType = PathFillType.EvenOdd }
     }
+
     var startTrim by mutableStateOf(0f)
     var endTrim by mutableStateOf(0f)
     var rotation by mutableStateOf(0f)

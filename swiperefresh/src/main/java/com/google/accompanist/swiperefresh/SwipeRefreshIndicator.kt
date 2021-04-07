@@ -30,6 +30,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -42,28 +43,76 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlin.math.min
 
+/**
+ * Object which contains default values for [SwipeRefreshIndicator].
+ */
+object SwipeRefreshIndicatorDefaults {
+    /**
+     * The default/normal size values for [SwipeRefreshIndicator].
+     */
+    val DefaultSizes = SwipeRefreshIndicatorSizes(
+        size = 40.dp,
+        arcRadius = 7.5.dp,
+        strokeWidth = 2.5.dp,
+        arrowWidth = 10.dp,
+        arrowHeight = 5.dp,
+    )
+
+    /**
+     * The 'large' size values for [SwipeRefreshIndicator].
+     */
+    val LargeSizes = SwipeRefreshIndicatorSizes(
+        size = 56.dp,
+        arcRadius = 11.dp,
+        strokeWidth = 3.dp,
+        arrowWidth = 12.dp,
+        arrowHeight = 6.dp,
+    )
+}
+
+/**
+ * A class to encapsulate details of different indicator sizes.
+ *
+ * @param size The overall size of the indicator.
+ * @param arcRadius The radius of the arc.
+ * @param strokeWidth The width of the arc stroke.
+ * @param arrowWidth The width of the arrow.
+ * @param arrowHeight The height of the arrow.
+ */
+@Immutable
+data class SwipeRefreshIndicatorSizes(
+    val size: Dp,
+    val arcRadius: Dp,
+    val strokeWidth: Dp,
+    val arrowWidth: Dp,
+    val arrowHeight: Dp,
+)
+
+/**
+ * Indicator composable which is typically used in conjunction with [SwipeRefresh].
+ */
 @Composable
 fun SwipeRefreshIndicator(
     isRefreshing: Boolean,
     offset: Float,
+    triggerOffset: Float,
     scale: Boolean = false,
     arrowEnabled: Boolean = true,
     color: Color = MaterialTheme.colors.surface,
     contentColor: Color = contentColorFor(color),
     shape: CornerBasedShape = CircleShape,
-    size: IndicatorSize = IndicatorSize.DEFAULT,
+    size: SwipeRefreshIndicatorSizes = SwipeRefreshIndicatorDefaults.DefaultSizes,
     elevation: Dp = 4.dp
 ) {
     val adjustedElevation = when (offset) {
         0f -> 0.dp
         else -> elevation
     }
-    val maxOffset = with(LocalDensity.current) { size.refreshTrigger.toPx() }
     val animatedAlpha by animateFloatAsState(
-        targetValue = if (offset >= maxOffset) MAX_ALPHA else MIN_ALPHA,
+        targetValue = if (offset >= triggerOffset) MaxAlpha else MinAlpha,
         animationSpec = tween()
     )
-    val adjustedScale = if (scale) min(1f, offset / maxOffset) else 1f
+    val adjustedScale = if (scale) min(1f, offset / triggerOffset) else 1f
     Surface(
         modifier = Modifier
             .size(size = size.size)
@@ -84,7 +133,7 @@ fun SwipeRefreshIndicator(
         painter.alpha = animatedAlpha
         val slingshot = calculateSlingshot(
             offsetY = offset,
-            maxOffsetY = maxOffset,
+            maxOffsetY = triggerOffset,
             height = with(LocalDensity.current) { size.size.roundToPx() }
         )
         painter.startTrim = slingshot.startTrim
@@ -95,7 +144,7 @@ fun SwipeRefreshIndicator(
         // depending on refresh state
         Crossfade(
             targetState = isRefreshing,
-            animationSpec = tween(durationMillis = CROSSFADE_DURATION)
+            animationSpec = tween(durationMillis = CrossfadeDurationMs)
         ) { refreshing ->
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -119,9 +168,9 @@ fun SwipeRefreshIndicator(
     }
 }
 
-private const val MAX_ALPHA = 1f
-private const val MIN_ALPHA = 0.3f
-private const val CROSSFADE_DURATION = 100
+private const val MaxAlpha = 1f
+private const val MinAlpha = 0.3f
+private const val CrossfadeDurationMs = 100
 
 @Preview
 @Composable
@@ -129,7 +178,8 @@ fun PreviewSwipeRefreshIndicator() {
     MaterialTheme {
         SwipeRefreshIndicator(
             isRefreshing = false,
-            offset = 0f
+            offset = 0f,
+            triggerOffset = 10f,
         )
     }
 }
