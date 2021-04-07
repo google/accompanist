@@ -20,7 +20,6 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.MutatorMutex
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
-import androidx.compose.material.TabRowDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
@@ -201,15 +200,15 @@ private class SwipeRefreshNestedScrollConnection(
  * If an app wishes to show just the progress animation, outside of a swipe refresh, it can
  * set [SwipeRefreshState.isRefreshing] as required.
  *
- * @param state
+ * @sample com.google.accompanist.sample.swiperefresh.SwipeRefreshSample
+ *
+ * @param state the state object to be used to control or observe the [SwipeRefresh] state.
  * @param onRefresh Lambda which is invoked when a swipe to refresh gesture is completed.
- * @param modifier
+ * @param modifier the modifier to apply to this layout.
  * @param swipeEnabled Whether the the layout should react to swipe gestures or not.
- * @param indicator the indicator that represents which tab is currently selected. By default this
- * will be a [SwipeRefreshIndicator], using a [TabRowDefaults.tabIndicatorOffset]
- * modifier to animate its position. Note that this indicator will be forced to fill up the
- * entire TabRow, so you should use [TabRowDefaults.tabIndicatorOffset] or similar to
- * animate the actual drawn indicator inside this space, and provide an offset from the start.
+ * @param indicator the indicator that represents the current state. By default this
+ * will be a [SwipeRefreshIndicator].
+ * @param content The content containing a scroll composable.
  */
 @Composable
 fun SwipeRefresh(

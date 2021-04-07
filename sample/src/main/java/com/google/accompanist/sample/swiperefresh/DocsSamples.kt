@@ -14,11 +14,28 @@
  * limitations under the License.
  */
 
+@file:Suppress("UNUSED_ANONYMOUS_PARAMETER")
+
 package com.google.accompanist.sample.swiperefresh
 
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @Composable
-fun SwipeRefreshSample() {
-    // TODO
+fun SwipeRefreshSample(
+    onRefresh: () -> Unit,
+    refreshing: Boolean,
+) {
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(isRefreshing = refreshing),
+        onRefresh = onRefresh,
+    ) {
+        LazyColumn {
+            items(30) { index ->
+                // TODO: list items
+            }
+        }
+    }
 }
