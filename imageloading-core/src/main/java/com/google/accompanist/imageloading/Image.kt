@@ -130,6 +130,10 @@ abstract class ImageState<R : Any> {
  * which build upon this, such as the Coil and Glide libraries.
  *
  * @param state The request to execute.
+ * @param contentDescription text used by accessibility services to describe what this image
+ * represents. This should always be provided unless this image is used for decorative purposes,
+ * and does not represent a meaningful action that a user can take. This text should be
+ * localized, such as by using [androidx.compose.ui.res.stringResource] or similar.
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
  * @param alignment Optional alignment parameter used to place the loaded [ImageBitmap] in the
  * given bounds defined by the width and height.
