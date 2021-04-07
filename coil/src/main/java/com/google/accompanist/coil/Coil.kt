@@ -66,11 +66,13 @@ object CoilImageDefaults {
  *
  * Changes to the provided values for [imageLoader] and [context] will **not** result
  * in the state being recreated or changed in any way if it has already been created.
- * Changes to [data] and [requestBuilder] will result in the [CoilImageState] being updated.
+ * Changes to [data], [shouldRefetchOnSizeChange] & [requestBuilder] will result in
+ * the [CoilImageState] being updated.
  *
  * @param data the value for [CoilImageState.data]
  * @param imageLoader the value for [CoilImageState.imageLoader]
  * @param context the initial value for [CoilImageState.context]
+ * @param shouldRefetchOnSizeChange the value for [CoilImageState.shouldRefetchOnSizeChange]
  * @param requestBuilder the value for [CoilImageState.requestBuilder]
  */
 @Composable
@@ -78,18 +80,22 @@ fun rememberCoilImageState(
     data: Any?,
     imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
     context: Context = LocalContext.current,
+    shouldRefetchOnSizeChange: ShouldRefetchOnSizeChange = { _, _ -> false },
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
 ): CoilImageState = remember(imageLoader, context) {
     CoilImageState(
         imageLoader = imageLoader,
         context = context,
+        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
     )
 }.apply {
     this.data = data
     this.requestBuilder = requestBuilder
+    this.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
 }
 
 private typealias RequestBuilder = (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)
+private typealias ShouldRefetchOnSizeChange = (currentState: ImageLoadState, size: IntSize) -> Boolean
 
 /**
  * A state object that can be hoisted for [com.google.accompanist.imageloading.Image]
@@ -100,12 +106,14 @@ private typealias RequestBuilder = (ImageRequest.Builder.(size: IntSize) -> Imag
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to
  * [CoilImageDefaults.defaultImageLoader].
  * @param context The Android [Context] to use when creating [ImageRequest]s.
+ * @param shouldRefetchOnSizeChange the value for [CoilImageState.shouldRefetchOnSizeChange].
  */
 @Stable
 class CoilImageState(
     private val imageLoader: ImageLoader,
     private val context: Context,
-) : ImageState<Any>() {
+    shouldRefetchOnSizeChange: ShouldRefetchOnSizeChange = { _, _ -> false },
+) : ImageState<Any>(shouldRefetchOnSizeChange) {
     private var currentData by mutableStateOf<Any?>(null)
 
     override val request: Any?

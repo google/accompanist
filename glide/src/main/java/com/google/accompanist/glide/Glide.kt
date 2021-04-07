@@ -70,25 +70,30 @@ object GlideImageDefaults {
  *
  * Changes to the provided values for [requestManager] will **not** result
  * in the state being recreated or changed in any way if it has already been created.
- * Changes to [data] and [requestBuilder] will result in the [GlideImageState] being updated.
+ * Changes to [data], [shouldRefetchOnSizeChange] & [requestBuilder] will result in
+ * the [GlideImageState] being updated.
  *
  * @param data the value for [GlideImageState.data]
  * @param requestManager the initial value for [GlideImageState.requestManager]
+ * @param shouldRefetchOnSizeChange the value for [GlideImageState.shouldRefetchOnSizeChange]
  * @param requestBuilder the value for [GlideImageState.requestBuilder]
  */
 @Composable
 fun rememberGlideImageState(
     data: Any?,
     requestManager: RequestManager = GlideImageDefaults.defaultRequestManager(),
+    shouldRefetchOnSizeChange: ShouldRefetchOnSizeChange = { _, _ -> false },
     requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)? = null,
 ): GlideImageState = remember(requestManager) {
-    GlideImageState(requestManager = requestManager)
+    GlideImageState(requestManager, shouldRefetchOnSizeChange)
 }.apply {
     this.data = data
     this.requestBuilder = requestBuilder
+    this.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
 }
 
 private typealias ImageRequestBuilder = (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)
+private typealias ShouldRefetchOnSizeChange = (currentState: ImageLoadState, size: IntSize) -> Boolean
 
 /**
  * A state object that can be hoisted for [com.google.accompanist.imageloading.Image]
@@ -97,11 +102,13 @@ private typealias ImageRequestBuilder = (RequestBuilder<Drawable>.(size: IntSize
  * In most cases, this will be created via [rememberGlideImageState].
  *
  * @param requestManager The [RequestManager] to use when requesting the image.
+ * @param shouldRefetchOnSizeChange Initial value for [GlideImageState.shouldRefetchOnSizeChange]
  */
 @Stable
 class GlideImageState(
-    private val requestManager: RequestManager
-) : ImageState<Any>() {
+    private val requestManager: RequestManager,
+    shouldRefetchOnSizeChange: ShouldRefetchOnSizeChange,
+) : ImageState<Any>(shouldRefetchOnSizeChange) {
     private var currentData by mutableStateOf<Any?>(null)
 
     override val request: Any?

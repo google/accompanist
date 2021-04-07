@@ -60,11 +60,17 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 
+private typealias ShouldRefetchOnSizeChange = (currentState: ImageLoadState, size: IntSize) -> Boolean
+
 /**
  * A state base class that can be hoisted to control image loads for [Image].
+ *
+ * @param shouldRefetchOnSizeChange Initial value for [shouldRefetchOnSizeChange].
  */
 @Stable
-abstract class ImageState<R : Any> {
+abstract class ImageState<R : Any>(
+    shouldRefetchOnSizeChange: ShouldRefetchOnSizeChange,
+) {
     /**
      * The current request object.
      *
@@ -80,6 +86,12 @@ abstract class ImageState<R : Any> {
         private set
 
     /**
+     * Lambda which will be invoked when the size changes, allowing
+     * optional re-fetching of the image.
+     */
+    var shouldRefetchOnSizeChange by mutableStateOf(shouldRefetchOnSizeChange)
+
+    /**
      * The function which executes the requests, and update [loadState] as appropriate with the
      * result.
      */
@@ -87,6 +99,12 @@ abstract class ImageState<R : Any> {
         if (request == null) {
             // If we don't have a request, set our state to Empty and return
             loadState = ImageLoadState.Empty
+            return
+        }
+
+        if (loadState != ImageLoadState.Empty && !shouldRefetchOnSizeChange(loadState, size)) {
+            // If we're not empty, and shouldRefetchOnSizeChange() returns false, return now to
+            // skip this size
             return
         }
 
@@ -147,8 +165,6 @@ abstract class ImageState<R : Any> {
  * @param fadeInDurationMs Duration for the fade animation in milliseconds when [fadeIn] is enabled.
  * @param previewPlaceholder Drawable resource ID which will be displayed when this function is
  * ran in preview mode.
- * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
- * optional re-fetching of the image. Return true to re-fetch the image.
  */
 @Composable
 fun <R : Any> Image(
@@ -161,7 +177,6 @@ fun <R : Any> Image(
     fadeIn: Boolean = false,
     fadeInDurationMs: Int = DefaultTransitionDuration,
     @DrawableRes previewPlaceholder: Int = 0,
-    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
 ) {
     if (LocalInspectionMode.current && previewPlaceholder != 0) {
         // If we're in inspection mode (preview) and we have a preview placeholder, just draw
@@ -177,13 +192,7 @@ fun <R : Any> Image(
     val coroutineScope = rememberCoroutineScope()
 
     val imageLoader = remember(state, coroutineScope) {
-        ImageLoader(
-            state = state,
-            coroutineScope = coroutineScope,
-            initialShouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
-        )
-    }.apply {
-        this.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
+        ImageLoader(state, coroutineScope)
     }
 
     // This runs our fade in animation
@@ -277,10 +286,9 @@ private fun fadeInAsState(
 @Deprecated("Only used to help migration. DO NOT USE.")
 @Composable
 fun <R : Any> ImageSuchDeprecated(
-    request: ImageState<R>,
+    state: ImageState<R>,
     modifier: Modifier,
     @DrawableRes previewPlaceholder: Int = 0,
-    shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean,
     content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
 ) {
     if (LocalInspectionMode.current && previewPlaceholder != 0) {
@@ -296,21 +304,15 @@ fun <R : Any> ImageSuchDeprecated(
 
     val coroutineScope = rememberCoroutineScope()
 
-    val imageLoader = remember(request, coroutineScope) {
-        ImageLoader(
-            state = request,
-            coroutineScope = coroutineScope,
-            initialShouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
-        )
-    }.apply {
-        this.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
+    val imageLoader = remember(state, coroutineScope) {
+        ImageLoader(state, coroutineScope)
     }
 
     Box(
         propagateMinConstraints = true,
         modifier = modifier.then(imageLoader.layoutModifier)
     ) {
-        content(request.loadState)
+        content(state.loadState)
     }
 }
 
@@ -318,13 +320,9 @@ fun <R : Any> ImageSuchDeprecated(
 private class ImageLoader<R : Any>(
     val state: ImageState<R>,
     val coroutineScope: CoroutineScope,
-    initialShouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean,
 ) : RememberObserver {
     // Our size to use when performing the image load request
     var requestSize by mutableStateOf<IntSize?>(null)
-
-    // Our updated shouldRefetchOnSizeChange
-    var shouldRefetchOnSizeChange by mutableStateOf(initialShouldRefetchOnSizeChange)
 
     // Current request job
     private var job: Job? = null
@@ -369,10 +367,7 @@ private class ImageLoader<R : Any>(
         job = coroutineScope.launch {
             combine(
                 state.internalRequestFlow,
-                snapshotFlow { requestSize }
-                    .filterNotNull()
-                    // We use filterSubsequent() so that the first emitted size skips the predicate
-                    .filterSubsequent { shouldRefetchOnSizeChange(state.loadState, it) },
+                snapshotFlow { requestSize }.filterNotNull(),
                 transform = { request, size -> request to size }
             ).collectLatest { (request, size) ->
                 state.execute(request, size)

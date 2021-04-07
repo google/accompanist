@@ -102,6 +102,7 @@ fun CoilImage(
         data = data,
         requestBuilder = requestBuilder,
         imageLoader = imageLoader,
+        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
     )
 
     LaunchedEffect(request) {
@@ -112,9 +113,8 @@ fun CoilImage(
 
     @Suppress("DEPRECATION")
     ImageSuchDeprecated(
-        request = request,
+        state = request,
         previewPlaceholder = previewPlaceholder,
-        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         modifier = modifier,
         content = content
     )
@@ -282,6 +282,7 @@ fun CoilImage(
         data = data,
         requestBuilder = requestBuilder,
         imageLoader = imageLoader,
+        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
     )
 
     LaunchedEffect(request) {
@@ -292,9 +293,8 @@ fun CoilImage(
 
     @Suppress("DEPRECATION")
     ImageSuchDeprecated(
-        request = request,
+        state = request,
         previewPlaceholder = previewPlaceholder,
-        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         modifier = modifier,
     ) { imageState ->
         when (imageState) {

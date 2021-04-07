@@ -106,6 +106,7 @@ fun GlideImage(
         data = data,
         requestManager = requestManager,
         requestBuilder = requestBuilder,
+        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
     )
 
     LaunchedEffect(request) {
@@ -116,9 +117,8 @@ fun GlideImage(
 
     @Suppress("DEPRECATION")
     ImageSuchDeprecated(
-        request = request,
+        state = request,
         previewPlaceholder = previewPlaceholder,
-        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         modifier = modifier,
         content = content
     )
@@ -215,6 +215,7 @@ fun GlideImage(
         data = data,
         requestManager = requestManager,
         requestBuilder = requestBuilder,
+        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
     )
 
     LaunchedEffect(request) {
@@ -225,9 +226,8 @@ fun GlideImage(
 
     @Suppress("DEPRECATION")
     ImageSuchDeprecated(
-        request = request,
+        state = request,
         previewPlaceholder = previewPlaceholder,
-        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         modifier = modifier,
     ) { imageState ->
         when (imageState) {

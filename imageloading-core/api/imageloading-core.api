@@ -21,8 +21,8 @@ public final class com/google/accompanist/imageloading/DeprecatedKt {
 }
 
 public final class com/google/accompanist/imageloading/ImageKt {
-	public static final fun Image (Lcom/google/accompanist/imageloading/ImageState;Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;ZIILkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
-	public static final fun ImageSuchDeprecated (Lcom/google/accompanist/imageloading/ImageState;Landroidx/compose/ui/Modifier;ILkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
+	public static final fun Image (Lcom/google/accompanist/imageloading/ImageState;Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;ZIILandroidx/compose/runtime/Composer;II)V
+	public static final fun ImageSuchDeprecated (Lcom/google/accompanist/imageloading/ImageState;Landroidx/compose/ui/Modifier;ILkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
 }
 
 public abstract class com/google/accompanist/imageloading/ImageLoadState {
@@ -73,10 +73,12 @@ public final class com/google/accompanist/imageloading/ImageLoadStateKt {
 }
 
 public abstract class com/google/accompanist/imageloading/ImageState {
-	public fun <init> ()V
+	public fun <init> (Lkotlin/jvm/functions/Function2;)V
 	protected abstract fun executeRequest-JVtK1S4 (Ljava/lang/Object;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun getLoadState ()Lcom/google/accompanist/imageloading/ImageLoadState;
 	protected abstract fun getRequest ()Ljava/lang/Object;
+	public final fun getShouldRefetchOnSizeChange ()Lkotlin/jvm/functions/Function2;
+	public final fun setShouldRefetchOnSizeChange (Lkotlin/jvm/functions/Function2;)V
 }
 
 public final class com/google/accompanist/imageloading/MaterialLoadingImage {
