@@ -16,7 +16,6 @@ public final class com/google/accompanist/coil/CoilImageDefaults {
 public final class com/google/accompanist/coil/CoilImageState : com/google/accompanist/imageloading/ImageState {
 	public fun <init> (Lcoil/ImageLoader;Landroid/content/Context;)V
 	public final fun getData ()Ljava/lang/Object;
-	public final fun getImageLoader ()Lcoil/ImageLoader;
 	public final fun getRequestBuilder ()Lkotlin/jvm/functions/Function2;
 	public final fun setData (Ljava/lang/Object;)V
 	public final fun setRequestBuilder (Lkotlin/jvm/functions/Function2;)V

@@ -100,7 +100,7 @@ private typealias ImageRequestBuilder = (RequestBuilder<Drawable>.(size: IntSize
  */
 @Stable
 class GlideImageState(
-    val requestManager: RequestManager
+    private val requestManager: RequestManager
 ) : ImageState<Any>() {
     private var currentData by mutableStateOf<Any?>(null)
 

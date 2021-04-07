@@ -13,7 +13,6 @@ public final class com/google/accompanist/glide/GlideImageState : com/google/acc
 	public fun <init> (Lcom/bumptech/glide/RequestManager;)V
 	public final fun getData ()Ljava/lang/Object;
 	public final fun getRequestBuilder ()Lkotlin/jvm/functions/Function2;
-	public final fun getRequestManager ()Lcom/bumptech/glide/RequestManager;
 	public final fun setData (Ljava/lang/Object;)V
 	public final fun setRequestBuilder (Lkotlin/jvm/functions/Function2;)V
 }

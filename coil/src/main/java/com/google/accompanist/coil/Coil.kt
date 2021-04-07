@@ -103,7 +103,7 @@ private typealias RequestBuilder = (ImageRequest.Builder.(size: IntSize) -> Imag
  */
 @Stable
 class CoilImageState(
-    val imageLoader: ImageLoader,
+    private val imageLoader: ImageLoader,
     private val context: Context,
 ) : ImageState<Any>() {
     private var currentData by mutableStateOf<Any?>(null)
