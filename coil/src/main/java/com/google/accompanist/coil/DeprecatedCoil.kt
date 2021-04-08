@@ -37,6 +37,7 @@ import coil.request.ImageRequest
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.ImageSuchDeprecated
 import com.google.accompanist.imageloading.MaterialLoadingImage
+import com.google.accompanist.imageloading.isFinalState
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 
@@ -107,7 +108,7 @@ fun CoilImage(
 
     LaunchedEffect(request) {
         snapshotFlow { request.loadState }
-            .filter { it is ImageLoadState.Success || it is ImageLoadState.Error }
+            .filter { it.isFinalState() }
             .collect { onRequestCompleted(it) }
     }
 
@@ -287,7 +288,7 @@ fun CoilImage(
 
     LaunchedEffect(request) {
         snapshotFlow { request.loadState }
-            .filter { it is ImageLoadState.Success || it is ImageLoadState.Error }
+            .filter { it.isFinalState() }
             .collect { onRequestCompleted(it) }
     }
 
