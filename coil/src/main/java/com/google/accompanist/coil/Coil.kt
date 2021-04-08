@@ -50,7 +50,7 @@ val LocalImageLoader = staticCompositionLocalOf<ImageLoader?> { null }
 /**
  * Contains some default values used by [rememberCoilImageState].
  */
-object CoilImageDefaults {
+object CoilImageStateDefaults {
     /**
      * Returns the default [ImageLoader] value for the `imageLoader` parameter in [CoilImage].
      */
@@ -77,7 +77,7 @@ object CoilImageDefaults {
 @Composable
 fun rememberCoilImageState(
     data: Any?,
-    imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
+    imageLoader: ImageLoader = CoilImageStateDefaults.defaultImageLoader(),
     context: Context = LocalContext.current,
     shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
@@ -100,7 +100,7 @@ fun rememberCoilImageState(
  * In most cases, this will be created via [rememberCoilImageState].
  *
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to
- * [CoilImageDefaults.defaultImageLoader].
+ * [CoilImageStateDefaults.defaultImageLoader].
  * @param context The Android [Context] to use when creating [ImageRequest]s.
  * @param shouldRefetchOnSizeChange the value for [CoilImageState.shouldRefetchOnSizeChange].
  */

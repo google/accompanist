@@ -7,12 +7,6 @@ public final class com/google/accompanist/coil/CoilImage {
 	public static final fun rememberCoilImageState (Ljava/lang/Object;Lcoil/ImageLoader;Landroid/content/Context;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)Lcom/google/accompanist/coil/CoilImageState;
 }
 
-public final class com/google/accompanist/coil/CoilImageDefaults {
-	public static final field $stable I
-	public static final field INSTANCE Lcom/google/accompanist/coil/CoilImageDefaults;
-	public final fun defaultImageLoader (Landroidx/compose/runtime/Composer;I)Lcoil/ImageLoader;
-}
-
 public final class com/google/accompanist/coil/CoilImageState : com/google/accompanist/imageloading/ImageState {
 	public fun <init> (Lcoil/ImageLoader;Landroid/content/Context;Lkotlin/jvm/functions/Function2;)V
 	public synthetic fun <init> (Lcoil/ImageLoader;Landroid/content/Context;Lkotlin/jvm/functions/Function2;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -20,5 +14,11 @@ public final class com/google/accompanist/coil/CoilImageState : com/google/accom
 	public final fun getRequestBuilder ()Lkotlin/jvm/functions/Function2;
 	public final fun setData (Ljava/lang/Object;)V
 	public final fun setRequestBuilder (Lkotlin/jvm/functions/Function2;)V
+}
+
+public final class com/google/accompanist/coil/CoilImageStateDefaults {
+	public static final field $stable I
+	public static final field INSTANCE Lcom/google/accompanist/coil/CoilImageStateDefaults;
+	public final fun defaultImageLoader (Landroidx/compose/runtime/Composer;I)Lcoil/ImageLoader;
 }
 

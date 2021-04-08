@@ -50,7 +50,7 @@ val LocalRequestManager = staticCompositionLocalOf<RequestManager?> { null }
 /**
  * Contains some default values used for [GlideImageState].
  */
-object GlideImageDefaults {
+object GlideImageStateDefaults {
     /**
      * Returns the default [RequestManager] value for the `requestManager` parameter
      * in [GlideImage].
@@ -80,7 +80,7 @@ object GlideImageDefaults {
 @Composable
 fun rememberGlideImageState(
     data: Any?,
-    requestManager: RequestManager = GlideImageDefaults.defaultRequestManager(),
+    requestManager: RequestManager = GlideImageStateDefaults.defaultRequestManager(),
     shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
     requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)? = null,
 ): GlideImageState = remember(requestManager) {
