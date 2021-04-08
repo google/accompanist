@@ -81,7 +81,7 @@ object GlideImageDefaults {
 fun rememberGlideImageState(
     data: Any?,
     requestManager: RequestManager = GlideImageDefaults.defaultRequestManager(),
-    shouldRefetchOnSizeChange: ShouldRefetchOnSizeChange = { _, _ -> false },
+    shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
     requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)? = null,
 ): GlideImageState = remember(requestManager) {
     GlideImageState(requestManager, shouldRefetchOnSizeChange)
@@ -90,9 +90,6 @@ fun rememberGlideImageState(
     this.requestBuilder = requestBuilder
     this.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
 }
-
-private typealias ImageRequestBuilder = (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)
-private typealias ShouldRefetchOnSizeChange = (currentState: ImageLoadState, size: IntSize) -> Boolean
 
 /**
  * A state object that can be hoisted for [com.google.accompanist.imageloading.Image]
@@ -106,7 +103,7 @@ private typealias ShouldRefetchOnSizeChange = (currentState: ImageLoadState, siz
 @Stable
 class GlideImageState(
     private val requestManager: RequestManager,
-    shouldRefetchOnSizeChange: ShouldRefetchOnSizeChange,
+    shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean,
 ) : ImageState<Any>(shouldRefetchOnSizeChange) {
     private var currentData by mutableStateOf<Any?>(null)
 
@@ -125,7 +122,7 @@ class GlideImageState(
     /**
      * Holds an optional builder for every created [RequestBuilder].
      */
-    var requestBuilder by mutableStateOf<ImageRequestBuilder?>(null)
+    var requestBuilder by mutableStateOf<(RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)?>(null)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun executeRequest(

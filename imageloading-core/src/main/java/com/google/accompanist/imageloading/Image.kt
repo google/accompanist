@@ -59,8 +59,6 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 
-private typealias ShouldRefetchOnSizeChange = (currentState: ImageLoadState, size: IntSize) -> Boolean
-
 /**
  * A state base class that can be hoisted to control image loads for [Image].
  *
@@ -68,7 +66,7 @@ private typealias ShouldRefetchOnSizeChange = (currentState: ImageLoadState, siz
  */
 @Stable
 abstract class ImageState<R : Any>(
-    shouldRefetchOnSizeChange: ShouldRefetchOnSizeChange,
+    shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean,
 ) {
     /**
      * The current request object.

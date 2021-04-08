@@ -79,7 +79,7 @@ fun rememberCoilImageState(
     data: Any?,
     imageLoader: ImageLoader = CoilImageDefaults.defaultImageLoader(),
     context: Context = LocalContext.current,
-    shouldRefetchOnSizeChange: ShouldRefetchOnSizeChange = { _, _ -> false },
+    shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
 ): CoilImageState = remember(imageLoader, context) {
     CoilImageState(
@@ -92,9 +92,6 @@ fun rememberCoilImageState(
     this.requestBuilder = requestBuilder
     this.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
 }
-
-private typealias RequestBuilder = (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)
-private typealias ShouldRefetchOnSizeChange = (currentState: ImageLoadState, size: IntSize) -> Boolean
 
 /**
  * A state object that can be hoisted for [com.google.accompanist.imageloading.Image]
@@ -111,7 +108,7 @@ private typealias ShouldRefetchOnSizeChange = (currentState: ImageLoadState, siz
 class CoilImageState(
     private val imageLoader: ImageLoader,
     private val context: Context,
-    shouldRefetchOnSizeChange: ShouldRefetchOnSizeChange = { _, _ -> false },
+    shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
 ) : ImageState<Any>(shouldRefetchOnSizeChange) {
     private var currentData by mutableStateOf<Any?>(null)
 
@@ -121,7 +118,7 @@ class CoilImageState(
     /**
      * Holds an optional builder for every created [ImageRequest].
      */
-    var requestBuilder by mutableStateOf<RequestBuilder?>(null)
+    var requestBuilder by mutableStateOf<(ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)?>(null)
 
     /**
      * The data to load. See [ImageRequest.Builder.data] for the types supported.
