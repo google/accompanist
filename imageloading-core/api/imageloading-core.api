@@ -1,14 +1,3 @@
-public final class com/google/accompanist/imageloading/AndroidDrawablePainter : androidx/compose/ui/graphics/painter/Painter {
-	public static final field $stable I
-	public fun <init> (Landroid/graphics/drawable/Drawable;)V
-	public fun getIntrinsicSize-NH-jbRc ()J
-}
-
-public final class com/google/accompanist/imageloading/AndroidDrawablePainterKt {
-	public static final fun rememberDrawablePainter (Landroid/graphics/drawable/Drawable;Landroidx/compose/runtime/Composer;I)Landroidx/compose/ui/graphics/painter/Painter;
-	public static final fun toPainter (Landroid/graphics/drawable/Drawable;)Landroidx/compose/ui/graphics/painter/Painter;
-}
-
 public final class com/google/accompanist/imageloading/DataSource : java/lang/Enum {
 	public static final field DISK Lcom/google/accompanist/imageloading/DataSource;
 	public static final field MEMORY Lcom/google/accompanist/imageloading/DataSource;
@@ -19,6 +8,11 @@ public final class com/google/accompanist/imageloading/DataSource : java/lang/En
 
 public final class com/google/accompanist/imageloading/DeprecatedKt {
 	public static final fun getDefaultRefetchOnSizeChangeLambda ()Lkotlin/jvm/functions/Function2;
+}
+
+public final class com/google/accompanist/imageloading/DrawablePainterKt {
+	public static final fun rememberDrawablePainter (Landroid/graphics/drawable/Drawable;Landroidx/compose/runtime/Composer;I)Landroidx/compose/ui/graphics/painter/Painter;
+	public static final fun toPainter (Landroid/graphics/drawable/Drawable;)Landroidx/compose/ui/graphics/painter/Painter;
 }
 
 public final class com/google/accompanist/imageloading/ImageKt {

@@ -54,7 +54,7 @@ private val MAIN_HANDLER by lazy(LazyThreadSafetyMode.NONE) {
  *
  * Taken from https://goo.gle/compose-drawable-painter
  */
-class AndroidDrawablePainter(
+private class DrawablePainter(
     private val drawable: Drawable
 ) : Painter() {
     private var invalidateTick by mutableStateOf(0)
@@ -77,32 +77,17 @@ class AndroidDrawablePainter(
     }
 
     init {
-        drawable.callback = object : Drawable.Callback {
-            override fun invalidateDrawable(d: Drawable) {
-                // Update the tick so that we get re-drawn
-                invalidateTick++
-            }
-
-            override fun scheduleDrawable(d: Drawable, what: Runnable, time: Long) {
-                MAIN_HANDLER.postAtTime(what, time)
-            }
-
-            override fun unscheduleDrawable(d: Drawable, what: Runnable) {
-                MAIN_HANDLER.removeCallbacks(what)
-            }
-        }
-
         // Update the drawable's bounds to match the intrinsic size
         drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
     }
 
-    internal fun onRemembered() {
+    fun onRemembered() {
         drawable.callback = callback
         drawable.setVisible(true, true)
         if (drawable is Animatable) drawable.start()
     }
 
-    internal fun onDisposed() {
+    fun onDisposed() {
         if (drawable is Animatable) drawable.stop()
         drawable.setVisible(false, false)
         drawable.callback = null
@@ -174,9 +159,9 @@ fun rememberDrawablePainter(drawable: Drawable): Painter {
     }
 
     DisposableEffect(painter) {
-        if (painter is AndroidDrawablePainter) painter.onRemembered()
+        if (painter is DrawablePainter) painter.onRemembered()
         onDispose {
-            if (painter is AndroidDrawablePainter) painter.onDisposed()
+            if (painter is DrawablePainter) painter.onDisposed()
         }
     }
 
@@ -197,5 +182,5 @@ fun rememberDrawablePainter(drawable: Drawable): Painter {
 fun Drawable.toPainter(): Painter = when (this) {
     is BitmapDrawable -> BitmapPainter(bitmap.asImageBitmap())
     is ColorDrawable -> ColorPainter(Color(color))
-    else -> AndroidDrawablePainter(mutate())
+    else -> DrawablePainter(mutate())
 }
