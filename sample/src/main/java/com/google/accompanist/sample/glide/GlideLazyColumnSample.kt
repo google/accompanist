@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -35,10 +34,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.glide.GlideImage
+import com.google.accompanist.glide.rememberGlideImageState
+import com.google.accompanist.imageloading.Image
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
-import com.google.accompanist.sample.randomSampleImageUrl
+import com.google.accompanist.sample.rememberRandomSampleImageUrl
 
 class GlideLazyColumnSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,16 +63,13 @@ private fun Sample() {
             )
         }
     ) {
-        val items = buildList {
-            repeat(NumberItems) { add(randomSampleImageUrl(it)) }
-        }
         LazyColumn(Modifier.padding(16.dp)) {
-            items(items) { imageUrl ->
+            items(NumberItems) { index ->
                 Row(Modifier.padding(16.dp)) {
-                    GlideImage(
-                        data = imageUrl,
+                    Image(
+                        state = rememberGlideImageState(rememberRandomSampleImageUrl(index)),
                         contentDescription = null,
-                        modifier = Modifier.size(64.dp)
+                        modifier = Modifier.size(64.dp),
                     )
 
                     Spacer(Modifier.width(8.dp))
@@ -80,7 +77,9 @@ private fun Sample() {
                     Text(
                         text = "Text",
                         style = MaterialTheme.typography.subtitle2,
-                        modifier = Modifier.weight(1f).align(Alignment.CenterVertically)
+                        modifier = Modifier
+                            .weight(1f)
+                            .align(Alignment.CenterVertically)
                     )
                 }
             }

@@ -22,19 +22,10 @@ import androidx.core.net.toUri
 import androidx.test.platform.app.InstrumentationRegistry
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withTimeout
-import java.util.concurrent.TimeUnit
 
 fun resourceUri(id: Int): Uri {
     val packageName = InstrumentationRegistry.getInstrumentation().targetContext.packageName
     return "${ContentResolver.SCHEME_ANDROID_RESOURCE}://$packageName/$id".toUri()
-}
-
-/**
- * Designed to mirror `CountdownLatch.await()`
- */
-fun <T> ReceiveChannel<T>.awaitNext(timeout: Long, unit: TimeUnit): T = runBlocking {
-    withTimeout(unit.toMillis(timeout)) { receive() }
 }
 
 fun <T> ReceiveChannel<T>.receiveBlocking(): T = runBlocking { receive() }

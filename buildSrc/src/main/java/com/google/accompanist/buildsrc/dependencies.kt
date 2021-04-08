@@ -21,7 +21,7 @@ object Versions {
 }
 
 object Libs {
-    const val androidGradlePlugin = "com.android.tools.build:gradle:7.0.0-alpha13"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:7.0.0-alpha14"
 
     const val gradleMavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.13.0"
 
@@ -104,12 +104,12 @@ object Libs {
     }
 
     object Coil {
-        private const val version = "1.0.0"
+        private const val version = "1.1.1"
         const val coil = "io.coil-kt:coil:$version"
         const val gif = "io.coil-kt:coil-gif:$version"
     }
 
-    const val glide = "com.github.bumptech.glide:glide:4.11.0"
+    const val glide = "com.github.bumptech.glide:glide:4.12.0"
 
     const val truth = "com.google.truth:truth:1.0.1"
 

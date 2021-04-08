@@ -37,14 +37,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.coil.CoilImage
+import com.google.accompanist.coil.rememberCoilImageState
+import com.google.accompanist.imageloading.Image
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.VerticalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
-import com.google.accompanist.sample.randomSampleImageUrl
+import com.google.accompanist.sample.rememberRandomSampleImageUrl
 
 class NestedPagersSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -100,11 +101,13 @@ private fun PagerItem(
 ) {
     Box {
         // Our page content, displaying a random image
-        CoilImage(
-            data = randomSampleImageUrl(width = 600),
+        Image(
+            state = rememberCoilImageState(
+                rememberRandomSampleImageUrl(width = 600)
+            ),
             contentDescription = null,
+            modifier = modifier,
             fadeIn = true,
-            modifier = modifier
         )
 
         // Displays the page index
