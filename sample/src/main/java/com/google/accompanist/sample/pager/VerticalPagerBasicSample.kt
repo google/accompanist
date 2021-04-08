@@ -48,14 +48,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.coil.CoilImage
+import com.google.accompanist.coil.rememberCoilImageState
+import com.google.accompanist.imageloading.Image
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.VerticalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
-import com.google.accompanist.sample.randomSampleImageUrl
+import com.google.accompanist.sample.rememberRandomSampleImageUrl
 import kotlinx.coroutines.launch
 
 class VerticalPagerBasicSample : ComponentActivity() {
@@ -98,13 +99,15 @@ private fun Sample() {
             ) { page ->
                 Box {
                     // Our page content, displaying a random image
-                    CoilImage(
-                        data = randomSampleImageUrl(width = 600),
+                    Image(
+                        state = rememberCoilImageState(
+                            rememberRandomSampleImageUrl(width = 600)
+                        ),
                         contentDescription = null,
                         fadeIn = true,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .aspectRatio(1f)
+                            .aspectRatio(1f),
                     )
 
                     // Displays the page index
