@@ -202,7 +202,7 @@ fun <R : Any> Image(
     val fadeInColorFilter by fadeInAsState(
         imageState = state,
         enabled = { result ->
-            // We run the fade in animation is the result is loaded from disk/network. This allows
+            // We run the fade in animation if the result is loaded from disk/network. This allows
             // us to approximate only running the animation on 'first load'
             fadeIn && result is ImageLoadState.Success && result.source != DataSource.MEMORY
         },
