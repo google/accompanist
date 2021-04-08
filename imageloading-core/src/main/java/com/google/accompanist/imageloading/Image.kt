@@ -28,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -52,11 +53,9 @@ import androidx.compose.ui.unit.IntSize
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 
@@ -131,7 +130,7 @@ abstract class ImageState<R : Any>(
             throw e
         } catch (t: Throwable) {
             // Anything else, we wrap in a Error state instance
-            ImageLoadState.Error(painter = null, throwable = t, request = request)
+            ImageLoadState.Error(result = null, throwable = t, request = request)
         }
     }
 
@@ -199,7 +198,7 @@ fun <R : Any> Image(
     }
 
     // This runs our fade in animation
-    val fadeInColorFilter by fadeInAsState(
+    val fadeInColorFilter = fadeInAsState(
         imageState = state,
         enabled = { result ->
             // We run the fade in animation if the result is loaded from disk/network. This allows
@@ -216,22 +215,19 @@ fun <R : Any> Image(
         }
     } else Modifier
 
+    // Our result painter, created from the ImageState with some composition lifecycle
+    // callbacks
+    val resultPainter = state.painterAsState()
+
     // Our painter. We use a DelegatingPainter which delegates the actual drawn/laid-out painter
-    // to a lambda block. That block will be called during layout and drawing, which means
-    // that any changes to `state.loadState` will automatically re-trigger layout/draw.
-    // This allows us to use a single Painter instance, and usually a single Modifier.paint().
-    val painter = DelegatingPainter(
-        painter = {
-            state.loadState.let { state ->
-                when (state) {
-                    is ImageLoadState.Success -> state.painter
-                    is ImageLoadState.Error -> state.painter ?: EmptyPainter
-                    else -> EmptyPainter
-                }
-            }
-        },
-        transitionColorFilter = { fadeInColorFilter }
-    )
+    // to our result painter state. That block will be called during layout and drawing,
+    // which means that any changes to `state.loadState` will automatically re-trigger layout/draw.
+    val painter = remember(state) {
+        DelegatingPainter(
+            painter = { resultPainter.value },
+            transitionColorFilter = { fadeInColorFilter.value }
+        )
+    }
 
     // We build a modifier once, for each ImageLoader, which handles everything. We
     // ensure that no state objects are used in its construction, so that all state
@@ -250,6 +246,19 @@ fun <R : Any> Image(
             )
             .then(imageLoader.layoutModifier)
     )
+}
+
+/**
+ * Allows us observe the current result [Painter] as state. This function allows us to
+ * minimize the amount of composition needed, such that only this function needs to be restarted
+ * when the `loadState` changes.
+ */
+@Composable
+private fun ImageState<*>.painterAsState(): State<Painter> {
+    val painter = loadState.drawable
+        ?.let { rememberDrawablePainter(it) }
+        ?: EmptyPainter
+    return rememberUpdatedState(painter)
 }
 
 @Composable
@@ -382,21 +391,4 @@ private class ImageLoader<R : Any>(
 private object EmptyPainter : Painter() {
     override val intrinsicSize: Size get() = Size.Unspecified
     override fun DrawScope.onDraw() {}
-}
-
-/**
- * A variant of [kotlinx.coroutines.flow.filter] which always emits the first value,
- * then uses [predicate] as expected for subsequent emissions.
- */
-private fun <T> Flow<T>.filterSubsequent(
-    predicate: suspend (T) -> Boolean
-): Flow<T> = flow {
-    var hasEmitted = false
-    collect { value ->
-        // Emit the value if this is the first value, or predicate returns true
-        if (!hasEmitted || predicate(value)) {
-            hasEmitted = true
-            return@collect emit(value)
-        }
-    }
 }

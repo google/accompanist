@@ -179,7 +179,7 @@ fun MaterialLoadingImage(
     fadeInDurationMs: Int = DefaultTransitionDuration
 ) {
     MaterialLoadingImage(
-        painter = result.painter,
+        painter = rememberDrawablePainter(result.result),
         contentDescription = contentDescription,
         alignment = alignment,
         contentScale = contentScale,

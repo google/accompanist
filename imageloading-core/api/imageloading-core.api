@@ -5,6 +5,7 @@ public final class com/google/accompanist/imageloading/AndroidDrawablePainter : 
 }
 
 public final class com/google/accompanist/imageloading/AndroidDrawablePainterKt {
+	public static final fun rememberDrawablePainter (Landroid/graphics/drawable/Drawable;Landroidx/compose/runtime/Composer;I)Landroidx/compose/ui/graphics/painter/Painter;
 	public static final fun toPainter (Landroid/graphics/drawable/Drawable;)Landroidx/compose/ui/graphics/painter/Painter;
 }
 
@@ -36,16 +37,16 @@ public final class com/google/accompanist/imageloading/ImageLoadState$Empty : co
 
 public final class com/google/accompanist/imageloading/ImageLoadState$Error : com/google/accompanist/imageloading/ImageLoadState {
 	public static final field $stable I
-	public fun <init> (Landroidx/compose/ui/graphics/painter/Painter;Ljava/lang/Object;Ljava/lang/Throwable;)V
-	public synthetic fun <init> (Landroidx/compose/ui/graphics/painter/Painter;Ljava/lang/Object;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun component1 ()Landroidx/compose/ui/graphics/painter/Painter;
+	public fun <init> (Landroid/graphics/drawable/Drawable;Ljava/lang/Object;Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Landroid/graphics/drawable/Drawable;Ljava/lang/Object;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Landroid/graphics/drawable/Drawable;
 	public final fun component2 ()Ljava/lang/Object;
 	public final fun component3 ()Ljava/lang/Throwable;
-	public final fun copy (Landroidx/compose/ui/graphics/painter/Painter;Ljava/lang/Object;Ljava/lang/Throwable;)Lcom/google/accompanist/imageloading/ImageLoadState$Error;
-	public static synthetic fun copy$default (Lcom/google/accompanist/imageloading/ImageLoadState$Error;Landroidx/compose/ui/graphics/painter/Painter;Ljava/lang/Object;Ljava/lang/Throwable;ILjava/lang/Object;)Lcom/google/accompanist/imageloading/ImageLoadState$Error;
+	public final fun copy (Landroid/graphics/drawable/Drawable;Ljava/lang/Object;Ljava/lang/Throwable;)Lcom/google/accompanist/imageloading/ImageLoadState$Error;
+	public static synthetic fun copy$default (Lcom/google/accompanist/imageloading/ImageLoadState$Error;Landroid/graphics/drawable/Drawable;Ljava/lang/Object;Ljava/lang/Throwable;ILjava/lang/Object;)Lcom/google/accompanist/imageloading/ImageLoadState$Error;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getPainter ()Landroidx/compose/ui/graphics/painter/Painter;
 	public final fun getRequest ()Ljava/lang/Object;
+	public final fun getResult ()Landroid/graphics/drawable/Drawable;
 	public final fun getThrowable ()Ljava/lang/Throwable;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
@@ -58,15 +59,15 @@ public final class com/google/accompanist/imageloading/ImageLoadState$Loading : 
 
 public final class com/google/accompanist/imageloading/ImageLoadState$Success : com/google/accompanist/imageloading/ImageLoadState {
 	public static final field $stable I
-	public fun <init> (Landroidx/compose/ui/graphics/painter/Painter;Lcom/google/accompanist/imageloading/DataSource;Ljava/lang/Object;)V
-	public final fun component1 ()Landroidx/compose/ui/graphics/painter/Painter;
+	public fun <init> (Landroid/graphics/drawable/Drawable;Lcom/google/accompanist/imageloading/DataSource;Ljava/lang/Object;)V
+	public final fun component1 ()Landroid/graphics/drawable/Drawable;
 	public final fun component2 ()Lcom/google/accompanist/imageloading/DataSource;
 	public final fun component3 ()Ljava/lang/Object;
-	public final fun copy (Landroidx/compose/ui/graphics/painter/Painter;Lcom/google/accompanist/imageloading/DataSource;Ljava/lang/Object;)Lcom/google/accompanist/imageloading/ImageLoadState$Success;
-	public static synthetic fun copy$default (Lcom/google/accompanist/imageloading/ImageLoadState$Success;Landroidx/compose/ui/graphics/painter/Painter;Lcom/google/accompanist/imageloading/DataSource;Ljava/lang/Object;ILjava/lang/Object;)Lcom/google/accompanist/imageloading/ImageLoadState$Success;
+	public final fun copy (Landroid/graphics/drawable/Drawable;Lcom/google/accompanist/imageloading/DataSource;Ljava/lang/Object;)Lcom/google/accompanist/imageloading/ImageLoadState$Success;
+	public static synthetic fun copy$default (Lcom/google/accompanist/imageloading/ImageLoadState$Success;Landroid/graphics/drawable/Drawable;Lcom/google/accompanist/imageloading/DataSource;Ljava/lang/Object;ILjava/lang/Object;)Lcom/google/accompanist/imageloading/ImageLoadState$Success;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getPainter ()Landroidx/compose/ui/graphics/painter/Painter;
 	public final fun getRequest ()Ljava/lang/Object;
+	public final fun getResult ()Landroid/graphics/drawable/Drawable;
 	public final fun getSource ()Lcom/google/accompanist/imageloading/DataSource;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;

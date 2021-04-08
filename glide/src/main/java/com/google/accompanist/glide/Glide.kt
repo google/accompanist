@@ -38,7 +38,6 @@ import com.bumptech.glide.request.target.Target
 import com.google.accompanist.imageloading.DataSource
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.ImageState
-import com.google.accompanist.imageloading.toPainter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 
@@ -146,7 +145,7 @@ class GlideImageState(
                 }
 
                 val result = ImageLoadState.Error(
-                    painter = errorDrawable?.toPainter(),
+                    result = errorDrawable,
                     request = request,
                     throwable = failException
                         ?: IllegalArgumentException("Error while loading $request")
@@ -173,7 +172,7 @@ class GlideImageState(
                 }
 
                 val result = ImageLoadState.Success(
-                    painter = drawable.toPainter(),
+                    result = drawable,
                     request = request,
                     source = dataSource.toDataSource()
                 )

@@ -40,7 +40,6 @@ import coil.size.Precision
 import com.google.accompanist.imageloading.DataSource
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.ImageState
-import com.google.accompanist.imageloading.toPainter
 
 /**
  * Composition local containing the preferred [ImageLoader] to be used by
@@ -171,14 +170,14 @@ class CoilImageState(
 private fun ImageResult.toResult(request: Any): ImageLoadState = when (this) {
     is coil.request.SuccessResult -> {
         ImageLoadState.Success(
-            painter = drawable.toPainter(),
+            result = drawable,
             request = request,
             source = metadata.dataSource.toDataSource()
         )
     }
     is coil.request.ErrorResult -> {
         ImageLoadState.Error(
-            painter = drawable?.toPainter(),
+            result = drawable,
             request = request,
             throwable = throwable
         )
