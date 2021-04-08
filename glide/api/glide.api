@@ -4,11 +4,11 @@ public final class com/google/accompanist/glide/GlideImage {
 }
 
 public final class com/google/accompanist/glide/GlideImageState : com/google/accompanist/imageloading/ImageState {
-	public fun <init> (Lcom/bumptech/glide/RequestManager;Lkotlin/jvm/functions/Function2;)V
+	public fun <init> (Lcom/bumptech/glide/RequestManager;Lcom/google/accompanist/imageloading/ShouldRefetchOnSizeChange;)V
 	public final fun getData ()Ljava/lang/Object;
-	public final fun getRequestBuilder ()Lkotlin/jvm/functions/Function2;
+	public final fun getRequestBuilder ()Lcom/google/accompanist/glide/ImageRequestBuilder;
 	public final fun setData (Ljava/lang/Object;)V
-	public final fun setRequestBuilder (Lkotlin/jvm/functions/Function2;)V
+	public final fun setRequestBuilder (Lcom/google/accompanist/glide/ImageRequestBuilder;)V
 }
 
 public final class com/google/accompanist/glide/GlideImageStateDefaults {
@@ -19,6 +19,10 @@ public final class com/google/accompanist/glide/GlideImageStateDefaults {
 
 public final class com/google/accompanist/glide/GlideKt {
 	public static final fun getLocalRequestManager ()Landroidx/compose/runtime/ProvidableCompositionLocal;
-	public static final fun rememberGlideImageState (Ljava/lang/Object;Lcom/bumptech/glide/RequestManager;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)Lcom/google/accompanist/glide/GlideImageState;
+	public static final fun rememberGlideImageState (Ljava/lang/Object;Lcom/bumptech/glide/RequestManager;Lcom/google/accompanist/imageloading/ShouldRefetchOnSizeChange;Lcom/google/accompanist/glide/ImageRequestBuilder;Landroidx/compose/runtime/Composer;II)Lcom/google/accompanist/glide/GlideImageState;
+}
+
+public abstract interface class com/google/accompanist/glide/ImageRequestBuilder {
+	public abstract fun build-O0kMr_c (Lcom/bumptech/glide/RequestBuilder;J)Lcom/bumptech/glide/RequestBuilder;
 }
 

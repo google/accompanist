@@ -107,7 +107,10 @@ fun GlideImage(
         data = data,
         requestManager = requestManager,
         requestBuilder = requestBuilder,
-        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
+        // Need to wrap the lambda into a ShouldRefetchOnSizeChange
+        shouldRefetchOnSizeChange = { currentState, size ->
+            shouldRefetchOnSizeChange(currentState, size)
+        }
     )
 
     LaunchedEffect(request) {
@@ -216,7 +219,10 @@ fun GlideImage(
         data = data,
         requestManager = requestManager,
         requestBuilder = requestBuilder,
-        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
+        // Need to wrap the lambda into a ShouldRefetchOnSizeChange
+        shouldRefetchOnSizeChange = { currentState, size ->
+            shouldRefetchOnSizeChange(currentState, size)
+        }
     )
 
     LaunchedEffect(request) {

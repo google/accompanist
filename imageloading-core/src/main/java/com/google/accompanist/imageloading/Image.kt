@@ -59,6 +59,10 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 
+fun interface ShouldRefetchOnSizeChange {
+    fun shouldRefetch(currentState: ImageLoadState, size: IntSize): Boolean
+}
+
 /**
  * A state base class that can be hoisted to control image loads for [Image].
  *
@@ -66,7 +70,7 @@ import kotlin.coroutines.cancellation.CancellationException
  */
 @Stable
 abstract class ImageState<R : Any>(
-    shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean,
+    shouldRefetchOnSizeChange: ShouldRefetchOnSizeChange,
 ) {
     /**
      * The current request object.
@@ -101,7 +105,7 @@ abstract class ImageState<R : Any>(
 
         if (loadState != ImageLoadState.Empty &&
             request == loadState.request &&
-            !shouldRefetchOnSizeChange(loadState, size)
+            !shouldRefetchOnSizeChange.shouldRefetch(loadState, size)
         ) {
             // If we're not empty, the request is the same and shouldRefetchOnSizeChange()
             // returns false, return now to skip this request

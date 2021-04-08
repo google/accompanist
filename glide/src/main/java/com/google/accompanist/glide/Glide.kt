@@ -38,6 +38,7 @@ import com.bumptech.glide.request.target.Target
 import com.google.accompanist.imageloading.DataSource
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.ImageState
+import com.google.accompanist.imageloading.ShouldRefetchOnSizeChange
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 
@@ -81,14 +82,21 @@ object GlideImageStateDefaults {
 fun rememberGlideImageState(
     data: Any?,
     requestManager: RequestManager = GlideImageStateDefaults.defaultRequestManager(),
-    shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
-    requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)? = null,
+    shouldRefetchOnSizeChange: ShouldRefetchOnSizeChange = ShouldRefetchOnSizeChange { _, _ -> false },
+    requestBuilder: ImageRequestBuilder? = null,
 ): GlideImageState = remember(requestManager) {
     GlideImageState(requestManager, shouldRefetchOnSizeChange)
 }.apply {
     this.data = data
     this.requestBuilder = requestBuilder
     this.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
+}
+
+/**
+ * Interface which allows composing on top of a [RequestBuilder].
+ */
+fun interface ImageRequestBuilder {
+    fun RequestBuilder<Drawable>.build(size: IntSize): RequestBuilder<Drawable>
 }
 
 /**
@@ -103,7 +111,7 @@ fun rememberGlideImageState(
 @Stable
 class GlideImageState(
     private val requestManager: RequestManager,
-    shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean,
+    shouldRefetchOnSizeChange: ShouldRefetchOnSizeChange,
 ) : ImageState<Any>(shouldRefetchOnSizeChange) {
     private var currentData by mutableStateOf<Any?>(null)
 
@@ -122,7 +130,7 @@ class GlideImageState(
     /**
      * Holds an optional builder for every created [RequestBuilder].
      */
-    var requestBuilder by mutableStateOf<(RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)?>(null)
+    var requestBuilder by mutableStateOf<ImageRequestBuilder?>(null)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun executeRequest(
@@ -200,7 +208,7 @@ class GlideImageState(
 
         // Start the image request into the target
         requestManager.load(request)
-            .apply { requestBuilder?.invoke(this, size) }
+            .let { b -> requestBuilder?.run { b.build(size) } ?: b }
             .addListener(listener)
             .into(target)
 

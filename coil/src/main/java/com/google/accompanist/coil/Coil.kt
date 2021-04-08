@@ -40,6 +40,7 @@ import coil.size.Precision
 import com.google.accompanist.imageloading.DataSource
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.ImageState
+import com.google.accompanist.imageloading.ShouldRefetchOnSizeChange
 
 /**
  * Composition local containing the preferred [ImageLoader] to be used by
@@ -79,8 +80,8 @@ fun rememberCoilImageState(
     data: Any?,
     imageLoader: ImageLoader = CoilImageStateDefaults.defaultImageLoader(),
     context: Context = LocalContext.current,
-    shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
-    requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
+    shouldRefetchOnSizeChange: ShouldRefetchOnSizeChange = ShouldRefetchOnSizeChange { _, _ -> false },
+    requestBuilder: RequestBuilder? = null,
 ): CoilImageState = remember(imageLoader, context) {
     CoilImageState(
         imageLoader = imageLoader,
@@ -91,6 +92,13 @@ fun rememberCoilImageState(
     this.data = data
     this.requestBuilder = requestBuilder
     this.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
+}
+
+/**
+ * Interface which allows composing on top of a [ImageRequest.Builder].
+ */
+fun interface RequestBuilder {
+    fun ImageRequest.Builder.build(size: IntSize): ImageRequest.Builder
 }
 
 /**
@@ -108,7 +116,7 @@ fun rememberCoilImageState(
 class CoilImageState(
     private val imageLoader: ImageLoader,
     private val context: Context,
-    shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
+    shouldRefetchOnSizeChange: ShouldRefetchOnSizeChange = ShouldRefetchOnSizeChange { _, _ -> false },
 ) : ImageState<Any>(shouldRefetchOnSizeChange) {
     private var currentData by mutableStateOf<Any?>(null)
 
@@ -118,7 +126,7 @@ class CoilImageState(
     /**
      * Holds an optional builder for every created [ImageRequest].
      */
-    var requestBuilder by mutableStateOf<(ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)?>(null)
+    var requestBuilder by mutableStateOf<RequestBuilder?>(null)
 
     /**
      * The data to load. See [ImageRequest.Builder.data] for the types supported.
@@ -130,7 +138,7 @@ class CoilImageState(
         }
 
     override suspend fun executeRequest(request: Any, size: IntSize): ImageLoadState {
-        val baseRequest = when (request) {
+        val builder = when (request) {
             // If we've been given an ImageRequest instance, use it...
             is ImageRequest -> request.newBuilder()
             // Otherwise we construct a request from the data
@@ -141,10 +149,9 @@ class CoilImageState(
                     // INEXACT is correct as we can scale the result appropriately.
                     .precision(Precision.INEXACT)
             }
-        }.apply {
-            // Apply the request builder
-            requestBuilder?.invoke(this, size)
-        }.build()
+        }
+
+        val baseRequest = (requestBuilder?.run { builder.build(size) } ?: builder).build()
 
         val sizedRequest = when {
             // If the request has a size resolver set we just execute the request as-is

@@ -103,7 +103,10 @@ fun CoilImage(
         data = data,
         requestBuilder = requestBuilder,
         imageLoader = imageLoader,
-        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
+        // Need to wrap the lambda into a ShouldRefetchOnSizeChange
+        shouldRefetchOnSizeChange = { currentState, size ->
+            shouldRefetchOnSizeChange(currentState, size)
+        }
     )
 
     LaunchedEffect(request) {
@@ -283,7 +286,10 @@ fun CoilImage(
         data = data,
         requestBuilder = requestBuilder,
         imageLoader = imageLoader,
-        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
+        // Need to wrap the lambda into a ShouldRefetchOnSizeChange
+        shouldRefetchOnSizeChange = { currentState, size ->
+            shouldRefetchOnSizeChange(currentState, size)
+        }
     )
 
     LaunchedEffect(request) {

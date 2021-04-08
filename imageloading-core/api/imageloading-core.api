@@ -72,17 +72,21 @@ public final class com/google/accompanist/imageloading/ImageLoadStateKt {
 }
 
 public abstract class com/google/accompanist/imageloading/ImageState {
-	public fun <init> (Lkotlin/jvm/functions/Function2;)V
+	public fun <init> (Lcom/google/accompanist/imageloading/ShouldRefetchOnSizeChange;)V
 	protected abstract fun executeRequest-JVtK1S4 (Ljava/lang/Object;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun getLoadState ()Lcom/google/accompanist/imageloading/ImageLoadState;
 	protected abstract fun getRequest ()Ljava/lang/Object;
-	public final fun getShouldRefetchOnSizeChange ()Lkotlin/jvm/functions/Function2;
-	public final fun setShouldRefetchOnSizeChange (Lkotlin/jvm/functions/Function2;)V
+	public final fun getShouldRefetchOnSizeChange ()Lcom/google/accompanist/imageloading/ShouldRefetchOnSizeChange;
+	public final fun setShouldRefetchOnSizeChange (Lcom/google/accompanist/imageloading/ShouldRefetchOnSizeChange;)V
 }
 
 public final class com/google/accompanist/imageloading/MaterialLoadingImage {
 	public static final fun MaterialLoadingImage (Landroidx/compose/ui/graphics/ImageBitmap;Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;ZILandroidx/compose/runtime/Composer;II)V
 	public static final fun MaterialLoadingImage (Landroidx/compose/ui/graphics/painter/Painter;Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;ZILandroidx/compose/runtime/Composer;II)V
 	public static final fun MaterialLoadingImage (Lcom/google/accompanist/imageloading/ImageLoadState$Success;Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;ZZILandroidx/compose/runtime/Composer;II)V
+}
+
+public abstract interface class com/google/accompanist/imageloading/ShouldRefetchOnSizeChange {
+	public abstract fun shouldRefetch-O0kMr_c (Lcom/google/accompanist/imageloading/ImageLoadState;J)Z
 }
 
