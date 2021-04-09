@@ -52,8 +52,7 @@ import com.google.accompanist.insets.ViewWindowInsetObserver
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
-import com.google.accompanist.systemuicontroller.LocalSystemUiController
-import com.google.accompanist.systemuicontroller.rememberAndroidSystemUiController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class InsetsFragmentSample : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,11 +90,7 @@ class InsetsFragment : Fragment() {
             AccompanistSampleTheme {
                 // Instead of calling ProvideWindowInsets, we use CompositionLocalProvider to provide
                 // the WindowInsets instance from above to LocalWindowInsets
-                val controller = rememberAndroidSystemUiController()
-                CompositionLocalProvider(
-                    LocalWindowInsets provides windowInsets,
-                    LocalSystemUiController provides controller
-                ) {
+                CompositionLocalProvider(LocalWindowInsets provides windowInsets) {
                     Sample()
                 }
             }
@@ -105,7 +100,7 @@ class InsetsFragment : Fragment() {
 
 @Composable
 private fun Sample() {
-    val systemUiController = LocalSystemUiController.current
+    val systemUiController = rememberSystemUiController()
     val useDarkIcons = MaterialTheme.colors.isLight
     SideEffect {
         systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = useDarkIcons)

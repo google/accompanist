@@ -18,25 +18,14 @@ package com.google.accompanist.sample.systemuicontroller
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
-import com.google.accompanist.systemuicontroller.LocalSystemUiController
-import com.google.accompanist.systemuicontroller.rememberAndroidSystemUiController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
-fun MyApp() {
-    // Remember a controller, and provide it to the LocalSystemUiController
-    val systemUiController = rememberAndroidSystemUiController()
-    CompositionLocalProvider(LocalSystemUiController provides systemUiController) {
-        MyHomeScreen()
-    }
-}
-
-@Composable
-fun MyHomeScreen() {
+fun SystemUiControllerSample() {
     // Get the current SystemUiController
-    val systemUiController = LocalSystemUiController.current
+    val systemUiController = rememberSystemUiController()
     val useDarkIcons = MaterialTheme.colors.isLight
 
     SideEffect {

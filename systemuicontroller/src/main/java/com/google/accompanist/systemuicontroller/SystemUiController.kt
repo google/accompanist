@@ -37,7 +37,7 @@ import androidx.core.view.ViewCompat
  * A class which provides easy-to-use utilities for updating the System UI bar
  * colors within Jetpack Compose.
  *
- * @sample com.google.accompanist.sample.systemuicontroller.MyHomeScreen
+ * @sample com.google.accompanist.sample.systemuicontroller.SystemUiControllerSample
  */
 @Stable
 interface SystemUiController {
@@ -54,7 +54,7 @@ interface SystemUiController {
         color: Color,
         darkIcons: Boolean = color.luminance() > 0.5f,
         transformColorForLightContent: (Color) -> Color = BlackScrimmed
-    ) = Unit
+    )
 
     /**
      * Set the navigation bar color.
@@ -75,7 +75,7 @@ interface SystemUiController {
         darkIcons: Boolean = color.luminance() > 0.5f,
         navigationBarContrastEnforced: Boolean = true,
         transformColorForLightContent: (Color) -> Color = BlackScrimmed
-    ) = Unit
+    )
 
     /**
      * Set the status and navigation bars to [color].
@@ -104,26 +104,37 @@ interface SystemUiController {
      *
      * @return true, if API is 29+ and the system is ensuring contrast, false otherwise.
      */
-    fun isNavigationBarContrastEnforced(): Boolean = false
+    fun isNavigationBarContrastEnforced(): Boolean
 }
 
 /**
- * Remembers a [SystemUiController] which supports Android devices.
+ * Remembers a [SystemUiController] for the current device.
  */
+@Composable
+fun rememberSystemUiController(): SystemUiController {
+    val view = LocalView.current
+    return remember(view) { AndroidSystemUiController(view) }
+}
+
+@Deprecated(
+    "Migrate to rememberSystemUiController()",
+    ReplaceWith(
+        "rememberSystemUiController()",
+        "com.google.accompanist.systemuicontroller.rememberSystemUiController"
+    )
+)
 @Composable
 fun rememberAndroidSystemUiController(
     view: View = LocalView.current
-): SystemUiController = remember(view) {
-    AndroidSystemUiController(view)
-}
+): SystemUiController = remember(view) { AndroidSystemUiController(view) }
 
 /**
  * A helper class for setting the navigation and status bar colors for a [View], gracefully
  * degrading behavior based upon API level.
  *
- * Typically you would use [rememberAndroidSystemUiController] to remember an instance of this.
+ * Typically you would use [rememberSystemUiController] to remember an instance of this.
  */
-class AndroidSystemUiController(view: View) : SystemUiController {
+internal class AndroidSystemUiController(view: View) : SystemUiController {
     private val window = view.context.findWindow()
     private val windowInsetsController = ViewCompat.getWindowInsetsController(view)
 
@@ -187,8 +198,9 @@ class AndroidSystemUiController(view: View) : SystemUiController {
  * [LocalSystemUiController]. Defaults to a no-op controller; consumers should
  * [provide][androidx.compose.runtime.CompositionLocalProvider] a real one.
  *
- * @sample com.google.accompanist.sample.systemuicontroller.MyApp
+ * @sample com.google.accompanist.sample.systemuicontroller.SystemUiControllerSample
  */
+@Deprecated("Use rememberSystemUiController()")
 val LocalSystemUiController = staticCompositionLocalOf<SystemUiController> {
     NoOpSystemUiController
 }
@@ -201,4 +213,19 @@ private val BlackScrimmed: (Color) -> Color = { original ->
 /**
  * A no-op implementation, useful as the default value for [LocalSystemUiController].
  */
-private object NoOpSystemUiController : SystemUiController
+private object NoOpSystemUiController : SystemUiController {
+    override fun setStatusBarColor(
+        color: Color,
+        darkIcons: Boolean,
+        transformColorForLightContent: (Color) -> Color
+    ) = Unit
+
+    override fun setNavigationBarColor(
+        color: Color,
+        darkIcons: Boolean,
+        navigationBarContrastEnforced: Boolean,
+        transformColorForLightContent: (Color) -> Color
+    ) = Unit
+
+    override fun isNavigationBarContrastEnforced(): Boolean = false
+}
