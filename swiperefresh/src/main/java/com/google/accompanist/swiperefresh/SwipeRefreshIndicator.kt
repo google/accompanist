@@ -91,7 +91,18 @@ data class SwipeRefreshIndicatorSizes(
 /**
  * Indicator composable which is typically used in conjunction with [SwipeRefresh].
  *
- * TODO: parameter docs
+ * @param isRefreshing Whether the indicator should display an indeterminate progress indicator.
+ * @param offset The current scroll offset, in pixels.
+ * @param triggerOffset The scroll offset which would trigger a refresh, in pixels.
+ * @param modifier The modifier to apply to this layout.
+ * @param scale Whether the indicator should scale up/down as it is scrolled in. Defaults to false.
+ * @param arrowEnabled Whether an arrow should be drawn on the indicator. Defaults to true.
+ * @param backgroundColor The color of the indicator background surface.
+ * @param contentColor The color for the indicator's contents.
+ * @param shape The shape of the indicator background surface. Defaults to [CircleShape].
+ * @param sizes The [SwipeRefreshIndicatorSizes] to use. Defaults to
+ * [SwipeRefreshIndicatorDefaults.DefaultSizes].
+ * @param elevation The size of the shadow below the indicator.
  */
 @Composable
 fun SwipeRefreshIndicator(
@@ -101,11 +112,11 @@ fun SwipeRefreshIndicator(
     modifier: Modifier = Modifier,
     scale: Boolean = false,
     arrowEnabled: Boolean = true,
-    color: Color = MaterialTheme.colors.surface,
-    contentColor: Color = contentColorFor(color),
+    backgroundColor: Color = MaterialTheme.colors.surface,
+    contentColor: Color = contentColorFor(backgroundColor),
     shape: CornerBasedShape = CircleShape,
-    size: SwipeRefreshIndicatorSizes = SwipeRefreshIndicatorDefaults.DefaultSizes,
-    elevation: Dp = 4.dp
+    sizes: SwipeRefreshIndicatorSizes = SwipeRefreshIndicatorDefaults.DefaultSizes,
+    elevation: Dp = 4.dp,
 ) {
     val adjustedElevation = when (offset) {
         0f -> 0.dp
@@ -118,26 +129,26 @@ fun SwipeRefreshIndicator(
     val adjustedScale = if (scale) min(1f, offset / triggerOffset) else 1f
     Surface(
         modifier = modifier
-            .size(size = size.size)
+            .size(size = sizes.size)
             .scale(adjustedScale),
         shape = shape,
-        color = color,
+        color = backgroundColor,
         elevation = adjustedElevation
     ) {
         val painter = remember {
             CircularProgressPainter()
         }
-        painter.arcRadius = size.arcRadius
-        painter.strokeWidth = size.strokeWidth
-        painter.arrowWidth = size.arrowWidth
-        painter.arrowHeight = size.arrowHeight
+        painter.arcRadius = sizes.arcRadius
+        painter.strokeWidth = sizes.strokeWidth
+        painter.arrowWidth = sizes.arrowWidth
+        painter.arrowHeight = sizes.arrowHeight
         painter.arrowEnabled = arrowEnabled && !isRefreshing
         painter.color = contentColor
         painter.alpha = animatedAlpha
         val slingshot = calculateSlingshot(
             offsetY = offset,
             maxOffsetY = triggerOffset,
-            height = with(LocalDensity.current) { size.size.roundToPx() }
+            height = with(LocalDensity.current) { sizes.size.roundToPx() }
         )
         painter.startTrim = slingshot.startTrim
         painter.endTrim = slingshot.endTrim
@@ -154,10 +165,10 @@ fun SwipeRefreshIndicator(
                 contentAlignment = Alignment.Center
             ) {
                 if (refreshing) {
-                    val circleSize = (size.arcRadius + size.strokeWidth) * 2
+                    val circleSize = (sizes.arcRadius + sizes.strokeWidth) * 2
                     CircularProgressIndicator(
                         color = contentColor,
-                        strokeWidth = size.strokeWidth,
+                        strokeWidth = sizes.strokeWidth,
                         modifier = Modifier.size(circleSize),
                     )
                 } else {
