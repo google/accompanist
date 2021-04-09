@@ -47,7 +47,6 @@ import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
-import com.google.accompanist.swiperefresh.SwipeRefreshIndicatorDefaults
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.delay
 
@@ -88,14 +87,12 @@ private fun Sample() {
             onRefresh = { refreshing = true },
             indicator = {
                 SwipeRefreshIndicator(
-                    isRefreshing = isRefreshing,
-                    offset = indicatorOffset,
-                    triggerOffset = indicatorTriggerOffset,
+                    state = it,
                     scale = true,
                     arrowEnabled = false,
                     backgroundColor = MaterialTheme.colors.primary,
                     shape = MaterialTheme.shapes.small,
-                    sizes = SwipeRefreshIndicatorDefaults.LargeSizes,
+                    largeIndication = true,
                     elevation = 16.dp
                 )
             },
