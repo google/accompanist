@@ -21,7 +21,7 @@ public final class com/google/accompanist/swiperefresh/SwipeRefreshIndicatorDefa
 
 public final class com/google/accompanist/swiperefresh/SwipeRefreshIndicatorKt {
 	public static final fun PreviewSwipeRefreshIndicator (Landroidx/compose/runtime/Composer;I)V
-	public static final fun SwipeRefreshIndicator--cD_rqg (ZFFZZJJLandroidx/compose/foundation/shape/CornerBasedShape;Lcom/google/accompanist/swiperefresh/SwipeRefreshIndicatorSizes;FLandroidx/compose/runtime/Composer;II)V
+	public static final fun SwipeRefreshIndicator-YLMMpjw (ZFFLandroidx/compose/ui/Modifier;ZZJJLandroidx/compose/foundation/shape/CornerBasedShape;Lcom/google/accompanist/swiperefresh/SwipeRefreshIndicatorSizes;FLandroidx/compose/runtime/Composer;III)V
 }
 
 public abstract interface class com/google/accompanist/swiperefresh/SwipeRefreshIndicatorScope {

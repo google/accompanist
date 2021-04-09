@@ -90,12 +90,15 @@ data class SwipeRefreshIndicatorSizes(
 
 /**
  * Indicator composable which is typically used in conjunction with [SwipeRefresh].
+ *
+ * TODO: parameter docs
  */
 @Composable
 fun SwipeRefreshIndicator(
     isRefreshing: Boolean,
     offset: Float,
     triggerOffset: Float,
+    modifier: Modifier = Modifier,
     scale: Boolean = false,
     arrowEnabled: Boolean = true,
     color: Color = MaterialTheme.colors.surface,
@@ -114,7 +117,7 @@ fun SwipeRefreshIndicator(
     )
     val adjustedScale = if (scale) min(1f, offset / triggerOffset) else 1f
     Surface(
-        modifier = Modifier
+        modifier = modifier
             .size(size = size.size)
             .scale(adjustedScale),
         shape = shape,
