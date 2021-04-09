@@ -19,6 +19,7 @@ package com.google.accompanist.systemuicontroller
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.os.Build
 import android.view.View
 import android.view.Window
 import androidx.compose.runtime.Composable
@@ -63,12 +64,16 @@ interface SystemUiController {
      * and [Color.Transparent] will be used on API 29+ where gesture navigation is preferred or the
      * system UI automatically applies background protection in other navigation modes.
      * @param darkIcons Whether dark navigation bar icons would be preferable.
+     * @param navigationBarContrastEnforced Whether the system should ensure that the navigation
+     * bar has enough contrast when a fully transparent background is requested. Only supported on
+     * API 29+.
      * @param transformColorForLightContent A lambda which will be invoked to transform [color] if
      * dark icons were requested but are not available. Defaults to applying a black scrim.
      */
     fun setNavigationBarColor(
         color: Color,
         darkIcons: Boolean = color.luminance() > 0.5f,
+        navigationBarContrastEnforced: Boolean = true,
         transformColorForLightContent: (Color) -> Color = BlackScrimmed
     ) = Unit
 
@@ -81,10 +86,16 @@ interface SystemUiController {
     fun setSystemBarsColor(
         color: Color,
         darkIcons: Boolean = color.luminance() > 0.5f,
+        isNavigationBarContrastEnforced: Boolean = true,
         transformColorForLightContent: (Color) -> Color = BlackScrimmed
     ) {
         setStatusBarColor(color, darkIcons, transformColorForLightContent)
-        setNavigationBarColor(color, darkIcons, transformColorForLightContent)
+        setNavigationBarColor(
+            color,
+            darkIcons,
+            isNavigationBarContrastEnforced,
+            transformColorForLightContent
+        )
     }
 }
 
@@ -129,6 +140,7 @@ class AndroidSystemUiController(view: View) : SystemUiController {
     override fun setNavigationBarColor(
         color: Color,
         darkIcons: Boolean,
+        navigationBarContrastEnforced: Boolean,
         transformColorForLightContent: (Color) -> Color
     ) {
         windowInsetsController?.isAppearanceLightNavigationBars = darkIcons
@@ -142,6 +154,10 @@ class AndroidSystemUiController(view: View) : SystemUiController {
             }
             else -> color
         }.toArgb()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            window?.isNavigationBarContrastEnforced = navigationBarContrastEnforced
+        }
     }
 
     private fun Context.findWindow(): Window? {

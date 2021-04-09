@@ -183,6 +183,33 @@ class SystemUiControllerTest {
         val windowInsetsController = ViewCompat.getWindowInsetsController(view)!!
         assertThat(windowInsetsController.isAppearanceLightNavigationBars).isTrue()
     }
+
+    @Test
+    @UiThreadTest
+    @SdkSuppress(minSdkVersion = 26)
+    fun navigationBar_contrastEnforced() {
+        val view = composeTestRule.contentView
+        val window = composeTestRule.activity.window
+
+        // Now create an AndroidSystemUiController() and set the navigation bar with dark icons
+        // and enforce contrast
+        val controller = AndroidSystemUiController(view)
+        controller.setNavigationBarColor(
+            Color.Transparent,
+            darkIcons = true,
+            navigationBarContrastEnforced = true
+        ) {
+            // Here we can provide custom logic to 'darken' the color to maintain contrast.
+            // We return red just to assert below.
+            Color.Red
+        }
+
+        // Assert that the colors were darkened color is not used
+        assertThat(Color(window.navigationBarColor)).isEqualTo(Color.Transparent)
+
+        // Assert that the system applied the contrast enforced property
+        assertThat(window.isNavigationBarContrastEnforced).isTrue()
+    }
 }
 
 val AndroidComposeTestRule<*, *>.contentView
