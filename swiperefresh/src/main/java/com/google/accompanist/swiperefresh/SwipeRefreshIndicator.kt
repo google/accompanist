@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.google.accompanist.swiperefresh
 
 import androidx.compose.animation.Crossfade
@@ -24,7 +26,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.CornerBasedShape
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -37,38 +39,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlin.math.min
-
-/**
- * Object which contains default values for [SwipeRefreshIndicator].
- */
-object SwipeRefreshIndicatorDefaults {
-    /**
-     * The default/normal size values for [SwipeRefreshIndicator].
-     */
-    val DefaultSizes = SwipeRefreshIndicatorSizes(
-        size = 40.dp,
-        arcRadius = 7.5.dp,
-        strokeWidth = 2.5.dp,
-        arrowWidth = 10.dp,
-        arrowHeight = 5.dp,
-    )
-
-    /**
-     * The 'large' size values for [SwipeRefreshIndicator].
-     */
-    val LargeSizes = SwipeRefreshIndicatorSizes(
-        size = 56.dp,
-        arcRadius = 11.dp,
-        strokeWidth = 3.dp,
-        arrowWidth = 12.dp,
-        arrowHeight = 6.dp,
-    )
-}
 
 /**
  * A class to encapsulate details of different indicator sizes.
@@ -80,7 +56,7 @@ object SwipeRefreshIndicatorDefaults {
  * @param arrowHeight The height of the arrow.
  */
 @Immutable
-data class SwipeRefreshIndicatorSizes(
+private data class SwipeRefreshIndicatorSizes(
     val size: Dp,
     val arcRadius: Dp,
     val strokeWidth: Dp,
@@ -89,33 +65,95 @@ data class SwipeRefreshIndicatorSizes(
 )
 
 /**
- * Indicator composable which is typically used in conjunction with [SwipeRefresh].
+ * The default/normal size values for [SwipeRefreshIndicator].
+ */
+private val DefaultSizes = SwipeRefreshIndicatorSizes(
+    size = 40.dp,
+    arcRadius = 7.5.dp,
+    strokeWidth = 2.5.dp,
+    arrowWidth = 10.dp,
+    arrowHeight = 5.dp,
+)
+
+/**
+ * The 'large' size values for [SwipeRefreshIndicator].
+ */
+private val LargeSizes = SwipeRefreshIndicatorSizes(
+    size = 56.dp,
+    arcRadius = 11.dp,
+    strokeWidth = 3.dp,
+    arrowWidth = 12.dp,
+    arrowHeight = 6.dp,
+)
+
+/**
+ * A version of [SwipeRefreshIndicator] which reads the appropriate values for the `isRefreshing`,
+ * `offset` and `triggerOffset` from the provided [state].
  *
- * @param isRefreshing Whether the indicator should display an indeterminate progress indicator.
- * @param offset The current scroll offset, in pixels.
- * @param triggerOffset The scroll offset which would trigger a refresh, in pixels.
+ * @param state The [SwipeRefreshState] passed into the [SwipeRefresh] `indicator` block.
  * @param modifier The modifier to apply to this layout.
  * @param scale Whether the indicator should scale up/down as it is scrolled in. Defaults to false.
  * @param arrowEnabled Whether an arrow should be drawn on the indicator. Defaults to true.
  * @param backgroundColor The color of the indicator background surface.
  * @param contentColor The color for the indicator's contents.
  * @param shape The shape of the indicator background surface. Defaults to [CircleShape].
- * @param sizes The [SwipeRefreshIndicatorSizes] to use. Defaults to
- * [SwipeRefreshIndicatorDefaults.DefaultSizes].
+ * @param largeIndication Whether the indicator should be 'large' or not. Defaults to false.
+ * @param elevation The size of the shadow below the indicator.
+ */
+@Composable
+inline fun SwipeRefreshIndicator(
+    state: SwipeRefreshState,
+    modifier: Modifier = Modifier,
+    scale: Boolean = false,
+    arrowEnabled: Boolean = true,
+    backgroundColor: Color = MaterialTheme.colors.surface,
+    contentColor: Color = contentColorFor(backgroundColor),
+    shape: Shape = MaterialTheme.shapes.small.copy(CornerSize(percent = 50)),
+    largeIndication: Boolean = false,
+    elevation: Dp = 4.dp,
+) {
+    SwipeRefreshIndicator(
+        isRefreshing = state.isRefreshing,
+        offset = state.indicatorOffset,
+        refreshOffset = state.indicatorRefreshOffset,
+        modifier = modifier,
+        scale = scale,
+        arrowEnabled = arrowEnabled,
+        backgroundColor = backgroundColor,
+        contentColor = contentColor,
+        shape = shape,
+        largeIndication = largeIndication,
+        elevation = elevation,
+    )
+}
+
+/**
+ * Indicator composable which is typically used in conjunction with [SwipeRefresh].
+ *
+ * @param isRefreshing Whether the indicator should display an indeterminate progress indicator.
+ * @param offset The current scroll offset, in pixels.
+ * @param refreshOffset The scroll offset which would trigger a refresh, in pixels.
+ * @param modifier The modifier to apply to this layout.
+ * @param scale Whether the indicator should scale up/down as it is scrolled in. Defaults to false.
+ * @param arrowEnabled Whether an arrow should be drawn on the indicator. Defaults to true.
+ * @param backgroundColor The color of the indicator background surface.
+ * @param contentColor The color for the indicator's contents.
+ * @param shape The shape of the indicator background surface. Defaults to [CircleShape].
+ * @param largeIndication Whether the indicator should be 'large' or not. Defaults to false.
  * @param elevation The size of the shadow below the indicator.
  */
 @Composable
 fun SwipeRefreshIndicator(
     isRefreshing: Boolean,
     offset: Float,
-    triggerOffset: Float,
+    refreshOffset: Float,
     modifier: Modifier = Modifier,
     scale: Boolean = false,
     arrowEnabled: Boolean = true,
     backgroundColor: Color = MaterialTheme.colors.surface,
     contentColor: Color = contentColorFor(backgroundColor),
-    shape: CornerBasedShape = CircleShape,
-    sizes: SwipeRefreshIndicatorSizes = SwipeRefreshIndicatorDefaults.DefaultSizes,
+    shape: Shape = MaterialTheme.shapes.small.copy(CornerSize(percent = 50)),
+    largeIndication: Boolean = false,
     elevation: Dp = 4.dp,
 ) {
     val adjustedElevation = when (offset) {
@@ -123,10 +161,13 @@ fun SwipeRefreshIndicator(
         else -> elevation
     }
     val animatedAlpha by animateFloatAsState(
-        targetValue = if (offset >= triggerOffset) MaxAlpha else MinAlpha,
+        targetValue = if (offset >= refreshOffset) MaxAlpha else MinAlpha,
         animationSpec = tween()
     )
-    val adjustedScale = if (scale) min(1f, offset / triggerOffset) else 1f
+    val adjustedScale = if (scale) min(1f, offset / refreshOffset) else 1f
+
+    val sizes = if (largeIndication) LargeSizes else DefaultSizes
+
     Surface(
         modifier = modifier
             .size(size = sizes.size)
@@ -147,7 +188,7 @@ fun SwipeRefreshIndicator(
         painter.alpha = animatedAlpha
         val slingshot = calculateSlingshot(
             offsetY = offset,
-            maxOffsetY = triggerOffset,
+            maxOffsetY = refreshOffset,
             height = with(LocalDensity.current) { sizes.size.roundToPx() }
         )
         painter.startTrim = slingshot.startTrim
@@ -193,7 +234,7 @@ fun PreviewSwipeRefreshIndicator() {
         SwipeRefreshIndicator(
             isRefreshing = false,
             offset = 0f,
-            triggerOffset = 10f,
+            refreshOffset = 10f,
         )
     }
 }

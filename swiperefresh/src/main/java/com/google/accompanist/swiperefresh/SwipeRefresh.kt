@@ -17,6 +17,7 @@
 package com.google.accompanist.swiperefresh
 
 import androidx.compose.animation.core.Animatable
+import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.MutatorMutex
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
@@ -29,7 +30,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
@@ -40,7 +40,6 @@ import androidx.compose.ui.unit.Velocity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
-import kotlin.math.max
 
 private const val DragMultiplier = 0.5f
 
@@ -78,8 +77,6 @@ class SwipeRefreshState(
     private val _indicatorOffset = Animatable(0f)
     private val mutatorMutex = MutatorMutex()
 
-    internal var refreshTrigger by mutableStateOf(0f)
-
     /**
      * Whether this [SwipeRefreshState] is currently refreshing or not.
      */
@@ -96,6 +93,13 @@ class SwipeRefreshState(
      */
     val indicatorOffset: Float get() = _indicatorOffset.value
 
+    /**
+     * The [indicatorOffset] value (or greater) which would trigger a refresh when the use
+     * releases from a swipe.
+     */
+    var indicatorRefreshOffset by mutableStateOf(0f)
+        internal set
+
     internal suspend fun animateOffsetTo(offset: Float) {
         mutatorMutex.mutate {
             _indicatorOffset.animateTo(offset)
@@ -104,15 +108,15 @@ class SwipeRefreshState(
 
     internal suspend fun animateBackToRest() {
         mutatorMutex.mutate {
-            _indicatorOffset.animateTo(if (isRefreshing) refreshTrigger else 0f)
+            _indicatorOffset.animateTo(if (isRefreshing) indicatorRefreshOffset else 0f)
         }
     }
 
     /**
-     * Dispatch scroll delta in pixels.
+     * Dispatch scroll delta in pixels from touch events.
      */
     suspend fun dispatchRawDelta(delta: Float) {
-        mutatorMutex.mutate {
+        mutatorMutex.mutate(MutatePriority.UserInput) {
             _indicatorOffset.snapTo(_indicatorOffset.value + delta)
         }
     }
@@ -151,19 +155,22 @@ private class SwipeRefreshNestedScrollConnection(
     private fun onScroll(available: Offset): Offset {
         state.isSwipeInProgress = true
 
-        val drag = available.y * DragMultiplier
-        val distanceAvailable = when {
+        val minOffset = when {
             // If we're refreshing, we don't want the indicator to scroll below the refresh
             // trigger
-            state.isRefreshing -> max(drag, -(state.indicatorOffset - state.refreshTrigger))
-            else -> max(drag, -state.indicatorOffset)
+            state.isRefreshing -> state.indicatorRefreshOffset
+            else -> 0f
         }
-        return if (distanceAvailable.absoluteValue > 0.5f) {
+        val newOffset = (available.y * DragMultiplier + state.indicatorOffset)
+            .coerceAtLeast(minOffset)
+        val dragConsumed = newOffset - state.indicatorOffset
+
+        return if (dragConsumed.absoluteValue >= 0.5f) {
             coroutineScope.launch {
-                state.dispatchRawDelta(distanceAvailable)
+                state.dispatchRawDelta(dragConsumed)
             }
-            // Consume the consumed Y
-            Offset(x = 0f, y = distanceAvailable / DragMultiplier)
+            // Return the consumed Y
+            Offset(x = 0f, y = dragConsumed / DragMultiplier)
         } else {
             Offset.Zero
         }
@@ -173,13 +180,13 @@ private class SwipeRefreshNestedScrollConnection(
         // If we're currently refreshing, just animate back to the resting position
         state.isRefreshing -> {
             coroutineScope.launch {
-                state.animateOffsetTo(state.refreshTrigger)
+                state.animateOffsetTo(state.indicatorRefreshOffset)
             }
             // Don't consume any velocity, to allow the scrolling layout to fling
             Velocity.Zero
         }
         // If we're dragging and scrolled past the trigger point, refresh!
-        state.isSwipeInProgress && state.indicatorOffset >= state.refreshTrigger -> {
+        state.isSwipeInProgress && state.indicatorOffset >= state.indicatorRefreshOffset -> {
             onRefresh()
             // Don't consume any velocity, to allow the scrolling layout to fling
             Velocity.Zero
@@ -206,6 +213,9 @@ private class SwipeRefreshNestedScrollConnection(
  * If an app wishes to show just the progress animation, outside of a swipe refresh, it can
  * set [SwipeRefreshState.isRefreshing] as required.
  *
+ * This layout does not clip any of it's contents, including the indicator. If clipping
+ * is required, apps can provide the [androidx.compose.ui.draw.clipToBounds] modifier.
+ *
  * @sample com.google.accompanist.sample.swiperefresh.SwipeRefreshSample
  *
  * @param state the state object to be used to control or observe the [SwipeRefresh] state.
@@ -213,7 +223,7 @@ private class SwipeRefreshNestedScrollConnection(
  * @param modifier the modifier to apply to this layout.
  * @param swipeEnabled Whether the the layout should react to swipe gestures or not.
  * @param indicator the indicator that represents the current state. By default this
- * will be a [SwipeRefreshIndicator].
+ * will use a [SwipeRefreshIndicator].
  * @param content The content containing a scroll composable.
  */
 @Composable
@@ -222,13 +232,7 @@ fun SwipeRefresh(
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
     swipeEnabled: Boolean = true,
-    indicator: @Composable SwipeRefreshIndicatorScope.() -> Unit = {
-        SwipeRefreshIndicator(
-            isRefreshing = isRefreshing,
-            offset = indicatorOffset,
-            triggerOffset = indicatorTriggerOffset,
-        )
-    },
+    indicator: @Composable (SwipeRefreshState) -> Unit = { SwipeRefreshIndicator(it) },
     content: @Composable () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -252,16 +256,12 @@ fun SwipeRefresh(
         this.enabled = swipeEnabled
     }
 
-    val indicatorContentScope = remember(state) { SwipeRefreshIndicatorScopeImpl(state) }
-
     Layout(
         content = {
             Box(Modifier.layoutId(LayoutContentTag)) { content() }
-            Box(Modifier.layoutId(LayoutIndicatorTag)) { indicatorContentScope.indicator() }
+            Box(Modifier.layoutId(LayoutIndicatorTag)) { indicator(state) }
         },
-        modifier = modifier
-            .nestedScroll(connection = nestedScrollConnection)
-            .clipToBounds()
+        modifier = modifier.nestedScroll(connection = nestedScrollConnection)
     ) { measurables, constraints ->
         val noMinConstraints = constraints.copy(minWidth = 0, minHeight = 0)
 
@@ -273,7 +273,7 @@ fun SwipeRefresh(
 
         // TODO: make this configurable?
         val trigger = indicatorPlaceable.height * 1.5f
-        state.refreshTrigger = trigger
+        state.indicatorRefreshOffset = trigger
 
         // Our layout is the size of the content, coerced by the min constraints
         val layoutWidth = contentPlaceable.width.coerceAtLeast(constraints.minWidth)
@@ -298,39 +298,3 @@ fun SwipeRefresh(
 
 private const val LayoutContentTag = "swiperefresh_content"
 private const val LayoutIndicatorTag = "swiperefresh_indicator"
-
-@Stable
-private class SwipeRefreshIndicatorScopeImpl(
-    private val state: SwipeRefreshState
-) : SwipeRefreshIndicatorScope {
-    override val isRefreshing: Boolean get() = state.isRefreshing
-    override val indicatorOffset: Float get() = state.indicatorOffset
-    override val indicatorTriggerOffset: Float get() = state.refreshTrigger
-    override val isSwipeInProgress: Boolean get() = state.isSwipeInProgress
-}
-
-/**
- * Scope for [SwipeRefresh] indicator content.
- */
-@Stable
-interface SwipeRefreshIndicatorScope {
-    /**
-     * Whether this [SwipeRefreshState] is currently refreshing or not.
-     */
-    val isRefreshing: Boolean
-
-    /**
-     * The current offset of the indicator.
-     */
-    val indicatorOffset: Float
-
-    /**
-     * The offset of the indicator which would trigger a refresh.
-     */
-    val indicatorTriggerOffset: Float
-
-    /**
-     * Whether this [SwipeRefreshState] is currently refreshing or not.
-     */
-    val isSwipeInProgress: Boolean
-}
