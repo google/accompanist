@@ -239,7 +239,9 @@ fun SwipeRefresh(
     val updatedOnRefresh = rememberUpdatedState(onRefresh)
 
     // Our LaunchedEffect, which animates the indicator to an appropriate resting position
-    LaunchedEffect(state.isSwipeInProgress, state.isRefreshing) {
+    // We need to use isRefreshing and indicatorRefreshOffset as keys, so that we animate
+    // appropriately if those values change
+    LaunchedEffect(state.isSwipeInProgress, state.isRefreshing, state.indicatorRefreshOffset) {
         if (!state.isSwipeInProgress) {
             // If there's not a swipe in progress, rest the indicator at an appropriate position
             state.animateBackToRest()
