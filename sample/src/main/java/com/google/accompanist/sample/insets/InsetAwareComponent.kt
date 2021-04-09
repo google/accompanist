@@ -17,6 +17,7 @@
 package com.google.accompanist.sample.insets
 
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.TopAppBar
@@ -42,7 +43,7 @@ fun InsetAwareTopAppBar(
     actions: @Composable RowScope.() -> Unit = {},
     backgroundColor: Color = MaterialTheme.colors.primarySurface,
     contentColor: Color = contentColorFor(backgroundColor),
-    elevation: Dp = 4.dp
+    elevation: Dp = AppBarDefaults.TopAppBarElevation,
 ) {
     Surface(
         color = backgroundColor,
