@@ -186,7 +186,7 @@ class SystemUiControllerTest {
 
     @Test
     @UiThreadTest
-    @SdkSuppress(minSdkVersion = 26)
+    @SdkSuppress(minSdkVersion = 29)
     fun navigationBar_contrastEnforced() {
         val view = composeTestRule.contentView
         val window = composeTestRule.activity.window
