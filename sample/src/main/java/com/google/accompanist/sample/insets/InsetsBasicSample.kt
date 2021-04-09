@@ -30,7 +30,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,7 +41,6 @@ import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
-import com.google.accompanist.systemuicontroller.LocalSystemUiController
 import com.google.accompanist.systemuicontroller.rememberAndroidSystemUiController
 
 class InsetsBasicSample : ComponentActivity() {
@@ -57,11 +55,8 @@ class InsetsBasicSample : ComponentActivity() {
             AccompanistSampleTheme {
                 // We need to use ProvideWindowInsets to setup the necessary listeners which
                 // power the library
-                val controller = rememberAndroidSystemUiController()
-                CompositionLocalProvider(LocalSystemUiController provides controller) {
-                    ProvideWindowInsets {
-                        Sample()
-                    }
+                ProvideWindowInsets {
+                    Sample()
                 }
             }
         }
@@ -70,7 +65,7 @@ class InsetsBasicSample : ComponentActivity() {
 
 @Composable
 private fun Sample() {
-    val systemUiController = LocalSystemUiController.current
+    val systemUiController = rememberAndroidSystemUiController()
     val useDarkIcons = MaterialTheme.colors.isLight
     SideEffect {
         systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = useDarkIcons)

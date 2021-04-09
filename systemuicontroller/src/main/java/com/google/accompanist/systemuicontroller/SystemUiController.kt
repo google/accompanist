@@ -187,8 +187,9 @@ class AndroidSystemUiController(view: View) : SystemUiController {
  * [LocalSystemUiController]. Defaults to a no-op controller; consumers should
  * [provide][androidx.compose.runtime.CompositionLocalProvider] a real one.
  *
- * @sample com.google.accompanist.sample.systemuicontroller.MyApp
+ * @sample com.google.accompanist.sample.systemuicontroller.AndroidSystemUiControllerSample
  */
+@Deprecated("Use rememberAndroidSystemUiController()")
 val LocalSystemUiController = staticCompositionLocalOf<SystemUiController> {
     NoOpSystemUiController
 }
