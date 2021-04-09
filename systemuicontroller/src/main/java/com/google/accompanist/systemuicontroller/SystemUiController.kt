@@ -37,7 +37,7 @@ import androidx.core.view.ViewCompat
  * A class which provides easy-to-use utilities for updating the System UI bar
  * colors within Jetpack Compose.
  *
- * @sample com.google.accompanist.sample.systemuicontroller.AndroidSystemUiControllerSample
+ * @sample com.google.accompanist.sample.systemuicontroller.SystemUiControllerSample
  */
 @Stable
 interface SystemUiController {
@@ -111,23 +111,22 @@ interface SystemUiController {
  * Remembers a [SystemUiController] for the current device.
  */
 @Composable
-fun rememberSystemUiController(
-    view: View = LocalView.current
-): SystemUiController = remember(view) {
-    AndroidSystemUiController(view)
+fun rememberSystemUiController(): SystemUiController {
+    val view = LocalView.current
+    return remember(view) { AndroidSystemUiController(view) }
 }
 
 @Deprecated(
     "Migrate to rememberSystemUiController()",
     ReplaceWith(
-        "rememberSystemUiController(view)",
+        "rememberSystemUiController()",
         "com.google.accompanist.systemuicontroller.rememberSystemUiController"
     )
 )
 @Composable
 fun rememberAndroidSystemUiController(
     view: View = LocalView.current
-): SystemUiController = rememberSystemUiController(view)
+): SystemUiController = remember(view) { AndroidSystemUiController(view) }
 
 /**
  * A helper class for setting the navigation and status bar colors for a [View], gracefully
@@ -199,7 +198,7 @@ internal class AndroidSystemUiController(view: View) : SystemUiController {
  * [LocalSystemUiController]. Defaults to a no-op controller; consumers should
  * [provide][androidx.compose.runtime.CompositionLocalProvider] a real one.
  *
- * @sample com.google.accompanist.sample.systemuicontroller.AndroidSystemUiControllerSample
+ * @sample com.google.accompanist.sample.systemuicontroller.SystemUiControllerSample
  */
 @Deprecated("Use rememberSystemUiController()")
 val LocalSystemUiController = staticCompositionLocalOf<SystemUiController> {

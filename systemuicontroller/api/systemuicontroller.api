@@ -15,6 +15,6 @@ public final class com/google/accompanist/systemuicontroller/SystemUiController$
 public final class com/google/accompanist/systemuicontroller/SystemUiControllerKt {
 	public static final fun getLocalSystemUiController ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 	public static final fun rememberAndroidSystemUiController (Landroid/view/View;Landroidx/compose/runtime/Composer;II)Lcom/google/accompanist/systemuicontroller/SystemUiController;
-	public static final fun rememberSystemUiController (Landroid/view/View;Landroidx/compose/runtime/Composer;II)Lcom/google/accompanist/systemuicontroller/SystemUiController;
+	public static final fun rememberSystemUiController (Landroidx/compose/runtime/Composer;I)Lcom/google/accompanist/systemuicontroller/SystemUiController;
 }
 

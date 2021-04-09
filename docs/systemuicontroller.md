@@ -5,7 +5,7 @@
 System UI Controller provides easy-to-use utilities for updating the System UI bar colors within Jetpack Compose.
 
 ## Usage
-To control the system UI in your composables, you must need to get a [`SystemUiController`](../api/systemuicontroller/systemuicontroller/com.google.accompanist.systemuicontroller/-system-ui-controller/) instance. The library provides an [`AndroidSystemUiController`](../api/systemuicontroller/systemuicontroller/com.google.accompanist.systemuicontroller/-android-system-ui-controller/index.html) implementation and an associated [remember function](../api/systemuicontroller/systemuicontroller/com.google.accompanist.systemuicontroller/remember-android-system-ui-controller.html).
+To control the system UI in your composables, you must need to get a [`SystemUiController`](../api/systemuicontroller/systemuicontroller/com.google.accompanist.systemuicontroller/-system-ui-controller/) instance. The library provides the [`rememberSystemUiController()`](../api/systemuicontroller/systemuicontroller/com.google.accompanist.systemuicontroller/remember-system-ui-controller.html) function which returns an instance for the current system (currently only Android).
 
 In your layouts you can update the system bar colors like so:
 

@@ -23,7 +23,7 @@ import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
-fun AndroidSystemUiControllerSample() {
+fun SystemUiControllerSample() {
     // Get the current SystemUiController
     val systemUiController = rememberSystemUiController()
     val useDarkIcons = MaterialTheme.colors.isLight
