@@ -30,38 +30,34 @@ import java.util.concurrent.TimeUnit
  * for anything else.
  *
  * @param responseDelayMs Allows the setting of a response delay to simulate 'real-world'
- * network conditions. Defaults to 200ms.
+ * network conditions. Defaults to 0ms.
  */
-fun ImageMockWebServer(responseDelayMs: Long = 200): MockWebServer {
+fun ImageMockWebServer(responseDelayMs: Long = 0): MockWebServer {
     val dispatcher = object : Dispatcher() {
         override fun dispatch(request: RecordedRequest): MockResponse = when (request.path) {
             "/image" -> {
                 rawResourceAsResponse(
                     id = R.raw.sample,
                     mimeType = "image/jpeg",
-                    responseDelayMs = responseDelayMs
-                )
+                ).setHeadersDelay(responseDelayMs, TimeUnit.MILLISECONDS)
             }
             "/image2" -> {
                 rawResourceAsResponse(
                     id = R.raw.image2,
                     mimeType = "image/jpeg",
-                    responseDelayMs = responseDelayMs
-                )
+                ).setHeadersDelay(responseDelayMs, TimeUnit.MILLISECONDS)
             }
             "/blue" -> {
                 rawResourceAsResponse(
                     id = R.raw.blue_rectangle,
                     mimeType = "image/png",
-                    responseDelayMs = responseDelayMs
-                )
+                ).setHeadersDelay(responseDelayMs, TimeUnit.MILLISECONDS)
             }
             "/red" -> {
                 rawResourceAsResponse(
                     id = R.raw.red_rectangle,
                     mimeType = "image/png",
-                    responseDelayMs = responseDelayMs
-                )
+                ).setHeadersDelay(responseDelayMs, TimeUnit.MILLISECONDS)
             }
             else -> {
                 MockResponse()
@@ -78,18 +74,15 @@ fun ImageMockWebServer(responseDelayMs: Long = 200): MockWebServer {
 
 private fun rawResourceAsResponse(
     @RawRes id: Int,
-    mimeType: String,
-    responseDelayMs: Long = 0
+    mimeType: String
 ): MockResponse {
     val res = InstrumentationRegistry.getInstrumentation().targetContext.resources
-
-    // Load the image into a Buffer
-    val imageBuffer = Buffer().apply {
-        readFrom(res.openRawResource(id))
-    }
-
     return MockResponse()
-        .setHeadersDelay(responseDelayMs, TimeUnit.MILLISECONDS)
         .addHeader("Content-Type", mimeType)
-        .setBody(imageBuffer)
+        .setBody(
+            // Load the image into a Buffer
+            Buffer().apply {
+                readFrom(res.openRawResource(id))
+            }
+        )
 }

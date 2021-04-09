@@ -24,8 +24,11 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -51,14 +54,13 @@ private val MAIN_HANDLER by lazy(LazyThreadSafetyMode.NONE) {
  *
  * Taken from https://goo.gle/compose-drawable-painter
  */
-class AndroidDrawablePainter(
+private class DrawablePainter(
     private val drawable: Drawable
 ) : Painter() {
     private var invalidateTick by mutableStateOf(0)
-    private var startedAnimatable = drawable is Animatable && drawable.isRunning
 
-    init {
-        drawable.callback = object : Drawable.Callback {
+    private val callback: Drawable.Callback by lazy {
+        object : Drawable.Callback {
             override fun invalidateDrawable(d: Drawable) {
                 // Update the tick so that we get re-drawn
                 invalidateTick++
@@ -72,6 +74,23 @@ class AndroidDrawablePainter(
                 MAIN_HANDLER.removeCallbacks(what)
             }
         }
+    }
+
+    init {
+        // Update the drawable's bounds to match the intrinsic size
+        drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
+    }
+
+    fun onRemembered() {
+        drawable.callback = callback
+        drawable.setVisible(true, true)
+        if (drawable is Animatable) drawable.start()
+    }
+
+    fun onDisposed() {
+        if (drawable is Animatable) drawable.stop()
+        drawable.setVisible(false, false)
+        drawable.callback = null
     }
 
     override fun applyAlpha(alpha: Float): Boolean {
@@ -103,25 +122,21 @@ class AndroidDrawablePainter(
         )
 
     override fun DrawScope.onDraw() {
-        if (!startedAnimatable && drawable is Animatable && !drawable.isRunning) {
-            // If the drawable is Animatable, start it on the first draw
-            drawable.start()
-            startedAnimatable = true
-        }
-
         drawIntoCanvas { canvas ->
             // Reading this ensures that we invalidate when invalidateDrawable() is called
             invalidateTick
 
-            drawable.setBounds(0, 0, size.width.toInt(), size.height.toInt())
-
             canvas.withSave {
-                // Painters are responsible for scaling content to meet the canvas size
                 if (drawable.intrinsicWidth > 0 && drawable.intrinsicHeight > 0) {
+                    // Painters are responsible for scaling content to meet the canvas size
                     canvas.scale(
                         sx = size.width / drawable.intrinsicWidth,
                         sy = size.height / drawable.intrinsicHeight
                     )
+                } else {
+                    // If the drawable has no intrinsic bounds, set its bounds to be the
+                    // canvas size
+                    drawable.setBounds(0, 0, size.width.roundToInt(), size.height.roundToInt())
                 }
                 drawable.draw(canvas.nativeCanvas)
             }
@@ -130,11 +145,42 @@ class AndroidDrawablePainter(
 }
 
 /**
+ * Remembers a wrapped a [Drawable] as a [Painter], attempting to un-wrap the drawable contents
+ * and use Compose primitives where possible.
+ *
+ * This function tries to dispatch lifecycle events to [drawable] as much as possible from
+ * within Compose.
+ */
+@Composable
+fun rememberDrawablePainter(drawable: Drawable): Painter {
+    val painter = remember(drawable) {
+        @Suppress("DEPRECATION") // We will inline the code once we remove the function
+        drawable.toPainter()
+    }
+
+    DisposableEffect(painter) {
+        if (painter is DrawablePainter) painter.onRemembered()
+        onDispose {
+            if (painter is DrawablePainter) painter.onDisposed()
+        }
+    }
+
+    return painter
+}
+
+/**
  * Allows wrapping of a [Drawable] into a [Painter], attempting to un-wrap the drawable contents
  * and use Compose primitives where possible.
  */
+@Deprecated(
+    "Migrate to rememberDrawablePainter()",
+    ReplaceWith(
+        "rememberDrawablePainter(this)",
+        "com.google.accompanist.imageloading.rememberDrawablePainter",
+    )
+)
 fun Drawable.toPainter(): Painter = when (this) {
     is BitmapDrawable -> BitmapPainter(bitmap.asImageBitmap())
     is ColorDrawable -> ColorPainter(Color(color))
-    else -> AndroidDrawablePainter(mutate())
+    else -> DrawablePainter(mutate())
 }

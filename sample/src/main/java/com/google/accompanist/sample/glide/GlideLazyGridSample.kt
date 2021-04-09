@@ -32,14 +32,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
-import com.google.accompanist.glide.GlideImage
+import com.google.accompanist.glide.rememberGlideImageState
+import com.google.accompanist.imageloading.Image
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.toPaddingValues
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.insets.InsetAwareTopAppBar
-import com.google.accompanist.sample.randomSampleImageUrl
+import com.google.accompanist.sample.rememberRandomSampleImageUrl
 
 class GlideLazyGridSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,10 +59,7 @@ class GlideLazyGridSample : ComponentActivity() {
 
 private const val NumberItems = 60
 
-@OptIn(
-    ExperimentalStdlibApi::class,
-    ExperimentalFoundationApi::class
-)
+@OptIn(ExperimentalStdlibApi::class, ExperimentalFoundationApi::class)
 @Composable
 private fun Sample() {
     Scaffold(
@@ -78,13 +76,13 @@ private fun Sample() {
                 .toPaddingValues(additionalVertical = 16.dp, additionalHorizontal = 16.dp),
         ) {
             items(NumberItems) { index ->
-                GlideImage(
-                    data = randomSampleImageUrl(index),
+                Image(
+                    state = rememberGlideImageState(rememberRandomSampleImageUrl(index)),
                     contentDescription = null,
                     fadeIn = true,
                     modifier = Modifier
                         .aspectRatio(1f)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
                 )
             }
         }

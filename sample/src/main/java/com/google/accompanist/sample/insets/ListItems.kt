@@ -16,31 +16,21 @@
 
 package com.google.accompanist.sample.insets
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.glide.GlideImage
+import com.google.accompanist.glide.rememberGlideImageState
+import com.google.accompanist.imageloading.Image
 
 /**
  * Simple list item row which displays an image and text.
@@ -50,13 +40,13 @@ fun ListItem(
     imageUrl: String,
     modifier: Modifier = Modifier
 ) {
-    Row(modifier.padding(start = 16.dp, top = 8.dp, end = 4.dp, bottom = 8.dp)) {
-        GlideImage(
-            data = imageUrl,
+    Row(modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+        Image(
+            state = rememberGlideImageState(imageUrl),
             contentDescription = null,
             modifier = Modifier
                 .size(64.dp)
-                .clip(RoundedCornerShape(4.dp))
+                .clip(RoundedCornerShape(4.dp)),
         )
 
         Spacer(Modifier.width(16.dp))
@@ -64,35 +54,8 @@ fun ListItem(
         Text(
             text = "Text",
             style = MaterialTheme.typography.subtitle2,
-            modifier = Modifier
-                .weight(1f)
+            modifier = Modifier.weight(1f)
                 .align(Alignment.CenterVertically)
         )
-
-        Box {
-            var showMenu by remember { mutableStateOf(false) }
-
-            IconButton(onClick = { showMenu = true }) {
-                Icon(
-                    imageVector = Icons.Default.MoreVert,
-                    contentDescription = "Open menu"
-                )
-            }
-
-            DropdownMenu(
-                expanded = showMenu,
-                onDismissRequest = { showMenu = false }
-            ) {
-                DropdownMenuItem(onClick = { /* no-op */ }) {
-                    Text(text = "Menu item 1")
-                }
-                DropdownMenuItem(onClick = { /* no-op */ }) {
-                    Text(text = "Menu item 2")
-                }
-                DropdownMenuItem(onClick = { /* no-op */ }) {
-                    Text(text = "Menu item 3")
-                }
-            }
-        }
     }
 }
