@@ -1,24 +1,27 @@
 public final class com/google/accompanist/systemuicontroller/AndroidSystemUiController : com/google/accompanist/systemuicontroller/SystemUiController {
 	public static final field $stable I
 	public fun <init> (Landroid/view/View;)V
-	public fun setNavigationBarColor-ek8zF_U (JZLkotlin/jvm/functions/Function1;)V
+	public fun isNavigationBarContrastEnforced ()Z
+	public fun setNavigationBarColor-Iv8Zu3U (JZZLkotlin/jvm/functions/Function1;)V
 	public fun setStatusBarColor-ek8zF_U (JZLkotlin/jvm/functions/Function1;)V
-	public fun setSystemBarsColor-ek8zF_U (JZLkotlin/jvm/functions/Function1;)V
+	public fun setSystemBarsColor-Iv8Zu3U (JZZLkotlin/jvm/functions/Function1;)V
 }
 
 public abstract interface class com/google/accompanist/systemuicontroller/SystemUiController {
-	public abstract fun setNavigationBarColor-ek8zF_U (JZLkotlin/jvm/functions/Function1;)V
+	public abstract fun isNavigationBarContrastEnforced ()Z
+	public abstract fun setNavigationBarColor-Iv8Zu3U (JZZLkotlin/jvm/functions/Function1;)V
 	public abstract fun setStatusBarColor-ek8zF_U (JZLkotlin/jvm/functions/Function1;)V
-	public abstract fun setSystemBarsColor-ek8zF_U (JZLkotlin/jvm/functions/Function1;)V
+	public abstract fun setSystemBarsColor-Iv8Zu3U (JZZLkotlin/jvm/functions/Function1;)V
 }
 
 public final class com/google/accompanist/systemuicontroller/SystemUiController$DefaultImpls {
-	public static fun setNavigationBarColor-ek8zF_U (Lcom/google/accompanist/systemuicontroller/SystemUiController;JZLkotlin/jvm/functions/Function1;)V
-	public static synthetic fun setNavigationBarColor-ek8zF_U$default (Lcom/google/accompanist/systemuicontroller/SystemUiController;JZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static fun isNavigationBarContrastEnforced (Lcom/google/accompanist/systemuicontroller/SystemUiController;)Z
+	public static fun setNavigationBarColor-Iv8Zu3U (Lcom/google/accompanist/systemuicontroller/SystemUiController;JZZLkotlin/jvm/functions/Function1;)V
+	public static synthetic fun setNavigationBarColor-Iv8Zu3U$default (Lcom/google/accompanist/systemuicontroller/SystemUiController;JZZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 	public static fun setStatusBarColor-ek8zF_U (Lcom/google/accompanist/systemuicontroller/SystemUiController;JZLkotlin/jvm/functions/Function1;)V
 	public static synthetic fun setStatusBarColor-ek8zF_U$default (Lcom/google/accompanist/systemuicontroller/SystemUiController;JZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
-	public static fun setSystemBarsColor-ek8zF_U (Lcom/google/accompanist/systemuicontroller/SystemUiController;JZLkotlin/jvm/functions/Function1;)V
-	public static synthetic fun setSystemBarsColor-ek8zF_U$default (Lcom/google/accompanist/systemuicontroller/SystemUiController;JZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static fun setSystemBarsColor-Iv8Zu3U (Lcom/google/accompanist/systemuicontroller/SystemUiController;JZZLkotlin/jvm/functions/Function1;)V
+	public static synthetic fun setSystemBarsColor-Iv8Zu3U$default (Lcom/google/accompanist/systemuicontroller/SystemUiController;JZZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 }
 
 public final class com/google/accompanist/systemuicontroller/SystemUiControllerKt {
