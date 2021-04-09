@@ -37,7 +37,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -60,8 +59,7 @@ import com.google.accompanist.insets.toPaddingValues
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
-import com.google.accompanist.systemuicontroller.LocalSystemUiController
-import com.google.accompanist.systemuicontroller.rememberAndroidSystemUiController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class EdgeToEdgeLazyColumn : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,11 +71,8 @@ class EdgeToEdgeLazyColumn : ComponentActivity() {
 
         setContent {
             AccompanistSampleTheme {
-                val controller = rememberAndroidSystemUiController()
-                CompositionLocalProvider(LocalSystemUiController provides controller) {
-                    ProvideWindowInsets {
-                        Sample()
-                    }
+                ProvideWindowInsets {
+                    Sample()
                 }
             }
         }
@@ -86,7 +81,7 @@ class EdgeToEdgeLazyColumn : ComponentActivity() {
 
 @Composable
 private fun Sample() {
-    val systemUiController = LocalSystemUiController.current
+    val systemUiController = rememberSystemUiController()
     val useDarkIcons = MaterialTheme.colors.isLight
     SideEffect {
         systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = useDarkIcons)

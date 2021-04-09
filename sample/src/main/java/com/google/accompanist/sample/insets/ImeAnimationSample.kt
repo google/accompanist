@@ -31,7 +31,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,8 +48,7 @@ import com.google.accompanist.insets.rememberImeNestedScrollConnection
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
-import com.google.accompanist.systemuicontroller.LocalSystemUiController
-import com.google.accompanist.systemuicontroller.rememberAndroidSystemUiController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @OptIn(ExperimentalAnimatedInsets::class)
 class ImeAnimationSample : ComponentActivity() {
@@ -63,11 +61,8 @@ class ImeAnimationSample : ComponentActivity() {
 
         setContent {
             AccompanistSampleTheme {
-                val controller = rememberAndroidSystemUiController()
-                CompositionLocalProvider(LocalSystemUiController provides controller) {
-                    ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
-                        Sample()
-                    }
+                ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
+                    Sample()
                 }
             }
         }
@@ -79,7 +74,7 @@ private val listItems = List(40) { randomSampleImageUrl(it) }
 @OptIn(ExperimentalAnimatedInsets::class)
 @Composable
 private fun Sample() {
-    val systemUiController = LocalSystemUiController.current
+    val systemUiController = rememberSystemUiController()
     val useDarkIcons = MaterialTheme.colors.isLight
     SideEffect {
         systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = useDarkIcons)
