@@ -11,7 +11,7 @@ In your layouts you can update the system bar colors like so:
 
 ``` kotlin
 // Remember a SystemUiController
-val systemUiController = rememberAndroidSystemUiController()
+val systemUiController = rememberSystemUiController()
 val useDarkIcons = MaterialTheme.colors.isLight
 
 SideEffect {
