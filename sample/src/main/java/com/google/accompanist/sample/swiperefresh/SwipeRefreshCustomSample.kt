@@ -68,7 +68,7 @@ private fun Sample() {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.swiperefresh_title_basics)) },
+                title = { Text(stringResource(R.string.swiperefresh_title_custom)) },
                 backgroundColor = MaterialTheme.colors.surface,
             )
         },
