@@ -78,6 +78,8 @@ class SwipeRefreshState(
     private val _indicatorOffset = Animatable(0f)
     private val mutatorMutex = MutatorMutex()
 
+    internal var refreshTrigger by mutableStateOf(0f)
+
     /**
      * Whether this [SwipeRefreshState] is currently refreshing or not.
      */
@@ -100,6 +102,12 @@ class SwipeRefreshState(
         }
     }
 
+    internal suspend fun animateBackToRest() {
+        mutatorMutex.mutate {
+            _indicatorOffset.animateTo(if (isRefreshing) refreshTrigger else 0f)
+        }
+    }
+
     /**
      * Dispatch scroll delta in pixels.
      */
@@ -115,7 +123,6 @@ private class SwipeRefreshNestedScrollConnection(
     private val coroutineScope: CoroutineScope,
     private val onRefresh: () -> Unit,
 ) : NestedScrollConnection {
-    var refreshTrigger: Float = 0f
     var enabled: Boolean = false
 
     override fun onPreScroll(
@@ -163,13 +170,13 @@ private class SwipeRefreshNestedScrollConnection(
         // If we're currently refreshing, just animate back to the resting position
         state.isRefreshing -> {
             coroutineScope.launch {
-                state.animateOffsetTo(refreshTrigger)
+                state.animateOffsetTo(state.refreshTrigger)
             }
             // Consume the entire velocity
             available
         }
         // If we're dragging and scrolled past the trigger point, refresh!
-        state.isSwipeInProgress && state.indicatorOffset >= refreshTrigger -> {
+        state.isSwipeInProgress && state.indicatorOffset >= state.refreshTrigger -> {
             onRefresh()
             // Consume the entire velocity
             available
@@ -223,14 +230,12 @@ fun SwipeRefresh(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val updatedOnRefresh = rememberUpdatedState(onRefresh)
-    var refreshTrigger by remember { mutableStateOf(0f) }
 
     // Our LaunchedEffect, which animates the indicator to an appropriate resting position
-    LaunchedEffect(state.isRefreshing, state.isSwipeInProgress, refreshTrigger) {
+    LaunchedEffect(state.isSwipeInProgress, state.isRefreshing) {
         if (!state.isSwipeInProgress) {
-            // If there's not a swipe in progress, rest the indicator
-            // at an appropriate position
-            state.animateOffsetTo(if (state.isRefreshing) refreshTrigger else 0f)
+            // If there's not a swipe in progress, rest the indicator at an appropriate position
+            state.animateBackToRest()
         }
     }
 
@@ -241,15 +246,10 @@ fun SwipeRefresh(
             updatedOnRefresh.value.invoke()
         }
     }.apply {
-        this.refreshTrigger = refreshTrigger
         this.enabled = swipeEnabled
     }
 
-    val indicatorContentScope = remember(state) {
-        SwipeRefreshIndicatorScopeImpl(state)
-    }.apply {
-        this.indicatorTriggerOffset = refreshTrigger
-    }
+    val indicatorContentScope = remember(state) { SwipeRefreshIndicatorScopeImpl(state) }
 
     Layout(
         content = {
@@ -270,7 +270,7 @@ fun SwipeRefresh(
 
         // TODO: make this configurable?
         val trigger = indicatorPlaceable.height * 1.5f
-        refreshTrigger = trigger
+        state.refreshTrigger = trigger
 
         // Our layout is the size of the content, coerced by the min constraints
         val layoutWidth = contentPlaceable.width.coerceAtLeast(constraints.minWidth)
@@ -302,7 +302,7 @@ private class SwipeRefreshIndicatorScopeImpl(
 ) : SwipeRefreshIndicatorScope {
     override val isRefreshing: Boolean get() = state.isRefreshing
     override val indicatorOffset: Float get() = state.indicatorOffset
-    override var indicatorTriggerOffset: Float by mutableStateOf(0f)
+    override val indicatorTriggerOffset: Float get() = state.refreshTrigger
     override val isSwipeInProgress: Boolean get() = state.isSwipeInProgress
 }
 
