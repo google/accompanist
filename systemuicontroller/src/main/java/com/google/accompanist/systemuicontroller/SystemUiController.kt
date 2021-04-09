@@ -163,14 +163,13 @@ class AndroidSystemUiController(view: View) : SystemUiController {
             else -> color
         }.toArgb()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (Build.VERSION.SDK_INT >= 29) {
             window?.isNavigationBarContrastEnforced = navigationBarContrastEnforced
         }
     }
 
     override fun isNavigationBarContrastEnforced(): Boolean {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
-            window?.isNavigationBarContrastEnforced == true
+        return Build.VERSION.SDK_INT >= 29 && window?.isNavigationBarContrastEnforced == true
     }
 
     private fun Context.findWindow(): Window? {
