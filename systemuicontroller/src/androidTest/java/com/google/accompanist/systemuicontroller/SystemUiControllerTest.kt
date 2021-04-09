@@ -191,9 +191,13 @@ class SystemUiControllerTest {
         val view = composeTestRule.contentView
         val window = composeTestRule.activity.window
 
-        // Now create an AndroidSystemUiController() and set the navigation bar with dark icons
-        // and enforce contrast
+        // Now create an AndroidSystemUiController()
         val controller = AndroidSystemUiController(view)
+
+        // Assert that the contrast is not enforced initially
+        assertThat(controller.isNavigationBarContrastEnforced()).isFalse()
+
+        // and set the navigation bar with dark icons and enforce contrast
         controller.setNavigationBarColor(
             Color.Transparent,
             darkIcons = true,
@@ -209,6 +213,9 @@ class SystemUiControllerTest {
 
         // Assert that the system applied the contrast enforced property
         assertThat(window.isNavigationBarContrastEnforced).isTrue()
+
+        // Assert that the controller reflects that the contrast is enforced
+        assertThat(controller.isNavigationBarContrastEnforced()).isTrue()
     }
 }
 

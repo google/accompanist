@@ -97,6 +97,14 @@ interface SystemUiController {
             transformColorForLightContent
         )
     }
+
+    /**
+     * Returns whether the system is ensuring that the navigation bar has enough contrast when a
+     * fully transparent background is requested.
+     *
+     * @return true, if API is 29+ and the system is ensuring contrast, false otherwise.
+     */
+    fun isNavigationBarContrastEnforced(): Boolean = false
 }
 
 /**
@@ -158,6 +166,11 @@ class AndroidSystemUiController(view: View) : SystemUiController {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             window?.isNavigationBarContrastEnforced = navigationBarContrastEnforced
         }
+    }
+
+    override fun isNavigationBarContrastEnforced(): Boolean {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
+            window?.isNavigationBarContrastEnforced == true
     }
 
     private fun Context.findWindow(): Window? {
