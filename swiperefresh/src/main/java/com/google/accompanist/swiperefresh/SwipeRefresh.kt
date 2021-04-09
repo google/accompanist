@@ -131,19 +131,8 @@ private class SwipeRefreshNestedScrollConnection(
     ): Offset = when {
         // If swiping isn't enabled, return zero
         !enabled -> Offset.Zero
-        source == NestedScrollSource.Drag && available.y < 0 -> {
-            state.isSwipeInProgress = true
-
-            val drag = available.y * DragMultiplier
-            val distanceAvailable = max(drag, -state.indicatorOffset)
-            if (distanceAvailable.absoluteValue > 0.5f) {
-                coroutineScope.launch {
-                    state.dispatchRawDelta(distanceAvailable)
-                }
-            }
-            // Consume the consumed Y
-            Offset(x = 0f, y = distanceAvailable / DragMultiplier)
-        }
+        // If the user is swiping up, handle it
+        source == NestedScrollSource.Drag && available.y < 0 -> onScroll(available)
         else -> Offset.Zero
     }
 
@@ -154,16 +143,30 @@ private class SwipeRefreshNestedScrollConnection(
     ): Offset = when {
         // If swiping isn't enabled, return zero
         !enabled -> Offset.Zero
-        source == NestedScrollSource.Drag && available.y > 0 -> {
-            state.isSwipeInProgress = true
-
-            coroutineScope.launch {
-                state.dispatchRawDelta(available.y * DragMultiplier)
-            }
-            // Consume the entire Y delta
-            Offset(x = 0f, y = available.y)
-        }
+        // If the user is swiping down and there's y remaining, handle it
+        source == NestedScrollSource.Drag && available.y > 0 -> onScroll(available)
         else -> Offset.Zero
+    }
+
+    private fun onScroll(available: Offset): Offset {
+        state.isSwipeInProgress = true
+
+        val drag = available.y * DragMultiplier
+        val distanceAvailable = when {
+            // If we're refreshing, we don't want the indicator to scroll below the refresh
+            // trigger
+            state.isRefreshing -> max(drag, -(state.indicatorOffset - state.refreshTrigger))
+            else -> max(drag, -state.indicatorOffset)
+        }
+        return if (distanceAvailable.absoluteValue > 0.5f) {
+            coroutineScope.launch {
+                state.dispatchRawDelta(distanceAvailable)
+            }
+            // Consume the consumed Y
+            Offset(x = 0f, y = distanceAvailable / DragMultiplier)
+        } else {
+            Offset.Zero
+        }
     }
 
     override suspend fun onPreFling(available: Velocity): Velocity = when {
@@ -172,14 +175,14 @@ private class SwipeRefreshNestedScrollConnection(
             coroutineScope.launch {
                 state.animateOffsetTo(state.refreshTrigger)
             }
-            // Consume the entire velocity
-            available
+            // Don't consume any velocity, to allow the scrolling layout to fling
+            Velocity.Zero
         }
         // If we're dragging and scrolled past the trigger point, refresh!
         state.isSwipeInProgress && state.indicatorOffset >= state.refreshTrigger -> {
             onRefresh()
-            // Consume the entire velocity
-            available
+            // Don't consume any velocity, to allow the scrolling layout to fling
+            Velocity.Zero
         }
         else -> Velocity.Zero
     }.also {
