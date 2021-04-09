@@ -52,7 +52,7 @@ import com.google.accompanist.insets.ViewWindowInsetObserver
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
-import com.google.accompanist.systemuicontroller.rememberAndroidSystemUiController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class InsetsFragmentSample : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -100,7 +100,7 @@ class InsetsFragment : Fragment() {
 
 @Composable
 private fun Sample() {
-    val systemUiController = rememberAndroidSystemUiController()
+    val systemUiController = rememberSystemUiController()
     val useDarkIcons = MaterialTheme.colors.isLight
     SideEffect {
         systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = useDarkIcons)

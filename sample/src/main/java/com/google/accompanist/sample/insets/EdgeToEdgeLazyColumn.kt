@@ -59,7 +59,7 @@ import com.google.accompanist.insets.toPaddingValues
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
-import com.google.accompanist.systemuicontroller.rememberAndroidSystemUiController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class EdgeToEdgeLazyColumn : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,7 +81,7 @@ class EdgeToEdgeLazyColumn : ComponentActivity() {
 
 @Composable
 private fun Sample() {
-    val systemUiController = rememberAndroidSystemUiController()
+    val systemUiController = rememberSystemUiController()
     val useDarkIcons = MaterialTheme.colors.isLight
     SideEffect {
         systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = useDarkIcons)

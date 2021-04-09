@@ -48,7 +48,7 @@ import com.google.accompanist.insets.rememberImeNestedScrollConnection
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
-import com.google.accompanist.systemuicontroller.rememberAndroidSystemUiController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @OptIn(ExperimentalAnimatedInsets::class)
 class ImeAnimationSample : ComponentActivity() {
@@ -74,7 +74,7 @@ private val listItems = List(40) { randomSampleImageUrl(it) }
 @OptIn(ExperimentalAnimatedInsets::class)
 @Composable
 private fun Sample() {
-    val systemUiController = rememberAndroidSystemUiController()
+    val systemUiController = rememberSystemUiController()
     val useDarkIcons = MaterialTheme.colors.isLight
     SideEffect {
         systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = useDarkIcons)

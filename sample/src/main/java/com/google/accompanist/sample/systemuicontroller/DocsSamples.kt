@@ -20,12 +20,12 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
-import com.google.accompanist.systemuicontroller.rememberAndroidSystemUiController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun AndroidSystemUiControllerSample() {
     // Get the current SystemUiController
-    val systemUiController = rememberAndroidSystemUiController()
+    val systemUiController = rememberSystemUiController()
     val useDarkIcons = MaterialTheme.colors.isLight
 
     SideEffect {
