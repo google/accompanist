@@ -16,20 +16,136 @@
 
 package com.google.accompanist.sample.insets
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.AppBarDefaults
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationDefaults
+import androidx.compose.material.FabPosition
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Surface
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.contentColorFor
 import androidx.compose.material.primarySurface
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
+import com.google.accompanist.insets.toPaddingValues
+
+class InsetAwareState {
+
+    var topBarSize: IntSize by mutableStateOf(IntSize.Zero)
+
+    var bottomBarSize: IntSize by mutableStateOf(IntSize.Zero)
+}
+
+val LocalInsetAwareState = staticCompositionLocalOf { InsetAwareState() }
+
+@Composable
+fun InsetAwareState.toPaddingValues(
+    additionalTop: Dp = 0.dp,
+    additionalBottom: Dp = 0.dp,
+): PaddingValues = with(LocalDensity.current) {
+    LocalWindowInsets.current.systemBars.toPaddingValues(
+        top = false,
+        bottom = false,
+        additionalTop = topBarSize.height.toDp() + additionalTop,
+        additionalBottom = bottomBarSize.height.toDp() + additionalBottom,
+    )
+}
+
+@Composable
+fun edgeToEdgePaddingValues(
+    additionalTop: Dp = 0.dp,
+    additionalBottom: Dp = 0.dp,
+): PaddingValues = LocalInsetAwareState.current.toPaddingValues(
+    additionalTop = additionalTop,
+    additionalBottom = additionalBottom
+)
+
+@Composable
+fun edgeToEdgePaddingValues(
+    additionalVertical: Dp = 0.dp,
+): PaddingValues = LocalInsetAwareState.current.toPaddingValues(
+    additionalTop = additionalVertical,
+    additionalBottom = additionalVertical
+)
+
+fun Modifier.edgeToEdgePadding(
+    additionalTop: Dp = 0.dp,
+    additionalBottom: Dp = 0.dp,
+) = composed {
+    padding(
+        edgeToEdgePaddingValues(
+            additionalTop = additionalTop,
+            additionalBottom = additionalBottom
+        )
+    )
+}
+
+fun Modifier.edgeToEdgePadding(
+    additionalVertical: Dp = 0.dp,
+) = composed {
+    padding(
+        edgeToEdgePaddingValues(
+            additionalBottom = additionalVertical
+        )
+    )
+}
+
+private fun Modifier.measureTopBarSize() = composed {
+    onSizeChanged { LocalInsetAwareState.current.topBarSize = it }
+}
+
+private fun Modifier.measureBottomBarSize() = composed {
+    onSizeChanged { LocalInsetAwareState.current.bottomBarSize = it }
+}
+
+@Composable
+fun InsetAwareScaffold(
+    modifier: Modifier = Modifier,
+    scaffoldState: ScaffoldState = rememberScaffoldState(),
+    topBar: @Composable () -> Unit = {},
+    bottomBar: @Composable () -> Unit = {},
+    floatingActionButton: @Composable () -> Unit = {},
+    floatingActionButtonPosition: FabPosition = FabPosition.End,
+    content: @Composable (PaddingValues) -> Unit = {},
+) {
+    val insetAwareState = InsetAwareState()
+    CompositionLocalProvider(
+        LocalInsetAwareState provides insetAwareState
+    ) {
+        Scaffold(
+            modifier = modifier,
+            scaffoldState = scaffoldState,
+            floatingActionButton = floatingActionButton,
+            floatingActionButtonPosition = floatingActionButtonPosition,
+            bottomBar = bottomBar,
+            content = { innerPadding ->
+                content(innerPadding)
+                topBar()
+            }
+        )
+    }
+}
 
 /**
  * A wrapper around [TopAppBar] which uses [Modifier.statusBarsPadding] to shift the app bar's
@@ -49,6 +165,7 @@ fun InsetAwareTopAppBar(
         color = backgroundColor,
         elevation = elevation,
         modifier = modifier
+            .measureTopBarSize(),
     ) {
         TopAppBar(
             title = title,
@@ -60,6 +177,29 @@ fun InsetAwareTopAppBar(
             modifier = Modifier
                 .statusBarsPadding()
                 .navigationBarsPadding(bottom = false)
+        )
+    }
+}
+
+@Composable
+fun InsetAwareBottomNavigation(
+    modifier: Modifier = Modifier,
+    backgroundColor: Color = MaterialTheme.colors.primarySurface,
+    elevation: Dp = BottomNavigationDefaults.Elevation,
+    content: @Composable RowScope.() -> Unit,
+) {
+    Surface(
+        modifier = modifier
+            .measureBottomBarSize(),
+        color = backgroundColor,
+        elevation = elevation,
+    ) {
+        BottomNavigation(
+            modifier = Modifier
+                .navigationBarsPadding(),
+            backgroundColor = Color.Transparent,
+            elevation = 0.dp,
+            content = content,
         )
     }
 }
