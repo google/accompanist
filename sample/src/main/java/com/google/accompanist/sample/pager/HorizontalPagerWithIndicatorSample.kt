@@ -21,6 +21,7 @@ package com.google.accompanist.sample.pager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -46,8 +47,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.coil.rememberCoilImageState
-import com.google.accompanist.imageloading.Image
+import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
@@ -92,19 +92,20 @@ private fun Sample() {
                 state = pagerState,
                 // We increase the offscreen limit, to allow pre-loading of images
                 offscreenLimit = 2,
-                modifier = Modifier.weight(1f).fillMaxWidth(),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
             ) { page ->
                 Box {
                     // Our page content, displaying a random image
                     Image(
-                        state = rememberCoilImageState(
-                            rememberRandomSampleImageUrl(width = 600)
+                        painter = rememberCoilPainter(
+                            rememberRandomSampleImageUrl(width = 600), fadeIn = true,
                         ),
                         contentDescription = null,
                         modifier = Modifier
                             .fillMaxWidth(0.8f)
                             .aspectRatio(1f),
-                        fadeIn = true,
                     )
                 }
             }

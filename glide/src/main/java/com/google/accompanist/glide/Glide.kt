@@ -17,6 +17,7 @@
 package com.google.accompanist.glide
 
 import android.graphics.drawable.Drawable
+import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -38,6 +39,7 @@ import com.bumptech.glide.request.target.Target
 import com.google.accompanist.imageloading.DataSource
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.ImageState
+import com.google.accompanist.imageloading.rememberLoadPainter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 
@@ -63,6 +65,28 @@ object GlideImageStateDefaults {
         return LocalRequestManager.current ?: Glide.with(LocalContext.current.applicationContext)
     }
 }
+
+@Suppress("NOTHING_TO_INLINE")
+@Composable
+inline fun rememberGlidePainter(
+    data: Any?,
+    requestManager: RequestManager = GlideImageStateDefaults.defaultRequestManager(),
+    noinline shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
+    noinline requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)? = null,
+    fadeIn: Boolean = false,
+    fadeInDurationMs: Int = 1000,
+    @DrawableRes previewPlaceholder: Int = 0,
+): Painter = rememberLoadPainter(
+    state = rememberGlideImageState(
+        data = data,
+        requestManager = requestManager,
+        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
+        requestBuilder = requestBuilder
+    ),
+    fadeIn = fadeIn,
+    fadeInDurationMs = fadeInDurationMs,
+    previewPlaceholder = previewPlaceholder
+)
 
 /**
  * Creates a [GlideImageState] that is remembered across compositions.
@@ -92,7 +116,7 @@ fun rememberGlideImageState(
 }
 
 /**
- * A state object that can be hoisted for [com.google.accompanist.imageloading.Image]
+ * A state object that can be hoisted for [com.google.accompanist.imageloading.rememberLoadPainter]
  * to load images using [Glide].
  *
  * In most cases, this will be created via [rememberGlideImageState].
@@ -122,7 +146,9 @@ class GlideImageState(
     /**
      * Holds an optional builder for every created [RequestBuilder].
      */
-    var requestBuilder by mutableStateOf<(RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)?>(null)
+    var requestBuilder by mutableStateOf<(RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)?>(
+        null
+    )
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun executeRequest(

@@ -16,6 +16,7 @@
 
 package com.google.accompanist.sample.insets
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -29,8 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.glide.rememberGlideImageState
-import com.google.accompanist.imageloading.Image
+import com.google.accompanist.glide.rememberGlidePainter
 
 /**
  * Simple list item row which displays an image and text.
@@ -42,7 +42,7 @@ fun ListItem(
 ) {
     Row(modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
         Image(
-            state = rememberGlideImageState(imageUrl),
+            painter = rememberGlidePainter(imageUrl),
             contentDescription = null,
             modifier = Modifier
                 .size(64.dp)

@@ -18,6 +18,7 @@ package com.google.accompanist.glide
 
 import android.graphics.drawable.ShapeDrawable
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -45,9 +46,9 @@ import androidx.test.filters.LargeTest
 import androidx.test.filters.SdkSuppress
 import com.bumptech.glide.Glide
 import com.google.accompanist.glide.test.R
-import com.google.accompanist.imageloading.Image
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.isFinalState
+import com.google.accompanist.imageloading.rememberLoadPainter
 import com.google.accompanist.imageloading.test.ImageMockWebServer
 import com.google.accompanist.imageloading.test.LaunchedOnRequestComplete
 import com.google.accompanist.imageloading.test.assertPixels
@@ -98,7 +99,7 @@ class GlideTest {
             LaunchedOnRequestComplete(state) { requestCompleted = true }
 
             Image(
-                state = state,
+                painter = rememberLoadPainter(state),
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -124,7 +125,7 @@ class GlideTest {
             LaunchedOnRequestComplete(state) { requestCompleted = true }
 
             Image(
-                state = state,
+                painter = rememberLoadPainter(state),
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -152,7 +153,7 @@ class GlideTest {
             LaunchedOnRequestComplete(state) { requestCompleted = true }
 
             Image(
-                state = state,
+                painter = rememberLoadPainter(state),
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -180,7 +181,7 @@ class GlideTest {
                 .addDefaultRequestListener(SimpleRequestListener { requestCompleted = true })
 
             Image(
-                state = rememberGlideImageState(
+                painter = rememberGlidePainter(
                     server.url("/image").toString(),
                     requestManager = glide,
                 ),
@@ -204,7 +205,7 @@ class GlideTest {
 
             CompositionLocalProvider(LocalRequestManager provides glide) {
                 Image(
-                    state = rememberGlideImageState(server.url("/image").toString()),
+                    painter = rememberGlidePainter(server.url("/image").toString()),
                     contentDescription = null,
                     modifier = Modifier.size(128.dp, 128.dp),
                 )
@@ -227,7 +228,7 @@ class GlideTest {
             LaunchedOnRequestComplete(state) { requestCompleted = true }
 
             Image(
-                state = state,
+                painter = rememberLoadPainter(state),
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -274,7 +275,7 @@ class GlideTest {
                 val state = rememberGlideImageState(server.url("/red").toString())
 
                 Image(
-                    state = state,
+                    painter = rememberLoadPainter(state),
                     contentDescription = null,
                     modifier = Modifier
                         .size(size)
@@ -315,7 +316,7 @@ class GlideTest {
             LaunchedOnRequestComplete(state) { requestCompleted = true }
 
             Image(
-                state = state,
+                painter = rememberLoadPainter(state),
                 contentDescription = null,
                 modifier = Modifier.testTag(GlideTestTags.Image),
             )
@@ -335,7 +336,7 @@ class GlideTest {
     fun basicLoad_error() {
         composeTestRule.setContent {
             Image(
-                state = rememberGlideImageState(
+                painter = rememberGlidePainter(
                     data = server.url("/noimage"),
                     requestBuilder = {
                         // Display a red rectangle when errors occur
@@ -367,7 +368,7 @@ class GlideTest {
             LaunchedOnRequestComplete(state) { requestCompleted = true }
 
             Image(
-                state = state,
+                painter = rememberLoadPainter(state),
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -389,7 +390,7 @@ class GlideTest {
     fun data_drawable_throws() {
         composeTestRule.setContent {
             Image(
-                state = rememberGlideImageState(
+                painter = rememberGlidePainter(
                     data = ShapeDrawable(),
                 ),
                 contentDescription = null,
@@ -402,7 +403,7 @@ class GlideTest {
     fun data_imagebitmap_throws() {
         composeTestRule.setContent {
             Image(
-                state = rememberGlideImageState(
+                painter = rememberGlidePainter(
                     painterResource(android.R.drawable.ic_delete),
                 ),
                 contentDescription = null,
@@ -415,7 +416,7 @@ class GlideTest {
     fun data_imagevector_throws() {
         composeTestRule.setContent {
             Image(
-                state = rememberGlideImageState(
+                painter = rememberGlidePainter(
                     painterResource(R.drawable.ic_android_black_24dp),
                 ),
                 contentDescription = null,
@@ -428,7 +429,7 @@ class GlideTest {
     fun data_painter_throws() {
         composeTestRule.setContent {
             Image(
-                state = rememberGlideImageState(ColorPainter(Color.Magenta)),
+                painter = rememberGlidePainter(ColorPainter(Color.Magenta)),
                 contentDescription = null,
                 modifier = Modifier.size(128.dp, 128.dp),
             )
@@ -439,7 +440,7 @@ class GlideTest {
     fun error_stoppedThenResumed() {
         composeTestRule.setContent {
             Image(
-                state = rememberGlideImageState(data = ""),
+                painter = rememberGlidePainter(data = ""),
                 contentDescription = null,
                 modifier = Modifier.size(128.dp, 128.dp),
             )

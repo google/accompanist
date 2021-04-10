@@ -20,6 +20,7 @@
 package com.google.accompanist.coil
 
 import android.content.Context
+import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -40,6 +41,7 @@ import coil.size.Precision
 import com.google.accompanist.imageloading.DataSource
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.ImageState
+import com.google.accompanist.imageloading.rememberLoadPainter
 
 /**
  * Composition local containing the preferred [ImageLoader] to be used by
@@ -59,6 +61,30 @@ object CoilImageStateDefaults {
         return LocalImageLoader.current ?: LocalContext.current.imageLoader
     }
 }
+
+@Suppress("NOTHING_TO_INLINE")
+@Composable
+inline fun rememberCoilPainter(
+    data: Any?,
+    imageLoader: ImageLoader = CoilImageStateDefaults.defaultImageLoader(),
+    context: Context = LocalContext.current,
+    noinline shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
+    noinline requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
+    fadeIn: Boolean = false,
+    fadeInDurationMs: Int = 1000,
+    @DrawableRes previewPlaceholder: Int = 0,
+): Painter = rememberLoadPainter(
+    state = rememberCoilImageState(
+        data = data,
+        imageLoader = imageLoader,
+        context = context,
+        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
+        requestBuilder = requestBuilder
+    ),
+    fadeIn = fadeIn,
+    fadeInDurationMs = fadeInDurationMs,
+    previewPlaceholder = previewPlaceholder
+)
 
 /**
  * Creates a [CoilImageState] that is remembered across compositions.
@@ -94,7 +120,7 @@ fun rememberCoilImageState(
 }
 
 /**
- * A state object that can be hoisted for [com.google.accompanist.imageloading.Image]
+ * A state object that can be hoisted for [com.google.accompanist.imageloading.rememberLoadPainter]
  * to load images using [coil.Coil].
  *
  * In most cases, this will be created via [rememberCoilImageState].

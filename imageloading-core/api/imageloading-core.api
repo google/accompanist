@@ -16,8 +16,8 @@ public final class com/google/accompanist/imageloading/DrawablePainterKt {
 }
 
 public final class com/google/accompanist/imageloading/ImageKt {
-	public static final fun Image (Lcom/google/accompanist/imageloading/ImageState;Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;ZIILandroidx/compose/runtime/Composer;II)V
 	public static final fun ImageSuchDeprecated (Lcom/google/accompanist/imageloading/ImageState;Landroidx/compose/ui/Modifier;ILkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
+	public static final fun rememberLoadPainter (Lcom/google/accompanist/imageloading/ImageState;ZIILandroidx/compose/runtime/Composer;II)Landroidx/compose/ui/graphics/painter/Painter;
 }
 
 public abstract class com/google/accompanist/imageloading/ImageLoadState {

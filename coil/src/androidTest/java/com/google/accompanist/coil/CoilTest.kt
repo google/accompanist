@@ -18,6 +18,7 @@ package com.google.accompanist.coil
 
 import android.graphics.drawable.ShapeDrawable
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -49,9 +50,9 @@ import coil.request.CachePolicy
 import coil.request.ImageRequest
 import coil.request.ImageResult
 import com.google.accompanist.coil.test.R
-import com.google.accompanist.imageloading.Image
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.isFinalState
+import com.google.accompanist.imageloading.rememberLoadPainter
 import com.google.accompanist.imageloading.test.ImageMockWebServer
 import com.google.accompanist.imageloading.test.assertPixels
 import com.google.accompanist.imageloading.test.resourceUri
@@ -111,7 +112,7 @@ class CoilTest {
     fun basicLoad_http() {
         composeTestRule.setContent {
             Image(
-                state = rememberCoilImageState(server.url("/image")),
+                painter = rememberCoilPainter(server.url("/image")),
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -130,7 +131,7 @@ class CoilTest {
     fun basicLoad_drawableId() {
         composeTestRule.setContent {
             Image(
-                state = rememberCoilImageState(R.drawable.red_rectangle),
+                painter = rememberCoilPainter(R.drawable.red_rectangle),
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -151,7 +152,7 @@ class CoilTest {
     fun basicLoad_drawableUri() {
         composeTestRule.setContent {
             Image(
-                state = rememberCoilImageState(resourceUri(R.drawable.red_rectangle)),
+                painter = rememberCoilPainter(resourceUri(R.drawable.red_rectangle)),
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -184,7 +185,7 @@ class CoilTest {
 
         composeTestRule.setContent {
             Image(
-                state = rememberCoilImageState(
+                painter = rememberCoilPainter(
                     data = server.url("/image"),
                     imageLoader = imageLoader,
                 ),
@@ -216,7 +217,7 @@ class CoilTest {
         composeTestRule.setContent {
             CompositionLocalProvider(LocalImageLoader provides imageLoader) {
                 Image(
-                    state = rememberCoilImageState(server.url("/image")),
+                    painter = rememberCoilPainter(server.url("/image")),
                     contentDescription = null,
                     modifier = Modifier.size(128.dp, 128.dp),
                 )
@@ -235,7 +236,7 @@ class CoilTest {
 
         composeTestRule.setContent {
             Image(
-                state = rememberCoilImageState(data),
+                painter = rememberCoilPainter(data),
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -275,7 +276,7 @@ class CoilTest {
                 val state = rememberCoilImageState(server.url("/red"))
 
                 Image(
-                    state = state,
+                    painter = rememberLoadPainter(state),
                     contentDescription = null,
                     modifier = Modifier
                         .size(size)
@@ -311,7 +312,7 @@ class CoilTest {
     fun basicLoad_nosize() {
         composeTestRule.setContent {
             Image(
-                state = rememberCoilImageState(server.url("/image")),
+                painter = rememberCoilPainter(server.url("/image")),
                 contentDescription = null,
                 modifier = Modifier.testTag(CoilTestTags.Image),
             )
@@ -328,7 +329,7 @@ class CoilTest {
     fun basicLoad_error() {
         composeTestRule.setContent {
             Image(
-                state = rememberCoilImageState(
+                painter = rememberCoilPainter(
                     data = server.url("/noimage"),
                     requestBuilder = {
                         // Display a red rectangle when errors occur
@@ -355,7 +356,7 @@ class CoilTest {
     fun errorStillHasSize() {
         composeTestRule.setContent {
             Image(
-                state = rememberCoilImageState(server.url("/noimage")),
+                painter = rememberCoilPainter(server.url("/noimage")),
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -374,7 +375,7 @@ class CoilTest {
     fun data_drawable_throws() {
         composeTestRule.setContent {
             Image(
-                state = rememberCoilImageState(
+                painter = rememberCoilPainter(
                     data = ShapeDrawable(),
                 ),
                 contentDescription = null,
@@ -387,7 +388,7 @@ class CoilTest {
     fun data_imagebitmap_throws() {
         composeTestRule.setContent {
             Image(
-                state = rememberCoilImageState(
+                painter = rememberCoilPainter(
                     painterResource(android.R.drawable.ic_delete),
                 ),
                 contentDescription = null,
@@ -400,7 +401,7 @@ class CoilTest {
     fun data_imagevector_throws() {
         composeTestRule.setContent {
             Image(
-                state = rememberCoilImageState(
+                painter = rememberCoilPainter(
                     painterResource(R.drawable.ic_android_black_24dp),
                 ),
                 contentDescription = null,
@@ -413,7 +414,7 @@ class CoilTest {
     fun data_painter_throws() {
         composeTestRule.setContent {
             Image(
-                state = rememberCoilImageState(ColorPainter(Color.Magenta)),
+                painter = rememberCoilPainter(ColorPainter(Color.Magenta)),
                 contentDescription = null,
                 modifier = Modifier.size(128.dp, 128.dp),
             )
