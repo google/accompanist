@@ -279,7 +279,7 @@ fun CoilImage(
     error: @Composable (BoxScope.(ImageLoadState.Error) -> Unit)? = null,
     loading: @Composable (BoxScope.() -> Unit)? = null,
 ) {
-    val request = rememberCoilPainter(
+    val painter = rememberCoilPainter(
         data = data,
         requestBuilder = requestBuilder,
         imageLoader = imageLoader,
@@ -288,15 +288,15 @@ fun CoilImage(
         previewPlaceholder = previewPlaceholder,
     )
 
-    LaunchedEffect(request) {
-        snapshotFlow { request.loadState }
+    LaunchedEffect(painter) {
+        snapshotFlow { painter.loadState }
             .filter { it.isFinalState() }
             .collect { onRequestCompleted(it) }
     }
 
     @Suppress("DEPRECATION")
     ImageSuchDeprecated(
-        loadPainter = request,
+        loadPainter = painter,
         contentDescription = contentDescription,
         alignment = alignment,
         contentScale = contentScale,
