@@ -72,8 +72,9 @@ private fun Sample() {
         },
         modifier = Modifier.fillMaxSize()
     ) {
+        // Simulate a fake 2-second 'load'. Ideally this 'refreshing' value would
+        // come from a ViewModel or similar
         var refreshing by remember { mutableStateOf(false) }
-
         LaunchedEffect(refreshing) {
             if (refreshing) {
                 delay(2000)
