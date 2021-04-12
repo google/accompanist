@@ -308,7 +308,7 @@ class PagerState(
      *
      * @param deltaOffset delta in offset values (0f..1f). Values > 0 signify scrolls
      * towards the end of the pager, and values < 0 towards the start.
-     * @return any unconsumed [deltaOffset]
+     * @return the amount of [deltaOffset] consumed
      */
     private fun scrollByOffset(deltaOffset: Float): Float {
         val current = absolutePosition
@@ -323,7 +323,7 @@ class PagerState(
             )
         }
 
-        return deltaOffset - (target - current)
+        return target - current
     }
 
     /**
