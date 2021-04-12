@@ -115,7 +115,7 @@ class SwipeRefreshState(
     /**
      * Dispatch scroll delta in pixels from touch events.
      */
-    suspend fun dispatchRawDelta(delta: Float) {
+    internal suspend fun dispatchScrollDelta(delta: Float) {
         mutatorMutex.mutate(MutatePriority.UserInput) {
             _indicatorOffset.snapTo(_indicatorOffset.value + delta)
         }
@@ -167,7 +167,7 @@ private class SwipeRefreshNestedScrollConnection(
 
         return if (dragConsumed.absoluteValue >= 0.5f) {
             coroutineScope.launch {
-                state.dispatchRawDelta(dragConsumed)
+                state.dispatchScrollDelta(dragConsumed)
             }
             // Return the consumed Y
             Offset(x = 0f, y = dragConsumed / DragMultiplier)

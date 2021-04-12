@@ -25,7 +25,6 @@ public final class com/google/accompanist/swiperefresh/SwipeRefreshKt {
 
 public final class com/google/accompanist/swiperefresh/SwipeRefreshState {
 	public fun <init> (Z)V
-	public final fun dispatchRawDelta (FLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun getIndicatorOffset ()F
 	public final fun getIndicatorRefreshOffset ()F
 	public final fun isRefreshing ()Z
