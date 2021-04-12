@@ -56,6 +56,7 @@ dependencies {
     implementation project(':pager-indicators')
     implementation project(':flowlayout')
     implementation project(':systemuicontroller')
+    implementation project(':swiperefresh')
 
     implementation Libs.AndroidX.appcompat
 
