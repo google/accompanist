@@ -45,10 +45,8 @@ import coil.ImageLoader
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.transform.CircleCropTransformation
-import com.google.accompanist.coil.rememberCoilImageState
 import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.imageloading.ImageLoadState
-import com.google.accompanist.imageloading.rememberLoadPainter
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.rememberRandomSampleImageUrl
@@ -112,15 +110,15 @@ private fun Sample() {
             item {
                 // Loading content
                 Box {
-                    val coilState = rememberCoilImageState(rememberRandomSampleImageUrl())
+                    val coilPainter = rememberCoilPainter(rememberRandomSampleImageUrl())
 
                     Image(
-                        painter = rememberLoadPainter(state = coilState),
+                        painter = coilPainter,
                         contentDescription = null,
                         modifier = Modifier.size(128.dp),
                     )
 
-                    Crossfade(coilState.loadState) { state ->
+                    Crossfade(coilPainter.loadState) { state ->
                         if (state == ImageLoadState.Loading) {
                             CircularProgressIndicator(Modifier.align(Alignment.Center))
                         }

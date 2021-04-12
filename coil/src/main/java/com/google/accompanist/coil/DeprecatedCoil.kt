@@ -36,7 +36,6 @@ import coil.ImageLoader
 import coil.request.ImageRequest
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.ImageSuchDeprecated
-import com.google.accompanist.imageloading.MaterialLoadingImage
 import com.google.accompanist.imageloading.isFinalState
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
@@ -99,23 +98,24 @@ fun CoilImage(
     onRequestCompleted: (ImageLoadState) -> Unit = {},
     content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
 ) {
-    val request = rememberCoilImageState(
+    val painter = rememberCoilPainter(
         data = data,
         requestBuilder = requestBuilder,
         imageLoader = imageLoader,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
+        previewPlaceholder = previewPlaceholder,
     )
 
-    LaunchedEffect(request) {
-        snapshotFlow { request.loadState }
+    LaunchedEffect(painter) {
+        snapshotFlow { painter.loadState }
             .filter { it.isFinalState() }
             .collect { onRequestCompleted(it) }
     }
 
     @Suppress("DEPRECATION")
     ImageSuchDeprecated(
-        state = request,
-        previewPlaceholder = previewPlaceholder,
+        loadPainter = painter,
+        contentDescription = null,
         modifier = modifier,
         content = content
     )
@@ -193,7 +193,7 @@ fun CoilImage(
 }
 
 /**
- * Creates a composable that will attempt to load the given [data] using [Coil], and then
+ * Creates a composable that will attempt to load the given [data] using [coil.Coil], and then
  * display the result in an [Image].
  *
  * This version of the function is more opinionated, providing:
@@ -279,11 +279,13 @@ fun CoilImage(
     error: @Composable (BoxScope.(ImageLoadState.Error) -> Unit)? = null,
     loading: @Composable (BoxScope.() -> Unit)? = null,
 ) {
-    val request = rememberCoilImageState(
+    val request = rememberCoilPainter(
         data = data,
         requestBuilder = requestBuilder,
         imageLoader = imageLoader,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
+        fadeIn = fadeIn,
+        previewPlaceholder = previewPlaceholder,
     )
 
     LaunchedEffect(request) {
@@ -294,24 +296,17 @@ fun CoilImage(
 
     @Suppress("DEPRECATION")
     ImageSuchDeprecated(
-        state = request,
-        previewPlaceholder = previewPlaceholder,
+        loadPainter = request,
+        contentDescription = contentDescription,
+        alignment = alignment,
+        contentScale = contentScale,
+        colorFilter = colorFilter,
         modifier = modifier,
     ) { imageState ->
         when (imageState) {
-            is ImageLoadState.Success -> {
-                MaterialLoadingImage(
-                    result = imageState,
-                    contentDescription = contentDescription,
-                    fadeInEnabled = fadeIn,
-                    alignment = alignment,
-                    contentScale = contentScale,
-                    colorFilter = colorFilter
-                )
-            }
             is ImageLoadState.Error -> if (error != null) error(imageState)
             ImageLoadState.Loading -> if (loading != null) loading()
-            ImageLoadState.Empty -> Unit
+            else -> Unit
         }
     }
 }

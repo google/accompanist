@@ -40,7 +40,6 @@ import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.RequestManager
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.ImageSuchDeprecated
-import com.google.accompanist.imageloading.MaterialLoadingImage
 import com.google.accompanist.imageloading.isFinalState
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
@@ -103,23 +102,24 @@ fun GlideImage(
     onRequestCompleted: (ImageLoadState) -> Unit = {},
     content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
 ) {
-    val request = rememberGlideImageState(
+    val painter = rememberGlidePainter(
         data = data,
         requestManager = requestManager,
         requestBuilder = requestBuilder,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
+        previewPlaceholder = previewPlaceholder,
     )
 
-    LaunchedEffect(request) {
-        snapshotFlow { request.loadState }
+    LaunchedEffect(painter) {
+        snapshotFlow { painter.loadState }
             .filter { it.isFinalState() }
             .collect { onRequestCompleted(it) }
     }
 
     @Suppress("DEPRECATION")
     ImageSuchDeprecated(
-        state = request,
-        previewPlaceholder = previewPlaceholder,
+        loadPainter = painter,
+        contentDescription = null,
         modifier = modifier,
         content = content
     )
@@ -212,39 +212,34 @@ fun GlideImage(
     error: @Composable (BoxScope.(ImageLoadState.Error) -> Unit)? = null,
     loading: @Composable (BoxScope.() -> Unit)? = null,
 ) {
-    val request = rememberGlideImageState(
+    val painter = rememberGlidePainter(
         data = data,
         requestManager = requestManager,
         requestBuilder = requestBuilder,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
+        fadeIn = fadeIn,
+        previewPlaceholder = previewPlaceholder,
     )
 
-    LaunchedEffect(request) {
-        snapshotFlow { request.loadState }
+    LaunchedEffect(painter) {
+        snapshotFlow { painter.loadState }
             .filter { it.isFinalState() }
             .collect { onRequestCompleted(it) }
     }
 
     @Suppress("DEPRECATION")
     ImageSuchDeprecated(
-        state = request,
-        previewPlaceholder = previewPlaceholder,
+        loadPainter = painter,
         modifier = modifier,
+        contentDescription = contentDescription,
+        alignment = alignment,
+        contentScale = contentScale,
+        colorFilter = colorFilter
     ) { imageState ->
         when (imageState) {
-            is ImageLoadState.Success -> {
-                MaterialLoadingImage(
-                    result = imageState,
-                    contentDescription = contentDescription,
-                    fadeInEnabled = fadeIn,
-                    alignment = alignment,
-                    contentScale = contentScale,
-                    colorFilter = colorFilter
-                )
-            }
             is ImageLoadState.Error -> if (error != null) error(imageState)
             ImageLoadState.Loading -> if (loading != null) loading()
-            ImageLoadState.Empty -> Unit
+            else -> Unit
         }
     }
 }

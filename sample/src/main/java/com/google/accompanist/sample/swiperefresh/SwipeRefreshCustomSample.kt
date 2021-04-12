@@ -19,6 +19,7 @@ package com.google.accompanist.sample.swiperefresh
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,8 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.coil.rememberCoilImageState
-import com.google.accompanist.imageloading.Image
+import com.google.accompanist.glide.rememberGlidePainter
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
@@ -102,9 +102,7 @@ private fun Sample() {
                 items(30) { index ->
                     Row(Modifier.padding(16.dp)) {
                         Image(
-                            state = rememberCoilImageState(
-                                data = randomSampleImageUrl(index),
-                            ),
+                            painter = rememberGlidePainter(randomSampleImageUrl(index)),
                             contentDescription = null,
                             modifier = Modifier.size(64.dp),
                         )

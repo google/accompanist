@@ -38,10 +38,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.glide.rememberGlideImageState
 import com.google.accompanist.glide.rememberGlidePainter
 import com.google.accompanist.imageloading.ImageLoadState
-import com.google.accompanist.imageloading.rememberLoadPainter
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.rememberRandomSampleImageUrl
@@ -91,16 +89,16 @@ private fun Sample() {
             item {
                 // Loading content
                 Box {
-                    val coilState = rememberGlideImageState(rememberRandomSampleImageUrl())
+                    val glidePainter = rememberGlidePainter(rememberRandomSampleImageUrl())
 
                     Image(
-                        painter = rememberLoadPainter(state = coilState),
+                        painter = glidePainter,
                         contentDescription = null,
                         modifier = Modifier.size(128.dp),
                     )
 
                     Crossfade(
-                        targetState = coilState.loadState,
+                        targetState = glidePainter.loadState,
                         modifier = Modifier
                             .align(Alignment.Center)
                             .padding(16.dp)
@@ -127,15 +125,15 @@ private fun Sample() {
             item {
                 // Fade in and loading content
                 Box {
-                    val coilState = rememberGlideImageState(rememberRandomSampleImageUrl())
+                    val glidePainter = rememberGlidePainter(rememberRandomSampleImageUrl())
 
                     Image(
-                        painter = rememberLoadPainter(state = coilState, fadeIn = true),
+                        painter = glidePainter,
                         contentDescription = null,
                         modifier = Modifier.size(128.dp),
                     )
 
-                    Crossfade(coilState.loadState) { state ->
+                    Crossfade(glidePainter.loadState) { state ->
                         if (state == ImageLoadState.Loading) {
                             CircularProgressIndicator(Modifier.align(Alignment.Center))
                         }
@@ -146,14 +144,14 @@ private fun Sample() {
             item {
                 // Implicit size
                 Box {
-                    val glideState = rememberGlideImageState(rememberRandomSampleImageUrl())
+                    val glidePainter = rememberGlidePainter(rememberRandomSampleImageUrl())
 
                     Image(
-                        painter = rememberLoadPainter(state = glideState),
+                        painter = glidePainter,
                         contentDescription = null,
                     )
 
-                    Crossfade(glideState.loadState) { state ->
+                    Crossfade(glidePainter.loadState) { state ->
                         if (state == ImageLoadState.Loading) {
                             CircularProgressIndicator(Modifier.align(Alignment.Center))
                         }

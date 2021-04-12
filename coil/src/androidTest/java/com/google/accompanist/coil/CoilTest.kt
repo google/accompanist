@@ -29,6 +29,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.test.assertHeightIsAtLeast
@@ -52,7 +53,6 @@ import coil.request.ImageResult
 import com.google.accompanist.coil.test.R
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.isFinalState
-import com.google.accompanist.imageloading.rememberLoadPainter
 import com.google.accompanist.imageloading.test.ImageMockWebServer
 import com.google.accompanist.imageloading.test.assertPixels
 import com.google.accompanist.imageloading.test.resourceUri
@@ -273,18 +273,18 @@ class CoilTest {
             var size by mutableStateOf(128.dp)
 
             composeTestRule.setContent {
-                val state = rememberCoilImageState(server.url("/red"))
+                val painter = rememberCoilPainter(server.url("/red"))
 
                 Image(
-                    painter = rememberLoadPainter(state),
+                    painter = painter,
                     contentDescription = null,
                     modifier = Modifier
                         .size(size)
                         .testTag(CoilTestTags.Image),
                 )
 
-                LaunchedEffect(state) {
-                    snapshotFlow { state.loadState }
+                LaunchedEffect(painter) {
+                    snapshotFlow { painter.loadState }
                         .filter { it.isFinalState() }
                         .onCompletion { loadStates.cancel() }
                         .collect { loadStates.send(it) }
@@ -344,6 +344,32 @@ class CoilTest {
         }
 
         // Assert that the error drawable was drawn
+        composeTestRule.onNodeWithTag(CoilTestTags.Image)
+            .assertWidthIsEqualTo(128.dp)
+            .assertHeightIsEqualTo(128.dp)
+            .assertIsDisplayed()
+            .captureToImage()
+            .assertPixels(Color.Red)
+    }
+
+    @Test
+    @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
+    fun previewPlaceholder() {
+        composeTestRule.setContent {
+            CompositionLocalProvider(LocalInspectionMode provides true) {
+                Image(
+                    painter = rememberCoilPainter(
+                        data = "blah",
+                        previewPlaceholder = R.drawable.red_rectangle,
+                    ),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(128.dp, 128.dp)
+                        .testTag(CoilTestTags.Image),
+                )
+            }
+        }
+
         composeTestRule.onNodeWithTag(CoilTestTags.Image)
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)

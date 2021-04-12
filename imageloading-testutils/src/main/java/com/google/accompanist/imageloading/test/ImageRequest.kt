@@ -19,7 +19,7 @@ package com.google.accompanist.imageloading.test
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
-import com.google.accompanist.imageloading.ImageState
+import com.google.accompanist.imageloading.LoadPainter
 import com.google.accompanist.imageloading.isFinalState
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
@@ -31,11 +31,11 @@ import kotlinx.coroutines.flow.filter
  */
 @Composable
 inline fun LaunchedOnRequestComplete(
-    state: ImageState<*>,
+    painter: LoadPainter<*>,
     crossinline block: () -> Unit
 ) {
-    LaunchedEffect(state) {
-        snapshotFlow { state.loadState }
+    LaunchedEffect(painter) {
+        snapshotFlow { painter.loadState }
             .filter { it.isFinalState() }
             .collect { block() }
     }
