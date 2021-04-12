@@ -367,7 +367,7 @@ class GlideTest {
                 Image(
                     painter = rememberGlidePainter(
                         data = "blah",
-                        previewPlaceholder = R.drawable.red_rectangle,
+                        previewPlaceholder = R.drawable.red_rectangle_raster,
                     ),
                     contentDescription = null,
                     modifier = Modifier

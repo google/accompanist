@@ -360,7 +360,7 @@ class CoilTest {
                 Image(
                     painter = rememberCoilPainter(
                         data = "blah",
-                        previewPlaceholder = R.drawable.red_rectangle,
+                        previewPlaceholder = R.drawable.red_rectangle_raster,
                     ),
                     contentDescription = null,
                     modifier = Modifier

@@ -56,14 +56,12 @@ fun <R> ImageSuchDeprecated(
         Image(
             painter = loadPainter,
             contentDescription = contentDescription,
-            modifier = modifier,
             alignment = alignment,
             contentScale = contentScale,
             alpha = alpha,
             colorFilter = colorFilter,
         )
-        if (loadPainter.loadState !is ImageLoadState.Success) {
-            content(loadPainter.loadState)
-        }
+
+        content(loadPainter.loadState)
     }
 }
