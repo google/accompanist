@@ -20,6 +20,7 @@ import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.RememberObserver
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,6 +48,19 @@ import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 /**
+ * TODO
+ *
+ * Ideally this interface would be a functional interface, but Kotlin doesn't currently support
+ * suspending functional interfaces.
+ *
+ * @param R
+ */
+@Stable
+interface Loader<R> {
+    suspend fun load(request: R, size: IntSize): ImageLoadState
+}
+
+/**
  * A generic image loading painter, which provides hooks for image loading libraries to use.
  * Apps shouldn't generally use this function, instead preferring one of the extension libraries
  * which build upon this, such as the Coil and Glide libraries.
@@ -61,7 +75,7 @@ import kotlin.math.roundToInt
 @Composable
 fun <R> rememberLoadPainter(
     request: R?,
-    loader: suspend (R, size: IntSize) -> ImageLoadState,
+    loader: Loader<R>,
     shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean,
     fadeIn: Boolean = false,
     fadeInDurationMs: Int = DefaultTransitionDuration,
@@ -69,10 +83,8 @@ fun <R> rememberLoadPainter(
 ): LoadPainter<R> {
     val coroutineScope = rememberCoroutineScope()
 
-    // Our painter. We use a DelegatingPainter which delegates the actual drawn/laid-out painter
-    // to our result painter state. That block will be called during layout and drawing,
-    // which means that any changes to `state.loadState` will automatically re-trigger layout/draw.
-    return remember(coroutineScope) {
+    // Our LoadPainter. This invokes the loader as appropriate to display the result.
+    return remember(loader, coroutineScope) {
         LoadPainter(
             loader = loader,
             coroutineScope = coroutineScope,
@@ -83,7 +95,8 @@ fun <R> rememberLoadPainter(
         this.request = request
     }.also { loadPainter ->
         // This runs our fade in animation
-        loadPainter.fadeInAsState(
+        animateFadeInColorFilter(
+            painter = loadPainter,
             enabled = { result ->
                 // We run the fade in animation if the result is loaded from disk/network. This allows
                 // us to approximate only running the animation on 'first load'
@@ -110,7 +123,7 @@ fun <R> rememberLoadPainter(
  * @param shouldRefetchOnSizeChange
  */
 class LoadPainter<R>(
-    private val loader: suspend (request: R, size: IntSize) -> ImageLoadState,
+    private val loader: Loader<R>,
     private val coroutineScope: CoroutineScope,
     shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean,
 ) : Painter(), RememberObserver {
@@ -239,7 +252,7 @@ class LoadPainter<R>(
         loadState = ImageLoadState.Loading
 
         loadState = try {
-            loader(request, size)
+            loader.load(request, size)
         } catch (ce: CancellationException) {
             // We specifically don't do anything for the request coroutine being
             // cancelled: https://github.com/google/accompanist/issues/217
@@ -280,13 +293,15 @@ private fun <R> updatePainter(
     }
 }
 
+@SuppressLint("ComposableNaming")
 @Composable
-private fun <R> LoadPainter<R>.fadeInAsState(
+private fun <R> animateFadeInColorFilter(
+    painter: LoadPainter<R>,
     enabled: (ImageLoadState) -> Boolean,
     durationMs: Int,
 ) {
-    val state = loadState
-    transitionColorFilter = if (enabled(state)) {
+    val state = painter.loadState
+    painter.transitionColorFilter = if (enabled(state)) {
         val colorMatrix = remember { ColorMatrix() }
         val fadeInTransition = updateFadeInTransition(state, durationMs)
 

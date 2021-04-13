@@ -21,7 +21,9 @@ import android.graphics.drawable.Drawable
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
@@ -36,8 +38,8 @@ import coil.size.Precision
 import com.google.accompanist.imageloading.DataSource
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.LoadPainter
+import com.google.accompanist.imageloading.Loader
 import com.google.accompanist.imageloading.rememberLoadPainter
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /**
  * Composition local containing the preferred [ImageLoader] to be used by
@@ -69,14 +71,17 @@ fun rememberCoilPainter(
     fadeInDurationMs: Int = 1000,
     @DrawableRes previewPlaceholder: Int = 0,
 ): LoadPainter<Any> {
-    val updatedRequestBuilder by rememberUpdatedState(requestBuilder)
-    val updatedImageLoader by rememberUpdatedState(imageLoader)
-
+    // Remember and update a CoilLoader
+    val coilLoader = remember {
+        CoilLoader(context, imageLoader, requestBuilder)
+    }.apply {
+        this.context = context
+        this.imageLoader = imageLoader
+        this.requestBuilder = requestBuilder
+    }
     return rememberLoadPainter(
         request = checkData(data),
-        loader = { request, size ->
-            executeCoilRequest(request, size, context, updatedImageLoader, updatedRequestBuilder)
-        },
+        loader = coilLoader,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         fadeIn = fadeIn,
         fadeInDurationMs = fadeInDurationMs,
@@ -84,47 +89,50 @@ fun rememberCoilPainter(
     )
 }
 
-@OptIn(ExperimentalCoroutinesApi::class)
-private suspend fun executeCoilRequest(
-    request: Any,
-    size: IntSize,
+internal class CoilLoader(
     context: Context,
     imageLoader: ImageLoader,
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)?,
-): ImageLoadState {
-    val baseRequest = when (request) {
-        // If we've been given an ImageRequest instance, use it...
-        is ImageRequest -> request.newBuilder()
-        // Otherwise we construct a request from the data
-        else -> {
-            ImageRequest.Builder(context)
-                .data(request)
-                // We force in-exact precision as AUTOMATIC only works when used from views.
-                // INEXACT is correct as we can scale the result appropriately.
-                .precision(Precision.INEXACT)
-        }
-    }.apply {
-        // Apply the request builder
-        requestBuilder?.invoke(this, size)
-    }.build()
+) : Loader<Any> {
+    var context by mutableStateOf(context)
+    var imageLoader by mutableStateOf(imageLoader)
+    var requestBuilder by mutableStateOf(requestBuilder)
 
-    val sizedRequest = when {
-        // If the request has a size resolver set we just execute the request as-is
-        baseRequest.defined.sizeResolver != null -> baseRequest
-        // If the size contains an unspecified sized dimension, we don't specify a size
-        // in the Coil request
-        size.width < 0 || size.height < 0 -> baseRequest
-        // If we have a non-zero size, we can modify the request to include the size
-        size.width > 0 && size.height > 0 -> {
-            baseRequest.newBuilder()
-                .size(size.width, size.height)
-                .build()
+    override suspend fun load(request: Any, size: IntSize): ImageLoadState {
+        val baseRequest = when (request) {
+            // If we've been given an ImageRequest instance, use it...
+            is ImageRequest -> request.newBuilder()
+            // Otherwise we construct a request from the data
+            else -> {
+                ImageRequest.Builder(context)
+                    .data(request)
+                    // We force in-exact precision as AUTOMATIC only works when used from views.
+                    // INEXACT is correct as we can scale the result appropriately.
+                    .precision(Precision.INEXACT)
+            }
+        }.apply {
+            // Apply the request builder
+            requestBuilder?.invoke(this, size)
+        }.build()
+
+        val sizedRequest = when {
+            // If the request has a size resolver set we just execute the request as-is
+            baseRequest.defined.sizeResolver != null -> baseRequest
+            // If the size contains an unspecified sized dimension, we don't specify a size
+            // in the Coil request
+            size.width < 0 || size.height < 0 -> baseRequest
+            // If we have a non-zero size, we can modify the request to include the size
+            size.width > 0 && size.height > 0 -> {
+                baseRequest.newBuilder()
+                    .size(size.width, size.height)
+                    .build()
+            }
+            // Otherwise we have a zero size, so no point executing a request
+            else -> return ImageLoadState.Empty
         }
-        // Otherwise we have a zero size, so no point executing a request
-        else -> return ImageLoadState.Empty
+
+        return imageLoader.execute(sizedRequest).toResult(request)
     }
-
-    return imageLoader.execute(sizedRequest).toResult(request)
 }
 
 private fun ImageResult.toResult(request: Any): ImageLoadState = when (this) {

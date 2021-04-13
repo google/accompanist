@@ -20,7 +20,9 @@ import android.graphics.drawable.Drawable
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
@@ -36,6 +38,7 @@ import com.bumptech.glide.request.target.Target
 import com.google.accompanist.imageloading.DataSource
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.LoadPainter
+import com.google.accompanist.imageloading.Loader
 import com.google.accompanist.imageloading.rememberLoadPainter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -73,14 +76,17 @@ fun rememberGlidePainter(
     fadeInDurationMs: Int = 1000,
     @DrawableRes previewPlaceholder: Int = 0,
 ): LoadPainter<Any> {
-    val updatedRequestBuilder by rememberUpdatedState(requestBuilder)
-    val updatedRequestManager by rememberUpdatedState(requestManager)
+    // Remember and update a GlideLoader
+    val glideLoader = remember {
+        GlideLoader(requestManager, requestBuilder)
+    }.apply {
+        this.requestManager = requestManager
+        this.requestBuilder = requestBuilder
+    }
 
     return rememberLoadPainter(
         request = checkData(data),
-        loader = { request, size ->
-            executeGlideRequest(request, size, updatedRequestManager, updatedRequestBuilder)
-        },
+        loader = glideLoader,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         fadeIn = fadeIn,
         fadeInDurationMs = fadeInDurationMs,
@@ -88,91 +94,97 @@ fun rememberGlidePainter(
     )
 }
 
-@OptIn(ExperimentalCoroutinesApi::class)
-private suspend fun executeGlideRequest(
-    request: Any,
-    size: IntSize,
+internal class GlideLoader(
     requestManager: RequestManager,
     requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)?,
-): ImageLoadState = suspendCancellableCoroutine { cont ->
-    var failException: Throwable? = null
+) : Loader<Any> {
+    var requestManager by mutableStateOf(requestManager)
+    var requestBuilder by mutableStateOf(requestBuilder)
 
-    val target = object : EmptyCustomTarget(
-        if (size.width > 0) size.width else Target.SIZE_ORIGINAL,
-        if (size.height > 0) size.height else Target.SIZE_ORIGINAL
-    ) {
-        override fun onLoadFailed(errorDrawable: Drawable?) {
-            if (cont.isCompleted) {
-                // If we've already completed, ignore this
-                return
-            }
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override suspend fun load(
+        request: Any,
+        size: IntSize
+    ): ImageLoadState = suspendCancellableCoroutine { cont ->
+        var failException: Throwable? = null
 
-            val result = ImageLoadState.Error(
-                result = errorDrawable,
-                request = request,
-                throwable = failException
-                    ?: IllegalArgumentException("Error while loading $request")
-            )
+        val target = object : EmptyCustomTarget(
+            if (size.width > 0) size.width else Target.SIZE_ORIGINAL,
+            if (size.height > 0) size.height else Target.SIZE_ORIGINAL
+        ) {
+            override fun onLoadFailed(errorDrawable: Drawable?) {
+                if (cont.isCompleted) {
+                    // If we've already completed, ignore this
+                    return
+                }
 
-            cont.resume(result) {
-                // Clear any resources from the target if cancelled
-                requestManager.clear(this)
+                val result = ImageLoadState.Error(
+                    result = errorDrawable,
+                    request = request,
+                    throwable = failException
+                        ?: IllegalArgumentException("Error while loading $request")
+                )
+
+                cont.resume(result) {
+                    // Clear any resources from the target if cancelled
+                    requestManager.clear(this)
+                }
             }
         }
-    }
 
-    val listener = object : RequestListener<Drawable> {
-        override fun onResourceReady(
-            drawable: Drawable,
-            model: Any,
-            target: Target<Drawable>,
-            dataSource: com.bumptech.glide.load.DataSource,
-            isFirstResource: Boolean
-        ): Boolean {
-            if (cont.isCompleted) {
-                // If we've already completed, ignore this
+        val listener = object : RequestListener<Drawable> {
+            override fun onResourceReady(
+                drawable: Drawable,
+                model: Any,
+                target: Target<Drawable>,
+                dataSource: com.bumptech.glide.load.DataSource,
+                isFirstResource: Boolean
+            ): Boolean {
+                if (cont.isCompleted) {
+                    // If we've already completed, ignore this
+                    return true
+                }
+
+                val result = ImageLoadState.Success(
+                    result = drawable,
+                    request = request,
+                    source = dataSource.toDataSource()
+                )
+
+                cont.resume(result) {
+                    // Clear any resources from the target if cancelled
+                    requestManager.clear(target)
+                }
+
+                // Return true so that the target doesn't receive the drawable
                 return true
             }
 
-            val result = ImageLoadState.Success(
-                result = drawable,
-                request = request,
-                source = dataSource.toDataSource()
-            )
-
-            cont.resume(result) {
-                // Clear any resources from the target if cancelled
-                requestManager.clear(target)
+            override fun onLoadFailed(
+                e: GlideException?,
+                model: Any,
+                target: Target<Drawable>,
+                isFirstResource: Boolean
+            ): Boolean {
+                // Glide only passes the exception to the listener, so we store it
+                // for the target to use
+                failException = e
+                // Return false, allowing the target to receive it's onLoadFailed.
+                // This is needed so we can use any errorDrawable
+                return false
             }
-
-            // Return true so that the target doesn't receive the drawable
-            return true
         }
 
-        override fun onLoadFailed(
-            e: GlideException?,
-            model: Any,
-            target: Target<Drawable>,
-            isFirstResource: Boolean
-        ): Boolean {
-            // Glide only passes the exception to the listener, so we store it
-            // for the target to use
-            failException = e
-            // Return false, allowing the target to receive it's onLoadFailed.
-            // This is needed so we can use any errorDrawable
-            return false
+        // Start the image request into the target
+        requestManager.load(request)
+            .apply { requestBuilder?.invoke(this, size) }
+            .addListener(listener)
+            .into(target)
+
+        // If we're cancelled, clear the request from Glide
+        cont.invokeOnCancellation {
+            requestManager.clear(target)
         }
-    }
-
-    // Start the image request into the target
-    requestManager.load(request)
-        .apply { requestBuilder?.invoke(this, size) }
-        .addListener(listener)
-        .into(target)
-
-    // If we're cancelled, clear the request from Glide
-    cont.invokeOnCancellation {
-        requestManager.clear(target)
     }
 }
 
