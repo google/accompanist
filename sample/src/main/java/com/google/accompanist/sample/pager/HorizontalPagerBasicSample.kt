@@ -19,16 +19,11 @@ package com.google.accompanist.sample.pager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -47,15 +42,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.coil.rememberCoilImageState
-import com.google.accompanist.imageloading.Image
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
-import com.google.accompanist.sample.rememberRandomSampleImageUrl
 import kotlinx.coroutines.launch
 
 class HorizontalPagerBasicSample : ComponentActivity() {
@@ -94,32 +86,16 @@ private fun Sample() {
                 offscreenLimit = 2,
                 // Add some horizontal spacing between items
                 itemSpacing = 4.dp,
-                modifier = Modifier.weight(1f).fillMaxWidth()
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
             ) { page ->
-                Box {
-                    // Our page content, displaying a random image
-                    Image(
-                        state = rememberCoilImageState(
-                            rememberRandomSampleImageUrl(width = 600)
-                        ),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .fillMaxWidth(0.8f)
-                            .aspectRatio(1f),
-                        fadeIn = true,
-                    )
-
-                    // Displays the page index
-                    Text(
-                        text = page.toString(),
-                        modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .padding(16.dp)
-                            .background(MaterialTheme.colors.surface, RoundedCornerShape(4.dp))
-                            .padding(4.dp)
-                            .wrapContentSize(Alignment.Center)
-                    )
-                }
+                PagerSampleItem(
+                    page = page,
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .aspectRatio(1f)
+                )
             }
 
             ActionsRow(
@@ -132,7 +108,7 @@ private fun Sample() {
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-private fun ActionsRow(
+internal fun ActionsRow(
     pagerState: PagerState,
     modifier: Modifier = Modifier,
 ) {
