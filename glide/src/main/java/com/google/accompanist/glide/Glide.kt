@@ -85,8 +85,8 @@ fun rememberGlidePainter(
     }
 
     return rememberLoadPainter(
-        request = checkData(data),
         loader = glideLoader,
+        request = checkData(data),
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         fadeIn = fadeIn,
         fadeInDurationMs = fadeInDurationMs,

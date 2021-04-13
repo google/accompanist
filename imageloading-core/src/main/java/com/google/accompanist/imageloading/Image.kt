@@ -48,24 +48,34 @@ import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 /**
- * TODO
+ * A generic 'loader' interface, allowing apps to implement the loading/fetching of a resource
+ * as required.
  *
  * Ideally this interface would be a functional interface, but Kotlin doesn't currently support
  * suspending functional interfaces.
  *
- * @param R
+ * @param R The data or input parameter type.
  */
 @Stable
 interface Loader<R> {
+    /**
+     * Execute the 'load' with the given parameters.
+     *
+     * @param request The request of type [R] to use when executing.
+     * @param size The size of the canvas, which allows loaders to load an optimally sized result.
+     * @return The resulting [ImageLoadState].
+     */
     suspend fun load(request: R, size: IntSize): ImageLoadState
 }
 
 /**
- * A generic image loading painter, which provides hooks for image loading libraries to use.
- * Apps shouldn't generally use this function, instead preferring one of the extension libraries
- * which build upon this, such as the Coil and Glide libraries.
+ * A generic image loading painter, which provides the [Loader] interface for image loading
+ * libraries to implement. Apps shouldn't generally use this function, instead preferring one
+ * of the extension libraries which build upon this, such as the Coil and Glide libraries.
  *
- * @param state The request to execute.
+ * @param loader The [Loader] to use to fetch [request].
+ * @param request Updated value for [LoadPainter.request].
+ * @param shouldRefetchOnSizeChange Updated value for [LoadPainter.shouldRefetchOnSizeChange].
  * @param fadeIn Whether to run a fade-in animation when images are successfully loaded.
  * Default: `false`.
  * @param fadeInDurationMs Duration for the fade animation in milliseconds when [fadeIn] is enabled.
@@ -74,58 +84,52 @@ interface Loader<R> {
  */
 @Composable
 fun <R> rememberLoadPainter(
-    request: R?,
     loader: Loader<R>,
+    request: R?,
     shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean,
     fadeIn: Boolean = false,
-    fadeInDurationMs: Int = DefaultTransitionDuration,
+    fadeInDurationMs: Int = 1000,
     @DrawableRes previewPlaceholder: Int = 0,
 ): LoadPainter<R> {
     val coroutineScope = rememberCoroutineScope()
 
     // Our LoadPainter. This invokes the loader as appropriate to display the result.
-    return remember(loader, coroutineScope) {
-        LoadPainter(
-            loader = loader,
-            coroutineScope = coroutineScope,
-            shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
-        )
-    }.apply {
-        this.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
-        this.request = request
-    }.also { loadPainter ->
-        // This runs our fade in animation
-        animateFadeInColorFilter(
-            painter = loadPainter,
-            enabled = { result ->
-                // We run the fade in animation if the result is loaded from disk/network. This allows
-                // us to approximate only running the animation on 'first load'
-                fadeIn && result is ImageLoadState.Success && result.source != DataSource.MEMORY
-            },
-            durationMs = fadeInDurationMs,
-        )
-
-        // Our result painter, created from the ImageState with some composition lifecycle
-        // callbacks
-        updatePainter(loadPainter, previewPlaceholder)
+    val painter = remember(loader, coroutineScope) {
+        LoadPainter(loader, coroutineScope)
     }
+    painter.request = request
+    painter.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
+
+    // This runs our fade in animation
+    animateFadeInColorFilter(
+        painter = painter,
+        enabled = { result ->
+            // We run the fade in animation if the result is loaded from disk/network.
+            // This allows us to approximate only running the animation on 'first load'
+            fadeIn && result is ImageLoadState.Success && result.source != DataSource.MEMORY
+        },
+        durationMs = fadeInDurationMs,
+    )
+
+    // Our result painter, created from the ImageState with some composition lifecycle
+    // callbacks
+    updatePainter(painter, previewPlaceholder)
+
+    return painter
 }
 
+typealias ShouldRefetchOnSizeChange = (currentState: ImageLoadState, size: IntSize) -> Boolean
+
 /**
- * TODO
+ * A generic image loading painter, which provides the [Loader] interface for image loading
+ * libraries to implement. Apps shouldn't generally use this function, instead preferring one
+ * of the extension libraries which build upon this, such as the Coil and Glide libraries.
  *
- * @param R
- * @property loader
- * @property coroutineScope
- * @constructor
- * TODO
- *
- * @param shouldRefetchOnSizeChange
+ * Instances can be created and remembered via the [rememberLoadPainter] function.
  */
-class LoadPainter<R>(
+class LoadPainter<R> internal constructor(
     private val loader: Loader<R>,
     private val coroutineScope: CoroutineScope,
-    shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean,
 ) : Painter(), RememberObserver {
     private val paint by lazy(LazyThreadSafetyMode.NONE) { Paint() }
 
@@ -133,20 +137,23 @@ class LoadPainter<R>(
     internal var transitionColorFilter by mutableStateOf<ColorFilter?>(null)
 
     /**
-     * TODO
+     * The current request object.
      */
-    var shouldRefetchOnSizeChange by mutableStateOf(shouldRefetchOnSizeChange)
+    var request by mutableStateOf<R?>(null)
 
     /**
-     * TODO
+     * Lambda which will be invoked when the size changes, allowing
+     * optional re-fetching of the image.
+     */
+    var shouldRefetchOnSizeChange by mutableStateOf<ShouldRefetchOnSizeChange>(
+        value = { _, _ -> false }
+    )
+
+    /**
+     * The current [ImageLoadState].
      */
     var loadState: ImageLoadState by mutableStateOf(ImageLoadState.Empty)
         private set
-
-    /**
-     * TODO
-     */
-    var request by mutableStateOf<R?>(null)
 
     private var alpha: Float by mutableStateOf(1f)
     private var colorFilter: ColorFilter? by mutableStateOf(null)

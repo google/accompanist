@@ -17,7 +17,7 @@ public final class com/google/accompanist/imageloading/DrawablePainterKt {
 }
 
 public final class com/google/accompanist/imageloading/ImageKt {
-	public static final fun rememberLoadPainter (Ljava/lang/Object;Lcom/google/accompanist/imageloading/Loader;Lkotlin/jvm/functions/Function2;ZIILandroidx/compose/runtime/Composer;II)Lcom/google/accompanist/imageloading/LoadPainter;
+	public static final fun rememberLoadPainter (Lcom/google/accompanist/imageloading/Loader;Ljava/lang/Object;Lkotlin/jvm/functions/Function2;ZIILandroidx/compose/runtime/Composer;II)Lcom/google/accompanist/imageloading/LoadPainter;
 }
 
 public abstract class com/google/accompanist/imageloading/ImageLoadState {
@@ -73,7 +73,6 @@ public final class com/google/accompanist/imageloading/ImageLoadStateKt {
 
 public final class com/google/accompanist/imageloading/LoadPainter : androidx/compose/ui/graphics/painter/Painter, androidx/compose/runtime/RememberObserver {
 	public static final field $stable I
-	public fun <init> (Lcom/google/accompanist/imageloading/Loader;Lkotlinx/coroutines/CoroutineScope;Lkotlin/jvm/functions/Function2;)V
 	public fun getIntrinsicSize-NH-jbRc ()J
 	public final fun getLoadState ()Lcom/google/accompanist/imageloading/ImageLoadState;
 	public final fun getRequest ()Ljava/lang/Object;

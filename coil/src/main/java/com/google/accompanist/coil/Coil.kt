@@ -80,8 +80,8 @@ fun rememberCoilPainter(
         this.requestBuilder = requestBuilder
     }
     return rememberLoadPainter(
-        request = checkData(data),
         loader = coilLoader,
+        request = checkData(data),
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         fadeIn = fadeIn,
         fadeInDurationMs = fadeInDurationMs,
