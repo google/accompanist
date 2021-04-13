@@ -5,14 +5,14 @@ public final class com/google/accompanist/coil/CoilImage {
 	public static final fun CoilImage (Ljava/lang/Object;Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;ZLkotlin/jvm/functions/Function2;Lcoil/ImageLoader;ILkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;III)V
 }
 
-public final class com/google/accompanist/coil/CoilImageStateDefaults {
-	public static final field $stable I
-	public static final field INSTANCE Lcom/google/accompanist/coil/CoilImageStateDefaults;
-	public final fun defaultImageLoader (Landroidx/compose/runtime/Composer;I)Lcoil/ImageLoader;
-}
-
 public final class com/google/accompanist/coil/CoilKt {
 	public static final fun getLocalImageLoader ()Landroidx/compose/runtime/ProvidableCompositionLocal;
-	public static final fun rememberCoilPainter (Ljava/lang/Object;Lcoil/ImageLoader;Landroid/content/Context;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;ZIILandroidx/compose/runtime/Composer;II)Lcom/google/accompanist/imageloading/LoadPainter;
+	public static final fun rememberCoilPainter (Ljava/lang/Object;Lcoil/ImageLoader;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;ZIILandroidx/compose/runtime/Composer;II)Lcom/google/accompanist/imageloading/LoadPainter;
+}
+
+public final class com/google/accompanist/coil/CoilPainterDefaults {
+	public static final field $stable I
+	public static final field INSTANCE Lcom/google/accompanist/coil/CoilPainterDefaults;
+	public final fun defaultImageLoader (Landroidx/compose/runtime/Composer;I)Lcoil/ImageLoader;
 }
 

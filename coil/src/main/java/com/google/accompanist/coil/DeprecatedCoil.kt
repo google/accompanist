@@ -61,7 +61,7 @@ import kotlinx.coroutines.flow.filter
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
  * @param requestBuilder Optional builder for the [ImageRequest].
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to
- * [CoilImageStateDefaults.defaultImageLoader].
+ * [CoilPainterDefaults.defaultImageLoader].
  * @param previewPlaceholder Drawable resource ID which will be displayed when this function is
  * ran in preview mode.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
@@ -92,7 +92,7 @@ fun CoilImage(
     data: Any,
     modifier: Modifier = Modifier,
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
-    imageLoader: ImageLoader = CoilImageStateDefaults.defaultImageLoader(),
+    imageLoader: ImageLoader = CoilPainterDefaults.defaultImageLoader(),
     @DrawableRes previewPlaceholder: Int = 0,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
     onRequestCompleted: (ImageLoadState) -> Unit = {},
@@ -143,7 +143,7 @@ fun CoilImage(
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
  * @param requestBuilder Optional builder for the [ImageRequest].
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to
- * [CoilImageStateDefaults.defaultImageLoader].
+ * [CoilPainterDefaults.defaultImageLoader].
  * @param previewPlaceholder Drawable resource ID which will be displayed when this function is
  * ran in preview mode.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
@@ -174,7 +174,7 @@ fun CoilImage(
     request: ImageRequest,
     modifier: Modifier = Modifier,
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
-    imageLoader: ImageLoader = CoilImageStateDefaults.defaultImageLoader(),
+    imageLoader: ImageLoader = CoilPainterDefaults.defaultImageLoader(),
     @DrawableRes previewPlaceholder: Int = 0,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
     onRequestCompleted: (ImageLoadState) -> Unit = {},
@@ -233,7 +233,7 @@ fun CoilImage(
  * Default: `false`.
  * @param requestBuilder Optional builder for the [ImageRequest].
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to
- * [CoilImageStateDefaults.defaultImageLoader].
+ * [CoilPainterDefaults.defaultImageLoader].
  * @param previewPlaceholder Drawable resource ID which will be displayed when this function is
  * ran in preview mode.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
@@ -272,7 +272,7 @@ fun CoilImage(
     colorFilter: ColorFilter? = null,
     fadeIn: Boolean = false,
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
-    imageLoader: ImageLoader = CoilImageStateDefaults.defaultImageLoader(),
+    imageLoader: ImageLoader = CoilPainterDefaults.defaultImageLoader(),
     @DrawableRes previewPlaceholder: Int = 0,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
     onRequestCompleted: (ImageLoadState) -> Unit = {},
@@ -353,7 +353,7 @@ fun CoilImage(
  * Default: `false`.
  * @param requestBuilder Optional builder for the [ImageRequest].
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to
- * [CoilImageStateDefaults.defaultImageLoader].
+ * [CoilPainterDefaults.defaultImageLoader].
  * @param previewPlaceholder Drawable resource ID which will be displayed when this function is
  * ran in preview mode.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
@@ -392,7 +392,7 @@ fun CoilImage(
     colorFilter: ColorFilter? = null,
     fadeIn: Boolean = false,
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
-    imageLoader: ImageLoader = CoilImageStateDefaults.defaultImageLoader(),
+    imageLoader: ImageLoader = CoilPainterDefaults.defaultImageLoader(),
     @DrawableRes previewPlaceholder: Int = 0,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
     onRequestCompleted: (ImageLoadState) -> Unit = {},

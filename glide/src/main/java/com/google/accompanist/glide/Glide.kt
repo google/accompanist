@@ -52,7 +52,7 @@ val LocalRequestManager = staticCompositionLocalOf<RequestManager?> { null }
 /**
  * Contains some default values used for [rememberGlidePainter].
  */
-object GlideImageStateDefaults {
+object GlidePainterDefaults {
     /**
      * Returns the default [RequestManager] value for the `requestManager` parameter
      * in [GlideImage].
@@ -66,10 +66,26 @@ object GlideImageStateDefaults {
     }
 }
 
+/**
+ * Remembers a [LoadPainter] that use [Glide] to load images.
+ *
+ * Changes to [data], [requestManager], [shouldRefetchOnSizeChange] & [requestBuilder] will result
+ * in the [LoadPainter] being updated.
+ *
+ * @param data The data to load. See [RequestManager.load] for the types supported.
+ * @param requestManager The [RequestManager] to use when requesting the image.
+ * @param shouldRefetchOnSizeChange the value for [LoadPainter.shouldRefetchOnSizeChange].
+ * @param requestBuilder Optional builder for every created [RequestBuilder].
+ * @param fadeIn Whether to run a fade-in animation when images are successfully loaded.
+ * Default: `false`.
+ * @param fadeInDurationMs Duration for the fade animation in milliseconds when [fadeIn] is enabled.
+ * @param previewPlaceholder Drawable resource ID which will be displayed when this function is
+ * ran in preview mode.
+ */
 @Composable
 fun rememberGlidePainter(
     data: Any?,
-    requestManager: RequestManager = GlideImageStateDefaults.defaultRequestManager(),
+    requestManager: RequestManager = GlidePainterDefaults.defaultRequestManager(),
     shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
     requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)? = null,
     fadeIn: Boolean = false,
@@ -83,7 +99,6 @@ fun rememberGlidePainter(
         this.requestManager = requestManager
         this.requestBuilder = requestBuilder
     }
-
     return rememberLoadPainter(
         loader = glideLoader,
         request = checkData(data),

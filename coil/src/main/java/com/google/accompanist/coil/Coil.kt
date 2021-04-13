@@ -50,7 +50,7 @@ val LocalImageLoader = staticCompositionLocalOf<ImageLoader?> { null }
 /**
  * Contains some default values used by [rememberCoilPainter].
  */
-object CoilImageStateDefaults {
+object CoilPainterDefaults {
     /**
      * Returns the default [ImageLoader] value for the `imageLoader` parameter in [CoilImage].
      */
@@ -60,11 +60,27 @@ object CoilImageStateDefaults {
     }
 }
 
+/**
+ * Remembers a [LoadPainter] that use [coil.Coil] to load images.
+ *
+ * Changes to [data], [imageLoader], [shouldRefetchOnSizeChange] & [requestBuilder] will result in
+ * the [LoadPainter] being updated.
+ *
+ * @param data The data to load. See [ImageRequest.Builder.data] for the types supported.
+ * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to
+ * [CoilPainterDefaults.defaultImageLoader].
+ * @param shouldRefetchOnSizeChange the value for [LoadPainter.shouldRefetchOnSizeChange].
+ * @param requestBuilder Optional builder for each created [ImageRequest].
+ * @param fadeIn Whether to run a fade-in animation when images are successfully loaded.
+ * Default: `false`.
+ * @param fadeInDurationMs Duration for the fade animation in milliseconds when [fadeIn] is enabled.
+ * @param previewPlaceholder Drawable resource ID which will be displayed when this function is
+ * ran in preview mode.
+ */
 @Composable
 fun rememberCoilPainter(
     data: Any?,
-    imageLoader: ImageLoader = CoilImageStateDefaults.defaultImageLoader(),
-    context: Context = LocalContext.current,
+    imageLoader: ImageLoader = CoilPainterDefaults.defaultImageLoader(),
     shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
     fadeIn: Boolean = false,
@@ -72,6 +88,7 @@ fun rememberCoilPainter(
     @DrawableRes previewPlaceholder: Int = 0,
 ): LoadPainter<Any> {
     // Remember and update a CoilLoader
+    val context = LocalContext.current
     val coilLoader = remember {
         CoilLoader(context, imageLoader, requestBuilder)
     }.apply {
