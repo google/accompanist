@@ -38,6 +38,7 @@ import coil.size.Precision
 import com.google.accompanist.imageloading.DataSource
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.LoadPainter
+import com.google.accompanist.imageloading.LoadPainterDefaults
 import com.google.accompanist.imageloading.Loader
 import com.google.accompanist.imageloading.rememberLoadPainter
 
@@ -84,7 +85,7 @@ fun rememberCoilPainter(
     shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
     fadeIn: Boolean = false,
-    fadeInDurationMs: Int = 1000,
+    fadeInDurationMs: Int = LoadPainterDefaults.FadeInTransitionDuration,
     @DrawableRes previewPlaceholder: Int = 0,
 ): LoadPainter<Any> {
     // Remember and update a CoilLoader

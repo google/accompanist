@@ -80,6 +80,12 @@ public final class com/google/accompanist/imageloading/LoadPainter : androidx/co
 	public final fun setShouldRefetchOnSizeChange (Lkotlin/jvm/functions/Function2;)V
 }
 
+public final class com/google/accompanist/imageloading/LoadPainterDefaults {
+	public static final field $stable I
+	public static final field FadeInTransitionDuration I
+	public static final field INSTANCE Lcom/google/accompanist/imageloading/LoadPainterDefaults;
+}
+
 public final class com/google/accompanist/imageloading/LoadPainterKt {
 	public static final fun rememberLoadPainter (Lcom/google/accompanist/imageloading/Loader;Ljava/lang/Object;Lkotlin/jvm/functions/Function2;ZIILandroidx/compose/runtime/Composer;II)Lcom/google/accompanist/imageloading/LoadPainter;
 }

@@ -69,6 +69,16 @@ interface Loader<R> {
 }
 
 /**
+ * Object which holds default values for [rememberLoadPainter].
+ */
+object LoadPainterDefaults {
+    /**
+     * Default duration in milliseconds for the fade-in animation.
+     */
+    const val FadeInTransitionDuration: Int = 1000
+}
+
+/**
  * A generic image loading painter, which provides the [Loader] interface for image loading
  * libraries to implement. Apps shouldn't generally use this function, instead preferring one
  * of the extension libraries which build upon this, such as the Coil and Glide libraries.
@@ -88,7 +98,7 @@ fun <R> rememberLoadPainter(
     request: R?,
     shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean,
     fadeIn: Boolean = false,
-    fadeInDurationMs: Int = 1000,
+    fadeInDurationMs: Int = LoadPainterDefaults.FadeInTransitionDuration,
     @DrawableRes previewPlaceholder: Int = 0,
 ): LoadPainter<R> {
     val coroutineScope = rememberCoroutineScope()
