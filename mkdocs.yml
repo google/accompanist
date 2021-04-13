@@ -34,6 +34,9 @@ nav:
   - 'Pager layouts':
     - 'Guide': pager.md
     - 'API': api/pager/
+  - 'Swipe Refresh':
+    - 'Guide': swiperefresh.md
+    - 'API': api/swiperefresh/
   - 'Flow layouts':
     - 'Guide': flowlayout.md
     - 'API': api/flowlayout/
