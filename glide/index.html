@@ -16,7 +16,7 @@
         <link rel="canonical" href="https://google.github.io/accompanist/glide/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.0">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.1">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.33e2939f.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.9299cb39.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.ef6f36e2.min.css">
@@ -896,18 +896,18 @@
 <p>The primary API is via the <code>GlideImage()</code> functions. There are a number of function versions available.</p>
 <p>The simplest usage is like so:</p>
 <div class="highlight"><pre><span></span><code><span class="n">GlideImage</span><span class="p">(</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
-    <span class="n">contentDescription</span> <span class="o">=</span> <span class="s">&quot;My content description&quot;</span><span class="p">,</span>
+    <span class="k">data</span> <span class="p">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
+    <span class="n">contentDescription</span> <span class="p">=</span> <span class="s">&quot;My content description&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div>
 <p>This loads the <code>data</code> passed in with <a href="https://bumptech.github.io/glide/">Glide</a>, and then displays the resulting image using the standard <code>Image</code> composable.</p>
 <p>You can also customize the Glide <a href="https://bumptech.github.io/glide/javadocs/4110/com/bumptech/glide/RequestBuilder.html"><code>RequestBuilder</code></a> through the <code>requestBuilder</code> parameter. This allows usage of things like (but not limited to) transformations:</p>
 <div class="highlight"><pre><span></span><code><span class="n">GlideImage</span><span class="p">(</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
-    <span class="n">contentDescription</span> <span class="o">=</span> <span class="s">&quot;My content description&quot;</span><span class="p">,</span>
-    <span class="n">requestBuilder</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="kd">val</span> <span class="nv">options</span> <span class="o">=</span> <span class="n">RequestOptions</span><span class="p">()</span>
-        <span class="n">options</span><span class="p">.</span><span class="na">centerCrop</span><span class="p">()</span>
+    <span class="k">data</span> <span class="p">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
+    <span class="n">contentDescription</span> <span class="p">=</span> <span class="s">&quot;My content description&quot;</span><span class="p">,</span>
+    <span class="n">requestBuilder</span> <span class="p">=</span> <span class="p">{</span>
+        <span class="k">val</span> <span class="py">options</span> <span class="p">=</span> <span class="n">RequestOptions</span><span class="p">()</span>
+        <span class="n">options</span><span class="p">.</span><span class="n">centerCrop</span><span class="p">()</span>
 
         <span class="n">apply</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
     <span class="p">},</span>
@@ -915,15 +915,15 @@
 </code></pre></div>
 <p>It also provides optional content 'slots', allowing you to provide custom content to be displayed when the request is loading, and/or if the image request failed:</p>
 <div class="highlight"><pre><span></span><code><span class="n">GlideImage</span><span class="p">(</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
-    <span class="n">contentDescription</span> <span class="o">=</span> <span class="s">&quot;My content description&quot;</span><span class="p">,</span>
-    <span class="n">loading</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="n">Box</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="na">matchParentSize</span><span class="p">())</span> <span class="p">{</span>
-            <span class="n">CircularProgressIndicator</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="na">align</span><span class="p">(</span><span class="n">Alignment</span><span class="p">.</span><span class="na">Center</span><span class="p">))</span>
+    <span class="k">data</span> <span class="p">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
+    <span class="n">contentDescription</span> <span class="p">=</span> <span class="s">&quot;My content description&quot;</span><span class="p">,</span>
+    <span class="n">loading</span> <span class="p">=</span> <span class="p">{</span>
+        <span class="n">Box</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="n">matchParentSize</span><span class="p">())</span> <span class="p">{</span>
+            <span class="n">CircularProgressIndicator</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="n">align</span><span class="p">(</span><span class="n">Alignment</span><span class="p">.</span><span class="n">Center</span><span class="p">))</span>
         <span class="p">}</span>
     <span class="p">},</span>
-    <span class="n">error</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="n">Image</span><span class="p">(</span><span class="n">asset</span> <span class="o">=</span> <span class="n">imageResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="na">drawable</span><span class="p">.</span><span class="na">ic_error</span><span class="p">))</span>
+    <span class="n">error</span> <span class="p">=</span> <span class="p">{</span>
+        <span class="n">Image</span><span class="p">(</span><span class="n">asset</span> <span class="p">=</span> <span class="n">imageResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="n">drawable</span><span class="p">.</span><span class="n">ic_error</span><span class="p">))</span>
     <span class="p">}</span>
 <span class="p">)</span>
 </code></pre></div>
@@ -934,28 +934,28 @@
 <h3 id="fadein-parameter"><code>fadeIn</code> parameter<a class="headerlink" href="#fadein-parameter" title="Permanent link">&para;</a></h3>
 <p>A <code>fadeIn: Boolean</code> parameter has been added to <code>GlideImage</code> (default: <code>false</code>). When enabled, a default fade-in animation will be used when the image is successfully loaded:</p>
 <div class="highlight"><pre><span></span><code><span class="n">GlideImage</span><span class="p">(</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
-    <span class="n">contentDescription</span> <span class="o">=</span> <span class="s">&quot;My content description&quot;</span><span class="p">,</span>
-    <span class="n">fadeIn</span> <span class="o">=</span> <span class="kc">true</span>
+    <span class="k">data</span> <span class="p">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
+    <span class="n">contentDescription</span> <span class="p">=</span> <span class="s">&quot;My content description&quot;</span><span class="p">,</span>
+    <span class="n">fadeIn</span> <span class="p">=</span> <span class="k">true</span>
 <span class="p">)</span>
 </code></pre></div>
 <h2 id="custom-content">Custom content<a class="headerlink" href="#custom-content" title="Permanent link">&para;</a></h2>
 <p>If you need more control over the animation, or you want to provide custom layout for the loaded image, you can use the <code>content</code> composable version of <code>GlideImage</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="n">GlideImage</span><span class="p">(</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
-<span class="p">)</span> <span class="p">{</span> <span class="n">imageState</span> <span class="o">-&gt;</span>
+    <span class="k">data</span> <span class="p">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="p">{</span> <span class="n">imageState</span> <span class="p">-&gt;</span>
     <span class="k">when</span> <span class="p">(</span><span class="n">imageState</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">is</span> <span class="n">ImageLoadState</span><span class="p">.</span><span class="na">Success</span> <span class="o">-&gt;</span> <span class="p">{</span>
+        <span class="k">is</span> <span class="n">ImageLoadState</span><span class="p">.</span><span class="n">Success</span> <span class="p">-&gt;</span> <span class="p">{</span>
             <span class="n">MaterialLoadingImage</span><span class="p">(</span>
-                <span class="n">result</span> <span class="o">=</span> <span class="n">imageState</span><span class="p">,</span>
-                <span class="n">contentDescription</span> <span class="o">=</span> <span class="s">&quot;My content description&quot;</span><span class="p">,</span>
-                <span class="n">fadeInEnabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
-                <span class="n">fadeInDurationMs</span> <span class="o">=</span> <span class="m">600</span><span class="p">,</span>
+                <span class="n">result</span> <span class="p">=</span> <span class="n">imageState</span><span class="p">,</span>
+                <span class="n">contentDescription</span> <span class="p">=</span> <span class="s">&quot;My content description&quot;</span><span class="p">,</span>
+                <span class="n">fadeInEnabled</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
+                <span class="n">fadeInDurationMs</span> <span class="p">=</span> <span class="m">600</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="p">}</span>
-        <span class="k">is</span> <span class="n">ImageLoadState</span><span class="p">.</span><span class="na">Error</span> <span class="o">-&gt;</span> <span class="cm">/* TODO */</span>
-        <span class="n">ImageLoadState</span><span class="p">.</span><span class="na">Loading</span> <span class="o">-&gt;</span> <span class="cm">/* TODO */</span>
-        <span class="n">ImageLoadState</span><span class="p">.</span><span class="na">Empty</span> <span class="o">-&gt;</span> <span class="cm">/* TODO */</span>
+        <span class="k">is</span> <span class="n">ImageLoadState</span><span class="p">.</span><span class="n">Error</span> <span class="p">-&gt;</span> <span class="cm">/* TODO */</span>
+        <span class="n">ImageLoadState</span><span class="p">.</span><span class="n">Loading</span> <span class="p">-&gt;</span> <span class="cm">/* TODO */</span>
+        <span class="n">ImageLoadState</span><span class="p">.</span><span class="n">Empty</span> <span class="p">-&gt;</span> <span class="cm">/* TODO */</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
@@ -966,14 +966,14 @@
 <p>If you wish to provide a default <code>RequestManager</code> to use across all of your <code>GlideImage</code>
 calls, we provide the <code>LocalRequestManager</code> composition local.</p>
 <p>You can use it like so:</p>
-<div class="highlight"><pre><span></span><code><span class="kd">val</span> <span class="nv">requestManager</span> <span class="o">=</span> <span class="n">Glide</span><span class="p">.</span><span class="na">with</span><span class="p">(...)</span>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="py">requestManager</span> <span class="p">=</span> <span class="n">Glide</span><span class="p">.</span><span class="n">with</span><span class="p">(...)</span>
     <span class="c1">// customize the RequestManager as needed</span>
-    <span class="p">.</span><span class="na">build</span><span class="p">()</span>
+    <span class="p">.</span><span class="n">build</span><span class="p">()</span>
 
 <span class="n">CompositionLocalProvider</span><span class="p">(</span><span class="n">LocalRequestManager</span> <span class="n">provides</span> <span class="n">requestManager</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// This will automatically use the value of LocalRequestManager</span>
     <span class="n">GlideImage</span><span class="p">(</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="p">...</span>
+        <span class="k">data</span> <span class="p">=</span> <span class="p">...</span>
     <span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
@@ -1060,7 +1060,7 @@ calls, we provide the <code>LocalRequestManager</code> composition local.</p>
     <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../assets/javascripts/workers/search.fe42c31b.min.js", "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.d892486b.min.js"></script>
+      <script src="../assets/javascripts/bundle.7353b375.min.js"></script>
       
     
   </body>

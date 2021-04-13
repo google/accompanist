@@ -1,0 +1,8 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:com.google.accompanist.pager////PointingToDeclaration/pager-indicators/com.google.accompanist.pager/index.html
+$dokka.location:com.google.accompanist.pager//HorizontalPagerIndicator/#com.google.accompanist.pager.PagerState#androidx.compose.ui.Modifier#androidx.compose.ui.graphics.Color#androidx.compose.ui.graphics.Color#androidx.compose.ui.unit.Dp#androidx.compose.ui.unit.Dp#androidx.compose.ui.unit.Dp#androidx.compose.ui.graphics.Shape/PointingToDeclaration/pager-indicators/com.google.accompanist.pager/-horizontal-pager-indicator.html
+$dokka.location:com.google.accompanist.pager//VerticalPagerIndicator/#com.google.accompanist.pager.PagerState#androidx.compose.ui.Modifier#androidx.compose.ui.graphics.Color#androidx.compose.ui.graphics.Color#androidx.compose.ui.unit.Dp#androidx.compose.ui.unit.Dp#androidx.compose.ui.unit.Dp#androidx.compose.ui.graphics.Shape/PointingToDeclaration/pager-indicators/com.google.accompanist.pager/-vertical-pager-indicator.html
+$dokka.location:com.google.accompanist.pager//pagerTabIndicatorOffset/androidx.compose.ui.Modifier#com.google.accompanist.pager.PagerState#kotlin.collections.List[androidx.compose.material.TabPosition]/PointingToDeclaration/pager-indicators/com.google.accompanist.pager/pager-tab-indicator-offset.html
+com.google.accompanist.pager
+

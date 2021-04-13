@@ -16,7 +16,7 @@
         <link rel="canonical" href="https://google.github.io/accompanist/insets/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.0">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.1">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.33e2939f.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.9299cb39.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.ef6f36e2.min.css">
@@ -988,11 +988,11 @@ wrap your content. This would typically be done near the top level of your compo
 </div>
 <p><code>ProvideWindowInsets</code> allows the library to set an <a href="https://developer.android.com/reference/kotlin/androidx/core/view/OnApplyWindowInsetsListener"><code>OnApplyWindowInsetsListener</code></a> on your content's host view. That listener is used to update the value of a composition local bundled in this library: <code>LocalWindowInsets</code>.</p>
 <p><code>LocalWindowInsets</code> holds an instance of <code>WindowInsets</code> which contains the value of various <a href="https://developer.android.com/reference/kotlin/androidx/core/view/WindowInsetsCompat">WindowInsets</a> <a href="https://developer.android.com/reference/kotlin/androidx/core/view/WindowInsetsCompat.Type">types</a>. You can use the values manually like so:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@Composable</span>
-<span class="kd">fun</span> <span class="nf">ImeAvoidingBox</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">val</span> <span class="nv">insets</span> <span class="o">=</span> <span class="n">LocalWindowInsets</span><span class="p">.</span><span class="na">current</span>
+<div class="highlight"><pre><span></span><code><span class="n">@Composable</span>
+<span class="k">fun</span> <span class="nf">ImeAvoidingBox</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">val</span> <span class="py">insets</span> <span class="p">=</span> <span class="n">LocalWindowInsets</span><span class="p">.</span><span class="n">current</span>
 
-  <span class="n">Box</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="na">padding</span><span class="p">(</span><span class="n">bottom</span> <span class="o">=</span> <span class="n">insets</span><span class="p">.</span><span class="na">ime</span><span class="p">.</span><span class="na">bottom</span><span class="p">))</span>
+  <span class="n">Box</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="n">padding</span><span class="p">(</span><span class="n">bottom</span> <span class="p">=</span> <span class="n">insets</span><span class="p">.</span><span class="n">ime</span><span class="p">.</span><span class="n">bottom</span><span class="p">))</span>
 <span class="p">}</span>
 </code></pre></div>
 <p>...but we also provide some easy-to-use <a href="https://developer.android.com/reference/kotlin/androidx/ui/core/Modifier">Modifier</a>s.</p>
@@ -1009,11 +1009,11 @@ wrap your content. This would typically be done near the top level of your compo
 </ul>
 <p>These are commonly used to move composables out from under the system bars. The common example would be a <a href="https://developer.android.com/reference/kotlin/androidx/compose/material/package-summary#floatingactionbutton"><code>FloatingActionButton</code></a>:</p>
 <div class="highlight"><pre><span></span><code><span class="n">FloatingActionButton</span><span class="p">(</span>
-    <span class="n">icon</span> <span class="o">=</span> <span class="p">{</span> <span class="n">Icon</span><span class="p">(...)</span> <span class="p">},</span>
-    <span class="n">modifier</span> <span class="o">=</span> <span class="n">Modifier</span>
-        <span class="p">.</span><span class="na">align</span><span class="p">(</span><span class="n">Alignment</span><span class="p">.</span><span class="na">BottomEnd</span><span class="p">)</span>
-        <span class="p">.</span><span class="na">padding</span><span class="p">(</span><span class="m">16.</span><span class="n">dp</span><span class="p">)</span> <span class="c1">// normal 16dp of padding for FABs</span>
-        <span class="p">.</span><span class="na">navigationBarsPadding</span><span class="p">()</span> <span class="c1">// Move it out from under the nav bar</span>
+    <span class="n">icon</span> <span class="p">=</span> <span class="p">{</span> <span class="n">Icon</span><span class="p">(...)</span> <span class="p">},</span>
+    <span class="n">modifier</span> <span class="p">=</span> <span class="n">Modifier</span>
+        <span class="p">.</span><span class="n">align</span><span class="p">(</span><span class="n">Alignment</span><span class="p">.</span><span class="n">BottomEnd</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">padding</span><span class="p">(</span><span class="m">16.</span><span class="n">dp</span><span class="p">)</span> <span class="c1">// normal 16dp of padding for FABs</span>
+        <span class="p">.</span><span class="n">navigationBarsPadding</span><span class="p">()</span> <span class="c1">// Move it out from under the nav bar</span>
 <span class="p">)</span>
 </code></pre></div>
 <h4 id="size-modifiers">Size modifiers<a class="headerlink" href="#size-modifiers" title="Permanent link">&para;</a></h4>
@@ -1026,16 +1026,16 @@ wrap your content. This would typically be done near the top level of your compo
 <p>These are commonly used to allow composables behind the system bars, to provide background protection, or similar:</p>
 <div class="highlight"><pre><span></span><code><span class="n">Spacer</span><span class="p">(</span>
     <span class="n">Modifier</span>
-        <span class="p">.</span><span class="na">background</span><span class="p">(</span><span class="n">Color</span><span class="p">.</span><span class="na">Black</span><span class="p">.</span><span class="na">copy</span><span class="p">(</span><span class="n">alpha</span> <span class="o">=</span> <span class="m">0.7f</span><span class="p">))</span>
-        <span class="p">.</span><span class="na">statusBarsHeight</span><span class="p">()</span> <span class="c1">// Match the height of the status bar</span>
-        <span class="p">.</span><span class="na">fillMaxWidth</span><span class="p">()</span>
+        <span class="p">.</span><span class="n">background</span><span class="p">(</span><span class="n">Color</span><span class="p">.</span><span class="n">Black</span><span class="p">.</span><span class="n">copy</span><span class="p">(</span><span class="n">alpha</span> <span class="p">=</span> <span class="m">0.7f</span><span class="p">))</span>
+        <span class="p">.</span><span class="n">statusBarsHeight</span><span class="p">()</span> <span class="c1">// Match the height of the status bar</span>
+        <span class="p">.</span><span class="n">fillMaxWidth</span><span class="p">()</span>
 <span class="p">)</span>
 </code></pre></div>
 <h3 id="paddingvalues">PaddingValues<a class="headerlink" href="#paddingvalues" title="Permanent link">&para;</a></h3>
 <p>Compose also provides the concept of <a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/PaddingValues"><code>PaddingValues</code></a>, a data class which contains the padding values to be applied on all dimensions (similar to a rect). This is commonly used with container composables, such as <a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/lazy/package-summary#lazycolumn"><code>LazyColumn</code></a>, to set the content padding.</p>
 <p>You may want to use inset values for content padding, so this library provides the <code>Insets.toPaddingValues()</code> extension function to convert between <code>Insets</code> and <code>PaddingValues</code>. Here's an example of using the system bars insets:</p>
 <div class="highlight"><pre><span></span><code><span class="n">LazyColumn</span><span class="p">(</span>
-  <span class="n">contentPadding</span> <span class="o">=</span> <span class="n">LocalWindowInsets</span><span class="p">.</span><span class="na">current</span><span class="p">.</span><span class="na">systemBars</span><span class="p">.</span><span class="na">toPaddingValues</span><span class="p">()</span>
+  <span class="n">contentPadding</span> <span class="p">=</span> <span class="n">LocalWindowInsets</span><span class="p">.</span><span class="n">current</span><span class="p">.</span><span class="n">systemBars</span><span class="p">.</span><span class="n">toPaddingValues</span><span class="p">()</span>
 <span class="p">)</span>
 </code></pre></div>
 <p>For a more complex example, see the <a href="https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/insets/EdgeToEdgeLazyColumn.kt"><code>EdgeToEdgeLazyColumn</code></a> example:</p>
@@ -1052,14 +1052,14 @@ wrap your content. This would typically be done near the top level of your compo
 <p>To enable animated insets support, you need need to new <code>ProvideWindowInsets</code> overload, and set <code>windowInsetsAnimationsEnabled = true</code>.</p>
 </div>
 <input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Usage</label><div class="tabbed-content">
-<div class="highlight"><pre><span></span><code><span class="n">ProvideWindowInsets</span><span class="p">(</span><span class="n">windowInsetsAnimationsEnabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="n">ProvideWindowInsets</span><span class="p">(</span><span class="n">windowInsetsAnimationsEnabled</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// content</span>
 <span class="p">}</span>
 </code></pre></div>
 <p>You can then use the new <code>navigationBarsWithImePadding()</code> modifier like so:</p>
 <div class="highlight"><pre><span></span><code><span class="n">OutlinedTextField</span><span class="p">(</span>
     <span class="c1">// other params,</span>
-    <span class="n">modifier</span> <span class="o">=</span> <span class="n">Modifier</span><span class="p">.</span><span class="na">navigationBarsWithImePadding</span><span class="p">()</span>
+    <span class="n">modifier</span> <span class="p">=</span> <span class="n">Modifier</span><span class="p">.</span><span class="n">navigationBarsWithImePadding</span><span class="p">()</span>
 <span class="p">)</span>
 </code></pre></div>
 <p>See the <a href="https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/insets/ImeAnimationSample.kt">ImeAnimationSample</a> for a working example.</p>
@@ -1084,8 +1084,8 @@ wrap your content. This would typically be done near the top level of your compo
 <span class="n">ScrollableColumn</span><span class="p">(</span>
     <span class="c1">// We use the nestedScroll modifier, passing in the </span>
     <span class="c1">// the connection from rememberImeNestedScrollConnection()</span>
-    <span class="n">modifier</span> <span class="o">=</span> <span class="n">Modifier</span><span class="p">.</span><span class="na">nestedScroll</span><span class="p">(</span>
-        <span class="n">connection</span> <span class="o">=</span> <span class="n">rememberImeNestedScrollConnection</span><span class="p">()</span>
+    <span class="n">modifier</span> <span class="p">=</span> <span class="n">Modifier</span><span class="p">.</span><span class="n">nestedScroll</span><span class="p">(</span>
+        <span class="n">connection</span> <span class="p">=</span> <span class="n">rememberImeNestedScrollConnection</span><span class="p">()</span>
     <span class="p">)</span>
 <span class="p">)</span> <span class="p">{</span>
     <span class="c1">// list content</span>
@@ -1184,7 +1184,7 @@ wrap your content. This would typically be done near the top level of your compo
     <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../assets/javascripts/workers/search.fe42c31b.min.js", "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.d892486b.min.js"></script>
+      <script src="../assets/javascripts/bundle.7353b375.min.js"></script>
       
     
   </body>

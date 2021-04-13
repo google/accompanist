@@ -1,0 +1,49 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:com.google.accompanist.flowlayout////PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/index.html
+$dokka.location:com.google.accompanist.flowlayout//FlowColumn/#androidx.compose.ui.Modifier#com.google.accompanist.flowlayout.SizeMode#com.google.accompanist.flowlayout.MainAxisAlignment#androidx.compose.ui.unit.Dp#com.google.accompanist.flowlayout.FlowCrossAxisAlignment#androidx.compose.ui.unit.Dp#com.google.accompanist.flowlayout.MainAxisAlignment#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-flow-column.html
+$dokka.location:com.google.accompanist.flowlayout//FlowRow/#androidx.compose.ui.Modifier#com.google.accompanist.flowlayout.SizeMode#com.google.accompanist.flowlayout.MainAxisAlignment#androidx.compose.ui.unit.Dp#com.google.accompanist.flowlayout.FlowCrossAxisAlignment#androidx.compose.ui.unit.Dp#com.google.accompanist.flowlayout.MainAxisAlignment#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-flow-row.html
+$dokka.location:com.google.accompanist.flowlayout/FlowCrossAxisAlignment.Center///PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-flow-cross-axis-alignment/-center/index.html
+$dokka.location:com.google.accompanist.flowlayout/FlowCrossAxisAlignment.Center/name/#/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-flow-cross-axis-alignment/-center/name.html
+$dokka.location:com.google.accompanist.flowlayout/FlowCrossAxisAlignment.Center/ordinal/#/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-flow-cross-axis-alignment/-center/ordinal.html
+$dokka.location:com.google.accompanist.flowlayout/FlowCrossAxisAlignment.End///PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-flow-cross-axis-alignment/-end/index.html
+$dokka.location:com.google.accompanist.flowlayout/FlowCrossAxisAlignment.End/name/#/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-flow-cross-axis-alignment/-end/name.html
+$dokka.location:com.google.accompanist.flowlayout/FlowCrossAxisAlignment.End/ordinal/#/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-flow-cross-axis-alignment/-end/ordinal.html
+$dokka.location:com.google.accompanist.flowlayout/FlowCrossAxisAlignment.Start///PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-flow-cross-axis-alignment/-start/index.html
+$dokka.location:com.google.accompanist.flowlayout/FlowCrossAxisAlignment.Start/name/#/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-flow-cross-axis-alignment/-start/name.html
+$dokka.location:com.google.accompanist.flowlayout/FlowCrossAxisAlignment.Start/ordinal/#/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-flow-cross-axis-alignment/-start/ordinal.html
+$dokka.location:com.google.accompanist.flowlayout/FlowCrossAxisAlignment///PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-flow-cross-axis-alignment/index.html
+$dokka.location:com.google.accompanist.flowlayout/MainAxisAlignment.Center///PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-main-axis-alignment/-center/index.html
+$dokka.location:com.google.accompanist.flowlayout/MainAxisAlignment.Center/arrangement/#/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-main-axis-alignment/-center/arrangement.html
+$dokka.location:com.google.accompanist.flowlayout/MainAxisAlignment.Center/name/#/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-main-axis-alignment/-center/name.html
+$dokka.location:com.google.accompanist.flowlayout/MainAxisAlignment.Center/ordinal/#/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-main-axis-alignment/-center/ordinal.html
+$dokka.location:com.google.accompanist.flowlayout/MainAxisAlignment.End///PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-main-axis-alignment/-end/index.html
+$dokka.location:com.google.accompanist.flowlayout/MainAxisAlignment.End/arrangement/#/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-main-axis-alignment/-end/arrangement.html
+$dokka.location:com.google.accompanist.flowlayout/MainAxisAlignment.End/name/#/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-main-axis-alignment/-end/name.html
+$dokka.location:com.google.accompanist.flowlayout/MainAxisAlignment.End/ordinal/#/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-main-axis-alignment/-end/ordinal.html
+$dokka.location:com.google.accompanist.flowlayout/MainAxisAlignment.SpaceAround///PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-main-axis-alignment/-space-around/index.html
+$dokka.location:com.google.accompanist.flowlayout/MainAxisAlignment.SpaceAround/arrangement/#/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-main-axis-alignment/-space-around/arrangement.html
+$dokka.location:com.google.accompanist.flowlayout/MainAxisAlignment.SpaceAround/name/#/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-main-axis-alignment/-space-around/name.html
+$dokka.location:com.google.accompanist.flowlayout/MainAxisAlignment.SpaceAround/ordinal/#/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-main-axis-alignment/-space-around/ordinal.html
+$dokka.location:com.google.accompanist.flowlayout/MainAxisAlignment.SpaceBetween///PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-main-axis-alignment/-space-between/index.html
+$dokka.location:com.google.accompanist.flowlayout/MainAxisAlignment.SpaceBetween/arrangement/#/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-main-axis-alignment/-space-between/arrangement.html
+$dokka.location:com.google.accompanist.flowlayout/MainAxisAlignment.SpaceBetween/name/#/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-main-axis-alignment/-space-between/name.html
+$dokka.location:com.google.accompanist.flowlayout/MainAxisAlignment.SpaceBetween/ordinal/#/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-main-axis-alignment/-space-between/ordinal.html
+$dokka.location:com.google.accompanist.flowlayout/MainAxisAlignment.SpaceEvenly///PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-main-axis-alignment/-space-evenly/index.html
+$dokka.location:com.google.accompanist.flowlayout/MainAxisAlignment.SpaceEvenly/arrangement/#/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-main-axis-alignment/-space-evenly/arrangement.html
+$dokka.location:com.google.accompanist.flowlayout/MainAxisAlignment.SpaceEvenly/name/#/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-main-axis-alignment/-space-evenly/name.html
+$dokka.location:com.google.accompanist.flowlayout/MainAxisAlignment.SpaceEvenly/ordinal/#/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-main-axis-alignment/-space-evenly/ordinal.html
+$dokka.location:com.google.accompanist.flowlayout/MainAxisAlignment.Start///PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-main-axis-alignment/-start/index.html
+$dokka.location:com.google.accompanist.flowlayout/MainAxisAlignment.Start/arrangement/#/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-main-axis-alignment/-start/arrangement.html
+$dokka.location:com.google.accompanist.flowlayout/MainAxisAlignment.Start/name/#/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-main-axis-alignment/-start/name.html
+$dokka.location:com.google.accompanist.flowlayout/MainAxisAlignment.Start/ordinal/#/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-main-axis-alignment/-start/ordinal.html
+$dokka.location:com.google.accompanist.flowlayout/MainAxisAlignment///PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-main-axis-alignment/index.html
+$dokka.location:com.google.accompanist.flowlayout/SizeMode.Expand///PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-size-mode/-expand/index.html
+$dokka.location:com.google.accompanist.flowlayout/SizeMode.Expand/name/#/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-size-mode/-expand/name.html
+$dokka.location:com.google.accompanist.flowlayout/SizeMode.Expand/ordinal/#/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-size-mode/-expand/ordinal.html
+$dokka.location:com.google.accompanist.flowlayout/SizeMode.Wrap///PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-size-mode/-wrap/index.html
+$dokka.location:com.google.accompanist.flowlayout/SizeMode.Wrap/name/#/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-size-mode/-wrap/name.html
+$dokka.location:com.google.accompanist.flowlayout/SizeMode.Wrap/ordinal/#/PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-size-mode/-wrap/ordinal.html
+$dokka.location:com.google.accompanist.flowlayout/SizeMode///PointingToDeclaration/flowlayout/com.google.accompanist.flowlayout/-size-mode/index.html
+com.google.accompanist.flowlayout
+

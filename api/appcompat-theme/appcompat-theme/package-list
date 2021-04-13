@@ -1,0 +1,11 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:com.google.accompanist.appcompattheme////PointingToDeclaration/appcompat-theme/com.google.accompanist.appcompattheme/index.html
+$dokka.location:com.google.accompanist.appcompattheme//AppCompatTheme/#android.content.Context#kotlin.Boolean#kotlin.Boolean#androidx.compose.material.Shapes#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/appcompat-theme/com.google.accompanist.appcompattheme/-app-compat-theme.html
+$dokka.location:com.google.accompanist.appcompattheme//createAppCompatTheme/android.content.Context#kotlin.Boolean#kotlin.Boolean/PointingToDeclaration/appcompat-theme/com.google.accompanist.appcompattheme/create-app-compat-theme.html
+$dokka.location:com.google.accompanist.appcompattheme/ThemeParameters///PointingToDeclaration/appcompat-theme/com.google.accompanist.appcompattheme/-theme-parameters/index.html
+$dokka.location:com.google.accompanist.appcompattheme/ThemeParameters/ThemeParameters/#androidx.compose.material.Colors?#androidx.compose.material.Typography?/PointingToDeclaration/appcompat-theme/com.google.accompanist.appcompattheme/-theme-parameters/-theme-parameters.html
+$dokka.location:com.google.accompanist.appcompattheme/ThemeParameters/colors/#/PointingToDeclaration/appcompat-theme/com.google.accompanist.appcompattheme/-theme-parameters/colors.html
+$dokka.location:com.google.accompanist.appcompattheme/ThemeParameters/typography/#/PointingToDeclaration/appcompat-theme/com.google.accompanist.appcompattheme/-theme-parameters/typography.html
+com.google.accompanist.appcompattheme
+
