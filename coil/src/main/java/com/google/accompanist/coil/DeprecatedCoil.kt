@@ -36,6 +36,7 @@ import coil.ImageLoader
 import coil.request.ImageRequest
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.ImageSuchDeprecated
+import com.google.accompanist.imageloading.MaterialLoadingImage
 import com.google.accompanist.imageloading.isFinalState
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
@@ -116,9 +117,9 @@ fun CoilImage(
     @Suppress("DEPRECATION")
     ImageSuchDeprecated(
         loadPainter = painter,
-        contentDescription = null,
         modifier = modifier,
-        content = content
+        previewPlaceholder = previewPlaceholder,
+        content = content,
     )
 }
 
@@ -286,8 +287,7 @@ fun CoilImage(
         requestBuilder = requestBuilder,
         imageLoader = imageLoader,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
-        fadeIn = fadeIn,
-        previewPlaceholder = previewPlaceholder,
+        fadeIn = false, // MaterialLoadingImage performs the fade
     )
 
     LaunchedEffect(painter) {
@@ -299,13 +299,20 @@ fun CoilImage(
     @Suppress("DEPRECATION")
     ImageSuchDeprecated(
         loadPainter = painter,
-        contentDescription = contentDescription,
-        alignment = alignment,
-        contentScale = contentScale,
-        colorFilter = colorFilter,
         modifier = modifier,
+        previewPlaceholder = previewPlaceholder,
     ) { imageState ->
         when (imageState) {
+            is ImageLoadState.Success -> {
+                MaterialLoadingImage(
+                    result = imageState,
+                    contentDescription = contentDescription,
+                    alignment = alignment,
+                    contentScale = contentScale,
+                    colorFilter = colorFilter,
+                    fadeInEnabled = fadeIn,
+                )
+            }
             is ImageLoadState.Error -> if (error != null) error(imageState)
             ImageLoadState.Loading -> if (loading != null) loading()
             else -> Unit

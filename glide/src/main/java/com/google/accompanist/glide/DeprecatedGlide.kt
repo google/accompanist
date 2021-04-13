@@ -40,6 +40,7 @@ import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.RequestManager
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.ImageSuchDeprecated
+import com.google.accompanist.imageloading.MaterialLoadingImage
 import com.google.accompanist.imageloading.isFinalState
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
@@ -108,7 +109,6 @@ fun GlideImage(
         requestManager = requestManager,
         requestBuilder = requestBuilder,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
-        previewPlaceholder = previewPlaceholder,
     )
 
     LaunchedEffect(painter) {
@@ -120,8 +120,8 @@ fun GlideImage(
     @Suppress("DEPRECATION")
     ImageSuchDeprecated(
         loadPainter = painter,
-        contentDescription = null,
         modifier = modifier,
+        previewPlaceholder = previewPlaceholder,
         content = content
     )
 }
@@ -218,8 +218,7 @@ fun GlideImage(
         requestManager = requestManager,
         requestBuilder = requestBuilder,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
-        fadeIn = fadeIn,
-        previewPlaceholder = previewPlaceholder,
+        fadeIn = false, // MaterialLoadingImage performs the fade
     )
 
     LaunchedEffect(painter) {
@@ -232,12 +231,19 @@ fun GlideImage(
     ImageSuchDeprecated(
         loadPainter = painter,
         modifier = modifier,
-        contentDescription = contentDescription,
-        alignment = alignment,
-        contentScale = contentScale,
-        colorFilter = colorFilter
+        previewPlaceholder = previewPlaceholder,
     ) { imageState ->
         when (imageState) {
+            is ImageLoadState.Success -> {
+                MaterialLoadingImage(
+                    result = imageState,
+                    contentDescription = contentDescription,
+                    alignment = alignment,
+                    contentScale = contentScale,
+                    colorFilter = colorFilter,
+                    fadeInEnabled = fadeIn,
+                )
+            }
             is ImageLoadState.Error -> if (error != null) error(imageState)
             ImageLoadState.Loading -> if (loading != null) loading()
             else -> Unit

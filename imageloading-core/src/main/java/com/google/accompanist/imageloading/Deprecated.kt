@@ -18,14 +18,15 @@
 
 package com.google.accompanist.imageloading
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.layout
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntSize
 
 /**
@@ -41,27 +42,39 @@ val DefaultRefetchOnSizeChangeLambda: (ImageLoadState, IntSize) -> Boolean = { _
 @Composable
 fun <R> ImageSuchDeprecated(
     loadPainter: LoadPainter<R>,
-    contentDescription: String?,
-    modifier: Modifier,
-    alignment: Alignment = Alignment.Center,
-    contentScale: ContentScale = ContentScale.Fit,
-    alpha: Float = 1f,
-    colorFilter: ColorFilter? = null,
-    content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
+    modifier: Modifier = Modifier,
+    @DrawableRes previewPlaceholder: Int = 0,
+    content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit,
 ) {
+    if (LocalInspectionMode.current && previewPlaceholder != 0) {
+        // If we're in inspection mode (preview) and we have a preview placeholder, just draw
+        // that using an Image and return
+        Image(
+            painter = painterResource(previewPlaceholder),
+            contentDescription = null,
+            modifier = modifier,
+        )
+        return
+    }
+
     Box(
         propagateMinConstraints = true,
-        modifier = modifier,
-    ) {
-        Image(
-            painter = loadPainter,
-            contentDescription = contentDescription,
-            alignment = alignment,
-            contentScale = contentScale,
-            alpha = alpha,
-            colorFilter = colorFilter,
-        )
+        modifier = modifier
+            // Layout modifier to receive the incoming constraints, such that we can use them
+            // to update our request size
+            .layout { measurable, constraints ->
+                loadPainter.requestSize = IntSize(
+                    width = if (constraints.hasBoundedWidth) constraints.maxWidth else -1,
+                    height = if (constraints.hasBoundedHeight) constraints.maxHeight else -1
+                )
 
+                // No-op measure + layout
+                val placeable = measurable.measure(constraints)
+                layout(width = placeable.width, height = placeable.height) {
+                    placeable.place(0, 0)
+                }
+            }
+    ) {
         content(loadPainter.loadState)
     }
 }

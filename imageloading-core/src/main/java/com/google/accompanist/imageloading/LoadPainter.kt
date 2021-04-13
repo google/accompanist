@@ -168,8 +168,11 @@ class LoadPainter<R> internal constructor(
     private var alpha: Float by mutableStateOf(1f)
     private var colorFilter: ColorFilter? by mutableStateOf(null)
 
-    // Our size to use when performing the image load request
-    private var requestSize by mutableStateOf<IntSize?>(null)
+    /**
+     * Our size to use when performing the image load request. This is internal due to
+     * [ImageSuchDeprecated].
+     */
+    internal var requestSize by mutableStateOf<IntSize?>(null)
 
     // Current request job
     private var job: Job? = null
