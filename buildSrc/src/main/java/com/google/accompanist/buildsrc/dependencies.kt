@@ -94,7 +94,10 @@ object Libs {
 
         const val fragmentKtx = "androidx.fragment:fragment-ktx:1.3.0"
 
-        const val lifecycleKtx = "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0"
+        object Lifecycle {
+            const val lifecycleKtx = "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0"
+            const val viewModelCompose = "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha04"
+        }
 
         const val core1_5_0 = "androidx.core:core:1.5.0-beta03"
 

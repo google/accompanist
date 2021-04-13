@@ -225,7 +225,16 @@
         </activity>
 
         <activity
-            android:name=".swiperefresh.SwipeRefreshCustomSample"
+            android:name=".swiperefresh.SwipeRefreshTweakedIndicatorSample"
+            android:label="@string/swiperefresh_title_tweaked">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".swiperefresh.SwipeRefreshCustomIndicatorSample"
             android:label="@string/swiperefresh_title_custom">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

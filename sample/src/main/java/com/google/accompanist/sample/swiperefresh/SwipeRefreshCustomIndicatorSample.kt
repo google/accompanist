@@ -19,17 +19,28 @@ package com.google.accompanist.sample.swiperefresh
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animate
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -38,19 +49,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.coil.rememberCoilImageState
-import com.google.accompanist.imageloading.Image
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
-import com.google.accompanist.sample.randomSampleImageUrl
 import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
+import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.delay
 
-class SwipeRefreshCustomSample : ComponentActivity() {
+class SwipeRefreshCustomIndicatorSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -86,25 +96,15 @@ private fun Sample() {
         SwipeRefresh(
             state = rememberSwipeRefreshState(isRefreshing = refreshing),
             onRefresh = { refreshing = true },
-            indicator = {
-                SwipeRefreshIndicator(
-                    state = it,
-                    scale = true,
-                    arrowEnabled = false,
-                    backgroundColor = MaterialTheme.colors.primary,
-                    shape = MaterialTheme.shapes.small,
-                    largeIndication = true,
-                    elevation = 16.dp
-                )
+            indicator = { state ->
+                CustomIndicator(swipeRefreshState = state)
             },
         ) {
             LazyColumn {
-                items(30) { index ->
+                items(30) {
                     Row(Modifier.padding(16.dp)) {
                         Image(
-                            state = rememberCoilImageState(
-                                data = randomSampleImageUrl(index),
-                            ),
+                            painter = painterResource(R.drawable.placeholder),
                             contentDescription = null,
                             modifier = Modifier.size(64.dp),
                         )
@@ -122,5 +122,49 @@ private fun Sample() {
                 }
             }
         }
+    }
+}
+
+@Composable
+fun CustomIndicator(swipeRefreshState: SwipeRefreshState) {
+    // Animates the indicator when refreshing, by rotating it
+    val rotation = remember { mutableStateOf(0f) }
+    LaunchedEffect(swipeRefreshState.isRefreshing) {
+        if (swipeRefreshState.isRefreshing) {
+            animate(
+                initialValue = 0f,
+                targetValue = 360f,
+                animationSpec = infiniteRepeatable(
+                    animation = tween(500, easing = LinearEasing),
+                ),
+                block = { value, _ -> rotation.value = value }
+            )
+        } else {
+            rotation.value = 0f
+        }
+    }
+
+    Surface(
+        border = BorderStroke(1.dp, MaterialTheme.colors.primary),
+        elevation = 4.dp,
+        shape = CircleShape,
+        modifier = Modifier
+            .size(48.dp)
+            .graphicsLayer {
+                // We rotate the indicator in the X axis as the user swipes
+                val circumference = 2 * Math.PI.toFloat() * (48.dp.toPx() / 2)
+                rotationX = (swipeRefreshState.indicatorOffset / circumference) * -360f
+
+                // Apply our animated 'refreshing' rotation
+                rotationZ = rotation.value
+            }
+    ) {
+        Image(
+            imageVector = Icons.Default.Refresh,
+            contentDescription = "Refresh",
+            modifier = Modifier
+                .wrapContentSize()
+                .size(24.dp)
+        )
     }
 }
