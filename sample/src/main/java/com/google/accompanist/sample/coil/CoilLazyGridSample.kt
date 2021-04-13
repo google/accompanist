@@ -81,7 +81,7 @@ private fun Sample() {
             items(NumberItems) { index ->
                 Image(
                     painter = rememberCoilPainter(
-                        data = rememberRandomSampleImageUrl(index),
+                        request = rememberRandomSampleImageUrl(index),
                         fadeIn = true,
                     ),
                     contentDescription = null,

@@ -114,7 +114,7 @@ private fun Sample() {
                 // Fade in
                 Image(
                     painter = rememberGlidePainter(
-                        data = rememberRandomSampleImageUrl(),
+                        request = rememberRandomSampleImageUrl(),
                         fadeIn = true,
                     ),
                     contentDescription = null,

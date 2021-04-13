@@ -186,7 +186,7 @@ class CoilTest {
         composeTestRule.setContent {
             Image(
                 painter = rememberCoilPainter(
-                    data = server.url("/image"),
+                    request = server.url("/image"),
                     imageLoader = imageLoader,
                 ),
                 contentDescription = null,
@@ -330,7 +330,7 @@ class CoilTest {
         composeTestRule.setContent {
             Image(
                 painter = rememberCoilPainter(
-                    data = server.url("/noimage"),
+                    request = server.url("/noimage"),
                     requestBuilder = {
                         // Display a red rectangle when errors occur
                         error(R.drawable.red_rectangle)
@@ -359,7 +359,7 @@ class CoilTest {
             CompositionLocalProvider(LocalInspectionMode provides true) {
                 Image(
                     painter = rememberCoilPainter(
-                        data = "blah",
+                        request = "blah",
                         previewPlaceholder = R.drawable.red_rectangle_raster,
                     ),
                     contentDescription = null,
@@ -404,7 +404,7 @@ class CoilTest {
         composeTestRule.setContent {
             Image(
                 painter = rememberCoilPainter(
-                    data = ShapeDrawable(),
+                    request = ShapeDrawable(),
                 ),
                 contentDescription = null,
                 modifier = Modifier.size(128.dp, 128.dp),

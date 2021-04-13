@@ -70,21 +70,22 @@ import kotlinx.coroutines.flow.filter
  * @param content Content to be displayed for the given state.
  */
 @Deprecated(
-    message = "Replaced with Image() and rememberCoilImageState()",
+    "Replaced with Image() and rememberCoilPainter()",
     ReplaceWith(
-        expression = """ImageLoad(
-            request = rememberCoilImageLoadRequest(
-                data = data,
+        expression = """Image(
+            painter = rememberCoilPainter(
+                request = data,
                 imageLoader = imageLoader,
                 requestBuilder = requestBuilder,
+                fadeIn = fadeIn,
+                previewPlaceholder = previewPlaceholder,
+                shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
             ),
-            contentDescription = contentDescription,
+            contentDescription = null,
             modifier = modifier,
-            previewPlaceholder = previewPlaceholder,
-            shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         )""",
-        "com.google.accompanist.coil.rememberCoilImageLoadRequest",
-        "com.google.accompanist.imageloading.ImageLoad"
+        "androidx.compose.foundation.Image",
+        "com.google.accompanist.coil.rememberCoilPainter",
     )
 )
 @Composable
@@ -99,7 +100,7 @@ fun CoilImage(
     content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
 ) {
     val painter = rememberCoilPainter(
-        data = data,
+        request = data,
         requestBuilder = requestBuilder,
         imageLoader = imageLoader,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
@@ -152,21 +153,22 @@ fun CoilImage(
  * @param content Content to be displayed for the given state.
  */
 @Deprecated(
-    message = "Replaced with Image() and rememberCoilImageState()",
+    "Replaced with Image() and rememberCoilPainter()",
     ReplaceWith(
-        expression = """ImageLoad(
-            request = rememberCoilImageLoadRequest(
-                data = request,
+        expression = """Image(
+            painter = rememberCoilPainter(
+                request = request,
                 imageLoader = imageLoader,
                 requestBuilder = requestBuilder,
+                fadeIn = fadeIn,
+                previewPlaceholder = previewPlaceholder,
+                shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
             ),
-            contentDescription = contentDescription,
+            contentDescription = null,
             modifier = modifier,
-            previewPlaceholder = previewPlaceholder,
-            shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         )""",
-        "com.google.accompanist.coil.rememberCoilImageLoadRequest",
-        "com.google.accompanist.imageloading.ImageLoad"
+        "androidx.compose.foundation.Image",
+        "com.google.accompanist.coil.rememberCoilPainter",
     )
 )
 @Composable
@@ -241,25 +243,25 @@ fun CoilImage(
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
  */
 @Deprecated(
-    "Replaced with Image() and rememberCoilImageState()",
+    "Replaced with Image() and rememberCoilPainter()",
     ReplaceWith(
-        expression = """ImageLoad(
-            request = rememberCoilImageLoadRequest(
-                data = data,
+        expression = """Image(
+            painter = rememberCoilPainter(
+                request = data,
                 imageLoader = imageLoader,
                 requestBuilder = requestBuilder,
+                fadeIn = fadeIn,
+                previewPlaceholder = previewPlaceholder,
+                shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
             ),
             contentDescription = contentDescription,
             modifier = modifier,
             alignment = alignment,
             contentScale = contentScale,
             colorFilter = colorFilter,
-            fadeIn = fadeIn,
-            previewPlaceholder = previewPlaceholder,
-            shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         )""",
-        "com.google.accompanist.imageloading.ImageLoad",
-        "com.google.accompanist.coil.rememberCoilImageLoadRequest",
+        "androidx.compose.foundation.Image",
+        "com.google.accompanist.coil.rememberCoilPainter",
     )
 )
 @Composable
@@ -280,7 +282,7 @@ fun CoilImage(
     loading: @Composable (BoxScope.() -> Unit)? = null,
 ) {
     val painter = rememberCoilPainter(
-        data = data,
+        request = data,
         requestBuilder = requestBuilder,
         imageLoader = imageLoader,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
@@ -361,25 +363,25 @@ fun CoilImage(
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
  */
 @Deprecated(
-    "Replaced with Image() and rememberCoilImageState()",
+    "Replaced with Image() and rememberCoilPainter()",
     ReplaceWith(
-        expression = """ImageLoad(
-            request = rememberCoilImageLoadRequest(
+        expression = """Image(
+            painter = rememberCoilPainter(
                 data = request,
                 imageLoader = imageLoader,
                 requestBuilder = requestBuilder,
+                fadeIn = fadeIn,
+                previewPlaceholder = previewPlaceholder,
+                shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
             ),
             contentDescription = contentDescription,
             modifier = modifier,
             alignment = alignment,
             contentScale = contentScale,
             colorFilter = colorFilter,
-            fadeIn = fadeIn,
-            previewPlaceholder = previewPlaceholder,
-            shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         )""",
-        "com.google.accompanist.imageloading.ImageLoad",
-        "com.google.accompanist.coil.rememberCoilImageLoadRequest",
+        "androidx.compose.foundation.Image",
+        "com.google.accompanist.coil.rememberCoilPainter",
     )
 )
 @Composable

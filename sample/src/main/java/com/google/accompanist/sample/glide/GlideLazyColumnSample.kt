@@ -68,7 +68,7 @@ private fun Sample() {
                 Row(Modifier.padding(16.dp)) {
                     Image(
                         painter = rememberCoilPainter(
-                            data = rememberRandomSampleImageUrl(index),
+                            request = rememberRandomSampleImageUrl(index),
                             fadeIn = true,
                         ),
                         contentDescription = null,

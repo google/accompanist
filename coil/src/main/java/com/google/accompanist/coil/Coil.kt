@@ -64,10 +64,10 @@ object CoilPainterDefaults {
 /**
  * Remembers a [LoadPainter] that use [coil.Coil] to load images.
  *
- * Changes to [data], [imageLoader], [shouldRefetchOnSizeChange] & [requestBuilder] will result in
+ * Changes to [request], [imageLoader], [shouldRefetchOnSizeChange] & [requestBuilder] will result in
  * the [LoadPainter] being updated.
  *
- * @param data The data to load. See [ImageRequest.Builder.data] for the types supported.
+ * @param request The load request. See [ImageRequest.Builder.data] for the types supported.
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to
  * [CoilPainterDefaults.defaultImageLoader].
  * @param shouldRefetchOnSizeChange the value for [LoadPainter.shouldRefetchOnSizeChange].
@@ -80,7 +80,7 @@ object CoilPainterDefaults {
  */
 @Composable
 fun rememberCoilPainter(
-    data: Any?,
+    request: Any?,
     imageLoader: ImageLoader = CoilPainterDefaults.defaultImageLoader(),
     shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
@@ -99,7 +99,7 @@ fun rememberCoilPainter(
     }
     return rememberLoadPainter(
         loader = coilLoader,
-        request = checkData(data),
+        request = checkData(request),
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         fadeIn = fadeIn,
         fadeInDurationMs = fadeInDurationMs,

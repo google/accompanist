@@ -101,7 +101,7 @@ private fun Sample() {
                     // Our page content, displaying a random image
                     Image(
                         painter = rememberCoilPainter(
-                            data = rememberRandomSampleImageUrl(width = 600),
+                            request = rememberRandomSampleImageUrl(width = 600),
                             fadeIn = true,
                         ),
                         contentDescription = null,

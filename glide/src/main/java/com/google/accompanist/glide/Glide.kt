@@ -70,10 +70,10 @@ object GlidePainterDefaults {
 /**
  * Remembers a [LoadPainter] that use [Glide] to load images.
  *
- * Changes to [data], [requestManager], [shouldRefetchOnSizeChange] & [requestBuilder] will result
+ * Changes to [request], [requestManager], [shouldRefetchOnSizeChange] & [requestBuilder] will result
  * in the [LoadPainter] being updated.
  *
- * @param data The data to load. See [RequestManager.load] for the types supported.
+ * @param request The load request. See [RequestManager.load] for the types supported.
  * @param requestManager The [RequestManager] to use when requesting the image.
  * @param shouldRefetchOnSizeChange the value for [LoadPainter.shouldRefetchOnSizeChange].
  * @param requestBuilder Optional builder for every created [RequestBuilder].
@@ -85,7 +85,7 @@ object GlidePainterDefaults {
  */
 @Composable
 fun rememberGlidePainter(
-    data: Any?,
+    request: Any?,
     requestManager: RequestManager = GlidePainterDefaults.defaultRequestManager(),
     shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
     requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)? = null,
@@ -102,7 +102,7 @@ fun rememberGlidePainter(
     }
     return rememberLoadPainter(
         loader = glideLoader,
-        request = checkData(data),
+        request = checkData(request),
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         fadeIn = fadeIn,
         fadeInDurationMs = fadeInDurationMs,

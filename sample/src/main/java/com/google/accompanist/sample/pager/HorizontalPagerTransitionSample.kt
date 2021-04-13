@@ -125,7 +125,7 @@ fun HorizontalPagerWithOffsetTransition() {
             Box {
                 Image(
                     painter = rememberCoilPainter(
-                        data = rememberRandomSampleImageUrl(width = 600),
+                        request = rememberRandomSampleImageUrl(width = 600),
                         fadeIn = true,
                     ),
                     contentDescription = null,
@@ -162,7 +162,7 @@ private fun ProfilePicture(modifier: Modifier = Modifier) {
         border = BorderStroke(4.dp, MaterialTheme.colors.surface)
     ) {
         Image(
-            painter = rememberCoilPainter(data = rememberRandomSampleImageUrl(), fadeIn = true),
+            painter = rememberCoilPainter(request = rememberRandomSampleImageUrl(), fadeIn = true),
             contentDescription = null,
             modifier = Modifier.size(72.dp),
         )

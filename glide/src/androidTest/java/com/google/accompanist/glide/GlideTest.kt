@@ -337,7 +337,7 @@ class GlideTest {
         composeTestRule.setContent {
             Image(
                 painter = rememberGlidePainter(
-                    data = server.url("/noimage"),
+                    request = server.url("/noimage"),
                     requestBuilder = {
                         // Display a red rectangle when errors occur
                         error(R.drawable.red_rectangle)
@@ -366,7 +366,7 @@ class GlideTest {
             CompositionLocalProvider(LocalInspectionMode provides true) {
                 Image(
                     painter = rememberGlidePainter(
-                        data = "blah",
+                        request = "blah",
                         previewPlaceholder = R.drawable.red_rectangle_raster,
                     ),
                     contentDescription = null,
@@ -419,7 +419,7 @@ class GlideTest {
         composeTestRule.setContent {
             Image(
                 painter = rememberGlidePainter(
-                    data = ShapeDrawable(),
+                    request = ShapeDrawable(),
                 ),
                 contentDescription = null,
                 modifier = Modifier.size(128.dp, 128.dp),
@@ -468,7 +468,7 @@ class GlideTest {
     fun error_stoppedThenResumed() {
         composeTestRule.setContent {
             Image(
-                painter = rememberGlidePainter(data = ""),
+                painter = rememberGlidePainter(request = ""),
                 contentDescription = null,
                 modifier = Modifier.size(128.dp, 128.dp),
             )

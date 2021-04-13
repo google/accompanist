@@ -78,7 +78,7 @@ private fun Sample() {
             items(NumberItems) { index ->
                 Image(
                     painter = rememberGlidePainter(
-                        data = rememberRandomSampleImageUrl(index),
+                        request = rememberRandomSampleImageUrl(index),
                         fadeIn = true,
                     ),
                     contentDescription = null,

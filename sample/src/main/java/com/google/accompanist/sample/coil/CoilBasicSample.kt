@@ -85,7 +85,7 @@ private fun Sample() {
                 // Load GIF
                 Image(
                     painter = rememberCoilPainter(
-                        data = "https://cataas.com/cat/gif",
+                        request = "https://cataas.com/cat/gif",
                         imageLoader = gifImageLoader(LocalContext.current),
                     ),
                     contentDescription = "Cat animation",
@@ -97,7 +97,7 @@ private fun Sample() {
                 // Request builder parameter
                 Image(
                     painter = rememberCoilPainter(
-                        data = rememberRandomSampleImageUrl(),
+                        request = rememberRandomSampleImageUrl(),
                         requestBuilder = {
                             transformations(CircleCropTransformation())
                         }
@@ -130,7 +130,7 @@ private fun Sample() {
                 // Fade in
                 Image(
                     painter = rememberCoilPainter(
-                        data = rememberRandomSampleImageUrl(),
+                        request = rememberRandomSampleImageUrl(),
                         fadeIn = true,
                     ),
                     contentDescription = null,
