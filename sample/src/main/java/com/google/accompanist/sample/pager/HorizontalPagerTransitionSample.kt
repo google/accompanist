@@ -120,7 +120,6 @@ fun HorizontalPagerWithOffsetTransition() {
                 }
                 .fillMaxWidth(0.8f)
                 .aspectRatio(1f)
-
         ) {
             Box {
                 Image(
