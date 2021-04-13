@@ -16,10 +16,6 @@ public final class com/google/accompanist/imageloading/DrawablePainterKt {
 	public static final fun toPainter (Landroid/graphics/drawable/Drawable;)Landroidx/compose/ui/graphics/painter/Painter;
 }
 
-public final class com/google/accompanist/imageloading/ImageKt {
-	public static final fun rememberLoadPainter (Lcom/google/accompanist/imageloading/Loader;Ljava/lang/Object;Lkotlin/jvm/functions/Function2;ZIILandroidx/compose/runtime/Composer;II)Lcom/google/accompanist/imageloading/LoadPainter;
-}
-
 public abstract class com/google/accompanist/imageloading/ImageLoadState {
 	public static final field $stable I
 }
@@ -82,6 +78,10 @@ public final class com/google/accompanist/imageloading/LoadPainter : androidx/co
 	public fun onRemembered ()V
 	public final fun setRequest (Ljava/lang/Object;)V
 	public final fun setShouldRefetchOnSizeChange (Lkotlin/jvm/functions/Function2;)V
+}
+
+public final class com/google/accompanist/imageloading/LoadPainterKt {
+	public static final fun rememberLoadPainter (Lcom/google/accompanist/imageloading/Loader;Ljava/lang/Object;Lkotlin/jvm/functions/Function2;ZIILandroidx/compose/runtime/Composer;II)Lcom/google/accompanist/imageloading/LoadPainter;
 }
 
 public abstract interface class com/google/accompanist/imageloading/Loader {
