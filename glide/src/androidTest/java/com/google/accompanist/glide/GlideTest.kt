@@ -382,7 +382,9 @@ class GlideTest {
             .assertHeightIsEqualTo(128.dp)
             .assertIsDisplayed()
             .captureToImage()
-            .assertPixels(Color.Red)
+            // We're probably scaling a bitmap up in size, so increase the tolerance to 5%
+            // to not fail due to small scaling artifacts
+            .assertPixels(Color.Red, tolerance = 0.05f)
     }
 
     @Test
