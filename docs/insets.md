@@ -202,7 +202,7 @@ If you find that something isn't working correctly, here's a checklist to try:
 [insets]: https://developer.android.com/reference/kotlin/androidx/core/view/WindowInsetsCompat
 [insettypes]: https://developer.android.com/reference/kotlin/androidx/core/view/WindowInsetsCompat.Type
 [insetslistener]: https://developer.android.com/reference/kotlin/androidx/core/view/OnApplyWindowInsetsListener
-[modifier]: https://developer.android.com/reference/kotlin/androidx/ui/core/Modifier
+[modifier]: https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier
 [paddingvalues]: https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/PaddingValues
 [lazycolumn]: https://developer.android.com/reference/kotlin/androidx/compose/foundation/lazy/package-summary#lazycolumn
 [fab]: https://developer.android.com/reference/kotlin/androidx/compose/material/package-summary#floatingactionbutton

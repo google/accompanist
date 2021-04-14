@@ -25,6 +25,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performScrollTo
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.produceIn
 import org.junit.Ignore
@@ -36,8 +37,8 @@ private const val MediumSwipeDistance = 0.8f
 private const val ShortSwipeDistance = 0.45f
 
 private const val FastVelocity = 4000f
-private const val MediumVelocity = 1700f
-private const val SlowVelocity = 600f
+private const val MediumVelocity = 1500f
+private const val SlowVelocity = 300f
 
 @OptIn(ExperimentalPagerApi::class) // Pager is currently experimental
 abstract class PagerTest {
@@ -178,6 +179,34 @@ abstract class PagerTest {
 
         // Cancel the channel
         pageChangedChannel.cancel()
+    }
+
+    @Test
+    fun scrollToPage() = suspendTest {
+        val pagerState = setPagerContent(pageCount = 10)
+
+        pagerState.scrollToPage(3)
+        assertThat(pagerState.currentPage).isEqualTo(3)
+        assertPagerLayout(3)
+
+        pagerState.scrollToPage(0)
+        assertThat(pagerState.currentPage).isEqualTo(0)
+        assertPagerLayout(0)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    @Ignore("https://issuetracker.google.com/185228750")
+    fun animateScrollToPage() = suspendTest {
+        val pagerState = setPagerContent(pageCount = 10)
+
+        pagerState.animateScrollToPage(3)
+        assertThat(pagerState.currentPage).isEqualTo(3)
+        assertPagerLayout(3)
+
+        pagerState.animateScrollToPage(0)
+        assertThat(pagerState.currentPage).isEqualTo(0)
+        assertPagerLayout(0)
     }
 
     @Test
