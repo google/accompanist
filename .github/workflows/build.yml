@@ -62,8 +62,28 @@ jobs:
       # Allow tests to continue on other devices if they fail on one device.
       fail-fast: false
       matrix:
-        # Disable 21-23 for now as the devices seem to be flakey on CI
-        api-level: [24, 26, 29]
+        include:
+          # API 30 is only available in google_apis/playstore
+          - api-level: 30
+            target: google_apis
+          - api-level: 29
+            target: default
+          - api-level: 28
+            target: default
+          - api-level: 27
+            target: default
+          - api-level: 26
+            target: default
+          - api-level: 25
+            target: default
+          - api-level: 24
+            target: default
+          - api-level: 23
+            target: default
+          - api-level: 22
+            target: default
+          - api-level: 21
+            target: default
 
     env:
       TERM: dumb
@@ -98,9 +118,10 @@ jobs:
 
       - name: Run tests
         uses: reactivecircus/android-emulator-runner@v2
+        timeout-minutes: 40
         with:
           api-level: ${{ matrix.api-level }}
-          profile: Nexus 5X
+          target: ${{ matrix.target }}
           script: |
             adb logcat > logcat.txt &
             ./gradlew --scan connectedCheck
@@ -113,14 +134,14 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: logs-${{ matrix.api-level }}
+          name: logs-${{ matrix.api-level }}-${{ matrix.target }}
           path: logcat.txt
 
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: test-results-${{ matrix.api-level }}
+          name: test-results-${{ matrix.api-level }}-${{ matrix.target }}
           path: "**/build/outputs/*/connected/*.xml"
 
   deploy:
