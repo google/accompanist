@@ -37,8 +37,8 @@ private const val MediumSwipeDistance = 0.8f
 private const val ShortSwipeDistance = 0.45f
 
 private const val FastVelocity = 4000f
-private const val MediumVelocity = 1700f
-private const val SlowVelocity = 600f
+private const val MediumVelocity = 1500f
+private const val SlowVelocity = 300f
 
 @OptIn(ExperimentalPagerApi::class) // Pager is currently experimental
 abstract class PagerTest {

@@ -71,10 +71,7 @@ internal fun SemanticsNodeInteraction.swipeAcrossCenterWithVelocity(
         // https://issuetracker.google.com/182477143. To work around this, we catch the exception
         // and instead run a swipe() with a computed duration instead. This is not perfect,
         // but good enough.
-        val distance = hypot(
-            x = (endOffset.x - startOffset.x).absoluteValue * visibleSize.width,
-            y = (endOffset.y - startOffset.y).absoluteValue * visibleSize.height,
-        )
+        val distance = hypot(endOffset.x - startOffset.x, endOffset.y - startOffset.y)
         swipe(
             start = startOffset,
             end = endOffset,
