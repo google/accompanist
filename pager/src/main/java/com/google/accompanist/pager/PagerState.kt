@@ -245,6 +245,7 @@ class PagerState(
         scroll {
             currentLayoutPage = page
             currentLayoutPageOffset = pageOffset
+            snapToNearestPage()
         }
     }
 
