@@ -63,26 +63,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # API 30 is only available in google_apis/playstore
-          - api-level: 30
-            target: google_apis
           - api-level: 29
             target: default
           - api-level: 28
             target: default
-          - api-level: 27
-            target: default
           - api-level: 26
-            target: default
-          - api-level: 25
             target: default
           - api-level: 24
             target: default
-          - api-level: 23
-            target: default
           - api-level: 22
-            target: default
-          - api-level: 21
             target: default
 
     env:
