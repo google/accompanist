@@ -20,6 +20,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -42,8 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
-import com.google.accompanist.coil.rememberCoilImageState
-import com.google.accompanist.imageloading.Image
+import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
@@ -123,12 +123,12 @@ fun HorizontalPagerWithOffsetTransition() {
         ) {
             Box {
                 Image(
-                    state = rememberCoilImageState(
-                        rememberRandomSampleImageUrl(width = 600)
+                    painter = rememberCoilPainter(
+                        request = rememberRandomSampleImageUrl(width = 600),
+                        fadeIn = true,
                     ),
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize(),
-                    fadeIn = true,
                 )
 
                 ProfilePicture(
@@ -161,12 +161,9 @@ private fun ProfilePicture(modifier: Modifier = Modifier) {
         border = BorderStroke(4.dp, MaterialTheme.colors.surface)
     ) {
         Image(
-            state = rememberCoilImageState(
-                data = rememberRandomSampleImageUrl(),
-            ),
+            painter = rememberCoilPainter(request = rememberRandomSampleImageUrl(), fadeIn = true),
             contentDescription = null,
             modifier = Modifier.size(72.dp),
-            fadeIn = true,
         )
     }
 }

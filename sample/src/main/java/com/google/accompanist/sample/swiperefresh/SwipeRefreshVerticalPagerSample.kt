@@ -19,6 +19,7 @@ package com.google.accompanist.sample.swiperefresh
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
@@ -42,8 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.coil.rememberCoilImageState
-import com.google.accompanist.imageloading.Image
+import com.google.accompanist.glide.rememberGlidePainter
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.VerticalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -102,9 +102,7 @@ private fun Sample() {
                 Box {
                     // Our page content, displaying a random image
                     Image(
-                        state = rememberCoilImageState(
-                            data = randomSampleImageUrl(width = 600),
-                        ),
+                        painter = rememberGlidePainter(randomSampleImageUrl(width = 600)),
                         contentDescription = null,
                         modifier = Modifier
                             .fillMaxWidth()

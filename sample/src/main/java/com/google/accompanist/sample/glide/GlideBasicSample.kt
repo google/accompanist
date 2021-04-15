@@ -20,6 +20,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
@@ -37,8 +38,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.glide.rememberGlideImageState
-import com.google.accompanist.imageloading.Image
+import com.google.accompanist.glide.rememberGlidePainter
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
@@ -68,17 +68,19 @@ private fun Sample() {
             item {
                 // Data parameter
                 Image(
-                    state = rememberGlideImageState(rememberRandomSampleImageUrl()),
+                    painter = rememberGlidePainter(
+                        rememberRandomSampleImageUrl(),
+                        previewPlaceholder = R.drawable.placeholder,
+                    ),
                     contentDescription = null,
                     modifier = Modifier.size(128.dp),
-                    previewPlaceholder = R.drawable.placeholder,
                 )
             }
 
             item {
                 // Load GIF
                 Image(
-                    state = rememberGlideImageState("https://cataas.com/cat/gif"),
+                    painter = rememberGlidePainter("https://cataas.com/cat/gif"),
                     contentDescription = "Cat animation",
                     modifier = Modifier.size(128.dp),
                 )
@@ -87,16 +89,16 @@ private fun Sample() {
             item {
                 // Loading content
                 Box {
-                    val request = rememberGlideImageState(rememberRandomSampleImageUrl())
+                    val glidePainter = rememberGlidePainter(rememberRandomSampleImageUrl())
 
                     Image(
-                        state = request,
+                        painter = glidePainter,
                         contentDescription = null,
                         modifier = Modifier.size(128.dp),
                     )
 
                     Crossfade(
-                        targetState = request.loadState,
+                        targetState = glidePainter.loadState,
                         modifier = Modifier
                             .align(Alignment.Center)
                             .padding(16.dp)
@@ -111,26 +113,27 @@ private fun Sample() {
             item {
                 // Fade in
                 Image(
-                    state = rememberGlideImageState(rememberRandomSampleImageUrl()),
+                    painter = rememberGlidePainter(
+                        request = rememberRandomSampleImageUrl(),
+                        fadeIn = true,
+                    ),
                     contentDescription = null,
                     modifier = Modifier.size(128.dp),
-                    fadeIn = true,
                 )
             }
 
             item {
                 // Fade in and loading content
                 Box {
-                    val request = rememberGlideImageState(rememberRandomSampleImageUrl())
+                    val glidePainter = rememberGlidePainter(rememberRandomSampleImageUrl())
 
                     Image(
-                        state = request,
+                        painter = glidePainter,
                         contentDescription = null,
-                        fadeIn = true,
                         modifier = Modifier.size(128.dp),
                     )
 
-                    Crossfade(request.loadState) { state ->
+                    Crossfade(glidePainter.loadState) { state ->
                         if (state == ImageLoadState.Loading) {
                             CircularProgressIndicator(Modifier.align(Alignment.Center))
                         }
@@ -141,14 +144,14 @@ private fun Sample() {
             item {
                 // Implicit size
                 Box {
-                    val request = rememberGlideImageState(rememberRandomSampleImageUrl())
+                    val glidePainter = rememberGlidePainter(rememberRandomSampleImageUrl())
 
                     Image(
-                        state = request,
+                        painter = glidePainter,
                         contentDescription = null,
                     )
 
-                    Crossfade(request.loadState) { state ->
+                    Crossfade(glidePainter.loadState) { state ->
                         if (state == ImageLoadState.Loading) {
                             CircularProgressIndicator(Modifier.align(Alignment.Center))
                         }
@@ -159,7 +162,7 @@ private fun Sample() {
             item {
                 // Aspect ratio and crop
                 Image(
-                    state = rememberGlideImageState(rememberRandomSampleImageUrl()),
+                    painter = rememberGlidePainter(rememberRandomSampleImageUrl()),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier

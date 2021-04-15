@@ -62,7 +62,7 @@ import kotlinx.coroutines.flow.filter
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
  * @param requestBuilder Optional builder for the [ImageRequest].
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to
- * [CoilImageStateDefaults.defaultImageLoader].
+ * [CoilPainterDefaults.defaultImageLoader].
  * @param previewPlaceholder Drawable resource ID which will be displayed when this function is
  * ran in preview mode.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
@@ -71,21 +71,22 @@ import kotlinx.coroutines.flow.filter
  * @param content Content to be displayed for the given state.
  */
 @Deprecated(
-    message = "Replaced with Image() and rememberCoilImageState()",
+    "Replaced with Image() and rememberCoilPainter()",
     ReplaceWith(
-        expression = """ImageLoad(
-            request = rememberCoilImageLoadRequest(
-                data = data,
+        expression = """Image(
+            painter = rememberCoilPainter(
+                request = data,
                 imageLoader = imageLoader,
                 requestBuilder = requestBuilder,
+                fadeIn = fadeIn,
+                previewPlaceholder = previewPlaceholder,
+                shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
             ),
-            contentDescription = contentDescription,
+            contentDescription = null,
             modifier = modifier,
-            previewPlaceholder = previewPlaceholder,
-            shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         )""",
-        "com.google.accompanist.coil.rememberCoilImageLoadRequest",
-        "com.google.accompanist.imageloading.ImageLoad"
+        "androidx.compose.foundation.Image",
+        "com.google.accompanist.coil.rememberCoilPainter",
     )
 )
 @Composable
@@ -93,31 +94,32 @@ fun CoilImage(
     data: Any,
     modifier: Modifier = Modifier,
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
-    imageLoader: ImageLoader = CoilImageStateDefaults.defaultImageLoader(),
+    imageLoader: ImageLoader = CoilPainterDefaults.defaultImageLoader(),
     @DrawableRes previewPlaceholder: Int = 0,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
     onRequestCompleted: (ImageLoadState) -> Unit = {},
     content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
 ) {
-    val request = rememberCoilImageState(
-        data = data,
+    val painter = rememberCoilPainter(
+        request = data,
         requestBuilder = requestBuilder,
         imageLoader = imageLoader,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
+        previewPlaceholder = previewPlaceholder,
     )
 
-    LaunchedEffect(request) {
-        snapshotFlow { request.loadState }
+    LaunchedEffect(painter) {
+        snapshotFlow { painter.loadState }
             .filter { it.isFinalState() }
             .collect { onRequestCompleted(it) }
     }
 
     @Suppress("DEPRECATION")
     ImageSuchDeprecated(
-        state = request,
-        previewPlaceholder = previewPlaceholder,
+        loadPainter = painter,
         modifier = modifier,
-        content = content
+        previewPlaceholder = previewPlaceholder,
+        content = content,
     )
 }
 
@@ -143,7 +145,7 @@ fun CoilImage(
  * @param modifier [Modifier] used to adjust the layout algorithm or draw decoration content.
  * @param requestBuilder Optional builder for the [ImageRequest].
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to
- * [CoilImageStateDefaults.defaultImageLoader].
+ * [CoilPainterDefaults.defaultImageLoader].
  * @param previewPlaceholder Drawable resource ID which will be displayed when this function is
  * ran in preview mode.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
@@ -152,21 +154,22 @@ fun CoilImage(
  * @param content Content to be displayed for the given state.
  */
 @Deprecated(
-    message = "Replaced with Image() and rememberCoilImageState()",
+    "Replaced with Image() and rememberCoilPainter()",
     ReplaceWith(
-        expression = """ImageLoad(
-            request = rememberCoilImageLoadRequest(
-                data = request,
+        expression = """Image(
+            painter = rememberCoilPainter(
+                request = request,
                 imageLoader = imageLoader,
                 requestBuilder = requestBuilder,
+                fadeIn = fadeIn,
+                previewPlaceholder = previewPlaceholder,
+                shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
             ),
-            contentDescription = contentDescription,
+            contentDescription = null,
             modifier = modifier,
-            previewPlaceholder = previewPlaceholder,
-            shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         )""",
-        "com.google.accompanist.coil.rememberCoilImageLoadRequest",
-        "com.google.accompanist.imageloading.ImageLoad"
+        "androidx.compose.foundation.Image",
+        "com.google.accompanist.coil.rememberCoilPainter",
     )
 )
 @Composable
@@ -174,7 +177,7 @@ fun CoilImage(
     request: ImageRequest,
     modifier: Modifier = Modifier,
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
-    imageLoader: ImageLoader = CoilImageStateDefaults.defaultImageLoader(),
+    imageLoader: ImageLoader = CoilPainterDefaults.defaultImageLoader(),
     @DrawableRes previewPlaceholder: Int = 0,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
     onRequestCompleted: (ImageLoadState) -> Unit = {},
@@ -193,7 +196,7 @@ fun CoilImage(
 }
 
 /**
- * Creates a composable that will attempt to load the given [data] using [Coil], and then
+ * Creates a composable that will attempt to load the given [data] using [coil.Coil], and then
  * display the result in an [Image].
  *
  * This version of the function is more opinionated, providing:
@@ -233,7 +236,7 @@ fun CoilImage(
  * Default: `false`.
  * @param requestBuilder Optional builder for the [ImageRequest].
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to
- * [CoilImageStateDefaults.defaultImageLoader].
+ * [CoilPainterDefaults.defaultImageLoader].
  * @param previewPlaceholder Drawable resource ID which will be displayed when this function is
  * ran in preview mode.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
@@ -241,25 +244,25 @@ fun CoilImage(
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
  */
 @Deprecated(
-    "Replaced with Image() and rememberCoilImageState()",
+    "Replaced with Image() and rememberCoilPainter()",
     ReplaceWith(
-        expression = """ImageLoad(
-            request = rememberCoilImageLoadRequest(
-                data = data,
+        expression = """Image(
+            painter = rememberCoilPainter(
+                request = data,
                 imageLoader = imageLoader,
                 requestBuilder = requestBuilder,
+                fadeIn = fadeIn,
+                previewPlaceholder = previewPlaceholder,
+                shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
             ),
             contentDescription = contentDescription,
             modifier = modifier,
             alignment = alignment,
             contentScale = contentScale,
             colorFilter = colorFilter,
-            fadeIn = fadeIn,
-            previewPlaceholder = previewPlaceholder,
-            shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         )""",
-        "com.google.accompanist.imageloading.ImageLoad",
-        "com.google.accompanist.coil.rememberCoilImageLoadRequest",
+        "androidx.compose.foundation.Image",
+        "com.google.accompanist.coil.rememberCoilPainter",
     )
 )
 @Composable
@@ -272,46 +275,47 @@ fun CoilImage(
     colorFilter: ColorFilter? = null,
     fadeIn: Boolean = false,
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
-    imageLoader: ImageLoader = CoilImageStateDefaults.defaultImageLoader(),
+    imageLoader: ImageLoader = CoilPainterDefaults.defaultImageLoader(),
     @DrawableRes previewPlaceholder: Int = 0,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
     onRequestCompleted: (ImageLoadState) -> Unit = {},
     error: @Composable (BoxScope.(ImageLoadState.Error) -> Unit)? = null,
     loading: @Composable (BoxScope.() -> Unit)? = null,
 ) {
-    val request = rememberCoilImageState(
-        data = data,
+    val painter = rememberCoilPainter(
+        request = data,
         requestBuilder = requestBuilder,
         imageLoader = imageLoader,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
+        fadeIn = false, // MaterialLoadingImage performs the fade
     )
 
-    LaunchedEffect(request) {
-        snapshotFlow { request.loadState }
+    LaunchedEffect(painter) {
+        snapshotFlow { painter.loadState }
             .filter { it.isFinalState() }
             .collect { onRequestCompleted(it) }
     }
 
     @Suppress("DEPRECATION")
     ImageSuchDeprecated(
-        state = request,
-        previewPlaceholder = previewPlaceholder,
+        loadPainter = painter,
         modifier = modifier,
+        previewPlaceholder = previewPlaceholder,
     ) { imageState ->
         when (imageState) {
             is ImageLoadState.Success -> {
                 MaterialLoadingImage(
                     result = imageState,
                     contentDescription = contentDescription,
-                    fadeInEnabled = fadeIn,
                     alignment = alignment,
                     contentScale = contentScale,
-                    colorFilter = colorFilter
+                    colorFilter = colorFilter,
+                    fadeInEnabled = fadeIn,
                 )
             }
             is ImageLoadState.Error -> if (error != null) error(imageState)
             ImageLoadState.Loading -> if (loading != null) loading()
-            ImageLoadState.Empty -> Unit
+            else -> Unit
         }
     }
 }
@@ -358,7 +362,7 @@ fun CoilImage(
  * Default: `false`.
  * @param requestBuilder Optional builder for the [ImageRequest].
  * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to
- * [CoilImageStateDefaults.defaultImageLoader].
+ * [CoilPainterDefaults.defaultImageLoader].
  * @param previewPlaceholder Drawable resource ID which will be displayed when this function is
  * ran in preview mode.
  * @param shouldRefetchOnSizeChange Lambda which will be invoked when the size changes, allowing
@@ -366,25 +370,25 @@ fun CoilImage(
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
  */
 @Deprecated(
-    "Replaced with Image() and rememberCoilImageState()",
+    "Replaced with Image() and rememberCoilPainter()",
     ReplaceWith(
-        expression = """ImageLoad(
-            request = rememberCoilImageLoadRequest(
+        expression = """Image(
+            painter = rememberCoilPainter(
                 data = request,
                 imageLoader = imageLoader,
                 requestBuilder = requestBuilder,
+                fadeIn = fadeIn,
+                previewPlaceholder = previewPlaceholder,
+                shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
             ),
             contentDescription = contentDescription,
             modifier = modifier,
             alignment = alignment,
             contentScale = contentScale,
             colorFilter = colorFilter,
-            fadeIn = fadeIn,
-            previewPlaceholder = previewPlaceholder,
-            shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
         )""",
-        "com.google.accompanist.imageloading.ImageLoad",
-        "com.google.accompanist.coil.rememberCoilImageLoadRequest",
+        "androidx.compose.foundation.Image",
+        "com.google.accompanist.coil.rememberCoilPainter",
     )
 )
 @Composable
@@ -397,7 +401,7 @@ fun CoilImage(
     colorFilter: ColorFilter? = null,
     fadeIn: Boolean = false,
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
-    imageLoader: ImageLoader = CoilImageStateDefaults.defaultImageLoader(),
+    imageLoader: ImageLoader = CoilPainterDefaults.defaultImageLoader(),
     @DrawableRes previewPlaceholder: Int = 0,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
     onRequestCompleted: (ImageLoadState) -> Unit = {},

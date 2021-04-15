@@ -478,7 +478,7 @@ class DeprecatedCoilTest {
         composeTestRule.onNodeWithTag(CoilTestTags.Image)
             .assertIsDisplayed()
             .captureToImage()
-            .assertPixels(Color.Cyan)
+            .assertPixels(Color.Cyan, 0.05f)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

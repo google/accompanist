@@ -75,21 +75,22 @@ import kotlinx.coroutines.flow.filter
  * @param content Content to be displayed for the given state.
  */
 @Deprecated(
-    message = "Replaced with Image() and rememberGlideImageState()",
+    "Replaced with Image() and rememberGlidePainter()",
     ReplaceWith(
-        expression = """ImageLoad(
-            request = rememberGlideImageLoadRequest(
-                data = data,
+        expression = """Image(
+            painter = rememberGlidePainter(
+                request = data,
                 requestManager = requestManager,
                 requestBuilder = requestBuilder,
+                fadeIn = fadeIn,
+                previewPlaceholder = previewPlaceholder,
+                shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
             ),
-            contentDescription = contentDescription,
+            contentDescription = null,
             modifier = modifier,
-            previewPlaceholder = previewPlaceholder,
-            shouldRefetchOnSizeChange= shouldRefetchOnSizeChange,
         )""",
-        "com.google.accompanist.imageloading.ImageLoad",
-        "com.google.accompanist.glide.rememberGlideImageLoadRequest",
+        "androidx.compose.foundation.Image",
+        "com.google.accompanist.glide.rememberGlidePainter",
     )
 )
 @Composable
@@ -97,30 +98,30 @@ fun GlideImage(
     data: Any,
     modifier: Modifier = Modifier,
     requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)? = null,
-    requestManager: RequestManager = GlideImageStateDefaults.defaultRequestManager(),
+    requestManager: RequestManager = GlidePainterDefaults.defaultRequestManager(),
     @DrawableRes previewPlaceholder: Int = 0,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
     onRequestCompleted: (ImageLoadState) -> Unit = {},
     content: @Composable BoxScope.(imageLoadState: ImageLoadState) -> Unit
 ) {
-    val request = rememberGlideImageState(
-        data = data,
+    val painter = rememberGlidePainter(
+        request = data,
         requestManager = requestManager,
         requestBuilder = requestBuilder,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
     )
 
-    LaunchedEffect(request) {
-        snapshotFlow { request.loadState }
+    LaunchedEffect(painter) {
+        snapshotFlow { painter.loadState }
             .filter { it.isFinalState() }
             .collect { onRequestCompleted(it) }
     }
 
     @Suppress("DEPRECATION")
     ImageSuchDeprecated(
-        state = request,
-        previewPlaceholder = previewPlaceholder,
+        loadPainter = painter,
         modifier = modifier,
+        previewPlaceholder = previewPlaceholder,
         content = content
     )
 }
@@ -174,25 +175,25 @@ fun GlideImage(
  * @param onRequestCompleted Listener which will be called when the loading request has finished.
  */
 @Deprecated(
-    "Replaced with Image() and rememberGlideImageState()",
+    "Replaced with Image() and rememberGlidePainter()",
     ReplaceWith(
-        expression = """ImageLoad(
-            request = rememberGlideImageLoadRequest(
-                data = data,
+        expression = """Image(
+            painter = rememberGlidePainter(
+                request = data,
                 requestManager = requestManager,
                 requestBuilder = requestBuilder,
+                fadeIn = fadeIn,
+                previewPlaceholder = previewPlaceholder,
+                shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
             ),
             contentDescription = contentDescription,
             modifier = modifier,
             alignment = alignment,
             contentScale = contentScale,
             colorFilter = colorFilter,
-            fadeIn = fadeIn,
-            previewPlaceholder = previewPlaceholder,
-            shouldRefetchOnSizeChange= shouldRefetchOnSizeChange,
         )""",
-        "com.google.accompanist.imageloading.ImageLoad",
-        "com.google.accompanist.glide.rememberGlideImageLoadRequest",
+        "androidx.compose.foundation.Image",
+        "com.google.accompanist.glide.rememberGlidePainter",
     )
 )
 @Composable
@@ -205,46 +206,47 @@ fun GlideImage(
     colorFilter: ColorFilter? = null,
     fadeIn: Boolean = false,
     requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)? = null,
-    requestManager: RequestManager = GlideImageStateDefaults.defaultRequestManager(),
+    requestManager: RequestManager = GlidePainterDefaults.defaultRequestManager(),
     @DrawableRes previewPlaceholder: Int = 0,
     shouldRefetchOnSizeChange: (currentResult: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
     onRequestCompleted: (ImageLoadState) -> Unit = {},
     error: @Composable (BoxScope.(ImageLoadState.Error) -> Unit)? = null,
     loading: @Composable (BoxScope.() -> Unit)? = null,
 ) {
-    val request = rememberGlideImageState(
-        data = data,
+    val painter = rememberGlidePainter(
+        request = data,
         requestManager = requestManager,
         requestBuilder = requestBuilder,
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
+        fadeIn = false, // MaterialLoadingImage performs the fade
     )
 
-    LaunchedEffect(request) {
-        snapshotFlow { request.loadState }
+    LaunchedEffect(painter) {
+        snapshotFlow { painter.loadState }
             .filter { it.isFinalState() }
             .collect { onRequestCompleted(it) }
     }
 
     @Suppress("DEPRECATION")
     ImageSuchDeprecated(
-        state = request,
-        previewPlaceholder = previewPlaceholder,
+        loadPainter = painter,
         modifier = modifier,
+        previewPlaceholder = previewPlaceholder,
     ) { imageState ->
         when (imageState) {
             is ImageLoadState.Success -> {
                 MaterialLoadingImage(
                     result = imageState,
                     contentDescription = contentDescription,
-                    fadeInEnabled = fadeIn,
                     alignment = alignment,
                     contentScale = contentScale,
-                    colorFilter = colorFilter
+                    colorFilter = colorFilter,
+                    fadeInEnabled = fadeIn,
                 )
             }
             is ImageLoadState.Error -> if (error != null) error(imageState)
             ImageLoadState.Loading -> if (loading != null) loading()
-            ImageLoadState.Empty -> Unit
+            else -> Unit
         }
     }
 }

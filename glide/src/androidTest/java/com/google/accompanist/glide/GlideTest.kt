@@ -18,6 +18,7 @@ package com.google.accompanist.glide
 
 import android.graphics.drawable.ShapeDrawable
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -28,6 +29,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -45,7 +47,6 @@ import androidx.test.filters.LargeTest
 import androidx.test.filters.SdkSuppress
 import com.bumptech.glide.Glide
 import com.google.accompanist.glide.test.R
-import com.google.accompanist.imageloading.Image
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.isFinalState
 import com.google.accompanist.imageloading.test.ImageMockWebServer
@@ -94,11 +95,11 @@ class GlideTest {
         var requestCompleted by mutableStateOf(false)
 
         composeTestRule.setContent {
-            val state = rememberGlideImageState(server.url("/image").toString())
-            LaunchedOnRequestComplete(state) { requestCompleted = true }
+            val painter = rememberGlidePainter(server.url("/image").toString())
+            LaunchedOnRequestComplete(painter) { requestCompleted = true }
 
             Image(
-                state = state,
+                painter = painter,
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -120,11 +121,11 @@ class GlideTest {
         var requestCompleted by mutableStateOf(false)
 
         composeTestRule.setContent {
-            val state = rememberGlideImageState(R.drawable.red_rectangle)
-            LaunchedOnRequestComplete(state) { requestCompleted = true }
+            val painter = rememberGlidePainter(R.drawable.red_rectangle)
+            LaunchedOnRequestComplete(painter) { requestCompleted = true }
 
             Image(
-                state = state,
+                painter = painter,
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -148,11 +149,11 @@ class GlideTest {
         var requestCompleted by mutableStateOf(false)
 
         composeTestRule.setContent {
-            val state = rememberGlideImageState(resourceUri(R.drawable.red_rectangle))
-            LaunchedOnRequestComplete(state) { requestCompleted = true }
+            val painter = rememberGlidePainter(resourceUri(R.drawable.red_rectangle))
+            LaunchedOnRequestComplete(painter) { requestCompleted = true }
 
             Image(
-                state = state,
+                painter = painter,
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -180,7 +181,7 @@ class GlideTest {
                 .addDefaultRequestListener(SimpleRequestListener { requestCompleted = true })
 
             Image(
-                state = rememberGlideImageState(
+                painter = rememberGlidePainter(
                     server.url("/image").toString(),
                     requestManager = glide,
                 ),
@@ -204,7 +205,7 @@ class GlideTest {
 
             CompositionLocalProvider(LocalRequestManager provides glide) {
                 Image(
-                    state = rememberGlideImageState(server.url("/image").toString()),
+                    painter = rememberGlidePainter(server.url("/image").toString()),
                     contentDescription = null,
                     modifier = Modifier.size(128.dp, 128.dp),
                 )
@@ -223,11 +224,11 @@ class GlideTest {
         var requestCompleted by mutableStateOf(false)
 
         composeTestRule.setContent {
-            val state = rememberGlideImageState(data.toString())
-            LaunchedOnRequestComplete(state) { requestCompleted = true }
+            val painter = rememberGlidePainter(data.toString())
+            LaunchedOnRequestComplete(painter) { requestCompleted = true }
 
             Image(
-                state = state,
+                painter = painter,
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -271,18 +272,18 @@ class GlideTest {
             var size by mutableStateOf(128.dp)
 
             composeTestRule.setContent {
-                val state = rememberGlideImageState(server.url("/red").toString())
+                val painter = rememberGlidePainter(server.url("/red").toString())
 
                 Image(
-                    state = state,
+                    painter = painter,
                     contentDescription = null,
                     modifier = Modifier
                         .size(size)
                         .testTag(GlideTestTags.Image),
                 )
 
-                LaunchedEffect(state) {
-                    snapshotFlow { state.loadState }
+                LaunchedEffect(painter) {
+                    snapshotFlow { painter.loadState }
                         .filter { it.isFinalState() }
                         .onCompletion { loadStates.cancel() }
                         .collect { loadStates.send(it) }
@@ -311,11 +312,11 @@ class GlideTest {
         var requestCompleted by mutableStateOf(false)
 
         composeTestRule.setContent {
-            val state = rememberGlideImageState(server.url("/image").toString())
-            LaunchedOnRequestComplete(state) { requestCompleted = true }
+            val painter = rememberGlidePainter(server.url("/image").toString())
+            LaunchedOnRequestComplete(painter) { requestCompleted = true }
 
             Image(
-                state = state,
+                painter = painter,
                 contentDescription = null,
                 modifier = Modifier.testTag(GlideTestTags.Image),
             )
@@ -335,8 +336,8 @@ class GlideTest {
     fun basicLoad_error() {
         composeTestRule.setContent {
             Image(
-                state = rememberGlideImageState(
-                    data = server.url("/noimage"),
+                painter = rememberGlidePainter(
+                    request = server.url("/noimage"),
                     requestBuilder = {
                         // Display a red rectangle when errors occur
                         error(R.drawable.red_rectangle)
@@ -359,15 +360,43 @@ class GlideTest {
     }
 
     @Test
+    @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
+    fun previewPlaceholder() {
+        composeTestRule.setContent {
+            CompositionLocalProvider(LocalInspectionMode provides true) {
+                Image(
+                    painter = rememberGlidePainter(
+                        request = "blah",
+                        previewPlaceholder = R.drawable.red_rectangle_raster,
+                    ),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(128.dp, 128.dp)
+                        .testTag(GlideTestTags.Image),
+                )
+            }
+        }
+
+        composeTestRule.onNodeWithTag(GlideTestTags.Image)
+            .assertWidthIsEqualTo(128.dp)
+            .assertHeightIsEqualTo(128.dp)
+            .assertIsDisplayed()
+            .captureToImage()
+            // We're probably scaling a bitmap up in size, so increase the tolerance to 5%
+            // to not fail due to small scaling artifacts
+            .assertPixels(Color.Red, tolerance = 0.05f)
+    }
+
+    @Test
     fun errorStillHasSize() {
         var requestCompleted by mutableStateOf(false)
 
         composeTestRule.setContent {
-            val state = rememberGlideImageState(server.url("/noimage").toString())
-            LaunchedOnRequestComplete(state) { requestCompleted = true }
+            val painter = rememberGlidePainter(server.url("/noimage").toString())
+            LaunchedOnRequestComplete(painter) { requestCompleted = true }
 
             Image(
-                state = state,
+                painter = painter,
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -389,8 +418,8 @@ class GlideTest {
     fun data_drawable_throws() {
         composeTestRule.setContent {
             Image(
-                state = rememberGlideImageState(
-                    data = ShapeDrawable(),
+                painter = rememberGlidePainter(
+                    request = ShapeDrawable(),
                 ),
                 contentDescription = null,
                 modifier = Modifier.size(128.dp, 128.dp),
@@ -402,7 +431,7 @@ class GlideTest {
     fun data_imagebitmap_throws() {
         composeTestRule.setContent {
             Image(
-                state = rememberGlideImageState(
+                painter = rememberGlidePainter(
                     painterResource(android.R.drawable.ic_delete),
                 ),
                 contentDescription = null,
@@ -415,7 +444,7 @@ class GlideTest {
     fun data_imagevector_throws() {
         composeTestRule.setContent {
             Image(
-                state = rememberGlideImageState(
+                painter = rememberGlidePainter(
                     painterResource(R.drawable.ic_android_black_24dp),
                 ),
                 contentDescription = null,
@@ -428,7 +457,7 @@ class GlideTest {
     fun data_painter_throws() {
         composeTestRule.setContent {
             Image(
-                state = rememberGlideImageState(ColorPainter(Color.Magenta)),
+                painter = rememberGlidePainter(ColorPainter(Color.Magenta)),
                 contentDescription = null,
                 modifier = Modifier.size(128.dp, 128.dp),
             )
@@ -439,7 +468,7 @@ class GlideTest {
     fun error_stoppedThenResumed() {
         composeTestRule.setContent {
             Image(
-                state = rememberGlideImageState(data = ""),
+                painter = rememberGlidePainter(request = ""),
                 contentDescription = null,
                 modifier = Modifier.size(128.dp, 128.dp),
             )

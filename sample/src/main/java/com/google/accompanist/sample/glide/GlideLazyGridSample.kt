@@ -20,6 +20,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.GridCells
@@ -32,8 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
-import com.google.accompanist.glide.rememberGlideImageState
-import com.google.accompanist.imageloading.Image
+import com.google.accompanist.glide.rememberGlidePainter
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.toPaddingValues
@@ -77,9 +77,11 @@ private fun Sample() {
         ) {
             items(NumberItems) { index ->
                 Image(
-                    state = rememberGlideImageState(rememberRandomSampleImageUrl(index)),
+                    painter = rememberGlidePainter(
+                        request = rememberRandomSampleImageUrl(index),
+                        fadeIn = true,
+                    ),
                     contentDescription = null,
-                    fadeIn = true,
                     modifier = Modifier
                         .aspectRatio(1f)
                         .fillMaxWidth(),
