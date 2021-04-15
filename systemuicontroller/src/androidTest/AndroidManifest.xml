@@ -19,10 +19,8 @@
 
     <uses-sdk android:targetSdkVersion="30" />
 
-    <application>
-        <activity
-            android:name="com.google.accompanist.systemuicontroller.SystemUIControllerTestActivity"
-            android:theme="@android:style/Theme.Material.NoActionBar" />
+    <application android:theme="@android:style/Theme.Material.NoActionBar">
+        <activity android:name="androidx.activity.ComponentActivity" />
     </application>
 
 </manifest>
