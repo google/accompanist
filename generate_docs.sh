@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Copyright 2021 The Android Open Source Project
 #
@@ -13,6 +13,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# Fail on any error
+set -ex
 
 DOCS_ROOT=docs-gen
 
@@ -32,7 +35,7 @@ sed -i.bak 's/$dokka.linkExtension:md/$dokka.linkExtension:html/g' package-list-
 # Clear out the old API docs
 [ -d docs/api ] && rm -r docs/api
 # Build the docs with dokka
-./gradlew clean dokkaHtmlMultiModule || exit 1
+./gradlew clean dokkaHtmlMultiModule
 
 # Re-word the Dokka call out
 find docs/api/ -type f -name '*.html' -exec sed -i -e 's/Sponsored and developed/Documentation generated/g' {} \;
