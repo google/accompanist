@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-@file:JvmName("CoilImage")
-@file:JvmMultifileClass
-
 package com.google.accompanist.coil
 
 import android.content.Context
+import android.graphics.drawable.Drawable
+import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,18 +37,21 @@ import coil.request.ImageResult
 import coil.size.Precision
 import com.google.accompanist.imageloading.DataSource
 import com.google.accompanist.imageloading.ImageLoadState
-import com.google.accompanist.imageloading.ImageState
+import com.google.accompanist.imageloading.LoadPainter
+import com.google.accompanist.imageloading.LoadPainterDefaults
+import com.google.accompanist.imageloading.Loader
+import com.google.accompanist.imageloading.rememberLoadPainter
 
 /**
  * Composition local containing the preferred [ImageLoader] to be used by
- * [rememberCoilImageState].
+ * [rememberCoilPainter].
  */
 val LocalImageLoader = staticCompositionLocalOf<ImageLoader?> { null }
 
 /**
- * Contains some default values used by [rememberCoilImageState].
+ * Contains some default values used by [rememberCoilPainter].
  */
-object CoilImageStateDefaults {
+object CoilPainterDefaults {
     /**
      * Returns the default [ImageLoader] value for the `imageLoader` parameter in [CoilImage].
      */
@@ -61,75 +62,61 @@ object CoilImageStateDefaults {
 }
 
 /**
- * Creates a [CoilImageState] that is remembered across compositions.
+ * Remembers a [LoadPainter] that use [coil.Coil] to load images.
  *
- * Changes to the provided values for [imageLoader] and [context] will **not** result
- * in the state being recreated or changed in any way if it has already been created.
- * Changes to [data], [shouldRefetchOnSizeChange] & [requestBuilder] will result in
- * the [CoilImageState] being updated.
+ * Changes to [request], [imageLoader], [shouldRefetchOnSizeChange] & [requestBuilder] will result in
+ * the [LoadPainter] being updated.
  *
- * @param data the value for [CoilImageState.data]
- * @param imageLoader the value for [CoilImageState.imageLoader]
- * @param context the initial value for [CoilImageState.context]
- * @param shouldRefetchOnSizeChange the value for [CoilImageState.shouldRefetchOnSizeChange]
- * @param requestBuilder the value for [CoilImageState.requestBuilder]
+ * @param request The load request. See [ImageRequest.Builder.data] for the types supported.
+ * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to
+ * [CoilPainterDefaults.defaultImageLoader].
+ * @param shouldRefetchOnSizeChange the value for [LoadPainter.shouldRefetchOnSizeChange].
+ * @param requestBuilder Optional builder for each created [ImageRequest].
+ * @param fadeIn Whether to run a fade-in animation when images are successfully loaded.
+ * Default: `false`.
+ * @param fadeInDurationMs Duration for the fade animation in milliseconds when [fadeIn] is enabled.
+ * @param previewPlaceholder Drawable resource ID which will be displayed when this function is
+ * ran in preview mode.
  */
 @Composable
-fun rememberCoilImageState(
-    data: Any?,
-    imageLoader: ImageLoader = CoilImageStateDefaults.defaultImageLoader(),
-    context: Context = LocalContext.current,
+fun rememberCoilPainter(
+    request: Any?,
+    imageLoader: ImageLoader = CoilPainterDefaults.defaultImageLoader(),
     shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
-): CoilImageState = remember(imageLoader, context) {
-    CoilImageState(
-        imageLoader = imageLoader,
-        context = context,
+    fadeIn: Boolean = false,
+    fadeInDurationMs: Int = LoadPainterDefaults.FadeInTransitionDuration,
+    @DrawableRes previewPlaceholder: Int = 0,
+): LoadPainter<Any> {
+    // Remember and update a CoilLoader
+    val context = LocalContext.current
+    val coilLoader = remember {
+        CoilLoader(context, imageLoader, requestBuilder)
+    }.apply {
+        this.context = context
+        this.imageLoader = imageLoader
+        this.requestBuilder = requestBuilder
+    }
+    return rememberLoadPainter(
+        loader = coilLoader,
+        request = checkData(request),
         shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
+        fadeIn = fadeIn,
+        fadeInDurationMs = fadeInDurationMs,
+        previewPlaceholder = previewPlaceholder,
     )
-}.apply {
-    this.data = data
-    this.requestBuilder = requestBuilder
-    this.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
 }
 
-/**
- * A state object that can be hoisted for [com.google.accompanist.imageloading.Image]
- * to load images using [coil.Coil].
- *
- * In most cases, this will be created via [rememberCoilImageState].
- *
- * @param imageLoader The [ImageLoader] to use when requesting the image. Defaults to
- * [CoilImageStateDefaults.defaultImageLoader].
- * @param context The Android [Context] to use when creating [ImageRequest]s.
- * @param shouldRefetchOnSizeChange the value for [CoilImageState.shouldRefetchOnSizeChange].
- */
-@Stable
-class CoilImageState(
-    private val imageLoader: ImageLoader,
-    private val context: Context,
-    shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
-) : ImageState<Any>(shouldRefetchOnSizeChange) {
-    private var currentData by mutableStateOf<Any?>(null)
+internal class CoilLoader(
+    context: Context,
+    imageLoader: ImageLoader,
+    requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)?,
+) : Loader<Any> {
+    var context by mutableStateOf(context)
+    var imageLoader by mutableStateOf(imageLoader)
+    var requestBuilder by mutableStateOf(requestBuilder)
 
-    override val request: Any?
-        get() = currentData
-
-    /**
-     * Holds an optional builder for every created [ImageRequest].
-     */
-    var requestBuilder by mutableStateOf<(ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)?>(null)
-
-    /**
-     * The data to load. See [ImageRequest.Builder.data] for the types supported.
-     */
-    var data: Any?
-        get() = currentData
-        set(value) {
-            currentData = checkData(value)
-        }
-
-    override suspend fun executeRequest(request: Any, size: IntSize): ImageLoadState {
+    override suspend fun load(request: Any, size: IntSize): ImageLoadState {
         val baseRequest = when (request) {
             // If we've been given an ImageRequest instance, use it...
             is ImageRequest -> request.newBuilder()
@@ -154,9 +141,11 @@ class CoilImageState(
             size.width < 0 || size.height < 0 -> baseRequest
             // If we have a non-zero size, we can modify the request to include the size
             size.width > 0 && size.height > 0 -> {
-                baseRequest.newBuilder().size(size.width, size.height).build()
+                baseRequest.newBuilder()
+                    .size(size.width, size.height)
+                    .build()
             }
-            // Otherwise we have a zero size, so no point executing a request so return empty now
+            // Otherwise we have a zero size, so no point executing a request
             else -> return ImageLoadState.Empty
         }
 
@@ -190,7 +179,7 @@ private fun coil.decode.DataSource.toDataSource(): DataSource = when (this) {
 
 private fun checkData(data: Any?): Any? {
     when (data) {
-        is android.graphics.drawable.Drawable -> {
+        is Drawable -> {
             throw IllegalArgumentException(
                 "Unsupported type: Drawable." +
                     " If you wish to load a drawable, pass in the resource ID."

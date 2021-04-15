@@ -62,6 +62,7 @@ internal const val DefaultTransitionDuration = 1000
  * @param fadeInEnabled Whether the fade-in animation should be used or not.
  * @param fadeInDurationMs The duration of the fade-in animation in milliseconds.
  */
+@Deprecated("Migrate to rememberCoilPainter() or rememberGlidePainter()")
 @Composable
 fun MaterialLoadingImage(
     asset: ImageBitmap,
@@ -73,6 +74,7 @@ fun MaterialLoadingImage(
     fadeInEnabled: Boolean = true,
     fadeInDurationMs: Int = DefaultTransitionDuration
 ) {
+    @Suppress("DEPRECATION")
     MaterialLoadingImage(
         painter = BitmapPainter(asset),
         contentDescription = contentDescription,
@@ -106,6 +108,7 @@ fun MaterialLoadingImage(
  * @param fadeInEnabled Whether the fade-in animation should be used or not.
  * @param fadeInDurationMs The duration of the fade-in animation in milliseconds.
  */
+@Deprecated("Migrate to rememberCoilPainter() or rememberGlidePainter()")
 @Composable
 fun MaterialLoadingImage(
     painter: Painter,
@@ -166,6 +169,7 @@ fun MaterialLoadingImage(
  * @param fadeInEnabled Whether the fade-in animation should be used or not.
  * @param fadeInDurationMs The duration of the fade-in animation in milliseconds.
  */
+@Deprecated("Migrate to rememberCoilPainter() or rememberGlidePainter()")
 @Composable
 fun MaterialLoadingImage(
     result: ImageLoadState.Success,
@@ -178,6 +182,7 @@ fun MaterialLoadingImage(
     fadeInEnabled: Boolean = true,
     fadeInDurationMs: Int = DefaultTransitionDuration
 ) {
+    @Suppress("DEPRECATION")
     MaterialLoadingImage(
         painter = rememberDrawablePainter(result.result),
         contentDescription = contentDescription,

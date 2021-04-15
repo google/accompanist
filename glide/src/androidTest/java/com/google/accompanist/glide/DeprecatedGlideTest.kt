@@ -445,7 +445,7 @@ class DeprecatedGlideTest {
         composeTestRule.onNodeWithTag(GlideTestTags.Image)
             .assertIsDisplayed()
             .captureToImage()
-            .assertPixels(Color.Cyan)
+            .assertPixels(Color.Cyan, 0.05f)
     }
 
     @Test

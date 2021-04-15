@@ -18,6 +18,7 @@ package com.google.accompanist.coil
 
 import android.graphics.drawable.ShapeDrawable
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -28,6 +29,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.test.assertHeightIsAtLeast
@@ -49,7 +51,6 @@ import coil.request.CachePolicy
 import coil.request.ImageRequest
 import coil.request.ImageResult
 import com.google.accompanist.coil.test.R
-import com.google.accompanist.imageloading.Image
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.isFinalState
 import com.google.accompanist.imageloading.test.ImageMockWebServer
@@ -111,7 +112,7 @@ class CoilTest {
     fun basicLoad_http() {
         composeTestRule.setContent {
             Image(
-                state = rememberCoilImageState(server.url("/image")),
+                painter = rememberCoilPainter(server.url("/image")),
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -130,7 +131,7 @@ class CoilTest {
     fun basicLoad_drawableId() {
         composeTestRule.setContent {
             Image(
-                state = rememberCoilImageState(R.drawable.red_rectangle),
+                painter = rememberCoilPainter(R.drawable.red_rectangle),
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -151,7 +152,7 @@ class CoilTest {
     fun basicLoad_drawableUri() {
         composeTestRule.setContent {
             Image(
-                state = rememberCoilImageState(resourceUri(R.drawable.red_rectangle)),
+                painter = rememberCoilPainter(resourceUri(R.drawable.red_rectangle)),
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -184,8 +185,8 @@ class CoilTest {
 
         composeTestRule.setContent {
             Image(
-                state = rememberCoilImageState(
-                    data = server.url("/image"),
+                painter = rememberCoilPainter(
+                    request = server.url("/image"),
                     imageLoader = imageLoader,
                 ),
                 contentDescription = null,
@@ -216,7 +217,7 @@ class CoilTest {
         composeTestRule.setContent {
             CompositionLocalProvider(LocalImageLoader provides imageLoader) {
                 Image(
-                    state = rememberCoilImageState(server.url("/image")),
+                    painter = rememberCoilPainter(server.url("/image")),
                     contentDescription = null,
                     modifier = Modifier.size(128.dp, 128.dp),
                 )
@@ -235,7 +236,7 @@ class CoilTest {
 
         composeTestRule.setContent {
             Image(
-                state = rememberCoilImageState(data),
+                painter = rememberCoilPainter(data),
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -272,18 +273,18 @@ class CoilTest {
             var size by mutableStateOf(128.dp)
 
             composeTestRule.setContent {
-                val state = rememberCoilImageState(server.url("/red"))
+                val painter = rememberCoilPainter(server.url("/red"))
 
                 Image(
-                    state = state,
+                    painter = painter,
                     contentDescription = null,
                     modifier = Modifier
                         .size(size)
                         .testTag(CoilTestTags.Image),
                 )
 
-                LaunchedEffect(state) {
-                    snapshotFlow { state.loadState }
+                LaunchedEffect(painter) {
+                    snapshotFlow { painter.loadState }
                         .filter { it.isFinalState() }
                         .onCompletion { loadStates.cancel() }
                         .collect { loadStates.send(it) }
@@ -311,7 +312,7 @@ class CoilTest {
     fun basicLoad_nosize() {
         composeTestRule.setContent {
             Image(
-                state = rememberCoilImageState(server.url("/image")),
+                painter = rememberCoilPainter(server.url("/image")),
                 contentDescription = null,
                 modifier = Modifier.testTag(CoilTestTags.Image),
             )
@@ -328,8 +329,8 @@ class CoilTest {
     fun basicLoad_error() {
         composeTestRule.setContent {
             Image(
-                state = rememberCoilImageState(
-                    data = server.url("/noimage"),
+                painter = rememberCoilPainter(
+                    request = server.url("/noimage"),
                     requestBuilder = {
                         // Display a red rectangle when errors occur
                         error(R.drawable.red_rectangle)
@@ -352,10 +353,38 @@ class CoilTest {
     }
 
     @Test
+    @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
+    fun previewPlaceholder() {
+        composeTestRule.setContent {
+            CompositionLocalProvider(LocalInspectionMode provides true) {
+                Image(
+                    painter = rememberCoilPainter(
+                        request = "blah",
+                        previewPlaceholder = R.drawable.red_rectangle_raster,
+                    ),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(128.dp, 128.dp)
+                        .testTag(CoilTestTags.Image),
+                )
+            }
+        }
+
+        composeTestRule.onNodeWithTag(CoilTestTags.Image)
+            .assertWidthIsEqualTo(128.dp)
+            .assertHeightIsEqualTo(128.dp)
+            .assertIsDisplayed()
+            .captureToImage()
+            // We're probably scaling a bitmap up in size, so increase the tolerance to 5%
+            // to not fail due to small scaling artifacts
+            .assertPixels(Color.Red, tolerance = 0.05f)
+    }
+
+    @Test
     fun errorStillHasSize() {
         composeTestRule.setContent {
             Image(
-                state = rememberCoilImageState(server.url("/noimage")),
+                painter = rememberCoilPainter(server.url("/noimage")),
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp, 128.dp)
@@ -374,8 +403,8 @@ class CoilTest {
     fun data_drawable_throws() {
         composeTestRule.setContent {
             Image(
-                state = rememberCoilImageState(
-                    data = ShapeDrawable(),
+                painter = rememberCoilPainter(
+                    request = ShapeDrawable(),
                 ),
                 contentDescription = null,
                 modifier = Modifier.size(128.dp, 128.dp),
@@ -387,7 +416,7 @@ class CoilTest {
     fun data_imagebitmap_throws() {
         composeTestRule.setContent {
             Image(
-                state = rememberCoilImageState(
+                painter = rememberCoilPainter(
                     painterResource(android.R.drawable.ic_delete),
                 ),
                 contentDescription = null,
@@ -400,7 +429,7 @@ class CoilTest {
     fun data_imagevector_throws() {
         composeTestRule.setContent {
             Image(
-                state = rememberCoilImageState(
+                painter = rememberCoilPainter(
                     painterResource(R.drawable.ic_android_black_24dp),
                 ),
                 contentDescription = null,
@@ -413,7 +442,7 @@ class CoilTest {
     fun data_painter_throws() {
         composeTestRule.setContent {
             Image(
-                state = rememberCoilImageState(ColorPainter(Color.Magenta)),
+                painter = rememberCoilPainter(ColorPainter(Color.Magenta)),
                 contentDescription = null,
                 modifier = Modifier.size(128.dp, 128.dp),
             )

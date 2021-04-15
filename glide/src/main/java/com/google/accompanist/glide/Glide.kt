@@ -17,8 +17,8 @@
 package com.google.accompanist.glide
 
 import android.graphics.drawable.Drawable
+import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,20 +37,23 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.google.accompanist.imageloading.DataSource
 import com.google.accompanist.imageloading.ImageLoadState
-import com.google.accompanist.imageloading.ImageState
+import com.google.accompanist.imageloading.LoadPainter
+import com.google.accompanist.imageloading.LoadPainterDefaults
+import com.google.accompanist.imageloading.Loader
+import com.google.accompanist.imageloading.rememberLoadPainter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 
 /**
  * Composition local containing the preferred [RequestManager] to use
- * for [rememberGlideImageState].
+ * for [rememberGlidePainter].
  */
 val LocalRequestManager = staticCompositionLocalOf<RequestManager?> { null }
 
 /**
- * Contains some default values used for [GlideImageState].
+ * Contains some default values used for [rememberGlidePainter].
  */
-object GlideImageStateDefaults {
+object GlidePainterDefaults {
     /**
      * Returns the default [RequestManager] value for the `requestManager` parameter
      * in [GlideImage].
@@ -65,67 +68,57 @@ object GlideImageStateDefaults {
 }
 
 /**
- * Creates a [GlideImageState] that is remembered across compositions.
+ * Remembers a [LoadPainter] that use [Glide] to load images.
  *
- * Changes to the provided values for [requestManager] will **not** result
- * in the state being recreated or changed in any way if it has already been created.
- * Changes to [data], [shouldRefetchOnSizeChange] & [requestBuilder] will result in
- * the [GlideImageState] being updated.
+ * Changes to [request], [requestManager], [shouldRefetchOnSizeChange] & [requestBuilder] will result
+ * in the [LoadPainter] being updated.
  *
- * @param data the value for [GlideImageState.data]
- * @param requestManager the initial value for [GlideImageState.requestManager]
- * @param shouldRefetchOnSizeChange the value for [GlideImageState.shouldRefetchOnSizeChange]
- * @param requestBuilder the value for [GlideImageState.requestBuilder]
+ * @param request The load request. See [RequestManager.load] for the types supported.
+ * @param requestManager The [RequestManager] to use when requesting the image.
+ * @param shouldRefetchOnSizeChange the value for [LoadPainter.shouldRefetchOnSizeChange].
+ * @param requestBuilder Optional builder for every created [RequestBuilder].
+ * @param fadeIn Whether to run a fade-in animation when images are successfully loaded.
+ * Default: `false`.
+ * @param fadeInDurationMs Duration for the fade animation in milliseconds when [fadeIn] is enabled.
+ * @param previewPlaceholder Drawable resource ID which will be displayed when this function is
+ * ran in preview mode.
  */
 @Composable
-fun rememberGlideImageState(
-    data: Any?,
-    requestManager: RequestManager = GlideImageStateDefaults.defaultRequestManager(),
+fun rememberGlidePainter(
+    request: Any?,
+    requestManager: RequestManager = GlidePainterDefaults.defaultRequestManager(),
     shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
     requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)? = null,
-): GlideImageState = remember(requestManager) {
-    GlideImageState(requestManager, shouldRefetchOnSizeChange)
-}.apply {
-    this.data = data
-    this.requestBuilder = requestBuilder
-    this.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
+    fadeIn: Boolean = false,
+    fadeInDurationMs: Int = LoadPainterDefaults.FadeInTransitionDuration,
+    @DrawableRes previewPlaceholder: Int = 0,
+): LoadPainter<Any> {
+    // Remember and update a GlideLoader
+    val glideLoader = remember {
+        GlideLoader(requestManager, requestBuilder)
+    }.apply {
+        this.requestManager = requestManager
+        this.requestBuilder = requestBuilder
+    }
+    return rememberLoadPainter(
+        loader = glideLoader,
+        request = checkData(request),
+        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
+        fadeIn = fadeIn,
+        fadeInDurationMs = fadeInDurationMs,
+        previewPlaceholder = previewPlaceholder
+    )
 }
 
-/**
- * A state object that can be hoisted for [com.google.accompanist.imageloading.Image]
- * to load images using [Glide].
- *
- * In most cases, this will be created via [rememberGlideImageState].
- *
- * @param requestManager The [RequestManager] to use when requesting the image.
- * @param shouldRefetchOnSizeChange Initial value for [GlideImageState.shouldRefetchOnSizeChange]
- */
-@Stable
-class GlideImageState(
-    private val requestManager: RequestManager,
-    shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean,
-) : ImageState<Any>(shouldRefetchOnSizeChange) {
-    private var currentData by mutableStateOf<Any?>(null)
-
-    override val request: Any?
-        get() = currentData
-
-    /**
-     * The data to load. See [RequestManager.load] for the types supported.
-     */
-    var data: Any?
-        get() = currentData
-        set(value) {
-            currentData = checkData(value)
-        }
-
-    /**
-     * Holds an optional builder for every created [RequestBuilder].
-     */
-    var requestBuilder by mutableStateOf<(RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)?>(null)
+internal class GlideLoader(
+    requestManager: RequestManager,
+    requestBuilder: (RequestBuilder<Drawable>.(size: IntSize) -> RequestBuilder<Drawable>)?,
+) : Loader<Any> {
+    var requestManager by mutableStateOf(requestManager)
+    var requestBuilder by mutableStateOf(requestBuilder)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override suspend fun executeRequest(
+    override suspend fun load(
         request: Any,
         size: IntSize
     ): ImageLoadState = suspendCancellableCoroutine { cont ->

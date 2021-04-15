@@ -19,6 +19,7 @@ package com.google.accompanist.sample.glide
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -34,8 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.glide.rememberGlideImageState
-import com.google.accompanist.imageloading.Image
+import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.rememberRandomSampleImageUrl
@@ -67,7 +67,10 @@ private fun Sample() {
             items(NumberItems) { index ->
                 Row(Modifier.padding(16.dp)) {
                     Image(
-                        state = rememberGlideImageState(rememberRandomSampleImageUrl(index)),
+                        painter = rememberCoilPainter(
+                            request = rememberRandomSampleImageUrl(index),
+                            fadeIn = true,
+                        ),
                         contentDescription = null,
                         modifier = Modifier.size(64.dp),
                     )
