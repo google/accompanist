@@ -23,6 +23,9 @@
         <activity
             android:name="com.google.accompanist.insets.InsetsTestActivity"
             android:theme="@android:style/Theme.Material.NoActionBar" />
+
+        <activity android:name="androidx.activity.ComponentActivity" />
+
     </application>
 
 </manifest>
