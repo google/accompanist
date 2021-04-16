@@ -37,8 +37,8 @@ Now edit the project to depend on the new Compose SNAPSHOT version:
 
 Edit [dependencies.kt](https://github.com/google/accompanist/blob/main/buildSrc/src/main/java/com/google/accompanist/buildsrc/dependencies.kt):
 
-1. Update the `Libs.AndroidX.Compose.snapshot` property to be the snapshot number
-2. Ensure that the `Libs.AndroidX.Compose.version` property is correct
+1. Update the `libs.compose.snapshot` property to be the snapshot number
+2. Ensure that the `libs.compose.version` property is correct
 
 Make sure the project builds and test pass:
 ```
@@ -72,8 +72,8 @@ git merge snapshot
 
 Edit [dependencies.kt](https://github.com/google/accompanist/blob/main/buildSrc/src/main/java/com/google/accompanist/buildsrc/dependencies.kt):
 
-1. Update the `Libs.AndroidX.Compose.snapshot` property to be an empty string (`val snapshot = ""`)
-2. Update the `Libs.AndroidX.Compose.version` property to the new Compose version (`1.0.0-alpha03` for example).
+1. Update the `libs.compose.snapshot` property to be an empty string (`val snapshot = ""`)
+2. Update the `libs.compose.version` property to the new Compose version (`1.0.0-alpha03` for example).
 
 Make sure the project builds and test pass:
 ```
