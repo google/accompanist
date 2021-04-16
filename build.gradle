@@ -58,8 +58,9 @@ allprojects {
         mavenCentral()
         jcenter()
 
-        if (!Libs.AndroidX.Compose.snapshot.isEmpty()) {
-            maven { url Libs.AndroidX.Compose.snapshotUrl }
+        def composeSnapshot = libs.versions.composesnapshot.get()
+        if (composeSnapshot.length() > 1) {
+            maven { url "https://androidx.dev/snapshots/builds/$composeSnapshot/artifacts/repository/" }
         }
     }
 }
@@ -166,15 +167,13 @@ subprojects {
             }
         }
 
-        if (!Libs.AndroidX.Compose.snapshot.isEmpty()) {
+        def composeSnapshot = libs.versions.composesnapshot.get()
+        if (composeSnapshot.length() > 1) {
             // We're depending on a Jetpack Compose snapshot, update the library version name
             // to indicate it's from a Compose snapshot
             def versionName = project.properties.get('VERSION_NAME')
             if (versionName.contains("SNAPSHOT")) {
-                version = versionName.replace(
-                        '-SNAPSHOT',
-                        ".compose-${Libs.AndroidX.Compose.snapshot}-SNAPSHOT"
-                )
+                version = versionName.replace('-SNAPSHOT', ".compose-${composeSnapshot}-SNAPSHOT")
             }
         }
 

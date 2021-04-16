@@ -45,7 +45,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion Libs.AndroidX.Compose.version
+        kotlinCompilerExtensionVersion libs.versions.compose.get()
     }
 
     lintOptions {
@@ -67,7 +67,7 @@ android {
 }
 
 dependencies {
-    implementation Libs.AndroidX.Compose.foundation
+    implementation libs.compose.foundation.foundation
 
     implementation Libs.Coroutines.android
 }

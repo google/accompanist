@@ -61,34 +61,6 @@ object Libs {
 
         const val appcompat = "androidx.appcompat:appcompat:1.3.0-rc01"
 
-        object Compose {
-            const val snapshot = ""
-            const val version = "1.0.0-beta04"
-
-            @JvmStatic
-            val snapshotUrl: String
-                get() = when {
-                    snapshot.isNotEmpty() -> {
-                        "https://androidx.dev/snapshots/builds/$snapshot/artifacts/repository/"
-                    }
-                    else -> throw IllegalArgumentException("Snapshot version not set")
-                }
-
-            const val compiler = "androidx.compose.compiler:compiler:$version"
-
-            const val runtime = "androidx.compose.runtime:runtime:$version"
-            const val foundation = "androidx.compose.foundation:foundation:${version}"
-            const val layout = "androidx.compose.foundation:foundation-layout:${version}"
-
-            const val ui = "androidx.compose.ui:ui:${version}"
-            const val material = "androidx.compose.material:material:${version}"
-            const val iconsExtended = "androidx.compose.material:material-icons-extended:${version}"
-
-            const val util = "androidx.compose.ui:ui-util:${version}"
-            const val tooling = "androidx.compose.ui:ui-tooling:${version}"
-            const val test = "androidx.compose.ui:ui-test-junit4:${version}"
-        }
-
         const val core = "androidx.core:core:1.2.0"
         const val coreKtx = "androidx.core:core-ktx:1.2.0"
 

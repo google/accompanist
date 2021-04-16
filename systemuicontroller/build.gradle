@@ -45,7 +45,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion Libs.AndroidX.Compose.version
+        kotlinCompilerExtensionVersion libs.versions.compose.get()
     }
 
     lintOptions {
@@ -75,7 +75,7 @@ android {
 
 dependencies {
     implementation Libs.AndroidX.core1_5_0
-    implementation Libs.AndroidX.Compose.ui
+    implementation libs.compose.ui.ui
 
     // ======================
     // Test dependencies
@@ -84,8 +84,8 @@ dependencies {
     androidTestImplementation Libs.junit
     androidTestImplementation Libs.truth
 
-    androidTestImplementation Libs.AndroidX.Compose.test
-    androidTestImplementation Libs.AndroidX.Compose.ui
+    androidTestImplementation libs.compose.ui.test
+    androidTestImplementation libs.compose.ui.ui
     androidTestImplementation Libs.AndroidX.Test.rules
     androidTestImplementation Libs.AndroidX.Test.runner
 }

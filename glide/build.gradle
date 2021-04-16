@@ -45,7 +45,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion Libs.AndroidX.Compose.version
+        kotlinCompilerExtensionVersion libs.versions.compose.get()
     }
 
     lintOptions {
@@ -77,7 +77,7 @@ dependencies {
     api Libs.glide
 
     implementation Libs.AndroidX.coreKtx
-    implementation Libs.AndroidX.Compose.foundation
+    implementation libs.compose.foundation.foundation
 
     implementation Libs.Coroutines.android
 
@@ -90,9 +90,8 @@ dependencies {
     androidTestImplementation Libs.junit
     androidTestImplementation Libs.truth
 
-    androidTestImplementation Libs.AndroidX.Compose.test
-    androidTestImplementation Libs.AndroidX.Compose.ui
-    androidTestImplementation Libs.AndroidX.Compose.material
+    androidTestImplementation libs.compose.ui.test
+    androidTestImplementation libs.compose.material.material
     androidTestImplementation Libs.AndroidX.Test.rules
     androidTestImplementation Libs.AndroidX.Test.runner
 }

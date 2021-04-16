@@ -40,7 +40,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion Libs.AndroidX.Compose.version
+        kotlinCompilerExtensionVersion libs.versions.compose.get()
     }
 
     lintOptions {
@@ -66,7 +66,7 @@ dependencies {
 
     implementation Libs.AndroidX.coreKtx
 
-    implementation Libs.AndroidX.Compose.ui
+    implementation libs.compose.ui.ui
 
     implementation Libs.Kotlin.stdlib
     implementation Libs.Coroutines.android
@@ -78,7 +78,7 @@ dependencies {
 
     implementation Libs.Coroutines.test
 
-    implementation Libs.AndroidX.Compose.test
+    implementation libs.compose.ui.test
     implementation Libs.AndroidX.Test.rules
     implementation Libs.AndroidX.Test.runner
 }

@@ -44,7 +44,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion Libs.AndroidX.Compose.version
+        kotlinCompilerExtensionVersion libs.versions.compose.get()
     }
 }
 
@@ -62,11 +62,11 @@ dependencies {
 
     implementation Libs.Coil.gif
 
-    implementation Libs.AndroidX.Compose.material
-    implementation Libs.AndroidX.Compose.iconsExtended
-    implementation Libs.AndroidX.Compose.layout
-    implementation Libs.AndroidX.Compose.tooling
-    implementation Libs.AndroidX.Compose.util
+    implementation libs.compose.material.material
+    implementation libs.compose.material.iconsext
+    implementation libs.compose.foundation.layout
+    implementation libs.compose.ui.tooling
+    implementation libs.compose.ui.util
 
     implementation Libs.AndroidX.Lifecycle.viewModelCompose
     implementation Libs.AndroidX.Activity.activityCompose
