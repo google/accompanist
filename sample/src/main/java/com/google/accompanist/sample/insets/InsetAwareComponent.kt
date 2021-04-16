@@ -16,6 +16,8 @@
 
 package com.google.accompanist.sample.insets
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
@@ -138,10 +140,22 @@ fun InsetAwareScaffold(
             scaffoldState = scaffoldState,
             floatingActionButton = floatingActionButton,
             floatingActionButtonPosition = floatingActionButtonPosition,
-            bottomBar = bottomBar,
+            bottomBar = {
+                Box(
+                    modifier = Modifier
+                        .measureBottomBarSize()
+                        .animateContentSize(),
+                    content = { bottomBar() }
+                )
+            },
             content = { innerPadding ->
                 content(innerPadding)
-                topBar()
+                Box(
+                    modifier = Modifier
+                        .measureTopBarSize()
+                        .animateContentSize(),
+                    content = { topBar() }
+                )
             }
         )
     }
@@ -164,8 +178,7 @@ fun InsetAwareTopAppBar(
     Surface(
         color = backgroundColor,
         elevation = elevation,
-        modifier = modifier
-            .measureTopBarSize(),
+        modifier = modifier,
     ) {
         TopAppBar(
             title = title,
@@ -189,8 +202,7 @@ fun InsetAwareBottomNavigation(
     content: @Composable RowScope.() -> Unit,
 ) {
     Surface(
-        modifier = modifier
-            .measureBottomBarSize(),
+        modifier = modifier,
         color = backgroundColor,
         elevation = elevation,
     ) {
