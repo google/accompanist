@@ -66,7 +66,7 @@ dependencies {
     implementation libs.compose.ui.tooling
     implementation libs.compose.ui.util
 
-    implementation libs.androidx.lifecycle.viewmodelcompose
+    implementation libs.androidx.lifecycle.viewmodel.compose
     implementation libs.androidx.activity.compose
 
     implementation libs.androidx.core
