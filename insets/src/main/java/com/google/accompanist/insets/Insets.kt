@@ -43,32 +43,32 @@ import androidx.core.view.WindowInsetsCompat
  * Main holder of our inset values.
  */
 @Stable
-data class WindowInsets(
+class WindowInsets {
     /**
      * Inset values which match [WindowInsetsCompat.Type.systemBars]
      */
-    val systemBars: InsetsType = InsetsType(),
+    val systemBars: InsetsType = InsetsType()
 
     /**
      * Inset values which match [WindowInsetsCompat.Type.systemGestures]
      */
-    val systemGestures: InsetsType = InsetsType(),
+    val systemGestures: InsetsType = InsetsType()
 
     /**
      * Inset values which match [WindowInsetsCompat.Type.navigationBars]
      */
-    val navigationBars: InsetsType = InsetsType(),
+    val navigationBars: InsetsType = InsetsType()
 
     /**
      * Inset values which match [WindowInsetsCompat.Type.statusBars]
      */
-    val statusBars: InsetsType = InsetsType(),
+    val statusBars: InsetsType = InsetsType()
 
     /**
      * Inset values which match [WindowInsetsCompat.Type.ime]
      */
     val ime: InsetsType = InsetsType()
-)
+}
 
 /**
  * Represents the values for a type of insets, and stores information about the layout insets,
@@ -161,28 +161,6 @@ class InsetsType : Insets {
             animationFraction = 0f
         }
     }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as InsetsType
-
-        if (ongoingAnimationsCount != other.ongoingAnimationsCount) return false
-        if (_layoutInsets != other._layoutInsets) return false
-        if (_animatedInsets != other._animatedInsets) return false
-        if (isVisible != other.isVisible) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = ongoingAnimationsCount
-        result = 31 * result + _layoutInsets.hashCode()
-        result = 31 * result + _animatedInsets.hashCode()
-        result = 31 * result + isVisible.hashCode()
-        return result
-    }
 }
 
 @Stable
@@ -257,29 +235,6 @@ internal class MutableInsets(
         right = 0
         bottom = 0
     }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as MutableInsets
-
-        if (left != other.left) return false
-        if (top != other.top) return false
-        if (right != other.right) return false
-        if (bottom != other.bottom) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = left
-        result = 31 * result + top
-        result = 31 * result + right
-        result = 31 * result + bottom
-        return result
-    }
-
 }
 
 /**
