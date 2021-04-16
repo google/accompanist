@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import com.google.accompanist.buildsrc.Libs
-
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
@@ -81,13 +79,12 @@ dependencies {
     // Test dependencies
     // ======================
 
-    androidTestImplementation Libs.junit
-    androidTestImplementation Libs.truth
+    androidTestImplementation libs.junit
+    androidTestImplementation libs.truth
 
     androidTestImplementation libs.compose.ui.test
     androidTestImplementation libs.compose.foundation.foundation
-    androidTestImplementation Libs.AndroidX.Test.rules
-    androidTestImplementation Libs.AndroidX.Test.runner
+    androidTestImplementation libs.androidx.test.runner
 }
 
 apply plugin: "com.vanniktech.maven.publish"

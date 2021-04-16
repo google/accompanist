@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import com.google.accompanist.buildsrc.Libs
-
 apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
@@ -58,9 +56,9 @@ dependencies {
     implementation project(':systemuicontroller')
     implementation project(':swiperefresh')
 
-    implementation Libs.AndroidX.appcompat
+    implementation libs.androidx.appcompat
 
-    implementation Libs.Coil.gif
+    implementation libs.coil.gif
 
     implementation libs.compose.material.material
     implementation libs.compose.material.iconsext
@@ -68,12 +66,12 @@ dependencies {
     implementation libs.compose.ui.tooling
     implementation libs.compose.ui.util
 
-    implementation Libs.AndroidX.Lifecycle.viewModelCompose
-    implementation Libs.AndroidX.Activity.activityCompose
+    implementation libs.androidx.lifecycle.viewmodelcompose
+    implementation libs.androidx.activity.compose
 
-    implementation Libs.AndroidX.coreKtx
-    implementation Libs.AndroidX.fragmentKtx
-    implementation Libs.AndroidX.Lifecycle.lifecycleKtx
+    implementation libs.androidx.core
+    implementation libs.androidx.fragment
+    implementation libs.androidx.lifecycle.runtime
 
-    implementation Libs.Kotlin.stdlib
+    implementation libs.kotlin.stdlib
 }

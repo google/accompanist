@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import com.google.accompanist.buildsrc.Libs
-
 buildscript {
     repositories {
         google()
@@ -24,13 +22,13 @@ buildscript {
     }
 
     dependencies {
-        classpath Libs.androidGradlePlugin
-        classpath Libs.Kotlin.gradlePlugin
+        classpath libs.android.gradleplugin
+        classpath libs.kotlin.gradleplugin
 
-        classpath Libs.gradleMavenPublishPlugin
+        classpath libs.gradlemavenpublishplugin
 
-        classpath Libs.Dokka.gradlePlugin
-        classpath Libs.Kotlin.binaryCompatibility
+        classpath libs.dokka
+        classpath libs.kotlin.binarycompatibility
     }
 }
 

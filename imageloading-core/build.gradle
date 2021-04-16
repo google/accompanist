@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import com.google.accompanist.buildsrc.Libs
-
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
@@ -68,8 +66,7 @@ android {
 
 dependencies {
     implementation libs.compose.foundation.foundation
-
-    implementation Libs.Coroutines.android
+    implementation libs.kotlin.coroutines.android
 }
 
 apply plugin: "com.vanniktech.maven.publish"
