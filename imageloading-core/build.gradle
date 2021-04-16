@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import com.google.accompanist.buildsrc.Libs
-
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
@@ -45,7 +43,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion Libs.AndroidX.Compose.version
+        kotlinCompilerExtensionVersion libs.versions.compose.get()
     }
 
     lintOptions {
@@ -67,9 +65,8 @@ android {
 }
 
 dependencies {
-    implementation Libs.AndroidX.Compose.foundation
-
-    implementation Libs.Coroutines.android
+    implementation libs.compose.foundation.foundation
+    implementation libs.kotlin.coroutines.android
 }
 
 apply plugin: "com.vanniktech.maven.publish"

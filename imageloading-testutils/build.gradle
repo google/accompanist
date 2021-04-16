@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import com.google.accompanist.buildsrc.Libs
-
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
@@ -40,7 +38,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion Libs.AndroidX.Compose.version
+        kotlinCompilerExtensionVersion libs.versions.compose.get()
     }
 
     lintOptions {
@@ -64,21 +62,19 @@ android {
 dependencies {
     implementation project(':imageloading-core')
 
-    implementation Libs.AndroidX.coreKtx
+    implementation libs.androidx.core
 
-    implementation Libs.AndroidX.Compose.ui
+    implementation libs.compose.ui.ui
 
-    implementation Libs.Kotlin.stdlib
-    implementation Libs.Coroutines.android
+    implementation libs.kotlin.stdlib
+    implementation libs.kotlin.coroutines.android
 
-    api Libs.OkHttp.mockWebServer
-    implementation Libs.OkHttp.okhttp
+    api libs.okhttp.mockWebServer
+    implementation libs.okhttp.okhttp
 
-    implementation Libs.truth
+    implementation libs.truth
 
-    implementation Libs.Coroutines.test
+    implementation libs.kotlin.coroutines.test
 
-    implementation Libs.AndroidX.Compose.test
-    implementation Libs.AndroidX.Test.rules
-    implementation Libs.AndroidX.Test.runner
+    implementation libs.compose.ui.test
 }
