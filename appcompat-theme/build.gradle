@@ -79,6 +79,7 @@ dependencies {
 
     androidTestImplementation libs.junit
     androidTestImplementation libs.compose.ui.test
+    androidTestImplementation libs.androidx.test.runner
 }
 
 apply plugin: 'com.vanniktech.maven.publish'

@@ -8,6 +8,8 @@ coroutines = "1.4.1"
 okhttp = "3.12.2"
 coil = "1.1.1"
 
+androidxtest = "1.2.0"
+
 [libraries]
 compose-ui-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 compose-ui-util = { module = "androidx.compose.ui:ui-util", version.ref = "compose" }
@@ -47,6 +49,7 @@ androidx-dynamicanimation = "androidx.dynamicanimation:dynamicanimation-ktx:1.0.
 androidx-lifecycle-runtime = "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0"
 androidx-lifecycle-viewmodelcompose = "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha04"
 
-androidx-test-runner = "androidx.test:runner:1.2.0"
+androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidxtest" }
+androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidxtest" }
 junit = "junit:junit:4.13"
 truth = "com.google.truth:truth:1.0.1"
