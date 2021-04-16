@@ -15,7 +15,6 @@
  */
 
 import com.google.accompanist.buildsrc.Libs
-import com.google.accompanist.buildsrc.Versions
 
 buildscript {
     repositories {
@@ -70,7 +69,7 @@ subprojects {
     spotless {
         kotlin {
             target "**/*.kt"
-            ktlint(Versions.ktlint)
+            ktlint(libs.versions.ktlint.get())
             licenseHeaderFile rootProject.file('spotless/copyright.txt')
         }
 

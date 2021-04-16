@@ -1,6 +1,7 @@
 [versions]
 compose = "1.0.0-beta04"
 composesnapshot = "." # a single character = no snapshot
+ktlint = "0.40.0"
 
 [libraries]
 compose-ui-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
