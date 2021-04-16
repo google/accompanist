@@ -148,18 +148,42 @@ interface SystemUiController {
     fun setNavigationBarDarkIcons(enabled: Boolean = true)
 
     /**
-     * Returns true when the icon color of the status bar is dark.
+     * Set the status and navigation bars icons darkened.
+     *
+     * @param statusBarEnabled If the value is true, the status bar icon will change to a dark
+     * color, but if the system does not support the status bar dark mode, nothing will happen.
+     * @param navigationBarEnabled If the value is true, the navigation bar icon will change to a
+     * dark color, but if the system does not support the status bar dark mode, nothing will happen.
+     */
+    fun setSystemBarsDarkIcons(
+        statusBarEnabled: Boolean = true,
+        navigationBarEnabled: Boolean = statusBarEnabled,
+    ) {
+        setStatusBarDarkIcons(statusBarEnabled)
+        setNavigationBarDarkIcons(navigationBarEnabled)
+    }
+
+    /**
+     * Returns true when the icons color of the status bar is dark.
      *
      * @see setStatusBarDarkIcons
      */
     fun isDarkStatusBarIcons(): Boolean
 
     /**
-     * Returns true when the icon color of the navigation bar is dark.
+     * Returns true when the icons color of the navigation bar is dark.
      *
      * @see setNavigationBarDarkIcons
      */
     fun isDarkNavigationBarIcons(): Boolean
+
+    /**
+     * Returns true when the icons color of the status and navigation bars is dark.
+     *
+     * @see setStatusBarDarkIcons
+     * @see setNavigationBarDarkIcons
+     */
+    fun isDarkSystemBarsIcons(): Boolean = isDarkStatusBarIcons() && isDarkNavigationBarIcons()
 
     /**
      * Returns whether the system is ensuring that the navigation bar has enough contrast when a
