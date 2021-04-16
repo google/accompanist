@@ -40,7 +40,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
-
 /**
  * A class which provides easy-to-use utilities for updating the System UI bar
  * colors within Jetpack Compose.
