@@ -19,7 +19,6 @@ package com.google.accompanist.sample.systemuicontroller
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -56,7 +55,6 @@ import androidx.core.view.WindowCompat
 import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.systemBarsPadding
-import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.rememberRandomSampleImageUrl
@@ -100,7 +98,8 @@ private fun Sample() {
                 Box(
                     Modifier
                         .size(48.dp)
-                        .background(Color.Black.copy(alpha = 0.6f)))
+                        .background(Color.Black.copy(alpha = 0.6f))
+                )
             }
             Box(modifier = Modifier.size(44.dp)) {
                 Image(
