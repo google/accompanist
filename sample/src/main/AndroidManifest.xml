@@ -251,6 +251,24 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".systemuicontroller.SystemBarsColorSample"
+            android:label="@string/system_ui_controller_title_color">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".systemuicontroller.SystemBarsShowHideSample"
+            android:label="@string/system_ui_controller_title_showhide">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

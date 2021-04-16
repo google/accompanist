@@ -16,12 +16,18 @@
 
 package com.google.accompanist.systemuicontroller
 
+import android.R
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.res.Configuration
+import android.graphics.Point
+import android.graphics.Rect
 import android.os.Build
+import android.util.DisplayMetrics
 import android.view.View
 import android.view.Window
+import android.view.WindowManager
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
@@ -32,6 +38,8 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+
 
 /**
  * A class which provides easy-to-use utilities for updating the System UI bar
@@ -41,6 +49,27 @@ import androidx.core.view.ViewCompat
  */
 @Stable
 interface SystemUiController {
+
+    /**
+     * If the value is true, the status bar will be displayed,
+     * otherwise the status bar will be hidden.
+     */
+    var isStatusBarVisible: Boolean
+
+    /**
+     * If the value is true, the navigation bar will be displayed,
+     * otherwise the navigation bar will be hidden.
+     */
+    var isNavigationBarVisible: Boolean
+
+    /**
+     * If the value is true, both the status bar and the navigation bar will be displayed,
+     * otherwise they will be hidden.
+     *
+     * When any system bar is visible, this value is false.
+     */
+    var isSystemBarsVisible: Boolean
+
     /**
      * Set the status bar color.
      *
@@ -49,6 +78,8 @@ interface SystemUiController {
      * @param darkIcons Whether dark status bar icons would be preferable.
      * @param transformColorForLightContent A lambda which will be invoked to transform [color] if
      * dark icons were requested but are not available. Defaults to applying a black scrim.
+     *
+     * @see setStatusBarDarkIcons
      */
     fun setStatusBarColor(
         color: Color,
@@ -69,6 +100,8 @@ interface SystemUiController {
      * API 29+.
      * @param transformColorForLightContent A lambda which will be invoked to transform [color] if
      * dark icons were requested but are not available. Defaults to applying a black scrim.
+     *
+     * @see setNavigationBarDarkIcons
      */
     fun setNavigationBarColor(
         color: Color,
@@ -97,6 +130,36 @@ interface SystemUiController {
             transformColorForLightContent
         )
     }
+
+    /**
+     * Set the status bar icons darkened.
+     *
+     * @param enabled If the value is true, the status bar icon will change to a dark color,
+     * but if the system does not support the status bar dark mode, nothing will happen.
+     */
+    fun setStatusBarDarkIcons(enabled: Boolean = true)
+
+    /**
+     * Set the navigation bar icons darkened.
+     *
+     * @param enabled If the value is true, the navigation bar icon will change to a dark color,
+     * but if the system does not support the navigation bar dark mode, nothing will happen.
+     */
+    fun setNavigationBarDarkIcons(enabled: Boolean = true)
+
+    /**
+     * Returns true when the icon color of the status bar is dark.
+     *
+     * @see setStatusBarDarkIcons
+     */
+    fun isDarkStatusBarIcons(): Boolean
+
+    /**
+     * Returns true when the icon color of the navigation bar is dark.
+     *
+     * @see setNavigationBarDarkIcons
+     */
+    fun isDarkNavigationBarIcons(): Boolean
 
     /**
      * Returns whether the system is ensuring that the navigation bar has enough contrast when a
@@ -134,9 +197,68 @@ fun rememberAndroidSystemUiController(
  *
  * Typically you would use [rememberSystemUiController] to remember an instance of this.
  */
-internal class AndroidSystemUiController(view: View) : SystemUiController {
+class AndroidSystemUiController(view: View) : SystemUiController {
     private val window = view.context.findWindow()
     private val windowInsetsController = ViewCompat.getWindowInsetsController(view)
+
+    override var isStatusBarVisible: Boolean
+        get() = window?.attributes?.flags?.let {
+            @Suppress("DEPRECATION")
+            it and WindowManager.LayoutParams.FLAG_FULLSCREEN == 0
+        } ?: true
+        set(value) {
+            if (value) {
+                windowInsetsController?.show(WindowInsetsCompat.Type.statusBars())
+            } else {
+                windowInsetsController?.hide(WindowInsetsCompat.Type.statusBars())
+            }
+        }
+
+    override var isNavigationBarVisible: Boolean
+        @Suppress("DEPRECATION")
+        get() {
+            val window = window ?: return true
+            val decorView = window.decorView
+            val display = window.windowManager.defaultDisplay
+
+            val realDisplayMetrics = DisplayMetrics()
+            display.getRealMetrics(realDisplayMetrics)
+            val realHeight = realDisplayMetrics.heightPixels
+            val realWidth = realDisplayMetrics.widthPixels
+            val displayMetrics = DisplayMetrics()
+            display.getMetrics(displayMetrics)
+            val displayHeight = displayMetrics.heightPixels
+            val displayWidth = displayMetrics.widthPixels
+            // The actual screen is the same as the display
+            val correctSize = (realWidth - displayWidth) > 0 || (realHeight - displayHeight) > 0
+
+            val point = Point()
+            display.getRealSize(point)
+            return if (Configuration.ORIENTATION_LANDSCAPE == window.context.resources.configuration.orientation) {
+                (point.x != decorView.findViewById<View>(R.id.content).width)
+            } else {
+                val rect = Rect()
+                decorView.getWindowVisibleDisplayFrame(rect)
+                (rect.bottom != point.y)
+            } && correctSize
+        }
+        set(value) {
+            if (value) {
+                windowInsetsController?.show(WindowInsetsCompat.Type.navigationBars())
+            } else {
+                windowInsetsController?.hide(WindowInsetsCompat.Type.navigationBars())
+            }
+        }
+
+    override var isSystemBarsVisible: Boolean
+        get() = isStatusBarVisible && isNavigationBarVisible
+        set(value) {
+            if (value) {
+                windowInsetsController?.show(WindowInsetsCompat.Type.systemBars())
+            } else {
+                windowInsetsController?.hide(WindowInsetsCompat.Type.systemBars())
+            }
+        }
 
     override fun setStatusBarColor(
         color: Color,
@@ -179,6 +301,20 @@ internal class AndroidSystemUiController(view: View) : SystemUiController {
         }
     }
 
+    override fun setStatusBarDarkIcons(enabled: Boolean) {
+        windowInsetsController?.isAppearanceLightStatusBars = enabled
+    }
+
+    override fun setNavigationBarDarkIcons(enabled: Boolean) {
+        windowInsetsController?.isAppearanceLightNavigationBars = enabled
+    }
+
+    override fun isDarkStatusBarIcons(): Boolean =
+        windowInsetsController?.isAppearanceLightStatusBars ?: false
+
+    override fun isDarkNavigationBarIcons(): Boolean =
+        windowInsetsController?.isAppearanceLightNavigationBars ?: false
+
     override fun isNavigationBarContrastEnforced(): Boolean {
         return Build.VERSION.SDK_INT >= 29 && window?.isNavigationBarContrastEnforced == true
     }
@@ -214,6 +350,12 @@ private val BlackScrimmed: (Color) -> Color = { original ->
  * A no-op implementation, useful as the default value for [LocalSystemUiController].
  */
 private object NoOpSystemUiController : SystemUiController {
+    override var isStatusBarVisible: Boolean = true
+
+    override var isNavigationBarVisible: Boolean = true
+
+    override var isSystemBarsVisible: Boolean = true
+
     override fun setStatusBarColor(
         color: Color,
         darkIcons: Boolean,
@@ -226,6 +368,14 @@ private object NoOpSystemUiController : SystemUiController {
         navigationBarContrastEnforced: Boolean,
         transformColorForLightContent: (Color) -> Color
     ) = Unit
+
+    override fun setStatusBarDarkIcons(enabled: Boolean) = Unit
+
+    override fun setNavigationBarDarkIcons(enabled: Boolean) = Unit
+
+    override fun isDarkStatusBarIcons(): Boolean = false
+
+    override fun isDarkNavigationBarIcons(): Boolean = false
 
     override fun isNavigationBarContrastEnforced(): Boolean = false
 }
