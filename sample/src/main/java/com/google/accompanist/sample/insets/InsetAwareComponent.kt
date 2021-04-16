@@ -86,7 +86,7 @@ fun edgeToEdgePaddingValues(
 @Composable
 fun edgeToEdgePaddingValues(
     additionalVertical: Dp = 0.dp,
-): PaddingValues = LocalInsetAwareState.current.toPaddingValues(
+): PaddingValues = edgeToEdgePaddingValues(
     additionalTop = additionalVertical,
     additionalBottom = additionalVertical
 )
@@ -108,7 +108,7 @@ fun Modifier.edgeToEdgePadding(
 ) = composed {
     padding(
         edgeToEdgePaddingValues(
-            additionalBottom = additionalVertical
+            additionalVertical = additionalVertical
         )
     )
 }
