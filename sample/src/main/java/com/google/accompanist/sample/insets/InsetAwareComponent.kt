@@ -37,6 +37,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
@@ -113,12 +114,10 @@ fun Modifier.edgeToEdgePadding(
     )
 }
 
-private fun Modifier.measureTopBarSize() = composed {
-    onSizeChanged { LocalInsetAwareState.current.topBarSize = it }
-}
-
-private fun Modifier.measureBottomBarSize() = composed {
-    onSizeChanged { LocalInsetAwareState.current.bottomBarSize = it }
+private fun Modifier.measureInsetAwareState(
+    measure: InsetAwareState.(IntSize) -> Unit,
+) = composed {
+    onSizeChanged { LocalInsetAwareState.current.measure(it) }
 }
 
 @Composable
@@ -143,7 +142,7 @@ fun InsetAwareScaffold(
             bottomBar = {
                 Box(
                     modifier = Modifier
-                        .measureBottomBarSize()
+                        .measureInsetAwareState { bottomBarSize = it }
                         .animateContentSize(),
                     content = { bottomBar() }
                 )
@@ -152,7 +151,7 @@ fun InsetAwareScaffold(
                 content(innerPadding)
                 Box(
                     modifier = Modifier
-                        .measureTopBarSize()
+                        .measureInsetAwareState { topBarSize = it }
                         .animateContentSize(),
                     content = { topBar() }
                 )
