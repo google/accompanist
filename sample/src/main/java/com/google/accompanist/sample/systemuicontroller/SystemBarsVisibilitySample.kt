@@ -41,7 +41,7 @@ import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
-class SystemBarsShowHideSample : ComponentActivity() {
+class SystemBarsVisibilitySample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -65,7 +65,7 @@ private fun Sample() {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.system_ui_controller_title_showhide)) },
+                title = { Text(stringResource(R.string.system_ui_controller_title_visibility)) },
                 backgroundColor = MaterialTheme.colors.surface,
             )
         },

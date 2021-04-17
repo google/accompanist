@@ -261,8 +261,8 @@
         </activity>
 
         <activity
-            android:name=".systemuicontroller.SystemBarsShowHideSample"
-            android:label="@string/system_ui_controller_title_showhide">
+            android:name=".systemuicontroller.SystemBarsVisibilitySample"
+            android:label="@string/system_ui_controller_title_visibility">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />

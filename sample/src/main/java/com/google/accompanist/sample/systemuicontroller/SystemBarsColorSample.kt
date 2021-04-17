@@ -210,7 +210,10 @@ private fun Sample() {
 
                 Row(
                     modifier = Modifier
-                        .clickable { statusBarDarkIcons = !statusBarDarkIcons }
+                        .clickable {
+                            statusBarDarkIcons = !statusBarDarkIcons
+                            systemUiController.setStatusBarDarkIcons(statusBarDarkIcons)
+                        }
                         .padding(8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -225,7 +228,10 @@ private fun Sample() {
                 }
                 Row(
                     modifier = Modifier
-                        .clickable { navigationBarDarkIcons = !navigationBarDarkIcons }
+                        .clickable {
+                            navigationBarDarkIcons = !navigationBarDarkIcons
+                            systemUiController.setNavigationBarDarkIcons(navigationBarDarkIcons)
+                        }
                         .padding(8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
