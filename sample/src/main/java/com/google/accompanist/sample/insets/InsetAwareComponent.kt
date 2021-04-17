@@ -130,7 +130,7 @@ fun InsetAwareScaffold(
     floatingActionButtonPosition: FabPosition = FabPosition.End,
     content: @Composable (PaddingValues) -> Unit = {},
 ) {
-    val insetAwareState = InsetAwareState()
+    val insetAwareState = remember { InsetAwareState() }
     CompositionLocalProvider(
         LocalInsetAwareState provides insetAwareState
     ) {
