@@ -16,18 +16,12 @@
 
 package com.google.accompanist.systemuicontroller
 
-import android.R
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
-import android.content.res.Configuration
-import android.graphics.Point
-import android.graphics.Rect
 import android.os.Build
-import android.util.DisplayMetrics
 import android.view.View
 import android.view.Window
-import android.view.WindowManager
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
@@ -50,24 +44,25 @@ import androidx.core.view.WindowInsetsCompat
 interface SystemUiController {
 
     /**
-     * If the value is true, the status bar will be displayed,
-     * otherwise the status bar will be hidden.
+     * Set the status bar visibility, if [isVisible] is true, show the status bar,
+     * otherwise hide the status bar.
      */
-    var isStatusBarVisible: Boolean
+    fun setStatusBarVisible(isVisible: Boolean = true)
 
     /**
-     * If the value is true, the navigation bar will be displayed,
-     * otherwise the navigation bar will be hidden.
+     * Set the navigation bar visibility, if [isVisible] is true, show the navigation bar,
+     * otherwise hide the navigation bar.
      */
-    var isNavigationBarVisible: Boolean
+    fun setNavigationBarVisible(isVisible: Boolean = true)
 
     /**
-     * If the value is true, both the status bar and the navigation bar will be displayed,
-     * otherwise they will be hidden.
-     *
-     * When any system bar is visible, this value is false.
+     * Set the status and navigation bars visibility, if [isVisible] is true, show the status and
+     * navigation bars, otherwise they will all be hidden.
      */
-    var isSystemBarsVisible: Boolean
+    fun setSystemBarsVisible(isVisible: Boolean = true) {
+        setStatusBarVisible(isVisible)
+        setNavigationBarVisible(isVisible)
+    }
 
     /**
      * Set the status bar color.
@@ -149,17 +144,12 @@ interface SystemUiController {
     /**
      * Set the status and navigation bars icons darkened.
      *
-     * @param statusBarEnabled If the value is true, the status bar icon will change to a dark
-     * color, but if the system does not support the status bar dark mode, nothing will happen.
-     * @param navigationBarEnabled If the value is true, the navigation bar icon will change to a
-     * dark color, but if the system does not support the status bar dark mode, nothing will happen.
+     * @param enabled If the value is true, the status and navigation bars icon will change to a
+     * dark color, but if the system bars does not support dark mode, nothing will happen.
      */
-    fun setSystemBarsDarkIcons(
-        statusBarEnabled: Boolean = true,
-        navigationBarEnabled: Boolean = statusBarEnabled,
-    ) {
-        setStatusBarDarkIcons(statusBarEnabled)
-        setNavigationBarDarkIcons(navigationBarEnabled)
+    fun setSystemBarsDarkIcons(enabled: Boolean = true) {
+        setStatusBarDarkIcons(enabled)
+        setNavigationBarDarkIcons(enabled)
     }
 
     /**
@@ -224,64 +214,21 @@ class AndroidSystemUiController(view: View) : SystemUiController {
     private val window = view.context.findWindow()
     private val windowInsetsController = ViewCompat.getWindowInsetsController(view)
 
-    override var isStatusBarVisible: Boolean
-        get() = window?.attributes?.flags?.let {
-            @Suppress("DEPRECATION")
-            it and WindowManager.LayoutParams.FLAG_FULLSCREEN == 0
-        } ?: true
-        set(value) {
-            if (value) {
-                windowInsetsController?.show(WindowInsetsCompat.Type.statusBars())
-            } else {
-                windowInsetsController?.hide(WindowInsetsCompat.Type.statusBars())
-            }
+    override fun setStatusBarVisible(isVisible: Boolean) {
+        if (isVisible) {
+            windowInsetsController?.show(WindowInsetsCompat.Type.statusBars())
+        } else {
+            windowInsetsController?.hide(WindowInsetsCompat.Type.statusBars())
         }
+    }
 
-    override var isNavigationBarVisible: Boolean
-        @Suppress("DEPRECATION")
-        get() {
-            val window = window ?: return true
-            val decorView = window.decorView
-            val display = window.windowManager.defaultDisplay
-
-            val realDisplayMetrics = DisplayMetrics()
-            display.getRealMetrics(realDisplayMetrics)
-            val realHeight = realDisplayMetrics.heightPixels
-            val realWidth = realDisplayMetrics.widthPixels
-            val displayMetrics = DisplayMetrics()
-            display.getMetrics(displayMetrics)
-            val displayHeight = displayMetrics.heightPixels
-            val displayWidth = displayMetrics.widthPixels
-            // The actual screen is the same as the display
-            val correctSize = (realWidth - displayWidth) > 0 || (realHeight - displayHeight) > 0
-
-            val point = Point()
-            display.getRealSize(point)
-            return if (Configuration.ORIENTATION_LANDSCAPE == window.context.resources.configuration.orientation) {
-                (point.x != decorView.findViewById<View>(R.id.content).width)
-            } else {
-                val rect = Rect()
-                decorView.getWindowVisibleDisplayFrame(rect)
-                (rect.bottom != point.y)
-            } && correctSize
+    override fun setNavigationBarVisible(isVisible: Boolean) {
+        if (isVisible) {
+            windowInsetsController?.show(WindowInsetsCompat.Type.navigationBars())
+        } else {
+            windowInsetsController?.hide(WindowInsetsCompat.Type.navigationBars())
         }
-        set(value) {
-            if (value) {
-                windowInsetsController?.show(WindowInsetsCompat.Type.navigationBars())
-            } else {
-                windowInsetsController?.hide(WindowInsetsCompat.Type.navigationBars())
-            }
-        }
-
-    override var isSystemBarsVisible: Boolean
-        get() = isStatusBarVisible && isNavigationBarVisible
-        set(value) {
-            if (value) {
-                windowInsetsController?.show(WindowInsetsCompat.Type.systemBars())
-            } else {
-                windowInsetsController?.hide(WindowInsetsCompat.Type.systemBars())
-            }
-        }
+    }
 
     override fun setStatusBarColor(
         color: Color,
@@ -373,11 +320,9 @@ private val BlackScrimmed: (Color) -> Color = { original ->
  * A no-op implementation, useful as the default value for [LocalSystemUiController].
  */
 private object NoOpSystemUiController : SystemUiController {
-    override var isStatusBarVisible: Boolean = true
+    override fun setStatusBarVisible(isVisible: Boolean) = Unit
 
-    override var isNavigationBarVisible: Boolean = true
-
-    override var isSystemBarsVisible: Boolean = true
+    override fun setNavigationBarVisible(isVisible: Boolean) = Unit
 
     override fun setStatusBarColor(
         color: Color,

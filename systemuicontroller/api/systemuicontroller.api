@@ -5,9 +5,6 @@ public final class com/google/accompanist/systemuicontroller/AndroidSystemUiCont
 	public fun isDarkStatusBarIcons ()Z
 	public fun isDarkSystemBarsIcons ()Z
 	public fun isNavigationBarContrastEnforced ()Z
-	public fun isNavigationBarVisible ()Z
-	public fun isStatusBarVisible ()Z
-	public fun isSystemBarsVisible ()Z
 	public fun setNavigationBarColor-Iv8Zu3U (JZZLkotlin/jvm/functions/Function1;)V
 	public fun setNavigationBarDarkIcons (Z)V
 	public fun setNavigationBarVisible (Z)V
@@ -15,7 +12,7 @@ public final class com/google/accompanist/systemuicontroller/AndroidSystemUiCont
 	public fun setStatusBarDarkIcons (Z)V
 	public fun setStatusBarVisible (Z)V
 	public fun setSystemBarsColor-Iv8Zu3U (JZZLkotlin/jvm/functions/Function1;)V
-	public fun setSystemBarsDarkIcons (ZZ)V
+	public fun setSystemBarsDarkIcons (Z)V
 	public fun setSystemBarsVisible (Z)V
 }
 
@@ -24,9 +21,6 @@ public abstract interface class com/google/accompanist/systemuicontroller/System
 	public abstract fun isDarkStatusBarIcons ()Z
 	public abstract fun isDarkSystemBarsIcons ()Z
 	public abstract fun isNavigationBarContrastEnforced ()Z
-	public abstract fun isNavigationBarVisible ()Z
-	public abstract fun isStatusBarVisible ()Z
-	public abstract fun isSystemBarsVisible ()Z
 	public abstract fun setNavigationBarColor-Iv8Zu3U (JZZLkotlin/jvm/functions/Function1;)V
 	public abstract fun setNavigationBarDarkIcons (Z)V
 	public abstract fun setNavigationBarVisible (Z)V
@@ -34,7 +28,7 @@ public abstract interface class com/google/accompanist/systemuicontroller/System
 	public abstract fun setStatusBarDarkIcons (Z)V
 	public abstract fun setStatusBarVisible (Z)V
 	public abstract fun setSystemBarsColor-Iv8Zu3U (JZZLkotlin/jvm/functions/Function1;)V
-	public abstract fun setSystemBarsDarkIcons (ZZ)V
+	public abstract fun setSystemBarsDarkIcons (Z)V
 	public abstract fun setSystemBarsVisible (Z)V
 }
 
@@ -42,12 +36,16 @@ public final class com/google/accompanist/systemuicontroller/SystemUiController$
 	public static fun isDarkSystemBarsIcons (Lcom/google/accompanist/systemuicontroller/SystemUiController;)Z
 	public static synthetic fun setNavigationBarColor-Iv8Zu3U$default (Lcom/google/accompanist/systemuicontroller/SystemUiController;JZZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 	public static synthetic fun setNavigationBarDarkIcons$default (Lcom/google/accompanist/systemuicontroller/SystemUiController;ZILjava/lang/Object;)V
+	public static synthetic fun setNavigationBarVisible$default (Lcom/google/accompanist/systemuicontroller/SystemUiController;ZILjava/lang/Object;)V
 	public static synthetic fun setStatusBarColor-ek8zF_U$default (Lcom/google/accompanist/systemuicontroller/SystemUiController;JZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 	public static synthetic fun setStatusBarDarkIcons$default (Lcom/google/accompanist/systemuicontroller/SystemUiController;ZILjava/lang/Object;)V
+	public static synthetic fun setStatusBarVisible$default (Lcom/google/accompanist/systemuicontroller/SystemUiController;ZILjava/lang/Object;)V
 	public static fun setSystemBarsColor-Iv8Zu3U (Lcom/google/accompanist/systemuicontroller/SystemUiController;JZZLkotlin/jvm/functions/Function1;)V
 	public static synthetic fun setSystemBarsColor-Iv8Zu3U$default (Lcom/google/accompanist/systemuicontroller/SystemUiController;JZZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
-	public static fun setSystemBarsDarkIcons (Lcom/google/accompanist/systemuicontroller/SystemUiController;ZZ)V
-	public static synthetic fun setSystemBarsDarkIcons$default (Lcom/google/accompanist/systemuicontroller/SystemUiController;ZZILjava/lang/Object;)V
+	public static fun setSystemBarsDarkIcons (Lcom/google/accompanist/systemuicontroller/SystemUiController;Z)V
+	public static synthetic fun setSystemBarsDarkIcons$default (Lcom/google/accompanist/systemuicontroller/SystemUiController;ZILjava/lang/Object;)V
+	public static fun setSystemBarsVisible (Lcom/google/accompanist/systemuicontroller/SystemUiController;Z)V
+	public static synthetic fun setSystemBarsVisible$default (Lcom/google/accompanist/systemuicontroller/SystemUiController;ZILjava/lang/Object;)V
 }
 
 public final class com/google/accompanist/systemuicontroller/SystemUiControllerKt {

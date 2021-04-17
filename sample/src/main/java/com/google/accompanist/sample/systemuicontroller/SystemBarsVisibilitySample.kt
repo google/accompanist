@@ -76,35 +76,61 @@ private fun Sample() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            /** Status bar */
+
             Button(
-                onClick = {
-                    systemUiController.isStatusBarVisible = !systemUiController.isStatusBarVisible
-                },
+                onClick = { systemUiController.setStatusBarVisible() },
                 modifier = Modifier
                     .fillMaxWidth(0.7f)
                     .padding(vertical = 8.dp)
             ) {
-                Text(text = "Change status bar visibility")
+                Text(text = "Show the status bar")
             }
             Button(
-                onClick = {
-                    systemUiController.isNavigationBarVisible = !systemUiController.isNavigationBarVisible
-                },
+                onClick = { systemUiController.setStatusBarVisible(false) },
                 modifier = Modifier
                     .fillMaxWidth(0.7f)
                     .padding(vertical = 8.dp)
             ) {
-                Text(text = "Change navigation bar visibility")
+                Text(text = "Hide the status bar")
+            }
+
+            /** Navigation bar */
+
+            Button(
+                onClick = { systemUiController.setNavigationBarVisible() },
+                modifier = Modifier
+                    .fillMaxWidth(0.7f)
+                    .padding(vertical = 8.dp)
+            ) {
+                Text(text = "Show the navigation bar")
             }
             Button(
-                onClick = {
-                    systemUiController.isSystemBarsVisible = !systemUiController.isSystemBarsVisible
-                },
+                onClick = { systemUiController.setNavigationBarVisible(false) },
                 modifier = Modifier
                     .fillMaxWidth(0.7f)
                     .padding(vertical = 8.dp)
             ) {
-                Text(text = "Change system bars visibility")
+                Text(text = "Hide the navigation bar")
+            }
+
+            /** System bars */
+
+            Button(
+                onClick = { systemUiController.setSystemBarsVisible() },
+                modifier = Modifier
+                    .fillMaxWidth(0.7f)
+                    .padding(vertical = 8.dp)
+            ) {
+                Text(text = "Show the system bars")
+            }
+            Button(
+                onClick = { systemUiController.setSystemBarsVisible(false) },
+                modifier = Modifier
+                    .fillMaxWidth(0.7f)
+                    .padding(vertical = 8.dp)
+            ) {
+                Text(text = "Hide the system bars")
             }
         }
     }
