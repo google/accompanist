@@ -198,6 +198,7 @@ fun InsetAwareTopAppBar(
 fun InsetAwareBottomNavigation(
     modifier: Modifier = Modifier,
     backgroundColor: Color = MaterialTheme.colors.primarySurface,
+    contentColor: Color = contentColorFor(backgroundColor),
     elevation: Dp = BottomNavigationDefaults.Elevation,
     content: @Composable RowScope.() -> Unit,
 ) {
@@ -210,6 +211,7 @@ fun InsetAwareBottomNavigation(
             modifier = Modifier
                 .navigationBarsPadding(),
             backgroundColor = Color.Transparent,
+            contentColor = contentColor,
             elevation = 0.dp,
             content = content,
         )
