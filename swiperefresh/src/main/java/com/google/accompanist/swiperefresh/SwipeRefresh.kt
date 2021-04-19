@@ -110,12 +110,6 @@ class SwipeRefreshState(
         }
     }
 
-    internal suspend fun animateBackToRest() {
-        mutatorMutex.mutate {
-            _indicatorOffset.animateTo(if (isRefreshing) indicatorRefreshOffset else 0f)
-        }
-    }
-
     /**
      * Dispatch scroll delta in pixels from touch events.
      */
@@ -245,13 +239,11 @@ fun SwipeRefresh(
     val coroutineScope = rememberCoroutineScope()
     val updatedOnRefresh = rememberUpdatedState(onRefresh)
 
-    // Our LaunchedEffect, which animates the indicator to an appropriate resting position
-    // We need to use isRefreshing and indicatorRefreshOffset as keys, so that we animate
-    // appropriately if those values change
-    LaunchedEffect(state.isSwipeInProgress, state.isRefreshing, state.indicatorRefreshOffset) {
+    // Our LaunchedEffect, which animates the indicator to its resting position
+    LaunchedEffect(state.isSwipeInProgress) {
         if (!state.isSwipeInProgress) {
-            // If there's not a swipe in progress, rest the indicator at an appropriate position
-            state.animateBackToRest()
+            // If there's not a swipe in progress, rest the indicator at 0f
+            state.animateOffsetTo(0f)
         }
     }
 

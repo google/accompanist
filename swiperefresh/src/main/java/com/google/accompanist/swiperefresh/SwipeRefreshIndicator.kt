@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-@file:Suppress("NOTHING_TO_INLINE")
-
 package com.google.accompanist.swiperefresh
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -34,16 +33,17 @@ import androidx.compose.material.Surface
 import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
@@ -88,8 +88,7 @@ private val LargeSizes = SwipeRefreshIndicatorSizes(
 )
 
 /**
- * A version of [SwipeRefreshIndicator] which reads the appropriate values for the `isRefreshing`,
- * `offset` and `triggerOffset` from the provided [state].
+ * Indicator composable which is typically used in conjunction with [SwipeRefresh].
  *
  * @param state The [SwipeRefreshState] passed into the [SwipeRefresh] `indicator` block.
  * @param modifier The modifier to apply to this layout.
@@ -110,78 +109,67 @@ fun SwipeRefreshIndicator(
     backgroundColor: Color = MaterialTheme.colors.surface,
     contentColor: Color = contentColorFor(backgroundColor),
     shape: Shape = MaterialTheme.shapes.small.copy(CornerSize(percent = 50)),
+    refreshingOffset: Dp = 16.dp,
     largeIndication: Boolean = false,
     elevation: Dp = 4.dp,
 ) {
-    SwipeRefreshIndicator(
-        isRefreshing = state.isRefreshing,
-        offset = state.indicatorOffset,
-        refreshOffset = state.indicatorRefreshOffset,
-        modifier = modifier,
-        scale = scale,
-        arrowEnabled = arrowEnabled,
-        backgroundColor = backgroundColor,
-        contentColor = contentColor,
-        shape = shape,
-        largeIndication = largeIndication,
-        elevation = elevation,
-    )
-}
-
-/**
- * Indicator composable which is typically used in conjunction with [SwipeRefresh].
- *
- * @param isRefreshing Whether the indicator should display an indeterminate progress indicator.
- * @param offset The current scroll offset, in pixels.
- * @param refreshOffset The scroll offset which would trigger a refresh, in pixels.
- * @param modifier The modifier to apply to this layout.
- * @param scale Whether the indicator should scale up/down as it is scrolled in. Defaults to false.
- * @param arrowEnabled Whether an arrow should be drawn on the indicator. Defaults to true.
- * @param backgroundColor The color of the indicator background surface.
- * @param contentColor The color for the indicator's contents.
- * @param shape The shape of the indicator background surface. Defaults to [CircleShape].
- * @param largeIndication Whether the indicator should be 'large' or not. Defaults to false.
- * @param elevation The size of the shadow below the indicator.
- */
-@Composable
-fun SwipeRefreshIndicator(
-    isRefreshing: Boolean,
-    offset: Float,
-    refreshOffset: Float,
-    modifier: Modifier = Modifier,
-    scale: Boolean = false,
-    arrowEnabled: Boolean = true,
-    backgroundColor: Color = MaterialTheme.colors.surface,
-    contentColor: Color = contentColorFor(backgroundColor),
-    shape: Shape = MaterialTheme.shapes.small.copy(CornerSize(percent = 50)),
-    largeIndication: Boolean = false,
-    elevation: Dp = 4.dp,
-) {
-    val adjustedElevation = if (offset > 0.5f) elevation else 0.dp
+    val adjustedElevation = when {
+        state.isRefreshing -> elevation
+        state.indicatorOffset > 0.5f -> elevation
+        else -> 0.dp
+    }
     val sizes = if (largeIndication) LargeSizes else DefaultSizes
 
     val animatedAlpha by animateFloatAsState(
-        targetValue = if (offset >= refreshOffset) MaxAlpha else MinAlpha,
+        targetValue = when {
+            state.isRefreshing -> MaxAlpha
+            state.indicatorOffset >= state.indicatorRefreshOffset -> MaxAlpha
+            else -> MinAlpha
+        },
         animationSpec = tween()
     )
 
     val indicatorHeight = with(LocalDensity.current) { sizes.size.roundToPx() }
+    val refreshingOffsetPx = with(LocalDensity.current) { refreshingOffset.toPx() }
+
     val slingshot = rememberUpdatedSlingshot(
-        offsetY = offset,
-        maxOffsetY = refreshOffset,
+        offsetY = state.indicatorOffset,
+        maxOffsetY = state.indicatorRefreshOffset,
         height = indicatorHeight,
     )
 
-    val progress by rememberUpdatedState(offset / refreshOffset.coerceAtLeast(1f))
+    var offset by remember { mutableStateOf(0f) }
+
+    // If the user is currently swiping, we use the 'slingshot' offset directly
+    if (state.isSwipeInProgress) {
+        offset = slingshot.offset.toFloat()
+    }
+
+    LaunchedEffect(state.isSwipeInProgress, state.isRefreshing) {
+        // If there's no swipe currently in progress, animate to the correct resting position
+        if (!state.isSwipeInProgress) {
+            animate(
+                initialValue = offset,
+                targetValue = when {
+                    state.isRefreshing -> indicatorHeight + refreshingOffsetPx
+                    else -> 0f
+                }
+            ) { value, _ ->
+                offset = value
+            }
+        }
+    }
 
     Surface(
         modifier = modifier
             .size(size = sizes.size)
             .graphicsLayer {
                 // Translate the indicator according to the slingshot
-                translationY = slingshot.offset.toFloat() - indicatorHeight
+                translationY = offset - indicatorHeight
 
-                val scaleFraction = if (scale) {
+                val scaleFraction = if (scale && !state.isRefreshing) {
+                    val progress = offset / state.indicatorRefreshOffset.coerceAtLeast(1f)
+
                     // We use LinearOutSlowInEasing to speed up the scale in
                     LinearOutSlowInEasing
                         .transform(progress)
@@ -200,7 +188,7 @@ fun SwipeRefreshIndicator(
         painter.strokeWidth = sizes.strokeWidth
         painter.arrowWidth = sizes.arrowWidth
         painter.arrowHeight = sizes.arrowHeight
-        painter.arrowEnabled = arrowEnabled && !isRefreshing
+        painter.arrowEnabled = arrowEnabled && !state.isRefreshing
         painter.color = contentColor
         painter.alpha = animatedAlpha
 
@@ -212,7 +200,7 @@ fun SwipeRefreshIndicator(
         // This shows either an Image with CircularProgressPainter or a CircularProgressIndicator,
         // depending on refresh state
         Crossfade(
-            targetState = isRefreshing,
+            targetState = state.isRefreshing,
             animationSpec = tween(durationMillis = CrossfadeDurationMs)
         ) { refreshing ->
             Box(
@@ -240,15 +228,3 @@ fun SwipeRefreshIndicator(
 private const val MaxAlpha = 1f
 private const val MinAlpha = 0.3f
 private const val CrossfadeDurationMs = 100
-
-@Preview
-@Composable
-fun PreviewSwipeRefreshIndicator() {
-    MaterialTheme {
-        SwipeRefreshIndicator(
-            isRefreshing = false,
-            offset = 0f,
-            refreshOffset = 10f,
-        )
-    }
-}

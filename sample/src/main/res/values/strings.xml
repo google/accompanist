@@ -46,8 +46,7 @@
     <string name="swiperefresh_title_basics">Swipe Refresh: Basic</string>
     <string name="swiperefresh_title_content_padding">Swipe Refresh: Edge-to-edge</string>
     <string name="swiperefresh_title_tweaked">Swipe Refresh: Tweaked indicator</string>
-    <string name="swiperefresh_title_custom">Swipe Refresh: Custom indicator #1</string>
-    <string name="swiperefresh_title_custom_glow">Swipe Refresh: Custom indicator glow</string>
+    <string name="swiperefresh_title_custom">Swipe Refresh: Custom indicator</string>
     <string name="swiperefresh_title_verticalpager">Swipe Refresh: VerticalPager</string>
 
 </resources>
