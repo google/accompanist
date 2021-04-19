@@ -97,8 +97,8 @@ private fun Sample() {
             SwipeRefresh(
                 state = rememberSwipeRefreshState(refreshing),
                 onRefresh = { refreshing = true },
-                // Shift the indicator down so that it starts below the app bar
-                indicatorStart = contentPadding.calculateTopPadding(),
+                // Shift the indicator to match the list content padding
+                indicatorPadding = contentPadding,
                 // Tweak the indicator to scale up/down
                 indicator = { state ->
                     SwipeRefreshIndicator(state = state, scale = true)

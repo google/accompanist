@@ -36,6 +36,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -101,7 +102,7 @@ private val LargeSizes = SwipeRefreshIndicatorSizes(
  * @param elevation The size of the shadow below the indicator.
  */
 @Composable
-inline fun SwipeRefreshIndicator(
+fun SwipeRefreshIndicator(
     state: SwipeRefreshState,
     modifier: Modifier = Modifier,
     scale: Boolean = false,
@@ -156,25 +157,34 @@ fun SwipeRefreshIndicator(
     largeIndication: Boolean = false,
     elevation: Dp = 4.dp,
 ) {
-    val adjustedElevation = when (offset) {
-        0f -> 0.dp
-        else -> elevation
-    }
+    val adjustedElevation = if (offset > 0.5f) elevation else 0.dp
+    val sizes = if (largeIndication) LargeSizes else DefaultSizes
+
     val animatedAlpha by animateFloatAsState(
         targetValue = if (offset >= refreshOffset) MaxAlpha else MinAlpha,
         animationSpec = tween()
     )
 
-    val sizes = if (largeIndication) LargeSizes else DefaultSizes
+    val indicatorHeight = with(LocalDensity.current) { sizes.size.roundToPx() }
+    val slingshot = rememberUpdatedSlingshot(
+        offsetY = offset,
+        maxOffsetY = refreshOffset,
+        height = indicatorHeight,
+    )
+
+    val progress by rememberUpdatedState(offset / refreshOffset.coerceAtLeast(1f))
 
     Surface(
         modifier = modifier
             .size(size = sizes.size)
             .graphicsLayer {
+                // Translate the indicator according to the slingshot
+                translationY = slingshot.offset.toFloat() - indicatorHeight
+
                 val scaleFraction = if (scale) {
                     // We use LinearOutSlowInEasing to speed up the scale in
                     LinearOutSlowInEasing
-                        .transform(offset / refreshOffset)
+                        .transform(progress)
                         .coerceIn(0f, 1f)
                 } else 1f
 
@@ -194,11 +204,6 @@ fun SwipeRefreshIndicator(
         painter.color = contentColor
         painter.alpha = animatedAlpha
 
-        val slingshot = calculateSlingshot(
-            offsetY = offset,
-            maxOffsetY = refreshOffset,
-            height = with(LocalDensity.current) { sizes.size.roundToPx() }
-        )
         painter.startTrim = slingshot.startTrim
         painter.endTrim = slingshot.endTrim
         painter.rotation = slingshot.rotation

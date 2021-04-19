@@ -252,6 +252,15 @@
         </activity>
 
         <activity
+            android:name=".swiperefresh.SwipeRefreshCustomIndicator2Sample"
+            android:label="@string/swiperefresh_title_custom_glow">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".swiperefresh.SwipeRefreshVerticalPagerSample"
             android:label="@string/swiperefresh_title_verticalpager">
             <intent-filter>

@@ -20,6 +20,8 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.MutatorMutex
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
@@ -29,13 +31,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.Velocity
@@ -235,8 +236,9 @@ fun SwipeRefresh(
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
     swipeEnabled: Boolean = true,
-    indicatorStart: Dp = 0.dp,
-    refreshTriggerDistance: Dp = 64.dp,
+    refreshTriggerDistance: Dp = 80.dp,
+    indicatorAlignment: Alignment = Alignment.TopCenter,
+    indicatorPadding: PaddingValues = PaddingValues(0.dp),
     indicator: @Composable (SwipeRefreshState) -> Unit = { SwipeRefreshIndicator(it) },
     content: @Composable () -> Unit,
 ) {
@@ -267,41 +269,11 @@ fun SwipeRefresh(
         this.enabled = swipeEnabled
     }
 
-    Layout(
-        content = {
-            Box(Modifier.layoutId(LayoutContentTag)) { content() }
-            Box(Modifier.layoutId(LayoutIndicatorTag)) { indicator(state) }
-        },
-        modifier = modifier.nestedScroll(connection = nestedScrollConnection)
-    ) { measurables, constraints ->
-        val noMinConstraints = constraints.copy(minWidth = 0, minHeight = 0)
+    Box(modifier.nestedScroll(connection = nestedScrollConnection)) {
+        content()
 
-        // Measure both the content and the indicator
-        val contentPlaceable = measurables.first { it.layoutId == LayoutContentTag }
-            .measure(noMinConstraints)
-        val indicatorPlaceable = measurables.first { it.layoutId == LayoutIndicatorTag }
-            .measure(noMinConstraints)
-
-        // Our layout is the size of the content, coerced by the min constraints
-        val layoutWidth = contentPlaceable.width.coerceAtLeast(constraints.minWidth)
-        val layoutHeight = contentPlaceable.height.coerceAtLeast(constraints.minHeight)
-
-        layout(layoutWidth, layoutHeight) {
-            // Place our content at x = center, y = top
-            contentPlaceable.place(x = (layoutWidth - contentPlaceable.width) / 2, y = 0)
-
-            val slingshot = calculateSlingshot(
-                offsetY = state.indicatorOffset,
-                maxOffsetY = state.indicatorRefreshOffset,
-                height = indicatorPlaceable.height,
-            )
-            indicatorPlaceable.place(
-                x = (layoutWidth - indicatorPlaceable.width) / 2,
-                y = (indicatorStart.roundToPx() - indicatorPlaceable.height) + slingshot.offset,
-            )
+        Box(Modifier.align(indicatorAlignment).padding(indicatorPadding)) {
+            indicator(state)
         }
     }
 }
-
-private const val LayoutContentTag = "swiperefresh_content"
-private const val LayoutIndicatorTag = "swiperefresh_indicator"

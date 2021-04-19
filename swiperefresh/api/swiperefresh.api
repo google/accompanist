@@ -19,7 +19,7 @@ public final class com/google/accompanist/swiperefresh/SwipeRefreshIndicatorKt {
 }
 
 public final class com/google/accompanist/swiperefresh/SwipeRefreshKt {
-	public static final fun SwipeRefresh-tOXsyB8 (Lcom/google/accompanist/swiperefresh/SwipeRefreshState;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;ZFFLkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun SwipeRefresh-gNPyAyM (Lcom/google/accompanist/swiperefresh/SwipeRefreshState;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;ZFLandroidx/compose/ui/Alignment;Landroidx/compose/foundation/layout/PaddingValues;Lkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 	public static final fun rememberSwipeRefreshState (ZLandroidx/compose/runtime/Composer;I)Lcom/google/accompanist/swiperefresh/SwipeRefreshState;
 }
 
