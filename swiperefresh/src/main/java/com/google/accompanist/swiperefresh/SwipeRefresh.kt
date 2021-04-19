@@ -36,7 +36,10 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.Velocity
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
@@ -97,7 +100,7 @@ class SwipeRefreshState(
      * The [indicatorOffset] value (or greater) which would trigger a refresh when the use
      * releases from a swipe.
      */
-    var indicatorRefreshOffset by mutableStateOf(0f)
+    var indicatorRefreshOffset: Float by mutableStateOf(0f)
         internal set
 
     internal suspend fun animateOffsetTo(offset: Float) {
@@ -232,6 +235,8 @@ fun SwipeRefresh(
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
     swipeEnabled: Boolean = true,
+    indicatorStart: Dp = 0.dp,
+    refreshTriggerDistance: Dp = 64.dp,
     indicator: @Composable (SwipeRefreshState) -> Unit = { SwipeRefreshIndicator(it) },
     content: @Composable () -> Unit,
 ) {
@@ -246,6 +251,10 @@ fun SwipeRefresh(
             // If there's not a swipe in progress, rest the indicator at an appropriate position
             state.animateBackToRest()
         }
+    }
+
+    state.indicatorRefreshOffset = with(LocalDensity.current) {
+        refreshTriggerDistance.toPx()
     }
 
     // Our nested scroll connection, which updates our state.
@@ -273,10 +282,6 @@ fun SwipeRefresh(
         val indicatorPlaceable = measurables.first { it.layoutId == LayoutIndicatorTag }
             .measure(noMinConstraints)
 
-        // TODO: make this configurable?
-        val trigger = indicatorPlaceable.height * 1.5f
-        state.indicatorRefreshOffset = trigger
-
         // Our layout is the size of the content, coerced by the min constraints
         val layoutWidth = contentPlaceable.width.coerceAtLeast(constraints.minWidth)
         val layoutHeight = contentPlaceable.height.coerceAtLeast(constraints.minHeight)
@@ -287,12 +292,12 @@ fun SwipeRefresh(
 
             val slingshot = calculateSlingshot(
                 offsetY = state.indicatorOffset,
-                maxOffsetY = trigger,
-                height = indicatorPlaceable.height
+                maxOffsetY = state.indicatorRefreshOffset,
+                height = indicatorPlaceable.height,
             )
             indicatorPlaceable.place(
                 x = (layoutWidth - indicatorPlaceable.width) / 2,
-                y = -indicatorPlaceable.height + slingshot.offset,
+                y = (indicatorStart.roundToPx() - indicatorPlaceable.height) + slingshot.offset,
             )
         }
     }

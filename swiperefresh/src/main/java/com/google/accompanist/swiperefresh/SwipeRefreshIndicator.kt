@@ -19,6 +19,7 @@
 package com.google.accompanist.swiperefresh
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -37,14 +38,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import kotlin.math.min
 
 /**
  * A class to encapsulate details of different indicator sizes.
@@ -164,21 +164,28 @@ fun SwipeRefreshIndicator(
         targetValue = if (offset >= refreshOffset) MaxAlpha else MinAlpha,
         animationSpec = tween()
     )
-    val adjustedScale = if (scale) min(1f, offset / refreshOffset) else 1f
 
     val sizes = if (largeIndication) LargeSizes else DefaultSizes
 
     Surface(
         modifier = modifier
             .size(size = sizes.size)
-            .scale(adjustedScale),
+            .graphicsLayer {
+                val scaleFraction = if (scale) {
+                    // We use LinearOutSlowInEasing to speed up the scale in
+                    LinearOutSlowInEasing
+                        .transform(offset / refreshOffset)
+                        .coerceIn(0f, 1f)
+                } else 1f
+
+                scaleX = scaleFraction
+                scaleY = scaleFraction
+            },
         shape = shape,
         color = backgroundColor,
         elevation = adjustedElevation
     ) {
-        val painter = remember {
-            CircularProgressPainter()
-        }
+        val painter = remember { CircularProgressPainter() }
         painter.arcRadius = sizes.arcRadius
         painter.strokeWidth = sizes.strokeWidth
         painter.arrowWidth = sizes.arrowWidth
@@ -186,6 +193,7 @@ fun SwipeRefreshIndicator(
         painter.arrowEnabled = arrowEnabled && !isRefreshing
         painter.color = contentColor
         painter.alpha = animatedAlpha
+
         val slingshot = calculateSlingshot(
             offsetY = offset,
             maxOffsetY = refreshOffset,
@@ -195,6 +203,7 @@ fun SwipeRefreshIndicator(
         painter.endTrim = slingshot.endTrim
         painter.rotation = slingshot.rotation
         painter.arrowScale = slingshot.arrowScale
+
         // This shows either an Image with CircularProgressPainter or a CircularProgressIndicator,
         // depending on refresh state
         Crossfade(
