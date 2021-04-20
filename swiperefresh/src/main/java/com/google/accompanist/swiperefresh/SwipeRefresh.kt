@@ -20,6 +20,8 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.MutatorMutex
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
@@ -29,14 +31,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.Velocity
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
@@ -93,22 +97,9 @@ class SwipeRefreshState(
      */
     val indicatorOffset: Float get() = _indicatorOffset.value
 
-    /**
-     * The [indicatorOffset] value (or greater) which would trigger a refresh when the use
-     * releases from a swipe.
-     */
-    var indicatorRefreshOffset by mutableStateOf(0f)
-        internal set
-
     internal suspend fun animateOffsetTo(offset: Float) {
         mutatorMutex.mutate {
             _indicatorOffset.animateTo(offset)
-        }
-    }
-
-    internal suspend fun animateBackToRest() {
-        mutatorMutex.mutate {
-            _indicatorOffset.animateTo(if (isRefreshing) indicatorRefreshOffset else 0f)
         }
     }
 
@@ -128,6 +119,7 @@ private class SwipeRefreshNestedScrollConnection(
     private val onRefresh: () -> Unit,
 ) : NestedScrollConnection {
     var enabled: Boolean = false
+    var refreshTrigger: Float = 0f
 
     override fun onPreScroll(
         available: Offset,
@@ -158,7 +150,7 @@ private class SwipeRefreshNestedScrollConnection(
         val minOffset = when {
             // If we're refreshing, we don't want the indicator to scroll below the refresh
             // trigger
-            state.isRefreshing -> state.indicatorRefreshOffset
+            state.isRefreshing -> refreshTrigger
             else -> 0f
         }
         val newOffset = (available.y * DragMultiplier + state.indicatorOffset)
@@ -180,13 +172,13 @@ private class SwipeRefreshNestedScrollConnection(
         // If we're currently refreshing, just animate back to the resting position
         state.isRefreshing -> {
             coroutineScope.launch {
-                state.animateOffsetTo(state.indicatorRefreshOffset)
+                state.animateOffsetTo(refreshTrigger)
             }
             // Don't consume any velocity, to allow the scrolling layout to fling
             Velocity.Zero
         }
         // If we're dragging and scrolled past the trigger point, refresh!
-        state.isSwipeInProgress && state.indicatorOffset >= state.indicatorRefreshOffset -> {
+        state.isSwipeInProgress && state.indicatorOffset >= refreshTrigger -> {
             onRefresh()
             // Don't consume any velocity, to allow the scrolling layout to fling
             Velocity.Zero
@@ -222,6 +214,9 @@ private class SwipeRefreshNestedScrollConnection(
  * @param onRefresh Lambda which is invoked when a swipe to refresh gesture is completed.
  * @param modifier the modifier to apply to this layout.
  * @param swipeEnabled Whether the the layout should react to swipe gestures or not.
+ * @param refreshTriggerDistance The minimum swipe distance which would trigger a refresh.
+ * @param indicatorAlignment The alignment of the indicator. Defaults to [Alignment.TopCenter].
+ * @param indicatorPadding Content padding for the indicator, to inset the indicator in if required.
  * @param indicator the indicator that represents the current state. By default this
  * will use a [SwipeRefreshIndicator].
  * @param content The content containing a scroll composable.
@@ -232,21 +227,26 @@ fun SwipeRefresh(
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
     swipeEnabled: Boolean = true,
-    indicator: @Composable (SwipeRefreshState) -> Unit = { SwipeRefreshIndicator(it) },
+    refreshTriggerDistance: Dp = 80.dp,
+    indicatorAlignment: Alignment = Alignment.TopCenter,
+    indicatorPadding: PaddingValues = PaddingValues(0.dp),
+    indicator: @Composable (state: SwipeRefreshState, refreshTrigger: Dp) -> Unit = { s, trigger ->
+        SwipeRefreshIndicator(s, trigger)
+    },
     content: @Composable () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val updatedOnRefresh = rememberUpdatedState(onRefresh)
 
-    // Our LaunchedEffect, which animates the indicator to an appropriate resting position
-    // We need to use isRefreshing and indicatorRefreshOffset as keys, so that we animate
-    // appropriately if those values change
-    LaunchedEffect(state.isSwipeInProgress, state.isRefreshing, state.indicatorRefreshOffset) {
+    // Our LaunchedEffect, which animates the indicator to its resting position
+    LaunchedEffect(state.isSwipeInProgress) {
         if (!state.isSwipeInProgress) {
-            // If there's not a swipe in progress, rest the indicator at an appropriate position
-            state.animateBackToRest()
+            // If there's not a swipe in progress, rest the indicator at 0f
+            state.animateOffsetTo(0f)
         }
     }
+
+    val refreshTriggerPx = with(LocalDensity.current) { refreshTriggerDistance.toPx() }
 
     // Our nested scroll connection, which updates our state.
     val nestedScrollConnection = remember(state, coroutineScope) {
@@ -256,47 +256,18 @@ fun SwipeRefresh(
         }
     }.apply {
         this.enabled = swipeEnabled
+        this.refreshTrigger = refreshTriggerPx
     }
 
-    Layout(
-        content = {
-            Box(Modifier.layoutId(LayoutContentTag)) { content() }
-            Box(Modifier.layoutId(LayoutIndicatorTag)) { indicator(state) }
-        },
-        modifier = modifier.nestedScroll(connection = nestedScrollConnection)
-    ) { measurables, constraints ->
-        val noMinConstraints = constraints.copy(minWidth = 0, minHeight = 0)
+    Box(modifier.nestedScroll(connection = nestedScrollConnection)) {
+        content()
 
-        // Measure both the content and the indicator
-        val contentPlaceable = measurables.first { it.layoutId == LayoutContentTag }
-            .measure(noMinConstraints)
-        val indicatorPlaceable = measurables.first { it.layoutId == LayoutIndicatorTag }
-            .measure(noMinConstraints)
-
-        // TODO: make this configurable?
-        val trigger = indicatorPlaceable.height * 1.5f
-        state.indicatorRefreshOffset = trigger
-
-        // Our layout is the size of the content, coerced by the min constraints
-        val layoutWidth = contentPlaceable.width.coerceAtLeast(constraints.minWidth)
-        val layoutHeight = contentPlaceable.height.coerceAtLeast(constraints.minHeight)
-
-        layout(layoutWidth, layoutHeight) {
-            // Place our content at x = center, y = top
-            contentPlaceable.place(x = (layoutWidth - contentPlaceable.width) / 2, y = 0)
-
-            val slingshot = calculateSlingshot(
-                offsetY = state.indicatorOffset,
-                maxOffsetY = trigger,
-                height = indicatorPlaceable.height
-            )
-            indicatorPlaceable.place(
-                x = (layoutWidth - indicatorPlaceable.width) / 2,
-                y = -indicatorPlaceable.height + slingshot.offset,
-            )
+        Box(
+            Modifier
+                .align(indicatorAlignment)
+                .padding(indicatorPadding)
+        ) {
+            indicator(state, refreshTriggerDistance)
         }
     }
 }
-
-private const val LayoutContentTag = "swiperefresh_content"
-private const val LayoutIndicatorTag = "swiperefresh_indicator"

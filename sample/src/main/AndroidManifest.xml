@@ -225,6 +225,15 @@
         </activity>
 
         <activity
+            android:name=".swiperefresh.SwipeRefreshContentPaddingSample"
+            android:label="@string/swiperefresh_title_content_padding">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".swiperefresh.SwipeRefreshTweakedIndicatorSample"
             android:label="@string/swiperefresh_title_tweaked">
             <intent-filter>

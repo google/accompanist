@@ -86,9 +86,10 @@ private fun Sample() {
         SwipeRefresh(
             state = rememberSwipeRefreshState(isRefreshing = refreshing),
             onRefresh = { refreshing = true },
-            indicator = {
+            indicator = { state, trigger ->
                 SwipeRefreshIndicator(
-                    state = it,
+                    state = state,
+                    refreshTriggerDistance = trigger,
                     scale = true,
                     arrowEnabled = false,
                     backgroundColor = MaterialTheme.colors.primary,
