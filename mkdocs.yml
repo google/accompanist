@@ -17,9 +17,11 @@ nav:
   - 'Coil':
     - 'Guide': coil.md
     - 'API': api/coil/
+    - 'Migration from CoilImage': coil/migration-coilimage.md
   - 'Glide':
     - 'Guide': glide.md
     - 'API': api/glide/
+    - 'Migration from GlideImage': glide/migration-glideimage.md
   - 'Image Loading Core':
     - 'API': api/imageloading-core/
   - 'Insets':
