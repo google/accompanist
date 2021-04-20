@@ -19,7 +19,8 @@ import com.google.accompanist.coil.rememberCoilPainter
 
 Image(
     painter = rememberCoilPainter("https://picsum.photos/300/300"),
-    contentDescription = "My content description",
+    contentDescription = stringResource(R.string.image_content_desc),
+    previewPlaceholder = R.drawable.placeholder,
 )
 ```
 
@@ -38,7 +39,7 @@ Image(
             transformations(CircleCropTransformation())
         },
     ),
-    contentDescription = "My content description",
+    contentDescription = stringResource(R.string.image_content_desc),
 )
 ```
 
@@ -60,7 +61,7 @@ Image(
         "https://picsum.photos/300/300",
         fadeIn = true
     ),
-    contentDescription = "My content description",
+    contentDescription = stringResource(R.string.image_content_desc),
 )
 ```
 
@@ -75,12 +76,17 @@ val painter = rememberCoilPainter("https://picsum.photos/300/300")
 Box {
     Image(
         painter = painter,
-        contentDescription = "My content description",
+        contentDescription = stringResource(R.string.image_content_desc),
     )
 
-    if (painter.loadState == ImageLoadState.Loading) {
-        // Display a circular progress indicator whilst loading
-        CircularProgressIndicator(Modifier.align(Alignment.Center))     
+    when (painter.loadState) {
+        ImageLoadState.Loading -> {
+            // Display a circular progress indicator whilst loading
+            CircularProgressIndicator(Modifier.align(Alignment.Center))
+        }
+        is ImageLoadState.Error -> {
+            // If you wish to display some content if the request fails
+        }
     }
 }
 ```
@@ -97,13 +103,33 @@ Image(
         request = "https://picsum.photos/300/300",
         previewPlaceholder = R.drawable.placeholder,
     ),
-    contentDescription = "My content description",
+    contentDescription = stringResource(R.string.image_content_desc),
 )
 ```
+
+If the referenced drawable is only used for the purposes of `previewPlaceholder`s, it can be placed in the resources of your `debug` build variant For example: `app/debug/res/drawable/`. This allows the drawable to be only bundled in your debug builds, and not shipped to users of your release build.
 
 ## GIFs
 
 Accompanist Coil supports GIFs through Coil's own GIF support. Follow the [setup instructions](https://coil-kt.github.io/coil/gifs/) and it should just work.
+
+## Observing load state changes
+
+To observe changes to the load state you can use [`snapshotFlow()`][snapshotflow] to observe changes to `painter.loadState`, and then call your logic as necessary:
+
+``` kotlin
+val painter = rememberCoilPainter("https://image.url")
+
+LaunchedEffect(painter) {
+    snapshotFlow { painter.loadState }
+        .filter { it.isFinalState() }
+        .collect { result ->
+            // TODO do something with result
+        }
+}
+
+Image(painter = painter)
+```
 
 ## Custom ImageLoader
 
@@ -143,12 +169,13 @@ dependencies {
 
 Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap]. These are updated on every commit.
 
-[compose]: https://developer.android.com/jetpack/compose
-[snap]: https://oss.sonatype.org/content/repositories/snapshots/com/google/accompanist/accompanist-coil/
-[coil]: https://github.com/coil-kt/coil
-[rememberpainter]: ../api/coil/coil/com.google.accompanist.coil/remember-coil-painter.html
-[imageloadstate]: ../api/imageloading-core/imageloading-core/com.google.accompanist.imageloading/-image-load-state/index.html
-[loadpainter]: ../api/imageloading-core/imageloading-core/com.google.accompanist.imageloading/-load-painter/index.html
-[local]: ../api/coil/coil/com.google.accompanist.coil/-local-image-loader.html
-[crossfade]: https://developer.android.com/reference/kotlin/androidx/compose/animation/package-summary#crossfade
-[painter]: https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/painter/Painter
+  [compose]: https://developer.android.com/jetpack/compose
+  [snap]: https://oss.sonatype.org/content/repositories/snapshots/com/google/accompanist/accompanist-coil/
+  [coil]: https://github.com/coil-kt/coil
+  [rememberpainter]: ../api/coil/coil/com.google.accompanist.coil/remember-coil-painter.html
+  [imageloadstate]: ../api/imageloading-core/imageloading-core/com.google.accompanist.imageloading/-image-load-state/index.html
+  [loadpainter]: ../api/imageloading-core/imageloading-core/com.google.accompanist.imageloading/-load-painter/index.html
+  [local]: ../api/coil/coil/com.google.accompanist.coil/-local-image-loader.html
+  [crossfade]: https://developer.android.com/reference/kotlin/androidx/compose/animation/package-summary#crossfade
+  [painter]: https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/painter/Painter
+  [snapshotflow]: https://developer.android.com/reference/kotlin/androidx/compose/runtime/package-summary#snapshotflow

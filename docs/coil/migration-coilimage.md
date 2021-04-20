@@ -15,21 +15,7 @@ The new API is intentionally missing some functionality which was previously ava
 
 ### onRequestCompleted()
 
-`CoilImage` previously allowed the passing of a lambda which was invoked whenever a request was completed. This has been removed to simplify the internal state. If you wish to convert state changes into events, you can use [`snapshotFlow()`][snapshotflow] to observe changes to `painter.loadState`, and then call your logic as necessary:
-
-``` kotlin
-val painter = rememberCoilPainter("https://image.url")
-
-LaunchedEffect(painter) {
-    snapshotFlow { painter.loadState }
-        .filter { it.isFinalState() }
-        .collect { result ->
-            // TODO do something with result
-        }
-}
-
-Image(painter = painter)
-```
+`CoilImage` previously allowed the passing of a lambda which was invoked whenever a request was completed. This has been removed to simplify the internal state. If you wish to observe these events see the ['Observing load state changes'](../#observing-load-state-changes) document for an alternative.
 
 ### Loading and error content slots
 
