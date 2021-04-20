@@ -2,7 +2,7 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-coil)](https://search.maven.org/search?q=g:com.google.accompanist)
 
-This library brings easy-to-use [Painter][painter] which can fetch and display images from external sources, such as network, using the [Coil][coil] image loading library.
+This library provides easy-to-use [Painter][painter] which can fetch and display images from external sources, such as network, using the [Coil][coil] image loading library.
 
 <img src="https://coil-kt.github.io/coil/logo.svg" width="480" alt="Coil logo">
 
@@ -66,7 +66,7 @@ Image(
 
 ## Custom content
 
-Some times you may wish to display some alternative content whilst the image is loading, or an error has occurred. The painter returned from `rememberCoilPainter()` is an instance of [`LoadPainter`][loadpainter], which is stateful and allows you to display different content as required:
+Some times you may wish to display alternative content whilst the image is loading, or an error has occurred. The painter returned from `rememberCoilPainter()` is an instance of [`LoadPainter`][loadpainter], which is stateful and allows you to display different content as required:
 
 
 ``` kotlin

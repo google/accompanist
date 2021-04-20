@@ -7,7 +7,7 @@ The `CoilImage()` functions still exist (as of v0.8.0) but are now deprecated. T
 
 ### ReplaceWith
 
-An automatic replacement migration has been provided in the deprecation. This allows you to migrate one or all `CoilImage()` calls over to the new API.  This works perfectly in most cases but you may find that the resulting code needs tidying up, YMMV.
+An automatic replacement migration has been provided in the deprecation. This allows you to migrate one or all `CoilImage()` calls over to the new API.
 
 ## Removed features
 
