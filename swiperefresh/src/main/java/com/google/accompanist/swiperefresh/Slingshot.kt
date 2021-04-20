@@ -16,6 +16,12 @@
 
 package com.google.accompanist.swiperefresh
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -31,7 +37,8 @@ import kotlin.math.pow
  * @param maxOffsetY The max y offset.
  * @param height The height of the item to slingshot.
  */
-internal fun calculateSlingshot(
+@Composable
+internal fun rememberUpdatedSlingshot(
     offsetY: Float,
     maxOffsetY: Float,
     height: Int
@@ -60,21 +67,22 @@ internal fun calculateSlingshot(
     val rotation = (-0.25f + 0.4f * adjustedPercent + tensionPercent * 2) * 0.5f
     val arrowScale = min(1f, adjustedPercent)
 
-    return Slingshot(
-        offset = offset,
-        startTrim = startTrim,
-        endTrim = endTrim,
-        rotation = rotation,
-        arrowScale = arrowScale
-    )
+    return remember { Slingshot() }.apply {
+        this.offset = offset
+        this.startTrim = startTrim
+        this.endTrim = endTrim
+        this.rotation = rotation
+        this.arrowScale = arrowScale
+    }
 }
 
-internal data class Slingshot(
-    val offset: Int,
-    val startTrim: Float,
-    val endTrim: Float,
-    val rotation: Float,
-    val arrowScale: Float
-)
+@Stable
+internal class Slingshot {
+    var offset: Int by mutableStateOf(0)
+    var startTrim: Float by mutableStateOf(0f)
+    var endTrim: Float by mutableStateOf(0f)
+    var rotation: Float by mutableStateOf(0f)
+    var arrowScale: Float by mutableStateOf(0f)
+}
 
 internal const val MaxProgressArc = 0.8f

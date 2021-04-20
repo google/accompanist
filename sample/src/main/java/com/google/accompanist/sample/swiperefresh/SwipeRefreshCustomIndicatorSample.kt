@@ -19,28 +19,23 @@ package com.google.accompanist.sample.swiperefresh
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animate
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -49,9 +44,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
@@ -96,8 +95,11 @@ private fun Sample() {
         SwipeRefresh(
             state = rememberSwipeRefreshState(isRefreshing = refreshing),
             onRefresh = { refreshing = true },
-            indicator = { state ->
-                CustomIndicator(swipeRefreshState = state)
+            indicator = { state, trigger ->
+                GlowIndicator(
+                    swipeRefreshState = state,
+                    refreshTriggerDistance = trigger
+                )
             },
         ) {
             LazyColumn {
@@ -125,46 +127,44 @@ private fun Sample() {
     }
 }
 
+/**
+ * A custom indicator which displays a glow and progress indicator
+ */
 @Composable
-fun CustomIndicator(swipeRefreshState: SwipeRefreshState) {
-    // Animates the indicator when refreshing, by rotating it
-    val rotation = remember { mutableStateOf(0f) }
-    LaunchedEffect(swipeRefreshState.isRefreshing) {
-        if (swipeRefreshState.isRefreshing) {
-            animate(
-                initialValue = 0f,
-                targetValue = 360f,
-                animationSpec = infiniteRepeatable(
-                    animation = tween(500, easing = LinearEasing),
-                ),
-                block = { value, _ -> rotation.value = value }
-            )
-        } else {
-            rotation.value = 0f
-        }
-    }
-
-    Surface(
-        border = BorderStroke(1.dp, MaterialTheme.colors.primary),
-        elevation = 4.dp,
-        shape = CircleShape,
-        modifier = Modifier
-            .size(48.dp)
-            .graphicsLayer {
-                // We rotate the indicator in the X axis as the user swipes
-                val circumference = 2 * Math.PI.toFloat() * (48.dp.toPx() / 2)
-                rotationX = (swipeRefreshState.indicatorOffset / circumference) * -360f
-
-                // Apply our animated 'refreshing' rotation
-                rotationZ = rotation.value
+fun GlowIndicator(
+    swipeRefreshState: SwipeRefreshState,
+    refreshTriggerDistance: Dp,
+    color: Color = MaterialTheme.colors.primary,
+) {
+    Box(
+        Modifier
+            .drawWithCache {
+                onDrawBehind {
+                    val distance = refreshTriggerDistance.toPx()
+                    val progress = (swipeRefreshState.indicatorOffset / distance).coerceIn(0f, 1f)
+                    // We draw a translucent glow
+                    val brush = Brush.verticalGradient(
+                        0f to color.copy(alpha = 0.45f),
+                        1f to color.copy(alpha = 0f)
+                    )
+                    // And fade the glow in/out based on the swipe progress
+                    drawRect(brush = brush, alpha = FastOutSlowInEasing.transform(progress))
+                }
             }
+            .fillMaxWidth()
+            .height(72.dp)
     ) {
-        Image(
-            imageVector = Icons.Default.Refresh,
-            contentDescription = "Refresh",
-            modifier = Modifier
-                .wrapContentSize()
-                .size(24.dp)
-        )
+        if (swipeRefreshState.isRefreshing) {
+            // If we're refreshing, show an indeterminate progress indicator
+            LinearProgressIndicator(Modifier.fillMaxWidth())
+        } else {
+            // Otherwise we display a determinate progress indicator with the current swipe progress
+            val trigger = with(LocalDensity.current) { refreshTriggerDistance.toPx() }
+            val progress = (swipeRefreshState.indicatorOffset / trigger).coerceIn(0f, 1f)
+            LinearProgressIndicator(
+                progress = progress,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
     }
 }
