@@ -71,10 +71,11 @@ To customize the default indicator, we can provide our own `indicator` content b
     SwipeRefresh(
         state = /* ... */,
         onRefresh = /* ... */,
-        indicator = { state ->
+        indicator = { state, trigger ->
             SwipeRefreshIndicator(
-                // Pass the SwipeRefreshState through
+                // Pass the SwipeRefreshState + trigger through
                 state = state,
+                refreshTriggerDistance = trigger,
                 // Enable the scale animation
                 scale = true,
                 // Change the color and shape
