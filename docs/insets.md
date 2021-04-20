@@ -19,7 +19,7 @@ setContent {
 ```
 
 !!! note
-    **This library does not disable window decor fitting.** For your view hierarchy to able to receive insets, you need to make sure to call: [`WindowCompat.setDecorFitsSystemWindows(window, false)`](https://developer.android.com/reference/androidx/core/view/WindowCompat#setDecorFitsSystemWindows(android.view.Window,%20boolean)) from your Activity.
+    **This library does not disable window decor fitting.** For your view hierarchy to able to receive insets, you need to make sure to call: [`WindowCompat.setDecorFitsSystemWindows(window, false)`](https://developer.android.com/reference/androidx/core/view/WindowCompat#setDecorFitsSystemWindows(android.view.Window,%20boolean)) from your Activity. You also need to set the system bar backgrounds to be transparent, which can be done with our [System UI Controller](../systemuicontroller) library.
 
 `ProvideWindowInsets` allows the library to set an [`OnApplyWindowInsetsListener`][insetslistener] on your content's host view. That listener is used to update the value of a composition local bundled in this library: `LocalWindowInsets`.
 
