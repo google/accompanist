@@ -118,8 +118,8 @@ private fun SwipeRefreshTestContent(
             state = state,
             onRefresh = onRefresh,
             modifier = Modifier.testTag(SwipeRefreshTag),
-            indicator = { state ->
-                SwipeRefreshIndicator(state, Modifier.testTag(SwipeRefreshIndicatorTag))
+            indicator = { state, trigger ->
+                SwipeRefreshIndicator(state, trigger, Modifier.testTag(SwipeRefreshIndicatorTag))
             }
         ) {
             LazyColumn(Modifier.fillMaxSize()) {

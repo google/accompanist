@@ -47,8 +47,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
@@ -93,8 +95,11 @@ private fun Sample() {
         SwipeRefresh(
             state = rememberSwipeRefreshState(isRefreshing = refreshing),
             onRefresh = { refreshing = true },
-            indicator = { state ->
-                GlowIndicator(swipeRefreshState = state)
+            indicator = { state, trigger ->
+                GlowIndicator(
+                    swipeRefreshState = state,
+                    refreshTriggerDistance = trigger
+                )
             },
         ) {
             LazyColumn {
@@ -128,15 +133,15 @@ private fun Sample() {
 @Composable
 fun GlowIndicator(
     swipeRefreshState: SwipeRefreshState,
+    refreshTriggerDistance: Dp,
     color: Color = MaterialTheme.colors.primary,
 ) {
     Box(
         Modifier
             .drawWithCache {
                 onDrawBehind {
-                    val progress = with(swipeRefreshState) {
-                        (indicatorOffset / indicatorRefreshOffset).coerceIn(0f, 1f)
-                    }
+                    val distance = refreshTriggerDistance.toPx()
+                    val progress = (swipeRefreshState.indicatorOffset / distance).coerceIn(0f, 1f)
                     // We draw a translucent glow
                     val brush = Brush.verticalGradient(
                         0f to color.copy(alpha = 0.45f),
@@ -154,9 +159,8 @@ fun GlowIndicator(
             LinearProgressIndicator(Modifier.fillMaxWidth())
         } else {
             // Otherwise we display a determinate progress indicator with the current swipe progress
-            val progress = with(swipeRefreshState) {
-                (indicatorOffset / indicatorRefreshOffset).coerceIn(0f, 1f)
-            }
+            val trigger = with(LocalDensity.current) { refreshTriggerDistance.toPx() }
+            val progress = (swipeRefreshState.indicatorOffset / trigger).coerceIn(0f, 1f)
             LinearProgressIndicator(
                 progress = progress,
                 modifier = Modifier.fillMaxWidth(),

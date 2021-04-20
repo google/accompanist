@@ -103,6 +103,7 @@ private val LargeSizes = SwipeRefreshIndicatorSizes(
 @Composable
 fun SwipeRefreshIndicator(
     state: SwipeRefreshState,
+    refreshTriggerDistance: Dp,
     modifier: Modifier = Modifier,
     scale: Boolean = false,
     arrowEnabled: Boolean = true,
@@ -120,10 +121,12 @@ fun SwipeRefreshIndicator(
     }
     val sizes = if (largeIndication) LargeSizes else DefaultSizes
 
+    val indicatorRefreshTrigger = with(LocalDensity.current) { refreshTriggerDistance.toPx() }
+
     val animatedAlpha by animateFloatAsState(
         targetValue = when {
             state.isRefreshing -> MaxAlpha
-            state.indicatorOffset >= state.indicatorRefreshOffset -> MaxAlpha
+            state.indicatorOffset >= indicatorRefreshTrigger -> MaxAlpha
             else -> MinAlpha
         },
         animationSpec = tween()
@@ -134,7 +137,7 @@ fun SwipeRefreshIndicator(
 
     val slingshot = rememberUpdatedSlingshot(
         offsetY = state.indicatorOffset,
-        maxOffsetY = state.indicatorRefreshOffset,
+        maxOffsetY = indicatorRefreshTrigger,
         height = indicatorHeight,
     )
 
@@ -168,7 +171,7 @@ fun SwipeRefreshIndicator(
                 translationY = offset - indicatorHeight
 
                 val scaleFraction = if (scale && !state.isRefreshing) {
-                    val progress = offset / state.indicatorRefreshOffset.coerceAtLeast(1f)
+                    val progress = offset / indicatorRefreshTrigger.coerceAtLeast(1f)
 
                     // We use LinearOutSlowInEasing to speed up the scale in
                     LinearOutSlowInEasing

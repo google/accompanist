@@ -100,8 +100,12 @@ private fun Sample() {
                 // Shift the indicator to match the list content padding
                 indicatorPadding = contentPadding,
                 // Tweak the indicator to scale up/down
-                indicator = { state ->
-                    SwipeRefreshIndicator(state = state, scale = true)
+                indicator = { state, refreshTriggerDistance ->
+                    SwipeRefreshIndicator(
+                        state = state,
+                        refreshTriggerDistance = refreshTriggerDistance,
+                        scale = true
+                    )
                 }
             ) {
                 LazyColumn(contentPadding = contentPadding) {
