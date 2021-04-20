@@ -12,10 +12,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          # 0 == fetch all history history
-          fetch-depth: '0'
+          fetch-depth: '0' # 0 == fetch all history history
           ref: 'snapshot'
-        
+          token: ${{ secrets.AUTOMERGE_PAT }}
+
       - run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
