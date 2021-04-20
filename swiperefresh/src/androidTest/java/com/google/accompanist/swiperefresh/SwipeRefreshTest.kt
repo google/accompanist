@@ -35,6 +35,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performGesture
 import androidx.compose.ui.test.swipeDown
 import com.google.common.truth.Truth.assertThat
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
@@ -43,6 +44,7 @@ class SwipeRefreshTest {
     val rule = createComposeRule()
 
     @Test
+    @Ignore("https://issuetracker.google.com/issues/185814751")
     fun swipeRefreshes() {
         val state = SwipeRefreshState(false)
         var refreshCallCount = 0
