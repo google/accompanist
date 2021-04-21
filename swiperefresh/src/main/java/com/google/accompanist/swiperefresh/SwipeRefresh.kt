@@ -127,6 +127,8 @@ private class SwipeRefreshNestedScrollConnection(
     ): Offset = when {
         // If swiping isn't enabled, return zero
         !enabled -> Offset.Zero
+        // If we're refreshing, return zero
+        state.isRefreshing -> Offset.Zero
         // If the user is swiping up, handle it
         source == NestedScrollSource.Drag && available.y < 0 -> onScroll(available)
         else -> Offset.Zero
@@ -139,6 +141,8 @@ private class SwipeRefreshNestedScrollConnection(
     ): Offset = when {
         // If swiping isn't enabled, return zero
         !enabled -> Offset.Zero
+        // If we're refreshing, return zero
+        state.isRefreshing -> Offset.Zero
         // If the user is swiping down and there's y remaining, handle it
         source == NestedScrollSource.Drag && available.y > 0 -> onScroll(available)
         else -> Offset.Zero
@@ -147,14 +151,7 @@ private class SwipeRefreshNestedScrollConnection(
     private fun onScroll(available: Offset): Offset {
         state.isSwipeInProgress = true
 
-        val minOffset = when {
-            // If we're refreshing, we don't want the indicator to scroll below the refresh
-            // trigger
-            state.isRefreshing -> refreshTrigger
-            else -> 0f
-        }
-        val newOffset = (available.y * DragMultiplier + state.indicatorOffset)
-            .coerceAtLeast(minOffset)
+        val newOffset = (available.y * DragMultiplier + state.indicatorOffset).coerceAtLeast(0f)
         val dragConsumed = newOffset - state.indicatorOffset
 
         return if (dragConsumed.absoluteValue >= 0.5f) {
@@ -168,25 +165,18 @@ private class SwipeRefreshNestedScrollConnection(
         }
     }
 
-    override suspend fun onPreFling(available: Velocity): Velocity = when {
-        // If we're currently refreshing, just animate back to the resting position
-        state.isRefreshing -> {
-            coroutineScope.launch {
-                state.animateOffsetTo(refreshTrigger)
-            }
-            // Don't consume any velocity, to allow the scrolling layout to fling
-            Velocity.Zero
-        }
-        // If we're dragging and scrolled past the trigger point, refresh!
-        state.isSwipeInProgress && state.indicatorOffset >= refreshTrigger -> {
+    override suspend fun onPreFling(available: Velocity): Velocity {
+        // If we're dragging, not currently refreshing and scrolled
+        // past the trigger point, refresh!
+        if (!state.isRefreshing && state.indicatorOffset >= refreshTrigger) {
             onRefresh()
-            // Don't consume any velocity, to allow the scrolling layout to fling
-            Velocity.Zero
         }
-        else -> Velocity.Zero
-    }.also {
+
         // Reset the drag in progress state
         state.isSwipeInProgress = false
+
+        // Don't consume any velocity, to allow the scrolling layout to fling
+        return Velocity.Zero
     }
 }
 
