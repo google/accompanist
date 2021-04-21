@@ -96,7 +96,7 @@ object LoadPainterDefaults {
 fun <R> rememberLoadPainter(
     loader: Loader<R>,
     request: R?,
-    shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean,
+    shouldRefetchOnSizeChange: ShouldRefetchOnSizeChange,
     fadeIn: Boolean = false,
     fadeInDurationMs: Int = LoadPainterDefaults.FadeInTransitionDuration,
     @DrawableRes previewPlaceholder: Int = 0,
@@ -128,7 +128,18 @@ fun <R> rememberLoadPainter(
     return painter
 }
 
-typealias ShouldRefetchOnSizeChange = (currentState: ImageLoadState, size: IntSize) -> Boolean
+/**
+ * Interface that allows apps to control whether a request is re-run once the size changes.
+ */
+fun interface ShouldRefetchOnSizeChange {
+    /**
+     * Return `true` if the request should be re-run if the [size] has changed.
+     *
+     * @param currentState The current request state.
+     * @param size The new size.
+     */
+    operator fun invoke(currentState: ImageLoadState, size: IntSize): Boolean
+}
 
 /**
  * A generic image loading painter, which provides the [Loader] interface for image loading
@@ -155,9 +166,7 @@ class LoadPainter<R> internal constructor(
      * Lambda which will be invoked when the size changes, allowing
      * optional re-fetching of the image.
      */
-    var shouldRefetchOnSizeChange by mutableStateOf<ShouldRefetchOnSizeChange>(
-        value = { _, _ -> false }
-    )
+    var shouldRefetchOnSizeChange by mutableStateOf(ShouldRefetchOnSizeChange { _, _ -> false })
 
     /**
      * The current [ImageLoadState].

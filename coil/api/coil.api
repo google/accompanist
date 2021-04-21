@@ -7,7 +7,7 @@ public final class com/google/accompanist/coil/CoilImage {
 
 public final class com/google/accompanist/coil/CoilKt {
 	public static final fun getLocalImageLoader ()Landroidx/compose/runtime/ProvidableCompositionLocal;
-	public static final fun rememberCoilPainter (Ljava/lang/Object;Lcoil/ImageLoader;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;ZIILandroidx/compose/runtime/Composer;II)Lcom/google/accompanist/imageloading/LoadPainter;
+	public static final fun rememberCoilPainter (Ljava/lang/Object;Lcoil/ImageLoader;Lcom/google/accompanist/imageloading/ShouldRefetchOnSizeChange;Lkotlin/jvm/functions/Function2;ZIILandroidx/compose/runtime/Composer;II)Lcom/google/accompanist/imageloading/LoadPainter;
 }
 
 public final class com/google/accompanist/coil/CoilPainterDefaults {
