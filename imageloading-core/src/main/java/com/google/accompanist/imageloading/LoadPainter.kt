@@ -43,7 +43,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -181,7 +180,7 @@ class LoadPainter<R> internal constructor(
      * Our size to use when performing the image load request. This is internal due to
      * [ImageSuchDeprecated].
      */
-    internal var requestSize by mutableStateOf<IntSize?>(null)
+    internal var requestSize by mutableStateOf(IntSize(-1, -1))
 
     // Current request job
     private var job: Job? = null
@@ -249,7 +248,7 @@ class LoadPainter<R> internal constructor(
         job = coroutineScope.launch {
             combine(
                 snapshotFlow { request },
-                snapshotFlow { requestSize }.filterNotNull(),
+                snapshotFlow { requestSize },
                 transform = { request, size -> request to size }
             ).collectLatest { (request, size) ->
                 execute(request, size)
