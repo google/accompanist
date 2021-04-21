@@ -13,7 +13,7 @@
       <div id="main">
         <script type="text/javascript" src="../../../scripts/main.js"></script><div id="leftToggler"><span class="icon-toggler"></span></div>
 
-        <div class="main-content" id="content" pageids="pager::com.google.accompanist.pager//calculateCurrentOffsetForPage/com.google.accompanist.pager.PagerScope#kotlin.Int/PointingToDeclaration//-784319828">
+        <div class="main-content" id="content" pageids="pager::com.google.accompanist.pager//calculateCurrentOffsetForPage/com.google.accompanist.pager.PagerScope#kotlin.Int/PointingToDeclaration//-592755553">
           <div class="navigation-wrapper" id="navigation-wrapper">
             <div class="breadcrumbs"><a href="../../index.html">pager</a>/<a href="index.html">com.google.accompanist.pager</a>/<a href="calculate-current-offset-for-page.html">calculateCurrentOffsetForPage</a></div>
             <div class="pull-right d-flex">
@@ -32,6 +32,7 @@
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -54,14 +55,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
-import com.google.accompanist.coil.CoilImage
+import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
-import com.google.accompanist.sample.randomSampleImageUrl
+import com.google.accompanist.sample.rememberRandomSampleImageUrl
 import kotlin.math.absoluteValue
 fun main() { 
    //sampleStart 
@@ -99,14 +100,15 @@ HorizontalPager(
             }
             .fillMaxWidth(0.8f)
             .aspectRatio(1f)
-
     ) {
         Box {
-            CoilImage(
-                data = randomSampleImageUrl(width = 600),
+            Image(
+                painter = rememberCoilPainter(
+                    request = rememberRandomSampleImageUrl(width = 600),
+                    fadeIn = true,
+                ),
                 contentDescription = null,
-                fadeIn = true,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
             )
 
             ProfilePicture(
@@ -132,10 +134,10 @@ HorizontalPager(
    //sampleEnd
 }</pre></code></div></div></div></div>
           <h2 class="">Sources</h2>
-          <div class="table" data-togglable="Sources"><a data-name="%5Bcom.google.accompanist.pager%2F%2FcalculateCurrentOffsetForPage%2Fcom.google.accompanist.pager.PagerScope%23kotlin.Int%2FPointingToDeclaration%2F%5D%2FSource%2F-1955499042" anchor-label="https://github.com/google/accompanist/blob/main/pager/src/main/java/com/google/accompanist/pager/Pager.kt#L403" id="%5Bcom.google.accompanist.pager%2F%2FcalculateCurrentOffsetForPage%2Fcom.google.accompanist.pager.PagerScope%23kotlin.Int%2FPointingToDeclaration%2F%5D%2FSource%2F-1955499042" data-filterable-set=":pager:dokkaHtmlPartial/main"></a>
+          <div class="table" data-togglable="Sources"><a data-name="%5Bcom.google.accompanist.pager%2F%2FcalculateCurrentOffsetForPage%2Fcom.google.accompanist.pager.PagerScope%23kotlin.Int%2FPointingToDeclaration%2F%5D%2FSource%2F-1763934767" anchor-label="https://github.com/google/accompanist/blob/main/pager/src/main/java/com/google/accompanist/pager/Pager.kt#L403" id="%5Bcom.google.accompanist.pager%2F%2FcalculateCurrentOffsetForPage%2Fcom.google.accompanist.pager.PagerScope%23kotlin.Int%2FPointingToDeclaration%2F%5D%2FSource%2F-1763934767" data-filterable-set=":pager:dokkaHtmlPartial/main"></a>
             <div class="table-row" data-filterable-current=":pager:dokkaHtmlPartial/main" data-filterable-set=":pager:dokkaHtmlPartial/main">
               <div class="main-subrow keyValue ">
-                <div class=""><span class="inline-flex"><a href="https://github.com/google/accompanist/blob/main/pager/src/main/java/com/google/accompanist/pager/Pager.kt#L403">androidJvm source</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bcom.google.accompanist.pager%2F%2FcalculateCurrentOffsetForPage%2Fcom.google.accompanist.pager.PagerScope%23kotlin.Int%2FPointingToDeclaration%2F%5D%2FSource%2F-1955499042"></span>
+                <div class=""><span class="inline-flex"><a href="https://github.com/google/accompanist/blob/main/pager/src/main/java/com/google/accompanist/pager/Pager.kt#L403">androidJvm source</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bcom.google.accompanist.pager%2F%2FcalculateCurrentOffsetForPage%2Fcom.google.accompanist.pager.PagerScope%23kotlin.Int%2FPointingToDeclaration%2F%5D%2FSource%2F-1763934767"></span>
                       <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                     </span></span></div>
                 <div></div>

@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://google.github.io/accompanist/coil/">
-      
-      
         <meta name="author" content="Google">
       
-      <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.1.6">
+      
+        <link rel="canonical" href="https://google.github.io/accompanist/coil/">
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.2">
     
     
       
@@ -24,10 +24,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.6910b76c.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.6f955dcd.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.196e0c26.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ef6f36e2.min.css">
         
           
           
@@ -39,9 +39,9 @@
     
       
         
-        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CJetBrains+Mono&display=fallback">
-        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"JetBrains Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"JetBrains Mono"}</style>
       
     
     
@@ -59,8 +59,10 @@
     
     
     <body dir="ltr" data-md-color-scheme="" data-md-color-primary="black" data-md-color-accent="deep-orange">
-      
   
+    
+    <script>function __prefix(e){return new URL("..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
@@ -76,36 +78,38 @@
       
     </div>
     
-      
-
-<header class="md-header" data-md-component="header">
-  <nav class="md-header-nav md-grid" aria-label="Header">
-    <a href="https://google.github.io/accompanist/" title="Accompanist" class="md-header-nav__button md-logo" aria-label="Accompanist">
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Accompanist" class="md-header__button md-logo" aria-label="Accompanist" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 11V7.5l2.2-2.21c.8-.79.95-2.05.39-3.03A2.467 2.467 0 0013.45 1c-.21 0-.45.03-.64.09C11.73 1.38 11 2.38 11 3.5v3.24L7.86 9.91a5.946 5.946 0 00-1.25 6.43c.77 1.9 2.45 3.21 4.39 3.55v.61c0 .26-.23.5-.5.5H9v2h1.5c1.35 0 2.5-1.11 2.5-2.5V20c2.03 0 4.16-1.92 4.16-4.75 0-2.3-1.92-4.25-4.16-4.25m0-7.5c0-.23.11-.41.32-.47.22-.06.45.03.56.23a.5.5 0 01-.08.61l-.8.86V3.5m-2 8c-.97.64-1.7 1.74-1.96 2.76l1.96.52v3.05a3.86 3.86 0 01-2.57-2.26c-.59-1.46-.27-3.12.83-4.24L11 9.5v2m2 6.5v-5.06c1.17 0 2.18 1.1 2.18 2.31C15.18 17 13.91 18 13 18z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 11V7.5l2.2-2.21c.8-.79.95-2.05.39-3.03A2.467 2.467 0 0 0 13.45 1c-.21 0-.45.03-.64.09C11.73 1.38 11 2.38 11 3.5v3.24L7.86 9.91a5.946 5.946 0 0 0-1.25 6.43c.77 1.9 2.45 3.21 4.39 3.55v.61c0 .26-.23.5-.5.5H9v2h1.5c1.35 0 2.5-1.11 2.5-2.5V20c2.03 0 4.16-1.92 4.16-4.75 0-2.3-1.92-4.25-4.16-4.25m0-7.5c0-.23.11-.41.32-.47.22-.06.45.03.56.23a.5.5 0 0 1-.08.61l-.8.86V3.5m-2 8c-.97.64-1.7 1.74-1.96 2.76l1.96.52v3.05a3.86 3.86 0 0 1-2.57-2.26c-.59-1.46-.27-3.12.83-4.24L11 9.5v2m2 6.5v-5.06c1.17 0 2.18 1.1 2.18 2.31C15.18 17 13.91 18 13 18z"/></svg>
 
     </a>
-    <label class="md-header-nav__button md-icon" for="__drawer">
+    <label class="md-header__button md-icon" for="__drawer">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
     </label>
-    <div class="md-header-nav__title" data-md-component="header-title">
-      
-        <div class="md-header-nav__ellipsis">
-          <span class="md-header-nav__topic md-ellipsis">
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
             Accompanist
           </span>
-          <span class="md-header-nav__topic md-ellipsis">
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
             
               Guide
             
           </span>
         </div>
-      
+      </div>
     </div>
     
-      <label class="md-header-nav__button md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
       </label>
       
 <div class="md-search" data-md-component="search" role="dialog">
@@ -114,11 +118,11 @@
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
       <label class="md-search__icon md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
       </label>
-      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
       </button>
     </form>
     <div class="md-search__output">
@@ -135,12 +139,12 @@
 </div>
     
     
-      <div class="md-header-nav__source">
+      <div class="md-header__source">
         
-<a href="https://github.com/google/accompanist/" title="Go to repository" class="md-source">
+<a href="https://github.com/google/accompanist/" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     Accompanist
@@ -160,17 +164,19 @@
         <div class="md-main__inner md-grid">
           
             
-              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
 
+
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="https://google.github.io/accompanist/" title="Accompanist" class="md-nav__button md-logo" aria-label="Accompanist">
+    <a href=".." title="Accompanist" class="md-nav__button md-logo" aria-label="Accompanist" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 11V7.5l2.2-2.21c.8-.79.95-2.05.39-3.03A2.467 2.467 0 0013.45 1c-.21 0-.45.03-.64.09C11.73 1.38 11 2.38 11 3.5v3.24L7.86 9.91a5.946 5.946 0 00-1.25 6.43c.77 1.9 2.45 3.21 4.39 3.55v.61c0 .26-.23.5-.5.5H9v2h1.5c1.35 0 2.5-1.11 2.5-2.5V20c2.03 0 4.16-1.92 4.16-4.75 0-2.3-1.92-4.25-4.16-4.25m0-7.5c0-.23.11-.41.32-.47.22-.06.45.03.56.23a.5.5 0 01-.08.61l-.8.86V3.5m-2 8c-.97.64-1.7 1.74-1.96 2.76l1.96.52v3.05a3.86 3.86 0 01-2.57-2.26c-.59-1.46-.27-3.12.83-4.24L11 9.5v2m2 6.5v-5.06c1.17 0 2.18 1.1 2.18 2.31C15.18 17 13.91 18 13 18z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 11V7.5l2.2-2.21c.8-.79.95-2.05.39-3.03A2.467 2.467 0 0 0 13.45 1c-.21 0-.45.03-.64.09C11.73 1.38 11 2.38 11 3.5v3.24L7.86 9.91a5.946 5.946 0 0 0-1.25 6.43c.77 1.9 2.45 3.21 4.39 3.55v.61c0 .26-.23.5-.5.5H9v2h1.5c1.35 0 2.5-1.11 2.5-2.5V20c2.03 0 4.16-1.92 4.16-4.75 0-2.3-1.92-4.25-4.16-4.25m0-7.5c0-.23.11-.41.32-.47.22-.06.45.03.56.23a.5.5 0 0 1-.08.61l-.8.86V3.5m-2 8c-.97.64-1.7 1.74-1.96 2.76l1.96.52v3.05a3.86 3.86 0 0 1-2.57-2.26c-.59-1.46-.27-3.12.83-4.24L11 9.5v2m2 6.5v-5.06c1.17 0 2.18 1.1 2.18 2.31C15.18 17 13.91 18 13 18z"/></svg>
 
     </a>
     Accompanist
@@ -178,10 +184,10 @@
   
     <div class="md-nav__source">
       
-<a href="https://github.com/google/accompanist/" title="Go to repository" class="md-source">
+<a href="https://github.com/google/accompanist/" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     Accompanist
@@ -195,12 +201,15 @@
       
       
 
-
-  <li class="md-nav__item">
-    <a href=".." class="md-nav__link">
-      Overview
-    </a>
-  </li>
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
 
     
       
@@ -208,48 +217,53 @@
       
 
   
-
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  
     
-    <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
-    <label class="md-nav__link" for="nav-2">
-      Coil
-      <span class="md-nav__icon md-icon"></span>
-    </label>
-    <nav class="md-nav" aria-label="Coil" data-md-level="1">
-      <label class="md-nav__title" for="nav-2">
-        <span class="md-nav__icon md-icon"></span>
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+      
+      <label class="md-nav__link" for="__nav_2">
         Coil
-      </label>
-      <ul class="md-nav__list" data-md-scrollfix>
-        
-        
-          
-          
-          
-
-  
-
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-      
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="__toc">
-        Guide
         <span class="md-nav__icon md-icon"></span>
       </label>
+      <nav class="md-nav" aria-label="Coil" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Coil
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
     
-    <a href="./" class="md-nav__link md-nav__link--active">
-      Guide
-    </a>
-    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
       
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Guide
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Guide
+      </a>
+      
+        
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
   
   
     
@@ -259,11 +273,11 @@
       <span class="md-nav__icon md-icon"></span>
       Table of contents
     </label>
-    <ul class="md-nav__list" data-md-scrollfix>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#coilimage" class="md-nav__link">
-    CoilImage()
+  <a href="#remembercoilpainter" class="md-nav__link">
+    rememberCoilPainter()
   </a>
   
 </li>
@@ -272,19 +286,6 @@
   <a href="#fade-in-animation" class="md-nav__link">
     Fade-in animation
   </a>
-  
-    <nav class="md-nav" aria-label="Fade-in animation">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#fadein-parameter" class="md-nav__link">
-    fadeIn parameter
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -296,8 +297,22 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#previews" class="md-nav__link">
+    Previews
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#gifs" class="md-nav__link">
     GIFs
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#observing-load-state-changes" class="md-nav__link">
+    Observing load state changes
   </a>
   
 </li>
@@ -314,435 +329,548 @@
     Download
   </a>
   
-    <nav class="md-nav" aria-label="Download">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#whats-the-goal-of-the-library" class="md-nav__link">
-    What's the goal of the library?
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
     </ul>
   
 </nav>
-    
-  </li>
+      
+    </li>
+  
 
-        
           
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/coil/" class="md-nav__link">
+        API
+      </a>
+    </li>
+  
+
           
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="migration-coilimage/" class="md-nav__link">
+        Migration from CoilImage
+      </a>
+    </li>
+  
+
           
-
-
-  <li class="md-nav__item">
-    <a href="../api/coil/" class="md-nav__link">
-      API
-    </a>
-  </li>
-
-        
-      </ul>
-    </nav>
-  </li>
+        </ul>
+      </nav>
+    </li>
+  
 
     
       
       
       
 
-
-  <li class="md-nav__item md-nav__item--nested">
+  
+  
+  
     
-    <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" >
-    <label class="md-nav__link" for="nav-3">
-      Glide
-      <span class="md-nav__icon md-icon"></span>
-    </label>
-    <nav class="md-nav" aria-label="Glide" data-md-level="1">
-      <label class="md-nav__title" for="nav-3">
-        <span class="md-nav__icon md-icon"></span>
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      <label class="md-nav__link" for="__nav_3">
         Glide
-      </label>
-      <ul class="md-nav__list" data-md-scrollfix>
-        
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../glide/" class="md-nav__link">
-      Guide
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../api/glide/" class="md-nav__link">
-      API
-    </a>
-  </li>
-
-        
-      </ul>
-    </nav>
-  </li>
-
-    
-      
-      
-      
-
-
-  <li class="md-nav__item md-nav__item--nested">
-    
-    <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4" >
-    <label class="md-nav__link" for="nav-4">
-      Image Loading Core
-      <span class="md-nav__icon md-icon"></span>
-    </label>
-    <nav class="md-nav" aria-label="Image Loading Core" data-md-level="1">
-      <label class="md-nav__title" for="nav-4">
         <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Glide" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Glide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../glide/" class="md-nav__link">
+        Guide
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/glide/" class="md-nav__link">
+        API
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../glide/migration-glideimage/" class="md-nav__link">
+        Migration from GlideImage
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      <label class="md-nav__link" for="__nav_4">
         Image Loading Core
-      </label>
-      <ul class="md-nav__list" data-md-scrollfix>
-        
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../api/imageloading-core/" class="md-nav__link">
-      API
-    </a>
-  </li>
-
-        
-      </ul>
-    </nav>
-  </li>
-
-    
-      
-      
-      
-
-
-  <li class="md-nav__item md-nav__item--nested">
-    
-    <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5" >
-    <label class="md-nav__link" for="nav-5">
-      Insets
-      <span class="md-nav__icon md-icon"></span>
-    </label>
-    <nav class="md-nav" aria-label="Insets" data-md-level="1">
-      <label class="md-nav__title" for="nav-5">
         <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Image Loading Core" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Image Loading Core
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/imageloading-core/" class="md-nav__link">
+        API
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      <label class="md-nav__link" for="__nav_5">
         Insets
-      </label>
-      <ul class="md-nav__list" data-md-scrollfix>
-        
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../insets/" class="md-nav__link">
-      Guide
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../api/insets/" class="md-nav__link">
-      API
-    </a>
-  </li>
-
-        
-      </ul>
-    </nav>
-  </li>
-
-    
-      
-      
-      
-
-
-  <li class="md-nav__item md-nav__item--nested">
-    
-    <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6" >
-    <label class="md-nav__link" for="nav-6">
-      System UI Controller
-      <span class="md-nav__icon md-icon"></span>
-    </label>
-    <nav class="md-nav" aria-label="System UI Controller" data-md-level="1">
-      <label class="md-nav__title" for="nav-6">
         <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Insets" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Insets
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../insets/" class="md-nav__link">
+        Guide
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/insets/" class="md-nav__link">
+        API
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      <label class="md-nav__link" for="__nav_6">
         System UI Controller
-      </label>
-      <ul class="md-nav__list" data-md-scrollfix>
-        
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../systemuicontroller/" class="md-nav__link">
-      Guide
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../api/systemuicontroller/" class="md-nav__link">
-      API
-    </a>
-  </li>
-
-        
-      </ul>
-    </nav>
-  </li>
-
-    
-      
-      
-      
-
-
-  <li class="md-nav__item md-nav__item--nested">
-    
-    <input class="md-nav__toggle md-toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7" >
-    <label class="md-nav__link" for="nav-7">
-      AppCompat Theme
-      <span class="md-nav__icon md-icon"></span>
-    </label>
-    <nav class="md-nav" aria-label="AppCompat Theme" data-md-level="1">
-      <label class="md-nav__title" for="nav-7">
         <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="System UI Controller" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          System UI Controller
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../systemuicontroller/" class="md-nav__link">
+        Guide
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/systemuicontroller/" class="md-nav__link">
+        API
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      <label class="md-nav__link" for="__nav_7">
         AppCompat Theme
-      </label>
-      <ul class="md-nav__list" data-md-scrollfix>
-        
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../appcompat-theme/" class="md-nav__link">
-      Guide
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../api/appcompat-theme/" class="md-nav__link">
-      API
-    </a>
-  </li>
-
-        
-      </ul>
-    </nav>
-  </li>
-
-    
-      
-      
-      
-
-
-  <li class="md-nav__item md-nav__item--nested">
-    
-    <input class="md-nav__toggle md-toggle" data-md-toggle="nav-8" type="checkbox" id="nav-8" >
-    <label class="md-nav__link" for="nav-8">
-      Pager layouts
-      <span class="md-nav__icon md-icon"></span>
-    </label>
-    <nav class="md-nav" aria-label="Pager layouts" data-md-level="1">
-      <label class="md-nav__title" for="nav-8">
         <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="AppCompat Theme" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          AppCompat Theme
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../appcompat-theme/" class="md-nav__link">
+        Guide
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/appcompat-theme/" class="md-nav__link">
+        API
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
+      
+      <label class="md-nav__link" for="__nav_8">
         Pager layouts
-      </label>
-      <ul class="md-nav__list" data-md-scrollfix>
-        
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../pager/" class="md-nav__link">
-      Guide
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../api/pager/" class="md-nav__link">
-      API
-    </a>
-  </li>
-
-        
-      </ul>
-    </nav>
-  </li>
-
-    
-      
-      
-      
-
-
-  <li class="md-nav__item md-nav__item--nested">
-    
-    <input class="md-nav__toggle md-toggle" data-md-toggle="nav-9" type="checkbox" id="nav-9" >
-    <label class="md-nav__link" for="nav-9">
-      Flow layouts
-      <span class="md-nav__icon md-icon"></span>
-    </label>
-    <nav class="md-nav" aria-label="Flow layouts" data-md-level="1">
-      <label class="md-nav__title" for="nav-9">
         <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Pager layouts" data-md-level="1">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          Pager layouts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pager/" class="md-nav__link">
+        Guide
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/pager/" class="md-nav__link">
+        API
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
+      
+      <label class="md-nav__link" for="__nav_9">
+        Swipe Refresh
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Swipe Refresh" data-md-level="1">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          Swipe Refresh
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../swiperefresh/" class="md-nav__link">
+        Guide
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/swiperefresh/" class="md-nav__link">
+        API
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_10" type="checkbox" id="__nav_10" >
+      
+      <label class="md-nav__link" for="__nav_10">
         Flow layouts
-      </label>
-      <ul class="md-nav__list" data-md-scrollfix>
-        
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../flowlayout/" class="md-nav__link">
-      Guide
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../api/flowlayout/" class="md-nav__link">
-      API
-    </a>
-  </li>
-
-        
-      </ul>
-    </nav>
-  </li>
-
-    
-      
-      
-      
-
-
-  <li class="md-nav__item">
-    <a href="../using-snapshot-version/" class="md-nav__link">
-      Snapshots
-    </a>
-  </li>
-
-    
-      
-      
-      
-
-
-  <li class="md-nav__item">
-    <a href="../contributing/" class="md-nav__link">
-      Contributing
-    </a>
-  </li>
-
-    
-      
-      
-      
-
-
-  <li class="md-nav__item md-nav__item--nested">
-    
-    <input class="md-nav__toggle md-toggle" data-md-toggle="nav-12" type="checkbox" id="nav-12" >
-    <label class="md-nav__link" for="nav-12">
-      Maintainers
-      <span class="md-nav__icon md-icon"></span>
-    </label>
-    <nav class="md-nav" aria-label="Maintainers" data-md-level="1">
-      <label class="md-nav__title" for="nav-12">
         <span class="md-nav__icon md-icon"></span>
-        Maintainers
       </label>
-      <ul class="md-nav__list" data-md-scrollfix>
-        
-        
+      <nav class="md-nav" aria-label="Flow layouts" data-md-level="1">
+        <label class="md-nav__title" for="__nav_10">
+          <span class="md-nav__icon md-icon"></span>
+          Flow layouts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
           
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flowlayout/" class="md-nav__link">
+        Guide
+      </a>
+    </li>
+  
+
           
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/flowlayout/" class="md-nav__link">
+        API
+      </a>
+    </li>
+  
+
           
+        </ul>
+      </nav>
+    </li>
+  
 
+    
+      
+      
+      
 
-  <li class="md-nav__item">
-    <a href="../updating/" class="md-nav__link">
-      Update guide
-    </a>
-  </li>
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../using-snapshot-version/" class="md-nav__link">
+        Snapshots
+      </a>
+    </li>
+  
 
-        
-      </ul>
-    </nav>
-  </li>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/" class="md-nav__link">
+        Contributing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_13" type="checkbox" id="__nav_13" >
+      
+      <label class="md-nav__link" for="__nav_13">
+        Maintainers
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Maintainers" data-md-level="1">
+        <label class="md-nav__title" for="__nav_13">
+          <span class="md-nav__icon md-icon"></span>
+          Maintainers
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updating/" class="md-nav__link">
+        Update guide
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
 
     
   </ul>
@@ -752,11 +880,13 @@
               </div>
             
             
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
   
   
     
@@ -766,11 +896,11 @@
       <span class="md-nav__icon md-icon"></span>
       Table of contents
     </label>
-    <ul class="md-nav__list" data-md-scrollfix>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#coilimage" class="md-nav__link">
-    CoilImage()
+  <a href="#remembercoilpainter" class="md-nav__link">
+    rememberCoilPainter()
   </a>
   
 </li>
@@ -779,19 +909,6 @@
   <a href="#fade-in-animation" class="md-nav__link">
     Fade-in animation
   </a>
-  
-    <nav class="md-nav" aria-label="Fade-in animation">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#fadein-parameter" class="md-nav__link">
-    fadeIn parameter
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -803,8 +920,22 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#previews" class="md-nav__link">
+    Previews
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#gifs" class="md-nav__link">
     GIFs
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#observing-load-state-changes" class="md-nav__link">
+    Observing load state changes
   </a>
   
 </li>
@@ -821,19 +952,6 @@
     Download
   </a>
   
-    <nav class="md-nav" aria-label="Download">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#whats-the-goal-of-the-library" class="md-nav__link">
-    What's the goal of the library?
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
     </ul>
@@ -844,7 +962,7 @@
               </div>
             
           
-          <div class="md-content">
+          <div class="md-content" data-md-component="content">
             <article class="md-content__inner md-typeset">
               
                 
@@ -855,86 +973,114 @@
                 
                 <h1 id="coil-for-jetpack-compose">Coil for Jetpack Compose<a class="headerlink" href="#coil-for-jetpack-compose" title="Permanent link">&para;</a></h1>
 <p><a href="https://search.maven.org/search?q=g:com.google.accompanist"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-coil" /></a></p>
-<p>This library brings easy-to-use composable which can fetch and display images from external sources, such as network, using the <a href="https://github.com/coil-kt/coil">Coil</a> image loading library.</p>
+<p>This library provides easy-to-use <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/painter/Painter">Painter</a> which can fetch and display images from external sources, such as network, using the <a href="https://github.com/coil-kt/coil">Coil</a> image loading library.</p>
 <p><img src="https://coil-kt.github.io/coil/logo.svg" width="480" alt="Coil logo"></p>
-<h2 id="coilimage"><code>CoilImage()</code><a class="headerlink" href="#coilimage" title="Permanent link">&para;</a></h2>
-<p>The primary API is via the <code>CoilImage()</code> functions. There are a number of function versions available.</p>
-<p>The simplest usage is like so:</p>
-<div class="highlight"><pre><span></span><code><span class="n">CoilImage</span><span class="p">(</span>
-    <span class="k">data</span> <span class="p">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
-    <span class="n">contentDescription</span> <span class="p">=</span> <span class="s">&quot;My content description&quot;</span>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>If you're migrating from Accompanist 0.7.x or before, please read the <a href="./migration-coilimage">migration</a> documentation after reading this document.</p>
+</div>
+<h2 id="remembercoilpainter"><code>rememberCoilPainter()</code><a class="headerlink" href="#remembercoilpainter" title="Permanent link">&para;</a></h2>
+<p>The primary API is via the <a href="../api/coil/coil/com.google.accompanist.coil/remember-coil-painter.html"><code>rememberCoilPainter()</code></a> function. The simplest usage is like so:</p>
+<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">androidx.compose.foundation.Image</span>
+<span class="k">import</span> <span class="nn">com.google.accompanist.coil.rememberCoilPainter</span>
+
+<span class="n">Image</span><span class="p">(</span>
+    <span class="n">painter</span> <span class="o">=</span> <span class="n">rememberCoilPainter</span><span class="p">(</span><span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">),</span>
+    <span class="n">contentDescription</span> <span class="o">=</span> <span class="n">stringResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="na">string</span><span class="p">.</span><span class="na">image_content_desc</span><span class="p">),</span>
+    <span class="n">previewPlaceholder</span> <span class="o">=</span> <span class="n">R</span><span class="p">.</span><span class="na">drawable</span><span class="p">.</span><span class="na">placeholder</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div>
-<p>This loads the <code>data</code> passed in with <a href="https://github.com/coil-kt/coil">Coil</a>, and then displays the resulting image using the standard <code>Image</code> composable.</p>
+<p>This painter loads the data passed in, using <a href="https://github.com/coil-kt/coil">Coil</a>, and then draws the resulting image.</p>
 <p>You can also customize the Coil <a href="https://coil-kt.github.io/coil/image_requests/"><code>ImageRequest</code></a> through the <code>requestBuilder</code> parameter. This allows usage of things like (but not limited to) transformations:</p>
-<div class="highlight"><pre><span></span><code><span class="n">CoilImage</span><span class="p">(</span>
-    <span class="k">data</span> <span class="p">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
-    <span class="n">contentDescription</span> <span class="p">=</span> <span class="s">&quot;My content description&quot;</span><span class="p">,</span>
-    <span class="n">requestBuilder</span> <span class="p">=</span> <span class="p">{</span>
-        <span class="n">transformations</span><span class="p">(</span><span class="n">CircleCropTransformation</span><span class="p">())</span>
-    <span class="p">}</span>
-<span class="p">)</span>
-</code></pre></div>
-<p>It also provides optional content 'slots', allowing you to provide custom content to be displayed when the request is loading, and/or if the image request failed:</p>
-<div class="highlight"><pre><span></span><code><span class="n">CoilImage</span><span class="p">(</span>
-    <span class="k">data</span> <span class="p">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
-    <span class="n">contentDescription</span> <span class="p">=</span> <span class="s">&quot;My content description&quot;</span><span class="p">,</span>
-    <span class="n">loading</span> <span class="p">=</span> <span class="p">{</span>
-        <span class="n">Box</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="n">matchParentSize</span><span class="p">())</span> <span class="p">{</span>
-            <span class="n">CircularProgressIndicator</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="n">align</span><span class="p">(</span><span class="n">Alignment</span><span class="p">.</span><span class="n">Center</span><span class="p">))</span>
-        <span class="p">}</span>
-    <span class="p">},</span>
-    <span class="n">error</span> <span class="p">=</span> <span class="p">{</span>
-        <span class="n">Image</span><span class="p">(</span><span class="n">asset</span> <span class="p">=</span> <span class="n">imageResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="n">drawable</span><span class="p">.</span><span class="n">ic_error</span><span class="p">))</span>
-    <span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">androidx.compose.foundation.Image</span>
+<span class="k">import</span> <span class="nn">com.google.accompanist.coil.rememberCoilPainter</span>
+
+<span class="n">Image</span><span class="p">(</span>
+    <span class="n">painter</span> <span class="o">=</span> <span class="n">rememberCoilPainter</span><span class="p">(</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
+        <span class="n">requestBuilder</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">transformations</span><span class="p">(</span><span class="n">CircleCropTransformation</span><span class="p">())</span>
+        <span class="p">},</span>
+    <span class="p">),</span>
+    <span class="n">contentDescription</span> <span class="o">=</span> <span class="n">stringResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="na">string</span><span class="p">.</span><span class="na">image_content_desc</span><span class="p">),</span>
 <span class="p">)</span>
 </code></pre></div>
 <h2 id="fade-in-animation">Fade-in animation<a class="headerlink" href="#fade-in-animation" title="Permanent link">&para;</a></h2>
 <p>This library has built-in support for animating loaded images in, using a <a href="https://material.io/archive/guidelines/patterns/loading-images.html">fade-in animation</a>.</p>
-<p><img alt="" src="./images/crossfade.gif" /></p>
-<p>There are two ways to enable the animation:</p>
-<h3 id="fadein-parameter"><code>fadeIn</code> parameter<a class="headerlink" href="#fadein-parameter" title="Permanent link">&para;</a></h3>
-<p>A <code>fadeIn: Boolean</code> parameter has been added to <code>CoilImage</code> (default: <code>false</code>). When enabled, a default fade-in animation will be used when the image is successfully loaded:</p>
-<div class="highlight"><pre><span></span><code><span class="n">CoilImage</span><span class="p">(</span>
-    <span class="k">data</span> <span class="p">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
-    <span class="n">contentDescription</span> <span class="p">=</span> <span class="s">&quot;My content description&quot;</span><span class="p">,</span>
-    <span class="n">fadeIn</span> <span class="p">=</span> <span class="k">true</span>
+<p><img alt="" src="crossfade.gif" /></p>
+<p>A <code>fadeIn: Boolean</code> parameter is available on <a href="../api/coil/coil/com.google.accompanist.coil/remember-coil-painter.html"><code>rememberCoilPainter()</code></a> (default: <code>false</code>). When enabled, a default fade-in animation will be used when the image is successfully loaded:</p>
+<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">androidx.compose.foundation.Image</span>
+<span class="k">import</span> <span class="nn">com.google.accompanist.coil.rememberCoilPainter</span>
+
+<span class="n">Image</span><span class="p">(</span>
+    <span class="n">painter</span> <span class="o">=</span> <span class="n">rememberCoilPainter</span><span class="p">(</span>
+        <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
+        <span class="n">fadeIn</span> <span class="o">=</span> <span class="kc">true</span>
+    <span class="p">),</span>
+    <span class="n">contentDescription</span> <span class="o">=</span> <span class="n">stringResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="na">string</span><span class="p">.</span><span class="na">image_content_desc</span><span class="p">),</span>
 <span class="p">)</span>
 </code></pre></div>
 <h2 id="custom-content">Custom content<a class="headerlink" href="#custom-content" title="Permanent link">&para;</a></h2>
-<p>If you need more control over the animation, or you want to provide custom layout for the loaded image, you can use the <code>content</code> composable version of <code>CoilImage</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="n">CoilImage</span><span class="p">(</span>
-    <span class="k">data</span> <span class="p">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
-<span class="p">)</span> <span class="p">{</span> <span class="n">imageState</span> <span class="p">-&gt;</span>
-    <span class="k">when</span> <span class="p">(</span><span class="n">imageState</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">is</span> <span class="n">ImageLoadState</span><span class="p">.</span><span class="n">Success</span> <span class="p">-&gt;</span> <span class="p">{</span>
-            <span class="n">MaterialLoadingImage</span><span class="p">(</span>
-                <span class="n">result</span> <span class="p">=</span> <span class="n">imageState</span><span class="p">,</span>
-                <span class="n">contentDescription</span> <span class="p">=</span> <span class="s">&quot;My content description&quot;</span><span class="p">,</span>
-                <span class="n">fadeInEnabled</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
-                <span class="n">fadeInDurationMs</span> <span class="p">=</span> <span class="m">600</span><span class="p">,</span>
-            <span class="p">)</span>
+<p>Some times you may wish to display alternative content whilst the image is loading, or an error has occurred. The painter returned from <code>rememberCoilPainter()</code> is an instance of <a href="../api/imageloading-core/imageloading-core/com.google.accompanist.imageloading/-load-painter/index.html"><code>LoadPainter</code></a>, which is stateful and allows you to display different content as required:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span> <span class="nv">painter</span> <span class="o">=</span> <span class="n">rememberCoilPainter</span><span class="p">(</span><span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">)</span>
+
+<span class="n">Box</span> <span class="p">{</span>
+    <span class="n">Image</span><span class="p">(</span>
+        <span class="n">painter</span> <span class="o">=</span> <span class="n">painter</span><span class="p">,</span>
+        <span class="n">contentDescription</span> <span class="o">=</span> <span class="n">stringResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="na">string</span><span class="p">.</span><span class="na">image_content_desc</span><span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="k">when</span> <span class="p">(</span><span class="n">painter</span><span class="p">.</span><span class="na">loadState</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">ImageLoadState</span><span class="p">.</span><span class="na">Loading</span> <span class="o">-&gt;</span> <span class="p">{</span>
+            <span class="c1">// Display a circular progress indicator whilst loading</span>
+            <span class="n">CircularProgressIndicator</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="na">align</span><span class="p">(</span><span class="n">Alignment</span><span class="p">.</span><span class="na">Center</span><span class="p">))</span>
         <span class="p">}</span>
-        <span class="k">is</span> <span class="n">ImageLoadState</span><span class="p">.</span><span class="n">Error</span> <span class="p">-&gt;</span> <span class="cm">/* TODO */</span>
-        <span class="n">ImageLoadState</span><span class="p">.</span><span class="n">Loading</span> <span class="p">-&gt;</span> <span class="cm">/* TODO */</span>
-        <span class="n">ImageLoadState</span><span class="p">.</span><span class="n">Empty</span> <span class="p">-&gt;</span> <span class="cm">/* TODO */</span>
+        <span class="k">is</span> <span class="n">ImageLoadState</span><span class="p">.</span><span class="na">Error</span> <span class="o">-&gt;</span> <span class="p">{</span>
+            <span class="c1">// If you wish to display some content if the request fails</span>
+        <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
+<p><a href="../api/imageloading-core/imageloading-core/com.google.accompanist.imageloading/-image-load-state/index.html"><code>ImageLoadState</code></a> has a number of different states, so tweak your logic to suit. You could also use a <a href="https://developer.android.com/reference/kotlin/androidx/compose/animation/package-summary#crossfade"><code>Crossfade()</code></a> or any other custom animation.</p>
+<h2 id="previews">Previews<a class="headerlink" href="#previews" title="Permanent link">&para;</a></h2>
+<p>To support Android Studio <a href="https://developer.android.com/jetpack/compose/tooling">Composable Previews</a>, you can provide a drawable resource ID via the <code>previewPlaceholder</code> parameter. That drawable will then be displayed when your content is displayed as a preview:</p>
+<div class="highlight"><pre><span></span><code><span class="n">Image</span><span class="p">(</span>
+    <span class="n">painter</span> <span class="o">=</span> <span class="n">rememberCoilPainter</span><span class="p">(</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
+        <span class="n">previewPlaceholder</span> <span class="o">=</span> <span class="n">R</span><span class="p">.</span><span class="na">drawable</span><span class="p">.</span><span class="na">placeholder</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">contentDescription</span> <span class="o">=</span> <span class="n">stringResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="na">string</span><span class="p">.</span><span class="na">image_content_desc</span><span class="p">),</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>If the referenced drawable is only used for the purposes of <code>previewPlaceholder</code>s, it can be placed in the resources of your <code>debug</code> build variant For example: <code>app/debug/res/drawable/</code>. This allows the drawable to be only bundled in your debug builds, and not shipped to users of your release build.</p>
 <h2 id="gifs">GIFs<a class="headerlink" href="#gifs" title="Permanent link">&para;</a></h2>
 <p>Accompanist Coil supports GIFs through Coil's own GIF support. Follow the <a href="https://coil-kt.github.io/coil/gifs/">setup instructions</a> and it should just work.</p>
+<h2 id="observing-load-state-changes">Observing load state changes<a class="headerlink" href="#observing-load-state-changes" title="Permanent link">&para;</a></h2>
+<p>To observe changes to the load state you can use <a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/package-summary#snapshotflow"><code>snapshotFlow()</code></a> to observe changes to <code>painter.loadState</code>, and then call your logic as necessary:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span> <span class="nv">painter</span> <span class="o">=</span> <span class="n">rememberCoilPainter</span><span class="p">(</span><span class="s">&quot;https://image.url&quot;</span><span class="p">)</span>
+
+<span class="n">LaunchedEffect</span><span class="p">(</span><span class="n">painter</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">snapshotFlow</span> <span class="p">{</span> <span class="n">painter</span><span class="p">.</span><span class="na">loadState</span> <span class="p">}</span>
+        <span class="p">.</span><span class="na">filter</span> <span class="p">{</span> <span class="nb">it</span><span class="p">.</span><span class="na">isFinalState</span><span class="p">()</span> <span class="p">}</span>
+        <span class="p">.</span><span class="na">collect</span> <span class="p">{</span> <span class="n">result</span> <span class="o">-&gt;</span>
+            <span class="c1">// TODO do something with result</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">Image</span><span class="p">(</span><span class="n">painter</span> <span class="o">=</span> <span class="n">painter</span><span class="p">)</span>
+</code></pre></div>
 <h2 id="custom-imageloader">Custom ImageLoader<a class="headerlink" href="#custom-imageloader" title="Permanent link">&para;</a></h2>
-<p>If you wish to provide a default <a href="https://coil-kt.github.io/coil/image_loaders/"><code>ImageLoader</code></a> to use across all of your <code>CoilImage</code>
-calls, we provide the <code>LocalImageLoader</code> composition local.</p>
+<p>If you wish to provide a default <a href="https://coil-kt.github.io/coil/image_loaders/"><code>ImageLoader</code></a> to use across all of your <code>rememberCoilPainter()</code>
+calls, we provide the <a href="../api/coil/coil/com.google.accompanist.coil/-local-image-loader.html"><code>LocalImageLoader</code></a> composition local.</p>
 <p>You can use it like so:</p>
-<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="py">imageLoader</span> <span class="p">=</span> <span class="n">ImageLoader</span><span class="p">.</span><span class="n">Builder</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span> <span class="nv">imageLoader</span> <span class="o">=</span> <span class="n">ImageLoader</span><span class="p">.</span><span class="na">Builder</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
     <span class="c1">// customize the ImageLoader as needed</span>
-    <span class="p">.</span><span class="n">build</span><span class="p">()</span>
+    <span class="p">.</span><span class="na">build</span><span class="p">()</span>
 
 <span class="n">CompositionLocalProvider</span><span class="p">(</span><span class="n">LocalImageLoader</span> <span class="n">provides</span> <span class="n">imageLoader</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// This will automatically use the value of LocalImageLoader</span>
-    <span class="n">CoilImage</span><span class="p">(</span>
-        <span class="k">data</span> <span class="p">=</span> <span class="p">...</span>
+    <span class="n">Image</span><span class="p">(</span>
+        <span class="n">painter</span> <span class="o">=</span> <span class="n">rememberCoilPainter</span><span class="p">(...)</span>
     <span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
@@ -950,8 +1096,6 @@ calls, we provide the <code>LocalImageLoader</code> composition local.</p>
 <span class="o">}</span>
 </code></pre></div>
 <p>Snapshots of the development version are available in <a href="https://oss.sonatype.org/content/repositories/snapshots/com/google/accompanist/accompanist-coil/">Sonatype's <code>snapshots</code> repository</a>. These are updated on every commit.</p>
-<h3 id="whats-the-goal-of-the-library">What's the goal of the library?<a class="headerlink" href="#whats-the-goal-of-the-library" title="Permanent link">&para;</a></h3>
-<p>Eventually the goal is to upstream all of this functionality back to <a href="https://github.com/coil-kt/coil">Coil</a>. <a href="https://developer.android.com/jetpack/compose">Jetpack Compose</a>'s development is currently moving very fast, which means that there are frequent API changes between releases. For now, it makes sense to keep this as a seperately released library to track the latest Compose release.</p>
                 
               
               
@@ -962,45 +1106,44 @@ calls, we provide the <code>LocalImageLoader</code> composition local.</p>
             </article>
           </div>
         </div>
+        
       </main>
       
         
 <footer class="md-footer">
   
-    <div class="md-footer-nav">
-      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
-        
-          <a href=".." class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
-            <div class="md-footer-nav__button md-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        <a href=".." class="md-footer__link md-footer__link--prev" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Overview
             </div>
-            <div class="md-footer-nav__title">
-              <div class="md-ellipsis">
-                <span class="md-footer-nav__direction">
-                  Previous
-                </span>
-                Overview
-              </div>
+          </div>
+        </a>
+      
+      
+        <a href="migration-coilimage/" class="md-footer__link md-footer__link--next" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Migration from CoilImage
             </div>
-          </a>
-        
-        
-          <a href="../glide/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
-            <div class="md-footer-nav__title">
-              <div class="md-ellipsis">
-                <span class="md-footer-nav__direction">
-                  Next
-                </span>
-                Guide
-              </div>
-            </div>
-            <div class="md-footer-nav__button md-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
-            </div>
-          </a>
-        
-      </nav>
-    </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -1010,6 +1153,7 @@ calls, we provide the <code>LocalImageLoader</code> composition local.</p>
         <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
           Material for MkDocs
         </a>
+        
       </div>
       
     </div>
@@ -1017,19 +1161,13 @@ calls, we provide the <code>LocalImageLoader</code> composition local.</p>
 </footer>
       
     </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../assets/javascripts/workers/search.fe42c31b.min.js", "version": null}</script>
     
-      <script src="../assets/javascripts/vendor.fd16492e.min.js"></script>
-      <script src="../assets/javascripts/bundle.7836ba4d.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
-      
-      <script>
-        app = initialize({
-          base: "..",
-          features: [],
-          search: Object.assign({
-            worker: "../assets/javascripts/worker/search.4ac00218.min.js"
-          }, typeof search !== "undefined" && search)
-        })
-      </script>
+    
+      <script src="../assets/javascripts/bundle.4ea5477f.min.js"></script>
       
     
   </body>

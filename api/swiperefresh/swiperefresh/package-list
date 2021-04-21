@@ -1,0 +1,13 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:com.google.accompanist.swiperefresh////PointingToDeclaration/swiperefresh/com.google.accompanist.swiperefresh/index.html
+$dokka.location:com.google.accompanist.swiperefresh//SwipeRefresh/#com.google.accompanist.swiperefresh.SwipeRefreshState#kotlin.Function0[kotlin.Unit]#androidx.compose.ui.Modifier#kotlin.Boolean#androidx.compose.ui.unit.Dp#androidx.compose.ui.Alignment#androidx.compose.foundation.layout.PaddingValues#kotlin.Function2[com.google.accompanist.swiperefresh.SwipeRefreshState,androidx.compose.ui.unit.Dp,kotlin.Unit]#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/swiperefresh/com.google.accompanist.swiperefresh/-swipe-refresh.html
+$dokka.location:com.google.accompanist.swiperefresh//SwipeRefreshIndicator/#com.google.accompanist.swiperefresh.SwipeRefreshState#androidx.compose.ui.unit.Dp#androidx.compose.ui.Modifier#kotlin.Boolean#kotlin.Boolean#androidx.compose.ui.graphics.Color#androidx.compose.ui.graphics.Color#androidx.compose.ui.graphics.Shape#androidx.compose.ui.unit.Dp#kotlin.Boolean#androidx.compose.ui.unit.Dp/PointingToDeclaration/swiperefresh/com.google.accompanist.swiperefresh/-swipe-refresh-indicator.html
+$dokka.location:com.google.accompanist.swiperefresh//rememberSwipeRefreshState/#kotlin.Boolean/PointingToDeclaration/swiperefresh/com.google.accompanist.swiperefresh/remember-swipe-refresh-state.html
+$dokka.location:com.google.accompanist.swiperefresh/SwipeRefreshState///PointingToDeclaration/swiperefresh/com.google.accompanist.swiperefresh/-swipe-refresh-state/index.html
+$dokka.location:com.google.accompanist.swiperefresh/SwipeRefreshState/SwipeRefreshState/#kotlin.Boolean/PointingToDeclaration/swiperefresh/com.google.accompanist.swiperefresh/-swipe-refresh-state/-swipe-refresh-state.html
+$dokka.location:com.google.accompanist.swiperefresh/SwipeRefreshState/indicatorOffset/#/PointingToDeclaration/swiperefresh/com.google.accompanist.swiperefresh/-swipe-refresh-state/indicator-offset.html
+$dokka.location:com.google.accompanist.swiperefresh/SwipeRefreshState/isRefreshing/#/PointingToDeclaration/swiperefresh/com.google.accompanist.swiperefresh/-swipe-refresh-state/is-refreshing.html
+$dokka.location:com.google.accompanist.swiperefresh/SwipeRefreshState/isSwipeInProgress/#/PointingToDeclaration/swiperefresh/com.google.accompanist.swiperefresh/-swipe-refresh-state/is-swipe-in-progress.html
+com.google.accompanist.swiperefresh
+
