@@ -22,6 +22,9 @@ A library which provides paging layouts for Jetpack Compose, similar to Android'
 ### 🌊 [Flow layouts](./flowlayout/)
 A library that adds a 'flexbox'-like layout to [Jetpack Compose][compose].
 
+### ⬆️ [Swipe To refresh](./swiperefresh/)
+A library which provides a layout which provides the swipe-to-refresh UX pattern, similar to Android's SwipeRefreshLayout.
+
 ---
 
 ## Updates
