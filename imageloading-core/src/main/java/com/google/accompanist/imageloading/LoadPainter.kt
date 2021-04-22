@@ -347,7 +347,7 @@ private fun <R> animateFadeInColorFilter(
     } else null // If the fade in is not enabled, we don't use a fade in transition
 }
 
-private object EmptyPainter : Painter() {
+internal object EmptyPainter : Painter() {
     override val intrinsicSize: Size get() = Size.Unspecified
     override fun DrawScope.onDraw() {}
 }
