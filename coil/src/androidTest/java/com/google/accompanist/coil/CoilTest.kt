@@ -20,6 +20,7 @@ import android.graphics.drawable.ShapeDrawable
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -316,6 +317,28 @@ class CoilTest {
                 contentDescription = null,
                 modifier = Modifier.testTag(CoilTestTags.Image),
             )
+        }
+
+        composeTestRule.onNodeWithTag(CoilTestTags.Image)
+            .assertWidthIsAtLeast(1.dp)
+            .assertHeightIsAtLeast(1.dp)
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun lazycolumn_nosize() {
+        composeTestRule.setContent {
+            LazyColumn {
+                item {
+                    Image(
+                        painter = rememberCoilPainter(server.url("/image")),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillParentMaxWidth()
+                            .testTag(CoilTestTags.Image),
+                    )
+                }
+            }
         }
 
         composeTestRule.onNodeWithTag(CoilTestTags.Image)
