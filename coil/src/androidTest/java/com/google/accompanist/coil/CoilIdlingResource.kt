@@ -29,6 +29,8 @@ import coil.request.ImageResult
 class CoilIdlingResource : EventListener, IdlingResource {
     private val ongoingRequests = mutableSetOf<ImageRequest>()
 
+    var finishedRequests = 0
+
     override val isIdleNow: Boolean
         get() = ongoingRequests.isEmpty()
 
@@ -42,9 +44,11 @@ class CoilIdlingResource : EventListener, IdlingResource {
 
     override fun onError(request: ImageRequest, throwable: Throwable) {
         ongoingRequests.remove(request)
+        finishedRequests++
     }
 
     override fun onSuccess(request: ImageRequest, metadata: ImageResult.Metadata) {
         ongoingRequests.remove(request)
+        finishedRequests++
     }
 }
