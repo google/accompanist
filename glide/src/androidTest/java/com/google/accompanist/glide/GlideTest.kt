@@ -20,6 +20,7 @@ import android.graphics.drawable.ShapeDrawable
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -320,6 +321,36 @@ class GlideTest {
                 contentDescription = null,
                 modifier = Modifier.testTag(GlideTestTags.Image),
             )
+        }
+
+        // Wait until the first image loads
+        composeTestRule.waitUntil(10_000) { requestCompleted }
+
+        composeTestRule.onNodeWithTag(GlideTestTags.Image)
+            .assertWidthIsAtLeast(1.dp)
+            .assertHeightIsAtLeast(1.dp)
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun lazycolumn_nosize() {
+        var requestCompleted by mutableStateOf(false)
+
+        composeTestRule.setContent {
+            val painter = rememberGlidePainter(server.url("/image").toString())
+            LaunchedOnRequestComplete(painter) { requestCompleted = true }
+
+            LazyColumn {
+                item {
+                    Image(
+                        painter = painter,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillParentMaxWidth()
+                            .testTag(GlideTestTags.Image),
+                    )
+                }
+            }
         }
 
         // Wait until the first image loads
