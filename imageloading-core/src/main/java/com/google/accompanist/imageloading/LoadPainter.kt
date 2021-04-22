@@ -41,6 +41,8 @@ import androidx.compose.ui.unit.IntSize
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
@@ -157,6 +159,9 @@ class LoadPainter<R> internal constructor(
     internal var painter by mutableStateOf<Painter>(EmptyPainter)
     internal var transitionColorFilter by mutableStateOf<ColorFilter?>(null)
 
+    // CoroutineScope for the current request
+    private var requestCoroutineScope: CoroutineScope? = null
+
     /**
      * The current request object.
      */
@@ -182,9 +187,6 @@ class LoadPainter<R> internal constructor(
      * [ImageSuchDeprecated].
      */
     internal var requestSize by mutableStateOf<IntSize?>(null)
-
-    // Current request job
-    private var job: Job? = null
 
     override val intrinsicSize: Size
         get() = painter.intrinsicSize
@@ -228,31 +230,48 @@ class LoadPainter<R> internal constructor(
     }
 
     override fun onAbandoned() {
-        // We've been abandoned from composition, so cancel our request handling coroutine
-        job?.cancel()
-        job = null
+        // We've been abandoned from composition, so cancel our request scope
+        requestCoroutineScope?.cancel()
+        requestCoroutineScope = null
     }
 
     override fun onForgotten() {
-        // We've been forgotten from composition, so cancel our request handling coroutine
-        job?.cancel()
-        job = null
+        // We've been forgotten from composition, so cancel our request scope
+        requestCoroutineScope?.cancel()
+        requestCoroutineScope = null
     }
 
     override fun onRemembered() {
-        // Cancel any on-going job (this shouldn't really happen anyway)
-        job?.cancel()
+        // Cancel any on-going scope (this shouldn't really happen anyway)
+        requestCoroutineScope?.cancel()
+
+        // Create a new CoroutineScope for the current request. We use the provided
+        // `coroutineScope` as the source for everything, but we create a new child Job.
+        // This allows us cancel the scope without affecting the parent scope's job.
+        val scope = coroutineScope.coroutineContext.let { context ->
+            CoroutineScope(context + Job(context[Job]))
+        }.also { requestCoroutineScope = it }
 
         // We've been remembered, so launch a coroutine to observe the current request object,
         // and the request size. Whenever either of these values change, the collectLatest block
         // will run and execute the image load (with any on-going request cancelled).
-        job = coroutineScope.launch {
+        scope.launch {
             combine(
                 snapshotFlow { request },
                 snapshotFlow { requestSize }.filterNotNull(),
                 transform = { request, size -> request to size }
             ).collectLatest { (request, size) ->
                 execute(request, size)
+            }
+        }
+
+        // Our fail-safe. If we don't receive an appropriate size from `onDraw()` we update the
+        // request size to be -1, -1 which will load the original size image.
+        // The ideal fix for this is waiting on https://issuetracker.google.com/186012457
+        scope.launch {
+            delay(32) // 32ms should be enough time for measure/layout/draw to happen.
+            if (requestSize == null) {
+                requestSize = IntSize(-1, -1)
             }
         }
     }
