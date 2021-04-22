@@ -82,7 +82,7 @@ class CoilTest {
     // Our MockWebServer. We use a response delay to simulate real-world conditions
     private val server = ImageMockWebServer()
 
-    private val idlingResource = CoilIdlingResource()
+    private val coilRequestTracker = CoilIdlingResource()
 
     @Before
     fun setup() {
@@ -93,17 +93,17 @@ class CoilTest {
         val imageLoader = ImageLoader.Builder(composeTestRule.activity.applicationContext)
             .diskCachePolicy(CachePolicy.DISABLED)
             .memoryCachePolicy(CachePolicy.DISABLED)
-            .eventListener(idlingResource)
+            .eventListener(coilRequestTracker)
             .build()
 
         Coil.setImageLoader(imageLoader)
 
-        composeTestRule.registerIdlingResource(idlingResource)
+        composeTestRule.registerIdlingResource(coilRequestTracker)
     }
 
     @After
     fun teardown() {
-        composeTestRule.unregisterIdlingResource(idlingResource)
+        composeTestRule.unregisterIdlingResource(coilRequestTracker)
 
         // Shutdown our mock web server
         server.shutdown()
@@ -340,6 +340,8 @@ class CoilTest {
                 }
             }
         }
+
+        composeTestRule.waitUntil { coilRequestTracker.finishedRequests > 0 }
 
         composeTestRule.onNodeWithTag(CoilTestTags.Image)
             .assertWidthIsAtLeast(1.dp)
