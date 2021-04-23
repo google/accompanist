@@ -2,7 +2,7 @@ $dokka.format:html-v1
 $dokka.linkExtension:html
 $dokka.location:com.google.accompanist.imageloading////PointingToDeclaration/imageloading-core/com.google.accompanist.imageloading/index.html
 $dokka.location:com.google.accompanist.imageloading//isFinalState/com.google.accompanist.imageloading.ImageLoadState#/PointingToDeclaration/imageloading-core/com.google.accompanist.imageloading/is-final-state.html
-$dokka.location:com.google.accompanist.imageloading//rememberDrawablePainter/#android.graphics.drawable.Drawable/PointingToDeclaration/imageloading-core/com.google.accompanist.imageloading/remember-drawable-painter.html
+$dokka.location:com.google.accompanist.imageloading//rememberDrawablePainter/#android.graphics.drawable.Drawable?/PointingToDeclaration/imageloading-core/com.google.accompanist.imageloading/remember-drawable-painter.html
 $dokka.location:com.google.accompanist.imageloading//rememberLoadPainter/#com.google.accompanist.imageloading.Loader[TypeParam(bounds=[kotlin.Any?])]#TypeParam(bounds=[kotlin.Any?])?#com.google.accompanist.imageloading.ShouldRefetchOnSizeChange#kotlin.Boolean#kotlin.Int#kotlin.Int/PointingToDeclaration/imageloading-core/com.google.accompanist.imageloading/remember-load-painter.html
 $dokka.location:com.google.accompanist.imageloading/DataSource.DISK///PointingToDeclaration/imageloading-core/com.google.accompanist.imageloading/-data-source/-d-i-s-k/index.html
 $dokka.location:com.google.accompanist.imageloading/DataSource.DISK/name/#/PointingToDeclaration/imageloading-core/com.google.accompanist.imageloading/-data-source/-d-i-s-k/name.html
