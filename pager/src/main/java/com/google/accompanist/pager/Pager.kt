@@ -285,21 +285,24 @@ internal fun Pager(
                 )
             }
 
-            for (layoutPage in state.layoutPages) {
-                val pageIndex = layoutPage.page ?: continue
-
-                key(pageIndex) {
+            // FYI: We need to filter out null/empty pages *outside* of the loop. Compose uses the
+            // call stack as part of the key for state, so we need to ensure that the call stack
+            // for page content is consistent as the user scrolls, otherwise content will
+            // drop/recreate state.
+            val pages = state.layoutPages.mapNotNull { it.page }
+            for (page in pages) {
+                key(page) {
                     val itemSemantics = Modifier.semantics {
-                        this.selected = pageIndex == state.currentPage
+                        this.selected = page == state.currentPage
                     }
                     Box(
                         contentAlignment = Alignment.Center,
-                        modifier = itemSemantics.then(PageData(pageIndex))
+                        modifier = itemSemantics.then(PageData(page))
                     ) {
                         val scope = remember(this, state) {
                             PagerScopeImpl(this, state)
                         }
-                        scope.content(pageIndex)
+                        scope.content(page)
                     }
                 }
             }
