@@ -219,12 +219,10 @@ class PagerState(
      */
     suspend fun animateScrollToPage(
         @IntRange(from = 0) page: Int,
-        @FloatRange(from = 0.0, to = 1.0) pageOffset: Float = 0f,
         animationSpec: AnimationSpec<Float> = spring(),
         initialVelocity: Float = 0f,
     ) {
         requireCurrentPage(page, "page")
-        requireCurrentPageOffset(pageOffset, "pageOffset")
 
         if (page == currentPage) return
 
@@ -233,7 +231,6 @@ class PagerState(
         scroll {
             animateToPage(
                 page = page.coerceIn(0, lastPageIndex),
-                pageOffset = pageOffset.coerceIn(0f, 1f),
                 animationSpec = animationSpec,
                 initialVelocity = initialVelocity,
             )
@@ -248,20 +245,16 @@ class PagerState(
      * complete.
      *
      * @param page the page to snap to. Must be between 0 and [pageCount] (inclusive).
-     * @param pageOffset the percentage of the page width to offset, from the start of [page].
-     * Must be in the range 0f..1f.
      */
     suspend fun scrollToPage(
-        @IntRange(from = 0) page: Int,
-        @FloatRange(from = 0.0, to = 1.0) pageOffset: Float = 0f,
+        @IntRange(from = 0) page: Int
     ) {
         requireCurrentPage(page, "page")
-        requireCurrentPageOffset(pageOffset, "pageOffset")
 
         // We don't specifically use the ScrollScope's scrollBy(), but
         // we do want to use it's mutex
         scroll {
-            snapToPage(page, pageOffset)
+            snapToPage(page)
         }
     }
 
@@ -287,20 +280,41 @@ class PagerState(
 
     private suspend fun animateToPage(
         page: Int,
-        pageOffset: Float = 0f,
         animationSpec: AnimationSpec<Float> = spring(),
         initialVelocity: Float = 0f,
+        skipLongDistances: Boolean = true,
     ) {
         // Set our target page
         _animationTargetPage = page
 
+        val initialIndex = currentLayoutPageIndex
+        val distance = (page - initialIndex).absoluteValue
+
+        val pages: IntArray = if (skipLongDistances && distance >= 4) {
+            if (page < initialIndex) {
+                intArrayOf(initialIndex, initialIndex - 1, page + 1, page)
+            } else {
+                intArrayOf(initialIndex, initialIndex + 1, page - 1, page)
+            }
+        } else {
+            (if (page < initialIndex) (page..initialIndex).reversed() else initialIndex..page)
+                .toList()
+                .toIntArray()
+        }
+
+        if (DebugLog) {
+            Log.d(LogTag, "Animating with pages: ${pages.contentToString()}")
+        }
+
         animate(
-            initialValue = absolutePosition,
-            targetValue = page + pageOffset,
+            initialValue = 0f + currentPageOffset,
+            targetValue = pages.size - 1f,
             initialVelocity = initialVelocity,
             animationSpec = animationSpec
         ) { value, _ ->
-            updateLayoutForScrollPosition(value)
+            val flooredIndex = floor(value).toInt()
+            val offset = value - flooredIndex
+            updateLayoutForScrollPosition(pages[flooredIndex] + offset)
         }
         snapToNearestPage()
     }
