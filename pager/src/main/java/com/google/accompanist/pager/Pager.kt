@@ -178,8 +178,6 @@ fun HorizontalPager(
  * composed from the bottom to the top and [PagerState.currentPage] == 0 will mean
  * the first item is located at the bottom.
  * @param itemSpacing vertical spacing to add between items.
- * @param offscreenLimit the number of pages that should be retained on either side of the
- * current page. This value is required to be `1` or greater.
  * @param dragEnabled toggle manual scrolling, when `false` the user can not drag the view to a
  * different page.
  * @param flingBehavior logic describing fling behavior.
@@ -240,7 +238,7 @@ internal fun Pager(
     val coroutineScope = rememberCoroutineScope()
     val semanticsAxisRange = remember(state, reverseDirection) {
         ScrollAxisRange(
-            value = { state.currentLayoutPage + state.currentLayoutPageOffset },
+            value = { state.currentLayoutPageIndex + state.currentLayoutPageOffset },
             maxValue = { state.lastPageIndex.toFloat() },
         )
     }
@@ -281,16 +279,16 @@ internal fun Pager(
                 Log.d(
                     LogTag,
                     "Content: firstPage:${firstPage?.page ?: "none"}, " +
-                        "layoutPage:${state.currentLayoutPage}, " +
+                        "layoutPage:${state.currentLayoutPageIndex}, " +
                         "currentPage:${state.currentPage}, " +
                         "lastPage:${lastPage?.page ?: "none"}"
                 )
             }
 
-            for (page in state.layoutPages) {
-                val pageIndex = page.page ?: continue
+            for (layoutPage in state.layoutPages) {
+                val pageIndex = layoutPage.page ?: continue
 
-                key(page) {
+                key(pageIndex) {
                     val itemSemantics = Modifier.semantics {
                         this.selected = pageIndex == state.currentPage
                     }
@@ -321,12 +319,13 @@ internal fun Pager(
         val pagerHeight = placeables.maxOf { it.height }.coerceAtLeast(constraints.minHeight)
 
         layout(width = pagerWidth, height = pagerHeight) {
-            val layoutPage = state.currentLayoutPage
+            val layoutPage = state.currentLayoutPageIndex
             val offset = state.currentLayoutPageOffset
             val itemSpacingPx = itemSpacing.roundToPx()
 
             placeables.forEachIndexed { index, placeable ->
                 val page = measurables[index].page
+                val layoutInfo = state.layoutPages.first { it.page == page }
 
                 val xCenterOffset = horizontalAlignment.align(
                     size = placeable.width,
@@ -343,14 +342,10 @@ internal fun Pager(
                 val offsetForPage = page - layoutPage - offset
 
                 if (isVertical) {
-                    state.layoutPages[index].also {
-                        if (it.page == page) it.layoutSize = placeable.height
-                    }
+                    layoutInfo.layoutSize = placeable.height
                     yItemOffset = (offsetForPage * (placeable.height + itemSpacingPx)).roundToInt()
                 } else {
-                    state.layoutPages[index].also {
-                        if (it.page == page) it.layoutSize = placeable.width
-                    }
+                    layoutInfo.layoutSize = placeable.width
                     xItemOffset = (offsetForPage * (placeable.width + itemSpacingPx)).roundToInt()
                 }
 

@@ -101,36 +101,31 @@ class PagerState(
     private var _currentPage by mutableStateOf(currentPage)
     private var _currentLayoutPageOffset by mutableStateOf(currentPageOffset)
 
-    internal var currentLayoutPage by mutableStateOf(currentPage)
-        private set
-
-    internal val layoutPages = List((offscreenLimit * 2) + 1) { PageLayoutInfo() }
+    internal val layoutPages: List<PageLayoutInfo> = List((offscreenLimit * 2) + 1) { PageLayoutInfo() }
 
     internal var currentLayoutPageOffset: Float
         get() = _currentLayoutPageOffset
         private set(value) {
             _currentLayoutPageOffset = value.coerceIn(
                 minimumValue = 0f,
-                maximumValue = if (currentLayoutPage == lastPageIndex) 0f else 1f,
+                maximumValue = if (currentLayoutPageIndex == lastPageIndex) 0f else 1f,
             )
         }
 
-    private val currentLayoutPageSize: Int
-        get() {
-            // The current layout should be the 'middle' item
-            val middle = layoutPages[(layoutPages.size + 1) / 2]
-            if (middle.page == currentLayoutPage) {
-                return middle.layoutSize
-            }
-            // Otherwise we fall-back to a find
-            return layoutPages.find { it.page == currentLayoutPage }?.layoutSize ?: 0
-        }
+    internal inline val currentLayoutPageSize: Int
+        get() = currentLayoutPageInfo.layoutSize
+
+    internal inline val currentLayoutPageIndex: Int
+        get() = currentLayoutPageInfo.page!!
+
+    internal inline val currentLayoutPageInfo: PageLayoutInfo
+        get() = layoutPages[(layoutPages.size - 1) / 2]
 
     /**
      * The current scroll position, as a float value between `0 until pageSize`
      */
     private inline val absolutePosition: Float
-        get() = currentLayoutPage + currentLayoutPageOffset
+        get() = currentLayoutPageIndex + currentLayoutPageOffset
 
     internal inline val lastPageIndex: Int
         get() = (pageCount - 1).coerceAtLeast(0)
@@ -142,7 +137,8 @@ class PagerState(
     private val scrollableState = ScrollableState { deltaPixels ->
         // scrollByOffset expects values in an opposite sign to what we're passed, so we need
         // to negate the value passed in, and the value returned.
-        val size = currentLayoutPageSize.coerceAtLeast(1)
+        val size = currentLayoutPageSize
+        require(size > 0) { "Layout size for current item is 0" }
         -scrollByOffset(-deltaPixels / size) * size
     }
 
@@ -152,7 +148,7 @@ class PagerState(
         requireCurrentPage(currentPage, "currentPage")
         requireCurrentPageOffset(currentPageOffset, "currentPageOffset")
 
-        updateLayoutPages()
+        updateLayoutPages(currentPage)
     }
 
     /**
@@ -165,7 +161,7 @@ class PagerState(
             require(value >= 0) { "pageCount must be >= 0" }
             _pageCount = value
             currentPage = currentPage.coerceIn(0, lastPageIndex)
-            updateLayoutPages()
+            updateLayoutPages(currentPage)
         }
 
     /**
@@ -180,8 +176,7 @@ class PagerState(
         private set(value) {
             _currentPage = value.coerceIn(0, lastPageIndex)
             // If the current page is changed, update the layout page too
-            currentLayoutPage = _currentPage
-            updateLayoutPages()
+            updateLayoutPages(_currentPage)
         }
 
     /**
@@ -266,28 +261,28 @@ class PagerState(
         // We don't specifically use the ScrollScope's scrollBy(), but
         // we do want to use it's mutex
         scroll {
-            currentLayoutPage = page
-            currentLayoutPageOffset = pageOffset
-            snapToNearestPage()
+            snapToPage(page, pageOffset)
         }
     }
 
-    private fun snapToNearestPage() {
+    private fun snapToPage(page: Int, offset: Float = 0f) {
         if (DebugLog) {
             Log.d(
                 LogTag,
-                "snapToNearestPage. page:$currentLayoutPage, offset:$currentLayoutPageOffset"
+                "snapToPage. page:$currentLayoutPageIndex, offset:$currentLayoutPageOffset"
             )
         }
         // Snap the layout
-        currentLayoutPage += currentLayoutPageOffset.roundToInt()
-        currentLayoutPageOffset = 0f
+        updateLayoutPages(page)
+        currentLayoutPageOffset = offset
         // Then update the current page to match
-        currentPage = currentLayoutPage
+        currentPage = page
         // Clear the target page
         _animationTargetPage = null
+    }
 
-        updateLayoutPages()
+    private fun snapToNearestPage() {
+        snapToPage(currentLayoutPageIndex + currentLayoutPageOffset.roundToInt())
     }
 
     private suspend fun animateToPage(
@@ -325,14 +320,14 @@ class PagerState(
     }
 
     private fun updateLayoutForScrollPosition(position: Float) {
-        currentLayoutPage = floor(position).toInt()
-        currentLayoutPageOffset = position - currentLayoutPage
-        updateLayoutPages()
+        val newIndex = floor(position).toInt()
+        currentLayoutPageOffset = position - newIndex
+        updateLayoutPages(newIndex)
     }
 
-    private fun updateLayoutPages() {
+    private fun updateLayoutPages(page: Int) {
         layoutPages.forEachIndexed { index, layoutPage ->
-            val pg = currentLayoutPage + index - offscreenLimit
+            val pg = page + index - offscreenLimit
             layoutPage.page = if (pg < 0 || pg > lastPageIndex) null else pg
         }
     }
@@ -353,7 +348,7 @@ class PagerState(
             Log.d(
                 LogTag,
                 "scrollByOffset. delta:%.4f, new-page:%d, new-offset:%.4f"
-                    .format(deltaOffset, currentLayoutPage, currentLayoutPageOffset),
+                    .format(deltaOffset, currentLayoutPageIndex, currentLayoutPageOffset),
             )
         }
 
@@ -390,7 +385,7 @@ class PagerState(
                 "fling. velocity:%.4f, page: %d, offset:%.4f, targetOffset:%.4f"
                     .format(
                         initialVelocity,
-                        currentLayoutPage,
+                        currentLayoutPageIndex,
                         currentLayoutPageOffset,
                         targetOffset
                     )
@@ -405,8 +400,8 @@ class PagerState(
             // Animate with the decay animation spec using the fling velocity
 
             val target = when {
-                targetOffset > 0 -> (currentLayoutPage + 1).coerceAtMost(lastPageIndex)
-                else -> currentLayoutPage
+                targetOffset > 0 -> (currentLayoutPageIndex + 1).coerceAtMost(lastPageIndex)
+                else -> currentLayoutPageIndex
             }
             // Update the external state too
             _animationTargetPage = target
@@ -430,6 +425,7 @@ class PagerState(
                 val coerced = value.coerceIn(0f, currentLayoutPageSize.toFloat())
                 scrollBy(coerced - (currentLayoutPageOffset * currentLayoutPageSize))
 
+                val currentLayoutPage = currentLayoutPageIndex
                 // If we've scroll our target page (or beyond it), cancel the animation
                 val pastStartBound = initialVelocity < 0 &&
                     (currentLayoutPage < target || (currentLayoutPage == target && currentLayoutPageOffset == 0f))
@@ -439,13 +435,12 @@ class PagerState(
                 if (pastStartBound || pastEndBound) {
                     // If we reach the bounds of the allowed offset, cancel the animation
                     cancelAnimation()
-                    currentLayoutPage = target
-                    currentLayoutPageOffset = 0f
+                    snapToPage(target)
                 }
             }
         } else {
             // Otherwise we animate to the next item, or spring-back depending on the offset
-            val target = currentLayoutPage + determineSpringBackOffset(
+            val target = currentLayoutPageIndex + determineSpringBackOffset(
                 velocity = initialVelocity,
                 offset = targetOffset
             )
@@ -462,9 +457,9 @@ class PagerState(
                 // Keep track of velocity
                 lastVelocity = velocity
             }
+            snapToNearestPage()
         }
 
-        snapToNearestPage()
         return lastVelocity
     }
 
