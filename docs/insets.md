@@ -101,6 +101,20 @@ For a more complex example, see the [`EdgeToEdgeLazyColumn`](https://github.com/
 <img src="images/edge-to-edge-list.jpg" width=300>
 </a>
 
+### Inset-aware layouts
+
+Unfortunately, most of Compose Material's layouts do not support the use of content padding, which means that the following code probably doesn't produce the effect you want:
+
+``` kotlin
+TopAppBar(
+    // content
+    modifier = Modifier.statusBarsPadding()
+)
+```
+
+To workaround this, our sample has a number of wrapper layouts in the [`InsetAwareLayouts.kt`](https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/insets/InsetAwareLayouts.kt)
+
+
 ## 🚧 Experimental
 
 The features below are experimental, and require developers to [opt-in](https://kotlinlang.org/docs/reference/opt-in-requirements.html).
