@@ -2,8 +2,8 @@ public abstract interface annotation class com/google/accompanist/pager/Experime
 }
 
 public final class com/google/accompanist/pager/Pager {
-	public static final fun HorizontalPager-7vwJh_E (Lcom/google/accompanist/pager/PagerState;Landroidx/compose/ui/Modifier;ZFIZLandroidx/compose/foundation/gestures/FlingBehavior;Landroidx/compose/ui/Alignment$Vertical;Landroidx/compose/ui/Alignment$Horizontal;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
-	public static final fun VerticalPager-7vwJh_E (Lcom/google/accompanist/pager/PagerState;Landroidx/compose/ui/Modifier;ZFIZLandroidx/compose/foundation/gestures/FlingBehavior;Landroidx/compose/ui/Alignment$Vertical;Landroidx/compose/ui/Alignment$Horizontal;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
+	public static final fun HorizontalPager-_-WMjBM (Lcom/google/accompanist/pager/PagerState;Landroidx/compose/ui/Modifier;ZFZLandroidx/compose/foundation/gestures/FlingBehavior;Landroidx/compose/ui/Alignment$Vertical;Landroidx/compose/ui/Alignment$Horizontal;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
+	public static final fun VerticalPager-_-WMjBM (Lcom/google/accompanist/pager/PagerState;Landroidx/compose/ui/Modifier;ZFZLandroidx/compose/foundation/gestures/FlingBehavior;Landroidx/compose/ui/Alignment$Vertical;Landroidx/compose/ui/Alignment$Horizontal;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
 	public static final fun calculateCurrentOffsetForPage (Lcom/google/accompanist/pager/PagerScope;I)F
 }
 
@@ -20,13 +20,14 @@ public abstract interface class com/google/accompanist/pager/PagerScope : androi
 
 public final class com/google/accompanist/pager/PagerState : androidx/compose/foundation/gestures/ScrollableState {
 	public static final field Companion Lcom/google/accompanist/pager/PagerState$Companion;
-	public fun <init> (IIF)V
-	public synthetic fun <init> (IIFILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (IIFI)V
+	public synthetic fun <init> (IIFIILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun animateScrollToPage (IFLandroidx/compose/animation/core/AnimationSpec;FLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun animateScrollToPage$default (Lcom/google/accompanist/pager/PagerState;IFLandroidx/compose/animation/core/AnimationSpec;FLkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public fun dispatchRawDelta (F)F
 	public final fun getCurrentPage ()I
 	public final fun getCurrentPageOffset ()F
+	public final fun getOffscreenLimit ()I
 	public final fun getPageCount ()I
 	public final fun getTargetPage ()Ljava/lang/Integer;
 	public fun isScrollInProgress ()Z
@@ -43,6 +44,6 @@ public final class com/google/accompanist/pager/PagerState$Companion {
 
 public final class com/google/accompanist/pager/PagerStateKt {
 	public static final fun getPageChanges (Lcom/google/accompanist/pager/PagerState;)Lkotlinx/coroutines/flow/Flow;
-	public static final fun rememberPagerState (IIFLandroidx/compose/runtime/Composer;II)Lcom/google/accompanist/pager/PagerState;
+	public static final fun rememberPagerState (IIFILandroidx/compose/runtime/Composer;II)Lcom/google/accompanist/pager/PagerState;
 }
 

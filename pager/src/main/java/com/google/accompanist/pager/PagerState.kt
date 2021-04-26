@@ -57,6 +57,8 @@ private const val LogTag = "PagerState"
  * @param pageCount the value for [PagerState.pageCount]
  * @param initialPage the initial value for [PagerState.currentPage]
  * @param initialPageOffset the initial value for [PagerState.currentPageOffset]
+ * @param initialOffscreenLimit the number of pages that should be retained on either side of the
+ * current page. This value is required to be `1` or greater.
  */
 @ExperimentalPagerApi
 @Composable
@@ -64,11 +66,13 @@ fun rememberPagerState(
     @IntRange(from = 0) pageCount: Int,
     @IntRange(from = 0) initialPage: Int = 0,
     @FloatRange(from = 0.0, to = 1.0) initialPageOffset: Float = 0f,
+    @IntRange(from = 1) initialOffscreenLimit: Int = 1,
 ): PagerState = rememberSaveable(saver = PagerState.Saver) {
     PagerState(
         pageCount = pageCount,
         currentPage = initialPage,
         currentPageOffset = initialPageOffset,
+        offscreenLimit = initialOffscreenLimit,
     )
 }.apply {
     this.pageCount = pageCount
@@ -82,6 +86,8 @@ fun rememberPagerState(
  * @param pageCount the initial value for [PagerState.pageCount]
  * @param currentPage the initial value for [PagerState.currentPage]
  * @param currentPageOffset the initial value for [PagerState.currentPageOffset]
+ * @param offscreenLimit the number of pages that should be retained on either side of the
+ * current page. This value is required to be `1` or greater.
  */
 @ExperimentalPagerApi
 @Stable
@@ -89,6 +95,7 @@ class PagerState(
     @IntRange(from = 0) pageCount: Int,
     @IntRange(from = 0) currentPage: Int = 0,
     @FloatRange(from = 0.0, to = 1.0) currentPageOffset: Float = 0f,
+    val offscreenLimit: Int = 1,
 ) : ScrollableState {
     private var _pageCount by mutableStateOf(pageCount)
     private var _currentPage by mutableStateOf(currentPage)
@@ -96,6 +103,8 @@ class PagerState(
 
     internal var currentLayoutPage by mutableStateOf(currentPage)
         private set
+
+    internal val layoutPages = List((offscreenLimit * 2) + 1) { PageLayoutInfo() }
 
     internal var currentLayoutPageOffset: Float
         get() = _currentLayoutPageOffset
@@ -106,7 +115,16 @@ class PagerState(
             )
         }
 
-    internal var currentLayoutPageSize by mutableStateOf(0)
+    private val currentLayoutPageSize: Int
+        get() {
+            // The current layout should be the 'middle' item
+            val middle = layoutPages[(layoutPages.size + 1) / 2]
+            if (middle.page == currentLayoutPage) {
+                return middle.layoutSize
+            }
+            // Otherwise we fall-back to a find
+            return layoutPages.find { it.page == currentLayoutPage }?.layoutSize ?: 0
+        }
 
     /**
      * The current scroll position, as a float value between `0 until pageSize`
@@ -129,9 +147,12 @@ class PagerState(
     }
 
     init {
+        require(offscreenLimit >= 1) { "offscreenLimit is required to be >= 1" }
         require(pageCount >= 0) { "pageCount must be >= 0" }
         requireCurrentPage(currentPage, "currentPage")
         requireCurrentPageOffset(currentPageOffset, "currentPageOffset")
+
+        updateLayoutPages()
     }
 
     /**
@@ -144,6 +165,7 @@ class PagerState(
             require(value >= 0) { "pageCount must be >= 0" }
             _pageCount = value
             currentPage = currentPage.coerceIn(0, lastPageIndex)
+            updateLayoutPages()
         }
 
     /**
@@ -159,6 +181,7 @@ class PagerState(
             _currentPage = value.coerceIn(0, lastPageIndex)
             // If the current page is changed, update the layout page too
             currentLayoutPage = _currentPage
+            updateLayoutPages()
         }
 
     /**
@@ -263,6 +286,8 @@ class PagerState(
         currentPage = currentLayoutPage
         // Clear the target page
         _animationTargetPage = null
+
+        updateLayoutPages()
     }
 
     private suspend fun animateToPage(
@@ -302,6 +327,14 @@ class PagerState(
     private fun updateLayoutForScrollPosition(position: Float) {
         currentLayoutPage = floor(position).toInt()
         currentLayoutPageOffset = position - currentLayoutPage
+        updateLayoutPages()
+    }
+
+    private fun updateLayoutPages() {
+        layoutPages.forEachIndexed { index, layoutPage ->
+            val pg = currentLayoutPage + index - offscreenLimit
+            layoutPage.page = if (pg < 0 || pg > lastPageIndex) null else pg
+        }
     }
 
     /**
@@ -505,3 +538,9 @@ class PagerState(
 @ExperimentalPagerApi
 inline val PagerState.pageChanges
     get() = snapshotFlow { currentPage }
+
+@Stable
+internal class PageLayoutInfo {
+    var page: Int? by mutableStateOf(null)
+    var layoutSize: Int by mutableStateOf(0)
+}
