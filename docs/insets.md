@@ -28,9 +28,10 @@ setContent {
 ``` kotlin
 @Composable
 fun ImeAvoidingBox() {
-  val insets = LocalWindowInsets.current
-
-  Box(Modifier.padding(bottom = insets.ime.bottom))
+    val insets = LocalWindowInsets.current
+    
+    val imeBottom = with(LocalDensity.current) { insets.ime.bottom.toDp() }
+    Box(Modifier.padding(bottom = imeBottom))
 }
 ```
 
@@ -53,12 +54,14 @@ These are commonly used to move composables out from under the system bars. The 
 
 ``` kotlin
 FloatingActionButton(
-    icon = { Icon(...) },
+    onClick = { /* TODO */ },
     modifier = Modifier
         .align(Alignment.BottomEnd)
         .padding(16.dp) // normal 16dp of padding for FABs
         .navigationBarsPadding() // Move it out from under the nav bar
-)
+) {
+    Icon(imageVector = Icons.Default.Add, contentDescription = null)
+}
 ```
 
 #### Size modifiers
@@ -86,8 +89,10 @@ You may want to use inset values for content padding, so this library provides t
 
 ``` kotlin
 LazyColumn(
-  contentPadding = LocalWindowInsets.current.systemBars.toPaddingValues()
-)
+    contentPadding = LocalWindowInsets.current.systemBars.toPaddingValues()
+) {
+    // content
+}
 ```
 
 For a more complex example, see the [`EdgeToEdgeLazyColumn`](https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/insets/EdgeToEdgeLazyColumn.kt) example:
