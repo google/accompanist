@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -159,6 +160,8 @@ class HorizontalPagerTest(
     ): PagerState {
         val pagerState = PagerState(pageCount = pageCount)
         composeTestRule.setContent(layoutDirection) {
+            applierScope = rememberCoroutineScope()
+
             HorizontalPager(
                 state = pagerState,
                 itemSpacing = itemSpacingDp.dp,

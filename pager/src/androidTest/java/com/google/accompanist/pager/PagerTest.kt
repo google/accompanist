@@ -25,9 +25,11 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performScrollTo
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.produceIn
+import kotlinx.coroutines.withContext
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
@@ -48,6 +50,12 @@ abstract class PagerTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
+
+    /**
+     * This is a workaround for https://issuetracker.google.com/issues/179492185.
+     * Ideally we would have a way to get the applier scope from the rule
+     */
+    protected lateinit var applierScope: CoroutineScope
 
     @Test
     fun layout() {
@@ -196,15 +204,20 @@ abstract class PagerTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    @Ignore("https://issuetracker.google.com/185228750")
     fun animateScrollToPage() = suspendTest {
         val pagerState = setPagerContent(pageCount = 10)
 
-        pagerState.animateScrollToPage(3)
+        withContext(applierScope.coroutineContext) {
+            pagerState.animateScrollToPage(3)
+        }
+        composeTestRule.awaitIdle()
         assertThat(pagerState.currentPage).isEqualTo(3)
         assertPagerLayout(3)
 
-        pagerState.animateScrollToPage(0)
+        withContext(applierScope.coroutineContext) {
+            pagerState.animateScrollToPage(0)
+        }
+        composeTestRule.awaitIdle()
         assertThat(pagerState.currentPage).isEqualTo(0)
         assertPagerLayout(0)
     }
