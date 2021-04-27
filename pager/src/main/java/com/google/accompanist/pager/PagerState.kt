@@ -101,7 +101,8 @@ class PagerState(
     private var _currentPage by mutableStateOf(currentPage)
     private var _currentLayoutPageOffset by mutableStateOf(currentPageOffset)
 
-    internal val layoutPages: List<PageLayoutInfo> = List((offscreenLimit * 2) + 1) { PageLayoutInfo() }
+    internal val layoutPages: List<PageLayoutInfo> =
+        List((offscreenLimit * 2) + 1) { PageLayoutInfo() }
 
     internal var currentLayoutPageOffset: Float
         get() = _currentLayoutPageOffset
@@ -213,7 +214,6 @@ class PagerState(
      * complete.
      *
      * @param page the page to snap to. Must be between 0 and [pageCount] (inclusive).
-     * @param pageOffset the percentage of the page width to offset, from the start of [page]
      * @param initialVelocity Initial velocity in pixels per second, or `0f` to not use a start velocity.
      * Must be in the range 0f..1f.
      */
@@ -221,25 +221,35 @@ class PagerState(
         @IntRange(from = 0) page: Int,
         animationSpec: AnimationSpec<Float> = spring(),
         initialVelocity: Float = 0f,
+        skipLongDistances: Boolean = false,
     ) {
         requireCurrentPage(page, "page")
-
         if (page == currentPage) return
 
         // We don't specifically use the ScrollScope's scrollBy, but
         // we do want to use it's mutex
         scroll {
-            animateToPage(
-                page = page.coerceIn(0, lastPageIndex),
-                animationSpec = animationSpec,
-                initialVelocity = initialVelocity,
-            )
+            val target = page.coerceIn(0, lastPageIndex)
+
+            val currentIndex = currentLayoutPageIndex
+            val distance = (target - currentIndex).absoluteValue
+
+            /**
+             * The distance of 4 may seem like a magic number, but it's not.
+             * It's: current page, current page + 1, target page - 1, target page.
+             * This provides the illusion of movement, but allows us to lay out as few pages
+             * as possible.
+             */
+            if (skipLongDistances && distance >= 4) {
+                animateToPageSkip(target, animationSpec, initialVelocity)
+            } else {
+                animateToPageLinear(target, animationSpec, initialVelocity)
+            }
         }
     }
 
     /**
-     * Instantly brings the item at [page] to the middle of the viewport, offset by [pageOffset]
-     * percentage of page width.
+     * Instantly brings the item at [page] to the middle of the viewport.
      *
      * Cancels the currently running scroll, if any, and suspends until the cancellation is
      * complete.
@@ -278,28 +288,38 @@ class PagerState(
         snapToPage(currentLayoutPageIndex + currentLayoutPageOffset.roundToInt())
     }
 
-    private suspend fun animateToPage(
+    private suspend fun animateToPageLinear(
         page: Int,
-        animationSpec: AnimationSpec<Float> = spring(),
-        initialVelocity: Float = 0f,
-        skipLongDistances: Boolean = true,
+        animationSpec: AnimationSpec<Float>,
+        initialVelocity: Float,
+    ) {
+        // Set our target page
+        _animationTargetPage = page
+
+        animate(
+            initialValue = absolutePosition,
+            targetValue = page.toFloat(),
+            initialVelocity = initialVelocity,
+            animationSpec = animationSpec
+        ) { value, _ ->
+            updateLayoutForScrollPosition(value)
+        }
+        snapToNearestPage()
+    }
+
+    private suspend fun animateToPageSkip(
+        page: Int,
+        animationSpec: AnimationSpec<Float>,
+        initialVelocity: Float,
     ) {
         // Set our target page
         _animationTargetPage = page
 
         val initialIndex = currentLayoutPageIndex
-        val distance = (page - initialIndex).absoluteValue
-
-        val pages: IntArray = if (skipLongDistances && distance >= 4) {
-            if (page < initialIndex) {
-                intArrayOf(initialIndex, initialIndex - 1, page + 1, page)
-            } else {
-                intArrayOf(initialIndex, initialIndex + 1, page - 1, page)
-            }
+        val pages: IntArray = if (page < initialIndex) {
+            intArrayOf(initialIndex, initialIndex - 1, page + 1, page)
         } else {
-            (if (page < initialIndex) (page..initialIndex).reversed() else initialIndex..page)
-                .toList()
-                .toIntArray()
+            intArrayOf(initialIndex, initialIndex + 1, page - 1, page)
         }
 
         if (DebugLog) {
@@ -307,7 +327,7 @@ class PagerState(
         }
 
         animate(
-            initialValue = 0f + currentPageOffset,
+            initialValue = currentPageOffset,
             targetValue = pages.size - 1f,
             initialVelocity = initialVelocity,
             animationSpec = animationSpec
