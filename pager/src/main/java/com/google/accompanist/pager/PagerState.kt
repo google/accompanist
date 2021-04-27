@@ -109,24 +109,26 @@ class PagerState(
         private set(value) {
             _currentLayoutPageOffset = value.coerceIn(
                 minimumValue = 0f,
-                maximumValue = if (currentLayoutPageIndex == lastPageIndex) 0f else 1f,
+                maximumValue = if (currentLayoutPage == lastPageIndex) 0f else 1f,
             )
         }
 
     internal inline val currentLayoutPageSize: Int
         get() = currentLayoutPageInfo.layoutSize
 
-    internal inline val currentLayoutPageIndex: Int
+    internal inline val currentLayoutPage: Int
         get() = currentLayoutPageInfo.page!!
 
     internal inline val currentLayoutPageInfo: PageLayoutInfo
-        get() = layoutPages[(layoutPages.size - 1) / 2]
+        get() = layoutPages[currentLayoutPageIndex]
+
+    private val currentLayoutPageIndex: Int = (layoutPages.size - 1) / 2
 
     /**
      * The current scroll position, as a float value between `0 until pageSize`
      */
     private inline val absolutePosition: Float
-        get() = currentLayoutPageIndex + currentLayoutPageOffset
+        get() = currentLayoutPage + currentLayoutPageOffset
 
     internal inline val lastPageIndex: Int
         get() = (pageCount - 1).coerceAtLeast(0)
@@ -213,15 +215,19 @@ class PagerState(
      * Cancels the currently running scroll, if any, and suspends until the cancellation is
      * complete.
      *
-     * @param page the page to snap to. Must be between 0 and [pageCount] (inclusive).
+     * @param page the page to animate to. Must be between 0 and [pageCount] (inclusive).
      * @param initialVelocity Initial velocity in pixels per second, or `0f` to not use a start velocity.
      * Must be in the range 0f..1f.
+     * @param skipPages Whether to skip most intermediate pages. This allows the layout to skip
+     * work for pages which are displayed for only a *very* short amount of time. Visually users
+     * should see no difference. Pass `false` to animate over all pages between [currentPage]
+     * and [page]. Defaults to `true`.
      */
     suspend fun animateScrollToPage(
         @IntRange(from = 0) page: Int,
         animationSpec: AnimationSpec<Float> = spring(),
         initialVelocity: Float = 0f,
-        skipLongDistances: Boolean = false,
+        skipPages: Boolean = true,
     ) {
         requireCurrentPage(page, "page")
         if (page == currentPage) return
@@ -231,7 +237,7 @@ class PagerState(
         scroll {
             val target = page.coerceIn(0, lastPageIndex)
 
-            val currentIndex = currentLayoutPageIndex
+            val currentIndex = currentLayoutPage
             val distance = (target - currentIndex).absoluteValue
 
             /**
@@ -240,7 +246,7 @@ class PagerState(
              * This provides the illusion of movement, but allows us to lay out as few pages
              * as possible.
              */
-            if (skipLongDistances && distance >= 4) {
+            if (skipPages && distance > 4) {
                 animateToPageSkip(target, animationSpec, initialVelocity)
             } else {
                 animateToPageLinear(target, animationSpec, initialVelocity)
@@ -272,7 +278,7 @@ class PagerState(
         if (DebugLog) {
             Log.d(
                 LogTag,
-                "snapToPage. page:$currentLayoutPageIndex, offset:$currentLayoutPageOffset"
+                "snapToPage. page:$currentLayoutPage, offset:$currentLayoutPageOffset"
             )
         }
         // Snap the layout
@@ -285,7 +291,7 @@ class PagerState(
     }
 
     private fun snapToNearestPage() {
-        snapToPage(currentLayoutPageIndex + currentLayoutPageOffset.roundToInt())
+        snapToPage(currentLayoutPage + currentLayoutPageOffset.roundToInt())
     }
 
     private suspend fun animateToPageLinear(
@@ -315,15 +321,10 @@ class PagerState(
         // Set our target page
         _animationTargetPage = page
 
-        val initialIndex = currentLayoutPageIndex
-        val pages: IntArray = if (page < initialIndex) {
-            intArrayOf(initialIndex, initialIndex - 1, page + 1, page)
-        } else {
-            intArrayOf(initialIndex, initialIndex + 1, page - 1, page)
-        }
-
-        if (DebugLog) {
-            Log.d(LogTag, "Animating with pages: ${pages.contentToString()}")
+        val initialIndex = currentLayoutPage
+        val pages: IntArray = when {
+            page > initialIndex -> intArrayOf(initialIndex, initialIndex + 1, page - 1, page)
+            else -> intArrayOf(initialIndex, initialIndex - 1, page + 1, page)
         }
 
         animate(
@@ -333,8 +334,12 @@ class PagerState(
             animationSpec = animationSpec
         ) { value, _ ->
             val flooredIndex = floor(value).toInt()
-            val offset = value - flooredIndex
-            updateLayoutForScrollPosition(pages[flooredIndex] + offset)
+            layoutPages.forEachIndexed { index, layoutInfo ->
+                layoutInfo.page = pages.getOrNull(flooredIndex + (index - currentLayoutPageIndex))
+            }
+            if (DebugLog) Log.d(LogTag, "animateToPageSkip: $layoutPages")
+
+            currentLayoutPageOffset = value - flooredIndex
         }
         snapToNearestPage()
     }
@@ -382,7 +387,7 @@ class PagerState(
             Log.d(
                 LogTag,
                 "scrollByOffset. delta:%.4f, new-page:%d, new-offset:%.4f"
-                    .format(deltaOffset, currentLayoutPageIndex, currentLayoutPageOffset),
+                    .format(deltaOffset, currentLayoutPage, currentLayoutPageOffset),
             )
         }
 
@@ -419,7 +424,7 @@ class PagerState(
                 "fling. velocity:%.4f, page: %d, offset:%.4f, targetOffset:%.4f"
                     .format(
                         initialVelocity,
-                        currentLayoutPageIndex,
+                        currentLayoutPage,
                         currentLayoutPageOffset,
                         targetOffset
                     )
@@ -434,8 +439,8 @@ class PagerState(
             // Animate with the decay animation spec using the fling velocity
 
             val target = when {
-                targetOffset > 0 -> (currentLayoutPageIndex + 1).coerceAtMost(lastPageIndex)
-                else -> currentLayoutPageIndex
+                targetOffset > 0 -> (currentLayoutPage + 1).coerceAtMost(lastPageIndex)
+                else -> currentLayoutPage
             }
             // Update the external state too
             _animationTargetPage = target
@@ -459,7 +464,7 @@ class PagerState(
                 val coerced = value.coerceIn(0f, currentLayoutPageSize.toFloat())
                 scrollBy(coerced - (currentLayoutPageOffset * currentLayoutPageSize))
 
-                val currentLayoutPage = currentLayoutPageIndex
+                val currentLayoutPage = currentLayoutPage
                 // If we've scroll our target page (or beyond it), cancel the animation
                 val pastStartBound = initialVelocity < 0 &&
                     (currentLayoutPage < target || (currentLayoutPage == target && currentLayoutPageOffset == 0f))
@@ -474,7 +479,7 @@ class PagerState(
             }
         } else {
             // Otherwise we animate to the next item, or spring-back depending on the offset
-            val target = currentLayoutPageIndex + determineSpringBackOffset(
+            val target = currentLayoutPage + determineSpringBackOffset(
                 velocity = initialVelocity,
                 offset = targetOffset
             )
@@ -572,4 +577,8 @@ inline val PagerState.pageChanges
 internal class PageLayoutInfo {
     var page: Int? by mutableStateOf(null)
     var layoutSize: Int by mutableStateOf(0)
+
+    override fun toString(): String {
+        return "PageLayoutInfo(page = $page, layoutSize=$layoutSize)"
+    }
 }

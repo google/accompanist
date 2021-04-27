@@ -238,7 +238,7 @@ internal fun Pager(
     val coroutineScope = rememberCoroutineScope()
     val semanticsAxisRange = remember(state, reverseDirection) {
         ScrollAxisRange(
-            value = { state.currentLayoutPageIndex + state.currentLayoutPageOffset },
+            value = { state.currentLayoutPage + state.currentLayoutPageOffset },
             maxValue = { state.lastPageIndex.toFloat() },
         )
     }
@@ -279,7 +279,7 @@ internal fun Pager(
                 Log.d(
                     LogTag,
                     "Content: firstPage:${firstPage?.page ?: "none"}, " +
-                        "layoutPage:${state.currentLayoutPageIndex}, " +
+                        "layoutPage:${state.currentLayoutPage}, " +
                         "currentPage:${state.currentPage}, " +
                         "lastPage:${lastPage?.page ?: "none"}"
                 )
@@ -322,7 +322,7 @@ internal fun Pager(
         val pagerHeight = placeables.maxOf { it.height }.coerceAtLeast(constraints.minHeight)
 
         layout(width = pagerWidth, height = pagerHeight) {
-            val layoutPage = state.currentLayoutPageIndex
+            val layoutPage = state.currentLayoutPage
             val offset = state.currentLayoutPageOffset
             val itemSpacingPx = itemSpacing.roundToPx()
 
