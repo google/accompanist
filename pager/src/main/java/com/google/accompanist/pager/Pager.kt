@@ -59,7 +59,7 @@ import kotlin.math.roundToInt
 /**
  * Library-wide switch to turn on debug logging.
  */
-internal const val DebugLog = true
+internal const val DebugLog = false
 
 private const val LogTag = "Pager"
 
