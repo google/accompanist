@@ -119,12 +119,14 @@ class VerticalPagerTest(
     }
 
     override fun setPagerContent(pageCount: Int): PagerState {
-        val pagerState = PagerState(pageCount = pageCount)
+        val pagerState = PagerState(
+            pageCount = pageCount,
+            offscreenLimit = offscreenLimit,
+        )
         // Stick to LTR for vertical tests
         composeTestRule.setContent(LayoutDirection.Ltr) {
             VerticalPager(
                 state = pagerState,
-                offscreenLimit = offscreenLimit,
                 itemSpacing = itemSpacingDp.dp,
                 reverseLayout = reverseLayout,
                 verticalAlignment = verticalAlignment,

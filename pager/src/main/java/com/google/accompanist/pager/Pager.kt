@@ -328,7 +328,7 @@ internal fun Pager(
 
             placeables.forEachIndexed { index, placeable ->
                 val page = measurables[index].page
-                val layoutInfo = state.layoutPages.first { it.page == page }
+                val layoutInfo = state.layoutPages.firstOrNull { it.page == page }
 
                 val xCenterOffset = horizontalAlignment.align(
                     size = placeable.width,
@@ -345,10 +345,10 @@ internal fun Pager(
                 val offsetForPage = page - layoutPage - offset
 
                 if (isVertical) {
-                    layoutInfo.layoutSize = placeable.height
+                    layoutInfo?.layoutSize = placeable.height
                     yItemOffset = (offsetForPage * (placeable.height + itemSpacingPx)).roundToInt()
                 } else {
-                    layoutInfo.layoutSize = placeable.width
+                    layoutInfo?.layoutSize = placeable.width
                     xItemOffset = (offsetForPage * (placeable.width + itemSpacingPx)).roundToInt()
                 }
 
