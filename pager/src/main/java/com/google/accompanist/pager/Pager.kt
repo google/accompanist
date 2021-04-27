@@ -115,11 +115,6 @@ object PagerDefaults {
 /**
  * A horizontally scrolling layout that allows users to flip between items to the left and right.
  *
- * This layout allows the setting of the [offscreenLimit], which defines the number of pages that
- * should be retained on either side of the current page. Pages beyond this limit will be
- * recreated as needed. This value defaults to `1`, but can be increased to enable pre-loading
- * of more content.
- *
  * @sample com.google.accompanist.sample.pager.HorizontalPagerSample
  *
  * @param state the state object to be used to control or observe the pager's state.
@@ -128,7 +123,6 @@ object PagerDefaults {
  * composed from the end to the start and [PagerState.currentPage] == 0 will mean
  * the first item is located at the end.
  * @param itemSpacing horizontal spacing to add between items.
-
  * @param dragEnabled toggle manual scrolling, when `false` the user can not drag the view to a
  * different page.
  * @param flingBehavior logic describing fling behavior.
@@ -164,11 +158,6 @@ fun HorizontalPager(
 
 /**
  * A vertically scrolling layout that allows users to flip between items to the top and bottom.
- *
- * This layout allows the setting of the [offscreenLimit], which defines the number of pages that
- * should be retained on either side of the current page. Pages beyond this limit will be
- * recreated as needed. This value defaults to `1`, but can be increased to enable pre-loading
- * of more content.
  *
  * @sample com.google.accompanist.sample.pager.VerticalPagerSample
  *
@@ -279,7 +268,7 @@ internal fun Pager(
                 Log.d(
                     LogTag,
                     "Content: firstPage:${firstPage?.page ?: "none"}, " +
-                        "layoutPage:${state.currentLayoutPage}, " +
+                        "layoutPage:${state.currentLayoutPageInfo}, " +
                         "currentPage:${state.currentPage}, " +
                         "lastPage:${lastPage?.page ?: "none"}"
                 )

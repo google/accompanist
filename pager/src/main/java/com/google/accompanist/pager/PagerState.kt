@@ -50,9 +50,9 @@ private const val LogTag = "PagerState"
 /**
  * Creates a [PagerState] that is remembered across compositions.
  *
- * Changes to the provided values for [initialPage] and [initialPageOffset] will **not** result
- * in the state being recreated or changed in any way if it has already been created.
- * Changes to [pageCount] will result in the [PagerState] being updated.
+ * Changes to the provided values for [initialPage], [initialPageOffset] & [initialOffscreenLimit]
+ * will **not** result in the state being recreated or changed in any way if it has already
+ * been created. Changes to [pageCount] will result in the [PagerState] being updated.
  *
  * @param pageCount the value for [PagerState.pageCount]
  * @param initialPage the initial value for [PagerState.currentPage]
@@ -82,6 +82,11 @@ fun rememberPagerState(
  * A state object that can be hoisted to control and observe scrolling for [HorizontalPager].
  *
  * In most cases, this will be created via [rememberPagerState].
+ *
+ * This layout allows the setting of the `offscreenLimit`, which defines the number of pages that
+ * should be retained on either side of the current page. Pages beyond this limit will be
+ * recreated as needed. This value defaults to `1`, but can be increased to enable pre-loading
+ * of more content.
  *
  * @param pageCount the initial value for [PagerState.pageCount]
  * @param currentPage the initial value for [PagerState.currentPage]
