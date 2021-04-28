@@ -44,7 +44,6 @@ import org.junit.runners.Parameterized
 @LargeTest
 @RunWith(Parameterized::class)
 class VerticalPagerTest(
-    private val itemWidthFraction: Float,
     private val verticalAlignment: Alignment.Vertical,
     // We don't use the Dp type due to https://youtrack.jetbrains.com/issue/KT-35523
     private val itemSpacingDp: Int,
@@ -55,25 +54,25 @@ class VerticalPagerTest(
         @JvmStatic
         @Parameterized.Parameters
         fun data(): Collection<Array<Any>> = listOf(
-            // itemWidthFraction, verticalAlignment, offscreenLimit
+            // verticalAlignment, itemSpacingDp, offscreenLimit, reverseLayout
 
             // Test typical full-width items
-            arrayOf(1f, Alignment.CenterVertically, 0, 2, false),
-            arrayOf(1f, Alignment.Top, 0, 2, false),
-            arrayOf(1f, Alignment.Bottom, 0, 2, false),
+            arrayOf(Alignment.CenterVertically, 0, 2, false),
+            arrayOf(Alignment.Top, 0, 2, false),
+            arrayOf(Alignment.Bottom, 0, 2, false),
 
             // Full-width items with spacing
-            arrayOf(1f, Alignment.CenterVertically, 4, 2, false),
-            arrayOf(1f, Alignment.Top, 4, 2, false),
-            arrayOf(1f, Alignment.Bottom, 4, 2, false),
+            arrayOf(Alignment.CenterVertically, 4, 2, false),
+            arrayOf(Alignment.Top, 4, 2, false),
+            arrayOf(Alignment.Bottom, 4, 2, false),
 
             // Full-width items with reverseLayout = true
-            arrayOf(1f, Alignment.CenterVertically, 0, 2, true),
-            arrayOf(1f, Alignment.Top, 0, 2, true),
-            arrayOf(1f, Alignment.Bottom, 0, 2, true),
+            arrayOf(Alignment.CenterVertically, 0, 2, true),
+            arrayOf(Alignment.Top, 0, 2, true),
+            arrayOf(Alignment.Bottom, 0, 2, true),
 
             // Test an increased offscreenLimit
-            arrayOf(1f, Alignment.CenterVertically, 0, 4, false),
+            arrayOf(Alignment.CenterVertically, 0, 4, false),
         )
     }
 
@@ -93,7 +92,7 @@ class VerticalPagerTest(
         currentPage: Int
     ): SemanticsNodeInteraction {
         val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
-        val expectedItemSize = rootBounds.width * itemWidthFraction
+        val expectedItemSize = rootBounds.width
 
         // The expected coordinates. This uses the implicit fact that VerticalPager by
         // use Alignment.CenterVertically by default, and that we're using items
@@ -134,7 +133,7 @@ class VerticalPagerTest(
             ) { page ->
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth(itemWidthFraction)
+                        .fillMaxWidth()
                         .aspectRatio(1f)
                         .background(randomColor())
                         .testTag(page.toString())
