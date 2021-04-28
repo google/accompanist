@@ -78,6 +78,21 @@ private fun Sample() {
             }
 
             item {
+                // Data parameter with placeholder
+                Image(
+                    painter = rememberGlidePainter(
+                        request = rememberRandomSampleImageUrl(),
+                        previewPlaceholder = R.drawable.placeholder,
+                        requestBuilder = {
+                            placeholder(R.drawable.placeholder)
+                        }
+                    ),
+                    contentDescription = null,
+                    modifier = Modifier.size(128.dp),
+                )
+            }
+
+            item {
                 // Load GIF
                 Image(
                     painter = rememberGlidePainter("https://cataas.com/cat/gif"),
@@ -103,7 +118,7 @@ private fun Sample() {
                             .align(Alignment.Center)
                             .padding(16.dp)
                     ) { state ->
-                        if (state == ImageLoadState.Loading) {
+                        if (state is ImageLoadState.Loading) {
                             CircularProgressIndicator()
                         }
                     }
@@ -134,7 +149,7 @@ private fun Sample() {
                     )
 
                     Crossfade(glidePainter.loadState) { state ->
-                        if (state == ImageLoadState.Loading) {
+                        if (state is ImageLoadState.Loading) {
                             CircularProgressIndicator(Modifier.align(Alignment.Center))
                         }
                     }
@@ -152,7 +167,7 @@ private fun Sample() {
                     )
 
                     Crossfade(glidePainter.loadState) { state ->
-                        if (state == ImageLoadState.Loading) {
+                        if (state is ImageLoadState.Loading) {
                             CircularProgressIndicator(Modifier.align(Alignment.Center))
                         }
                     }

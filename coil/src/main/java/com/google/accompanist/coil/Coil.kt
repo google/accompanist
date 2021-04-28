@@ -42,6 +42,10 @@ import com.google.accompanist.imageloading.LoadPainterDefaults
 import com.google.accompanist.imageloading.Loader
 import com.google.accompanist.imageloading.ShouldRefetchOnSizeChange
 import com.google.accompanist.imageloading.rememberLoadPainter
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.launch
 
 /**
  * Composition local containing the preferred [ImageLoader] to be used by
@@ -117,7 +121,8 @@ internal class CoilLoader(
     var imageLoader by mutableStateOf(imageLoader)
     var requestBuilder by mutableStateOf(requestBuilder)
 
-    override suspend fun load(request: Any, size: IntSize): ImageLoadState {
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun load(request: Any, size: IntSize): Flow<ImageLoadState> = channelFlow {
         val baseRequest = when (request) {
             // If we've been given an ImageRequest instance, use it...
             is ImageRequest -> request.newBuilder()
@@ -132,7 +137,11 @@ internal class CoilLoader(
         }.apply {
             // Apply the request builder
             requestBuilder?.invoke(this, size)
-        }.build()
+        }.target(
+            onStart = { placeholder ->
+                launch { send(ImageLoadState.Loading(placeholder, request)) }
+            }
+        ).build()
 
         val sizedRequest = when {
             // If the request has a size resolver set we just execute the request as-is
@@ -147,10 +156,10 @@ internal class CoilLoader(
                     .build()
             }
             // Otherwise we have a zero size, so no point executing a request
-            else -> return ImageLoadState.Empty
+            else -> return@channelFlow
         }
 
-        return imageLoader.execute(sizedRequest).toResult(request)
+        send(imageLoader.execute(sizedRequest).toResult(request))
     }
 }
 

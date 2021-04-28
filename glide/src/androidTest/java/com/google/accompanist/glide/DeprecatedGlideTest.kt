@@ -59,7 +59,7 @@ import com.google.accompanist.imageloading.test.resourceUri
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.withTimeoutOrNull
 import org.junit.After
 import org.junit.Before
@@ -69,6 +69,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 
 @Suppress("DEPRECATION")
+@OptIn(ExperimentalCoroutinesApi::class)
 @LargeTest
 @RunWith(JUnit4::class)
 class DeprecatedGlideTest {
@@ -232,7 +233,7 @@ class DeprecatedGlideTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun basicLoad_changeSize() {
+    fun basicLoad_changeSize() = runBlockingTest {
         val loadCompleteSignal = Channel<ImageLoadState>(Channel.UNLIMITED)
         var size by mutableStateOf(128.dp)
 
@@ -253,10 +254,8 @@ class DeprecatedGlideTest {
         size = 256.dp
 
         // Await the potential second load (which shouldn't come)
-        runBlocking {
-            val result = withTimeoutOrNull(3000) { loadCompleteSignal.receive() }
-            assertThat(result).isNull()
-        }
+        val result = withTimeoutOrNull(3000) { loadCompleteSignal.receive() }
+        assertThat(result).isNull()
 
         // Close the signal channel
         loadCompleteSignal.close()
@@ -449,18 +448,15 @@ class DeprecatedGlideTest {
     }
 
     @Test
-    fun loading_slot() {
+    fun loading_slot() = runBlockingTest {
         var requestCompleted by mutableStateOf(false)
 
-        val glide = Glide.with(composeTestRule.activity.applicationContext).apply {
-            // Pause all requests so that the request doesn't complete
-            pauseAllRequests()
-        }
+        // Create a test dispatcher and immediately pause it
+        pauseDispatcher()
 
         composeTestRule.setContent {
             GlideImage(
                 data = server.url("/image").toString(),
-                requestManager = glide,
                 contentDescription = null,
                 modifier = Modifier.size(128.dp, 128.dp),
                 loading = { Text(text = "Loading") },
@@ -471,11 +467,12 @@ class DeprecatedGlideTest {
         // Assert that the loading component is displayed
         composeTestRule.onNodeWithText("Loading").assertIsDisplayed()
 
-        // Now resume all requests
-        glide.resumeRequests()
+        // Now resume the dispatcher to start the Coil request
+        resumeDispatcher()
 
         // We now wait for the request to complete
         composeTestRule.waitUntil(10_000) { requestCompleted }
+        composeTestRule.waitForIdle()
 
         // And assert that the loading component no longer exists
         composeTestRule.onNodeWithText("Loading").assertDoesNotExist()

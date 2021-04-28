@@ -17,6 +17,8 @@
 package com.google.accompanist.glide
 
 import android.graphics.drawable.Drawable
+import android.os.Handler
+import android.os.Looper
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,7 +45,10 @@ import com.google.accompanist.imageloading.Loader
 import com.google.accompanist.imageloading.ShouldRefetchOnSizeChange
 import com.google.accompanist.imageloading.rememberLoadPainter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.channels.sendBlocking
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 
 /**
  * Composition local containing the preferred [RequestManager] to use
@@ -118,34 +123,39 @@ internal class GlideLoader(
     var requestManager by mutableStateOf(requestManager)
     var requestBuilder by mutableStateOf(requestBuilder)
 
+    private val handler = Handler(Looper.getMainLooper())
+
+    /**
+     * Don't remove the explicit type `<ImageLoadState>` on [callbackFlow]. The IR compiler
+     * doesn't like the implicit type.
+     */
+    @Suppress("RemoveExplicitTypeArguments")
     @OptIn(ExperimentalCoroutinesApi::class)
-    override suspend fun load(
+    override fun load(
         request: Any,
         size: IntSize
-    ): ImageLoadState = suspendCancellableCoroutine { cont ->
+    ): Flow<ImageLoadState> = callbackFlow<ImageLoadState> {
         var failException: Throwable? = null
 
         val target = object : EmptyCustomTarget(
             if (size.width > 0) size.width else Target.SIZE_ORIGINAL,
             if (size.height > 0) size.height else Target.SIZE_ORIGINAL
         ) {
+            override fun onLoadStarted(placeholder: Drawable?) {
+                sendBlocking(ImageLoadState.Loading(placeholder, request))
+            }
+
             override fun onLoadFailed(errorDrawable: Drawable?) {
-                if (cont.isCompleted) {
-                    // If we've already completed, ignore this
-                    return
-                }
-
-                val result = ImageLoadState.Error(
-                    result = errorDrawable,
-                    request = request,
-                    throwable = failException
-                        ?: IllegalArgumentException("Error while loading $request")
+                sendBlocking(
+                    ImageLoadState.Error(
+                        result = errorDrawable,
+                        request = request,
+                        throwable = failException
+                            ?: IllegalArgumentException("Error while loading $request")
+                    )
                 )
-
-                cont.resume(result) {
-                    // Clear any resources from the target if cancelled
-                    requestManager.clear(this)
-                }
+                // Close the channel[Flow]
+                channel.close()
             }
         }
 
@@ -157,22 +167,9 @@ internal class GlideLoader(
                 dataSource: com.bumptech.glide.load.DataSource,
                 isFirstResource: Boolean
             ): Boolean {
-                if (cont.isCompleted) {
-                    // If we've already completed, ignore this
-                    return true
-                }
-
-                val result = ImageLoadState.Success(
-                    result = drawable,
-                    request = request,
-                    source = dataSource.toDataSource()
-                )
-
-                cont.resume(result) {
-                    // Clear any resources from the target if cancelled
-                    requestManager.clear(target)
-                }
-
+                sendBlocking(ImageLoadState.Success(drawable, dataSource.toDataSource(), request))
+                // Close the channel[Flow]
+                channel.close()
                 // Return true so that the target doesn't receive the drawable
                 return true
             }
@@ -198,9 +195,11 @@ internal class GlideLoader(
             .addListener(listener)
             .into(target)
 
-        // If we're cancelled, clear the request from Glide
-        cont.invokeOnCancellation {
-            requestManager.clear(target)
+        // When we're cancelled/closed, clear the request from Glide
+        awaitClose {
+            // Unfortunately we need to post the clear. Glide will crash if the close happens
+            // in the same call frame as the Target calls above (happens in testing)
+            handler.post { requestManager.clear(target) }
         }
     }
 }
