@@ -99,6 +99,8 @@ private fun Sample() {
                 onRefresh = { refreshing = true },
                 // Shift the indicator to match the list content padding
                 indicatorPadding = contentPadding,
+                // We want the indicator to draw within the padding
+                clipIndicatorToPadding = false,
                 // Tweak the indicator to scale up/down
                 indicator = { state, refreshTriggerDistance ->
                     SwipeRefreshIndicator(
