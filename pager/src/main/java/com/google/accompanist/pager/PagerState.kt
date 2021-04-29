@@ -215,12 +215,15 @@ class PagerState(
         }
 
     /**
-     * Animate (smooth scroll) to the given page.
+     * Animate (smooth scroll) to the given page to the middle of the viewport, offset
+     * by [pageOffset] percentage of page width.
      *
      * Cancels the currently running scroll, if any, and suspends until the cancellation is
      * complete.
      *
      * @param page the page to animate to. Must be between 0 and [pageCount] (inclusive).
+     * @param pageOffset the percentage of the page width to offset, from the start of [page].
+     * Must be in the range 0f..1f.
      * @param initialVelocity Initial velocity in pixels per second, or `0f` to not use a start velocity.
      * Must be in the range 0f..1f.
      * @param skipPages Whether to skip most intermediate pages. This allows the layout to skip
@@ -230,6 +233,7 @@ class PagerState(
      */
     suspend fun animateScrollToPage(
         @IntRange(from = 0) page: Int,
+        @FloatRange(from = 0.0, to = 1.0) pageOffset: Float = 0f,
         animationSpec: AnimationSpec<Float> = spring(),
         initialVelocity: Float = 0f,
         skipPages: Boolean = true,
@@ -252,30 +256,34 @@ class PagerState(
              * as possible.
              */
             if (skipPages && distance > 4) {
-                animateToPageSkip(target, animationSpec, initialVelocity)
+                animateToPageSkip(target, pageOffset, animationSpec, initialVelocity)
             } else {
-                animateToPageLinear(target, animationSpec, initialVelocity)
+                animateToPageLinear(target, pageOffset, animationSpec, initialVelocity)
             }
         }
     }
 
     /**
-     * Instantly brings the item at [page] to the middle of the viewport.
+     * Instantly brings the item at [page] to the middle of the viewport, offset by [pageOffset]
+     * percentage of page width.
      *
      * Cancels the currently running scroll, if any, and suspends until the cancellation is
      * complete.
      *
      * @param page the page to snap to. Must be between 0 and [pageCount] (inclusive).
+     * @param pageOffset the percentage of the page width to offset, from the start of [page].
+     * Must be in the range 0f..1f.
      */
     suspend fun scrollToPage(
-        @IntRange(from = 0) page: Int
+        @IntRange(from = 0) page: Int,
+        @FloatRange(from = 0.0, to = 1.0) pageOffset: Float = 0f,
     ) {
         requireCurrentPage(page, "page")
 
         // We don't specifically use the ScrollScope's scrollBy(), but
         // we do want to use it's mutex
         scroll {
-            snapToPage(page)
+            snapToPage(page, pageOffset)
         }
     }
 
@@ -301,6 +309,7 @@ class PagerState(
 
     private suspend fun animateToPageLinear(
         page: Int,
+        pageOffset: Float,
         animationSpec: AnimationSpec<Float>,
         initialVelocity: Float,
     ) {
@@ -309,7 +318,7 @@ class PagerState(
 
         animate(
             initialValue = absolutePosition,
-            targetValue = page.toFloat(),
+            targetValue = page + pageOffset,
             initialVelocity = initialVelocity,
             animationSpec = animationSpec
         ) { value, _ ->
@@ -320,6 +329,7 @@ class PagerState(
 
     private suspend fun animateToPageSkip(
         page: Int,
+        pageOffset: Float,
         animationSpec: AnimationSpec<Float>,
         initialVelocity: Float,
     ) {
@@ -334,7 +344,7 @@ class PagerState(
 
         animate(
             initialValue = currentPageOffset,
-            targetValue = pages.size - 1f,
+            targetValue = pages.size + pageOffset - 1,
             initialVelocity = initialVelocity,
             animationSpec = animationSpec
         ) { value, _ ->
