@@ -142,10 +142,14 @@ internal class GlideLoader(
             if (size.height > 0) size.height else Target.SIZE_ORIGINAL
         ) {
             override fun onLoadStarted(placeholder: Drawable?) {
+                if (isClosedForSend) return
+
                 sendBlocking(ImageLoadState.Loading(placeholder, request))
             }
 
             override fun onLoadFailed(errorDrawable: Drawable?) {
+                if (isClosedForSend) return
+
                 sendBlocking(
                     ImageLoadState.Error(
                         result = errorDrawable,
@@ -154,6 +158,14 @@ internal class GlideLoader(
                             ?: IllegalArgumentException("Error while loading $request")
                     )
                 )
+            }
+
+            override fun onLoadCleared(resource: Drawable?) {
+                if (isClosedForSend) return
+
+                // Glide wants to free up the resource, so we need to clear
+                // the result, otherwise we might draw a recycled bitmap later.
+                sendBlocking(ImageLoadState.Empty)
                 // Close the channel[Flow]
                 channel.close()
             }
@@ -168,8 +180,6 @@ internal class GlideLoader(
                 isFirstResource: Boolean
             ): Boolean {
                 sendBlocking(ImageLoadState.Success(drawable, dataSource.toDataSource(), request))
-                // Close the channel[Flow]
-                channel.close()
                 // Return true so that the target doesn't receive the drawable
                 return true
             }

@@ -139,7 +139,9 @@ internal class CoilLoader(
             requestBuilder?.invoke(this, size)
         }.target(
             onStart = { placeholder ->
-                launch { send(ImageLoadState.Loading(placeholder, request)) }
+                launch {
+                    if (!isClosedForSend) send(ImageLoadState.Loading(placeholder, request))
+                }
             }
         ).build()
 
@@ -159,7 +161,9 @@ internal class CoilLoader(
             else -> return@channelFlow
         }
 
-        send(imageLoader.execute(sizedRequest).toResult(request))
+        val result = imageLoader.execute(sizedRequest).toResult(request)
+
+        if (!isClosedForSend) send(result)
     }
 }
 
