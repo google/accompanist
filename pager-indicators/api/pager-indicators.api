@@ -1,9 +1,0 @@
-public final class com/google/accompanist/pager/PagerIndicatorKt {
-	public static final fun HorizontalPagerIndicator-RfBtt3o (Lcom/google/accompanist/pager/PagerState;Landroidx/compose/ui/Modifier;JJFFFLandroidx/compose/ui/graphics/Shape;Landroidx/compose/runtime/Composer;II)V
-	public static final fun VerticalPagerIndicator-RfBtt3o (Lcom/google/accompanist/pager/PagerState;Landroidx/compose/ui/Modifier;JJFFFLandroidx/compose/ui/graphics/Shape;Landroidx/compose/runtime/Composer;II)V
-}
-
-public final class com/google/accompanist/pager/PagerTabKt {
-	public static final fun pagerTabIndicatorOffset (Landroidx/compose/ui/Modifier;Lcom/google/accompanist/pager/PagerState;Ljava/util/List;)Landroidx/compose/ui/Modifier;
-}
-
