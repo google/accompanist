@@ -253,7 +253,7 @@ class PagerState(
              * The distance of 4 may seem like a magic number, but it's not.
              * It's: current page, current page + 1, target page - 1, target page.
              * This provides the illusion of movement, but allows us to lay out as few pages
-             * as possible.
+             * as possible. 🧙‍♂️
              */
             if (skipPages && distance > 4) {
                 animateToPageSkip(target, pageOffset, animationSpec, initialVelocity)
