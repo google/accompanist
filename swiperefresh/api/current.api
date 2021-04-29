@@ -9,7 +9,7 @@ package com.google.accompanist.swiperefresh {
   }
 
   public final class SwipeRefreshKt {
-    method @androidx.compose.runtime.Composable public static void SwipeRefresh-GdvqWcI(com.google.accompanist.swiperefresh.SwipeRefreshState state, kotlin.jvm.functions.Function0<kotlin.Unit> onRefresh, optional androidx.compose.ui.Modifier modifier, optional boolean swipeEnabled, optional float refreshTriggerDistance, optional androidx.compose.ui.Alignment indicatorAlignment, optional androidx.compose.foundation.layout.PaddingValues indicatorPadding, optional kotlin.jvm.functions.Function2<? super com.google.accompanist.swiperefresh.SwipeRefreshState,? super androidx.compose.ui.unit.Dp,kotlin.Unit> indicator, kotlin.jvm.functions.Function0<kotlin.Unit> content);
+    method @androidx.compose.runtime.Composable public static void SwipeRefresh-NapciQ8(com.google.accompanist.swiperefresh.SwipeRefreshState state, kotlin.jvm.functions.Function0<kotlin.Unit> onRefresh, optional androidx.compose.ui.Modifier modifier, optional boolean swipeEnabled, optional float refreshTriggerDistance, optional androidx.compose.ui.Alignment indicatorAlignment, optional androidx.compose.foundation.layout.PaddingValues indicatorPadding, optional kotlin.jvm.functions.Function2<? super com.google.accompanist.swiperefresh.SwipeRefreshState,? super androidx.compose.ui.unit.Dp,kotlin.Unit> indicator, optional boolean clipIndicatorToPadding, kotlin.jvm.functions.Function0<kotlin.Unit> content);
     method @androidx.compose.runtime.Composable public static com.google.accompanist.swiperefresh.SwipeRefreshState rememberSwipeRefreshState(boolean isRefreshing);
   }
 
