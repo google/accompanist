@@ -1,0 +1,18 @@
+// Signature format: 4.0
+package com.google.accompanist.systemuicontroller {
+
+  @androidx.compose.runtime.Stable public interface SystemUiController {
+    method public boolean isNavigationBarContrastEnforced();
+    method public void setNavigationBarColor-PQP5Tvw(long color, optional boolean darkIcons, optional boolean navigationBarContrastEnforced, optional kotlin.jvm.functions.Function1<? super androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color> transformColorForLightContent);
+    method public void setStatusBarColor-qhJFjJI(long color, optional boolean darkIcons, optional kotlin.jvm.functions.Function1<? super androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color> transformColorForLightContent);
+    method public default void setSystemBarsColor-PQP5Tvw(long color, optional boolean darkIcons, optional boolean isNavigationBarContrastEnforced, optional kotlin.jvm.functions.Function1<? super androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color> transformColorForLightContent);
+  }
+
+  public final class SystemUiControllerKt {
+    method @Deprecated public static androidx.compose.runtime.ProvidableCompositionLocal<com.google.accompanist.systemuicontroller.SystemUiController> getLocalSystemUiController();
+    method @Deprecated @androidx.compose.runtime.Composable public static com.google.accompanist.systemuicontroller.SystemUiController rememberAndroidSystemUiController(optional android.view.View view);
+    method @androidx.compose.runtime.Composable public static com.google.accompanist.systemuicontroller.SystemUiController rememberSystemUiController();
+  }
+
+}
+
