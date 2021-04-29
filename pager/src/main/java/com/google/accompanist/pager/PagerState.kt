@@ -83,7 +83,7 @@ fun rememberPagerState(
  *
  * In most cases, this will be created via [rememberPagerState].
  *
- * This layout allows the setting of the `offscreenLimit`, which defines the number of pages that
+ * The `offscreenLimit` param defines the number of pages that
  * should be retained on either side of the current page. Pages beyond this limit will be
  * recreated as needed. This value defaults to `1`, but can be increased to enable pre-loading
  * of more content.
@@ -227,7 +227,7 @@ class PagerState(
      * @param initialVelocity Initial velocity in pixels per second, or `0f` to not use a start velocity.
      * Must be in the range 0f..1f.
      * @param skipPages Whether to skip most intermediate pages. This allows the layout to skip
-     * work for pages which are displayed for only a *very* short amount of time. Visually users
+     * creating pages which are only displayed for a *very* short amount of time. Visually users
      * should see no difference. Pass `false` to animate over all pages between [currentPage]
      * and [page]. Defaults to `true`.
      */
