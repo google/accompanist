@@ -1,6 +1,6 @@
 [versions]
 compose = "1.0.0-SNAPSHOT"
-composesnapshot = "7285231" # a single character = no snapshot
+composesnapshot = "7321851" # a single character = no snapshot
 
 ktlint = "0.40.0"
 kotlin = "1.4.32"

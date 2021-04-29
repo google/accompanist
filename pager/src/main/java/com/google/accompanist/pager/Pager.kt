@@ -23,7 +23,7 @@ import androidx.annotation.IntRange
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.DecayAnimationSpec
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.defaultDecayAnimationSpec
+import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.ScrollScope
@@ -97,7 +97,7 @@ object PagerDefaults {
     @Composable
     fun defaultPagerFlingConfig(
         state: PagerState,
-        decayAnimationSpec: DecayAnimationSpec<Float> = defaultDecayAnimationSpec(),
+        decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
         snapAnimationSpec: AnimationSpec<Float> = spring(stiffness = SnapSpringStiffness),
     ): FlingBehavior = remember(state, decayAnimationSpec, snapAnimationSpec) {
         object : FlingBehavior {
