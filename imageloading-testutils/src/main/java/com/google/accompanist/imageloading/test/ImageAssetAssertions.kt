@@ -19,6 +19,7 @@ package com.google.accompanist.imageloading.test
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.toPixelMap
+import androidx.compose.ui.test.SemanticsNodeInteraction
 import com.google.common.truth.Truth.assertThat
 
 /**
@@ -32,4 +33,26 @@ fun ImageBitmap.assertPixels(expected: Color, tolerance: Float = 0.001f) {
         assertThat(color.blue).isWithin(tolerance).of(expected.blue)
         assertThat(color.alpha).isWithin(tolerance).of(expected.alpha)
     }
+}
+
+/**
+ * Run the [SemanticsNodeInteraction] provided by [block] repeatedly until either
+ * the assertion succeeds, or the execution runs past [timeoutMillis].
+ */
+fun SemanticsNodeInteraction.assertWithTimeout(
+    timeoutMillis: Long,
+    block: SemanticsNodeInteraction.() -> SemanticsNodeInteraction,
+): SemanticsNodeInteraction {
+    val startTime = System.nanoTime()
+    while (System.nanoTime() - startTime <= timeoutMillis * 1_000_000) {
+        try {
+            return block()
+        } catch (error: AssertionError) {
+            // If the assertion failed, sleep for 10ms before the next loop iteration
+            Thread.sleep(10)
+        }
+    }
+    // If we reach here, each assertion has failed and we've reached the time out.
+    // Run block one last time...
+    return block()
 }
