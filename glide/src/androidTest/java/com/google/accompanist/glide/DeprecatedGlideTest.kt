@@ -467,7 +467,7 @@ class DeprecatedGlideTest {
         // Assert that the loading component is displayed
         composeTestRule.onNodeWithText("Loading").assertIsDisplayed()
 
-        // Now resume the dispatcher to start the Coil request
+        // Now resume the dispatcher to start the Glide request
         resumeDispatcher()
 
         // We now wait for the request to complete
