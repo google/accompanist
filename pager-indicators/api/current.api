@@ -1,0 +1,14 @@
+// Signature format: 4.0
+package com.google.accompanist.pager {
+
+  public final class PagerIndicatorKt {
+    method @androidx.compose.runtime.Composable @com.google.accompanist.pager.ExperimentalPagerApi public static void HorizontalPagerIndicator-xA7ehL4(com.google.accompanist.pager.PagerState pagerState, optional androidx.compose.ui.Modifier modifier, optional long activeColor, optional long inactiveColor, optional float indicatorWidth, optional float indicatorHeight, optional float spacing, optional androidx.compose.ui.graphics.Shape indicatorShape);
+    method @androidx.compose.runtime.Composable @com.google.accompanist.pager.ExperimentalPagerApi public static void VerticalPagerIndicator-xA7ehL4(com.google.accompanist.pager.PagerState pagerState, optional androidx.compose.ui.Modifier modifier, optional long activeColor, optional long inactiveColor, optional float indicatorHeight, optional float indicatorWidth, optional float spacing, optional androidx.compose.ui.graphics.Shape indicatorShape);
+  }
+
+  public final class PagerTabKt {
+    method @com.google.accompanist.pager.ExperimentalPagerApi public static androidx.compose.ui.Modifier pagerTabIndicatorOffset(androidx.compose.ui.Modifier, com.google.accompanist.pager.PagerState pagerState, java.util.List<androidx.compose.material.TabPosition> tabPositions);
+  }
+
+}
+

@@ -28,7 +28,8 @@ buildscript {
         classpath libs.gradleMavenPublishPlugin
 
         classpath libs.dokka
-        classpath libs.kotlin.binaryCompatibility
+
+        classpath libs.metalavaGradle
     }
 }
 
@@ -37,12 +38,6 @@ plugins {
 }
 
 apply plugin: 'org.jetbrains.dokka'
-
-apply plugin: 'binary-compatibility-validator'
-apiValidation {
-    // Ignore the sample from API tracking/checking
-    ignoredProjects += ["sample", "imageloading-testutils"]
-}
 
 tasks.withType(org.jetbrains.dokka.gradle.DokkaMultiModuleTask).configureEach {
     outputDirectory = rootProject.file('docs/api')

@@ -1,0 +1,103 @@
+// Signature format: 4.0
+package com.google.accompanist.imageloading {
+
+  public enum DataSource {
+    enum_constant public static final com.google.accompanist.imageloading.DataSource DISK;
+    enum_constant public static final com.google.accompanist.imageloading.DataSource MEMORY;
+    enum_constant public static final com.google.accompanist.imageloading.DataSource NETWORK;
+  }
+
+  public final class DeprecatedKt {
+    method @Deprecated public static kotlin.jvm.functions.Function2<com.google.accompanist.imageloading.ImageLoadState,androidx.compose.ui.unit.IntSize,java.lang.Boolean> getDefaultRefetchOnSizeChangeLambda();
+  }
+
+  public final class DrawablePainterKt {
+    method @androidx.compose.runtime.Composable public static androidx.compose.ui.graphics.painter.Painter rememberDrawablePainter(android.graphics.drawable.Drawable? drawable);
+    method @Deprecated public static androidx.compose.ui.graphics.painter.Painter toPainter(android.graphics.drawable.Drawable);
+  }
+
+  public abstract sealed class ImageLoadState {
+  }
+
+  public static final class ImageLoadState.Empty extends com.google.accompanist.imageloading.ImageLoadState {
+    field public static final com.google.accompanist.imageloading.ImageLoadState.Empty INSTANCE;
+  }
+
+  public static final class ImageLoadState.Error extends com.google.accompanist.imageloading.ImageLoadState {
+    ctor public ImageLoadState.Error(android.graphics.drawable.Drawable? result, Object request, Throwable throwable);
+    method public android.graphics.drawable.Drawable? component1();
+    method public Object component2();
+    method public Throwable component3();
+    method public com.google.accompanist.imageloading.ImageLoadState.Error copy(android.graphics.drawable.Drawable? result, Object request, Throwable throwable);
+    method public Object getRequest();
+    method public android.graphics.drawable.Drawable? getResult();
+    method public Throwable getThrowable();
+    property public final Object request;
+    property public final android.graphics.drawable.Drawable? result;
+    property public final Throwable throwable;
+  }
+
+  public static final class ImageLoadState.Loading extends com.google.accompanist.imageloading.ImageLoadState {
+    field public static final com.google.accompanist.imageloading.ImageLoadState.Loading INSTANCE;
+  }
+
+  public static final class ImageLoadState.Success extends com.google.accompanist.imageloading.ImageLoadState {
+    ctor public ImageLoadState.Success(android.graphics.drawable.Drawable result, com.google.accompanist.imageloading.DataSource source, Object request);
+    method public android.graphics.drawable.Drawable component1();
+    method public com.google.accompanist.imageloading.DataSource component2();
+    method public Object component3();
+    method public com.google.accompanist.imageloading.ImageLoadState.Success copy(android.graphics.drawable.Drawable result, com.google.accompanist.imageloading.DataSource source, Object request);
+    method public Object getRequest();
+    method public android.graphics.drawable.Drawable getResult();
+    method public com.google.accompanist.imageloading.DataSource getSource();
+    property public final Object request;
+    property public final android.graphics.drawable.Drawable result;
+    property public final com.google.accompanist.imageloading.DataSource source;
+  }
+
+  public final class ImageLoadStateKt {
+    method public static boolean isFinalState(com.google.accompanist.imageloading.ImageLoadState);
+  }
+
+  public final class LoadPainter<R> extends androidx.compose.ui.graphics.painter.Painter implements androidx.compose.runtime.RememberObserver {
+    method public long getIntrinsicSize-NH-jbRc();
+    method public com.google.accompanist.imageloading.ImageLoadState getLoadState();
+    method public R? getRequest();
+    method public com.google.accompanist.imageloading.ShouldRefetchOnSizeChange getShouldRefetchOnSizeChange();
+    method public void onAbandoned();
+    method protected void onDraw(androidx.compose.ui.graphics.drawscope.DrawScope);
+    method public void onForgotten();
+    method public void onRemembered();
+    method public void setRequest(R? p);
+    method public void setShouldRefetchOnSizeChange(com.google.accompanist.imageloading.ShouldRefetchOnSizeChange p);
+    property public long intrinsicSize;
+    property public final com.google.accompanist.imageloading.ImageLoadState loadState;
+    property public final R? request;
+    property public final com.google.accompanist.imageloading.ShouldRefetchOnSizeChange shouldRefetchOnSizeChange;
+  }
+
+  public final class LoadPainterDefaults {
+    field public static final int FadeInTransitionDuration = 1000; // 0x3e8
+    field public static final com.google.accompanist.imageloading.LoadPainterDefaults INSTANCE;
+  }
+
+  public final class LoadPainterKt {
+    method @androidx.compose.runtime.Composable public static <R> com.google.accompanist.imageloading.LoadPainter<R> rememberLoadPainter(com.google.accompanist.imageloading.Loader<R> loader, R? request, com.google.accompanist.imageloading.ShouldRefetchOnSizeChange shouldRefetchOnSizeChange, optional boolean fadeIn, optional int fadeInDurationMs, optional @DrawableRes int previewPlaceholder);
+  }
+
+  @androidx.compose.runtime.Stable public interface Loader<R> {
+    method public suspend Object? load-X1Y6Dhk(R? request, long size, kotlin.coroutines.Continuation<? super com.google.accompanist.imageloading.ImageLoadState> p);
+  }
+
+  public final class MaterialLoadingImage {
+    method @Deprecated @androidx.compose.runtime.Composable public static void MaterialLoadingImage(androidx.compose.ui.graphics.ImageBitmap asset, String? contentDescription, optional androidx.compose.ui.Modifier modifier, optional androidx.compose.ui.Alignment alignment, optional androidx.compose.ui.layout.ContentScale contentScale, optional androidx.compose.ui.graphics.ColorFilter? colorFilter, optional boolean fadeInEnabled, optional int fadeInDurationMs);
+    method @Deprecated @androidx.compose.runtime.Composable public static void MaterialLoadingImage(androidx.compose.ui.graphics.painter.Painter painter, String? contentDescription, optional androidx.compose.ui.Modifier modifier, optional androidx.compose.ui.Alignment alignment, optional androidx.compose.ui.layout.ContentScale contentScale, optional androidx.compose.ui.graphics.ColorFilter? colorFilter, optional boolean fadeInEnabled, optional int fadeInDurationMs);
+    method @Deprecated @androidx.compose.runtime.Composable public static void MaterialLoadingImage(com.google.accompanist.imageloading.ImageLoadState.Success result, String? contentDescription, optional androidx.compose.ui.Modifier modifier, optional androidx.compose.ui.Alignment alignment, optional androidx.compose.ui.layout.ContentScale contentScale, optional androidx.compose.ui.graphics.ColorFilter? colorFilter, optional boolean skipFadeWhenLoadedFromMemory, optional boolean fadeInEnabled, optional int fadeInDurationMs);
+  }
+
+  public fun interface ShouldRefetchOnSizeChange {
+    method public operator boolean invoke-oYZsGPE(com.google.accompanist.imageloading.ImageLoadState currentState, long size);
+  }
+
+}
+

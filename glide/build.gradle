@@ -18,6 +18,7 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
     id 'org.jetbrains.dokka'
+    id 'me.tylerbwong.gradle.metalava'
 }
 
 kotlin {
@@ -91,6 +92,11 @@ dependencies {
     androidTestImplementation libs.compose.ui.test
     androidTestImplementation libs.compose.material.material
     androidTestImplementation libs.androidx.test.runner
+}
+
+metalava {
+    filename = "api/current.api"
+    reportLintsAsErrors = true
 }
 
 apply plugin: "com.vanniktech.maven.publish"
