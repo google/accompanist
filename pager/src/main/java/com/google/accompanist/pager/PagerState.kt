@@ -106,8 +106,8 @@ class PagerState(
     private var _currentPage by mutableStateOf(currentPage)
     private var _currentLayoutPageOffset by mutableStateOf(currentPageOffset)
 
-    internal val layoutPages: List<PageLayoutInfo> =
-        List((offscreenLimit * 2) + 1) { PageLayoutInfo() }
+    internal val layoutPages: Array<PageLayoutInfo> =
+        Array((offscreenLimit * 2) + 1) { PageLayoutInfo() }
 
     internal var currentLayoutPageOffset: Float
         get() = _currentLayoutPageOffset
