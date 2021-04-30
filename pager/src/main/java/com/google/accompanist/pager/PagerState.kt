@@ -239,7 +239,8 @@ class PagerState(
         skipPages: Boolean = true,
     ) {
         requireCurrentPage(page, "page")
-        if (page == currentPage) return
+        requireCurrentPageOffset(pageOffset, "pageOffset")
+        if (page == currentPage && pageOffset == currentLayoutPageOffset) return
 
         // We don't specifically use the ScrollScope's scrollBy, but
         // we do want to use it's mutex
@@ -279,6 +280,8 @@ class PagerState(
         @FloatRange(from = 0.0, to = 1.0) pageOffset: Float = 0f,
     ) {
         requireCurrentPage(page, "page")
+        requireCurrentPageOffset(pageOffset, "pageOffset")
+        if (page == currentPage && pageOffset == currentLayoutPageOffset) return
 
         // We don't specifically use the ScrollScope's scrollBy(), but
         // we do want to use it's mutex
