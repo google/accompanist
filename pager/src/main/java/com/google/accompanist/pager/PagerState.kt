@@ -106,8 +106,22 @@ class PagerState(
     private var _currentPage by mutableStateOf(currentPage)
     private var _currentLayoutPageOffset by mutableStateOf(currentPageOffset)
 
+    /**
+     * This is the array of all the pages to be laid out. In effect, this contains the
+     * 'current' page, plus the `offscreenLimit` on either side. Each PageLayoutInfo holds the page
+     * index it should be displaying, and it's current layout size. Pager reads these values
+     * to layout the pages as appropriate.
+     *
+     * The 'current layout page' is in the center of the array. The index is available at
+     * [currentLayoutPageIndex].
+     */
     internal val layoutPages: Array<PageLayoutInfo> =
         Array((offscreenLimit * 2) + 1) { PageLayoutInfo() }
+
+    /**
+     * The index for the 'current layout page' in [layoutPages].
+     */
+    private val currentLayoutPageIndex: Int = (layoutPages.size - 1) / 2
 
     internal var currentLayoutPageOffset: Float
         get() = _currentLayoutPageOffset
@@ -118,16 +132,20 @@ class PagerState(
             )
         }
 
-    internal inline val currentLayoutPageSize: Int
+    /**
+     * The width/height of the current layout page (depending on the layout).
+     */
+    private inline val currentLayoutPageSize: Int
         get() = currentLayoutPageInfo.layoutSize
 
+    /**
+     * The page which is currently laid out.
+     */
     internal inline val currentLayoutPage: Int
         get() = currentLayoutPageInfo.page!!
 
     internal inline val currentLayoutPageInfo: PageLayoutInfo
         get() = layoutPages[currentLayoutPageIndex]
-
-    private val currentLayoutPageIndex: Int = (layoutPages.size - 1) / 2
 
     /**
      * The current scroll position, as a float value between `0 until pageSize`
@@ -290,6 +308,9 @@ class PagerState(
         }
     }
 
+    /**
+     * Snap the layout the given [page] and [offset].
+     */
     private fun snapToPage(page: Int, offset: Float = 0f) {
         if (DebugLog) {
             Log.d(
@@ -310,6 +331,13 @@ class PagerState(
         snapToPage(currentLayoutPage + currentLayoutPageOffset.roundToInt())
     }
 
+    /**
+     * Animates to the given [page] and [pageOffset] linearly, by animating through all pages
+     * in-between [currentPage] and [page]. As an example, if we're currently displaying item 0,
+     * and we want to animate to page 9, this function will lay out and animate over:
+     * [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]. This is different to [animateToPageSkip] which skips the
+     * intermediate pages.
+     */
     private suspend fun animateToPageLinear(
         page: Int,
         pageOffset: Float,
@@ -327,9 +355,17 @@ class PagerState(
         ) { value, _ ->
             updateLayoutForScrollPosition(value)
         }
-        snapToNearestPage()
+
+        // At the end of the animate, snap to the page + offset. This isn't strictly necessary,
+        // but ensures that all our state to consistent.
+        snapToPage(page = page, offset = pageOffset)
     }
 
+    /**
+     * Animates to the given [page] and [pageOffset], but unlike [animateToPageLinear]
+     * it skips intermediate pages. As an example, if we're currently displaying item 0, and we
+     * want to animate to page 9, this function will only lay out and animate over: [0, 1, 8, 9].
+     */
     private suspend fun animateToPageSkip(
         page: Int,
         pageOffset: Float,
@@ -340,26 +376,36 @@ class PagerState(
         _animationTargetPage = page
 
         val initialIndex = currentLayoutPage
+        // These are the pages which we'll iterate through to display the 'effect' of scrolling.
         val pages: IntArray = when {
             page > initialIndex -> intArrayOf(initialIndex, initialIndex + 1, page - 1, page)
             else -> intArrayOf(initialIndex, initialIndex - 1, page + 1, page)
         }
 
+        // We animate over the length of the `pages` array (including the offset). Pages includes
+        // the current page (to allow us to animate over the offset) so we need to minus 1
         animate(
             initialValue = currentPageOffset,
             targetValue = pages.size + pageOffset - 1,
             initialVelocity = initialVelocity,
             animationSpec = animationSpec
         ) { value, _ ->
+            // Value here is the [index of page in pages] + offset. We floor the value to get
+            // the pages index
             val flooredIndex = floor(value).toInt()
+            // We then go through each layout page and set it to the correct page from [pages]
             layoutPages.forEachIndexed { index, layoutInfo ->
                 layoutInfo.page = pages.getOrNull(flooredIndex + (index - currentLayoutPageIndex))
             }
             if (DebugLog) Log.d(LogTag, "animateToPageSkip: $layoutPages")
 
+            // Then derive the remaining offset from the index
             currentLayoutPageOffset = value - flooredIndex
         }
-        snapToNearestPage()
+
+        // At the end of the animate, snap to the page + offset. This isn't strictly necessary,
+        // but ensures that all our state to consistent.
+        snapToPage(page = page, offset = pageOffset)
     }
 
     private fun determineSpringBackOffset(
@@ -376,12 +422,18 @@ class PagerState(
         else -> 1
     }
 
+    /**
+     * Updates the [layoutPages] so that for the given [position].
+     */
     private fun updateLayoutForScrollPosition(position: Float) {
         val newIndex = floor(position).toInt()
         currentLayoutPageOffset = position - newIndex
         updateLayoutPages(newIndex)
     }
 
+    /**
+     * Updates the [layoutPages] so that [page] is the current laid out page.
+     */
     private fun updateLayoutPages(page: Int) {
         layoutPages.forEachIndexed { index, layoutPage ->
             val pg = page + index - offscreenLimit
