@@ -19,7 +19,6 @@
 package com.google.accompanist.pager
 
 import android.util.Log
-import androidx.annotation.IntRange
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.DecayAnimationSpec
 import androidx.compose.animation.core.spring
@@ -116,11 +115,6 @@ object PagerDefaults {
 /**
  * A horizontally scrolling layout that allows users to flip between items to the left and right.
  *
- * This layout allows the setting of the [offscreenLimit], which defines the number of pages that
- * should be retained on either side of the current page. Pages beyond this limit will be
- * recreated as needed. This value defaults to `1`, but can be increased to enable pre-loading
- * of more content.
- *
  * @sample com.google.accompanist.sample.pager.HorizontalPagerSample
  *
  * @param state the state object to be used to control or observe the pager's state.
@@ -129,8 +123,6 @@ object PagerDefaults {
  * composed from the end to the start and [PagerState.currentPage] == 0 will mean
  * the first item is located at the end.
  * @param itemSpacing horizontal spacing to add between items.
- * @param offscreenLimit the number of pages that should be retained on either side of the
- * current page. This value is required to be `1` or greater.
  * @param dragEnabled toggle manual scrolling, when `false` the user can not drag the view to a
  * different page.
  * @param flingBehavior logic describing fling behavior.
@@ -144,7 +136,6 @@ fun HorizontalPager(
     modifier: Modifier = Modifier,
     reverseLayout: Boolean = false,
     itemSpacing: Dp = 0.dp,
-    @IntRange(from = 1) offscreenLimit: Int = 1,
     dragEnabled: Boolean = true,
     flingBehavior: FlingBehavior = PagerDefaults.defaultPagerFlingConfig(state),
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
@@ -159,7 +150,6 @@ fun HorizontalPager(
         itemSpacing = itemSpacing,
         verticalAlignment = verticalAlignment,
         horizontalAlignment = horizontalAlignment,
-        offscreenLimit = offscreenLimit,
         dragEnabled = dragEnabled,
         flingBehavior = flingBehavior,
         content = content
@@ -169,11 +159,6 @@ fun HorizontalPager(
 /**
  * A vertically scrolling layout that allows users to flip between items to the top and bottom.
  *
- * This layout allows the setting of the [offscreenLimit], which defines the number of pages that
- * should be retained on either side of the current page. Pages beyond this limit will be
- * recreated as needed. This value defaults to `1`, but can be increased to enable pre-loading
- * of more content.
- *
  * @sample com.google.accompanist.sample.pager.VerticalPagerSample
  *
  * @param state the state object to be used to control or observe the pager's state.
@@ -182,8 +167,6 @@ fun HorizontalPager(
  * composed from the bottom to the top and [PagerState.currentPage] == 0 will mean
  * the first item is located at the bottom.
  * @param itemSpacing vertical spacing to add between items.
- * @param offscreenLimit the number of pages that should be retained on either side of the
- * current page. This value is required to be `1` or greater.
  * @param dragEnabled toggle manual scrolling, when `false` the user can not drag the view to a
  * different page.
  * @param flingBehavior logic describing fling behavior.
@@ -197,7 +180,6 @@ fun VerticalPager(
     modifier: Modifier = Modifier,
     reverseLayout: Boolean = false,
     itemSpacing: Dp = 0.dp,
-    @IntRange(from = 1) offscreenLimit: Int = 1,
     dragEnabled: Boolean = true,
     flingBehavior: FlingBehavior = PagerDefaults.defaultPagerFlingConfig(state),
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
@@ -212,7 +194,6 @@ fun VerticalPager(
         itemSpacing = itemSpacing,
         verticalAlignment = verticalAlignment,
         horizontalAlignment = horizontalAlignment,
-        offscreenLimit = offscreenLimit,
         dragEnabled = dragEnabled,
         flingBehavior = flingBehavior,
         content = content
@@ -229,13 +210,10 @@ internal fun Pager(
     isVertical: Boolean,
     verticalAlignment: Alignment.Vertical,
     horizontalAlignment: Alignment.Horizontal,
-    @IntRange(from = 1) offscreenLimit: Int,
     dragEnabled: Boolean,
     flingBehavior: FlingBehavior,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
-    require(offscreenLimit >= 1) { "offscreenLimit is required to be >= 1" }
-
     // True if the scroll direction is RTL, false for LTR
     val reverseDirection = when {
         // If we're vertical, just use reverseLayout as-is
@@ -284,20 +262,24 @@ internal fun Pager(
             .then(scrollable)
             .clipToBounds(),
         content = {
-            val firstPage = (state.currentLayoutPage - offscreenLimit).coerceAtLeast(0)
-            val lastPage = (state.currentLayoutPage + offscreenLimit).coerceAtMost(state.lastPageIndex)
-
             if (DebugLog) {
+                val firstPage = state.layoutPages.firstOrNull { it.page != null }
+                val lastPage = state.layoutPages.lastOrNull { it.page != null }
                 Log.d(
                     LogTag,
-                    "Content: firstPage:$firstPage, " +
-                        "layoutPage:${state.currentLayoutPage}, " +
+                    "Content: firstPage:${firstPage?.page ?: "none"}, " +
+                        "layoutPage:${state.currentLayoutPageInfo}, " +
                         "currentPage:${state.currentPage}, " +
-                        "lastPage:$lastPage"
+                        "lastPage:${lastPage?.page ?: "none"}"
                 )
             }
 
-            for (page in firstPage..lastPage) {
+            // FYI: We need to filter out null/empty pages *outside* of the loop. Compose uses the
+            // call stack as part of the key for state, so we need to ensure that the call stack
+            // for page content is consistent as the user scrolls, otherwise content will
+            // drop/recreate state.
+            val pages = state.layoutPages.mapNotNull { it.page }
+            for (page in pages) {
                 key(page) {
                     val itemSemantics = Modifier.semantics {
                         this.selected = page == state.currentPage
@@ -335,6 +317,7 @@ internal fun Pager(
 
             placeables.forEachIndexed { index, placeable ->
                 val page = measurables[index].page
+                val layoutInfo = state.layoutPages.firstOrNull { it.page == page }
 
                 val xCenterOffset = horizontalAlignment.align(
                     size = placeable.width,
@@ -351,14 +334,10 @@ internal fun Pager(
                 val offsetForPage = page - layoutPage - offset
 
                 if (isVertical) {
-                    if (layoutPage == page) {
-                        state.currentLayoutPageSize = placeable.height
-                    }
+                    layoutInfo?.layoutSize = placeable.height
                     yItemOffset = (offsetForPage * (placeable.height + itemSpacingPx)).roundToInt()
                 } else {
-                    if (layoutPage == page) {
-                        state.currentLayoutPageSize = placeable.width
-                    }
+                    layoutInfo?.layoutSize = placeable.width
                     xItemOffset = (offsetForPage * (placeable.width + itemSpacingPx)).roundToInt()
                 }
 

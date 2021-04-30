@@ -68,12 +68,14 @@ private fun Sample() {
     ) {
         Column(Modifier.fillMaxSize()) {
             // Display 10 items
-            val pagerState = rememberPagerState(pageCount = 10)
+            val pagerState = rememberPagerState(
+                pageCount = 10,
+                // We increase the offscreen limit, to allow pre-loading of images
+                initialOffscreenLimit = 2,
+            )
 
             VerticalPager(
                 state = pagerState,
-                // We increase the offscreen limit, to allow pre-loading of images
-                offscreenLimit = 2,
                 // Add some vertical spacing between items
                 itemSpacing = 8.dp,
                 modifier = Modifier.weight(1f).fillMaxHeight(),
