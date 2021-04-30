@@ -43,7 +43,7 @@ import org.junit.runners.JUnit4
 @OptIn(ExperimentalPagerApi::class) // Pager is currently experimental
 @LargeTest
 @RunWith(JUnit4::class)
-class VerticalPagerInfiniteHeightTest {
+class VerticalPagerInfiniteWidthTest {
     @get:Rule
     val rule = createComposeRule()
 

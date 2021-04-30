@@ -158,14 +158,16 @@ class HorizontalPagerTest(
     override fun setPagerContent(
         pageCount: Int,
     ): PagerState {
-        val pagerState = PagerState(pageCount = pageCount)
+        val pagerState = PagerState(
+            pageCount = pageCount,
+            offscreenLimit = offscreenLimit,
+        )
         composeTestRule.setContent(layoutDirection) {
             applierScope = rememberCoroutineScope()
 
             HorizontalPager(
                 state = pagerState,
                 itemSpacing = itemSpacingDp.dp,
-                offscreenLimit = offscreenLimit,
                 reverseLayout = reverseLayout,
                 horizontalAlignment = horizontalAlignment,
                 modifier = Modifier.fillMaxSize()

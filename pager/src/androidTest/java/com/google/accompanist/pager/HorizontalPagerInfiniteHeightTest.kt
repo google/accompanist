@@ -25,7 +25,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.test.assertHeightIsAtLeast
+import androidx.compose.ui.test.assertHeightIsEqualTo
 import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -72,7 +72,7 @@ class HorizontalPagerInfiniteHeightTest {
         rule.onNodeWithTag(TestTag)
             .assertWidthIsEqualTo(rootBounds.width)
             // Since the pager's content uses 200.dp height
-            .assertHeightIsAtLeast(200.dp)
+            .assertHeightIsEqualTo(200.dp)
     }
 
     companion object {
