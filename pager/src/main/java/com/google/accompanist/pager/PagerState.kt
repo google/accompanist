@@ -100,7 +100,7 @@ class PagerState(
     @IntRange(from = 0) pageCount: Int,
     @IntRange(from = 0) currentPage: Int = 0,
     @FloatRange(from = 0.0, to = 1.0) currentPageOffset: Float = 0f,
-    val offscreenLimit: Int = 1,
+    private val offscreenLimit: Int = 1,
 ) : ScrollableState {
     private var _pageCount by mutableStateOf(pageCount)
     private var _currentPage by mutableStateOf(currentPage)
