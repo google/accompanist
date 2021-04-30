@@ -24,21 +24,28 @@ package com.google.accompanist.imageloading {
   }
 
   public static final class ImageLoadState.Error extends com.google.accompanist.imageloading.ImageLoadState {
-    ctor public ImageLoadState.Error(android.graphics.drawable.Drawable? result, Object request, Throwable throwable);
-    method public android.graphics.drawable.Drawable? component1();
-    method public Object component2();
-    method public Throwable component3();
-    method public com.google.accompanist.imageloading.ImageLoadState.Error copy(android.graphics.drawable.Drawable? result, Object request, Throwable throwable);
+    ctor public ImageLoadState.Error(Object request, android.graphics.drawable.Drawable? result, Throwable? throwable);
+    method public Object component1();
+    method public android.graphics.drawable.Drawable? component2();
+    method public Throwable? component3();
+    method public com.google.accompanist.imageloading.ImageLoadState.Error copy(Object request, android.graphics.drawable.Drawable? result, Throwable? throwable);
     method public Object getRequest();
     method public android.graphics.drawable.Drawable? getResult();
-    method public Throwable getThrowable();
+    method public Throwable? getThrowable();
     property public final Object request;
     property public final android.graphics.drawable.Drawable? result;
-    property public final Throwable throwable;
+    property public final Throwable? throwable;
   }
 
   public static final class ImageLoadState.Loading extends com.google.accompanist.imageloading.ImageLoadState {
-    field public static final com.google.accompanist.imageloading.ImageLoadState.Loading INSTANCE;
+    ctor public ImageLoadState.Loading(android.graphics.drawable.Drawable? placeholder, Object request);
+    method public android.graphics.drawable.Drawable? component1();
+    method public Object component2();
+    method public com.google.accompanist.imageloading.ImageLoadState.Loading copy(android.graphics.drawable.Drawable? placeholder, Object request);
+    method public android.graphics.drawable.Drawable? getPlaceholder();
+    method public Object getRequest();
+    property public final android.graphics.drawable.Drawable? placeholder;
+    property public final Object request;
   }
 
   public static final class ImageLoadState.Success extends com.google.accompanist.imageloading.ImageLoadState {
@@ -85,8 +92,8 @@ package com.google.accompanist.imageloading {
     method @androidx.compose.runtime.Composable public static <R> com.google.accompanist.imageloading.LoadPainter<R> rememberLoadPainter(com.google.accompanist.imageloading.Loader<R> loader, R? request, com.google.accompanist.imageloading.ShouldRefetchOnSizeChange shouldRefetchOnSizeChange, optional boolean fadeIn, optional int fadeInDurationMs, optional @DrawableRes int previewPlaceholder);
   }
 
-  @androidx.compose.runtime.Stable public interface Loader<R> {
-    method public suspend Object? load-X1Y6Dhk(R? request, long size, kotlin.coroutines.Continuation<? super com.google.accompanist.imageloading.ImageLoadState> p);
+  @androidx.compose.runtime.Stable public fun interface Loader<R> {
+    method public kotlinx.coroutines.flow.Flow<com.google.accompanist.imageloading.ImageLoadState> load-CDCt4V4(R? request, long size);
   }
 
   public final class MaterialLoadingImage {

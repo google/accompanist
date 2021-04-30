@@ -314,7 +314,7 @@ fun CoilImage(
                 )
             }
             is ImageLoadState.Error -> if (error != null) error(imageState)
-            ImageLoadState.Loading -> if (loading != null) loading()
+            is ImageLoadState.Loading -> if (loading != null) loading()
             else -> Unit
         }
     }
