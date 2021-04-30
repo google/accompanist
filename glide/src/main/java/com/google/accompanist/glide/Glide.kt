@@ -17,8 +17,6 @@
 package com.google.accompanist.glide
 
 import android.graphics.drawable.Drawable
-import android.os.Handler
-import android.os.Looper
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -123,8 +121,6 @@ internal class GlideLoader(
     var requestManager by mutableStateOf(requestManager)
     var requestBuilder by mutableStateOf(requestBuilder)
 
-    private val handler = Handler(Looper.getMainLooper())
-
     /**
      * Don't remove the explicit type `<ImageLoadState>` on [callbackFlow]. The IR compiler
      * doesn't like the implicit type.
@@ -207,9 +203,7 @@ internal class GlideLoader(
 
         // When we're cancelled/closed, clear the request from Glide
         awaitClose {
-            // Unfortunately we need to post the clear. Glide will crash if the close happens
-            // in the same call frame as the Target calls above (happens in testing)
-            handler.post { requestManager.clear(target) }
+            requestManager.clear(target)
         }
     }
 }
