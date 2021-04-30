@@ -19,7 +19,6 @@ package com.google.accompanist.coil
 import android.graphics.drawable.ShapeDrawable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Text
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,7 +36,6 @@ import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.unit.dp
 import androidx.test.filters.LargeTest
 import androidx.test.filters.SdkSuppress
@@ -59,7 +57,6 @@ import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.withTimeoutOrNull
 import org.junit.After
 import org.junit.Before
@@ -67,8 +64,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 
 @Suppress("DEPRECATION") // This is testing the deprecated functions
@@ -479,50 +474,6 @@ class DeprecatedCoilTest {
             .assertIsDisplayed()
             .captureToImage()
             .assertPixels(Color.Cyan, 0.05f)
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @Test
-    fun loading_slot() {
-        val loadLatch = CountDownLatch(1)
-
-        // Create a test dispatcher and immediately pause it
-        val dispatcher = TestCoroutineDispatcher()
-        dispatcher.pauseDispatcher()
-
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-        val imageLoader = ImageLoader.Builder(context)
-            // Load on our test dispatcher
-            .dispatcher(dispatcher)
-            // Disable memory cache. If the item is in the cache, the fetch is
-            // synchronous and the dispatcher pause has no effect
-            .memoryCachePolicy(CachePolicy.DISABLED)
-            .build()
-
-        composeTestRule.setContent {
-            CoilImage(
-                data = server.url("/image"),
-                imageLoader = imageLoader,
-                contentDescription = null,
-                modifier = Modifier.size(128.dp, 128.dp),
-                loading = { Text(text = "Loading") },
-                onRequestCompleted = { loadLatch.countDown() }
-            )
-        }
-
-        // Assert that the loading component is displayed
-        composeTestRule.onNodeWithText("Loading").assertIsDisplayed()
-
-        // Now resume the dispatcher to start the Coil request
-        dispatcher.resumeDispatcher()
-
-        // We now wait for the request to complete
-        loadLatch.await(5, TimeUnit.SECONDS)
-
-        // And assert that the loading component no longer exists
-        composeTestRule.onNodeWithText("Loading").assertDoesNotExist()
-
-        dispatcher.cleanupTestCoroutines()
     }
 
     @Test

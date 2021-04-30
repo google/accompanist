@@ -1,0 +1,142 @@
+// Signature format: 4.0
+package com.google.accompanist.insets {
+
+  public final class ComposeInsets {
+    method @androidx.compose.runtime.Composable public static void ProvideWindowInsets(optional boolean consumeWindowInsets, kotlin.jvm.functions.Function0<kotlin.Unit> content);
+    method @androidx.compose.runtime.Composable @com.google.accompanist.insets.ExperimentalAnimatedInsets public static void ProvideWindowInsets(boolean windowInsetsAnimationsEnabled, optional boolean consumeWindowInsets, kotlin.jvm.functions.Function0<kotlin.Unit> content);
+    method public static com.google.accompanist.insets.Insets coerceEachDimensionAtLeast(com.google.accompanist.insets.InsetsType, com.google.accompanist.insets.InsetsType minimumValue);
+    method public static androidx.compose.runtime.ProvidableCompositionLocal<com.google.accompanist.insets.WindowInsets> getLocalWindowInsets();
+    method public static androidx.compose.ui.Modifier imePadding(androidx.compose.ui.Modifier);
+    method public static androidx.compose.ui.Modifier navigationBarsHeight-wxomhCo(androidx.compose.ui.Modifier, optional float additional);
+    method public static androidx.compose.ui.Modifier navigationBarsPadding(androidx.compose.ui.Modifier, optional boolean bottom, optional boolean left, optional boolean right);
+    method public static androidx.compose.ui.Modifier navigationBarsWidth-8ffaRSw(androidx.compose.ui.Modifier, com.google.accompanist.insets.HorizontalSide side, optional float additional);
+    method public static androidx.compose.ui.Modifier navigationBarsWithImePadding(androidx.compose.ui.Modifier);
+    method public static androidx.compose.ui.Modifier statusBarsHeight-wxomhCo(androidx.compose.ui.Modifier, optional float additional);
+    method public static androidx.compose.ui.Modifier statusBarsPadding(androidx.compose.ui.Modifier);
+    method public static androidx.compose.ui.Modifier systemBarsPadding(androidx.compose.ui.Modifier, optional boolean enabled);
+    method @androidx.compose.runtime.Composable public static androidx.compose.foundation.layout.PaddingValues toPaddingValues-FJxeph0(com.google.accompanist.insets.InsetsType, optional boolean start, optional boolean top, optional boolean end, optional boolean bottom, optional float additionalStart, optional float additionalTop, optional float additionalEnd, optional float additionalBottom);
+    method @androidx.compose.runtime.Composable public static inline androidx.compose.foundation.layout.PaddingValues toPaddingValues-WXyNqVY(com.google.accompanist.insets.InsetsType, optional boolean start, optional boolean top, optional boolean end, optional boolean bottom, optional float additionalHorizontal, optional float additionalVertical);
+  }
+
+  public final class ComposeInsets {
+    method @androidx.compose.runtime.Composable public static void ProvideWindowInsets(optional boolean consumeWindowInsets, kotlin.jvm.functions.Function0<kotlin.Unit> content);
+    method @androidx.compose.runtime.Composable @com.google.accompanist.insets.ExperimentalAnimatedInsets public static void ProvideWindowInsets(boolean windowInsetsAnimationsEnabled, optional boolean consumeWindowInsets, kotlin.jvm.functions.Function0<kotlin.Unit> content);
+    method public static com.google.accompanist.insets.Insets coerceEachDimensionAtLeast(com.google.accompanist.insets.InsetsType, com.google.accompanist.insets.InsetsType minimumValue);
+    method public static androidx.compose.runtime.ProvidableCompositionLocal<com.google.accompanist.insets.WindowInsets> getLocalWindowInsets();
+    method public static androidx.compose.ui.Modifier imePadding(androidx.compose.ui.Modifier);
+    method public static androidx.compose.ui.Modifier navigationBarsHeight-wxomhCo(androidx.compose.ui.Modifier, optional float additional);
+    method public static androidx.compose.ui.Modifier navigationBarsPadding(androidx.compose.ui.Modifier, optional boolean bottom, optional boolean left, optional boolean right);
+    method public static androidx.compose.ui.Modifier navigationBarsWidth-8ffaRSw(androidx.compose.ui.Modifier, com.google.accompanist.insets.HorizontalSide side, optional float additional);
+    method public static androidx.compose.ui.Modifier navigationBarsWithImePadding(androidx.compose.ui.Modifier);
+    method public static androidx.compose.ui.Modifier statusBarsHeight-wxomhCo(androidx.compose.ui.Modifier, optional float additional);
+    method public static androidx.compose.ui.Modifier statusBarsPadding(androidx.compose.ui.Modifier);
+    method public static androidx.compose.ui.Modifier systemBarsPadding(androidx.compose.ui.Modifier, optional boolean enabled);
+    method @androidx.compose.runtime.Composable public static androidx.compose.foundation.layout.PaddingValues toPaddingValues-FJxeph0(com.google.accompanist.insets.InsetsType, optional boolean start, optional boolean top, optional boolean end, optional boolean bottom, optional float additionalStart, optional float additionalTop, optional float additionalEnd, optional float additionalBottom);
+    method @androidx.compose.runtime.Composable public static inline androidx.compose.foundation.layout.PaddingValues toPaddingValues-WXyNqVY(com.google.accompanist.insets.InsetsType, optional boolean start, optional boolean top, optional boolean end, optional boolean bottom, optional float additionalHorizontal, optional float additionalVertical);
+  }
+
+  public final class ComposeInsets {
+    method @androidx.compose.runtime.Composable public static void ProvideWindowInsets(optional boolean consumeWindowInsets, kotlin.jvm.functions.Function0<kotlin.Unit> content);
+    method @androidx.compose.runtime.Composable @com.google.accompanist.insets.ExperimentalAnimatedInsets public static void ProvideWindowInsets(boolean windowInsetsAnimationsEnabled, optional boolean consumeWindowInsets, kotlin.jvm.functions.Function0<kotlin.Unit> content);
+    method public static com.google.accompanist.insets.Insets coerceEachDimensionAtLeast(com.google.accompanist.insets.InsetsType, com.google.accompanist.insets.InsetsType minimumValue);
+    method public static androidx.compose.runtime.ProvidableCompositionLocal<com.google.accompanist.insets.WindowInsets> getLocalWindowInsets();
+    method public static androidx.compose.ui.Modifier imePadding(androidx.compose.ui.Modifier);
+    method public static androidx.compose.ui.Modifier navigationBarsHeight-wxomhCo(androidx.compose.ui.Modifier, optional float additional);
+    method public static androidx.compose.ui.Modifier navigationBarsPadding(androidx.compose.ui.Modifier, optional boolean bottom, optional boolean left, optional boolean right);
+    method public static androidx.compose.ui.Modifier navigationBarsWidth-8ffaRSw(androidx.compose.ui.Modifier, com.google.accompanist.insets.HorizontalSide side, optional float additional);
+    method public static androidx.compose.ui.Modifier navigationBarsWithImePadding(androidx.compose.ui.Modifier);
+    method public static androidx.compose.ui.Modifier statusBarsHeight-wxomhCo(androidx.compose.ui.Modifier, optional float additional);
+    method public static androidx.compose.ui.Modifier statusBarsPadding(androidx.compose.ui.Modifier);
+    method public static androidx.compose.ui.Modifier systemBarsPadding(androidx.compose.ui.Modifier, optional boolean enabled);
+    method @androidx.compose.runtime.Composable public static androidx.compose.foundation.layout.PaddingValues toPaddingValues-FJxeph0(com.google.accompanist.insets.InsetsType, optional boolean start, optional boolean top, optional boolean end, optional boolean bottom, optional float additionalStart, optional float additionalTop, optional float additionalEnd, optional float additionalBottom);
+    method @androidx.compose.runtime.Composable public static inline androidx.compose.foundation.layout.PaddingValues toPaddingValues-WXyNqVY(com.google.accompanist.insets.InsetsType, optional boolean start, optional boolean top, optional boolean end, optional boolean bottom, optional float additionalHorizontal, optional float additionalVertical);
+  }
+
+  @kotlin.RequiresOptIn(message="Animated Insets support is experimental. The API may be changed in the future.") @kotlin.annotation.Retention(kotlin.annotation.AnnotationRetention) @kotlin.annotation.Target(allowedTargets={kotlin.annotation.AnnotationTarget, kotlin.annotation.AnnotationTarget}) public @interface ExperimentalAnimatedInsets {
+  }
+
+  public enum HorizontalSide {
+    enum_constant public static final com.google.accompanist.insets.HorizontalSide Left;
+    enum_constant public static final com.google.accompanist.insets.HorizontalSide Right;
+  }
+
+  @com.google.accompanist.insets.ExperimentalAnimatedInsets public final class ImeNestedScrollConnection implements androidx.compose.ui.input.nestedscroll.NestedScrollConnection {
+    ctor public ImeNestedScrollConnection(android.view.View view, boolean scrollImeOffScreenWhenVisible, boolean scrollImeOnScreenWhenNotVisible);
+    method public suspend Object? onPostFling-k5p9STU(long consumed, long available, kotlin.coroutines.Continuation<? super androidx.compose.ui.unit.Velocity> p);
+    method public long onPostScroll-61dr0bI(long consumed, long available, androidx.compose.ui.input.nestedscroll.NestedScrollSource source);
+    method public long onPreScroll-ScU7Jk8(long available, androidx.compose.ui.input.nestedscroll.NestedScrollSource source);
+  }
+
+  public final class ImeNestedScrollConnectionKt {
+    method @androidx.compose.runtime.Composable @com.google.accompanist.insets.ExperimentalAnimatedInsets public static androidx.compose.ui.input.nestedscroll.NestedScrollConnection rememberImeNestedScrollConnection(optional boolean scrollImeOffScreenWhenVisible, optional boolean scrollImeOnScreenWhenNotVisible);
+  }
+
+  @androidx.compose.runtime.Stable public interface Insets {
+    method public default com.google.accompanist.insets.Insets copy(optional int left, optional int top, optional int right, optional int bottom);
+    method @IntRange(from=0) public int getBottom();
+    method @IntRange(from=0) public int getLeft();
+    method @IntRange(from=0) public int getRight();
+    method @IntRange(from=0) public int getTop();
+    method public default operator com.google.accompanist.insets.Insets minus(com.google.accompanist.insets.Insets other);
+    method public default operator com.google.accompanist.insets.Insets plus(com.google.accompanist.insets.Insets other);
+    property @IntRange(from=0) public abstract int bottom;
+    property @IntRange(from=0) public abstract int left;
+    property @IntRange(from=0) public abstract int right;
+    property @IntRange(from=0) public abstract int top;
+  }
+
+  @androidx.compose.runtime.Stable public final class InsetsType implements com.google.accompanist.insets.Insets {
+    ctor public InsetsType();
+    method public com.google.accompanist.insets.Insets getAnimatedInsets();
+    method @FloatRange(from=0.0, to=1.0) public float getAnimationFraction();
+    method public boolean getAnimationInProgress();
+    method public int getBottom();
+    method public com.google.accompanist.insets.Insets getLayoutInsets();
+    method public int getLeft();
+    method public int getRight();
+    method public int getTop();
+    method public boolean isVisible();
+    property public final com.google.accompanist.insets.Insets animatedInsets;
+    property @FloatRange(from=0.0, to=1.0) public final float animationFraction;
+    property public final boolean animationInProgress;
+    property public int bottom;
+    property public final boolean isVisible;
+    property public final com.google.accompanist.insets.Insets layoutInsets;
+    property public int left;
+    property public int right;
+    property public int top;
+  }
+
+  public final class SimpleImeAnimationControllerKt {
+  }
+
+  public enum VerticalSide {
+    enum_constant public static final com.google.accompanist.insets.VerticalSide Bottom;
+    enum_constant public static final com.google.accompanist.insets.VerticalSide Top;
+  }
+
+  public final class ViewWindowInsetObserver {
+    ctor public ViewWindowInsetObserver(android.view.View view);
+    method public boolean isObserving();
+    method public com.google.accompanist.insets.WindowInsets start(optional boolean consumeWindowInsets);
+    method @com.google.accompanist.insets.ExperimentalAnimatedInsets public com.google.accompanist.insets.WindowInsets start(boolean windowInsetsAnimationsEnabled, optional boolean consumeWindowInsets);
+    method public void stop();
+    property public final boolean isObserving;
+  }
+
+  @androidx.compose.runtime.Stable public final class WindowInsets {
+    ctor public WindowInsets();
+    method public com.google.accompanist.insets.InsetsType getIme();
+    method public com.google.accompanist.insets.InsetsType getNavigationBars();
+    method public com.google.accompanist.insets.InsetsType getStatusBars();
+    method public com.google.accompanist.insets.InsetsType getSystemBars();
+    method public com.google.accompanist.insets.InsetsType getSystemGestures();
+    property public final com.google.accompanist.insets.InsetsType ime;
+    property public final com.google.accompanist.insets.InsetsType navigationBars;
+    property public final com.google.accompanist.insets.InsetsType statusBars;
+    property public final com.google.accompanist.insets.InsetsType systemBars;
+    property public final com.google.accompanist.insets.InsetsType systemGestures;
+  }
+
+}
+

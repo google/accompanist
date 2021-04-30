@@ -22,12 +22,12 @@ compose-material-iconsext = { module = "androidx.compose.material:material-icons
 
 android-gradlePlugin = "com.android.tools.build:gradle:7.0.0-alpha14"
 gradleMavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.13.0"
+metalavaGradle = "me.tylerbwong.gradle:metalava-gradle:0.1.6"
 
 glide = "com.github.bumptech.glide:glide:4.12.0"
 
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-kotlin-binaryCompatibility = "org.jetbrains.kotlinx:binary-compatibility-validator:0.3.0"
 
 kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
