@@ -19,21 +19,21 @@
 package com.google.accompanist.insets
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.layout.LayoutModifier
-import androidx.compose.ui.layout.Measurable
-import androidx.compose.ui.layout.MeasureResult
-import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.offset
 
 /**
  * Selectively apply additional space which matches the width/height of any system bars present
@@ -45,12 +45,14 @@ import androidx.compose.ui.unit.offset
 fun Modifier.systemBarsPadding(
     enabled: Boolean = true
 ): Modifier = composed {
-    InsetsPaddingModifier(
-        insetsType = LocalWindowInsets.current.systemBars,
-        applyLeft = enabled,
-        applyTop = enabled,
-        applyRight = enabled,
-        applyBottom = enabled
+    padding(
+        rememberWindowInsetsTypePaddingValues(
+            type = LocalWindowInsets.current.navigationBars,
+            applyStart = enabled,
+            applyTop = enabled,
+            applyEnd = enabled,
+            applyBottom = enabled
+        )
     )
 }
 
@@ -59,9 +61,11 @@ fun Modifier.systemBarsPadding(
  * of the content.
  */
 fun Modifier.statusBarsPadding(): Modifier = composed {
-    InsetsPaddingModifier(
-        insetsType = LocalWindowInsets.current.statusBars,
-        applyTop = true
+    padding(
+        rememberWindowInsetsTypePaddingValues(
+            type = LocalWindowInsets.current.statusBars,
+            applyTop = true
+        )
     )
 }
 
@@ -82,11 +86,14 @@ fun Modifier.navigationBarsPadding(
     left: Boolean = true,
     right: Boolean = true
 ): Modifier = composed {
-    InsetsPaddingModifier(
-        insetsType = LocalWindowInsets.current.navigationBars,
-        applyLeft = left,
-        applyRight = right,
-        applyBottom = bottom
+    padding(
+        // FIXME: Need to alias start/end to left/right
+        rememberWindowInsetsTypePaddingValues(
+            type = LocalWindowInsets.current.navigationBars,
+            applyStart = left,
+            applyEnd = right,
+            applyBottom = bottom
+        )
     )
 }
 
@@ -99,11 +106,13 @@ fun Modifier.navigationBarsPadding(
  * [Modifier.navigationBarsWithImePadding] modifier.
  */
 fun Modifier.imePadding(): Modifier = composed {
-    InsetsPaddingModifier(
-        insetsType = LocalWindowInsets.current.ime,
-        applyLeft = true,
-        applyRight = true,
-        applyBottom = true,
+    padding(
+        rememberWindowInsetsTypePaddingValues(
+            type = LocalWindowInsets.current.ime,
+            applyStart = true,
+            applyEnd = true,
+            applyBottom = true
+        )
     )
 }
 
@@ -116,42 +125,14 @@ fun Modifier.navigationBarsWithImePadding(): Modifier = composed {
     val ime = LocalWindowInsets.current.ime
     val navBars = LocalWindowInsets.current.navigationBars
     val insets = remember(ime, navBars) { derivedWindowInsetsTypeOf(ime, navBars) }
-    InsetsPaddingModifier(
-        insetsType = insets,
-        applyLeft = true,
-        applyRight = true,
-        applyBottom = true,
+    padding(
+        rememberWindowInsetsTypePaddingValues(
+            type = insets,
+            applyStart = true,
+            applyEnd = true,
+            applyBottom = true
+        )
     )
-}
-
-private data class InsetsPaddingModifier(
-    private val insetsType: WindowInsets.Type,
-    private val applyLeft: Boolean = false,
-    private val applyTop: Boolean = false,
-    private val applyRight: Boolean = false,
-    private val applyBottom: Boolean = false,
-) : LayoutModifier {
-    override fun MeasureScope.measure(
-        measurable: Measurable,
-        constraints: Constraints
-    ): MeasureResult {
-        val left = if (applyLeft) insetsType.left else 0
-        val top = if (applyTop) insetsType.top else 0
-        val right = if (applyRight) insetsType.right else 0
-        val bottom = if (applyBottom) insetsType.bottom else 0
-        val horizontal = left + right
-        val vertical = top + bottom
-
-        val placeable = measurable.measure(constraints.offset(-horizontal, -vertical))
-
-        val width = (placeable.width + horizontal)
-            .coerceIn(constraints.minWidth, constraints.maxWidth)
-        val height = (placeable.height + vertical)
-            .coerceIn(constraints.minHeight, constraints.maxHeight)
-        return layout(width, height) {
-            placeable.place(left, top)
-        }
-    }
 }
 
 /**
@@ -164,6 +145,23 @@ private data class InsetsPaddingModifier(
  * @param additionalHorizontal Value to add to the start and end dimensions.
  * @param additionalVertical Value to add to the top and bottom dimensions.
  */
+@Deprecated(
+    "Replaced with rememberWindowInsetsTypePaddingValues()",
+    ReplaceWith(
+        """rememberWindowInsetsTypePaddingValues(
+            type = this,
+            applyStart = start,
+            applyTop = top,
+            applyEnd = end,
+            applyBottom = bottom,
+            additionalStart = additionalHorizontal,
+            additionalTop = additionalVertical,
+            additionalEnd = additionalHorizontal,
+            additionalBottom = additionalVertical
+        )""",
+        "com.google.accompanist.insets.rememberWindowInsetsTypePaddingValues"
+    )
+)
 @Composable
 inline fun WindowInsets.Type.toPaddingValues(
     start: Boolean = true,
@@ -172,7 +170,7 @@ inline fun WindowInsets.Type.toPaddingValues(
     bottom: Boolean = true,
     additionalHorizontal: Dp = 0.dp,
     additionalVertical: Dp = 0.dp,
-) = toPaddingValues(
+): PaddingValues = toPaddingValues(
     start = start,
     top = top,
     end = end,
@@ -195,8 +193,25 @@ inline fun WindowInsets.Type.toPaddingValues(
  * @param additionalEnd Value to add to the end dimension.
  * @param additionalBottom Value to add to the bottom dimension.
  */
+@Deprecated(
+    "Replaced with rememberWindowInsetsTypePaddingValues()",
+    ReplaceWith(
+        """rememberWindowInsetsTypePaddingValues(
+            type = this,
+            applyStart = start,
+            applyTop = top,
+            applyEnd = end,
+            applyBottom = bottom,
+            additionalStart = additionalStart,
+            additionalTop = additionalTop,
+            additionalEnd = additionalEnd,
+            additionalBottom = additionalBottom
+        )""",
+        "com.google.accompanist.insets.rememberWindowInsetsTypePaddingValues"
+    )
+)
 @Composable
-fun WindowInsets.Type.toPaddingValues(
+inline fun WindowInsets.Type.toPaddingValues(
     start: Boolean = true,
     top: Boolean = true,
     end: Boolean = true,
@@ -205,26 +220,109 @@ fun WindowInsets.Type.toPaddingValues(
     additionalTop: Dp = 0.dp,
     additionalEnd: Dp = 0.dp,
     additionalBottom: Dp = 0.dp,
-): PaddingValues = with(LocalDensity.current) {
+): PaddingValues = rememberWindowInsetsTypePaddingValues(
+    type = this,
+    applyStart = start,
+    applyTop = top,
+    applyEnd = end,
+    applyBottom = bottom,
+    additionalStart = additionalStart,
+    additionalTop = additionalTop,
+    additionalEnd = additionalEnd,
+    additionalBottom = additionalBottom
+)
+
+/**
+ * Returns the current insets converted into a [PaddingValues].
+ *
+ * @param type
+ * @param applyStart Whether to apply the inset on the start dimension.
+ * @param applyTop Whether to apply the inset on the top dimension.
+ * @param applyEnd Whether to apply the inset on the end dimension.
+ * @param applyBottom Whether to apply the inset on the bottom dimension.
+ * @param additionalStart Value to add to the start dimension.
+ * @param additionalTop Value to add to the top dimension.
+ * @param additionalEnd Value to add to the end dimension.
+ * @param additionalBottom Value to add to the bottom dimension.
+ */
+@Composable
+fun rememberWindowInsetsTypePaddingValues(
+    type: WindowInsets.Type,
+    applyStart: Boolean = true,
+    applyTop: Boolean = true,
+    applyEnd: Boolean = true,
+    applyBottom: Boolean = true,
+    additionalStart: Dp = 0.dp,
+    additionalTop: Dp = 0.dp,
+    additionalEnd: Dp = 0.dp,
+    additionalBottom: Dp = 0.dp,
+): PaddingValues {
+    val density = LocalDensity.current
     val layoutDirection = LocalLayoutDirection.current
-    PaddingValues(
-        start = additionalStart + when {
-            start && layoutDirection == LayoutDirection.Ltr -> this@toPaddingValues.left.toDp()
-            start && layoutDirection == LayoutDirection.Rtl -> this@toPaddingValues.right.toDp()
-            else -> 0.dp
-        },
-        top = additionalTop + when {
-            top -> this@toPaddingValues.top.toDp()
-            else -> 0.dp
-        },
-        end = additionalEnd + when {
-            end && layoutDirection == LayoutDirection.Ltr -> this@toPaddingValues.right.toDp()
-            end && layoutDirection == LayoutDirection.Rtl -> this@toPaddingValues.left.toDp()
-            else -> 0.dp
-        },
-        bottom = additionalBottom + when {
-            bottom -> this@toPaddingValues.bottom.toDp()
-            else -> 0.dp
+
+    return remember(density, layoutDirection) {
+        WindowInsetsTypePaddingValues(insets = type, density = density)
+    }.apply {
+        this.applyStart = applyStart
+        this.applyTop = applyTop
+        this.applyEnd = applyEnd
+        this.applyBottom = applyBottom
+
+        this.additionalStart = additionalStart
+        this.additionalTop = additionalTop
+        this.additionalEnd = additionalEnd
+        this.additionalBottom = additionalBottom
+    }
+}
+
+/**
+ * This won't work until [PaddingValues] is marked as `@Stable` rather than `@Immutable`:
+ * See https://issuetracker.google.com/187082366
+ */
+@Stable
+internal class WindowInsetsTypePaddingValues(
+    private val insets: WindowInsets.Type,
+    private val density: Density,
+) : PaddingValues {
+    var applyStart: Boolean by mutableStateOf(true)
+    var applyTop: Boolean by mutableStateOf(true)
+    var applyEnd: Boolean by mutableStateOf(true)
+    var applyBottom: Boolean by mutableStateOf(true)
+
+    var additionalStart: Dp by mutableStateOf(0.dp)
+    var additionalTop: Dp by mutableStateOf(0.dp)
+    var additionalEnd: Dp by mutableStateOf(0.dp)
+    var additionalBottom: Dp by mutableStateOf(0.dp)
+
+    override fun calculateLeftPadding(layoutDirection: LayoutDirection): Dp {
+        return when (layoutDirection) {
+            LayoutDirection.Ltr -> {
+                additionalStart + if (applyStart) with(density) { insets.left.toDp() } else 0.dp
+            }
+            LayoutDirection.Rtl -> {
+                additionalEnd + if (applyEnd) with(density) { insets.left.toDp() } else 0.dp
+            }
         }
-    )
+    }
+
+    override fun calculateTopPadding(): Dp = additionalBottom + when {
+        applyTop -> with(density) { insets.bottom.toDp() }
+        else -> 0.dp
+    }
+
+    override fun calculateRightPadding(layoutDirection: LayoutDirection): Dp {
+        return when (layoutDirection) {
+            LayoutDirection.Ltr -> {
+                additionalEnd + if (applyEnd) with(density) { insets.right.toDp() } else 0.dp
+            }
+            LayoutDirection.Rtl -> {
+                additionalStart + if (applyStart) with(density) { insets.right.toDp() } else 0.dp
+            }
+        }
+    }
+
+    override fun calculateBottomPadding(): Dp = additionalTop + when {
+        applyTop -> with(density) { insets.top.toDp() }
+        else -> 0.dp
+    }
 }

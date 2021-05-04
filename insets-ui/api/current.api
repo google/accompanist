@@ -1,0 +1,13 @@
+// Signature format: 4.0
+package com.google.accompanist.insets.ui {
+
+  public final class BottomNavigationKt {
+    method @androidx.compose.runtime.Composable public static void BottomNavigation-5gJNPH0(optional androidx.compose.ui.Modifier modifier, optional androidx.compose.foundation.layout.PaddingValues contentPadding, optional long backgroundColor, optional long contentColor, optional float elevation, kotlin.jvm.functions.Function1<? super androidx.compose.foundation.layout.RowScope,kotlin.Unit> content);
+  }
+
+  public final class TopAppBarKt {
+    method @androidx.compose.runtime.Composable public static void TopAppBar--LHhVXk(kotlin.jvm.functions.Function0<kotlin.Unit> title, optional androidx.compose.ui.Modifier modifier, optional androidx.compose.foundation.layout.PaddingValues contentPadding, optional kotlin.jvm.functions.Function0<kotlin.Unit>? navigationIcon, optional kotlin.jvm.functions.Function1<? super androidx.compose.foundation.layout.RowScope,kotlin.Unit> actions, optional long backgroundColor, optional long contentColor, optional float elevation);
+  }
+
+}
+

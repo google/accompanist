@@ -37,8 +37,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
+import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
+import com.google.accompanist.insets.rememberWindowInsetsTypePaddingValues
+import com.google.accompanist.insets.ui.TopAppBar
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -72,12 +75,20 @@ private fun Sample() {
     }
 
     Box(Modifier.fillMaxSize()) {
-        InsetAwareTopAppBar(
+        /**
+         * We use [TopAppBar] from accompanist-insets-ui which allows us to provide
+         * content padding matching the system bars insets.
+         */
+        TopAppBar(
             title = {
                 Text(stringResource(R.string.insets_title_basic))
             },
             backgroundColor = MaterialTheme.colors.surface,
-            modifier = Modifier.fillMaxWidth()
+            contentPadding = rememberWindowInsetsTypePaddingValues(
+                LocalWindowInsets.current.systemBars,
+                applyBottom = false,
+            ),
+            modifier = Modifier.fillMaxWidth(),
         )
 
         FloatingActionButton(

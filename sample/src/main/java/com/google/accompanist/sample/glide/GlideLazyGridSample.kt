@@ -36,10 +36,10 @@ import androidx.core.view.WindowCompat
 import com.google.accompanist.glide.rememberGlidePainter
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.accompanist.insets.toPaddingValues
+import com.google.accompanist.insets.rememberWindowInsetsTypePaddingValues
+import com.google.accompanist.insets.ui.TopAppBar
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
-import com.google.accompanist.sample.insets.InsetAwareTopAppBar
 import com.google.accompanist.sample.rememberRandomSampleImageUrl
 
 class GlideLazyGridSample : ComponentActivity() {
@@ -64,16 +64,25 @@ private const val NumberItems = 60
 private fun Sample() {
     Scaffold(
         topBar = {
-            InsetAwareTopAppBar(
+            TopAppBar(
                 title = { Text(text = stringResource(R.string.glide_title_lazy_grid)) },
                 backgroundColor = MaterialTheme.colors.surface,
+                contentPadding = rememberWindowInsetsTypePaddingValues(
+                    LocalWindowInsets.current.systemBars,
+                    applyBottom = false,
+                ),
             )
         }
     ) {
         LazyVerticalGrid(
             cells = GridCells.Adaptive(96.dp),
-            contentPadding = LocalWindowInsets.current.navigationBars
-                .toPaddingValues(additionalVertical = 16.dp, additionalHorizontal = 16.dp),
+            contentPadding = rememberWindowInsetsTypePaddingValues(
+                type = LocalWindowInsets.current.navigationBars,
+                additionalStart = 16.dp,
+                additionalTop = 16.dp,
+                additionalEnd = 16.dp,
+                additionalBottom = 16.dp
+            ),
         ) {
             items(NumberItems) { index ->
                 Image(

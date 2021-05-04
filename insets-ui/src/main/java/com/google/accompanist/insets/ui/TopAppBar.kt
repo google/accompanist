@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.google.accompanist.sample.insets
+package com.google.accompanist.insets.ui
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.AppBarDefaults
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.TopAppBar
@@ -30,17 +30,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.navigationBarsPadding
-import com.google.accompanist.insets.statusBarsPadding
 
 /**
- * A wrapper around [TopAppBar] which uses [Modifier.statusBarsPadding] to shift the app bar's
- * contents down, but still draws the background behind the status bar too.
+ * A wrapper around [TopAppBar] which supports the setting of [contentPadding] to add
+ * internal padding. This is especially useful in conjunction with insets.
+ *
+ * For an edge-to-edge layout, typically you would use the
+ * [com.google.accompanist.insets.WindowInsets.systemBars] insets like so below:
+ *
+ * @sample com.google.accompanist.sample.insets.TopAppBar_Insets
  */
 @Composable
-fun InsetAwareTopAppBar(
+fun TopAppBar(
     title: @Composable () -> Unit,
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
     navigationIcon: @Composable (() -> Unit)? = null,
     actions: @Composable RowScope.() -> Unit = {},
     backgroundColor: Color = MaterialTheme.colors.primarySurface,
@@ -59,37 +63,7 @@ fun InsetAwareTopAppBar(
             backgroundColor = Color.Transparent,
             contentColor = contentColor,
             elevation = 0.dp,
-            modifier = Modifier
-                .statusBarsPadding()
-                .navigationBarsPadding(bottom = false)
-        )
-    }
-}
-
-/**
- * A wrapper around [BottomNavigation] which uses [Modifier.navigationBarsPadding] to shift
- * the contents away from the system navigation bar, but still draws the background
- * behind the system bar.
- */
-@Composable
-fun InsetAwareBottomNavigation(
-    modifier: Modifier = Modifier,
-    backgroundColor: Color = MaterialTheme.colors.primarySurface,
-    contentColor: Color = contentColorFor(backgroundColor),
-    elevation: Dp = BottomNavigationDefaults.Elevation,
-    content: @Composable RowScope.() -> Unit
-) {
-    Surface(
-        color = backgroundColor,
-        elevation = elevation,
-        modifier = modifier
-    ) {
-        BottomNavigation(
-            backgroundColor = Color.Transparent,
-            contentColor = contentColor,
-            elevation = 0.dp,
-            modifier = Modifier.navigationBarsPadding(),
-            content = content
+            modifier = Modifier.padding(contentPadding)
         )
     }
 }

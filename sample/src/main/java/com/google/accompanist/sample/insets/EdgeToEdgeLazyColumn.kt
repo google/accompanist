@@ -49,7 +49,9 @@ import androidx.core.view.WindowCompat
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
+import com.google.accompanist.insets.rememberWindowInsetsTypePaddingValues
 import com.google.accompanist.insets.toPaddingValues
+import com.google.accompanist.insets.ui.TopAppBar
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
@@ -102,12 +104,17 @@ private fun Sample() {
             }
 
             /**
-             * We show a translucent app bar above which floats about the content. Our
-             * [InsetAwareTopAppBar] below automatically draws behind the status bar too.
+             * We show a translucent app bar above which floats about the content.
+             * We use [TopAppBar] from accompanist-insets-ui which allows us to provide
+             * content padding matching the system bars insets.
              */
-            InsetAwareTopAppBar(
+            TopAppBar(
                 title = { Text(stringResource(R.string.insets_title_list)) },
                 backgroundColor = MaterialTheme.colors.surface.copy(alpha = 0.9f),
+                contentPadding = rememberWindowInsetsTypePaddingValues(
+                    LocalWindowInsets.current.systemBars,
+                    applyBottom = false,
+                ),
                 modifier = Modifier
                     .fillMaxWidth()
                     // We use onSizeChanged to track the app bar height, and update

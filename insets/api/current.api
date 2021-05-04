@@ -49,10 +49,11 @@ package com.google.accompanist.insets {
     method public static androidx.compose.ui.Modifier imePadding(androidx.compose.ui.Modifier);
     method public static androidx.compose.ui.Modifier navigationBarsPadding(androidx.compose.ui.Modifier, optional boolean bottom, optional boolean left, optional boolean right);
     method public static androidx.compose.ui.Modifier navigationBarsWithImePadding(androidx.compose.ui.Modifier);
+    method @androidx.compose.runtime.Composable public static androidx.compose.foundation.layout.PaddingValues rememberWindowInsetsTypePaddingValues-ye5NoXI(com.google.accompanist.insets.WindowInsets.Type type, optional boolean applyStart, optional boolean applyTop, optional boolean applyEnd, optional boolean applyBottom, optional float additionalStart, optional float additionalTop, optional float additionalEnd, optional float additionalBottom);
     method public static androidx.compose.ui.Modifier statusBarsPadding(androidx.compose.ui.Modifier);
     method public static androidx.compose.ui.Modifier systemBarsPadding(androidx.compose.ui.Modifier, optional boolean enabled);
-    method @androidx.compose.runtime.Composable public static inline androidx.compose.foundation.layout.PaddingValues toPaddingValues-J9vYEFM(com.google.accompanist.insets.WindowInsets.Type, optional boolean start, optional boolean top, optional boolean end, optional boolean bottom, optional float additionalHorizontal, optional float additionalVertical);
-    method @androidx.compose.runtime.Composable public static androidx.compose.foundation.layout.PaddingValues toPaddingValues-ye5NoXI(com.google.accompanist.insets.WindowInsets.Type, optional boolean start, optional boolean top, optional boolean end, optional boolean bottom, optional float additionalStart, optional float additionalTop, optional float additionalEnd, optional float additionalBottom);
+    method @Deprecated @androidx.compose.runtime.Composable public static inline androidx.compose.foundation.layout.PaddingValues toPaddingValues-J9vYEFM(com.google.accompanist.insets.WindowInsets.Type, optional boolean start, optional boolean top, optional boolean end, optional boolean bottom, optional float additionalHorizontal, optional float additionalVertical);
+    method @Deprecated @androidx.compose.runtime.Composable public static inline androidx.compose.foundation.layout.PaddingValues toPaddingValues-ye5NoXI(com.google.accompanist.insets.WindowInsets.Type, optional boolean start, optional boolean top, optional boolean end, optional boolean bottom, optional float additionalStart, optional float additionalTop, optional float additionalEnd, optional float additionalBottom);
   }
 
   public final class SimpleImeAnimationControllerKt {

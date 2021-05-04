@@ -42,9 +42,12 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import com.google.accompanist.insets.ExperimentalAnimatedInsets
+import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.google.accompanist.insets.rememberImeNestedScrollConnection
+import com.google.accompanist.insets.rememberWindowInsetsTypePaddingValues
+import com.google.accompanist.insets.ui.TopAppBar
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
@@ -82,12 +85,20 @@ private fun Sample() {
 
     Scaffold(
         topBar = {
-            InsetAwareTopAppBar(
+            /**
+             * We use [TopAppBar] from accompanist-insets-ui which allows us to provide
+             * content padding matching the system bars insets.
+             */
+            TopAppBar(
                 title = {
                     Text(stringResource(R.string.insets_title_imeanim))
                 },
                 backgroundColor = MaterialTheme.colors.surface,
-                modifier = Modifier.fillMaxWidth()
+                contentPadding = rememberWindowInsetsTypePaddingValues(
+                    LocalWindowInsets.current.systemBars,
+                    applyBottom = false,
+                ),
+                modifier = Modifier.fillMaxWidth(),
             )
         },
         modifier = Modifier.fillMaxSize()
