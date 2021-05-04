@@ -21,7 +21,6 @@ import android.graphics.drawable.ShapeDrawable
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Text
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,7 +39,6 @@ import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.test.filters.LargeTest
@@ -59,7 +57,7 @@ import com.google.accompanist.imageloading.test.resourceUri
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.withTimeoutOrNull
 import org.junit.After
 import org.junit.Before
@@ -69,6 +67,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 
 @Suppress("DEPRECATION")
+@OptIn(ExperimentalCoroutinesApi::class)
 @LargeTest
 @RunWith(JUnit4::class)
 class DeprecatedGlideTest {
@@ -148,7 +147,9 @@ class DeprecatedGlideTest {
             GlideImage(
                 data = server.url("/image").toString(),
                 contentDescription = null,
-                modifier = Modifier.size(128.dp, 128.dp).testTag(GlideTestTags.Image),
+                modifier = Modifier
+                    .size(128.dp, 128.dp)
+                    .testTag(GlideTestTags.Image),
                 onRequestCompleted = { requestCompleted = true }
             )
         }
@@ -171,7 +172,9 @@ class DeprecatedGlideTest {
             GlideImage(
                 data = resourceUri(R.drawable.red_rectangle),
                 contentDescription = null,
-                modifier = Modifier.size(128.dp, 128.dp).testTag(GlideTestTags.Image),
+                modifier = Modifier
+                    .size(128.dp, 128.dp)
+                    .testTag(GlideTestTags.Image),
                 onRequestCompleted = { requestCompleted = true }
             )
         }
@@ -198,7 +201,9 @@ class DeprecatedGlideTest {
             GlideImage(
                 data = data.toString(),
                 contentDescription = null,
-                modifier = Modifier.size(128.dp, 128.dp).testTag(GlideTestTags.Image),
+                modifier = Modifier
+                    .size(128.dp, 128.dp)
+                    .testTag(GlideTestTags.Image),
                 onRequestCompleted = { loadCompleteSignal = true }
             )
         }
@@ -232,7 +237,7 @@ class DeprecatedGlideTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun basicLoad_changeSize() {
+    fun basicLoad_changeSize() = runBlockingTest {
         val loadCompleteSignal = Channel<ImageLoadState>(Channel.UNLIMITED)
         var size by mutableStateOf(128.dp)
 
@@ -240,7 +245,9 @@ class DeprecatedGlideTest {
             GlideImage(
                 data = server.url("/red").toString(),
                 contentDescription = null,
-                modifier = Modifier.size(size).testTag(GlideTestTags.Image),
+                modifier = Modifier
+                    .size(size)
+                    .testTag(GlideTestTags.Image),
                 onRequestCompleted = { loadCompleteSignal.offer(it) }
             )
         }
@@ -253,10 +260,8 @@ class DeprecatedGlideTest {
         size = 256.dp
 
         // Await the potential second load (which shouldn't come)
-        runBlocking {
-            val result = withTimeoutOrNull(3000) { loadCompleteSignal.receive() }
-            assertThat(result).isNull()
-        }
+        val result = withTimeoutOrNull(3000) { loadCompleteSignal.receive() }
+        assertThat(result).isNull()
 
         // Close the signal channel
         loadCompleteSignal.close()
@@ -345,7 +350,9 @@ class DeprecatedGlideTest {
             GlideImage(
                 data = server.url("/noimage").toString(),
                 contentDescription = null,
-                modifier = Modifier.size(128.dp, 128.dp).testTag(GlideTestTags.Image),
+                modifier = Modifier
+                    .size(128.dp, 128.dp)
+                    .testTag(GlideTestTags.Image),
                 onRequestCompleted = { requestCompleted = true }
             )
         }
@@ -426,7 +433,9 @@ class DeprecatedGlideTest {
         composeTestRule.setContent {
             GlideImage(
                 data = server.url("/image").toString(),
-                modifier = Modifier.size(128.dp, 128.dp).testTag(GlideTestTags.Image),
+                modifier = Modifier
+                    .size(128.dp, 128.dp)
+                    .testTag(GlideTestTags.Image),
                 onRequestCompleted = { requestCompleted = true }
             ) {
                 // Return an Image which just draws cyan
@@ -449,39 +458,6 @@ class DeprecatedGlideTest {
     }
 
     @Test
-    fun loading_slot() {
-        var requestCompleted by mutableStateOf(false)
-
-        val glide = Glide.with(composeTestRule.activity.applicationContext).apply {
-            // Pause all requests so that the request doesn't complete
-            pauseAllRequests()
-        }
-
-        composeTestRule.setContent {
-            GlideImage(
-                data = server.url("/image").toString(),
-                requestManager = glide,
-                contentDescription = null,
-                modifier = Modifier.size(128.dp, 128.dp),
-                loading = { Text(text = "Loading") },
-                onRequestCompleted = { requestCompleted = true }
-            )
-        }
-
-        // Assert that the loading component is displayed
-        composeTestRule.onNodeWithText("Loading").assertIsDisplayed()
-
-        // Now resume all requests
-        glide.resumeRequests()
-
-        // We now wait for the request to complete
-        composeTestRule.waitUntil(10_000) { requestCompleted }
-
-        // And assert that the loading component no longer exists
-        composeTestRule.onNodeWithText("Loading").assertDoesNotExist()
-    }
-
-    @Test
     @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
     fun error_slot() {
         var requestCompleted by mutableStateOf(false)
@@ -498,7 +474,9 @@ class DeprecatedGlideTest {
                     )
                 },
                 contentDescription = null,
-                modifier = Modifier.size(128.dp, 128.dp).testTag(GlideTestTags.Image),
+                modifier = Modifier
+                    .size(128.dp, 128.dp)
+                    .testTag(GlideTestTags.Image),
                 onRequestCompleted = { requestCompleted = true }
             )
         }

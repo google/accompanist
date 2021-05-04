@@ -19,7 +19,7 @@ setContent {
 ```
 
 !!! note
-    **This library does not disable window decor fitting.** For your view hierarchy to able to receive insets, you need to make sure to call: [`WindowCompat.setDecorFitsSystemWindows(window, false)`](https://developer.android.com/reference/androidx/core/view/WindowCompat#setDecorFitsSystemWindows(android.view.Window,%20boolean)) from your Activity.
+    **This library does not disable window decor fitting.** For your view hierarchy to able to receive insets, you need to make sure to call: [`WindowCompat.setDecorFitsSystemWindows(window, false)`](https://developer.android.com/reference/androidx/core/view/WindowCompat#setDecorFitsSystemWindows(android.view.Window,%20boolean)) from your Activity. You also need to set the system bar backgrounds to be transparent, which can be done with our [System UI Controller](../systemuicontroller) library.
 
 `ProvideWindowInsets` allows the library to set an [`OnApplyWindowInsetsListener`][insetslistener] on your content's host view. That listener is used to update the value of a composition local bundled in this library: `LocalWindowInsets`.
 
@@ -28,9 +28,10 @@ setContent {
 ``` kotlin
 @Composable
 fun ImeAvoidingBox() {
-  val insets = LocalWindowInsets.current
-
-  Box(Modifier.padding(bottom = insets.ime.bottom))
+    val insets = LocalWindowInsets.current
+    
+    val imeBottom = with(LocalDensity.current) { insets.ime.bottom.toDp() }
+    Box(Modifier.padding(bottom = imeBottom))
 }
 ```
 
@@ -53,12 +54,14 @@ These are commonly used to move composables out from under the system bars. The 
 
 ``` kotlin
 FloatingActionButton(
-    icon = { Icon(...) },
+    onClick = { /* TODO */ },
     modifier = Modifier
         .align(Alignment.BottomEnd)
         .padding(16.dp) // normal 16dp of padding for FABs
         .navigationBarsPadding() // Move it out from under the nav bar
-)
+) {
+    Icon(imageVector = Icons.Default.Add, contentDescription = null)
+}
 ```
 
 #### Size modifiers
@@ -86,8 +89,10 @@ You may want to use inset values for content padding, so this library provides t
 
 ``` kotlin
 LazyColumn(
-  contentPadding = LocalWindowInsets.current.systemBars.toPaddingValues()
-)
+    contentPadding = LocalWindowInsets.current.systemBars.toPaddingValues()
+) {
+    // content
+}
 ```
 
 For a more complex example, see the [`EdgeToEdgeLazyColumn`](https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/insets/EdgeToEdgeLazyColumn.kt) example:
@@ -95,6 +100,20 @@ For a more complex example, see the [`EdgeToEdgeLazyColumn`](https://github.com/
 <a href="images/edge-to-edge-list.jpg">
 <img src="images/edge-to-edge-list.jpg" width=300>
 </a>
+
+### Inset-aware layouts
+
+Unfortunately, most of Compose Material's layouts do not support the use of content padding, which means that the following code probably doesn't produce the effect you want:
+
+``` kotlin
+// This likely doesn't do what you want
+TopAppBar(
+    // content
+    modifier = Modifier.statusBarsPadding()
+)
+```
+
+To workaround this, our sample has a number of wrapper layouts in the [`InsetAwareLayouts.kt`](https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/insets/InsetAwareLayouts.kt) file which may be useful. These are used in the `EdgeToEdgeLazyColumn` sample for example.
 
 ## 🚧 Experimental
 

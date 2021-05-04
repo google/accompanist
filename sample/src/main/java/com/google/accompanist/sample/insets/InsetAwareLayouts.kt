@@ -17,6 +17,7 @@
 package com.google.accompanist.sample.insets
 
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationDefaults
 import androidx.compose.material.MaterialTheme
@@ -44,7 +45,7 @@ fun InsetAwareTopAppBar(
     actions: @Composable RowScope.() -> Unit = {},
     backgroundColor: Color = MaterialTheme.colors.primarySurface,
     contentColor: Color = contentColorFor(backgroundColor),
-    elevation: Dp = 4.dp
+    elevation: Dp = AppBarDefaults.TopAppBarElevation,
 ) {
     Surface(
         color = backgroundColor,
@@ -66,8 +67,9 @@ fun InsetAwareTopAppBar(
 }
 
 /**
- * A wrapper around [BottomNavigation] which uses [Modifier.statusBarsPadding] to shift the
- * contents up, but still draws the background behind the navigation bar too.
+ * A wrapper around [BottomNavigation] which uses [Modifier.navigationBarsPadding] to shift
+ * the contents away from the system navigation bar, but still draws the background
+ * behind the system bar.
  */
 @Composable
 fun InsetAwareBottomNavigation(
@@ -86,9 +88,8 @@ fun InsetAwareBottomNavigation(
             backgroundColor = Color.Transparent,
             contentColor = contentColor,
             elevation = 0.dp,
-            modifier = Modifier.navigationBarsPadding()
-        ) {
-            content()
-        }
+            modifier = Modifier.navigationBarsPadding(),
+            content = content
+        )
     }
 }

@@ -1,0 +1,56 @@
+// Signature format: 4.0
+package com.google.accompanist.pager {
+
+  @kotlin.RequiresOptIn(message="Accompanist Pager is experimental. The API may be changed in the future.") @kotlin.annotation.Retention(kotlin.annotation.AnnotationRetention) public @interface ExperimentalPagerApi {
+  }
+
+  public final class Pager {
+    method @androidx.compose.runtime.Composable @com.google.accompanist.pager.ExperimentalPagerApi public static void HorizontalPager-mDqaqPw(com.google.accompanist.pager.PagerState state, optional androidx.compose.ui.Modifier modifier, optional boolean reverseLayout, optional float itemSpacing, optional boolean dragEnabled, optional androidx.compose.foundation.gestures.FlingBehavior flingBehavior, optional androidx.compose.ui.Alignment.Vertical verticalAlignment, optional androidx.compose.ui.Alignment.Horizontal horizontalAlignment, kotlin.jvm.functions.Function2<? super com.google.accompanist.pager.PagerScope,? super java.lang.Integer,kotlin.Unit> content);
+    method @androidx.compose.runtime.Composable @com.google.accompanist.pager.ExperimentalPagerApi public static void VerticalPager-mDqaqPw(com.google.accompanist.pager.PagerState state, optional androidx.compose.ui.Modifier modifier, optional boolean reverseLayout, optional float itemSpacing, optional boolean dragEnabled, optional androidx.compose.foundation.gestures.FlingBehavior flingBehavior, optional androidx.compose.ui.Alignment.Vertical verticalAlignment, optional androidx.compose.ui.Alignment.Horizontal horizontalAlignment, kotlin.jvm.functions.Function2<? super com.google.accompanist.pager.PagerScope,? super java.lang.Integer,kotlin.Unit> content);
+    method @com.google.accompanist.pager.ExperimentalPagerApi public static float calculateCurrentOffsetForPage(com.google.accompanist.pager.PagerScope, int page);
+  }
+
+  @com.google.accompanist.pager.ExperimentalPagerApi public final class PagerDefaults {
+    method @androidx.compose.runtime.Composable public androidx.compose.foundation.gestures.FlingBehavior defaultPagerFlingConfig(com.google.accompanist.pager.PagerState state, optional androidx.compose.animation.core.DecayAnimationSpec<java.lang.Float> decayAnimationSpec, optional androidx.compose.animation.core.AnimationSpec<java.lang.Float> snapAnimationSpec);
+    field public static final com.google.accompanist.pager.PagerDefaults INSTANCE;
+  }
+
+  @androidx.compose.runtime.Stable @com.google.accompanist.pager.ExperimentalPagerApi public interface PagerScope extends androidx.compose.foundation.layout.BoxScope {
+    method public int getCurrentPage();
+    method public float getCurrentPageOffset();
+    property public abstract int currentPage;
+    property public abstract float currentPageOffset;
+  }
+
+  @androidx.compose.runtime.Stable @com.google.accompanist.pager.ExperimentalPagerApi public final class PagerState implements androidx.compose.foundation.gestures.ScrollableState {
+    ctor public PagerState(@IntRange(from=0) int pageCount, @IntRange(from=0) int currentPage, @FloatRange(from=0.0, to=1.0) float currentPageOffset, int offscreenLimit);
+    method public suspend Object? animateScrollToPage(@IntRange(from=0) int page, optional @FloatRange(from=0.0, to=1.0) float pageOffset, optional androidx.compose.animation.core.AnimationSpec<java.lang.Float> animationSpec, optional float initialVelocity, optional boolean skipPages, optional kotlin.coroutines.Continuation<? super kotlin.Unit> p);
+    method public float dispatchRawDelta(float delta);
+    method @IntRange(from=0) public int getCurrentPage();
+    method public float getCurrentPageOffset();
+    method @IntRange(from=0) public int getPageCount();
+    method public Integer? getTargetPage();
+    method public boolean isScrollInProgress();
+    method public suspend Object? scroll(androidx.compose.foundation.MutatePriority scrollPriority, kotlin.jvm.functions.Function2<? super androidx.compose.foundation.gestures.ScrollScope,? super kotlin.coroutines.Continuation<? super kotlin.Unit>,?> block, kotlin.coroutines.Continuation<? super kotlin.Unit> p);
+    method public suspend Object? scrollToPage(@IntRange(from=0) int page, optional @FloatRange(from=0.0, to=1.0) float pageOffset, optional kotlin.coroutines.Continuation<? super kotlin.Unit> p);
+    method public void setPageCount(@IntRange(from=0) int value);
+    property @IntRange(from=0) public final int currentPage;
+    property public final float currentPageOffset;
+    property public boolean isScrollInProgress;
+    property @IntRange(from=0) public final int pageCount;
+    property public final Integer? targetPage;
+    field public static final com.google.accompanist.pager.PagerState.Companion Companion;
+  }
+
+  public static final class PagerState.Companion {
+    method public androidx.compose.runtime.saveable.Saver<com.google.accompanist.pager.PagerState,?> getSaver();
+    property public final androidx.compose.runtime.saveable.Saver<com.google.accompanist.pager.PagerState,?> Saver;
+  }
+
+  public final class PagerStateKt {
+    method @Deprecated public static inline kotlinx.coroutines.flow.Flow<java.lang.Integer>! getPageChanges(com.google.accompanist.pager.PagerState);
+    method @androidx.compose.runtime.Composable @com.google.accompanist.pager.ExperimentalPagerApi public static com.google.accompanist.pager.PagerState rememberPagerState(@IntRange(from=0) int pageCount, optional @IntRange(from=0) int initialPage, optional @FloatRange(from=0.0, to=1.0) float initialPageOffset, optional @IntRange(from=1) int initialOffscreenLimit);
+  }
+
+}
+

@@ -30,7 +30,10 @@ sealed class ImageLoadState {
     /**
      * Indicates that the request is currently in progress.
      */
-    object Loading : ImageLoadState()
+    data class Loading(
+        val placeholder: Drawable?,
+        val request: Any,
+    ) : ImageLoadState()
 
     /**
      * Indicates that the request completed successfully.
@@ -53,9 +56,9 @@ sealed class ImageLoadState {
      * @param request The original request for this result.
      */
     data class Error(
-        val result: Drawable? = null,
         val request: Any,
-        val throwable: Throwable
+        val result: Drawable? = null,
+        val throwable: Throwable? = null
     ) : ImageLoadState()
 }
 
@@ -70,6 +73,7 @@ internal inline val ImageLoadState.drawable: Drawable?
     get() = when (this) {
         is ImageLoadState.Success -> result
         is ImageLoadState.Error -> result
+        is ImageLoadState.Loading -> placeholder
         else -> null
     }
 

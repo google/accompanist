@@ -5,19 +5,7 @@ This doc is mostly for maintainers.
 ## New features & bugfixes
 All new features should be uploaded as PRs against the `main` branch. 
 
-Once merged into `main`, they should be merged into the `snapshot` branch:
-
-``` sh
-git checkout main && git pull
-git checkout snapshot && git pull
-
-# Create branch for PR
-git checkout -b snapshot_main_merge
-# Merge in the main branch
-git merge main
-
-# Push to GitHub
-```
+Once merged into `main`, they will be automatically merged into the `snapshot` branch.
 
 ## Jetpack Compose Snapshots
 
@@ -35,10 +23,12 @@ git checkout -b update_snapshot
 
 Now edit the project to depend on the new Compose SNAPSHOT version:
 
-Edit [dependencies.kt](https://github.com/google/accompanist/blob/main/buildSrc/src/main/java/com/google/accompanist/buildsrc/dependencies.kt):
+Edit [`/gradle/libs.versions.toml`](https://github.com/google/accompanist/blob/main/gradle/libs.versions.toml):
 
-1. Update the `Libs.AndroidX.Compose.snapshot` property to be the snapshot number
-2. Ensure that the `Libs.AndroidX.Compose.version` property is correct
+Under `[versions]`:
+
+1. Update the `composesnapshot` property to be the snapshot number
+2. Ensure that the `compose` property is correct
 
 Make sure the project builds and test pass:
 ```
@@ -70,10 +60,12 @@ git merge snapshot
 
 ### #2: Update dependencies
 
-Edit [dependencies.kt](https://github.com/google/accompanist/blob/main/buildSrc/src/main/java/com/google/accompanist/buildsrc/dependencies.kt):
+Edit [`/gradle/libs.versions.toml`](https://github.com/google/accompanist/blob/main/gradle/libs.versions.toml):
 
-1. Update the `Libs.AndroidX.Compose.snapshot` property to be an empty string (`val snapshot = ""`)
-2. Update the `Libs.AndroidX.Compose.version` property to the new Compose version (`1.0.0-alpha03` for example).
+Under `[versions]`:
+
+1. Update the `composesnapshot` property to a single character (usually `-`). This disables the snapshot repository.
+2. Update the `compose` property to match the new release (i.e. `1.0.0-beta06`)
 
 Make sure the project builds and test pass:
 ```

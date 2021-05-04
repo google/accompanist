@@ -38,9 +38,13 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntSize
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
@@ -57,7 +61,7 @@ import kotlin.math.roundToInt
  * @param R The data or input parameter type.
  */
 @Stable
-interface Loader<R> {
+fun interface Loader<R> {
     /**
      * Execute the 'load' with the given parameters.
      *
@@ -65,7 +69,7 @@ interface Loader<R> {
      * @param size The size of the canvas, which allows loaders to load an optimally sized result.
      * @return The resulting [ImageLoadState].
      */
-    suspend fun load(request: R, size: IntSize): ImageLoadState
+    fun load(request: R, size: IntSize): Flow<ImageLoadState>
 }
 
 /**
@@ -96,7 +100,7 @@ object LoadPainterDefaults {
 fun <R> rememberLoadPainter(
     loader: Loader<R>,
     request: R?,
-    shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean,
+    shouldRefetchOnSizeChange: ShouldRefetchOnSizeChange,
     fadeIn: Boolean = false,
     fadeInDurationMs: Int = LoadPainterDefaults.FadeInTransitionDuration,
     @DrawableRes previewPlaceholder: Int = 0,
@@ -128,7 +132,18 @@ fun <R> rememberLoadPainter(
     return painter
 }
 
-typealias ShouldRefetchOnSizeChange = (currentState: ImageLoadState, size: IntSize) -> Boolean
+/**
+ * Interface that allows apps to control whether a request is re-run once the size changes.
+ */
+fun interface ShouldRefetchOnSizeChange {
+    /**
+     * Return `true` if the request should be re-run if the [size] has changed.
+     *
+     * @param currentState The current request state.
+     * @param size The new size.
+     */
+    operator fun invoke(currentState: ImageLoadState, size: IntSize): Boolean
+}
 
 /**
  * A generic image loading painter, which provides the [Loader] interface for image loading
@@ -146,6 +161,9 @@ class LoadPainter<R> internal constructor(
     internal var painter by mutableStateOf<Painter>(EmptyPainter)
     internal var transitionColorFilter by mutableStateOf<ColorFilter?>(null)
 
+    // CoroutineScope for the current request
+    private var requestCoroutineScope: CoroutineScope? = null
+
     /**
      * The current request object.
      */
@@ -155,9 +173,7 @@ class LoadPainter<R> internal constructor(
      * Lambda which will be invoked when the size changes, allowing
      * optional re-fetching of the image.
      */
-    var shouldRefetchOnSizeChange by mutableStateOf<ShouldRefetchOnSizeChange>(
-        value = { _, _ -> false }
-    )
+    var shouldRefetchOnSizeChange by mutableStateOf(ShouldRefetchOnSizeChange { _, _ -> false })
 
     /**
      * The current [ImageLoadState].
@@ -173,9 +189,6 @@ class LoadPainter<R> internal constructor(
      * [ImageSuchDeprecated].
      */
     internal var requestSize by mutableStateOf<IntSize?>(null)
-
-    // Current request job
-    private var job: Job? = null
 
     override val intrinsicSize: Size
         get() = painter.intrinsicSize
@@ -219,31 +232,48 @@ class LoadPainter<R> internal constructor(
     }
 
     override fun onAbandoned() {
-        // We've been abandoned from composition, so cancel our request handling coroutine
-        job?.cancel()
-        job = null
+        // We've been abandoned from composition, so cancel our request scope
+        requestCoroutineScope?.cancel()
+        requestCoroutineScope = null
     }
 
     override fun onForgotten() {
-        // We've been forgotten from composition, so cancel our request handling coroutine
-        job?.cancel()
-        job = null
+        // We've been forgotten from composition, so cancel our request scope
+        requestCoroutineScope?.cancel()
+        requestCoroutineScope = null
     }
 
     override fun onRemembered() {
-        // Cancel any on-going job (this shouldn't really happen anyway)
-        job?.cancel()
+        // Cancel any on-going scope (this shouldn't really happen anyway)
+        requestCoroutineScope?.cancel()
+
+        // Create a new CoroutineScope for the current request. We use the provided
+        // `coroutineScope` as the source for everything, but we create a new child Job.
+        // This allows us cancel the scope without affecting the parent scope's job.
+        val scope = coroutineScope.coroutineContext.let { context ->
+            CoroutineScope(context + Job(context[Job]))
+        }.also { requestCoroutineScope = it }
 
         // We've been remembered, so launch a coroutine to observe the current request object,
         // and the request size. Whenever either of these values change, the collectLatest block
         // will run and execute the image load (with any on-going request cancelled).
-        job = coroutineScope.launch {
+        scope.launch {
             combine(
                 snapshotFlow { request },
                 snapshotFlow { requestSize }.filterNotNull(),
                 transform = { request, size -> request to size }
             ).collectLatest { (request, size) ->
                 execute(request, size)
+            }
+        }
+
+        // Our fail-safe. If we don't receive an appropriate size from `onDraw()` we update the
+        // request size to be -1, -1 which will load the original size image.
+        // The ideal fix for this is waiting on https://issuetracker.google.com/186012457
+        scope.launch {
+            delay(32) // 32ms should be enough time for measure/layout/draw to happen.
+            if (requestSize == null) {
+                requestSize = IntSize(-1, -1)
             }
         }
     }
@@ -268,28 +298,26 @@ class LoadPainter<R> internal constructor(
             return
         }
 
-        // Otherwise we're about to start a request, so set us to 'Loading'
-        loadState = ImageLoadState.Loading
-
-        loadState = try {
-            loader.load(request, size)
-        } catch (ce: CancellationException) {
-            // We specifically don't do anything for the request coroutine being
-            // cancelled: https://github.com/google/accompanist/issues/217
-            throw ce
-        } catch (e: Error) {
-            // Re-throw all Errors
-            throw e
-        } catch (e: IllegalStateException) {
-            // Re-throw all IllegalStateExceptions
-            throw e
-        } catch (e: IllegalArgumentException) {
-            // Re-throw all IllegalArgumentExceptions
-            throw e
-        } catch (t: Throwable) {
-            // Anything else, we wrap in a Error state instance
-            ImageLoadState.Error(result = null, throwable = t, request = request)
-        }
+        loader.load(request, size)
+            .catch { throwable ->
+                when (throwable) {
+                    // Re-throw all Errors, IllegalStateExceptions & IllegalArgumentExceptions
+                    is Error -> throw throwable
+                    is IllegalStateException -> throw throwable
+                    is IllegalArgumentException -> throw throwable
+                    else -> {
+                        // Anything else, we wrap in a Error state instance and re-emit
+                        emit(
+                            ImageLoadState.Error(
+                                result = null,
+                                throwable = throwable,
+                                request = request
+                            )
+                        )
+                    }
+                }
+            }
+            .collect { loadState = it }
     }
 }
 
@@ -338,7 +366,7 @@ private fun <R> animateFadeInColorFilter(
     } else null // If the fade in is not enabled, we don't use a fade in transition
 }
 
-private object EmptyPainter : Painter() {
+internal object EmptyPainter : Painter() {
     override val intrinsicSize: Size get() = Size.Unspecified
     override fun DrawScope.onDraw() {}
 }

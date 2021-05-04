@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-import com.google.accompanist.buildsrc.Libs
-
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
     id 'org.jetbrains.dokka'
+    id 'me.tylerbwong.gradle.metalava'
 }
 
 kotlin {
@@ -45,7 +44,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion Libs.AndroidX.Compose.version
+        kotlinCompilerExtensionVersion libs.versions.compose.get()
     }
 
     lintOptions {
@@ -74,15 +73,19 @@ android {
 }
 
 dependencies {
-    implementation Libs.AndroidX.coreKtx
-    implementation Libs.AndroidX.Compose.material
+    implementation libs.androidx.core
+    implementation libs.compose.material.material
 
-    api Libs.AndroidX.appcompat
+    api libs.androidx.appcompat
 
-    androidTestImplementation Libs.junit
-    androidTestImplementation Libs.AndroidX.Compose.test
-    androidTestImplementation Libs.AndroidX.Test.rules
-    androidTestImplementation Libs.AndroidX.Test.runner
+    androidTestImplementation libs.junit
+    androidTestImplementation libs.compose.ui.test
+    androidTestImplementation libs.androidx.test.runner
+}
+
+metalava {
+    filename = "api/current.api"
+    reportLintsAsErrors = true
 }
 
 apply plugin: 'com.vanniktech.maven.publish'

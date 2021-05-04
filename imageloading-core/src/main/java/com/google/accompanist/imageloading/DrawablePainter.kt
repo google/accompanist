@@ -145,17 +145,19 @@ private class DrawablePainter(
 }
 
 /**
- * Remembers a wrapped a [Drawable] as a [Painter], attempting to un-wrap the drawable contents
- * and use Compose primitives where possible.
+ * Remembers [Drawable] wrapped up as a [Painter]. This function attempts to un-wrap the
+ * drawable contents and use Compose primitives where possible.
+ *
+ * If the provided [drawable] is `null`, an empty no-op painter is returned.
  *
  * This function tries to dispatch lifecycle events to [drawable] as much as possible from
  * within Compose.
  */
 @Composable
-fun rememberDrawablePainter(drawable: Drawable): Painter {
+fun rememberDrawablePainter(drawable: Drawable?): Painter {
     val painter = remember(drawable) {
         @Suppress("DEPRECATION") // We will inline the code once we remove the function
-        drawable.toPainter()
+        drawable?.toPainter() ?: EmptyPainter
     }
 
     DisposableEffect(painter) {

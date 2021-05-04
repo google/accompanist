@@ -59,8 +59,7 @@ import com.google.accompanist.insets.toPaddingValues
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
-import com.google.accompanist.systemuicontroller.LocalSystemUiController
-import com.google.accompanist.systemuicontroller.rememberAndroidSystemUiController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class EdgeToEdgeBottomNavigation : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,11 +78,8 @@ class EdgeToEdgeBottomNavigation : ComponentActivity() {
 
         setContent {
             AccompanistSampleTheme {
-                val controller = rememberAndroidSystemUiController()
-                CompositionLocalProvider(LocalSystemUiController provides controller) {
-                    ProvideWindowInsets {
-                        Sample()
-                    }
+                ProvideWindowInsets {
+                    Sample()
                 }
             }
         }
@@ -97,7 +93,7 @@ private const val TranslucentAppBarAlpha = 0.93f
 
 @Composable
 private fun Sample() {
-    val systemUiController = LocalSystemUiController.current
+    val systemUiController = rememberSystemUiController()
     val useDarkIcons = MaterialTheme.colors.isLight
     SideEffect {
         systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = useDarkIcons)

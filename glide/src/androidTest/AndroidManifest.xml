@@ -19,4 +19,8 @@
 
     <uses-sdk android:targetSdkVersion="30" />
 
+    <application>
+        <activity android:name="androidx.activity.ComponentActivity" />
+    </application>
+
 </manifest>

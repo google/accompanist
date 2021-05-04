@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-import com.google.accompanist.buildsrc.Libs
-import com.google.accompanist.buildsrc.Versions
-
 buildscript {
     repositories {
         google()
@@ -25,13 +22,14 @@ buildscript {
     }
 
     dependencies {
-        classpath Libs.androidGradlePlugin
-        classpath Libs.Kotlin.gradlePlugin
+        classpath libs.android.gradlePlugin
+        classpath libs.kotlin.gradlePlugin
 
-        classpath Libs.gradleMavenPublishPlugin
+        classpath libs.gradleMavenPublishPlugin
 
-        classpath Libs.Dokka.gradlePlugin
-        classpath Libs.Kotlin.binaryCompatibility
+        classpath libs.dokka
+
+        classpath libs.metalavaGradle
     }
 }
 
@@ -40,12 +38,6 @@ plugins {
 }
 
 apply plugin: 'org.jetbrains.dokka'
-
-apply plugin: 'binary-compatibility-validator'
-apiValidation {
-    // Ignore the sample from API tracking/checking
-    ignoredProjects += ["sample", "imageloading-testutils"]
-}
 
 tasks.withType(org.jetbrains.dokka.gradle.DokkaMultiModuleTask).configureEach {
     outputDirectory = rootProject.file('docs/api')
@@ -58,8 +50,9 @@ allprojects {
         mavenCentral()
         jcenter()
 
-        if (!Libs.AndroidX.Compose.snapshot.isEmpty()) {
-            maven { url Libs.AndroidX.Compose.snapshotUrl }
+        def composeSnapshot = libs.versions.composesnapshot.get()
+        if (composeSnapshot.length() > 1) {
+            maven { url "https://androidx.dev/snapshots/builds/$composeSnapshot/artifacts/repository/" }
         }
     }
 }
@@ -69,7 +62,7 @@ subprojects {
     spotless {
         kotlin {
             target "**/*.kt"
-            ktlint(Versions.ktlint)
+            ktlint(libs.versions.ktlint.get())
             licenseHeaderFile rootProject.file('spotless/copyright.txt')
         }
 
@@ -77,7 +70,7 @@ subprojects {
             target '**/*.gradle'
             greclipse().configFile(rootProject.file('spotless/greclipse.properties'))
             licenseHeaderFile rootProject.file('spotless/copyright.txt'),
-                    '(buildscript|apply|import)'
+                    '(buildscript|apply|import|plugins)'
         }
     }
 
@@ -166,15 +159,13 @@ subprojects {
             }
         }
 
-        if (!Libs.AndroidX.Compose.snapshot.isEmpty()) {
+        def composeSnapshot = libs.versions.composesnapshot.get()
+        if (composeSnapshot.length() > 1) {
             // We're depending on a Jetpack Compose snapshot, update the library version name
             // to indicate it's from a Compose snapshot
             def versionName = project.properties.get('VERSION_NAME')
             if (versionName.contains("SNAPSHOT")) {
-                version = versionName.replace(
-                        '-SNAPSHOT',
-                        ".compose-${Libs.AndroidX.Compose.snapshot}-SNAPSHOT"
-                )
+                version = versionName.replace('-SNAPSHOT', ".compose-${composeSnapshot}-SNAPSHOT")
             }
         }
 
