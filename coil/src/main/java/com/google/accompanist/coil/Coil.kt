@@ -43,9 +43,9 @@ import com.google.accompanist.imageloading.Loader
 import com.google.accompanist.imageloading.ShouldRefetchOnSizeChange
 import com.google.accompanist.imageloading.rememberLoadPainter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.sendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.launch
 
 /**
  * Composition local containing the preferred [ImageLoader] to be used by
@@ -139,8 +139,10 @@ internal class CoilLoader(
             requestBuilder?.invoke(this, size)
         }.target(
             onStart = { placeholder ->
-                launch {
-                    if (!isClosedForSend) send(ImageLoadState.Loading(placeholder, request))
+                // We need to send blocking, to ensure that Loading is sent
+                // before the execute result below.
+                if (!isClosedForSend) {
+                    sendBlocking(ImageLoadState.Loading(placeholder, request))
                 }
             }
         ).build()
