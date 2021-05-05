@@ -20,10 +20,11 @@ import android.graphics.Rect
 import androidx.core.view.WindowInsetsCompat
 import com.google.common.truth.Truth.assertThat
 
-internal fun WindowInsets.assertEqualTo(insets: androidx.core.view.WindowInsetsCompat) {
+internal fun WindowInsets.assertEqualTo(insets: WindowInsetsCompat) {
     systemBars.assertEqualTo(
         insets = insets.getInsets(WindowInsetsCompat.Type.systemBars()),
-        visible = insets.isVisible(WindowInsetsCompat.Type.systemBars()),
+        // WIC systemBars() is never really 'visible' as it looks at the caption bar too
+        visible = true,
     )
 
     statusBars.assertEqualTo(

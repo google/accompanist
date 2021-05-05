@@ -205,7 +205,7 @@ private class CalculatedInsetsType(vararg types: InsetsType) : InsetsType {
     }
 
     override val isVisible: Boolean by derivedStateOf {
-        types.any { it.isVisible }
+        types.all { it.isVisible }
     }
 
     override val animationInProgress: Boolean by derivedStateOf {
