@@ -83,7 +83,8 @@ package com.google.accompanist.insets {
   }
 
   public final class InsetsTypeKt {
-    method public static com.google.accompanist.insets.InsetValues coerceEachDimensionAtLeast(com.google.accompanist.insets.InsetsType, com.google.accompanist.insets.InsetsType minimumValue);
+    method public static com.google.accompanist.insets.InsetValues coerceEachDimensionAtLeast(com.google.accompanist.insets.InsetValues, com.google.accompanist.insets.InsetValues minimumValue);
+    method public static com.google.accompanist.insets.InsetsType derivedInsetsTypeOf(com.google.accompanist.insets.InsetsType... types);
   }
 
   public final class SimpleImeAnimationControllerKt {

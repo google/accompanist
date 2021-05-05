@@ -434,7 +434,7 @@ internal class RootWindowInsets : WindowInsets {
     /**
      * Inset values which match [WindowInsetsCompat.Type.systemBars]
      */
-    override val systemBars: InsetsType = CalculatedInsetsType(statusBars, navigationBars)
+    override val systemBars: InsetsType = derivedInsetsTypeOf(statusBars, navigationBars)
 }
 
 /**
@@ -446,7 +446,7 @@ internal class ImmutableWindowInsets(
     override val statusBars: InsetsType = InsetsType.Empty,
     override val ime: InsetsType = InsetsType.Empty,
 ) : WindowInsets {
-    override val systemBars: InsetsType = CalculatedInsetsType(statusBars, navigationBars)
+    override val systemBars: InsetsType = derivedInsetsTypeOf(statusBars, navigationBars)
 }
 
 @RequiresOptIn(message = "Animated Insets support is experimental. The API may be changed in the future.")

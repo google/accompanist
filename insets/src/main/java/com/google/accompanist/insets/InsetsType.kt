@@ -191,20 +191,33 @@ internal class ImmutableInsetsType(
 ) : InsetsType
 
 /**
- * Implementation of [InsetsType] whose values are calculated and derived from the [InsetsType]
- * instances passed in to [types].
+ * Returns an instance of [InsetsType] whose values are calculated and derived from the
+ * [InsetsType] instances passed in to [types].
+ *
+ * Each [InsetsType] passed in will be coerced with each other, such that the maximum value for
+ * each dimension is calculated and used. This is typically used for two purposes:
+ *
+ * 1) Creating semantic types. [WindowInsets.systemBars] is a good example, as it is the derived
+ * insets of [WindowInsets.statusBars] and [WindowInsets.navigationBars].
+ * 2) Combining insets for specific usages. [navigationBarsWithImePadding] is a good example, as it
+ * is the derived insets of the [WindowInsets.ime] insets, coerced by the
+ * [WindowInsets.navigationBars] insets.
  */
-internal class CalculatedInsetsType(vararg types: InsetsType) : InsetsType {
+fun derivedInsetsTypeOf(vararg types: InsetsType): InsetsType = CalculatedInsetsType(*types)
+
+/**
+ * Implementation of [InsetsType] which is the backing implementation for [derivedInsetsTypeOf].
+ */
+private class CalculatedInsetsType(vararg types: InsetsType) : InsetsType {
     override val layoutInsetValues: InsetValues by derivedStateOf {
         types.fold(InsetValues.Empty) { acc, insetsType ->
-            // TODO: Probably want to coerce rather than add
-            acc + insetsType.layoutInsetValues
+            acc.coerceEachDimensionAtLeast(insetsType)
         }
     }
+
     override val animatedInsetValues: InsetValues by derivedStateOf {
         types.fold(InsetValues.Empty) { acc, insetsType ->
-            // TODO: Probably want to coerce rather than add
-            acc + insetsType.animatedInsetValues
+            acc.coerceEachDimensionAtLeast(insetsType)
         }
     }
 
@@ -229,7 +242,7 @@ internal class CalculatedInsetsType(vararg types: InsetsType) : InsetsType {
  * dimension value in [minimumValue], otherwise a copy of this with each dimension coerced with the
  * corresponding dimension value in [minimumValue].
  */
-fun InsetsType.coerceEachDimensionAtLeast(minimumValue: InsetsType): InsetValues {
+fun InsetValues.coerceEachDimensionAtLeast(minimumValue: InsetValues): InsetValues {
     return takeIf {
         // Fast path, no need to copy if: this >= minimumValue
         it.left >= minimumValue.left && it.top >= minimumValue.top &&

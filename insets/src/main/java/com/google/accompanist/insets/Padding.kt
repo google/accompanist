@@ -23,6 +23,7 @@ package com.google.accompanist.insets
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.layout.LayoutModifier
@@ -115,9 +116,11 @@ fun Modifier.imePadding(): Modifier = composed {
  * at the bottom of the screen.
  */
 fun Modifier.navigationBarsWithImePadding(): Modifier = composed {
+    val ime = LocalWindowInsets.current.ime
+    val navBars = LocalWindowInsets.current.navigationBars
+    val insets = remember(ime, navBars) { derivedInsetsTypeOf(ime, navBars) }
     InsetsPaddingModifier(
-        insetsType = LocalWindowInsets.current.ime,
-        minimumInsetsType = LocalWindowInsets.current.navigationBars,
+        insetsType = insets,
         applyLeft = true,
         applyRight = true,
         applyBottom = true,
@@ -126,7 +129,6 @@ fun Modifier.navigationBarsWithImePadding(): Modifier = composed {
 
 private data class InsetsPaddingModifier(
     private val insetsType: InsetsType,
-    private val minimumInsetsType: InsetsType? = null,
     private val applyLeft: Boolean = false,
     private val applyTop: Boolean = false,
     private val applyRight: Boolean = false,
@@ -136,15 +138,10 @@ private data class InsetsPaddingModifier(
         measurable: Measurable,
         constraints: Constraints
     ): MeasureResult {
-        val transformedInsets = if (minimumInsetsType != null) {
-            // If we have a minimum insets, coerce each dimensions
-            insetsType.coerceEachDimensionAtLeast(minimumInsetsType)
-        } else insetsType
-
-        val left = if (applyLeft) transformedInsets.left else 0
-        val top = if (applyTop) transformedInsets.top else 0
-        val right = if (applyRight) transformedInsets.right else 0
-        val bottom = if (applyBottom) transformedInsets.bottom else 0
+        val left = if (applyLeft) insetsType.left else 0
+        val top = if (applyTop) insetsType.top else 0
+        val right = if (applyRight) insetsType.right else 0
+        val bottom = if (applyBottom) insetsType.bottom else 0
         val horizontal = left + right
         val vertical = top + bottom
 
