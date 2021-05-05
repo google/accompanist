@@ -16,7 +16,7 @@
         <link rel="canonical" href="https://google.github.io/accompanist/insets/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.2">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.3">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.6f955dcd.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.e35208c4.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.ef6f36e2.min.css">
@@ -487,6 +487,13 @@
           <li class="md-nav__item">
   <a href="#paddingvalues" class="md-nav__link">
     PaddingValues
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inset-aware-layouts" class="md-nav__link">
+    Inset-aware layouts
   </a>
   
 </li>
@@ -979,6 +986,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#inset-aware-layouts" class="md-nav__link">
+    Inset-aware layouts
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1071,9 +1085,10 @@ wrap your content. This would typically be done near the top level of your compo
 <p><code>LocalWindowInsets</code> holds an instance of <code>WindowInsets</code> which contains the value of various <a href="https://developer.android.com/reference/kotlin/androidx/core/view/WindowInsetsCompat">WindowInsets</a> <a href="https://developer.android.com/reference/kotlin/androidx/core/view/WindowInsetsCompat.Type">types</a>. You can use the values manually like so:</p>
 <div class="highlight"><pre><span></span><code><span class="nd">@Composable</span>
 <span class="kd">fun</span> <span class="nf">ImeAvoidingBox</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">val</span> <span class="nv">insets</span> <span class="o">=</span> <span class="n">LocalWindowInsets</span><span class="p">.</span><span class="na">current</span>
+    <span class="kd">val</span> <span class="nv">insets</span> <span class="o">=</span> <span class="n">LocalWindowInsets</span><span class="p">.</span><span class="na">current</span>
 
-  <span class="n">Box</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="na">padding</span><span class="p">(</span><span class="n">bottom</span> <span class="o">=</span> <span class="n">insets</span><span class="p">.</span><span class="na">ime</span><span class="p">.</span><span class="na">bottom</span><span class="p">))</span>
+    <span class="kd">val</span> <span class="nv">imeBottom</span> <span class="o">=</span> <span class="n">with</span><span class="p">(</span><span class="n">LocalDensity</span><span class="p">.</span><span class="na">current</span><span class="p">)</span> <span class="p">{</span> <span class="n">insets</span><span class="p">.</span><span class="na">ime</span><span class="p">.</span><span class="na">bottom</span><span class="p">.</span><span class="na">toDp</span><span class="p">()</span> <span class="p">}</span>
+    <span class="n">Box</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="na">padding</span><span class="p">(</span><span class="n">bottom</span> <span class="o">=</span> <span class="n">imeBottom</span><span class="p">))</span>
 <span class="p">}</span>
 </code></pre></div>
 <p>...but we also provide some easy-to-use <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier">Modifier</a>s.</p>
@@ -1090,12 +1105,14 @@ wrap your content. This would typically be done near the top level of your compo
 </ul>
 <p>These are commonly used to move composables out from under the system bars. The common example would be a <a href="https://developer.android.com/reference/kotlin/androidx/compose/material/package-summary#floatingactionbutton"><code>FloatingActionButton</code></a>:</p>
 <div class="highlight"><pre><span></span><code><span class="n">FloatingActionButton</span><span class="p">(</span>
-    <span class="n">icon</span> <span class="o">=</span> <span class="p">{</span> <span class="n">Icon</span><span class="p">(...)</span> <span class="p">},</span>
+    <span class="n">onClick</span> <span class="o">=</span> <span class="p">{</span> <span class="cm">/* TODO */</span> <span class="p">},</span>
     <span class="n">modifier</span> <span class="o">=</span> <span class="n">Modifier</span>
         <span class="p">.</span><span class="na">align</span><span class="p">(</span><span class="n">Alignment</span><span class="p">.</span><span class="na">BottomEnd</span><span class="p">)</span>
         <span class="p">.</span><span class="na">padding</span><span class="p">(</span><span class="m">16.</span><span class="n">dp</span><span class="p">)</span> <span class="c1">// normal 16dp of padding for FABs</span>
         <span class="p">.</span><span class="na">navigationBarsPadding</span><span class="p">()</span> <span class="c1">// Move it out from under the nav bar</span>
-<span class="p">)</span>
+<span class="p">)</span> <span class="p">{</span>
+    <span class="n">Icon</span><span class="p">(</span><span class="n">imageVector</span> <span class="o">=</span> <span class="n">Icons</span><span class="p">.</span><span class="na">Default</span><span class="p">.</span><span class="na">Add</span><span class="p">,</span> <span class="n">contentDescription</span> <span class="o">=</span> <span class="kc">null</span><span class="p">)</span>
+<span class="p">}</span>
 </code></pre></div>
 <h4 id="size-modifiers">Size modifiers<a class="headerlink" href="#size-modifiers" title="Permanent link">&para;</a></h4>
 <p>The size modifiers allow you to match the size of a composable to a specific type of inset. Currently we provide:</p>
@@ -1116,13 +1133,24 @@ wrap your content. This would typically be done near the top level of your compo
 <p>Compose also provides the concept of <a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/PaddingValues"><code>PaddingValues</code></a>, a data class which contains the padding values to be applied on all dimensions (similar to a rect). This is commonly used with container composables, such as <a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/lazy/package-summary#lazycolumn"><code>LazyColumn</code></a>, to set the content padding.</p>
 <p>You may want to use inset values for content padding, so this library provides the <code>Insets.toPaddingValues()</code> extension function to convert between <code>Insets</code> and <code>PaddingValues</code>. Here's an example of using the system bars insets:</p>
 <div class="highlight"><pre><span></span><code><span class="n">LazyColumn</span><span class="p">(</span>
-  <span class="n">contentPadding</span> <span class="o">=</span> <span class="n">LocalWindowInsets</span><span class="p">.</span><span class="na">current</span><span class="p">.</span><span class="na">systemBars</span><span class="p">.</span><span class="na">toPaddingValues</span><span class="p">()</span>
-<span class="p">)</span>
+    <span class="n">contentPadding</span> <span class="o">=</span> <span class="n">LocalWindowInsets</span><span class="p">.</span><span class="na">current</span><span class="p">.</span><span class="na">systemBars</span><span class="p">.</span><span class="na">toPaddingValues</span><span class="p">()</span>
+<span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// content</span>
+<span class="p">}</span>
 </code></pre></div>
 <p>For a more complex example, see the <a href="https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/insets/EdgeToEdgeLazyColumn.kt"><code>EdgeToEdgeLazyColumn</code></a> example:</p>
 <p><a href="images/edge-to-edge-list.jpg">
 <img src="images/edge-to-edge-list.jpg" width=300>
 </a></p>
+<h3 id="inset-aware-layouts">Inset-aware layouts<a class="headerlink" href="#inset-aware-layouts" title="Permanent link">&para;</a></h3>
+<p>Unfortunately, most of Compose Material's layouts do not support the use of content padding, which means that the following code probably doesn't produce the effect you want:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// This likely doesn&#39;t do what you want</span>
+<span class="n">TopAppBar</span><span class="p">(</span>
+    <span class="c1">// content</span>
+    <span class="n">modifier</span> <span class="o">=</span> <span class="n">Modifier</span><span class="p">.</span><span class="na">statusBarsPadding</span><span class="p">()</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>To workaround this, our sample has a number of wrapper layouts in the <a href="https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/insets/InsetAwareLayouts.kt"><code>InsetAwareLayouts.kt</code></a> file which may be useful. These are used in the <code>EdgeToEdgeLazyColumn</code> sample for example.</p>
 <h2 id="experimental">🚧 Experimental<a class="headerlink" href="#experimental" title="Permanent link">&para;</a></h2>
 <p>The features below are experimental, and require developers to <a href="https://kotlinlang.org/docs/reference/opt-in-requirements.html">opt-in</a>.</p>
 <h3 id="animated-insets-support">Animated Insets support<a class="headerlink" href="#animated-insets-support" title="Permanent link">&para;</a></h3>
