@@ -21,32 +21,26 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.common.truth.Truth.assertThat
 
 internal fun WindowInsets.assertEqualTo(insets: WindowInsetsCompat) {
-    systemBars.assertEqualTo(
-        insets = insets.getInsets(WindowInsetsCompat.Type.systemBars()),
-        // WIC systemBars() is never really 'visible' as it looks at the caption bar too
-        visible = true,
-    )
+    statusBars.assertEqualTo(insets.getInsets(WindowInsetsCompat.Type.statusBars()))
+    assertThat(statusBars.isVisible)
+        .isEqualTo(insets.isVisible(WindowInsetsCompat.Type.statusBars()))
 
-    statusBars.assertEqualTo(
-        insets = insets.getInsets(WindowInsetsCompat.Type.statusBars()),
-        visible = insets.isVisible(WindowInsetsCompat.Type.statusBars()),
-    )
+    navigationBars.assertEqualTo(insets.getInsets(WindowInsetsCompat.Type.navigationBars()))
+    assertThat(navigationBars.isVisible)
+        .isEqualTo(insets.isVisible(WindowInsetsCompat.Type.navigationBars()))
 
-    navigationBars.assertEqualTo(
-        insets = insets.getInsets(WindowInsetsCompat.Type.navigationBars()),
-        visible = insets.isVisible(WindowInsetsCompat.Type.navigationBars()),
-    )
+    ime.assertEqualTo(insets.getInsets(WindowInsetsCompat.Type.ime()))
+    assertThat(ime.isVisible)
+        .isEqualTo(insets.isVisible(WindowInsetsCompat.Type.ime()))
 
-    ime.assertEqualTo(
-        insets = insets.getInsets(WindowInsetsCompat.Type.ime()),
-        visible = insets.isVisible(WindowInsetsCompat.Type.ime()),
-    )
+    systemBars.assertEqualTo(insets.getInsets(WindowInsetsCompat.Type.systemBars()))
+    // It's difficult to create an expected value for isVisible as it depends on the system ui
+    // of the device.
 }
 
-internal fun InsetsType.assertEqualTo(insets: androidx.core.graphics.Insets, visible: Boolean) {
+internal fun WindowInsets.Type.assertEqualTo(insets: androidx.core.graphics.Insets) {
     // This might look a bit weird, why are we using a Rect? Well, it makes the assertion
     // error message much easier to read, by containing all of the dimensions.
     assertThat(Rect(left, top, right, bottom))
         .isEqualTo(Rect(insets.left, insets.top, insets.right, insets.bottom))
-    assertThat(isVisible).isEqualTo(visible)
 }

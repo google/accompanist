@@ -161,7 +161,7 @@ fun Modifier.navigationBarsWidth(
  * issue tracker.
  */
 private data class InsetsSizeModifier(
-    private val insetsType: InsetsType,
+    private val insetsType: WindowInsets.Type,
     private val widthSide: HorizontalSide? = null,
     private val additionalWidth: Dp = 0.dp,
     private val heightSide: VerticalSide? = null,

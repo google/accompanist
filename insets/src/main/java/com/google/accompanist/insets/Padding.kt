@@ -115,7 +115,7 @@ fun Modifier.imePadding(): Modifier = composed {
 fun Modifier.navigationBarsWithImePadding(): Modifier = composed {
     val ime = LocalWindowInsets.current.ime
     val navBars = LocalWindowInsets.current.navigationBars
-    val insets = remember(ime, navBars) { derivedInsetsTypeOf(ime, navBars) }
+    val insets = remember(ime, navBars) { derivedWindowInsetsTypeOf(ime, navBars) }
     InsetsPaddingModifier(
         insetsType = insets,
         applyLeft = true,
@@ -125,7 +125,7 @@ fun Modifier.navigationBarsWithImePadding(): Modifier = composed {
 }
 
 private data class InsetsPaddingModifier(
-    private val insetsType: InsetsType,
+    private val insetsType: WindowInsets.Type,
     private val applyLeft: Boolean = false,
     private val applyTop: Boolean = false,
     private val applyRight: Boolean = false,
@@ -165,7 +165,7 @@ private data class InsetsPaddingModifier(
  * @param additionalVertical Value to add to the top and bottom dimensions.
  */
 @Composable
-inline fun InsetsType.toPaddingValues(
+inline fun WindowInsets.Type.toPaddingValues(
     start: Boolean = true,
     top: Boolean = true,
     end: Boolean = true,
@@ -196,7 +196,7 @@ inline fun InsetsType.toPaddingValues(
  * @param additionalBottom Value to add to the bottom dimension.
  */
 @Composable
-fun InsetsType.toPaddingValues(
+fun WindowInsets.Type.toPaddingValues(
     start: Boolean = true,
     top: Boolean = true,
     end: Boolean = true,

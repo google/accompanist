@@ -20,60 +20,29 @@ package com.google.accompanist.insets {
     method @androidx.compose.runtime.Composable @com.google.accompanist.insets.ExperimentalAnimatedInsets public static androidx.compose.ui.input.nestedscroll.NestedScrollConnection rememberImeNestedScrollConnection(optional boolean scrollImeOffScreenWhenVisible, optional boolean scrollImeOnScreenWhenNotVisible);
   }
 
-  @androidx.compose.runtime.Stable public interface InsetValues {
-    method public default com.google.accompanist.insets.InsetValues copy(optional int left, optional int top, optional int right, optional int bottom);
+  @androidx.compose.runtime.Stable public interface Insets {
+    method public default com.google.accompanist.insets.Insets copy(optional int left, optional int top, optional int right, optional int bottom);
     method @IntRange(from=0) public int getBottom();
     method @IntRange(from=0) public int getLeft();
     method @IntRange(from=0) public int getRight();
     method @IntRange(from=0) public int getTop();
-    method public default operator com.google.accompanist.insets.InsetValues minus(com.google.accompanist.insets.InsetValues other);
-    method public default operator com.google.accompanist.insets.InsetValues plus(com.google.accompanist.insets.InsetValues other);
+    method public default operator com.google.accompanist.insets.Insets minus(com.google.accompanist.insets.Insets other);
+    method public default operator com.google.accompanist.insets.Insets plus(com.google.accompanist.insets.Insets other);
     property @IntRange(from=0) public abstract int bottom;
     property @IntRange(from=0) public abstract int left;
     property @IntRange(from=0) public abstract int right;
     property @IntRange(from=0) public abstract int top;
-    field public static final com.google.accompanist.insets.InsetValues.Companion Companion;
+    field public static final com.google.accompanist.insets.Insets.Companion Companion;
   }
 
-  public static final class InsetValues.Companion {
-    method public com.google.accompanist.insets.InsetValues InsetValues(optional int left, optional int top, optional int right, optional int bottom);
-    method public com.google.accompanist.insets.InsetValues getEmpty();
-    property public final com.google.accompanist.insets.InsetValues Empty;
+  public static final class Insets.Companion {
+    method public com.google.accompanist.insets.Insets Insets(optional int left, optional int top, optional int right, optional int bottom);
+    method public com.google.accompanist.insets.Insets getEmpty();
+    property public final com.google.accompanist.insets.Insets Empty;
   }
 
-  public final class InsetValuesKt {
-    method public static com.google.accompanist.insets.InsetValues coerceEachDimensionAtLeast(com.google.accompanist.insets.InsetValues, com.google.accompanist.insets.InsetValues minimumValue);
-  }
-
-  @androidx.compose.runtime.Stable public interface InsetsType extends com.google.accompanist.insets.InsetValues {
-    method public com.google.accompanist.insets.InsetValues getAnimatedInsetValues();
-    method @FloatRange(from=0.0, to=1.0) public float getAnimationFraction();
-    method public boolean getAnimationInProgress();
-    method public default int getBottom();
-    method public com.google.accompanist.insets.InsetValues getLayoutInsetValues();
-    method public default int getLeft();
-    method public default int getRight();
-    method public default int getTop();
-    method public boolean isVisible();
-    property public abstract com.google.accompanist.insets.InsetValues animatedInsetValues;
-    property @FloatRange(from=0.0, to=1.0) public abstract float animationFraction;
-    property public abstract boolean animationInProgress;
-    property public default int bottom;
-    property public abstract boolean isVisible;
-    property public abstract com.google.accompanist.insets.InsetValues layoutInsetValues;
-    property public default int left;
-    property public default int right;
-    property public default int top;
-    field public static final com.google.accompanist.insets.InsetsType.Companion Companion;
-  }
-
-  public static final class InsetsType.Companion {
-    method public com.google.accompanist.insets.InsetsType getEmpty();
-    property public final com.google.accompanist.insets.InsetsType Empty;
-  }
-
-  public final class InsetsTypeKt {
-    method public static com.google.accompanist.insets.InsetsType derivedInsetsTypeOf(com.google.accompanist.insets.InsetsType... types);
+  public final class InsetsKt {
+    method public static com.google.accompanist.insets.Insets coerceEachDimensionAtLeast(com.google.accompanist.insets.Insets, com.google.accompanist.insets.Insets minimumValue);
   }
 
   public final class PaddingKt {
@@ -82,8 +51,8 @@ package com.google.accompanist.insets {
     method public static androidx.compose.ui.Modifier navigationBarsWithImePadding(androidx.compose.ui.Modifier);
     method public static androidx.compose.ui.Modifier statusBarsPadding(androidx.compose.ui.Modifier);
     method public static androidx.compose.ui.Modifier systemBarsPadding(androidx.compose.ui.Modifier, optional boolean enabled);
-    method @androidx.compose.runtime.Composable public static androidx.compose.foundation.layout.PaddingValues toPaddingValues-FJxeph0(com.google.accompanist.insets.InsetsType, optional boolean start, optional boolean top, optional boolean end, optional boolean bottom, optional float additionalStart, optional float additionalTop, optional float additionalEnd, optional float additionalBottom);
-    method @androidx.compose.runtime.Composable public static inline androidx.compose.foundation.layout.PaddingValues toPaddingValues-WXyNqVY(com.google.accompanist.insets.InsetsType, optional boolean start, optional boolean top, optional boolean end, optional boolean bottom, optional float additionalHorizontal, optional float additionalVertical);
+    method @androidx.compose.runtime.Composable public static inline androidx.compose.foundation.layout.PaddingValues toPaddingValues-J9vYEFM(com.google.accompanist.insets.WindowInsets.Type, optional boolean start, optional boolean top, optional boolean end, optional boolean bottom, optional float additionalHorizontal, optional float additionalVertical);
+    method @androidx.compose.runtime.Composable public static androidx.compose.foundation.layout.PaddingValues toPaddingValues-ye5NoXI(com.google.accompanist.insets.WindowInsets.Type, optional boolean start, optional boolean top, optional boolean end, optional boolean bottom, optional float additionalStart, optional float additionalTop, optional float additionalEnd, optional float additionalBottom);
   }
 
   public final class SimpleImeAnimationControllerKt {
@@ -110,17 +79,17 @@ package com.google.accompanist.insets {
   }
 
   @androidx.compose.runtime.Stable public interface WindowInsets {
-    method public default com.google.accompanist.insets.WindowInsets copy(optional com.google.accompanist.insets.InsetsType navigationBars, optional com.google.accompanist.insets.InsetsType statusBars, optional com.google.accompanist.insets.InsetsType systemGestures, optional com.google.accompanist.insets.InsetsType ime);
-    method public com.google.accompanist.insets.InsetsType getIme();
-    method public com.google.accompanist.insets.InsetsType getNavigationBars();
-    method public com.google.accompanist.insets.InsetsType getStatusBars();
-    method public com.google.accompanist.insets.InsetsType getSystemBars();
-    method public com.google.accompanist.insets.InsetsType getSystemGestures();
-    property public abstract com.google.accompanist.insets.InsetsType ime;
-    property public abstract com.google.accompanist.insets.InsetsType navigationBars;
-    property public abstract com.google.accompanist.insets.InsetsType statusBars;
-    property public abstract com.google.accompanist.insets.InsetsType systemBars;
-    property public abstract com.google.accompanist.insets.InsetsType systemGestures;
+    method public default com.google.accompanist.insets.WindowInsets copy(optional com.google.accompanist.insets.WindowInsets.Type navigationBars, optional com.google.accompanist.insets.WindowInsets.Type statusBars, optional com.google.accompanist.insets.WindowInsets.Type systemGestures, optional com.google.accompanist.insets.WindowInsets.Type ime);
+    method public com.google.accompanist.insets.WindowInsets.Type getIme();
+    method public com.google.accompanist.insets.WindowInsets.Type getNavigationBars();
+    method public com.google.accompanist.insets.WindowInsets.Type getStatusBars();
+    method public com.google.accompanist.insets.WindowInsets.Type getSystemBars();
+    method public com.google.accompanist.insets.WindowInsets.Type getSystemGestures();
+    property public abstract com.google.accompanist.insets.WindowInsets.Type ime;
+    property public abstract com.google.accompanist.insets.WindowInsets.Type navigationBars;
+    property public abstract com.google.accompanist.insets.WindowInsets.Type statusBars;
+    property public abstract com.google.accompanist.insets.WindowInsets.Type systemBars;
+    property public abstract com.google.accompanist.insets.WindowInsets.Type systemGestures;
     field public static final com.google.accompanist.insets.WindowInsets.Companion Companion;
   }
 
@@ -129,10 +98,41 @@ package com.google.accompanist.insets {
     property public final com.google.accompanist.insets.WindowInsets Empty;
   }
 
+  @androidx.compose.runtime.Stable public static interface WindowInsets.Type extends com.google.accompanist.insets.Insets {
+    method public com.google.accompanist.insets.Insets getAnimatedInsets();
+    method @FloatRange(from=0.0, to=1.0) public float getAnimationFraction();
+    method public boolean getAnimationInProgress();
+    method public default int getBottom();
+    method public com.google.accompanist.insets.Insets getLayoutInsets();
+    method public default int getLeft();
+    method public default int getRight();
+    method public default int getTop();
+    method public boolean isVisible();
+    property public abstract com.google.accompanist.insets.Insets animatedInsets;
+    property @FloatRange(from=0.0, to=1.0) public abstract float animationFraction;
+    property public abstract boolean animationInProgress;
+    property public default int bottom;
+    property public abstract boolean isVisible;
+    property public abstract com.google.accompanist.insets.Insets layoutInsets;
+    property public default int left;
+    property public default int right;
+    property public default int top;
+    field public static final com.google.accompanist.insets.WindowInsets.Type.Companion Companion;
+  }
+
+  public static final class WindowInsets.Type.Companion {
+    method public com.google.accompanist.insets.WindowInsets.Type getEmpty();
+    property public final com.google.accompanist.insets.WindowInsets.Type Empty;
+  }
+
   public final class WindowInsetsKt {
     method @androidx.compose.runtime.Composable public static void ProvideWindowInsets(optional boolean consumeWindowInsets, kotlin.jvm.functions.Function0<kotlin.Unit> content);
     method @androidx.compose.runtime.Composable @com.google.accompanist.insets.ExperimentalAnimatedInsets public static void ProvideWindowInsets(boolean windowInsetsAnimationsEnabled, optional boolean consumeWindowInsets, kotlin.jvm.functions.Function0<kotlin.Unit> content);
     method public static androidx.compose.runtime.ProvidableCompositionLocal<com.google.accompanist.insets.WindowInsets> getLocalWindowInsets();
+  }
+
+  public final class WindowInsetsTypeKt {
+    method public static com.google.accompanist.insets.WindowInsets.Type derivedWindowInsetsTypeOf(com.google.accompanist.insets.WindowInsets.Type... types);
   }
 
 }

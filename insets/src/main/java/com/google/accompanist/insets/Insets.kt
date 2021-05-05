@@ -28,7 +28,7 @@ import androidx.compose.runtime.setValue
  * offsets which describe changes to the four edges of a rectangle.
  */
 @Stable
-interface InsetValues {
+interface Insets {
     /**
      * The left dimension of these insets in pixels.
      */
@@ -61,16 +61,16 @@ interface InsetValues {
         top: Int = this.top,
         right: Int = this.right,
         bottom: Int = this.bottom,
-    ): InsetValues = ImmutableInsetValues(left, top, right, bottom)
+    ): Insets = ImmutableInsets(left, top, right, bottom)
 
-    operator fun minus(other: InsetValues): InsetValues = copy(
+    operator fun minus(other: Insets): Insets = copy(
         left = this.left - other.left,
         top = this.top - other.top,
         right = this.right - other.right,
         bottom = this.bottom - other.bottom,
     )
 
-    operator fun plus(other: InsetValues): InsetValues = copy(
+    operator fun plus(other: Insets): Insets = copy(
         left = this.left + other.left,
         top = this.top + other.top,
         right = this.right + other.right,
@@ -79,53 +79,46 @@ interface InsetValues {
 
     companion object {
         /**
-         * Creates an [InsetValues] instance with the given values.
+         * Creates an [Insets] instance with the given values.
          */
-        fun InsetValues(
+        fun Insets(
             left: Int = 0,
             top: Int = 0,
             right: Int = 0,
             bottom: Int = 0,
-        ): InsetValues = ImmutableInsetValues(left, top, right, bottom)
+        ): Insets = ImmutableInsets(left, top, right, bottom)
 
         /**
-         * An empty [InsetValues] instance, with each dimension set to a value of 0.
+         * An empty [Insets] instance, with each dimension set to a value of 0.
          */
-        val Empty: InsetValues = ImmutableInsetValues()
+        val Empty: Insets = ImmutableInsets()
     }
 }
 
 /**
- * Immutable implementation of [InsetValues].
+ * Immutable implementation of [Insets].
  */
 @Immutable
-internal class ImmutableInsetValues(
+internal class ImmutableInsets(
     override val left: Int = 0,
     override val top: Int = 0,
     override val right: Int = 0,
     override val bottom: Int = 0,
-) : InsetValues
+) : Insets
 
 /**
- * Mutable [androidx.compose.runtime.State] backed implementation of [InsetValues].
+ * Mutable [androidx.compose.runtime.State] backed implementation of [Insets].
  */
-internal class MutableInsetValues(
+internal class MutableInsets(
     left: Int = 0,
     top: Int = 0,
     right: Int = 0,
     bottom: Int = 0,
-) : InsetValues {
+) : Insets {
     override var left by mutableStateOf(left)
-        internal set
-
     override var top by mutableStateOf(top)
-        internal set
-
     override var right by mutableStateOf(right)
-        internal set
-
     override var bottom by mutableStateOf(bottom)
-        internal set
 
     fun reset() {
         left = 0
@@ -136,9 +129,9 @@ internal class MutableInsetValues(
 }
 
 /**
- * Updates our mutable state backed [InsetsType] from an Android system insets.
+ * Updates our mutable state backed [WindowInsets.Type] from an Android system insets.
  */
-internal fun MutableInsetValues.updateFrom(insets: androidx.core.graphics.Insets) {
+internal fun MutableInsets.updateFrom(insets: androidx.core.graphics.Insets) {
     left = insets.left
     top = insets.top
     right = insets.right
@@ -153,12 +146,12 @@ internal fun MutableInsetValues.updateFrom(insets: androidx.core.graphics.Insets
  * dimension value in [minimumValue], otherwise a copy of this with each dimension coerced with the
  * corresponding dimension value in [minimumValue].
  */
-fun InsetValues.coerceEachDimensionAtLeast(minimumValue: InsetValues): InsetValues {
+fun Insets.coerceEachDimensionAtLeast(minimumValue: Insets): Insets {
     return takeIf {
         // Fast path, no need to copy if: this >= minimumValue
         it.left >= minimumValue.left && it.top >= minimumValue.top &&
             it.right >= minimumValue.right && it.bottom >= minimumValue.bottom
-    } ?: MutableInsetValues(
+    } ?: MutableInsets(
         left = left.coerceAtLeast(minimumValue.left),
         top = top.coerceAtLeast(minimumValue.top),
         right = right.coerceAtLeast(minimumValue.right),

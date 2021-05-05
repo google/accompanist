@@ -18,6 +18,7 @@ package com.google.accompanist.insets
 
 import android.view.View
 import android.view.WindowInsetsAnimation
+import androidx.annotation.FloatRange
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
@@ -30,7 +31,7 @@ import androidx.core.view.WindowInsetsAnimationCompat
 import androidx.core.view.WindowInsetsCompat
 
 /**
- * The main insets holder, containing instances of [InsetsType] which each refer to different
+ * The main insets holder, containing instances of [WindowInsets.Type] which each refer to different
  * types of system display insets.
  */
 @Stable
@@ -39,36 +40,36 @@ interface WindowInsets {
     /**
      * Inset values which match [WindowInsetsCompat.Type.navigationBars]
      */
-    val navigationBars: InsetsType
+    val navigationBars: Type
 
     /**
      * Inset values which match [WindowInsetsCompat.Type.statusBars]
      */
-    val statusBars: InsetsType
+    val statusBars: Type
 
     /**
      * Inset values which match [WindowInsetsCompat.Type.ime]
      */
-    val ime: InsetsType
+    val ime: Type
 
     /**
      * Inset values which match [WindowInsetsCompat.Type.systemGestures]
      */
-    val systemGestures: InsetsType
+    val systemGestures: Type
 
     /**
      * Inset values which match [WindowInsetsCompat.Type.systemBars]
      */
-    val systemBars: InsetsType
+    val systemBars: Type
 
     /**
      * Returns a copy of this instance with the given values.
      */
     fun copy(
-        navigationBars: InsetsType = this.navigationBars,
-        statusBars: InsetsType = this.statusBars,
-        systemGestures: InsetsType = this.systemGestures,
-        ime: InsetsType = this.ime,
+        navigationBars: Type = this.navigationBars,
+        statusBars: Type = this.statusBars,
+        systemGestures: Type = this.systemGestures,
+        ime: Type = this.ime,
     ): WindowInsets = ImmutableWindowInsets(
         systemGestures = systemGestures,
         navigationBars = navigationBars,
@@ -81,6 +82,82 @@ interface WindowInsets {
          * Empty and immutable instance of [WindowInsets].
          */
         val Empty: WindowInsets = ImmutableWindowInsets()
+    }
+
+    /**
+     * Represents the values for a type of insets, and stores information about the layout insets,
+     * animating insets, and visibility of the insets.
+     *
+     * [WindowInsets.Type] instances are commonly stored in a [WindowInsets] instance.
+     */
+    @Stable
+    interface Type : Insets {
+        /**
+         * The layout insets for this [WindowInsets.Type]. These are the insets which are defined from the
+         * current window layout.
+         *
+         * You should not normally need to use this directly, and instead use [left], [top],
+         * [right], and [bottom] to return the correct value for the current state.
+         */
+        val layoutInsets: Insets
+
+        /**
+         * The animated insets for this [WindowInsets.Type]. These are the insets which are updated from
+         * any on-going animations. If there are no animations in progress, the returned [Insets] will
+         * be empty.
+         *
+         * You should not normally need to use this directly, and instead use [left], [top],
+         * [right], and [bottom] to return the correct value for the current state.
+         */
+        val animatedInsets: Insets
+
+        /**
+         * Whether the insets are currently visible.
+         */
+        val isVisible: Boolean
+
+        /**
+         * Whether this insets type is being animated at this moment.
+         */
+        val animationInProgress: Boolean
+
+        /**
+         * The left dimension of the insets in pixels.
+         */
+        override val left: Int
+            get() = (if (animationInProgress) animatedInsets else layoutInsets).left
+
+        /**
+         * The top dimension of the insets in pixels.
+         */
+        override val top: Int
+            get() = (if (animationInProgress) animatedInsets else layoutInsets).top
+
+        /**
+         * The right dimension of the insets in pixels.
+         */
+        override val right: Int
+            get() = (if (animationInProgress) animatedInsets else layoutInsets).right
+
+        /**
+         * The bottom dimension of the insets in pixels.
+         */
+        override val bottom: Int
+            get() = (if (animationInProgress) animatedInsets else layoutInsets).bottom
+
+        /**
+         * The progress of any ongoing animations, in the range of 0 to 1.
+         * If there is no animation in progress, this will return 0.
+         */
+        @get:FloatRange(from = 0.0, to = 1.0)
+        val animationFraction: Float
+
+        companion object {
+            /**
+             * Empty and immutable instance of [WindowInsets.Type].
+             */
+            val Empty: Type = ImmutableWindowInsetsType()
+        }
     }
 }
 
@@ -375,7 +452,7 @@ private class InnerWindowInsetsAnimationCallback(
         return platformInsets
     }
 
-    private fun MutableInsetsType.updateAnimation(
+    private fun MutableWindowInsetsType.updateAnimation(
         platformInsets: WindowInsetsCompat,
         runningAnimations: List<WindowInsetsAnimationCompat>,
         type: Int,
@@ -414,39 +491,39 @@ internal class RootWindowInsets : WindowInsets {
     /**
      * Inset values which match [WindowInsetsCompat.Type.systemGestures]
      */
-    override val systemGestures: MutableInsetsType = MutableInsetsType()
+    override val systemGestures: MutableWindowInsetsType = MutableWindowInsetsType()
 
     /**
      * Inset values which match [WindowInsetsCompat.Type.navigationBars]
      */
-    override val navigationBars: MutableInsetsType = MutableInsetsType()
+    override val navigationBars: MutableWindowInsetsType = MutableWindowInsetsType()
 
     /**
      * Inset values which match [WindowInsetsCompat.Type.statusBars]
      */
-    override val statusBars: MutableInsetsType = MutableInsetsType()
+    override val statusBars: MutableWindowInsetsType = MutableWindowInsetsType()
 
     /**
      * Inset values which match [WindowInsetsCompat.Type.ime]
      */
-    override val ime: MutableInsetsType = MutableInsetsType()
+    override val ime: MutableWindowInsetsType = MutableWindowInsetsType()
 
     /**
      * Inset values which match [WindowInsetsCompat.Type.systemBars]
      */
-    override val systemBars: InsetsType = derivedInsetsTypeOf(statusBars, navigationBars)
+    override val systemBars: WindowInsets.Type = derivedWindowInsetsTypeOf(statusBars, navigationBars)
 }
 
 /**
  * Shallow-immutable implementation of [WindowInsets].
  */
 internal class ImmutableWindowInsets(
-    override val systemGestures: InsetsType = InsetsType.Empty,
-    override val navigationBars: InsetsType = InsetsType.Empty,
-    override val statusBars: InsetsType = InsetsType.Empty,
-    override val ime: InsetsType = InsetsType.Empty,
+    override val systemGestures: WindowInsets.Type = WindowInsets.Type.Empty,
+    override val navigationBars: WindowInsets.Type = WindowInsets.Type.Empty,
+    override val statusBars: WindowInsets.Type = WindowInsets.Type.Empty,
+    override val ime: WindowInsets.Type = WindowInsets.Type.Empty,
 ) : WindowInsets {
-    override val systemBars: InsetsType = derivedInsetsTypeOf(statusBars, navigationBars)
+    override val systemBars: WindowInsets.Type = derivedWindowInsetsTypeOf(statusBars, navigationBars)
 }
 
 @RequiresOptIn(message = "Animated Insets support is experimental. The API may be changed in the future.")
