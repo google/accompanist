@@ -1,16 +1,6 @@
 // Signature format: 4.0
 package com.google.accompanist.insets {
 
-  public final class ComposeInsets {
-    method public static androidx.compose.ui.Modifier imePadding(androidx.compose.ui.Modifier);
-    method public static androidx.compose.ui.Modifier navigationBarsPadding(androidx.compose.ui.Modifier, optional boolean bottom, optional boolean left, optional boolean right);
-    method public static androidx.compose.ui.Modifier navigationBarsWithImePadding(androidx.compose.ui.Modifier);
-    method public static androidx.compose.ui.Modifier statusBarsPadding(androidx.compose.ui.Modifier);
-    method public static androidx.compose.ui.Modifier systemBarsPadding(androidx.compose.ui.Modifier, optional boolean enabled);
-    method @androidx.compose.runtime.Composable public static androidx.compose.foundation.layout.PaddingValues toPaddingValues-FJxeph0(com.google.accompanist.insets.InsetsType, optional boolean start, optional boolean top, optional boolean end, optional boolean bottom, optional float additionalStart, optional float additionalTop, optional float additionalEnd, optional float additionalBottom);
-    method @androidx.compose.runtime.Composable public static inline androidx.compose.foundation.layout.PaddingValues toPaddingValues-WXyNqVY(com.google.accompanist.insets.InsetsType, optional boolean start, optional boolean top, optional boolean end, optional boolean bottom, optional float additionalHorizontal, optional float additionalVertical);
-  }
-
   @kotlin.RequiresOptIn(message="Animated Insets support is experimental. The API may be changed in the future.") @kotlin.annotation.Retention(kotlin.annotation.AnnotationRetention) @kotlin.annotation.Target(allowedTargets={kotlin.annotation.AnnotationTarget, kotlin.annotation.AnnotationTarget}) public @interface ExperimentalAnimatedInsets {
   }
 
@@ -84,6 +74,16 @@ package com.google.accompanist.insets {
 
   public final class InsetsTypeKt {
     method public static com.google.accompanist.insets.InsetsType derivedInsetsTypeOf(com.google.accompanist.insets.InsetsType... types);
+  }
+
+  public final class PaddingKt {
+    method public static androidx.compose.ui.Modifier imePadding(androidx.compose.ui.Modifier);
+    method public static androidx.compose.ui.Modifier navigationBarsPadding(androidx.compose.ui.Modifier, optional boolean bottom, optional boolean left, optional boolean right);
+    method public static androidx.compose.ui.Modifier navigationBarsWithImePadding(androidx.compose.ui.Modifier);
+    method public static androidx.compose.ui.Modifier statusBarsPadding(androidx.compose.ui.Modifier);
+    method public static androidx.compose.ui.Modifier systemBarsPadding(androidx.compose.ui.Modifier, optional boolean enabled);
+    method @androidx.compose.runtime.Composable public static androidx.compose.foundation.layout.PaddingValues toPaddingValues-FJxeph0(com.google.accompanist.insets.InsetsType, optional boolean start, optional boolean top, optional boolean end, optional boolean bottom, optional float additionalStart, optional float additionalTop, optional float additionalEnd, optional float additionalBottom);
+    method @androidx.compose.runtime.Composable public static inline androidx.compose.foundation.layout.PaddingValues toPaddingValues-WXyNqVY(com.google.accompanist.insets.InsetsType, optional boolean start, optional boolean top, optional boolean end, optional boolean bottom, optional float additionalHorizontal, optional float additionalVertical);
   }
 
   public final class SimpleImeAnimationControllerKt {

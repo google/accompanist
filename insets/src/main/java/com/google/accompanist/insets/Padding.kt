@@ -16,9 +16,6 @@
 
 @file:Suppress("NOTHING_TO_INLINE", "unused")
 
-@file:JvmName("ComposeInsets")
-@file:JvmMultifileClass
-
 package com.google.accompanist.insets
 
 import androidx.compose.foundation.layout.PaddingValues
