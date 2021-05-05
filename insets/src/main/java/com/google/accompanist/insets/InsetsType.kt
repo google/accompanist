@@ -91,23 +91,6 @@ interface InsetsType : InsetValues {
     @get:FloatRange(from = 0.0, to = 1.0)
     val animationFraction: Float
 
-    /**
-     * TODO
-     */
-    fun copy(
-        layoutInsets: InsetValues = this.layoutInsetValues,
-        isVisible: Boolean = this.isVisible,
-        animatedInsets: InsetValues = this.animatedInsetValues,
-        animationInProgress: Boolean = this.animationInProgress,
-        animationFraction: Float = this.animationFraction,
-    ): InsetsType = ImmutableInsetsType(
-        layoutInsetValues = layoutInsets,
-        animatedInsetValues = animatedInsets,
-        isVisible = isVisible,
-        animationInProgress = animationInProgress,
-        animationFraction = animationFraction,
-    )
-
     companion object {
         /**
          * Empty and immutable instance of [InsetsType].
@@ -232,25 +215,4 @@ private class CalculatedInsetsType(vararg types: InsetsType) : InsetsType {
     override val animationFraction: Float by derivedStateOf {
         types.maxOf { it.animationFraction }
     }
-}
-
-/**
- * Ensures that each dimension is not less than corresponding dimension in the
- * specified [minimumValue].
- *
- * @return this if every dimension is greater than or equal to the corresponding
- * dimension value in [minimumValue], otherwise a copy of this with each dimension coerced with the
- * corresponding dimension value in [minimumValue].
- */
-fun InsetValues.coerceEachDimensionAtLeast(minimumValue: InsetValues): InsetValues {
-    return takeIf {
-        // Fast path, no need to copy if: this >= minimumValue
-        it.left >= minimumValue.left && it.top >= minimumValue.top &&
-            it.right >= minimumValue.right && it.bottom >= minimumValue.bottom
-    } ?: MutableInsetValues(
-        left = left.coerceAtLeast(minimumValue.left),
-        top = top.coerceAtLeast(minimumValue.top),
-        right = right.coerceAtLeast(minimumValue.right),
-        bottom = bottom.coerceAtLeast(minimumValue.bottom),
-    )
 }

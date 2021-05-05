@@ -52,10 +52,10 @@ package com.google.accompanist.insets {
   }
 
   public final class InsetValuesKt {
+    method public static com.google.accompanist.insets.InsetValues coerceEachDimensionAtLeast(com.google.accompanist.insets.InsetValues, com.google.accompanist.insets.InsetValues minimumValue);
   }
 
   @androidx.compose.runtime.Stable public interface InsetsType extends com.google.accompanist.insets.InsetValues {
-    method public default com.google.accompanist.insets.InsetsType copy(optional com.google.accompanist.insets.InsetValues layoutInsets, optional boolean isVisible, optional com.google.accompanist.insets.InsetValues animatedInsets, optional boolean animationInProgress, optional float animationFraction);
     method public com.google.accompanist.insets.InsetValues getAnimatedInsetValues();
     method @FloatRange(from=0.0, to=1.0) public float getAnimationFraction();
     method public boolean getAnimationInProgress();
@@ -83,7 +83,6 @@ package com.google.accompanist.insets {
   }
 
   public final class InsetsTypeKt {
-    method public static com.google.accompanist.insets.InsetValues coerceEachDimensionAtLeast(com.google.accompanist.insets.InsetValues, com.google.accompanist.insets.InsetValues minimumValue);
     method public static com.google.accompanist.insets.InsetsType derivedInsetsTypeOf(com.google.accompanist.insets.InsetsType... types);
   }
 
