@@ -207,7 +207,7 @@ class LoadPainter<R> internal constructor(
         // Update the request size, based on the provided canvas size
         requestSize = IntSize(
             width = if (size.width >= 0.5f) size.width.roundToInt() else -1,
-            height = if (size.height >= 0.5f) size.width.roundToInt() else -1,
+            height = if (size.height >= 0.5f) size.height.roundToInt() else -1,
         )
 
         val transitionColorFilter = transitionColorFilter
