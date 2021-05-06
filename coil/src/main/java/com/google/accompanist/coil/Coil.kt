@@ -160,7 +160,10 @@ internal class CoilLoader(
                     .build()
             }
             // Otherwise we have a zero size, so no point executing a request
-            else -> return@channelFlow
+            else -> {
+                if (!isClosedForSend) send(ImageLoadState.Empty)
+                return@channelFlow
+            }
         }
 
         val result = imageLoader.execute(sizedRequest).toResult(request)
