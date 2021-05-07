@@ -40,9 +40,6 @@
 
     <string name="pagers_title_nested">Pagers: Nested</string>
 
-    <string name="flowlayout_title_column">Flow Layout: Column</string>
-    <string name="flowlayout_title_row">Flow Layout: Row</string>
-
     <string name="swiperefresh_title_basics">Swipe Refresh: Basic</string>
     <string name="swiperefresh_title_content_padding">Swipe Refresh: Edge-to-edge</string>
     <string name="swiperefresh_title_tweaked">Swipe Refresh: Tweaked indicator</string>

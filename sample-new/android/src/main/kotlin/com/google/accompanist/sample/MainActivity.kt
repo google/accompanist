@@ -14,35 +14,22 @@
  * limitations under the License.
  */
 
-package com.google.accompanist.sample.flowlayout
+package com.google.accompanist.sample
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
-import androidx.compose.ui.res.stringResource
-import com.google.accompanist.flowlayout.FlowRow
-import com.google.accompanist.sample.AccompanistSampleTheme
-import com.google.accompanist.sample.R
+import androidx.compose.foundation.isSystemInDarkTheme
 
-class FlowRowSample : ComponentActivity() {
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
-            AccompanistSampleTheme {
-                Scaffold(
-                    topBar = {
-                        TopAppBar(
-                            title = { Text(text = stringResource(R.string.flowlayout_title_row)) }
-                        )
-                    }
-                ) {
-                    FlowRow {
-                        SampleContent()
-                    }
-                }
+            AccompanistSampleTheme(
+                darkTheme = isSystemInDarkTheme()
+            ) {
+                Samples()
             }
         }
     }
