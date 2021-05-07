@@ -44,9 +44,7 @@ private const val SlowVelocity = 300f
 
 @OptIn(ExperimentalPagerApi::class) // Pager is currently experimental
 abstract class PagerTest {
-
     protected abstract val offscreenLimit: Int
-    protected abstract val pageCount: Int
 
     @get:Rule
     val composeTestRule = createComposeRule()
@@ -59,13 +57,13 @@ abstract class PagerTest {
 
     @Test
     fun layout() {
-        setPagerContent(pageCount = 10)
-        assertPagerLayout(currentPage = 0)
+        val pagerState = setPagerContent(pageCount = 10)
+        assertPagerLayout(0, pagerState.pageCount)
     }
 
     @Test
     fun swipe() {
-        setPagerContent(pageCount = 10)
+        val pagerState = setPagerContent(pageCount = 10)
 
         // First test swiping towards end, from 0 to -1, which should no-op
         composeTestRule.onNodeWithTag("0")
@@ -74,7 +72,7 @@ abstract class PagerTest {
                 velocity = MediumVelocity,
             )
         // ...and assert that nothing happened
-        assertPagerLayout(currentPage = 0)
+        assertPagerLayout(0, pagerState.pageCount)
 
         // Now swipe towards start, from page 0 to page 1
         composeTestRule.onNodeWithTag("0")
@@ -83,12 +81,52 @@ abstract class PagerTest {
                 velocity = MediumVelocity,
             )
         // ...and assert that we now laid out from page 1
-        assertPagerLayout(currentPage = 1)
+        assertPagerLayout(1, pagerState.pageCount)
+    }
+
+    @Test
+    fun swipeToEndAndBack() {
+        val pagerState = setPagerContent(pageCount = 4)
+
+        // Now swipe towards start, from page 0 to page 1 and assert the layout
+        composeTestRule.onNodeWithTag("0").swipeAcrossCenter(-LongSwipeDistance)
+        assertThat(pagerState.currentPage).isEqualTo(1)
+        assertPagerLayout(1, pagerState.pageCount)
+
+        // Repeat for 1 -> 2
+        composeTestRule.onNodeWithTag("1").swipeAcrossCenter(-LongSwipeDistance)
+        assertThat(pagerState.currentPage).isEqualTo(2)
+        assertPagerLayout(2, pagerState.pageCount)
+
+        // Repeat for 2 -> 3
+        composeTestRule.onNodeWithTag("2").swipeAcrossCenter(-LongSwipeDistance)
+        assertThat(pagerState.currentPage).isEqualTo(3)
+        assertPagerLayout(3, pagerState.pageCount)
+
+        // Swipe past the last item. We shouldn't move
+        composeTestRule.onNodeWithTag("3").swipeAcrossCenter(-LongSwipeDistance)
+        assertThat(pagerState.currentPage).isEqualTo(3)
+        assertPagerLayout(3, pagerState.pageCount)
+
+        // Swipe back from 3 -> 2
+        composeTestRule.onNodeWithTag("3").swipeAcrossCenter(LongSwipeDistance)
+        assertThat(pagerState.currentPage).isEqualTo(2)
+        assertPagerLayout(2, pagerState.pageCount)
+
+        // Swipe back from 2 -> 1
+        composeTestRule.onNodeWithTag("2").swipeAcrossCenter(LongSwipeDistance)
+        assertThat(pagerState.currentPage).isEqualTo(1)
+        assertPagerLayout(1, pagerState.pageCount)
+
+        // Swipe back from 1 -> 0
+        composeTestRule.onNodeWithTag("1").swipeAcrossCenter(LongSwipeDistance)
+        assertThat(pagerState.currentPage).isEqualTo(0)
+        assertPagerLayout(0, pagerState.pageCount)
     }
 
     @Test
     fun mediumDistance_fastSwipe_toFling() {
-        setPagerContent(pageCount = 10)
+        val pagerState = setPagerContent(pageCount = 10)
 
         // Now swipe towards start, from page 0 to page 1, over a medium distance of the item width.
         // This should trigger a fling()
@@ -98,12 +136,12 @@ abstract class PagerTest {
                 velocity = FastVelocity,
             )
         // ...and assert that we now laid out from page 1
-        assertPagerLayout(currentPage = 1)
+        assertPagerLayout(1, pagerState.pageCount)
     }
 
     @Test
     fun mediumDistance_slowSwipe_toSnapForward() {
-        setPagerContent(pageCount = 10)
+        val pagerState = setPagerContent(pageCount = 10)
 
         // Now swipe towards start, from page 0 to page 1, over a medium distance of the item width.
         // This should trigger a spring to position 1
@@ -113,12 +151,12 @@ abstract class PagerTest {
                 velocity = SlowVelocity,
             )
         // ...and assert that we now laid out from page 1
-        assertPagerLayout(currentPage = 1)
+        assertPagerLayout(1, pagerState.pageCount)
     }
 
     @Test
     fun shortDistance_fastSwipe_toFling() {
-        setPagerContent(pageCount = 10)
+        val pagerState = setPagerContent(pageCount = 10)
 
         // Now swipe towards start, from page 0 to page 1, over a short distance of the item width.
         // This should trigger a fling to page 1
@@ -128,12 +166,12 @@ abstract class PagerTest {
                 velocity = FastVelocity,
             )
         // ...and assert that we now laid out from page 1
-        assertPagerLayout(currentPage = 1)
+        assertPagerLayout(1, pagerState.pageCount)
     }
 
     @Test
     fun shortDistance_slowSwipe_toSnapBack() {
-        setPagerContent(pageCount = 10)
+        val pagerState = setPagerContent(pageCount = 10)
 
         // Now swipe towards start, from page 0 to page 1, over a short distance of the item width.
         // This should trigger a spring back to the original position
@@ -143,7 +181,7 @@ abstract class PagerTest {
                 velocity = SlowVelocity,
             )
         // ...and assert that we 'sprang back' to page 0
-        assertPagerLayout(currentPage = 0)
+        assertPagerLayout(0, pagerState.pageCount)
     }
 
     @Suppress("DEPRECATION") // pageChanges
@@ -195,11 +233,11 @@ abstract class PagerTest {
 
         pagerState.scrollToPage(3)
         assertThat(pagerState.currentPage).isEqualTo(3)
-        assertPagerLayout(3)
+        assertPagerLayout(3, pagerState.pageCount)
 
         pagerState.scrollToPage(0)
         assertThat(pagerState.currentPage).isEqualTo(0)
-        assertPagerLayout(0)
+        assertPagerLayout(0, pagerState.pageCount)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -212,26 +250,26 @@ abstract class PagerTest {
         }
         composeTestRule.awaitIdle()
         assertThat(pagerState.currentPage).isEqualTo(3)
-        assertPagerLayout(3)
+        assertPagerLayout(3, pagerState.pageCount)
 
         withContext(applierScope.coroutineContext) {
             pagerState.animateScrollToPage(0)
         }
         composeTestRule.awaitIdle()
         assertThat(pagerState.currentPage).isEqualTo(0)
-        assertPagerLayout(0)
+        assertPagerLayout(0, pagerState.pageCount)
     }
 
     @Test
     @Ignore("Currently broken") // TODO: Will fix this once we move to Modifier.scrollable()
     fun a11yScroll() {
-        setPagerContent(pageCount = 10)
+        val pagerState = setPagerContent(pageCount = 10)
 
         // Perform a scroll to item 1
         composeTestRule.onNodeWithTag("1").performScrollTo()
 
         // ...and assert that we scrolled to page 1
-        assertPagerLayout(currentPage = 1)
+        assertPagerLayout(1, pagerState.pageCount)
     }
 
     /**
@@ -243,17 +281,17 @@ abstract class PagerTest {
      * Negative numbers mean swipe towards the start, positive towards the end.
      */
     abstract fun SemanticsNodeInteraction.swipeAcrossCenter(
-        velocity: Float,
-        distancePercentage: Float = 0f,
+        distancePercentage: Float,
+        velocity: Float = MediumVelocity
     ): SemanticsNodeInteraction
 
     // TODO: add test for state restoration?
 
-    private fun assertPagerLayout(currentPage: Int) {
+    private fun assertPagerLayout(currentPage: Int, pageCount: Int) {
         // The pages which are expected to be laid out, using the given current page,
         // offscreenLimit and page limit
         val expectedLaidOutPages = (currentPage - offscreenLimit)..(currentPage + offscreenLimit)
-            .coerceIn(0, pageCount)
+            .coerceIn(0, pageCount - 1)
 
         // Go through all of the pages, and assert the expected layout state
         (0 until pageCount).forEach { page ->
