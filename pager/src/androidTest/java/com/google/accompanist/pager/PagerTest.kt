@@ -90,36 +90,43 @@ abstract class PagerTest {
 
         // Now swipe towards start, from page 0 to page 1 and assert the layout
         composeTestRule.onNodeWithTag("0").swipeAcrossCenter(-LongSwipeDistance)
+        composeTestRule.waitForIdle()
         assertThat(pagerState.currentPage).isEqualTo(1)
         assertPagerLayout(1, pagerState.pageCount)
 
         // Repeat for 1 -> 2
         composeTestRule.onNodeWithTag("1").swipeAcrossCenter(-LongSwipeDistance)
+        composeTestRule.waitForIdle()
         assertThat(pagerState.currentPage).isEqualTo(2)
         assertPagerLayout(2, pagerState.pageCount)
 
         // Repeat for 2 -> 3
         composeTestRule.onNodeWithTag("2").swipeAcrossCenter(-LongSwipeDistance)
+        composeTestRule.waitForIdle()
         assertThat(pagerState.currentPage).isEqualTo(3)
         assertPagerLayout(3, pagerState.pageCount)
 
         // Swipe past the last item. We shouldn't move
         composeTestRule.onNodeWithTag("3").swipeAcrossCenter(-LongSwipeDistance)
+        composeTestRule.waitForIdle()
         assertThat(pagerState.currentPage).isEqualTo(3)
         assertPagerLayout(3, pagerState.pageCount)
 
         // Swipe back from 3 -> 2
         composeTestRule.onNodeWithTag("3").swipeAcrossCenter(LongSwipeDistance)
+        composeTestRule.waitForIdle()
         assertThat(pagerState.currentPage).isEqualTo(2)
         assertPagerLayout(2, pagerState.pageCount)
 
         // Swipe back from 2 -> 1
         composeTestRule.onNodeWithTag("2").swipeAcrossCenter(LongSwipeDistance)
+        composeTestRule.waitForIdle()
         assertThat(pagerState.currentPage).isEqualTo(1)
         assertPagerLayout(1, pagerState.pageCount)
 
         // Swipe back from 1 -> 0
         composeTestRule.onNodeWithTag("1").swipeAcrossCenter(LongSwipeDistance)
+        composeTestRule.waitForIdle()
         assertThat(pagerState.currentPage).isEqualTo(0)
         assertPagerLayout(0, pagerState.pageCount)
     }
