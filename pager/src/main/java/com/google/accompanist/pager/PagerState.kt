@@ -201,6 +201,9 @@ class PagerState(
         get() = _currentPage
         private set(value) {
             _currentPage = value.coerceIn(0, lastPageIndex)
+            if (DebugLog) {
+                Log.d(LogTag, "Current page changed: $_currentPage")
+            }
             // If the current page is changed, update the layout page too
             updateLayoutPages(_currentPage)
         }
@@ -427,8 +430,8 @@ class PagerState(
      */
     private fun updateLayoutForScrollPosition(position: Float) {
         val newIndex = floor(position).toInt()
-        currentLayoutPageOffset = position - newIndex
         updateLayoutPages(newIndex)
+        currentLayoutPageOffset = position - newIndex
     }
 
     /**
@@ -451,12 +454,21 @@ class PagerState(
     private fun scrollByOffset(deltaOffset: Float): Float {
         val current = absolutePosition
         val target = (current + deltaOffset).coerceIn(0f, lastPageIndex.toFloat())
+
+        if (DebugLog) {
+            Log.d(
+                LogTag,
+                "scrollByOffset [before]. delta:%.4f, current:%.4f, target:%.4f"
+                    .format(deltaOffset, current, target),
+            )
+        }
+
         updateLayoutForScrollPosition(target)
 
         if (DebugLog) {
             Log.d(
                 LogTag,
-                "scrollByOffset. delta:%.4f, new-page:%d, new-offset:%.4f"
+                "scrollByOffset [after]. delta:%.4f, new-page:%d, new-offset:%.4f"
                     .format(deltaOffset, currentLayoutPage, currentLayoutPageOffset),
             )
         }
