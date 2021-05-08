@@ -201,6 +201,9 @@ class PagerState(
         get() = _currentPage
         private set(value) {
             _currentPage = value.coerceIn(0, lastPageIndex)
+            if (DebugLog) {
+                Log.d(LogTag, "Current page changed: $_currentPage")
+            }
             // If the current page is changed, update the layout page too
             updateLayoutPages(_currentPage)
         }
@@ -427,8 +430,8 @@ class PagerState(
      */
     private fun updateLayoutForScrollPosition(position: Float) {
         val newIndex = floor(position).toInt()
-        currentLayoutPageOffset = position - newIndex
         updateLayoutPages(newIndex)
+        currentLayoutPageOffset = position - newIndex
     }
 
     /**
@@ -451,12 +454,21 @@ class PagerState(
     private fun scrollByOffset(deltaOffset: Float): Float {
         val current = absolutePosition
         val target = (current + deltaOffset).coerceIn(0f, lastPageIndex.toFloat())
+
+        if (DebugLog) {
+            Log.d(
+                LogTag,
+                "scrollByOffset [before]. delta:%.4f, current:%.4f, target:%.4f"
+                    .format(deltaOffset, current, target),
+            )
+        }
+
         updateLayoutForScrollPosition(target)
 
         if (DebugLog) {
             Log.d(
                 LogTag,
-                "scrollByOffset. delta:%.4f, new-page:%d, new-offset:%.4f"
+                "scrollByOffset [after]. delta:%.4f, new-page:%d, new-offset:%.4f"
                     .format(deltaOffset, currentLayoutPage, currentLayoutPageOffset),
             )
         }
@@ -534,14 +546,10 @@ class PagerState(
                 val coerced = value.coerceIn(0f, currentLayoutPageSize.toFloat())
                 scrollBy(coerced - (currentLayoutPageOffset * currentLayoutPageSize))
 
-                val currentLayoutPage = currentLayoutPage
                 // If we've scroll our target page (or beyond it), cancel the animation
-                val pastStartBound = initialVelocity < 0 &&
-                    (currentLayoutPage < target || (currentLayoutPage == target && currentLayoutPageOffset == 0f))
-                val pastEndBound = initialVelocity > 0 &&
-                    (currentLayoutPage > target || (currentLayoutPage == target && currentLayoutPageOffset > 0f))
-
-                if (pastStartBound || pastEndBound) {
+                if ((initialVelocity < 0 && absolutePosition < target) ||
+                    (initialVelocity > 0 && absolutePosition >= target)
+                ) {
                     // If we reach the bounds of the allowed offset, cancel the animation
                     cancelAnimation()
                     snapToPage(target)

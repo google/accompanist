@@ -104,12 +104,9 @@ class HorizontalPagerTest(
     private val reverseDirection: Boolean
         get() = if (layoutDirection == LayoutDirection.Rtl) !reverseLayout else reverseLayout
 
-    override val pageCount: Int
-        get() = 10
-
     override fun SemanticsNodeInteraction.swipeAcrossCenter(
+        distancePercentage: Float,
         velocity: Float,
-        distancePercentage: Float
     ): SemanticsNodeInteraction = swipeAcrossCenterWithVelocity(
         distancePercentageX = if (reverseDirection) -distancePercentage else distancePercentage,
         velocity = velocity,
