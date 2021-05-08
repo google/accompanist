@@ -546,12 +546,13 @@ class PagerState(
                 val coerced = value.coerceIn(0f, currentLayoutPageSize.toFloat())
                 scrollBy(coerced - (currentLayoutPageOffset * currentLayoutPageSize))
 
-                val currentLayoutPage = currentLayoutPage
+                val current = currentLayoutPage
+                val currentOffset = currentLayoutPageOffset
                 // If we've scroll our target page (or beyond it), cancel the animation
                 val pastStartBound = initialVelocity < 0 &&
-                    (currentLayoutPage < target || (currentLayoutPage == target && currentLayoutPageOffset == 0f))
+                    (current < target || (current == target && currentOffset < 0.001f))
                 val pastEndBound = initialVelocity > 0 &&
-                    (currentLayoutPage > target || (currentLayoutPage == target && currentLayoutPageOffset > 0f))
+                    (current > target || (current == target && currentOffset >= 0f))
 
                 if (pastStartBound || pastEndBound) {
                     // If we reach the bounds of the allowed offset, cancel the animation
