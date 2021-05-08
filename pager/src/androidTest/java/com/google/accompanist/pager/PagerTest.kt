@@ -129,6 +129,12 @@ abstract class PagerTest {
         composeTestRule.waitForIdle()
         assertThat(pagerState.currentPage).isEqualTo(0)
         assertPagerLayout(0, pagerState.pageCount)
+
+        // Swipe past the first item. We shouldn't move
+        composeTestRule.onNodeWithTag("0").swipeAcrossCenter(LongSwipeDistance)
+        composeTestRule.waitForIdle()
+        assertThat(pagerState.currentPage).isEqualTo(0)
+        assertPagerLayout(0, pagerState.pageCount)
     }
 
     @Test
