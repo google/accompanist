@@ -1,0 +1,177 @@
+<html><head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>ImageLoadState</title>
+</head><body><link href="../../../../../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../../";</script><script type="text/javascript" src="../../../../scripts/sourceset_dependencies.js" async></script><link href="../../../../styles/style.css" rel="Stylesheet"><link href="../../../../styles/logo-styles.css" rel="Stylesheet"><link href="../../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../../styles/main.css" rel="Stylesheet"><script type="text/javascript" src="../../../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../../../scripts/main.js" async></script>
+  
+    <div id="container">
+      <div id="leftColumn"><a href="../../../../index.html">
+            <div id="logo"></div>
+          </a>
+        <div id="paneSearch"></div>
+        <div id="sideMenu"></div>
+      </div>
+      <div id="main">
+        <script type="text/javascript" src="../../../../scripts/main.js"></script><div id="leftToggler"><span class="icon-toggler"></span></div>
+
+        <div class="main-content" id="content" pageids="imageloading-core::com.google.accompanist.imageloading/ImageLoadState///PointingToDeclaration//2113857789">
+          <div class="navigation-wrapper" id="navigation-wrapper">
+            <div class="breadcrumbs"><a href="../../../index.html">imageloading-core</a>/<a href="../index.html">com.google.accompanist.imageloading</a>/<a href="index.html">ImageLoadState</a></div>
+            <div class="pull-right d-flex">
+              <div id="searchBar"></div>
+            </div>
+          </div>
+          <div class="cover ">
+            <h1 class="cover"><span>Image</span><wbr><span>Load</span><wbr><span>State</span></h1>
+            <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":imageloading-core:dokkaHtmlPartial/release"><div class="symbol monospace">sealed class <a href="index.html">ImageLoadState</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Represents the state of a Image</p></div></div>
+          </div>
+          <div class="tabbedcontent">
+            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Types">Types</button><button class="section-tab" data-togglable="Extensions">Extensions</button><button class="section-tab" data-togglable="Sources">Sources</button><button class="section-tab" data-togglable="Inheritors">Inheritors</button></div>
+            <div class="tabs-section-body">
+              <h2 class="">Types</h2>
+              <div class="table" data-togglable="Types"><a data-name="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Empty%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F2113857789" anchor-label="Empty" id="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Empty%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F2113857789" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release"></a>
+                <div class="table-row" data-filterable-current=":imageloading-core:dokkaHtmlPartial/release" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="-empty/index.html">Empty</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Empty%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F2113857789"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":imageloading-core:dokkaHtmlPartial/release" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":imageloading-core:dokkaHtmlPartial/release"><div class="symbol monospace">object <a href="-empty/index.html">Empty</a> : <a href="index.html">ImageLoadState</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+<a data-name="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Empty%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F2113857789" anchor-label="Empty" id="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Empty%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F2113857789" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release"></a><div class="brief "><a data-name="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Empty%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F2113857789" anchor-label="Empty" id="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Empty%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F2113857789" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release"></a>Indicates that a request is not in progress.</div></div>
+</div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Error%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F2113857789" anchor-label="Error" id="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Error%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F2113857789" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release"></a>
+                <div class="table-row" data-filterable-current=":imageloading-core:dokkaHtmlPartial/release" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="-error/index.html">Error</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Error%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F2113857789"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":imageloading-core:dokkaHtmlPartial/release" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":imageloading-core:dokkaHtmlPartial/release"><div class="symbol monospace">data class <a href="-error/index.html">Error</a>(request: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>, result: <a href="https://developer.android.com/reference/kotlin/android/graphics/drawable/Drawable.html">Drawable</a>?, throwable: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html">Throwable</a>?) : <a href="index.html">ImageLoadState</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+<a data-name="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Error%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F2113857789" anchor-label="Error" id="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Error%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F2113857789" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release"></a><div class="brief "><a data-name="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Error%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F2113857789" anchor-label="Error" id="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Error%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F2113857789" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release"></a>Indicates that an error occurred while executing the request.</div></div>
+</div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Loading%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F2113857789" anchor-label="Loading" id="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Loading%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F2113857789" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release"></a>
+                <div class="table-row" data-filterable-current=":imageloading-core:dokkaHtmlPartial/release" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="-loading/index.html">Loading</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Loading%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F2113857789"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":imageloading-core:dokkaHtmlPartial/release" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":imageloading-core:dokkaHtmlPartial/release"><div class="symbol monospace">data class <a href="-loading/index.html">Loading</a>(placeholder: <a href="https://developer.android.com/reference/kotlin/android/graphics/drawable/Drawable.html">Drawable</a>?, request: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>) : <a href="index.html">ImageLoadState</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+<a data-name="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Loading%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F2113857789" anchor-label="Loading" id="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Loading%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F2113857789" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release"></a><div class="brief "><a data-name="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Loading%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F2113857789" anchor-label="Loading" id="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Loading%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F2113857789" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release"></a>Indicates that the request is currently in progress.</div></div>
+</div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Success%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F2113857789" anchor-label="Success" id="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Success%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F2113857789" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release"></a>
+                <div class="table-row" data-filterable-current=":imageloading-core:dokkaHtmlPartial/release" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="-success/index.html">Success</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Success%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F2113857789"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":imageloading-core:dokkaHtmlPartial/release" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":imageloading-core:dokkaHtmlPartial/release"><div class="symbol monospace">data class <a href="-success/index.html">Success</a>(result: <a href="https://developer.android.com/reference/kotlin/android/graphics/drawable/Drawable.html">Drawable</a>, source: <a href="../-data-source/index.html">DataSource</a>, request: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>) : <a href="index.html">ImageLoadState</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+<a data-name="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Success%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F2113857789" anchor-label="Success" id="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Success%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F2113857789" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release"></a><div class="brief "><a data-name="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Success%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F2113857789" anchor-label="Success" id="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Success%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F2113857789" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release"></a>Indicates that the request completed successfully.</div></div>
+</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h2 class="">Inheritors</h2>
+              <div class="table" data-togglable="Inheritors"><a data-name="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Empty%2F%2F%2FPointingToDeclaration%2F%5D%2FInheritors%2F2113857789" anchor-label="ImageLoadState" id="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Empty%2F%2F%2FPointingToDeclaration%2F%5D%2FInheritors%2F2113857789" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release"></a>
+                <div class="table-row" data-filterable-current=":imageloading-core:dokkaHtmlPartial/release" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="-empty/index.html">ImageLoadState</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Empty%2F%2F%2FPointingToDeclaration%2F%5D%2FInheritors%2F2113857789"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div></div>
+                  </div>
+                </div>
+<a data-name="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Loading%2F%2F%2FPointingToDeclaration%2F%5D%2FInheritors%2F2113857789" anchor-label="ImageLoadState" id="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Loading%2F%2F%2FPointingToDeclaration%2F%5D%2FInheritors%2F2113857789" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release"></a>
+                <div class="table-row" data-filterable-current=":imageloading-core:dokkaHtmlPartial/release" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="-loading/index.html">ImageLoadState</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Loading%2F%2F%2FPointingToDeclaration%2F%5D%2FInheritors%2F2113857789"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div></div>
+                  </div>
+                </div>
+<a data-name="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Success%2F%2F%2FPointingToDeclaration%2F%5D%2FInheritors%2F2113857789" anchor-label="ImageLoadState" id="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Success%2F%2F%2FPointingToDeclaration%2F%5D%2FInheritors%2F2113857789" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release"></a>
+                <div class="table-row" data-filterable-current=":imageloading-core:dokkaHtmlPartial/release" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="-success/index.html">ImageLoadState</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Success%2F%2F%2FPointingToDeclaration%2F%5D%2FInheritors%2F2113857789"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div></div>
+                  </div>
+                </div>
+<a data-name="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Error%2F%2F%2FPointingToDeclaration%2F%5D%2FInheritors%2F2113857789" anchor-label="ImageLoadState" id="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Error%2F%2F%2FPointingToDeclaration%2F%5D%2FInheritors%2F2113857789" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release"></a>
+                <div class="table-row" data-filterable-current=":imageloading-core:dokkaHtmlPartial/release" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="-error/index.html">ImageLoadState</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bcom.google.accompanist.imageloading%2FImageLoadState.Error%2F%2F%2FPointingToDeclaration%2F%5D%2FInheritors%2F2113857789"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div></div>
+                  </div>
+                </div>
+              </div>
+              <h2 class="tabbedcontent">Extensions</h2>
+              <div class="table" data-togglable="Extensions"><a data-name="%5Bcom.google.accompanist.imageloading%2F%2FisFinalState%2Fcom.google.accompanist.imageloading.ImageLoadState%23%2FPointingToDeclaration%2F%5D%2FExtensions%2F2113857789" anchor-label="isFinalState" id="%5Bcom.google.accompanist.imageloading%2F%2FisFinalState%2Fcom.google.accompanist.imageloading.ImageLoadState%23%2FPointingToDeclaration%2F%5D%2FExtensions%2F2113857789" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release"></a>
+                <div class="table-row" data-filterable-current=":imageloading-core:dokkaHtmlPartial/release" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="../is-final-state.html">isFinalState</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bcom.google.accompanist.imageloading%2F%2FisFinalState%2Fcom.google.accompanist.imageloading.ImageLoadState%23%2FPointingToDeclaration%2F%5D%2FExtensions%2F2113857789"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":imageloading-core:dokkaHtmlPartial/release" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":imageloading-core:dokkaHtmlPartial/release"><div class="symbol monospace">fun <a href="index.html">ImageLoadState</a>.<a href="../is-final-state.html">isFinalState</a>(): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+<a data-name="%5Bcom.google.accompanist.imageloading%2F%2FisFinalState%2Fcom.google.accompanist.imageloading.ImageLoadState%23%2FPointingToDeclaration%2F%5D%2FExtensions%2F2113857789" anchor-label="isFinalState" id="%5Bcom.google.accompanist.imageloading%2F%2FisFinalState%2Fcom.google.accompanist.imageloading.ImageLoadState%23%2FPointingToDeclaration%2F%5D%2FExtensions%2F2113857789" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release"></a><div class="brief "><a data-name="%5Bcom.google.accompanist.imageloading%2F%2FisFinalState%2Fcom.google.accompanist.imageloading.ImageLoadState%23%2FPointingToDeclaration%2F%5D%2FExtensions%2F2113857789" anchor-label="isFinalState" id="%5Bcom.google.accompanist.imageloading%2F%2FisFinalState%2Fcom.google.accompanist.imageloading.ImageLoadState%23%2FPointingToDeclaration%2F%5D%2FExtensions%2F2113857789" data-filterable-set=":imageloading-core:dokkaHtmlPartial/release"></a>Returns true if this state represents the final state for the current request.</div></div>
+</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h2 class="">Sources</h2>
+              <div class="table" data-togglable="Sources"><a data-name="%5Bcom.google.accompanist.imageloading%2FImageLoadState%2F%2F%2FPointingToDeclaration%2F%5D%2FSource%2F942678575" anchor-label="https://github.com/google/accompanist/blob/main/imageloading-core/src/main/java/com/google/accompanist/imageloading/ImageLoadState.kt#L21" id="%5Bcom.google.accompanist.imageloading%2FImageLoadState%2F%2F%2FPointingToDeclaration%2F%5D%2FSource%2F942678575" data-filterable-set=":imageloading-core:dokkaHtmlPartial/main"></a>
+                <div class="table-row" data-filterable-current=":imageloading-core:dokkaHtmlPartial/main" data-filterable-set=":imageloading-core:dokkaHtmlPartial/main">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="https://github.com/google/accompanist/blob/main/imageloading-core/src/main/java/com/google/accompanist/imageloading/ImageLoadState.kt#L21">androidJvm source</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bcom.google.accompanist.imageloading%2FImageLoadState%2F%2F%2FPointingToDeclaration%2F%5D%2FSource%2F942678575"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="footer"><span class="go-to-top-icon"><a href="#content"></a></span><span>© 2021 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+      </div>
+    </div>
+  
+
+
+</body></html>

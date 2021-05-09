@@ -1117,11 +1117,13 @@ All of the APIs are marked with the <code>@ExperimentalPagerApi</code> annotatio
 <h2 id="lazy-creation">Lazy creation<a class="headerlink" href="#lazy-creation" title="Permanent link">&para;</a></h2>
 <p>Pages in both <a href="../api/pager/pager/com.google.accompanist.pager/-horizontal-pager.html"><code>HorizontalPager</code></a> and <a href="../api/pager/pager/com.google.accompanist.pager/-vertical-pager.html"><code>VerticalPager</code></a> are lazily composed and laid-out as required by the layout. As the user scrolls through pages, any pages which are no longer required are removed from the content.</p>
 <h3 id="offscreen-limit">Offscreen Limit<a class="headerlink" href="#offscreen-limit" title="Permanent link">&para;</a></h3>
-<p>Both <a href="../api/pager/pager/com.google.accompanist.pager/-horizontal-pager.html"><code>HorizontalPager</code></a> &amp; <a href="../api/pager/pager/com.google.accompanist.pager/-vertical-pager.html"><code>VerticalPager</code></a> allow the setting of the <code>offscreenLimit</code>, which defines the number of pages that should be retained on either side of the current page. Pages beyond this limit will be removed, and then recreated when needed. This value defaults to <code>1</code>, but can be increased to enable pre-loading of more content:</p>
-<div class="highlight"><pre><span></span><code><span class="n">HorizontalPager</span><span class="p">(</span>
-    <span class="n">state</span> <span class="o">=</span> <span class="n">pagerState</span><span class="p">,</span>
+<p>The <a href="../api/pager/pager/com.google.accompanist.pager/remember-pager-state.html">PagerState</a> API allows the setting of the <code>offscreenLimit</code>, which defines the number of pages that should be retained on either side of the current page. Pages beyond this limit will be removed, and then recreated as needed. This value defaults to <code>1</code>, but can be increased to enable pre-loading of more content:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span> <span class="nv">pagerState</span> <span class="o">=</span> <span class="n">rememberPagerState</span><span class="p">(</span>
+    <span class="n">pageCount</span> <span class="o">=</span> <span class="m">10</span><span class="p">,</span>
     <span class="n">offscreenLimit</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span>
-<span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="o">-&gt;</span>
+<span class="p">)</span>
+
+<span class="n">HorizontalPager</span><span class="p">(</span><span class="n">state</span> <span class="o">=</span> <span class="n">pagerState</span><span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="o">-&gt;</span>
     <span class="c1">// ...</span>
 <span class="p">}</span>
 </code></pre></div>
@@ -1136,7 +1138,7 @@ All of the APIs are marked with the <code>@ExperimentalPagerApi</code> annotatio
     <figcaption>Item effects demo</figcaption>
 </figure>
 
-<p>The scope provided to your pager content allows apps to easily reference the <a href="../api/pager/pager/com.google.accompanist.pager/-pager-state/current-page.html"><code>currentPage</code></a> and <a href="../api/pager/pager/com.google.accompanist.pager/-pager-state/current-page-offset.html"><code>currentPageOffset</code></a>. The effects can then be calculated using those values. We provide the <a href="../api/pager/pager/com.google.accompanist.pager/calculate-current-offset-for-page.html)"><code>calculateCurrentOffsetForPage()</code></a> extension functions to support calculation of the 'offset' for a given page:</p>
+<p>The scope provided to your pager content allows apps to easily reference the <a href="../api/pager/pager/com.google.accompanist.pager/-pager-state/current-page.html"><code>currentPage</code></a> and <a href="../api/pager/pager/com.google.accompanist.pager/-pager-state/current-page-offset.html"><code>currentPageOffset</code></a>. The effects can then be calculated using those values. We provide the <a href="../api/pager/pager/com.google.accompanist.pager/calculate-current-offset-for-page.html"><code>calculateCurrentOffsetForPage()</code></a> extension functions to support calculation of the 'offset' for a given page:</p>
 <div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">com.google.accompanist.pager.calculateCurrentOffsetForPage</span>
 
 <span class="n">HorizontalPager</span><span class="p">(</span><span class="n">state</span> <span class="o">=</span> <span class="n">pagerState</span><span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="o">-&gt;</span>
