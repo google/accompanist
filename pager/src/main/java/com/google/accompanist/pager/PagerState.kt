@@ -40,7 +40,6 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import kotlin.math.absoluteValue
 import kotlin.math.floor
 import kotlin.math.roundToInt
@@ -634,22 +633,6 @@ class PagerState(
         )
     }
 }
-
-/**
- * A flow which emits the currently selected page.
- *
- * @sample com.google.accompanist.sample.pager.PageChangesSample
- */
-@Deprecated(
-    message = "Use snapshotFlow directly",
-    ReplaceWith(
-        expression = "snapshotFlow { this.currentPage }",
-        "androidx.compose.runtime.snapshotFlow"
-    )
-)
-@ExperimentalPagerApi
-inline val PagerState.pageChanges
-    get() = snapshotFlow { currentPage }
 
 @Stable
 internal class PageLayoutInfo {
