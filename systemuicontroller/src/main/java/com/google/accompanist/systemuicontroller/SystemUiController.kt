@@ -25,7 +25,6 @@ import android.view.Window
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.luminance
@@ -116,18 +115,6 @@ fun rememberSystemUiController(): SystemUiController {
     return remember(view) { AndroidSystemUiController(view) }
 }
 
-@Deprecated(
-    "Migrate to rememberSystemUiController()",
-    ReplaceWith(
-        "rememberSystemUiController()",
-        "com.google.accompanist.systemuicontroller.rememberSystemUiController"
-    )
-)
-@Composable
-fun rememberAndroidSystemUiController(
-    view: View = LocalView.current
-): SystemUiController = remember(view) { AndroidSystemUiController(view) }
-
 /**
  * A helper class for setting the navigation and status bar colors for a [View], gracefully
  * degrading behavior based upon API level.
@@ -191,18 +178,6 @@ internal class AndroidSystemUiController(view: View) : SystemUiController {
         }
         return null
     }
-}
-
-/**
- * An [androidx.compose.runtime.CompositionLocalProvider] holding the current
- * [LocalSystemUiController]. Defaults to a no-op controller; consumers should
- * [provide][androidx.compose.runtime.CompositionLocalProvider] a real one.
- *
- * @sample com.google.accompanist.sample.systemuicontroller.SystemUiControllerSample
- */
-@Deprecated("Use rememberSystemUiController()")
-val LocalSystemUiController = staticCompositionLocalOf<SystemUiController> {
-    NoOpSystemUiController
 }
 
 private val BlackScrim = Color(0f, 0f, 0f, 0.3f) // 30% opaque black

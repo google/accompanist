@@ -156,8 +156,12 @@ private class DrawablePainter(
 @Composable
 fun rememberDrawablePainter(drawable: Drawable?): Painter {
     val painter = remember(drawable) {
-        @Suppress("DEPRECATION") // We will inline the code once we remove the function
-        drawable?.toPainter() ?: EmptyPainter
+        when (drawable) {
+            null -> EmptyPainter
+            is BitmapDrawable -> BitmapPainter(drawable.bitmap.asImageBitmap())
+            is ColorDrawable -> ColorPainter(Color(drawable.color))
+            else -> DrawablePainter(drawable.mutate())
+        }
     }
 
     DisposableEffect(painter) {
@@ -168,21 +172,4 @@ fun rememberDrawablePainter(drawable: Drawable?): Painter {
     }
 
     return painter
-}
-
-/**
- * Allows wrapping of a [Drawable] into a [Painter], attempting to un-wrap the drawable contents
- * and use Compose primitives where possible.
- */
-@Deprecated(
-    "Migrate to rememberDrawablePainter()",
-    ReplaceWith(
-        "rememberDrawablePainter(this)",
-        "com.google.accompanist.imageloading.rememberDrawablePainter",
-    )
-)
-fun Drawable.toPainter(): Painter = when (this) {
-    is BitmapDrawable -> BitmapPainter(bitmap.asImageBitmap())
-    is ColorDrawable -> ColorPainter(Color(color))
-    else -> DrawablePainter(mutate())
 }

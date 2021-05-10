@@ -9,8 +9,6 @@ package com.google.accompanist.systemuicontroller {
   }
 
   public final class SystemUiControllerKt {
-    method @Deprecated public static androidx.compose.runtime.ProvidableCompositionLocal<com.google.accompanist.systemuicontroller.SystemUiController> getLocalSystemUiController();
-    method @Deprecated @androidx.compose.runtime.Composable public static com.google.accompanist.systemuicontroller.SystemUiController rememberAndroidSystemUiController(optional android.view.View view);
     method @androidx.compose.runtime.Composable public static com.google.accompanist.systemuicontroller.SystemUiController rememberSystemUiController();
   }
 
