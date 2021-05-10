@@ -546,14 +546,14 @@ class PagerState(
                 scrollBy(coerced - (currentLayoutPageOffset * currentLayoutPageSize))
 
                 // If we've scroll our target page (or beyond it), cancel the animation
-                if ((initialVelocity < 0 && absolutePosition < target) ||
+                if ((initialVelocity < 0 && absolutePosition <= target) ||
                     (initialVelocity > 0 && absolutePosition >= target)
                 ) {
                     // If we reach the bounds of the allowed offset, cancel the animation
                     cancelAnimation()
-                    snapToPage(target)
                 }
             }
+            snapToPage(target)
         } else {
             // Otherwise we animate to the next item, or spring-back depending on the offset
             val target = currentLayoutPage + determineSpringBackOffset(
