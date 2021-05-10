@@ -27,8 +27,6 @@ import androidx.compose.ui.test.performScrollTo
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.produceIn
 import kotlinx.coroutines.withContext
 import org.junit.Ignore
 import org.junit.Rule
@@ -195,49 +193,6 @@ abstract class PagerTest {
             )
         // ...and assert that we 'sprang back' to page 0
         assertPagerLayout(0, pagerState.pageCount)
-    }
-
-    @Suppress("DEPRECATION") // pageChanges
-    @OptIn(FlowPreview::class)
-    @Test
-    fun pageChanges() = suspendTest {
-        val pagerState = setPagerContent(pageCount = 10)
-
-        // Collect the pageChanges flow into a Channel, allowing us to poll values
-        val pageChangedChannel = pagerState.pageChanges.produceIn(this)
-
-        // Assert that the first emission is 0
-        assertThat(pageChangedChannel.receive()).isEqualTo(0)
-
-        // Now swipe to page 1..
-        composeTestRule.onNodeWithTag("0").swipeAcrossCenter(
-            distancePercentage = -MediumSwipeDistance,
-            velocity = MediumVelocity,
-        )
-        // ...and assert that the page 2 is emitted
-        assertThat(pageChangedChannel.receive()).isEqualTo(1)
-
-        // Now swipe to page 2...
-        composeTestRule.onNodeWithTag("1").swipeAcrossCenter(
-            distancePercentage = -MediumSwipeDistance,
-            velocity = MediumVelocity,
-        )
-        // ...and assert that the page 2 is emitted
-        assertThat(pageChangedChannel.receive()).isEqualTo(2)
-
-        // Now swipe back to page 1...
-        composeTestRule.onNodeWithTag("2").swipeAcrossCenter(
-            distancePercentage = MediumSwipeDistance,
-            velocity = MediumVelocity,
-        )
-        // ...and assert that the page 1 is emitted
-        assertThat(pageChangedChannel.receive()).isEqualTo(1)
-
-        // Assert that there are no more events
-        assertThat(pageChangedChannel.poll()).isNull()
-
-        // Cancel the channel
-        pageChangedChannel.cancel()
     }
 
     @Test
