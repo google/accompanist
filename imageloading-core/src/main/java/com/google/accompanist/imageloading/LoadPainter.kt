@@ -185,10 +185,9 @@ class LoadPainter<R> internal constructor(
     private var colorFilter: ColorFilter? by mutableStateOf(null)
 
     /**
-     * Our size to use when performing the image load request. This is internal due to
-     * [ImageSuchDeprecated].
+     * Our size to use when performing the image load request.
      */
-    internal var requestSize by mutableStateOf<IntSize?>(null)
+    private var requestSize by mutableStateOf<IntSize?>(null)
 
     override val intrinsicSize: Size
         get() = painter.intrinsicSize
@@ -337,7 +336,9 @@ private fun <R> updatePainter(
         // that using an Image and return
         painterResource(previewPlaceholder)
     } else {
-        loadPainter.loadState.drawable?.let { rememberDrawablePainter(it) } ?: EmptyPainter
+        // This may look like a useless remember, but this allows any Painters instances
+        // to receive remember events (if it implements RememberObserver). Do not remove.
+        remember(loadPainter.loadState) { loadPainter.loadState.painter } ?: EmptyPainter
     }
 }
 
