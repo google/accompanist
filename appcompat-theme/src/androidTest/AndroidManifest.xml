@@ -17,10 +17,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.google.accompanist.appcompattheme">
 
-    <uses-sdk android:targetSdkVersion="29" />
-
     <application>
-
         <activity
             android:name=".LightAppCompatActivity"
             android:theme="@style/Theme.AppCompatThemeTest" />
@@ -32,7 +29,6 @@
         <activity
             android:name=".NotAppCompatActivity"
             android:theme="@android:style/Theme.Material" />
-
     </application>
 
 </manifest>
