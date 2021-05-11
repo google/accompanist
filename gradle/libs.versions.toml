@@ -49,6 +49,8 @@ androidx-dynamicanimation = "androidx.dynamicanimation:dynamicanimation-ktx:1.0.
 androidx-lifecycle-runtime = "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0"
 androidx-lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha04"
 
+napier = "io.github.aakira:napier:1.4.1"
+
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidxtest" }
 androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidxtest" }
 junit = "junit:junit:4.13"
