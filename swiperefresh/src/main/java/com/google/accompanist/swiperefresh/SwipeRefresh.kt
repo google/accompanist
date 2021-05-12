@@ -186,7 +186,7 @@ private class SwipeRefreshNestedScrollConnection(
  * a vertical swipe gesture.
  *
  * This layout requires its content to be scrollable so that it receives vertical swipe events.
- * The scrollable content does not need to a direct descendant though. Layouts such as
+ * The scrollable content does not need to be a direct descendant though. Layouts such as
  * [androidx.compose.foundation.lazy.LazyColumn] are automatically scrollable, but others such as
  * [androidx.compose.foundation.layout.Column] require you to provide the
  * [androidx.compose.foundation.verticalScroll] modifier to that content.
