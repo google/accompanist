@@ -183,7 +183,7 @@ private class SwipeRefreshNestedScrollConnection(
 
 /**
  * A layout which implements the swipe-to-refresh pattern, allowing the user to refresh content via
- * a vertical swipe gesture. 
+ * a vertical swipe gesture.
  *
  * This layout requires its content to be scrollable so that it receives vertical swipe events.
  * The scrollable content does not need to a direct descendant though. Layouts such as
