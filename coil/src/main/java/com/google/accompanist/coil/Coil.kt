@@ -36,6 +36,7 @@ import coil.request.ImageRequest
 import coil.request.ImageResult
 import coil.size.Precision
 import com.google.accompanist.imageloading.DataSource
+import com.google.accompanist.imageloading.DrawablePainter
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.LoadPainter
 import com.google.accompanist.imageloading.LoadPainterDefaults
@@ -58,7 +59,8 @@ val LocalImageLoader = staticCompositionLocalOf<ImageLoader?> { null }
  */
 object CoilPainterDefaults {
     /**
-     * Returns the default [ImageLoader] value for the `imageLoader` parameter in [CoilImage].
+     * Returns the default [ImageLoader] value for the `imageLoader` parameter
+     * in [rememberCoilPainter].
      */
     @Composable
     fun defaultImageLoader(): ImageLoader {
@@ -142,7 +144,12 @@ internal class CoilLoader(
                 // We need to send blocking, to ensure that Loading is sent
                 // before the execute result below.
                 if (!isClosedForSend) {
-                    sendBlocking(ImageLoadState.Loading(placeholder, request))
+                    sendBlocking(
+                        ImageLoadState.Loading(
+                            placeholder = placeholder?.let(::DrawablePainter),
+                            request = request
+                        )
+                    )
                 }
             }
         ).build()
@@ -175,14 +182,14 @@ internal class CoilLoader(
 private fun ImageResult.toResult(request: Any): ImageLoadState = when (this) {
     is coil.request.SuccessResult -> {
         ImageLoadState.Success(
-            result = drawable,
+            result = DrawablePainter(drawable),
             request = request,
             source = metadata.dataSource.toDataSource()
         )
     }
     is coil.request.ErrorResult -> {
         ImageLoadState.Error(
-            result = drawable,
+            result = drawable?.let(::DrawablePainter),
             request = request,
             throwable = throwable
         )

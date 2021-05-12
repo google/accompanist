@@ -18,7 +18,6 @@
 
 package com.google.accompanist.pager
 
-import android.util.Log
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
 import androidx.compose.animation.core.AnimationSpec
@@ -40,6 +39,7 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import io.github.aakira.napier.Napier
 import kotlin.math.absoluteValue
 import kotlin.math.floor
 import kotlin.math.roundToInt
@@ -201,7 +201,7 @@ class PagerState(
         private set(value) {
             _currentPage = value.coerceIn(0, lastPageIndex)
             if (DebugLog) {
-                Log.d(LogTag, "Current page changed: $_currentPage")
+                Napier.d(tag = LogTag, message = "Current page changed: $_currentPage")
             }
             // If the current page is changed, update the layout page too
             updateLayoutPages(_currentPage)
@@ -315,9 +315,9 @@ class PagerState(
      */
     private fun snapToPage(page: Int, offset: Float = 0f) {
         if (DebugLog) {
-            Log.d(
-                LogTag,
-                "snapToPage. page:$currentLayoutPage, offset:$currentLayoutPageOffset"
+            Napier.d(
+                tag = LogTag,
+                message = "snapToPage. page:$currentLayoutPage, offset:$currentLayoutPageOffset"
             )
         }
         // Snap the layout
@@ -399,7 +399,12 @@ class PagerState(
             layoutPages.forEachIndexed { index, layoutInfo ->
                 layoutInfo.page = pages.getOrNull(flooredIndex + (index - currentLayoutPageIndex))
             }
-            if (DebugLog) Log.d(LogTag, "animateToPageSkip: $layoutPages")
+            if (DebugLog) {
+                Napier.d(
+                    tag = LogTag,
+                    message = "animateToPageSkip: $layoutPages"
+                )
+            }
 
             // Then derive the remaining offset from the index
             currentLayoutPageOffset = value - flooredIndex
@@ -455,9 +460,9 @@ class PagerState(
         val target = (current + deltaOffset).coerceIn(0f, lastPageIndex.toFloat())
 
         if (DebugLog) {
-            Log.d(
-                LogTag,
-                "scrollByOffset [before]. delta:%.4f, current:%.4f, target:%.4f"
+            Napier.d(
+                tag = LogTag,
+                message = "scrollByOffset [before]. delta:%.4f, current:%.4f, target:%.4f"
                     .format(deltaOffset, current, target),
             )
         }
@@ -465,9 +470,9 @@ class PagerState(
         updateLayoutForScrollPosition(target)
 
         if (DebugLog) {
-            Log.d(
-                LogTag,
-                "scrollByOffset [after]. delta:%.4f, new-page:%d, new-offset:%.4f"
+            Napier.d(
+                tag = LogTag,
+                message = "scrollByOffset [after]. delta:%.4f, new-page:%d, new-offset:%.4f"
                     .format(deltaOffset, currentLayoutPage, currentLayoutPageOffset),
             )
         }
@@ -500,9 +505,9 @@ class PagerState(
         ) / currentLayoutPageSize
 
         if (DebugLog) {
-            Log.d(
-                LogTag,
-                "fling. velocity:%.4f, page: %d, offset:%.4f, targetOffset:%.4f"
+            Napier.d(
+                tag = LogTag,
+                message = "fling. velocity:%.4f, page: %d, offset:%.4f, targetOffset:%.4f"
                     .format(
                         initialVelocity,
                         currentLayoutPage,
@@ -531,9 +536,9 @@ class PagerState(
                 initialVelocity = initialVelocity
             ).animateDecay(decayAnimationSpec) {
                 if (DebugLog) {
-                    Log.d(
-                        LogTag,
-                        "fling. decay. value:%.4f, page: %d, offset:%.4f"
+                    Napier.d(
+                        tag = LogTag,
+                        message = "fling. decay. value:%.4f, page: %d, offset:%.4f"
                             .format(value, currentPage, currentPageOffset)
                     )
                 }

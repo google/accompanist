@@ -18,7 +18,6 @@
 
 package com.google.accompanist.pager
 
-import android.util.Log
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.DecayAnimationSpec
 import androidx.compose.animation.core.spring
@@ -53,6 +52,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -265,9 +265,9 @@ internal fun Pager(
             if (DebugLog) {
                 val firstPage = state.layoutPages.firstOrNull { it.page != null }
                 val lastPage = state.layoutPages.lastOrNull { it.page != null }
-                Log.d(
-                    LogTag,
-                    "Content: firstPage:${firstPage?.page ?: "none"}, " +
+                Napier.d(
+                    tag = LogTag,
+                    message = "Content: firstPage:${firstPage?.page ?: "none"}, " +
                         "layoutPage:${state.currentLayoutPageInfo}, " +
                         "currentPage:${state.currentPage}, " +
                         "lastPage:${lastPage?.page ?: "none"}"

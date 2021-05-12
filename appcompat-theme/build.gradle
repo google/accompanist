@@ -30,6 +30,8 @@ android {
 
     defaultConfig {
         minSdkVersion 21
+        // targetSdkVersion has no effect for libraries. This is only used for the test APK
+        targetSdkVersion 30
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -79,7 +81,7 @@ dependencies {
     api libs.androidx.appcompat
 
     androidTestImplementation libs.junit
-    androidTestImplementation libs.compose.ui.test
+    androidTestImplementation libs.compose.ui.test.junit4
     androidTestImplementation libs.androidx.test.runner
 }
 
