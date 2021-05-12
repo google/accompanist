@@ -7,6 +7,16 @@ package com.google.accompanist.imageloading {
     enum_constant public static final com.google.accompanist.imageloading.DataSource NETWORK;
   }
 
+  public final class DrawablePainter extends androidx.compose.ui.graphics.painter.Painter implements androidx.compose.runtime.RememberObserver {
+    ctor public DrawablePainter(android.graphics.drawable.Drawable drawable);
+    method public long getIntrinsicSize-NH-jbRc();
+    method public void onAbandoned();
+    method protected void onDraw(androidx.compose.ui.graphics.drawscope.DrawScope);
+    method public void onForgotten();
+    method public void onRemembered();
+    property public long intrinsicSize;
+  }
+
   public final class DrawablePainterKt {
     method @androidx.compose.runtime.Composable public static androidx.compose.ui.graphics.painter.Painter rememberDrawablePainter(android.graphics.drawable.Drawable? drawable);
   }
@@ -19,41 +29,41 @@ package com.google.accompanist.imageloading {
   }
 
   public static final class ImageLoadState.Error extends com.google.accompanist.imageloading.ImageLoadState {
-    ctor public ImageLoadState.Error(Object request, android.graphics.drawable.Drawable? result, Throwable? throwable);
+    ctor public ImageLoadState.Error(Object request, androidx.compose.ui.graphics.painter.Painter? result, Throwable? throwable);
     method public Object component1();
-    method public android.graphics.drawable.Drawable? component2();
+    method public androidx.compose.ui.graphics.painter.Painter? component2();
     method public Throwable? component3();
-    method public com.google.accompanist.imageloading.ImageLoadState.Error copy(Object request, android.graphics.drawable.Drawable? result, Throwable? throwable);
+    method public com.google.accompanist.imageloading.ImageLoadState.Error copy(Object request, androidx.compose.ui.graphics.painter.Painter? result, Throwable? throwable);
     method public Object getRequest();
-    method public android.graphics.drawable.Drawable? getResult();
+    method public androidx.compose.ui.graphics.painter.Painter? getResult();
     method public Throwable? getThrowable();
     property public final Object request;
-    property public final android.graphics.drawable.Drawable? result;
+    property public final androidx.compose.ui.graphics.painter.Painter? result;
     property public final Throwable? throwable;
   }
 
   public static final class ImageLoadState.Loading extends com.google.accompanist.imageloading.ImageLoadState {
-    ctor public ImageLoadState.Loading(android.graphics.drawable.Drawable? placeholder, Object request);
-    method public android.graphics.drawable.Drawable? component1();
+    ctor public ImageLoadState.Loading(androidx.compose.ui.graphics.painter.Painter? placeholder, Object request);
+    method public androidx.compose.ui.graphics.painter.Painter? component1();
     method public Object component2();
-    method public com.google.accompanist.imageloading.ImageLoadState.Loading copy(android.graphics.drawable.Drawable? placeholder, Object request);
-    method public android.graphics.drawable.Drawable? getPlaceholder();
+    method public com.google.accompanist.imageloading.ImageLoadState.Loading copy(androidx.compose.ui.graphics.painter.Painter? placeholder, Object request);
+    method public androidx.compose.ui.graphics.painter.Painter? getPlaceholder();
     method public Object getRequest();
-    property public final android.graphics.drawable.Drawable? placeholder;
+    property public final androidx.compose.ui.graphics.painter.Painter? placeholder;
     property public final Object request;
   }
 
   public static final class ImageLoadState.Success extends com.google.accompanist.imageloading.ImageLoadState {
-    ctor public ImageLoadState.Success(android.graphics.drawable.Drawable result, com.google.accompanist.imageloading.DataSource source, Object request);
-    method public android.graphics.drawable.Drawable component1();
+    ctor public ImageLoadState.Success(androidx.compose.ui.graphics.painter.Painter result, com.google.accompanist.imageloading.DataSource source, Object request);
+    method public androidx.compose.ui.graphics.painter.Painter component1();
     method public com.google.accompanist.imageloading.DataSource component2();
     method public Object component3();
-    method public com.google.accompanist.imageloading.ImageLoadState.Success copy(android.graphics.drawable.Drawable result, com.google.accompanist.imageloading.DataSource source, Object request);
+    method public com.google.accompanist.imageloading.ImageLoadState.Success copy(androidx.compose.ui.graphics.painter.Painter result, com.google.accompanist.imageloading.DataSource source, Object request);
     method public Object getRequest();
-    method public android.graphics.drawable.Drawable getResult();
+    method public androidx.compose.ui.graphics.painter.Painter getResult();
     method public com.google.accompanist.imageloading.DataSource getSource();
     property public final Object request;
-    property public final android.graphics.drawable.Drawable result;
+    property public final androidx.compose.ui.graphics.painter.Painter result;
     property public final com.google.accompanist.imageloading.DataSource source;
   }
 

@@ -36,6 +36,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.google.accompanist.imageloading.DataSource
+import com.google.accompanist.imageloading.DrawablePainter
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.LoadPainter
 import com.google.accompanist.imageloading.LoadPainterDefaults
@@ -60,7 +61,7 @@ val LocalRequestManager = staticCompositionLocalOf<RequestManager?> { null }
 object GlidePainterDefaults {
     /**
      * Returns the default [RequestManager] value for the `requestManager` parameter
-     * in [GlideImage].
+     * in [rememberGlidePainter].
      */
     @Composable
     fun defaultRequestManager(): RequestManager {
@@ -140,7 +141,12 @@ internal class GlideLoader(
             override fun onLoadStarted(placeholder: Drawable?) {
                 if (isClosedForSend) return
 
-                sendBlocking(ImageLoadState.Loading(placeholder, request))
+                sendBlocking(
+                    ImageLoadState.Loading(
+                        placeholder = placeholder?.let(::DrawablePainter),
+                        request = request
+                    )
+                )
             }
 
             override fun onLoadFailed(errorDrawable: Drawable?) {
@@ -148,7 +154,7 @@ internal class GlideLoader(
 
                 sendBlocking(
                     ImageLoadState.Error(
-                        result = errorDrawable,
+                        result = errorDrawable?.let(::DrawablePainter),
                         request = request,
                         throwable = failException
                             ?: IllegalArgumentException("Error while loading $request")
@@ -175,7 +181,13 @@ internal class GlideLoader(
                 dataSource: com.bumptech.glide.load.DataSource,
                 isFirstResource: Boolean
             ): Boolean {
-                sendBlocking(ImageLoadState.Success(drawable, dataSource.toDataSource(), request))
+                sendBlocking(
+                    ImageLoadState.Success(
+                        result = DrawablePainter(drawable),
+                        source = dataSource.toDataSource(),
+                        request = request
+                    )
+                )
                 // Return true so that the target doesn't receive the drawable
                 return true
             }

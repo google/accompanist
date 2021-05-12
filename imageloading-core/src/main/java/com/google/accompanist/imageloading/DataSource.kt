@@ -16,19 +16,14 @@
 
 package com.google.accompanist.imageloading
 
-import android.graphics.Bitmap
-import androidx.annotation.DrawableRes
-import java.io.File
-import java.nio.ByteBuffer
-
 enum class DataSource {
     /**
-     * Represents an in-memory data source or cache (e.g. [Bitmap], [ByteBuffer]).
+     * Represents an in-memory data source or cache (e.g. bitmap, ByteBuffer).
      */
     MEMORY,
 
     /**
-     * Represents a disk-based data source (e.g. [DrawableRes], [File]).
+     * Represents a disk-based data source (e.g. drawable resource, or File).
      */
     DISK,
 

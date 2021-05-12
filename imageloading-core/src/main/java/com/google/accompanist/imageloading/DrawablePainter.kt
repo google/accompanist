@@ -25,7 +25,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,13 +50,14 @@ private val MAIN_HANDLER by lazy(LazyThreadSafetyMode.NONE) {
 }
 
 /**
- * A [Painter] which draws an Android [Drawable]. Supports [Animatable] drawables.
+ * A [Painter] which draws an Android [Drawable] and supports [Animatable] drawables. Instances
+ * should be remembered to be able to start and stop [Animatable] animations.
  *
- * Taken from https://goo.gle/compose-drawable-painter
+ * Instances are usually retrieved from [rememberDrawablePainter].
  */
-private class DrawablePainter(
+class DrawablePainter(
     private val drawable: Drawable
-) : Painter() {
+) : Painter(), RememberObserver {
     private var invalidateTick by mutableStateOf(0)
 
     private val callback: Drawable.Callback by lazy {
@@ -81,13 +82,15 @@ private class DrawablePainter(
         drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
     }
 
-    fun onRemembered() {
+    override fun onRemembered() {
         drawable.callback = callback
         drawable.setVisible(true, true)
         if (drawable is Animatable) drawable.start()
     }
 
-    fun onDisposed() {
+    override fun onAbandoned() = onForgotten()
+
+    override fun onForgotten() {
         if (drawable is Animatable) drawable.stop()
         drawable.setVisible(false, false)
         drawable.callback = null
@@ -154,22 +157,13 @@ private class DrawablePainter(
  * within Compose.
  */
 @Composable
-fun rememberDrawablePainter(drawable: Drawable?): Painter {
-    val painter = remember(drawable) {
-        when (drawable) {
-            null -> EmptyPainter
-            is BitmapDrawable -> BitmapPainter(drawable.bitmap.asImageBitmap())
-            is ColorDrawable -> ColorPainter(Color(drawable.color))
-            else -> DrawablePainter(drawable.mutate())
-        }
+fun rememberDrawablePainter(drawable: Drawable?): Painter = remember(drawable) {
+    when (drawable) {
+        null -> EmptyPainter
+        is BitmapDrawable -> BitmapPainter(drawable.bitmap.asImageBitmap())
+        is ColorDrawable -> ColorPainter(Color(drawable.color))
+        // Since the DrawablePainter will be remembered and it implements RememberObserver, it
+        // will receive the necessary events
+        else -> DrawablePainter(drawable.mutate())
     }
-
-    DisposableEffect(painter) {
-        if (painter is DrawablePainter) painter.onRemembered()
-        onDispose {
-            if (painter is DrawablePainter) painter.onDisposed()
-        }
-    }
-
-    return painter
 }

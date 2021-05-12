@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:JvmName("Flow")
-
 package com.google.accompanist.flowlayout
 
 import androidx.compose.foundation.layout.Arrangement
@@ -29,7 +27,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.fastForEachIndexed
 import kotlin.math.max
 
 /**
@@ -47,7 +44,7 @@ import kotlin.math.max
  * @param lastLineMainAxisAlignment Overrides the main axis alignment of the last row.
  */
 @Composable
-fun FlowRow(
+public fun FlowRow(
     modifier: Modifier = Modifier,
     mainAxisSize: SizeMode = SizeMode.Wrap,
     mainAxisAlignment: FlowMainAxisAlignment = FlowMainAxisAlignment.Start,
@@ -85,7 +82,7 @@ fun FlowRow(
  * @param lastLineMainAxisAlignment Overrides the main axis alignment of the last column.
  */
 @Composable
-fun FlowColumn(
+public fun FlowColumn(
     modifier: Modifier = Modifier,
     mainAxisSize: SizeMode = SizeMode.Wrap,
     mainAxisAlignment: FlowMainAxisAlignment = FlowMainAxisAlignment.Start,
@@ -111,7 +108,7 @@ fun FlowColumn(
 /**
  * Used to specify the alignment of a layout's children, in cross axis direction.
  */
-enum class FlowCrossAxisAlignment {
+public enum class FlowCrossAxisAlignment {
     /**
      * Place children such that their center is in the middle of the cross axis.
      */
@@ -126,7 +123,7 @@ enum class FlowCrossAxisAlignment {
     End,
 }
 
-typealias FlowMainAxisAlignment = MainAxisAlignment
+public typealias FlowMainAxisAlignment = MainAxisAlignment
 
 /**
  * Layout model that arranges its children in a horizontal or vertical flow.
@@ -229,7 +226,7 @@ private fun Flow(
         }
 
         layout(layoutWidth, layoutHeight) {
-            sequences.fastForEachIndexed { i, placeables ->
+            sequences.forEachIndexed { i, placeables ->
                 val childrenMainAxisSizes = IntArray(placeables.size) { j ->
                     placeables[j].mainAxisSize() +
                         if (j < placeables.lastIndex) mainAxisSpacing.roundToPx() else 0
@@ -245,7 +242,7 @@ private fun Flow(
                 with(arrangement) {
                     arrange(mainAxisLayoutSize, childrenMainAxisSizes, mainAxisPositions)
                 }
-                placeables.fastForEachIndexed { j, placeable ->
+                placeables.forEachIndexed { j, placeable ->
                     val crossAxis = when (crossAxisAlignment) {
                         FlowCrossAxisAlignment.Start -> 0
                         FlowCrossAxisAlignment.End ->
@@ -281,7 +278,7 @@ private fun Flow(
  * Used to specify how a layout chooses its own size when multiple behaviors are possible.
  */
 // TODO(popam): remove this when Flow is reworked
-enum class SizeMode {
+public enum class SizeMode {
     /**
      * Minimize the amount of free space by wrapping the children,
      * subject to the incoming layout constraints.
@@ -297,7 +294,7 @@ enum class SizeMode {
 /**
  * Used to specify the alignment of a layout's children, in main axis direction.
  */
-enum class MainAxisAlignment(internal val arrangement: Arrangement.Vertical) {
+public enum class MainAxisAlignment(internal val arrangement: Arrangement.Vertical) {
     // TODO(soboleva) support RTl in Flow
     // workaround for now - use Arrangement that equals to previous Arrangement
     /**
