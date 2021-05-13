@@ -18,10 +18,7 @@ import androidx.compose.foundation.Image
 import com.google.accompanist.coil.rememberCoilPainter
 
 Image(
-    painter = rememberCoilPainter(
-        request = "https://picsum.photos/300/300",
-        previewPlaceholder = R.drawable.placeholder,
-    ),
+    painter = rememberCoilPainter("https://picsum.photos/300/300"),
     contentDescription = stringResource(R.string.image_content_desc),
 )
 ```
