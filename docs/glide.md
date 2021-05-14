@@ -80,7 +80,7 @@ Box {
     )
 
     when (painter.loadState) {
-        ImageLoadState.Loading -> {
+        is ImageLoadState.Loading -> {
             // Display a circular progress indicator whilst loading
             CircularProgressIndicator(Modifier.align(Alignment.Center))
         }
