@@ -20,7 +20,6 @@ import com.google.accompanist.coil.rememberCoilPainter
 Image(
     painter = rememberCoilPainter("https://picsum.photos/300/300"),
     contentDescription = stringResource(R.string.image_content_desc),
-    previewPlaceholder = R.drawable.placeholder,
 )
 ```
 
@@ -80,7 +79,7 @@ Box {
     )
 
     when (painter.loadState) {
-        ImageLoadState.Loading -> {
+        is ImageLoadState.Loading -> {
             // Display a circular progress indicator whilst loading
             CircularProgressIndicator(Modifier.align(Alignment.Center))
         }
