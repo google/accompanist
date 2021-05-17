@@ -16,7 +16,11 @@
 
 package com.google.accompanist.pager
 
+import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.createComposeRule
+import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -54,5 +58,25 @@ class PagerStateUnitTest {
         composeTestRule.setContent {
             rememberPagerState(pageCount = 0, initialPage = 0, initialPageOffset = 0.5f)
         }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun store_restore_state() = runBlockingTest {
+        val stateRestoration = StateRestorationTester(composeTestRule)
+        lateinit var state: PagerState
+
+        stateRestoration.setContent {
+            state = rememberPagerState(pageCount = 10)
+        }
+        // Now scroll to page 4
+        state.scrollToPage(4)
+
+        // Emulator a state save + restore
+        stateRestoration.emulateSavedInstanceStateRestore()
+
+        // And assert that everything was restored
+        assertThat(state.currentPage).isEqualTo(4)
+        assertThat(state.pageCount).isEqualTo(10)
     }
 }

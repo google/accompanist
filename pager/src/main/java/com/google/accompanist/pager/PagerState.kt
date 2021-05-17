@@ -627,12 +627,11 @@ class PagerState(
          * The default [Saver] implementation for [PagerState].
          */
         val Saver: Saver<PagerState, *> = listSaver(
-            save = { listOf<Any>(it.pageCount, it.currentPage, it.currentPageOffset) },
+            save = { listOf(it.pageCount, it.currentPage) },
             restore = {
                 PagerState(
-                    pageCount = it[0] as Int,
-                    currentPage = it[1] as Int,
-                    currentPageOffset = it[2] as Float
+                    pageCount = it[0],
+                    currentPage = it[1],
                 )
             }
         )
