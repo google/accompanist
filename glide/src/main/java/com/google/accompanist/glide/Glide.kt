@@ -160,6 +160,8 @@ internal class GlideLoader(
                             ?: IllegalArgumentException("Error while loading $request")
                     )
                 )
+                // Close the channel[Flow]
+                channel.close()
             }
 
             override fun onLoadCleared(resource: Drawable?) {
@@ -181,6 +183,8 @@ internal class GlideLoader(
                 dataSource: com.bumptech.glide.load.DataSource,
                 isFirstResource: Boolean
             ): Boolean {
+                if (isClosedForSend) return true
+
                 sendBlocking(
                     ImageLoadState.Success(
                         result = DrawablePainter(drawable),
@@ -188,6 +192,8 @@ internal class GlideLoader(
                         request = request
                     )
                 )
+                // Close the channel[Flow]
+                channel.close()
                 // Return true so that the target doesn't receive the drawable
                 return true
             }
@@ -213,9 +219,10 @@ internal class GlideLoader(
             .addListener(listener)
             .into(target)
 
-        // When we're cancelled/closed, clear the request from Glide
+        // Await the channel being closed and request finishing...
         awaitClose {
-            requestManager.clear(target)
+            // We intentionally do not call Glide.clear() as we may end up drawing a recycled
+            // bitmap. See https://github.com/google/accompanist/issues/419
         }
     }
 }

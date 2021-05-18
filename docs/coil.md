@@ -6,7 +6,7 @@ This library provides easy-to-use [Painter][painter] which can fetch and display
 
 <img src="https://coil-kt.github.io/coil/logo.svg" width="480" alt="Coil logo">
 
-!!! info
+??? info "Migrating from CoilImage"
     If you're migrating from Accompanist 0.7.x or before, please read the [migration](./migration-coilimage) documentation after reading this document.
 
 ## `rememberCoilPainter()`

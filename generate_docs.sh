@@ -29,7 +29,7 @@ sed -i.bak 's/$dokka.linkExtension:md/$dokka.linkExtension:html/g' package-list-
 # Clear out the old API docs
 [ -d docs/api ] && rm -r docs/api
 # Build the docs with dokka
-./gradlew clean dokkaHtmlMultiModule
+./gradlew dokkaHtmlMultiModule
 
 # Re-word the Dokka call out
 find docs/api/ -type f -name '*.html' -exec sed -i -e 's/Sponsored and developed/Documentation generated/g' {} \;
