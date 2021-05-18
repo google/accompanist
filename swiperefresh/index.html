@@ -981,15 +981,15 @@
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
 <p>To implement this UX pattern there are two key APIs which are needed: <a href="../api/swiperefresh/swiperefresh/com.google.accompanist.swiperefresh/-swipe-refresh.html"><code>SwipeRefresh</code></a>, which is provides the layout, and <a href="../api/swiperefresh/swiperefresh/com.google.accompanist.swiperefresh/remember-swipe-refresh-state.html"><code>rememberSwipeRefreshState()</code></a> which provides some remembered state.</p>
 <p>The basic usage of a <a href="../api/swiperefresh/swiperefresh/com.google.accompanist.swiperefresh/-swipe-refresh.html"><code>SwipeRefresh</code></a> using a ViewModel looks like so:</p>
-<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="py">viewModel</span><span class="p">:</span> <span class="n">MyViewModel</span> <span class="p">=</span> <span class="n">viewModel</span><span class="p">()</span>
-<span class="k">val</span> <span class="py">isRefreshing</span> <span class="k">by</span> <span class="n">viewModel</span><span class="p">.</span><span class="n">isRefreshing</span><span class="p">.</span><span class="n">collectAsState</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span> <span class="nv">viewModel</span><span class="p">:</span> <span class="n">MyViewModel</span> <span class="o">=</span> <span class="n">viewModel</span><span class="p">()</span>
+<span class="kd">val</span> <span class="nv">isRefreshing</span> <span class="k">by</span> <span class="n">viewModel</span><span class="p">.</span><span class="na">isRefreshing</span><span class="p">.</span><span class="na">collectAsState</span><span class="p">()</span>
 
 <span class="n">SwipeRefresh</span><span class="p">(</span>
-    <span class="n">state</span> <span class="p">=</span> <span class="n">rememberSwipeRefreshState</span><span class="p">(</span><span class="n">isRefreshing</span><span class="p">),</span>
-    <span class="n">onRefresh</span> <span class="p">=</span> <span class="p">{</span> <span class="n">viewModel</span><span class="p">.</span><span class="n">refresh</span><span class="p">()</span> <span class="p">},</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">rememberSwipeRefreshState</span><span class="p">(</span><span class="n">isRefreshing</span><span class="p">),</span>
+    <span class="n">onRefresh</span> <span class="o">=</span> <span class="p">{</span> <span class="n">viewModel</span><span class="p">.</span><span class="na">refresh</span><span class="p">()</span> <span class="p">},</span>
 <span class="p">)</span> <span class="p">{</span>
     <span class="n">LazyColumn</span> <span class="p">{</span>
-        <span class="n">items</span><span class="p">(</span><span class="m">30</span><span class="p">)</span> <span class="p">{</span> <span class="n">index</span> <span class="p">-&gt;</span>
+        <span class="n">items</span><span class="p">(</span><span class="m">30</span><span class="p">)</span> <span class="p">{</span> <span class="n">index</span> <span class="o">-&gt;</span>
             <span class="c1">// TODO: list items</span>
         <span class="p">}</span>
     <span class="p">}</span>
@@ -1000,7 +1000,7 @@
 <div class="highlight"><pre><span></span><code><span class="n">SwipeRefresh</span><span class="p">(</span>
     <span class="c1">// ...</span>
 <span class="p">)</span> <span class="p">{</span>
-    <span class="n">Column</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="n">verticalScroll</span><span class="p">(</span><span class="n">rememberScrollState</span><span class="p">()))</span> <span class="p">{</span>
+    <span class="n">Column</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="na">verticalScroll</span><span class="p">(</span><span class="n">rememberScrollState</span><span class="p">()))</span> <span class="p">{</span>
         <span class="c1">// content</span>
     <span class="p">}</span>
 <span class="p">}</span>
@@ -1008,14 +1008,14 @@
 <h3 id="indicating-a-refresh-without-swiping">Indicating a refresh without swiping<a class="headerlink" href="#indicating-a-refresh-without-swiping" title="Permanent link">&para;</a></h3>
 <p>As this library is built with a seperate state object, it's easy to display a refreshing indicator without a swipe to triggering it.</p>
 <p>The unrealistic example below displays a forever refreshing indicator:</p>
-<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="py">swipeRefreshState</span> <span class="p">=</span> <span class="n">rememberSwipeRefreshState</span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span> <span class="nv">swipeRefreshState</span> <span class="o">=</span> <span class="n">rememberSwipeRefreshState</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
 
 <span class="n">SwipeRefresh</span><span class="p">(</span>
-    <span class="n">state</span> <span class="p">=</span> <span class="n">swipeRefreshState</span><span class="p">,</span>
-    <span class="n">onRefresh</span> <span class="p">=</span> <span class="p">{</span> <span class="cm">/* todo */</span> <span class="p">},</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">swipeRefreshState</span><span class="p">,</span>
+    <span class="n">onRefresh</span> <span class="o">=</span> <span class="p">{</span> <span class="cm">/* todo */</span> <span class="p">},</span>
 <span class="p">)</span> <span class="p">{</span>
     <span class="n">LazyColumn</span> <span class="p">{</span>
-        <span class="n">items</span><span class="p">(</span><span class="m">30</span><span class="p">)</span> <span class="p">{</span> <span class="n">index</span> <span class="p">-&gt;</span>
+        <span class="n">items</span><span class="p">(</span><span class="m">30</span><span class="p">)</span> <span class="p">{</span> <span class="n">index</span> <span class="o">-&gt;</span>
             <span class="c1">// TODO: list items</span>
         <span class="p">}</span>
     <span class="p">}</span>
@@ -1027,18 +1027,18 @@
 <p>To customize the default indicator, we can provide our own <code>indicator</code> content block, to call <a href="../api/swiperefresh/swiperefresh/com.google.accompanist.swiperefresh/-swipe-refresh-indicator.html"><code>SwipeRefreshIndicator()</code></a> with customized parameters:</p>
 <div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Sample</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code><span class="n">SwipeRefresh</span><span class="p">(</span>
-    <span class="n">state</span> <span class="p">=</span> <span class="cm">/* ... */</span><span class="p">,</span>
-    <span class="n">onRefresh</span> <span class="p">=</span> <span class="cm">/* ... */</span><span class="p">,</span>
-    <span class="n">indicator</span> <span class="p">=</span> <span class="p">{</span> <span class="n">state</span><span class="p">,</span> <span class="n">trigger</span> <span class="p">-&gt;</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="cm">/* ... */</span><span class="p">,</span>
+    <span class="n">onRefresh</span> <span class="o">=</span> <span class="cm">/* ... */</span><span class="p">,</span>
+    <span class="n">indicator</span> <span class="o">=</span> <span class="p">{</span> <span class="n">state</span><span class="p">,</span> <span class="n">trigger</span> <span class="o">-&gt;</span>
         <span class="n">SwipeRefreshIndicator</span><span class="p">(</span>
             <span class="c1">// Pass the SwipeRefreshState + trigger through</span>
-            <span class="n">state</span> <span class="p">=</span> <span class="n">state</span><span class="p">,</span>
-            <span class="n">refreshTriggerDistance</span> <span class="p">=</span> <span class="n">trigger</span><span class="p">,</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="n">state</span><span class="p">,</span>
+            <span class="n">refreshTriggerDistance</span> <span class="o">=</span> <span class="n">trigger</span><span class="p">,</span>
             <span class="c1">// Enable the scale animation</span>
-            <span class="n">scale</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
+            <span class="n">scale</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
             <span class="c1">// Change the color and shape</span>
-            <span class="n">backgroundColor</span> <span class="p">=</span> <span class="n">MaterialTheme</span><span class="p">.</span><span class="n">colors</span><span class="p">.</span><span class="n">primary</span><span class="p">,</span>
-            <span class="n">shape</span> <span class="p">=</span> <span class="n">MaterialTheme</span><span class="p">.</span><span class="n">shapes</span><span class="p">.</span><span class="n">small</span><span class="p">,</span>
+            <span class="n">backgroundColor</span> <span class="o">=</span> <span class="n">MaterialTheme</span><span class="p">.</span><span class="na">colors</span><span class="p">.</span><span class="na">primary</span><span class="p">,</span>
+            <span class="n">shape</span> <span class="o">=</span> <span class="n">MaterialTheme</span><span class="p">.</span><span class="na">shapes</span><span class="p">.</span><span class="na">small</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="p">}</span>
 <span class="p">)</span>

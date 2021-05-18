@@ -1083,13 +1083,13 @@ All of the APIs are marked with the <code>@ExperimentalPagerApi</code> annotatio
 
 <p>The simplest usage looks like the following:</p>
 <div class="highlight"><pre><span></span><code><span class="c1">// Display 10 items</span>
-<span class="k">val</span> <span class="py">pagerState</span> <span class="p">=</span> <span class="n">rememberPagerState</span><span class="p">(</span><span class="n">pageCount</span> <span class="p">=</span> <span class="m">10</span><span class="p">)</span>
+<span class="kd">val</span> <span class="nv">pagerState</span> <span class="o">=</span> <span class="n">rememberPagerState</span><span class="p">(</span><span class="n">pageCount</span> <span class="o">=</span> <span class="m">10</span><span class="p">)</span>
 
-<span class="n">HorizontalPager</span><span class="p">(</span><span class="n">state</span> <span class="p">=</span> <span class="n">pagerState</span><span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="p">-&gt;</span>
+<span class="n">HorizontalPager</span><span class="p">(</span><span class="n">state</span> <span class="o">=</span> <span class="n">pagerState</span><span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="o">-&gt;</span>
     <span class="c1">// Our page content</span>
     <span class="n">Text</span><span class="p">(</span>
-        <span class="n">text</span> <span class="p">=</span> <span class="s">&quot;Page: $page&quot;</span><span class="p">,</span>
-        <span class="n">modifier</span> <span class="p">=</span> <span class="n">Modifier</span><span class="p">.</span><span class="n">fillMaxWidth</span><span class="p">()</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s">&quot;Page: </span><span class="si">$</span><span class="n">page</span><span class="s">&quot;</span><span class="p">,</span>
+        <span class="n">modifier</span> <span class="o">=</span> <span class="n">Modifier</span><span class="p">.</span><span class="na">fillMaxWidth</span><span class="p">()</span>
     <span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
@@ -1104,13 +1104,13 @@ All of the APIs are marked with the <code>@ExperimentalPagerApi</code> annotatio
 </figure>
 
 <div class="highlight"><pre><span></span><code><span class="c1">// Display 10 items</span>
-<span class="k">val</span> <span class="py">pagerState</span> <span class="p">=</span> <span class="n">rememberPagerState</span><span class="p">(</span><span class="n">pageCount</span> <span class="p">=</span> <span class="m">10</span><span class="p">)</span>
+<span class="kd">val</span> <span class="nv">pagerState</span> <span class="o">=</span> <span class="n">rememberPagerState</span><span class="p">(</span><span class="n">pageCount</span> <span class="o">=</span> <span class="m">10</span><span class="p">)</span>
 
-<span class="n">VerticalPager</span><span class="p">(</span><span class="n">state</span> <span class="p">=</span> <span class="n">pagerState</span><span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="p">-&gt;</span>
+<span class="n">VerticalPager</span><span class="p">(</span><span class="n">state</span> <span class="o">=</span> <span class="n">pagerState</span><span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="o">-&gt;</span>
     <span class="c1">// Our page content</span>
     <span class="n">Text</span><span class="p">(</span>
-        <span class="n">text</span> <span class="p">=</span> <span class="s">&quot;Page: $page&quot;</span><span class="p">,</span>
-        <span class="n">modifier</span> <span class="p">=</span> <span class="n">Modifier</span><span class="p">.</span><span class="n">fillMaxWidth</span><span class="p">()</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s">&quot;Page: </span><span class="si">$</span><span class="n">page</span><span class="s">&quot;</span><span class="p">,</span>
+        <span class="n">modifier</span> <span class="o">=</span> <span class="n">Modifier</span><span class="p">.</span><span class="na">fillMaxWidth</span><span class="p">()</span>
     <span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
@@ -1118,12 +1118,12 @@ All of the APIs are marked with the <code>@ExperimentalPagerApi</code> annotatio
 <p>Pages in both <a href="../api/pager/pager/com.google.accompanist.pager/-horizontal-pager.html"><code>HorizontalPager</code></a> and <a href="../api/pager/pager/com.google.accompanist.pager/-vertical-pager.html"><code>VerticalPager</code></a> are lazily composed and laid-out as required by the layout. As the user scrolls through pages, any pages which are no longer required are removed from the content.</p>
 <h3 id="offscreen-limit">Offscreen Limit<a class="headerlink" href="#offscreen-limit" title="Permanent link">&para;</a></h3>
 <p>The <a href="../api/pager/pager/com.google.accompanist.pager/remember-pager-state.html">PagerState</a> API allows the setting of the <code>offscreenLimit</code>, which defines the number of pages that should be retained on either side of the current page. Pages beyond this limit will be removed, and then recreated as needed. This value defaults to <code>1</code>, but can be increased to enable pre-loading of more content:</p>
-<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="py">pagerState</span> <span class="p">=</span> <span class="n">rememberPagerState</span><span class="p">(</span>
-    <span class="n">pageCount</span> <span class="p">=</span> <span class="m">10</span><span class="p">,</span>
-    <span class="n">offscreenLimit</span> <span class="p">=</span> <span class="m">2</span><span class="p">,</span>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span> <span class="nv">pagerState</span> <span class="o">=</span> <span class="n">rememberPagerState</span><span class="p">(</span>
+    <span class="n">pageCount</span> <span class="o">=</span> <span class="m">10</span><span class="p">,</span>
+    <span class="n">offscreenLimit</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">HorizontalPager</span><span class="p">(</span><span class="n">state</span> <span class="p">=</span> <span class="n">pagerState</span><span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="p">-&gt;</span>
+<span class="n">HorizontalPager</span><span class="p">(</span><span class="n">state</span> <span class="o">=</span> <span class="n">pagerState</span><span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="o">-&gt;</span>
     <span class="c1">// ...</span>
 <span class="p">}</span>
 </code></pre></div>
@@ -1141,30 +1141,30 @@ All of the APIs are marked with the <code>@ExperimentalPagerApi</code> annotatio
 <p>The scope provided to your pager content allows apps to easily reference the <a href="../api/pager/pager/com.google.accompanist.pager/-pager-state/current-page.html"><code>currentPage</code></a> and <a href="../api/pager/pager/com.google.accompanist.pager/-pager-state/current-page-offset.html"><code>currentPageOffset</code></a>. The effects can then be calculated using those values. We provide the <a href="../api/pager/pager/com.google.accompanist.pager/calculate-current-offset-for-page.html"><code>calculateCurrentOffsetForPage()</code></a> extension functions to support calculation of the 'offset' for a given page:</p>
 <div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">com.google.accompanist.pager.calculateCurrentOffsetForPage</span>
 
-<span class="n">HorizontalPager</span><span class="p">(</span><span class="n">state</span> <span class="p">=</span> <span class="n">pagerState</span><span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="p">-&gt;</span>
+<span class="n">HorizontalPager</span><span class="p">(</span><span class="n">state</span> <span class="o">=</span> <span class="n">pagerState</span><span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="o">-&gt;</span>
     <span class="n">Card</span><span class="p">(</span>
         <span class="n">Modifier</span>
-            <span class="p">.</span><span class="n">graphicsLayer</span> <span class="p">{</span>
+            <span class="p">.</span><span class="na">graphicsLayer</span> <span class="p">{</span>
                 <span class="c1">// Calculate the absolute offset for the current page from the</span>
                 <span class="c1">// scroll position. We use the absolute value which allows us to mirror</span>
                 <span class="c1">// any effects for both directions</span>
-                <span class="k">val</span> <span class="py">pageOffset</span> <span class="p">=</span> <span class="n">calculateCurrentOffsetForPage</span><span class="p">(</span><span class="n">page</span><span class="p">).</span><span class="n">absoluteValue</span>
+                <span class="kd">val</span> <span class="nv">pageOffset</span> <span class="o">=</span> <span class="n">calculateCurrentOffsetForPage</span><span class="p">(</span><span class="n">page</span><span class="p">).</span><span class="na">absoluteValue</span>
 
                 <span class="c1">// We animate the scaleX + scaleY, between 85% and 100%</span>
                 <span class="n">lerp</span><span class="p">(</span>
-                    <span class="n">start</span> <span class="p">=</span> <span class="m">0.85f</span><span class="p">,</span>
-                    <span class="n">stop</span> <span class="p">=</span> <span class="m">1f</span><span class="p">,</span>
-                    <span class="n">fraction</span> <span class="p">=</span> <span class="m">1f</span> <span class="p">-</span> <span class="n">pageOffset</span><span class="p">.</span><span class="n">coerceIn</span><span class="p">(</span><span class="m">0f</span><span class="p">,</span> <span class="m">1f</span><span class="p">)</span>
-                <span class="p">).</span><span class="n">also</span> <span class="p">{</span> <span class="n">scale</span> <span class="p">-&gt;</span>
-                    <span class="n">scaleX</span> <span class="p">=</span> <span class="n">scale</span>
-                    <span class="n">scaleY</span> <span class="p">=</span> <span class="n">scale</span>
+                    <span class="n">start</span> <span class="o">=</span> <span class="m">0.85f</span><span class="p">,</span>
+                    <span class="n">stop</span> <span class="o">=</span> <span class="m">1f</span><span class="p">,</span>
+                    <span class="n">fraction</span> <span class="o">=</span> <span class="m">1f</span> <span class="o">-</span> <span class="n">pageOffset</span><span class="p">.</span><span class="na">coerceIn</span><span class="p">(</span><span class="m">0f</span><span class="p">,</span> <span class="m">1f</span><span class="p">)</span>
+                <span class="p">).</span><span class="na">also</span> <span class="p">{</span> <span class="n">scale</span> <span class="o">-&gt;</span>
+                    <span class="n">scaleX</span> <span class="o">=</span> <span class="n">scale</span>
+                    <span class="n">scaleY</span> <span class="o">=</span> <span class="n">scale</span>
                 <span class="p">}</span>
 
                 <span class="c1">// We animate the alpha, between 50% and 100%</span>
-                <span class="n">alpha</span> <span class="p">=</span> <span class="n">lerp</span><span class="p">(</span>
-                    <span class="n">start</span> <span class="p">=</span> <span class="m">0.5f</span><span class="p">,</span>
-                    <span class="n">stop</span> <span class="p">=</span> <span class="m">1f</span><span class="p">,</span>
-                    <span class="n">fraction</span> <span class="p">=</span> <span class="m">1f</span> <span class="p">-</span> <span class="n">pageOffset</span><span class="p">.</span><span class="n">coerceIn</span><span class="p">(</span><span class="m">0f</span><span class="p">,</span> <span class="m">1f</span><span class="p">)</span>
+                <span class="n">alpha</span> <span class="o">=</span> <span class="n">lerp</span><span class="p">(</span>
+                    <span class="n">start</span> <span class="o">=</span> <span class="m">0.5f</span><span class="p">,</span>
+                    <span class="n">stop</span> <span class="o">=</span> <span class="m">1f</span><span class="p">,</span>
+                    <span class="n">fraction</span> <span class="o">=</span> <span class="m">1f</span> <span class="o">-</span> <span class="n">pageOffset</span><span class="p">.</span><span class="na">coerceIn</span><span class="p">(</span><span class="m">0f</span><span class="p">,</span> <span class="m">1f</span><span class="p">)</span>
                 <span class="p">)</span>
             <span class="p">}</span>
     <span class="p">)</span> <span class="p">{</span>
@@ -1175,7 +1175,7 @@ All of the APIs are marked with the <code>@ExperimentalPagerApi</code> annotatio
 <h2 id="reacting-to-page-changes">Reacting to page changes<a class="headerlink" href="#reacting-to-page-changes" title="Permanent link">&para;</a></h2>
 <p>The <a href="../api/pager/pager/com.google.accompanist.pager/-pager-state/current-page.html"><code>PagerState.currentPage</code></a> property is updated whenever the selected page changes. You can use the <code>snapshowFlow</code> function to observe changes in a flow:</p>
 <div class="highlight"><pre><span></span><code><span class="n">LaunchedEffect</span><span class="p">(</span><span class="n">pagerState</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">snapshotFlow</span> <span class="p">{</span> <span class="n">pagerState</span><span class="p">.</span><span class="n">currentPage</span> <span class="p">}.</span><span class="n">collect</span> <span class="p">{</span> <span class="n">page</span> <span class="p">-&gt;</span>
+    <span class="n">snapshotFlow</span> <span class="p">{</span> <span class="n">pagerState</span><span class="p">.</span><span class="na">currentPage</span> <span class="p">}.</span><span class="na">collect</span> <span class="p">{</span> <span class="n">page</span> <span class="o">-&gt;</span>
         <span class="c1">// Selected page has changed...</span>
     <span class="p">}</span>
 <span class="p">}</span>
@@ -1202,29 +1202,29 @@ All of the APIs are marked with the <code>@ExperimentalPagerApi</code> annotatio
 </figure>
 
 <p>Provided in the <code>pager-indicators</code> library is a modifier which can be used on a tab indicator like so:</p>
-<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="py">pagerState</span> <span class="p">=</span> <span class="n">rememberPagerState</span><span class="p">(</span><span class="n">pageCount</span> <span class="p">=</span> <span class="n">pages</span><span class="p">.</span><span class="n">size</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span> <span class="nv">pagerState</span> <span class="o">=</span> <span class="n">rememberPagerState</span><span class="p">(</span><span class="n">pageCount</span> <span class="o">=</span> <span class="n">pages</span><span class="p">.</span><span class="na">size</span><span class="p">)</span>
 
 <span class="n">TabRow</span><span class="p">(</span>
     <span class="c1">// Our selected tab is our current page</span>
-    <span class="n">selectedTabIndex</span> <span class="p">=</span> <span class="n">pagerState</span><span class="p">.</span><span class="n">currentPage</span><span class="p">,</span>
+    <span class="n">selectedTabIndex</span> <span class="o">=</span> <span class="n">pagerState</span><span class="p">.</span><span class="na">currentPage</span><span class="p">,</span>
     <span class="c1">// Override the indicator, using the provided pagerTabIndicatorOffset modifier</span>
-    <span class="n">indicator</span> <span class="p">=</span> <span class="p">{</span> <span class="n">tabPositions</span> <span class="p">-&gt;</span>
-        <span class="n">TabRowDefaults</span><span class="p">.</span><span class="n">Indicator</span><span class="p">(</span>
-            <span class="n">Modifier</span><span class="p">.</span><span class="n">pagerTabIndicatorOffset</span><span class="p">(</span><span class="n">pagerState</span><span class="p">,</span> <span class="n">tabPositions</span><span class="p">)</span>
+    <span class="n">indicator</span> <span class="o">=</span> <span class="p">{</span> <span class="n">tabPositions</span> <span class="o">-&gt;</span>
+        <span class="n">TabRowDefaults</span><span class="p">.</span><span class="na">Indicator</span><span class="p">(</span>
+            <span class="n">Modifier</span><span class="p">.</span><span class="na">pagerTabIndicatorOffset</span><span class="p">(</span><span class="n">pagerState</span><span class="p">,</span> <span class="n">tabPositions</span><span class="p">)</span>
         <span class="p">)</span>
     <span class="p">}</span>
 <span class="p">)</span> <span class="p">{</span>
     <span class="c1">// Add tabs for all of our pages</span>
-    <span class="n">pages</span><span class="p">.</span><span class="n">forEachIndexed</span> <span class="p">{</span> <span class="n">index</span><span class="p">,</span> <span class="n">title</span> <span class="p">-&gt;</span>
+    <span class="n">pages</span><span class="p">.</span><span class="na">forEachIndexed</span> <span class="p">{</span> <span class="n">index</span><span class="p">,</span> <span class="n">title</span> <span class="o">-&gt;</span>
         <span class="n">Tab</span><span class="p">(</span>
-            <span class="n">text</span> <span class="p">=</span> <span class="p">{</span> <span class="n">Text</span><span class="p">(</span><span class="n">title</span><span class="p">)</span> <span class="p">},</span>
-            <span class="n">selected</span> <span class="p">=</span> <span class="n">pagerState</span><span class="p">.</span><span class="n">currentPage</span> <span class="p">==</span> <span class="n">index</span><span class="p">,</span>
-            <span class="n">onClick</span> <span class="p">=</span> <span class="p">{</span> <span class="cm">/* TODO */</span> <span class="p">},</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="p">{</span> <span class="n">Text</span><span class="p">(</span><span class="n">title</span><span class="p">)</span> <span class="p">},</span>
+            <span class="n">selected</span> <span class="o">=</span> <span class="n">pagerState</span><span class="p">.</span><span class="na">currentPage</span> <span class="o">==</span> <span class="n">index</span><span class="p">,</span>
+            <span class="n">onClick</span> <span class="o">=</span> <span class="p">{</span> <span class="cm">/* TODO */</span> <span class="p">},</span>
         <span class="p">)</span>
     <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="n">HorizontalPager</span><span class="p">(</span><span class="n">state</span> <span class="p">=</span> <span class="n">pagerState</span><span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="p">-&gt;</span>
+<span class="n">HorizontalPager</span><span class="p">(</span><span class="n">state</span> <span class="o">=</span> <span class="n">pagerState</span><span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="o">-&gt;</span>
     <span class="c1">// TODO: page content</span>
 <span class="p">}</span>
 </code></pre></div>

@@ -983,8 +983,8 @@
 <span class="k">import</span> <span class="nn">com.google.accompanist.coil.rememberCoilPainter</span>
 
 <span class="n">Image</span><span class="p">(</span>
-    <span class="n">painter</span> <span class="p">=</span> <span class="n">rememberCoilPainter</span><span class="p">(</span><span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">),</span>
-    <span class="n">contentDescription</span> <span class="p">=</span> <span class="n">stringResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="n">string</span><span class="p">.</span><span class="n">image_content_desc</span><span class="p">),</span>
+    <span class="n">painter</span> <span class="o">=</span> <span class="n">rememberCoilPainter</span><span class="p">(</span><span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">),</span>
+    <span class="n">contentDescription</span> <span class="o">=</span> <span class="n">stringResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="na">string</span><span class="p">.</span><span class="na">image_content_desc</span><span class="p">),</span>
 <span class="p">)</span>
 </code></pre></div>
 <p>This painter loads the data passed in, using <a href="https://github.com/coil-kt/coil">Coil</a>, and then draws the resulting image.</p>
@@ -993,13 +993,13 @@
 <span class="k">import</span> <span class="nn">com.google.accompanist.coil.rememberCoilPainter</span>
 
 <span class="n">Image</span><span class="p">(</span>
-    <span class="n">painter</span> <span class="p">=</span> <span class="n">rememberCoilPainter</span><span class="p">(</span>
-        <span class="n">request</span> <span class="p">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
-        <span class="n">requestBuilder</span> <span class="p">=</span> <span class="p">{</span>
+    <span class="n">painter</span> <span class="o">=</span> <span class="n">rememberCoilPainter</span><span class="p">(</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
+        <span class="n">requestBuilder</span> <span class="o">=</span> <span class="p">{</span>
             <span class="n">transformations</span><span class="p">(</span><span class="n">CircleCropTransformation</span><span class="p">())</span>
         <span class="p">},</span>
     <span class="p">),</span>
-    <span class="n">contentDescription</span> <span class="p">=</span> <span class="n">stringResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="n">string</span><span class="p">.</span><span class="n">image_content_desc</span><span class="p">),</span>
+    <span class="n">contentDescription</span> <span class="o">=</span> <span class="n">stringResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="na">string</span><span class="p">.</span><span class="na">image_content_desc</span><span class="p">),</span>
 <span class="p">)</span>
 </code></pre></div>
 <h2 id="fade-in-animation">Fade-in animation<a class="headerlink" href="#fade-in-animation" title="Permanent link">&para;</a></h2>
@@ -1010,29 +1010,29 @@
 <span class="k">import</span> <span class="nn">com.google.accompanist.coil.rememberCoilPainter</span>
 
 <span class="n">Image</span><span class="p">(</span>
-    <span class="n">painter</span> <span class="p">=</span> <span class="n">rememberCoilPainter</span><span class="p">(</span>
+    <span class="n">painter</span> <span class="o">=</span> <span class="n">rememberCoilPainter</span><span class="p">(</span>
         <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
-        <span class="n">fadeIn</span> <span class="p">=</span> <span class="k">true</span>
+        <span class="n">fadeIn</span> <span class="o">=</span> <span class="kc">true</span>
     <span class="p">),</span>
-    <span class="n">contentDescription</span> <span class="p">=</span> <span class="n">stringResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="n">string</span><span class="p">.</span><span class="n">image_content_desc</span><span class="p">),</span>
+    <span class="n">contentDescription</span> <span class="o">=</span> <span class="n">stringResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="na">string</span><span class="p">.</span><span class="na">image_content_desc</span><span class="p">),</span>
 <span class="p">)</span>
 </code></pre></div>
 <h2 id="custom-content">Custom content<a class="headerlink" href="#custom-content" title="Permanent link">&para;</a></h2>
 <p>Some times you may wish to display alternative content whilst the image is loading, or an error has occurred. The painter returned from <code>rememberCoilPainter()</code> is an instance of <a href="../api/imageloading-core/imageloading-core/com.google.accompanist.imageloading/-load-painter/index.html"><code>LoadPainter</code></a>, which is stateful and allows you to display different content as required:</p>
-<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="py">painter</span> <span class="p">=</span> <span class="n">rememberCoilPainter</span><span class="p">(</span><span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span> <span class="nv">painter</span> <span class="o">=</span> <span class="n">rememberCoilPainter</span><span class="p">(</span><span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">)</span>
 
 <span class="n">Box</span> <span class="p">{</span>
     <span class="n">Image</span><span class="p">(</span>
-        <span class="n">painter</span> <span class="p">=</span> <span class="n">painter</span><span class="p">,</span>
-        <span class="n">contentDescription</span> <span class="p">=</span> <span class="n">stringResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="n">string</span><span class="p">.</span><span class="n">image_content_desc</span><span class="p">),</span>
+        <span class="n">painter</span> <span class="o">=</span> <span class="n">painter</span><span class="p">,</span>
+        <span class="n">contentDescription</span> <span class="o">=</span> <span class="n">stringResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="na">string</span><span class="p">.</span><span class="na">image_content_desc</span><span class="p">),</span>
     <span class="p">)</span>
 
-    <span class="k">when</span> <span class="p">(</span><span class="n">painter</span><span class="p">.</span><span class="n">loadState</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">is</span> <span class="n">ImageLoadState</span><span class="p">.</span><span class="n">Loading</span> <span class="p">-&gt;</span> <span class="p">{</span>
+    <span class="k">when</span> <span class="p">(</span><span class="n">painter</span><span class="p">.</span><span class="na">loadState</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">is</span> <span class="n">ImageLoadState</span><span class="p">.</span><span class="na">Loading</span> <span class="o">-&gt;</span> <span class="p">{</span>
             <span class="c1">// Display a circular progress indicator whilst loading</span>
-            <span class="n">CircularProgressIndicator</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="n">align</span><span class="p">(</span><span class="n">Alignment</span><span class="p">.</span><span class="n">Center</span><span class="p">))</span>
+            <span class="n">CircularProgressIndicator</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="na">align</span><span class="p">(</span><span class="n">Alignment</span><span class="p">.</span><span class="na">Center</span><span class="p">))</span>
         <span class="p">}</span>
-        <span class="k">is</span> <span class="n">ImageLoadState</span><span class="p">.</span><span class="n">Error</span> <span class="p">-&gt;</span> <span class="p">{</span>
+        <span class="k">is</span> <span class="n">ImageLoadState</span><span class="p">.</span><span class="na">Error</span> <span class="o">-&gt;</span> <span class="p">{</span>
             <span class="c1">// If you wish to display some content if the request fails</span>
         <span class="p">}</span>
     <span class="p">}</span>
@@ -1042,11 +1042,11 @@
 <h2 id="previews">Previews<a class="headerlink" href="#previews" title="Permanent link">&para;</a></h2>
 <p>To support Android Studio <a href="https://developer.android.com/jetpack/compose/tooling">Composable Previews</a>, you can provide a drawable resource ID via the <code>previewPlaceholder</code> parameter. That drawable will then be displayed when your content is displayed as a preview:</p>
 <div class="highlight"><pre><span></span><code><span class="n">Image</span><span class="p">(</span>
-    <span class="n">painter</span> <span class="p">=</span> <span class="n">rememberCoilPainter</span><span class="p">(</span>
-        <span class="n">request</span> <span class="p">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
-        <span class="n">previewPlaceholder</span> <span class="p">=</span> <span class="n">R</span><span class="p">.</span><span class="n">drawable</span><span class="p">.</span><span class="n">placeholder</span><span class="p">,</span>
+    <span class="n">painter</span> <span class="o">=</span> <span class="n">rememberCoilPainter</span><span class="p">(</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
+        <span class="n">previewPlaceholder</span> <span class="o">=</span> <span class="n">R</span><span class="p">.</span><span class="na">drawable</span><span class="p">.</span><span class="na">placeholder</span><span class="p">,</span>
     <span class="p">),</span>
-    <span class="n">contentDescription</span> <span class="p">=</span> <span class="n">stringResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="n">string</span><span class="p">.</span><span class="n">image_content_desc</span><span class="p">),</span>
+    <span class="n">contentDescription</span> <span class="o">=</span> <span class="n">stringResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="na">string</span><span class="p">.</span><span class="na">image_content_desc</span><span class="p">),</span>
 <span class="p">)</span>
 </code></pre></div>
 <p>If the referenced drawable is only used for the purposes of <code>previewPlaceholder</code>s, it can be placed in the resources of your <code>debug</code> build variant For example: <code>app/debug/res/drawable/</code>. This allows the drawable to be only bundled in your debug builds, and not shipped to users of your release build.</p>
@@ -1054,30 +1054,30 @@
 <p>Accompanist Coil supports GIFs through Coil's own GIF support. Follow the <a href="https://coil-kt.github.io/coil/gifs/">setup instructions</a> and it should just work.</p>
 <h2 id="observing-load-state-changes">Observing load state changes<a class="headerlink" href="#observing-load-state-changes" title="Permanent link">&para;</a></h2>
 <p>To observe changes to the load state you can use <a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/package-summary#snapshotflow"><code>snapshotFlow()</code></a> to observe changes to <code>painter.loadState</code>, and then call your logic as necessary:</p>
-<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="py">painter</span> <span class="p">=</span> <span class="n">rememberCoilPainter</span><span class="p">(</span><span class="s">&quot;https://image.url&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span> <span class="nv">painter</span> <span class="o">=</span> <span class="n">rememberCoilPainter</span><span class="p">(</span><span class="s">&quot;https://image.url&quot;</span><span class="p">)</span>
 
 <span class="n">LaunchedEffect</span><span class="p">(</span><span class="n">painter</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">snapshotFlow</span> <span class="p">{</span> <span class="n">painter</span><span class="p">.</span><span class="n">loadState</span> <span class="p">}</span>
-        <span class="p">.</span><span class="n">filter</span> <span class="p">{</span> <span class="n">it</span><span class="p">.</span><span class="n">isFinalState</span><span class="p">()</span> <span class="p">}</span>
-        <span class="p">.</span><span class="n">collect</span> <span class="p">{</span> <span class="n">result</span> <span class="p">-&gt;</span>
+    <span class="n">snapshotFlow</span> <span class="p">{</span> <span class="n">painter</span><span class="p">.</span><span class="na">loadState</span> <span class="p">}</span>
+        <span class="p">.</span><span class="na">filter</span> <span class="p">{</span> <span class="nb">it</span><span class="p">.</span><span class="na">isFinalState</span><span class="p">()</span> <span class="p">}</span>
+        <span class="p">.</span><span class="na">collect</span> <span class="p">{</span> <span class="n">result</span> <span class="o">-&gt;</span>
             <span class="c1">// TODO do something with result</span>
         <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="n">Image</span><span class="p">(</span><span class="n">painter</span> <span class="p">=</span> <span class="n">painter</span><span class="p">)</span>
+<span class="n">Image</span><span class="p">(</span><span class="n">painter</span> <span class="o">=</span> <span class="n">painter</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="custom-imageloader">Custom ImageLoader<a class="headerlink" href="#custom-imageloader" title="Permanent link">&para;</a></h2>
 <p>If you wish to provide a default <a href="https://coil-kt.github.io/coil/image_loaders/"><code>ImageLoader</code></a> to use across all of your <code>rememberCoilPainter()</code>
 calls, we provide the <a href="../api/coil/coil/com.google.accompanist.coil/-local-image-loader.html"><code>LocalImageLoader</code></a> composition local.</p>
 <p>You can use it like so:</p>
-<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="py">imageLoader</span> <span class="p">=</span> <span class="n">ImageLoader</span><span class="p">.</span><span class="n">Builder</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span> <span class="nv">imageLoader</span> <span class="o">=</span> <span class="n">ImageLoader</span><span class="p">.</span><span class="na">Builder</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
     <span class="c1">// customize the ImageLoader as needed</span>
-    <span class="p">.</span><span class="n">build</span><span class="p">()</span>
+    <span class="p">.</span><span class="na">build</span><span class="p">()</span>
 
 <span class="n">CompositionLocalProvider</span><span class="p">(</span><span class="n">LocalImageLoader</span> <span class="n">provides</span> <span class="n">imageLoader</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// This will automatically use the value of LocalImageLoader</span>
     <span class="n">Image</span><span class="p">(</span>
-        <span class="n">painter</span> <span class="p">=</span> <span class="n">rememberCoilPainter</span><span class="p">(...)</span>
+        <span class="n">painter</span> <span class="o">=</span> <span class="n">rememberCoilPainter</span><span class="p">(...)</span>
     <span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>

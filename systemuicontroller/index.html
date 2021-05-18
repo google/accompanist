@@ -948,15 +948,15 @@
 <p>To control the system UI in your composables, you must need to get a <a href="../api/systemuicontroller/systemuicontroller/com.google.accompanist.systemuicontroller/-system-ui-controller/"><code>SystemUiController</code></a> instance. The library provides the <a href="../api/systemuicontroller/systemuicontroller/com.google.accompanist.systemuicontroller/remember-system-ui-controller.html"><code>rememberSystemUiController()</code></a> function which returns an instance for the current system (currently only Android).</p>
 <p>In your layouts you can update the system bar colors like so:</p>
 <div class="highlight"><pre><span></span><code><span class="c1">// Remember a SystemUiController</span>
-<span class="k">val</span> <span class="py">systemUiController</span> <span class="p">=</span> <span class="n">rememberSystemUiController</span><span class="p">()</span>
-<span class="k">val</span> <span class="py">useDarkIcons</span> <span class="p">=</span> <span class="n">MaterialTheme</span><span class="p">.</span><span class="n">colors</span><span class="p">.</span><span class="n">isLight</span>
+<span class="kd">val</span> <span class="nv">systemUiController</span> <span class="o">=</span> <span class="n">rememberSystemUiController</span><span class="p">()</span>
+<span class="kd">val</span> <span class="nv">useDarkIcons</span> <span class="o">=</span> <span class="n">MaterialTheme</span><span class="p">.</span><span class="na">colors</span><span class="p">.</span><span class="na">isLight</span>
 
 <span class="n">SideEffect</span> <span class="p">{</span>
     <span class="c1">// Update all of the system bar colors to be transparent, and use</span>
     <span class="c1">// dark icons if we&#39;re in light theme</span>
-    <span class="n">systemUiController</span><span class="p">.</span><span class="n">setSystemBarsColor</span><span class="p">(</span>
-        <span class="n">color</span> <span class="p">=</span> <span class="n">Color</span><span class="p">.</span><span class="n">Transparent</span><span class="p">,</span>
-        <span class="n">darkIcons</span> <span class="p">=</span> <span class="n">useDarkIcons</span>
+    <span class="n">systemUiController</span><span class="p">.</span><span class="na">setSystemBarsColor</span><span class="p">(</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">.</span><span class="na">Transparent</span><span class="p">,</span>
+        <span class="n">darkIcons</span> <span class="o">=</span> <span class="n">useDarkIcons</span>
     <span class="p">)</span>
 
     <span class="c1">// setStatusBarsColor() and setNavigationBarsColor() also exist</span>
@@ -970,10 +970,10 @@ altering the requested color with a scrim, to maintain contrast:</p>
 <p>Similar happens on navigation bar color, which is only available on API 26+.</p>
 <h3 id="modifying-scrim-logic">Modifying scrim logic<a class="headerlink" href="#modifying-scrim-logic" title="Permanent link">&para;</a></h3>
 <p>The scrim logic can be modified if needed:</p>
-<div class="highlight"><pre><span></span><code><span class="n">systemUiController</span><span class="p">.</span><span class="n">setStatusBarsColor</span><span class="p">(</span>
-    <span class="n">color</span> <span class="p">=</span> <span class="n">Color</span><span class="p">.</span><span class="n">Transparent</span><span class="p">,</span>
-    <span class="n">darkIcons</span> <span class="p">=</span> <span class="k">true</span>
-<span class="p">)</span> <span class="p">{</span> <span class="n">requestedColor</span> <span class="p">-&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="n">systemUiController</span><span class="p">.</span><span class="na">setStatusBarsColor</span><span class="p">(</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">.</span><span class="na">Transparent</span><span class="p">,</span>
+    <span class="n">darkIcons</span> <span class="o">=</span> <span class="kc">true</span>
+<span class="p">)</span> <span class="p">{</span> <span class="n">requestedColor</span> <span class="o">-&gt;</span>
     <span class="c1">// TODO: return a darkened color to be used when the system doesn&#39;t</span>
     <span class="c1">// natively support dark icons</span>
 <span class="p">}</span>
