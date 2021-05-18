@@ -6,7 +6,12 @@ This library brings easy-to-use [Painter][painter] which can fetch and display i
 
 <img src="https://github.com/bumptech/glide/blob/master/static/glide_logo.png?raw=true" width="480" alt="Glide logo">
 
-!!! info
+!!! tip
+    Unless you have a specific requirement to use Glide, consider using [Coil](coil.md) instead.
+    Coil is built upon Kotlin Coroutines which means that it integrates better with
+    Jetpack Compose, which also heavily uses [Coroutines](https://developer.android.com/jetpack/compose/kotlin#coroutines).
+
+??? info "Migrating from GlideImage"
     If you're migrating from Accompanist 0.7.x or before, please read the [migration](./migration-glideimage) documentation after reading this document.
 
 ## `rememberGlidePainter()`
