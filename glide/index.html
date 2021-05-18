@@ -975,19 +975,23 @@
 <p><a href="https://search.maven.org/search?q=g:com.google.accompanist"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-glide" /></a></p>
 <p>This library brings easy-to-use <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/painter/Painter">Painter</a> which can fetch and display images from external sources, such as network, using the <a href="https://bumptech.github.io/glide/">Glide</a> image loading library.</p>
 <p><img src="https://github.com/bumptech/glide/blob/master/static/glide_logo.png?raw=true" width="480" alt="Glide logo"></p>
-<div class="admonition info">
-<p class="admonition-title">Info</p>
-<p>If you're migrating from Accompanist 0.7.x or before, please read the <a href="./migration-glideimage">migration</a> documentation after reading this document.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Unless you have a specific requirement to use Glide, consider using <a href="../coil/">Coil</a> instead.
+Coil is built upon Kotlin Coroutines which means that it integrates better with
+Jetpack Compose, which also heavily uses <a href="https://developer.android.com/jetpack/compose/kotlin#coroutines">Coroutines</a>.</p>
 </div>
+<details class="info"><summary>Migrating from GlideImage</summary><p>If you're migrating from Accompanist 0.7.x or before, please read the <a href="./migration-glideimage">migration</a> documentation after reading this document.</p>
+</details>
 <h2 id="rememberglidepainter"><code>rememberGlidePainter()</code><a class="headerlink" href="#rememberglidepainter" title="Permanent link">&para;</a></h2>
 <p>The primary API is via the <a href="../api/glide/glide/com.google.accompanist.glide/remember-glide-painter.html"><code>rememberGlidePainter()</code></a> function. The simplest usage is like so:</p>
 <div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">androidx.compose.foundation.Image</span>
 <span class="k">import</span> <span class="nn">com.google.accompanist.glide.rememberGlidePainter</span>
 
 <span class="n">Image</span><span class="p">(</span>
-    <span class="n">painter</span> <span class="o">=</span> <span class="n">rememberGlidePainter</span><span class="p">(</span><span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">),</span>
-    <span class="n">contentDescription</span> <span class="o">=</span> <span class="n">stringResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="na">string</span><span class="p">.</span><span class="na">image_content_desc</span><span class="p">),</span>
-    <span class="n">previewPlaceholder</span> <span class="o">=</span> <span class="n">R</span><span class="p">.</span><span class="na">drawable</span><span class="p">.</span><span class="na">placeholder</span><span class="p">,</span>
+    <span class="n">painter</span> <span class="p">=</span> <span class="n">rememberGlidePainter</span><span class="p">(</span><span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">),</span>
+    <span class="n">contentDescription</span> <span class="p">=</span> <span class="n">stringResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="n">string</span><span class="p">.</span><span class="n">image_content_desc</span><span class="p">),</span>
+    <span class="n">previewPlaceholder</span> <span class="p">=</span> <span class="n">R</span><span class="p">.</span><span class="n">drawable</span><span class="p">.</span><span class="n">placeholder</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div>
 <p>This painter loads the data passed in, using <a href="https://bumptech.github.io/glide/">Glide</a>, and then draws the resulting image.</p>
@@ -996,13 +1000,13 @@
 <span class="k">import</span> <span class="nn">com.google.accompanist.glide.rememberGlidePainter</span>
 
 <span class="n">Image</span><span class="p">(</span>
-    <span class="n">painter</span> <span class="o">=</span> <span class="n">rememberGlidePainter</span><span class="p">(</span>
-        <span class="n">request</span> <span class="o">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
-        <span class="n">requestBuilder</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">painter</span> <span class="p">=</span> <span class="n">rememberGlidePainter</span><span class="p">(</span>
+        <span class="n">request</span> <span class="p">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
+        <span class="n">requestBuilder</span> <span class="p">=</span> <span class="p">{</span>
             <span class="n">transformations</span><span class="p">(</span><span class="n">CircleCropTransformation</span><span class="p">())</span>
         <span class="p">},</span>
     <span class="p">),</span>
-    <span class="n">contentDescription</span> <span class="o">=</span> <span class="n">stringResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="na">string</span><span class="p">.</span><span class="na">image_content_desc</span><span class="p">),</span>
+    <span class="n">contentDescription</span> <span class="p">=</span> <span class="n">stringResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="n">string</span><span class="p">.</span><span class="n">image_content_desc</span><span class="p">),</span>
 <span class="p">)</span>
 </code></pre></div>
 <h2 id="fade-in-animation">Fade-in animation<a class="headerlink" href="#fade-in-animation" title="Permanent link">&para;</a></h2>
@@ -1013,29 +1017,29 @@
 <span class="k">import</span> <span class="nn">com.google.accompanist.glide.rememberGlidePainter</span>
 
 <span class="n">Image</span><span class="p">(</span>
-    <span class="n">painter</span> <span class="o">=</span> <span class="n">rememberGlidePainter</span><span class="p">(</span>
+    <span class="n">painter</span> <span class="p">=</span> <span class="n">rememberGlidePainter</span><span class="p">(</span>
         <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
-        <span class="n">fadeIn</span> <span class="o">=</span> <span class="kc">true</span>
+        <span class="n">fadeIn</span> <span class="p">=</span> <span class="k">true</span>
     <span class="p">),</span>
-    <span class="n">contentDescription</span> <span class="o">=</span> <span class="n">stringResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="na">string</span><span class="p">.</span><span class="na">image_content_desc</span><span class="p">),</span>
+    <span class="n">contentDescription</span> <span class="p">=</span> <span class="n">stringResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="n">string</span><span class="p">.</span><span class="n">image_content_desc</span><span class="p">),</span>
 <span class="p">)</span>
 </code></pre></div>
 <h2 id="custom-content">Custom content<a class="headerlink" href="#custom-content" title="Permanent link">&para;</a></h2>
 <p>Some times you may wish to display some alternative content whilst the image is loading, or an error has occurred. The painter returned from <code>rememberGlidePainter()</code> is an instance of <a href="../api/imageloading-core/imageloading-core/com.google.accompanist.imageloading/-load-painter/index.html"><code>LoadPainter</code></a>, which is stateful and allows you to display different content as required:</p>
-<div class="highlight"><pre><span></span><code><span class="kd">val</span> <span class="nv">painter</span> <span class="o">=</span> <span class="n">rememberGlidePainter</span><span class="p">(</span><span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="py">painter</span> <span class="p">=</span> <span class="n">rememberGlidePainter</span><span class="p">(</span><span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">)</span>
 
 <span class="n">Box</span> <span class="p">{</span>
     <span class="n">Image</span><span class="p">(</span>
-        <span class="n">painter</span> <span class="o">=</span> <span class="n">painter</span><span class="p">,</span>
-        <span class="n">contentDescription</span> <span class="o">=</span> <span class="n">stringResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="na">string</span><span class="p">.</span><span class="na">image_content_desc</span><span class="p">),</span>
+        <span class="n">painter</span> <span class="p">=</span> <span class="n">painter</span><span class="p">,</span>
+        <span class="n">contentDescription</span> <span class="p">=</span> <span class="n">stringResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="n">string</span><span class="p">.</span><span class="n">image_content_desc</span><span class="p">),</span>
     <span class="p">)</span>
 
-    <span class="k">when</span> <span class="p">(</span><span class="n">painter</span><span class="p">.</span><span class="na">loadState</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">ImageLoadState</span><span class="p">.</span><span class="na">Loading</span> <span class="o">-&gt;</span> <span class="p">{</span>
+    <span class="k">when</span> <span class="p">(</span><span class="n">painter</span><span class="p">.</span><span class="n">loadState</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">is</span> <span class="n">ImageLoadState</span><span class="p">.</span><span class="n">Loading</span> <span class="p">-&gt;</span> <span class="p">{</span>
             <span class="c1">// Display a circular progress indicator whilst loading</span>
-            <span class="n">CircularProgressIndicator</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="na">align</span><span class="p">(</span><span class="n">Alignment</span><span class="p">.</span><span class="na">Center</span><span class="p">))</span>
+            <span class="n">CircularProgressIndicator</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="n">align</span><span class="p">(</span><span class="n">Alignment</span><span class="p">.</span><span class="n">Center</span><span class="p">))</span>
         <span class="p">}</span>
-        <span class="k">is</span> <span class="n">ImageLoadState</span><span class="p">.</span><span class="na">Error</span> <span class="o">-&gt;</span> <span class="p">{</span>
+        <span class="k">is</span> <span class="n">ImageLoadState</span><span class="p">.</span><span class="n">Error</span> <span class="p">-&gt;</span> <span class="p">{</span>
             <span class="c1">// If you wish to display some content if the request fails</span>
         <span class="p">}</span>
     <span class="p">}</span>
@@ -1045,11 +1049,11 @@
 <h2 id="previews">Previews<a class="headerlink" href="#previews" title="Permanent link">&para;</a></h2>
 <p>To support Android Studio <a href="https://developer.android.com/jetpack/compose/tooling">Composable Previews</a>, you can provide a drawable resource ID via the <code>previewPlaceholder</code> parameter. That drawable will then be displayed when your content is displayed as a preview:</p>
 <div class="highlight"><pre><span></span><code><span class="n">Image</span><span class="p">(</span>
-    <span class="n">painter</span> <span class="o">=</span> <span class="n">rememberGlidePainter</span><span class="p">(</span>
-        <span class="n">request</span> <span class="o">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
-        <span class="n">previewPlaceholder</span> <span class="o">=</span> <span class="n">R</span><span class="p">.</span><span class="na">drawable</span><span class="p">.</span><span class="na">placeholder</span><span class="p">,</span>
+    <span class="n">painter</span> <span class="p">=</span> <span class="n">rememberGlidePainter</span><span class="p">(</span>
+        <span class="n">request</span> <span class="p">=</span> <span class="s">&quot;https://picsum.photos/300/300&quot;</span><span class="p">,</span>
+        <span class="n">previewPlaceholder</span> <span class="p">=</span> <span class="n">R</span><span class="p">.</span><span class="n">drawable</span><span class="p">.</span><span class="n">placeholder</span><span class="p">,</span>
     <span class="p">),</span>
-    <span class="n">contentDescription</span> <span class="o">=</span> <span class="n">stringResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="na">string</span><span class="p">.</span><span class="na">image_content_desc</span><span class="p">),</span>
+    <span class="n">contentDescription</span> <span class="p">=</span> <span class="n">stringResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="n">string</span><span class="p">.</span><span class="n">image_content_desc</span><span class="p">),</span>
 <span class="p">)</span>
 </code></pre></div>
 <p>If the referenced drawable is only used for the purposes of <code>previewPlaceholder</code>s, it can be placed in the resources of your <code>debug</code> build variant For example: <code>app/debug/res/drawable/</code>. This allows the drawable to be only bundled in your debug builds, and not shipped to users of your release build.</p>
@@ -1058,30 +1062,30 @@
 <p><img alt="Example GIF" src="https://media.giphy.com/media/6oMKugqovQnjW/giphy.gif" /></p>
 <h2 id="observing-load-state-changes">Observing load state changes<a class="headerlink" href="#observing-load-state-changes" title="Permanent link">&para;</a></h2>
 <p>To observe changes to the load state you can use <a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/package-summary#snapshotflow"><code>snapshotFlow()</code></a> to observe changes to <code>painter.loadState</code>, and then call your logic as necessary:</p>
-<div class="highlight"><pre><span></span><code><span class="kd">val</span> <span class="nv">painter</span> <span class="o">=</span> <span class="n">rememberGlidePainter</span><span class="p">(</span><span class="s">&quot;https://image.url&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="py">painter</span> <span class="p">=</span> <span class="n">rememberGlidePainter</span><span class="p">(</span><span class="s">&quot;https://image.url&quot;</span><span class="p">)</span>
 
 <span class="n">LaunchedEffect</span><span class="p">(</span><span class="n">painter</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">snapshotFlow</span> <span class="p">{</span> <span class="n">painter</span><span class="p">.</span><span class="na">loadState</span> <span class="p">}</span>
-        <span class="p">.</span><span class="na">filter</span> <span class="p">{</span> <span class="nb">it</span><span class="p">.</span><span class="na">isFinalState</span><span class="p">()</span> <span class="p">}</span>
-        <span class="p">.</span><span class="na">collect</span> <span class="p">{</span> <span class="n">result</span> <span class="o">-&gt;</span>
+    <span class="n">snapshotFlow</span> <span class="p">{</span> <span class="n">painter</span><span class="p">.</span><span class="n">loadState</span> <span class="p">}</span>
+        <span class="p">.</span><span class="n">filter</span> <span class="p">{</span> <span class="n">it</span><span class="p">.</span><span class="n">isFinalState</span><span class="p">()</span> <span class="p">}</span>
+        <span class="p">.</span><span class="n">collect</span> <span class="p">{</span> <span class="n">result</span> <span class="p">-&gt;</span>
             <span class="c1">// TODO do something with result</span>
         <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="n">Image</span><span class="p">(</span><span class="n">painter</span> <span class="o">=</span> <span class="n">painter</span><span class="p">)</span>
+<span class="n">Image</span><span class="p">(</span><span class="n">painter</span> <span class="p">=</span> <span class="n">painter</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="custom-requestmanager">Custom RequestManager<a class="headerlink" href="#custom-requestmanager" title="Permanent link">&para;</a></h2>
 <p>If you wish to provide a default <a href="https://bumptech.github.io/glide/javadocs/4120/com/bumptech/glide/RequestManager.html"><code>RequestManager</code></a> to use across all of your <code>rememberGlidePainter()</code>
 calls, we provide the <a href="../api/glide/glide/com.google.accompanist.glide/-local-request-manager.html"><code>LocalRequestManager</code></a> composition local.</p>
 <p>You can use it like so:</p>
-<div class="highlight"><pre><span></span><code><span class="kd">val</span> <span class="nv">requestManager</span> <span class="o">=</span> <span class="n">Glide</span><span class="p">.</span><span class="na">with</span><span class="p">(...)</span>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="py">requestManager</span> <span class="p">=</span> <span class="n">Glide</span><span class="p">.</span><span class="n">with</span><span class="p">(...)</span>
     <span class="c1">// customize the RequestManager as needed</span>
-    <span class="p">.</span><span class="na">build</span><span class="p">()</span>
+    <span class="p">.</span><span class="n">build</span><span class="p">()</span>
 
 <span class="n">CompositionLocalProvider</span><span class="p">(</span><span class="n">LocalRequestManager</span> <span class="n">provides</span> <span class="n">requestManager</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// This will automatically use the value of LocalRequestManager</span>
     <span class="n">Image</span><span class="p">(</span>
-        <span class="n">painter</span> <span class="o">=</span> <span class="n">rememberGlidePainter</span><span class="p">(...)</span>
+        <span class="n">painter</span> <span class="p">=</span> <span class="n">rememberGlidePainter</span><span class="p">(...)</span>
     <span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
