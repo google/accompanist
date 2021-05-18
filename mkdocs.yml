@@ -72,3 +72,4 @@ markdown_extensions:
   - pymdownx.betterem
   - pymdownx.superfences
   - pymdownx.tabbed
+  - pymdownx.details
