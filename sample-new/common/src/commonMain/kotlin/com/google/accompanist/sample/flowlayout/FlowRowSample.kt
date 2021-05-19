@@ -14,17 +14,14 @@
  * limitations under the License.
  */
 
-package com.google.accompanist.flowlayout
+package com.google.accompanist.sample.flowlayout
 
-import androidx.activity.ComponentActivity
-import java.util.concurrent.CountDownLatch
+import androidx.compose.runtime.Composable
+import com.google.accompanist.flowlayout.FlowRow
 
-class TestActivity : ComponentActivity() {
-    var hasFocusLatch = CountDownLatch(1)
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if (hasFocus) {
-            hasFocusLatch.countDown()
-        }
+@Composable
+fun FlowRowSample() {
+    FlowRow {
+        SampleContent()
     }
 }

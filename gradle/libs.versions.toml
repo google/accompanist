@@ -11,6 +11,7 @@ coil = "1.1.1"
 androidxtest = "1.2.0"
 
 [libraries]
+compose-runtime-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "compose" }
 compose-ui-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 compose-ui-util = { module = "androidx.compose.ui:ui-util", version.ref = "compose" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }

@@ -19,6 +19,8 @@ buildscript {
         google()
         mavenCentral()
         jcenter()
+
+        maven { url 'https://maven.pkg.jetbrains.space/public/p/compose/dev' }
     }
 
     dependencies {
@@ -30,6 +32,8 @@ buildscript {
         classpath libs.dokka
 
         classpath libs.metalavaGradle
+
+        classpath "org.jetbrains.compose:compose-gradle-plugin:0.4.0-build182"
     }
 }
 
@@ -49,6 +53,8 @@ allprojects {
         google()
         mavenCentral()
         jcenter()
+
+        maven { url 'https://maven.pkg.jetbrains.space/public/p/compose/dev' }
 
         def composeSnapshot = libs.versions.composesnapshot.get()
         if (composeSnapshot.length() > 1) {

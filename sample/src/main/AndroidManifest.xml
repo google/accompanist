@@ -196,26 +196,6 @@
         </activity>
 
         <activity
-            android:name=".flowlayout.FlowColumnSample"
-            android:label="@string/flowlayout_title_column"
-            android:windowSoftInputMode="adjustResize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".flowlayout.FlowRowSample"
-            android:label="@string/flowlayout_title_row"
-            android:windowSoftInputMode="adjustResize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
             android:name=".swiperefresh.SwipeRefreshBasicSample"
             android:label="@string/swiperefresh_title_basics">
             <intent-filter>
