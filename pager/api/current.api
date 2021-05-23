@@ -23,7 +23,7 @@ package com.google.accompanist.pager {
   }
 
   @androidx.compose.runtime.Stable @com.google.accompanist.pager.ExperimentalPagerApi public final class PagerState implements androidx.compose.foundation.gestures.ScrollableState {
-    ctor public PagerState(@IntRange(from=0) int pageCount, @IntRange(from=0) int currentPage, @FloatRange(from=0.0, to=1.0) float currentPageOffset, int offscreenLimit);
+    ctor public PagerState(@IntRange(from=0) int pageCount, @IntRange(from=0) int currentPage, @FloatRange(from=0.0, to=1.0) float currentPageOffset, int offscreenLimit, boolean infiniteLoop);
     method public suspend Object? animateScrollToPage(@IntRange(from=0) int page, optional @FloatRange(from=0.0, to=1.0) float pageOffset, optional androidx.compose.animation.core.AnimationSpec<java.lang.Float> animationSpec, optional float initialVelocity, optional boolean skipPages, optional kotlin.coroutines.Continuation<? super kotlin.Unit> p);
     method public float dispatchRawDelta(float delta);
     method @IntRange(from=0) public int getCurrentPage();
@@ -48,7 +48,7 @@ package com.google.accompanist.pager {
   }
 
   public final class PagerStateKt {
-    method @androidx.compose.runtime.Composable @com.google.accompanist.pager.ExperimentalPagerApi public static com.google.accompanist.pager.PagerState rememberPagerState(@IntRange(from=0) int pageCount, optional @IntRange(from=0) int initialPage, optional @FloatRange(from=0.0, to=1.0) float initialPageOffset, optional @IntRange(from=1) int initialOffscreenLimit);
+    method @androidx.compose.runtime.Composable @com.google.accompanist.pager.ExperimentalPagerApi public static com.google.accompanist.pager.PagerState rememberPagerState(@IntRange(from=0) int pageCount, optional @IntRange(from=0) int initialPage, optional @FloatRange(from=0.0, to=1.0) float initialPageOffset, optional @IntRange(from=1) int initialOffscreenLimit, optional boolean infiniteLoop);
   }
 
 }
