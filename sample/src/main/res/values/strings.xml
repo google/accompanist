@@ -33,10 +33,12 @@
     <string name="horiz_pager_title_basics">Horizontal Pager: Basic</string>
     <string name="horiz_pager_with_indicator_title">Horizontal Pager: Indicator</string>
     <string name="horiz_pager_with_transition_title">Horizontal Pager: Transition</string>
-    <string name="horiz_pager_title_tabs">HorizontalPager: Tabs</string>
+    <string name="horiz_pager_title_tabs">Horizontal Pager: Tabs</string>
+    <string name="horiz_pager_title_loop">Horizontal Pager: Loop</string>
 
     <string name="vertical_pager_title_basics">Vertical Pager: Basic</string>
     <string name="vertical_pager_with_indicator_title">Vertical Pager: Indicator</string>
+    <string name="vertical_pager_title_loop">Vertical Pager: Loop</string>
 
     <string name="pagers_title_nested">Pagers: Nested</string>
 
