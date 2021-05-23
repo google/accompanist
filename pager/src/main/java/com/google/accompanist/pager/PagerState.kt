@@ -158,11 +158,11 @@ class PagerState(
         get() = currentLayoutPage + currentLayoutPageOffset
 
     internal inline val firstPageIndex: Int
-        get() = if (infiniteLoop) -1 else 0
+        get() = if (infiniteLoop) Int.MIN_VALUE else 0
 
     internal inline val lastPageIndex: Int
         get() = if (infiniteLoop) {
-            pageCount.coerceAtLeast(1)
+            Int.MAX_VALUE
         } else {
             (pageCount - 1).coerceAtLeast(0)
         }
