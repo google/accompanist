@@ -58,6 +58,7 @@ private const val LogTag = "PagerState"
  * @param initialPageOffset the initial value for [PagerState.currentPageOffset]
  * @param initialOffscreenLimit the number of pages that should be retained on either side of the
  * current page. This value is required to be `1` or greater.
+ * @param infiniteLoop Whether to support infinite looping effect.
  */
 @ExperimentalPagerApi
 @Composable
@@ -94,6 +95,7 @@ fun rememberPagerState(
  * @param currentPageOffset the initial value for [PagerState.currentPageOffset]
  * @param offscreenLimit the number of pages that should be retained on either side of the
  * current page. This value is required to be `1` or greater.
+ * @param infiniteLoop Whether to support infinite looping effect.
  */
 @ExperimentalPagerApi
 @Stable
@@ -473,7 +475,10 @@ class PagerState(
      */
     private fun scrollByOffset(deltaOffset: Float): Float {
         val current = absolutePosition
-        val target = (current + deltaOffset).coerceIn(firstPageIndex.toFloat(), lastPageIndex.toFloat())
+        val target = (current + deltaOffset).coerceIn(
+            minimumValue = firstPageIndex.toFloat(),
+            maximumValue = lastPageIndex.toFloat()
+        )
 
         if (DebugLog) {
             Napier.d(
