@@ -157,12 +157,6 @@ class PagerState(
     private inline val absolutePosition: Float
         get() = currentLayoutPage + currentLayoutPageOffset
 
-    /**
-     * The current scroll position, as a float value between `0 until pageSize`
-     */
-    val scrollPosition: Float
-        get() = absolutePosition.coerceIn(0f, (pageCount - 1).toFloat())
-
     internal inline val firstPageIndex: Int
         get() = if (infiniteLoop) -1 else 0
 
