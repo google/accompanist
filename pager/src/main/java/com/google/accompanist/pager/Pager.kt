@@ -279,14 +279,15 @@ internal fun Pager(
             // for page content is consistent as the user scrolls, otherwise content will
             // drop/recreate state.
             val pages = state.layoutPages.mapNotNull { it.page }
-            for (page in pages) {
+            for (_page in pages) {
+                val page = _page.floorMod(state.pageCount)
                 key(page) {
                     val itemSemantics = Modifier.semantics {
                         this.selected = page == state.currentPage
                     }
                     Box(
                         contentAlignment = Alignment.Center,
-                        modifier = itemSemantics.then(PageData(page))
+                        modifier = itemSemantics.then(PageData(_page))
                     ) {
                         val scope = remember(this, state) {
                             PagerScopeImpl(this, state)

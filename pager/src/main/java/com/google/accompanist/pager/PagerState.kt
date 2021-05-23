@@ -66,12 +66,14 @@ fun rememberPagerState(
     @IntRange(from = 0) initialPage: Int = 0,
     @FloatRange(from = 0.0, to = 1.0) initialPageOffset: Float = 0f,
     @IntRange(from = 1) initialOffscreenLimit: Int = 1,
+    infiniteLoop: Boolean = false
 ): PagerState = rememberSaveable(saver = PagerState.Saver) {
     PagerState(
         pageCount = pageCount,
         currentPage = initialPage,
         currentPageOffset = initialPageOffset,
         offscreenLimit = initialOffscreenLimit,
+        infiniteLoop = infiniteLoop
     )
 }.apply {
     this.pageCount = pageCount
@@ -100,6 +102,7 @@ class PagerState(
     @IntRange(from = 0) currentPage: Int = 0,
     @FloatRange(from = 0.0, to = 1.0) currentPageOffset: Float = 0f,
     private val offscreenLimit: Int = 1,
+    private val infiniteLoop: Boolean = false,
 ) : ScrollableState {
     private var _pageCount by mutableStateOf(pageCount)
     private var _currentPage by mutableStateOf(currentPage)
@@ -152,8 +155,15 @@ class PagerState(
     private inline val absolutePosition: Float
         get() = currentLayoutPage + currentLayoutPageOffset
 
+    internal inline val firstPageIndex: Int
+        get() = if (infiniteLoop) -1 else 0
+
     internal inline val lastPageIndex: Int
-        get() = (pageCount - 1).coerceAtLeast(0)
+        get() = if (infiniteLoop) {
+            pageCount.coerceAtLeast(1)
+        } else {
+            (pageCount - 1).coerceAtLeast(0)
+        }
 
     /**
      * The ScrollableController instance. We keep it as we need to call stopAnimation on it once
@@ -185,7 +195,7 @@ class PagerState(
         set(@IntRange(from = 0) value) {
             require(value >= 0) { "pageCount must be >= 0" }
             _pageCount = value
-            currentPage = currentPage.coerceIn(0, lastPageIndex)
+            currentPage = currentPage.coerceIn(firstPageIndex, lastPageIndex)
             updateLayoutPages(currentPage)
         }
 
@@ -199,7 +209,7 @@ class PagerState(
     var currentPage: Int
         get() = _currentPage
         private set(value) {
-            _currentPage = value.coerceIn(0, lastPageIndex)
+            _currentPage = value.floorMod(pageCount)
             if (DebugLog) {
                 Napier.d(tag = LogTag, message = "Current page changed: $_currentPage")
             }
@@ -265,7 +275,7 @@ class PagerState(
         // We don't specifically use the ScrollScope's scrollBy, but
         // we do want to use it's mutex
         scroll {
-            val target = page.coerceIn(0, lastPageIndex)
+            val target = page.floorMod(pageCount)
 
             val currentIndex = currentLayoutPage
             val distance = (target - currentIndex).absoluteValue
@@ -444,7 +454,7 @@ class PagerState(
     private fun updateLayoutPages(page: Int) {
         layoutPages.forEachIndexed { index, layoutPage ->
             val pg = page + index - offscreenLimit
-            layoutPage.page = if (pg < 0 || pg > lastPageIndex) null else pg
+            layoutPage.page = if (pg < firstPageIndex || pg > lastPageIndex) null else pg
         }
     }
 
@@ -457,7 +467,7 @@ class PagerState(
      */
     private fun scrollByOffset(deltaOffset: Float): Float {
         val current = absolutePosition
-        val target = (current + deltaOffset).coerceIn(0f, lastPageIndex.toFloat())
+        val target = (current + deltaOffset).coerceIn(firstPageIndex.toFloat(), lastPageIndex.toFloat())
 
         if (DebugLog) {
             Napier.d(
@@ -645,5 +655,12 @@ internal class PageLayoutInfo {
 
     override fun toString(): String {
         return "PageLayoutInfo(page = $page, layoutSize=$layoutSize)"
+    }
+}
+
+internal fun Int.floorMod(other: Int): Int {
+    return when (other) {
+        0 -> this
+        else -> (this % other + other) % other
     }
 }
