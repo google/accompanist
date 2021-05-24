@@ -2,7 +2,7 @@
 compose = "1.0.0-beta07"
 composesnapshot = "-" # a single character = no snapshot
 
-ktlint = "0.40.0"
+ktlint = "0.41.0"
 kotlin = "1.4.32"
 coroutines = "1.4.1"
 okhttp = "3.12.2"
