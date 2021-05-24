@@ -18,7 +18,6 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        jcenter()
     }
 
     dependencies {
@@ -48,7 +47,6 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        jcenter()
 
         def composeSnapshot = libs.versions.composesnapshot.get()
         if (composeSnapshot.length() > 1) {
