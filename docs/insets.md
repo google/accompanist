@@ -44,11 +44,11 @@ We provide two types of modifiers for easy handling of insets: padding and size.
 #### Padding modifiers
 The padding modifiers allow you to apply padding to a composable which matches a specific type of inset. Currently we provide:
 
-- [`Modifier.statusBarsPadding()`](https://google.github.io/accompanist/api/insets/insets/com.google.accompanist.insets/status-bars-padding.html)
-- [`Modifier.navigationBarsPadding()`](https://google.github.io/accompanist/api/insets/insets/com.google.accompanist.insets/navigation-bars-padding.html)
-- [`Modifier.systemBarsPadding()`](https://google.github.io/accompanist/api/insets/insets/com.google.accompanist.insets/system-bars-padding.html)
-- [`Modifier.imePadding()`](https://google.github.io/accompanist/api/insets/insets/com.google.accompanist.insets/ime-padding.html)
-- [`Modifier.navigationBarsWithImePadding()`](https://google.github.io/accompanist/api/insets/insets/com.google.accompanist.insets/navigation-bars-with-ime-padding.html)
+- [`Modifier.statusBarsPadding()`](../api/insets/insets/com.google.accompanist.insets/status-bars-padding.html)
+- [`Modifier.navigationBarsPadding()`](../api/insets/insets/com.google.accompanist.insets/navigation-bars-padding.html)
+- [`Modifier.systemBarsPadding()`](../api/insets/insets/com.google.accompanist.insets/system-bars-padding.html)
+- [`Modifier.imePadding()`](../api/insets/insets/com.google.accompanist.insets/ime-padding.html)
+- [`Modifier.navigationBarsWithImePadding()`](../api/insets/insets/com.google.accompanist.insets/navigation-bars-with-ime-padding.html)
 
 These are commonly used to move composables out from under the system bars. The common example would be a [`FloatingActionButton`][fab]:
 
@@ -67,9 +67,9 @@ FloatingActionButton(
 #### Size modifiers
 The size modifiers allow you to match the size of a composable to a specific type of inset. Currently we provide:
 
-- [`Modifier.statusBarsHeight()`](https://google.github.io/accompanist/api/insets/insets/com.google.accompanist.insets/status-bars-height.html)
-- [`Modifier.navigationBarsHeight()`](https://google.github.io/accompanist/api/insets/insets/com.google.accompanist.insets/navigation-bars-height.html)
-- [`Modifier.navigationBarsWidth()`](https://google.github.io/accompanist/api/insets/insets/com.google.accompanist.insets/navigation-bars-width.html)
+- [`Modifier.statusBarsHeight()`](../api/insets/insets/com.google.accompanist.insets/status-bars-height.html)
+- [`Modifier.navigationBarsHeight()`](../api/insets/insets/com.google.accompanist.insets/navigation-bars-height.html)
+- [`Modifier.navigationBarsWidth()`](../api/insets/insets/com.google.accompanist.insets/navigation-bars-width.html)
 
 These are commonly used to allow composables behind the system bars, to provide background protection, or similar:
 
@@ -85,11 +85,15 @@ Spacer(
 ### PaddingValues
 Compose also provides the concept of [`PaddingValues`][paddingvalues], a data class which contains the padding values to be applied on all dimensions (similar to a rect). This is commonly used with container composables, such as [`LazyColumn`][lazycolumn], to set the content padding.
 
-You may want to use inset values for content padding, so this library provides the `Insets.toPaddingValues()` extension function to convert between `Insets` and `PaddingValues`. Here's an example of using the system bars insets:
+You may want to use inset values for content padding, so this library provides the [`rememberWindowInsetsTypePaddingValues()`](..//api/insets/insets/com.google.accompanist.insets/remember-window-insets-type-padding-values.html) extension function to convert between [`WindowInsets.Type`][api-type] and [`PaddingValues`][paddingvalues]. Here's an example of using the system bars insets:
 
 ``` kotlin
 LazyColumn(
-    contentPadding = LocalWindowInsets.current.systemBars.toPaddingValues()
+    contentPadding = rememberWindowInsetsTypePaddingValues(
+        type = LocalWindowInsets.current.systemBars,
+        applyTop = true,
+        applyBottom = true,
+    )
 ) {
     // content
 }
@@ -101,19 +105,36 @@ For a more complex example, see the [`EdgeToEdgeLazyColumn`](https://github.com/
 <img src="images/edge-to-edge-list.jpg" width=300>
 </a>
 
-### Inset-aware layouts
+## Inset-aware layouts (`insets-ui`)
 
 Unfortunately, most of Compose Material's layouts do not support the use of content padding, which means that the following code probably doesn't produce the effect you want:
 
 ``` kotlin
-// This likely doesn't do what you want
+// 😥 This likely doesn't do what you want
 TopAppBar(
     // content
     modifier = Modifier.statusBarsPadding()
 )
 ```
 
-To workaround this, our sample has a number of wrapper layouts in the [`InsetAwareLayouts.kt`](https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/insets/InsetAwareLayouts.kt) file which may be useful. These are used in the `EdgeToEdgeLazyColumn` sample for example.
+To workaround this, we provide the `insets-ui` companion library which contains versions of commonly used layouts, with the addition of a `contentPadding` parameter. The example below is using our [`TopAppBar`](../api/insets-ui/insets-ui/com.google.accompanist.insets.ui/-top-app-bar.html) layout, providing the status bar insets to use as content padding:
+
+``` kotlin
+import com.google.accompanist.insets.ui.TopAppBar
+
+TopAppBar(
+    contentPadding = rememberWindowInsetsTypePaddingValues(
+        LocalWindowInsets.current.statusBars,
+        applyStart = true,
+        applyTop = true,
+        applyEnd = true,
+    )
+) {
+    // content
+}
+```
+
+See the [API docs](../api/insets-ui/insets-ui/com.google.accompanist.insets.ui/) for a list of the other layouts provided in the library.
 
 ## 🚧 Experimental
 
@@ -168,7 +189,7 @@ The default value of `windowSoftInputMode` _should_ work, but Compose does not c
 
     ![](images/ime-scroll.gif){: loading=lazy align=right }
 
-    This library also has support for controlling the IME from scroll gestures, allowing your scrollable components to pull/push the IME on/off screen. This is acheived through the built-in [`NestedScrollConnection`](https://developer.android.com/reference/kotlin/androidx/compose/ui/gesture/nestedscroll/NestedScrollConnection) implementation returned by [`rememberImeNestedScrollConnection()`](https://google.github.io/accompanist/api/insets/insets/com.google.accompanist.insets/remember-ime-nested-scroll-connection.html).
+    This library also has support for controlling the IME from scroll gestures, allowing your scrollable components to pull/push the IME on/off screen. This is acheived through the built-in [`NestedScrollConnection`](https://developer.android.com/reference/kotlin/androidx/compose/ui/gesture/nestedscroll/NestedScrollConnection) implementation returned by [`rememberImeNestedScrollConnection()`](../api/insets/insets/com.google.accompanist.insets/remember-ime-nested-scroll-connection.html).
 
     This functionality only works when running on devices with API 30+.
 
@@ -225,3 +246,4 @@ If you find that something isn't working correctly, here's a checklist to try:
 [paddingvalues]: https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/PaddingValues
 [lazycolumn]: https://developer.android.com/reference/kotlin/androidx/compose/foundation/lazy/package-summary#lazycolumn
 [fab]: https://developer.android.com/reference/kotlin/androidx/compose/material/package-summary#floatingactionbutton
+[api-type]: ../api/insets/insets/com.google.accompanist.insets/-window-insets/-type/
