@@ -54,4 +54,4 @@ napier = "io.github.aakira:napier:1.4.1"
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidxtest" }
 androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidxtest" }
 junit = "junit:junit:4.13"
-truth = "com.google.truth:truth:1.0.1"
+truth = "com.google.truth:truth:1.1.2"
