@@ -37,7 +37,6 @@ import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.rememberWindowInsetsTypePaddingValues
 import com.google.accompanist.insets.statusBarsHeight
-import com.google.accompanist.insets.toPaddingValues
 import com.google.accompanist.insets.ui.BottomNavigation
 
 @Composable
@@ -74,7 +73,9 @@ fun Sample_spacer() {
 @Composable
 fun Sample_lazycolumn() {
     LazyColumn(
-        contentPadding = LocalWindowInsets.current.systemBars.toPaddingValues()
+        contentPadding = rememberWindowInsetsTypePaddingValues(
+            type = LocalWindowInsets.current.systemBars
+        )
     ) {
         // content
     }

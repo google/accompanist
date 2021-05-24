@@ -170,11 +170,12 @@ inline fun WindowInsets.Type.toPaddingValues(
     bottom: Boolean = true,
     additionalHorizontal: Dp = 0.dp,
     additionalVertical: Dp = 0.dp,
-): PaddingValues = toPaddingValues(
-    start = start,
-    top = top,
-    end = end,
-    bottom = bottom,
+): PaddingValues = rememberWindowInsetsTypePaddingValues(
+    type = this,
+    applyStart = start,
+    applyTop = top,
+    applyEnd = end,
+    applyBottom = bottom,
     additionalStart = additionalHorizontal,
     additionalTop = additionalVertical,
     additionalEnd = additionalHorizontal,
@@ -305,8 +306,8 @@ internal class WindowInsetsTypePaddingValues(
         }
     }
 
-    override fun calculateTopPadding(): Dp = additionalBottom + when {
-        applyTop -> with(density) { insets.bottom.toDp() }
+    override fun calculateTopPadding(): Dp = additionalTop + when {
+        applyTop -> with(density) { insets.top.toDp() }
         else -> 0.dp
     }
 
@@ -321,8 +322,8 @@ internal class WindowInsetsTypePaddingValues(
         }
     }
 
-    override fun calculateBottomPadding(): Dp = additionalTop + when {
-        applyTop -> with(density) { insets.top.toDp() }
+    override fun calculateBottomPadding(): Dp = additionalBottom + when {
+        applyBottom -> with(density) { insets.bottom.toDp() }
         else -> 0.dp
     }
 }

@@ -50,7 +50,6 @@ import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.rememberWindowInsetsTypePaddingValues
-import com.google.accompanist.insets.toPaddingValues
 import com.google.accompanist.insets.ui.TopAppBar
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
@@ -93,8 +92,9 @@ private fun Sample() {
             // the app bar. Since the top inset is already contained within the app
             // bar height, we disable handling it in toPaddingValues().
             LazyColumn(
-                contentPadding = LocalWindowInsets.current.systemBars.toPaddingValues(
-                    top = false,
+                contentPadding = rememberWindowInsetsTypePaddingValues(
+                    type = LocalWindowInsets.current.systemBars,
+                    applyTop = false,
                     additionalTop = with(LocalDensity.current) { topAppBarSize.toDp() }
                 )
             ) {
