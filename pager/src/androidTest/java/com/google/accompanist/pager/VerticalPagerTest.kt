@@ -51,30 +51,33 @@ class VerticalPagerTest(
     private val itemSpacingDp: Int,
     override val offscreenLimit: Int,
     private val reverseLayout: Boolean,
+    override val infiniteLoop: Boolean,
 ) : PagerTest() {
     companion object {
         @JvmStatic
         @Parameterized.Parameters
-        fun data(): Collection<Array<Any>> = listOf(
-            // verticalAlignment, itemSpacingDp, offscreenLimit, reverseLayout
+        fun data(): Collection<Array<Any>> = dataset(false) + dataset(true)
+
+        private fun dataset(looping: Boolean): Collection<Array<Any>> = listOf(
+            // verticalAlignment, itemSpacingDp, offscreenLimit, reverseLayout, infiniteLoop
 
             // Test typical full-width items
-            arrayOf(Alignment.CenterVertically, 0, 2, false),
-            arrayOf(Alignment.Top, 0, 2, false),
-            arrayOf(Alignment.Bottom, 0, 2, false),
+            arrayOf(Alignment.CenterVertically, 0, 2, false, looping),
+            arrayOf(Alignment.Top, 0, 2, false, looping),
+            arrayOf(Alignment.Bottom, 0, 2, false, looping),
 
             // Full-width items with spacing
-            arrayOf(Alignment.CenterVertically, 4, 2, false),
-            arrayOf(Alignment.Top, 4, 2, false),
-            arrayOf(Alignment.Bottom, 4, 2, false),
+            arrayOf(Alignment.CenterVertically, 4, 2, false, looping),
+            arrayOf(Alignment.Top, 4, 2, false, looping),
+            arrayOf(Alignment.Bottom, 4, 2, false, looping),
 
             // Full-width items with reverseLayout = true
-            arrayOf(Alignment.CenterVertically, 0, 2, true),
-            arrayOf(Alignment.Top, 0, 2, true),
-            arrayOf(Alignment.Bottom, 0, 2, true),
+            arrayOf(Alignment.CenterVertically, 0, 2, true, looping),
+            arrayOf(Alignment.Top, 0, 2, true, looping),
+            arrayOf(Alignment.Bottom, 0, 2, true, looping),
 
             // Test an increased offscreenLimit
-            arrayOf(Alignment.CenterVertically, 0, 4, false),
+            arrayOf(Alignment.CenterVertically, 0, 4, false, looping),
         )
     }
 
@@ -128,7 +131,8 @@ class VerticalPagerTest(
         val pagerState = PagerState(
             pageCount = pageCount,
             offscreenLimit = offscreenLimit,
-        )
+            infiniteLoop = infiniteLoop,
+        ).apply { testing = true }
         // Stick to LTR for vertical tests
         composeTestRule.setContent(LayoutDirection.Ltr) {
             applierScope = rememberCoroutineScope()

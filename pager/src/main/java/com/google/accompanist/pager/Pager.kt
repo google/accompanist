@@ -280,7 +280,7 @@ internal fun Pager(
             // drop/recreate state.
             val pages = state.layoutPages.mapNotNull { it.page }
             for (_page in pages) {
-                val page = _page.floorMod(state.pageCount)
+                val page = state.pageOf(_page)
                 key(page) {
                     val itemSemantics = Modifier.semantics {
                         this.selected = page == state.currentPage

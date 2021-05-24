@@ -111,6 +111,11 @@ class PagerState(
     private var _currentLayoutPageOffset by mutableStateOf(currentPageOffset)
 
     /**
+     * When set to true, `page` of [Pager] content can be different in [infiniteLoop] mode.
+     */
+    internal var testing = false
+
+    /**
      * This is the array of all the pages to be laid out. In effect, this contains the
      * 'current' page, plus the `offscreenLimit` on either side. Each PageLayoutInfo holds the page
      * index it should be displaying, and it's current layout size. Pager reads these values
@@ -637,6 +642,16 @@ class PagerState(
         }
     }
 
+    /**
+     * Considering infinite loop, returns page between 0 until [pageCount].
+     */
+    internal fun pageOf(rawPage: Int): Int {
+        if (testing) {
+            return rawPage
+        }
+        return rawPage.floorMod(pageCount)
+    }
+
     companion object {
         /**
          * The default [Saver] implementation for [PagerState].
@@ -650,6 +665,16 @@ class PagerState(
                 )
             }
         )
+
+        /**
+         * Calculates the floor modulus in the range of -abs([other]) < r < +abs([other]).
+         */
+        private fun Int.floorMod(other: Int): Int {
+            return when (other) {
+                0 -> this
+                else -> (this % other + other) % other
+            }
+        }
     }
 }
 
@@ -660,12 +685,5 @@ internal class PageLayoutInfo {
 
     override fun toString(): String {
         return "PageLayoutInfo(page = $page, layoutSize=$layoutSize)"
-    }
-}
-
-internal fun Int.floorMod(other: Int): Int {
-    return when (other) {
-        0 -> this
-        else -> (this % other + other) % other
     }
 }
