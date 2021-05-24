@@ -309,23 +309,17 @@ abstract class PagerTest {
         // offscreenLimit and page limit
         val pageRange = (currentPage - offscreenLimit)..(currentPage + offscreenLimit)
         val expectedLaidOutPages = if (infiniteLoop) {
-            pageRange
-                .map { it to (it - currentPage) }
-                .toList()
+            pageRange.toList()
         } else {
-            pageRange
-                .filter { it in 0 until pageCount }
-                .map { it to (it - currentPage) }
-                .toList()
+            pageRange.filter { it in 0 until pageCount }.toList()
         }
 
         // Go through all of the pages, and assert the expected layout state
         (0 until pageCount).forEach { _page ->
-            val expectedPage = expectedLaidOutPages.find { it.first == _page }
-            if (expectedPage != null) {
+            val page = expectedLaidOutPages.find { it == _page }
+            if (page != null) {
                 // If this page is expected to be laid out, assert that it exists and is
                 // laid out in the correct position
-                val page = expectedPage.first
                 composeTestRule.onNodeWithTag(page.toString())
                     .assertExists()
                     .assertLaidOutItemPosition(page, currentPage)
