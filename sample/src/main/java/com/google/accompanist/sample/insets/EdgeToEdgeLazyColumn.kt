@@ -49,7 +49,7 @@ import androidx.core.view.WindowCompat
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
-import com.google.accompanist.insets.rememberWindowInsetsTypePaddingValues
+import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.insets.ui.TopAppBar
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
@@ -92,8 +92,8 @@ private fun Sample() {
             // the app bar. Since the top inset is already contained within the app
             // bar height, we disable handling it in toPaddingValues().
             LazyColumn(
-                contentPadding = rememberWindowInsetsTypePaddingValues(
-                    type = LocalWindowInsets.current.systemBars,
+                contentPadding = rememberInsetsPaddingValues(
+                    insets = LocalWindowInsets.current.systemBars,
                     applyTop = false,
                     additionalTop = with(LocalDensity.current) { topAppBarSize.toDp() }
                 )
@@ -111,7 +111,7 @@ private fun Sample() {
             TopAppBar(
                 title = { Text(stringResource(R.string.insets_title_list)) },
                 backgroundColor = MaterialTheme.colors.surface.copy(alpha = 0.9f),
-                contentPadding = rememberWindowInsetsTypePaddingValues(
+                contentPadding = rememberInsetsPaddingValues(
                     LocalWindowInsets.current.systemBars,
                     applyBottom = false,
                 ),

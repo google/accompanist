@@ -46,7 +46,7 @@ import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.google.accompanist.insets.rememberImeNestedScrollConnection
-import com.google.accompanist.insets.rememberWindowInsetsTypePaddingValues
+import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.insets.ui.TopAppBar
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
@@ -94,7 +94,7 @@ private fun Sample() {
                     Text(stringResource(R.string.insets_title_imeanim))
                 },
                 backgroundColor = MaterialTheme.colors.surface,
-                contentPadding = rememberWindowInsetsTypePaddingValues(
+                contentPadding = rememberInsetsPaddingValues(
                     LocalWindowInsets.current.systemBars,
                     applyBottom = false,
                 ),

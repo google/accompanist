@@ -50,7 +50,7 @@ import androidx.fragment.app.commit
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ViewWindowInsetObserver
 import com.google.accompanist.insets.navigationBarsPadding
-import com.google.accompanist.insets.rememberWindowInsetsTypePaddingValues
+import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.insets.ui.TopAppBar
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
@@ -117,7 +117,7 @@ private fun Sample() {
             TopAppBar(
                 title = { Text(stringResource(R.string.insets_title_fragment)) },
                 backgroundColor = MaterialTheme.colors.surface,
-                contentPadding = rememberWindowInsetsTypePaddingValues(
+                contentPadding = rememberInsetsPaddingValues(
                     LocalWindowInsets.current.systemBars,
                     applyBottom = false,
                 ),

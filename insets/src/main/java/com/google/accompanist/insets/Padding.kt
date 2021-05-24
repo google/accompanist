@@ -44,8 +44,8 @@ import androidx.compose.ui.unit.dp
  */
 inline fun Modifier.systemBarsPadding(enabled: Boolean = true): Modifier = composed {
     padding(
-        rememberWindowInsetsTypePaddingValues(
-            type = LocalWindowInsets.current.navigationBars,
+        rememberInsetsPaddingValues(
+            insets = LocalWindowInsets.current.navigationBars,
             applyStart = enabled,
             applyTop = enabled,
             applyEnd = enabled,
@@ -60,8 +60,8 @@ inline fun Modifier.systemBarsPadding(enabled: Boolean = true): Modifier = compo
  */
 inline fun Modifier.statusBarsPadding(): Modifier = composed {
     padding(
-        rememberWindowInsetsTypePaddingValues(
-            type = LocalWindowInsets.current.statusBars,
+        rememberInsetsPaddingValues(
+            insets = LocalWindowInsets.current.statusBars,
             applyTop = true
         )
     )
@@ -85,8 +85,8 @@ inline fun Modifier.navigationBarsPadding(
     end: Boolean = true,
 ): Modifier = composed {
     padding(
-        rememberWindowInsetsTypePaddingValues(
-            type = LocalWindowInsets.current.navigationBars,
+        rememberInsetsPaddingValues(
+            insets = LocalWindowInsets.current.navigationBars,
             applyStart = start,
             applyEnd = end,
             applyBottom = bottom
@@ -104,8 +104,8 @@ inline fun Modifier.navigationBarsPadding(
  */
 inline fun Modifier.imePadding(): Modifier = composed {
     padding(
-        rememberWindowInsetsTypePaddingValues(
-            type = LocalWindowInsets.current.ime,
+        rememberInsetsPaddingValues(
+            insets = LocalWindowInsets.current.ime,
             applyStart = true,
             applyEnd = true,
             applyBottom = true
@@ -123,8 +123,8 @@ inline fun Modifier.navigationBarsWithImePadding(): Modifier = composed {
     val navBars = LocalWindowInsets.current.navigationBars
     val insets = remember(ime, navBars) { derivedWindowInsetsTypeOf(ime, navBars) }
     padding(
-        rememberWindowInsetsTypePaddingValues(
-            type = insets,
+        rememberInsetsPaddingValues(
+            insets = insets,
             applyStart = true,
             applyEnd = true,
             applyBottom = true
@@ -167,8 +167,8 @@ inline fun WindowInsets.Type.toPaddingValues(
     bottom: Boolean = true,
     additionalHorizontal: Dp = 0.dp,
     additionalVertical: Dp = 0.dp,
-): PaddingValues = rememberWindowInsetsTypePaddingValues(
-    type = this,
+): PaddingValues = rememberInsetsPaddingValues(
+    insets = this,
     applyStart = start,
     applyTop = top,
     applyEnd = end,
@@ -218,8 +218,8 @@ inline fun WindowInsets.Type.toPaddingValues(
     additionalTop: Dp = 0.dp,
     additionalEnd: Dp = 0.dp,
     additionalBottom: Dp = 0.dp,
-): PaddingValues = rememberWindowInsetsTypePaddingValues(
-    type = this,
+): PaddingValues = rememberInsetsPaddingValues(
+    insets = this,
     applyStart = start,
     applyTop = top,
     applyEnd = end,
@@ -231,12 +231,12 @@ inline fun WindowInsets.Type.toPaddingValues(
 )
 
 /**
- * Returns the provided insets [type] in the form of a [PaddingValues] instance.
+ * Returns the provided insets [insets] in the form of a [PaddingValues] instance.
  *
  * The returned instance is stable, meaning that any changes to the inset values will result in
  * composition being notified, and these padding values being re-read.
  *
- * @param type The [WindowInsets.Type] to read from.
+ * @param insets The [WindowInsets.Type] to read from.
  * @param applyStart Whether to apply the inset on the start dimension. Defaults to false.
  * @param applyTop Whether to apply the inset on the top dimension. Defaults to false.
  * @param applyEnd Whether to apply the inset on the end dimension. Defaults to false.
@@ -247,8 +247,8 @@ inline fun WindowInsets.Type.toPaddingValues(
  * @param additionalBottom Value to add to the bottom dimension.
  */
 @Composable
-fun rememberWindowInsetsTypePaddingValues(
-    type: WindowInsets.Type,
+fun rememberInsetsPaddingValues(
+    insets: Insets,
     applyStart: Boolean = false,
     applyTop: Boolean = false,
     applyEnd: Boolean = false,
@@ -262,7 +262,7 @@ fun rememberWindowInsetsTypePaddingValues(
     val layoutDirection = LocalLayoutDirection.current
 
     return remember(density, layoutDirection) {
-        WindowInsetsTypePaddingValues(insets = type, density = density)
+        InsetsPaddingValues(insets = insets, density = density)
     }.apply {
         this.applyStart = applyStart
         this.applyTop = applyTop
@@ -277,12 +277,12 @@ fun rememberWindowInsetsTypePaddingValues(
 }
 
 /**
- * Our [PaddingValues] implementation which is state-backed, reading values as [insets] as
- * appropriate. Can be created via [rememberWindowInsetsTypePaddingValues].
+ * Our [PaddingValues] implementation which is state-backed, reading values from [insets] as
+ * appropriate. Can be created via [rememberInsetsPaddingValues].
  */
 @Stable
-internal class WindowInsetsTypePaddingValues(
-    private val insets: WindowInsets.Type,
+internal class InsetsPaddingValues(
+    private val insets: Insets,
     private val density: Density,
 ) : PaddingValues {
     var applyStart: Boolean by mutableStateOf(false)

@@ -40,7 +40,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.rememberWindowInsetsTypePaddingValues
+import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.insets.ui.TopAppBar
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
@@ -89,8 +89,8 @@ private fun Sample() {
                 }
             }
 
-            val contentPadding = rememberWindowInsetsTypePaddingValues(
-                type = LocalWindowInsets.current.systemBars,
+            val contentPadding = rememberInsetsPaddingValues(
+                insets = LocalWindowInsets.current.systemBars,
                 applyTop = false,
                 additionalTop = with(LocalDensity.current) { topAppBarSize.toDp() }
             )
@@ -126,7 +126,7 @@ private fun Sample() {
             TopAppBar(
                 title = { Text(stringResource(R.string.swiperefresh_title_content_padding)) },
                 backgroundColor = MaterialTheme.colors.surface.copy(alpha = 0.9f),
-                contentPadding = rememberWindowInsetsTypePaddingValues(
+                contentPadding = rememberInsetsPaddingValues(
                     LocalWindowInsets.current.systemBars,
                     applyBottom = false,
                 ),

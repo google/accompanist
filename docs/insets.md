@@ -85,12 +85,12 @@ Spacer(
 ### PaddingValues
 Compose also provides the concept of [`PaddingValues`][paddingvalues], a data class which contains the padding values to be applied on all dimensions (similar to a rect). This is commonly used with container composables, such as [`LazyColumn`][lazycolumn], to set the content padding.
 
-You may want to use inset values for content padding, so this library provides the [`rememberWindowInsetsTypePaddingValues()`](..//api/insets/insets/com.google.accompanist.insets/remember-window-insets-type-padding-values.html) extension function to convert between [`WindowInsets.Type`][api-type] and [`PaddingValues`][paddingvalues]. Here's an example of using the system bars insets:
+You may want to use inset values for content padding, so this library provides the [`rememberInsetsPaddingValues()`](..//api/insets/insets/com.google.accompanist.insets/remember-insets-padding-values.html) extension function to convert between `Insets` and [`PaddingValues`][paddingvalues]. Here's an example of using the system bars insets:
 
 ``` kotlin
 LazyColumn(
-    contentPadding = rememberWindowInsetsTypePaddingValues(
-        type = LocalWindowInsets.current.systemBars,
+    contentPadding = rememberInsetsPaddingValues(
+        insets = LocalWindowInsets.current.systemBars,
         applyTop = true,
         applyBottom = true,
     )
@@ -123,8 +123,8 @@ To workaround this, we provide the `insets-ui` companion library which contains 
 import com.google.accompanist.insets.ui.TopAppBar
 
 TopAppBar(
-    contentPadding = rememberWindowInsetsTypePaddingValues(
-        LocalWindowInsets.current.statusBars,
+    contentPadding = rememberInsetsPaddingValues(
+        insets = LocalWindowInsets.current.statusBars,
         applyStart = true,
         applyTop = true,
         applyEnd = true,

@@ -35,7 +35,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
-import com.google.accompanist.insets.rememberWindowInsetsTypePaddingValues
+import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.insets.statusBarsHeight
 import com.google.accompanist.insets.ui.BottomNavigation
 
@@ -73,8 +73,8 @@ fun Sample_spacer() {
 @Composable
 fun Sample_lazycolumn() {
     LazyColumn(
-        contentPadding = rememberWindowInsetsTypePaddingValues(
-            type = LocalWindowInsets.current.systemBars,
+        contentPadding = rememberInsetsPaddingValues(
+            insets = LocalWindowInsets.current.systemBars,
             applyTop = true,
             applyBottom = true,
         )
@@ -86,8 +86,8 @@ fun Sample_lazycolumn() {
 @Composable
 fun BottomNavigation_Insets() {
     BottomNavigation(
-        contentPadding = rememberWindowInsetsTypePaddingValues(
-            LocalWindowInsets.current.navigationBars,
+        contentPadding = rememberInsetsPaddingValues(
+            insets = LocalWindowInsets.current.navigationBars,
             applyStart = true,
             applyEnd = true,
             applyBottom = true,
@@ -100,8 +100,8 @@ fun BottomNavigation_Insets() {
 @Composable
 fun TopAppBar_Insets() {
     TopAppBar(
-        contentPadding = rememberWindowInsetsTypePaddingValues(
-            LocalWindowInsets.current.systemBars,
+        contentPadding = rememberInsetsPaddingValues(
+            insets = LocalWindowInsets.current.systemBars,
             applyStart = true,
             applyTop = true,
             applyEnd = true,

@@ -36,7 +36,7 @@ import androidx.core.view.WindowCompat
 import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.accompanist.insets.rememberWindowInsetsTypePaddingValues
+import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.insets.ui.TopAppBar
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
@@ -70,7 +70,7 @@ private fun Sample() {
             TopAppBar(
                 title = { Text(text = stringResource(R.string.coil_title_lazy_grid)) },
                 backgroundColor = MaterialTheme.colors.surface,
-                contentPadding = rememberWindowInsetsTypePaddingValues(
+                contentPadding = rememberInsetsPaddingValues(
                     LocalWindowInsets.current.systemBars,
                     applyBottom = false,
                 ),
@@ -79,8 +79,8 @@ private fun Sample() {
     ) {
         LazyVerticalGrid(
             cells = GridCells.Adaptive(96.dp),
-            contentPadding = rememberWindowInsetsTypePaddingValues(
-                type = LocalWindowInsets.current.navigationBars,
+            contentPadding = rememberInsetsPaddingValues(
+                insets = LocalWindowInsets.current.navigationBars,
                 additionalStart = 16.dp,
                 additionalTop = 16.dp,
                 additionalEnd = 16.dp,
