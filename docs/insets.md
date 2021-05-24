@@ -222,6 +222,8 @@ repositories {
 
 dependencies {
     implementation "com.google.accompanist:accompanist-insets:<version>"
+    // If using insets-ui
+    implementation "com.google.accompanist:accompanist-insets-ui:<version>"
 }
 ```
 
