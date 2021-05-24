@@ -231,13 +231,16 @@ inline fun WindowInsets.Type.toPaddingValues(
 )
 
 /**
- * Returns the current insets converted into a [PaddingValues].
+ * Returns the provided insets [type] in the form of a [PaddingValues] instance.
  *
- * @param type
- * @param applyStart Whether to apply the inset on the start dimension.
- * @param applyTop Whether to apply the inset on the top dimension.
- * @param applyEnd Whether to apply the inset on the end dimension.
- * @param applyBottom Whether to apply the inset on the bottom dimension.
+ * The returned instance is stable, meaning that any changes to the inset values will result in
+ * composition being notified, and these padding values being re-read.
+ *
+ * @param type The [WindowInsets.Type] to read from.
+ * @param applyStart Whether to apply the inset on the start dimension. Defaults to false.
+ * @param applyTop Whether to apply the inset on the top dimension. Defaults to false.
+ * @param applyEnd Whether to apply the inset on the end dimension. Defaults to false.
+ * @param applyBottom Whether to apply the inset on the bottom dimension. Defaults to false.
  * @param additionalStart Value to add to the start dimension.
  * @param additionalTop Value to add to the top dimension.
  * @param additionalEnd Value to add to the end dimension.
