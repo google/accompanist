@@ -185,6 +185,6 @@ fun PreviewSample() {
 
 fun gifImageLoader(context: Context): ImageLoader = ImageLoader.Builder(context)
     .componentRegistry {
-        if (SDK_INT >= 28) add(ImageDecoderDecoder()) else add(GifDecoder())
+        if (SDK_INT >= 28) add(ImageDecoderDecoder(context)) else add(GifDecoder())
     }
     .build()
