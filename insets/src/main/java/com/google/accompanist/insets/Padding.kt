@@ -42,9 +42,7 @@ import androidx.compose.ui.unit.dp
  * @param enabled Whether to apply padding using the system bars dimensions on the respective edges.
  * Defaults to `true`.
  */
-fun Modifier.systemBarsPadding(
-    enabled: Boolean = true
-): Modifier = composed {
+inline fun Modifier.systemBarsPadding(enabled: Boolean = true): Modifier = composed {
     padding(
         rememberWindowInsetsTypePaddingValues(
             type = LocalWindowInsets.current.navigationBars,
@@ -60,7 +58,7 @@ fun Modifier.systemBarsPadding(
  * Apply additional space which matches the height of the status bars height along the top edge
  * of the content.
  */
-fun Modifier.statusBarsPadding(): Modifier = composed {
+inline fun Modifier.statusBarsPadding(): Modifier = composed {
     padding(
         rememberWindowInsetsTypePaddingValues(
             type = LocalWindowInsets.current.statusBars,
@@ -72,26 +70,25 @@ fun Modifier.statusBarsPadding(): Modifier = composed {
 /**
  * Apply additional space which matches the height of the navigation bars height
  * along the [bottom] edge of the content, and additional space which matches the width of
- * the navigation bars on the respective [left] and [right] edges.
+ * the navigation bars on the respective [start] and [end] edges.
  *
  * @param bottom Whether to apply padding to the bottom edge, which matches the navigation bars
  * height (if present) at the bottom edge of the screen. Defaults to `true`.
- * @param left Whether to apply padding to the left edge, which matches the navigation bars width
- * (if present) on the left edge of the screen. Defaults to `true`.
- * @param right Whether to apply padding to the right edge, which matches the navigation bars width
- * (if present) on the right edge of the screen. Defaults to `true`.
+ * @param start Whether to apply padding to the start edge, which matches the navigation bars width
+ * (if present) on the start edge of the screen. Defaults to `true`.
+ * @param end Whether to apply padding to the end edge, which matches the navigation bars width
+ * (if present) on the end edge of the screen. Defaults to `true`.
  */
-fun Modifier.navigationBarsPadding(
+inline fun Modifier.navigationBarsPadding(
     bottom: Boolean = true,
-    left: Boolean = true,
-    right: Boolean = true
+    start: Boolean = true,
+    end: Boolean = true,
 ): Modifier = composed {
     padding(
-        // FIXME: Need to alias start/end to left/right
         rememberWindowInsetsTypePaddingValues(
             type = LocalWindowInsets.current.navigationBars,
-            applyStart = left,
-            applyEnd = right,
+            applyStart = start,
+            applyEnd = end,
             applyBottom = bottom
         )
     )
@@ -105,7 +102,7 @@ fun Modifier.navigationBarsPadding(
  * intersect the [WindowInsets.ime]. Most apps will usually want to use the
  * [Modifier.navigationBarsWithImePadding] modifier.
  */
-fun Modifier.imePadding(): Modifier = composed {
+inline fun Modifier.imePadding(): Modifier = composed {
     padding(
         rememberWindowInsetsTypePaddingValues(
             type = LocalWindowInsets.current.ime,
@@ -121,7 +118,7 @@ fun Modifier.imePadding(): Modifier = composed {
  * height and [WindowInsets.navigationBars]. This is what apps should use to handle any insets
  * at the bottom of the screen.
  */
-fun Modifier.navigationBarsWithImePadding(): Modifier = composed {
+inline fun Modifier.navigationBarsWithImePadding(): Modifier = composed {
     val ime = LocalWindowInsets.current.ime
     val navBars = LocalWindowInsets.current.navigationBars
     val insets = remember(ime, navBars) { derivedWindowInsetsTypeOf(ime, navBars) }
@@ -249,10 +246,10 @@ inline fun WindowInsets.Type.toPaddingValues(
 @Composable
 fun rememberWindowInsetsTypePaddingValues(
     type: WindowInsets.Type,
-    applyStart: Boolean = true,
-    applyTop: Boolean = true,
-    applyEnd: Boolean = true,
-    applyBottom: Boolean = true,
+    applyStart: Boolean = false,
+    applyTop: Boolean = false,
+    applyEnd: Boolean = false,
+    applyBottom: Boolean = false,
     additionalStart: Dp = 0.dp,
     additionalTop: Dp = 0.dp,
     additionalEnd: Dp = 0.dp,
@@ -277,18 +274,18 @@ fun rememberWindowInsetsTypePaddingValues(
 }
 
 /**
- * This won't work until [PaddingValues] is marked as `@Stable` rather than `@Immutable`:
- * See https://issuetracker.google.com/187082366
+ * Our [PaddingValues] implementation which is state-backed, reading values as [insets] as
+ * appropriate. Can be created via [rememberWindowInsetsTypePaddingValues].
  */
 @Stable
 internal class WindowInsetsTypePaddingValues(
     private val insets: WindowInsets.Type,
     private val density: Density,
 ) : PaddingValues {
-    var applyStart: Boolean by mutableStateOf(true)
-    var applyTop: Boolean by mutableStateOf(true)
-    var applyEnd: Boolean by mutableStateOf(true)
-    var applyBottom: Boolean by mutableStateOf(true)
+    var applyStart: Boolean by mutableStateOf(false)
+    var applyTop: Boolean by mutableStateOf(false)
+    var applyEnd: Boolean by mutableStateOf(false)
+    var applyBottom: Boolean by mutableStateOf(false)
 
     var additionalStart: Dp by mutableStateOf(0.dp)
     var additionalTop: Dp by mutableStateOf(0.dp)
