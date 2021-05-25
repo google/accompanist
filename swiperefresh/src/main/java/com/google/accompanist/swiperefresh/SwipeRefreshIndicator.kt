@@ -19,7 +19,6 @@ package com.google.accompanist.swiperefresh
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animate
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -105,6 +104,7 @@ fun SwipeRefreshIndicator(
     state: SwipeRefreshState,
     refreshTriggerDistance: Dp,
     modifier: Modifier = Modifier,
+    fade: Boolean = true,
     scale: Boolean = false,
     arrowEnabled: Boolean = true,
     backgroundColor: Color = MaterialTheme.colors.surface,
@@ -123,14 +123,11 @@ fun SwipeRefreshIndicator(
 
     val indicatorRefreshTrigger = with(LocalDensity.current) { refreshTriggerDistance.toPx() }
 
-    val animatedAlpha by animateFloatAsState(
-        targetValue = when {
-            state.isRefreshing -> MaxAlpha
-            state.indicatorOffset >= indicatorRefreshTrigger -> MaxAlpha
-            else -> MinAlpha
-        },
-        animationSpec = tween()
-    )
+    val alpha = if (fade) {
+        (state.indicatorOffset / indicatorRefreshTrigger).coerceIn(0f,  1f)
+    } else {
+        1f
+    }
 
     val indicatorHeight = with(LocalDensity.current) { sizes.size.roundToPx() }
     val refreshingOffsetPx = with(LocalDensity.current) { refreshingOffset.toPx() }
@@ -193,7 +190,7 @@ fun SwipeRefreshIndicator(
         painter.arrowHeight = sizes.arrowHeight
         painter.arrowEnabled = arrowEnabled && !state.isRefreshing
         painter.color = contentColor
-        painter.alpha = animatedAlpha
+        painter.alpha = alpha
 
         painter.startTrim = slingshot.startTrim
         painter.endTrim = slingshot.endTrim
@@ -228,6 +225,4 @@ fun SwipeRefreshIndicator(
     }
 }
 
-private const val MaxAlpha = 1f
-private const val MinAlpha = 0.3f
 private const val CrossfadeDurationMs = 100
