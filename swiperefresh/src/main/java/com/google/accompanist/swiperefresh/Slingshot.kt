@@ -62,7 +62,7 @@ internal fun rememberUpdatedSlingshot(
     val strokeStart = adjustedPercent * 0.8f
 
     val startTrim = 0f
-    val endTrim = strokeStart.coerceAtLeast(MaxProgressArc)
+    val endTrim = min(MaxProgressArc, strokeStart)
 
     val rotation = (-0.25f + 0.4f * adjustedPercent + tensionPercent * 2) * 0.5f
     val arrowScale = min(1f, adjustedPercent)
