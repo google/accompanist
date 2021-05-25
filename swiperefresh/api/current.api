@@ -5,7 +5,7 @@ package com.google.accompanist.swiperefresh {
   }
 
   public final class SwipeRefreshIndicatorKt {
-    method @androidx.compose.runtime.Composable public static void SwipeRefreshIndicator-E1VOmL8(com.google.accompanist.swiperefresh.SwipeRefreshState state, float refreshTriggerDistance, optional androidx.compose.ui.Modifier modifier, optional boolean scale, optional boolean arrowEnabled, optional long backgroundColor, optional long contentColor, optional androidx.compose.ui.graphics.Shape shape, optional float refreshingOffset, optional boolean largeIndication, optional float elevation);
+    method @androidx.compose.runtime.Composable public static void SwipeRefreshIndicator-V_RBFTI(com.google.accompanist.swiperefresh.SwipeRefreshState state, float refreshTriggerDistance, optional androidx.compose.ui.Modifier modifier, optional boolean fade, optional boolean scale, optional boolean arrowEnabled, optional long backgroundColor, optional long contentColor, optional androidx.compose.ui.graphics.Shape shape, optional float refreshingOffset, optional boolean largeIndication, optional float elevation);
   }
 
   public final class SwipeRefreshKt {
