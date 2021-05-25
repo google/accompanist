@@ -395,6 +395,7 @@ class PagerState(
         _animationTargetPage = page
 
         val initialIndex = currentLayoutPage
+        val direction = if (page > initialIndex) 1 else -1
         // These are the pages which we'll iterate through to display the 'effect' of scrolling.
         val pages: IntArray = when {
             page > initialIndex -> intArrayOf(initialIndex, initialIndex + 1, page - 1, page)
@@ -405,8 +406,8 @@ class PagerState(
         // the current page (to allow us to animate over the offset) so we need to minus 1
         animate(
             initialValue = currentPageOffset,
-            targetValue = pages.size + pageOffset - 1,
-            initialVelocity = initialVelocity,
+            targetValue = (pages.size - 1) * direction + pageOffset,
+            initialVelocity = initialVelocity * direction,
             animationSpec = animationSpec
         ) { value, _ ->
             // Value here is the [index of page in pages] + offset. We floor the value to get
@@ -414,7 +415,9 @@ class PagerState(
             val flooredIndex = floor(value).toInt()
             // We then go through each layout page and set it to the correct page from [pages]
             layoutPages.forEachIndexed { index, layoutInfo ->
-                layoutInfo.page = pages.getOrNull(flooredIndex + (index - currentLayoutPageIndex))
+                layoutInfo.page = pages.getOrNull(
+                    flooredIndex * direction + (index - currentLayoutPageIndex)
+                )
             }
             if (DebugLog) {
                 Napier.d(
