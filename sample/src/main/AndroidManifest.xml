@@ -168,6 +168,15 @@
         </activity>
 
         <activity
+            android:name=".pager.HorizontalPagerLoopSample"
+            android:label="@string/horiz_pager_title_loop">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".pager.VerticalPagerBasicSample"
             android:label="@string/vertical_pager_title_basics">
             <intent-filter>
@@ -185,6 +194,14 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".pager.VerticalPagerLoopSample"
+            android:label="@string/vertical_pager_title_loop">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".pager.NestedPagersSample"
