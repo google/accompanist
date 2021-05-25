@@ -91,6 +91,7 @@ private val LargeSizes = SwipeRefreshIndicatorSizes(
  *
  * @param state The [SwipeRefreshState] passed into the [SwipeRefresh] `indicator` block.
  * @param modifier The modifier to apply to this layout.
+ * @param fade Whether the arrow should fade in/out as it is scrolled in. Defaults to true.
  * @param scale Whether the indicator should scale up/down as it is scrolled in. Defaults to false.
  * @param arrowEnabled Whether an arrow should be drawn on the indicator. Defaults to true.
  * @param backgroundColor The color of the indicator background surface.
@@ -122,12 +123,6 @@ fun SwipeRefreshIndicator(
     val sizes = if (largeIndication) LargeSizes else DefaultSizes
 
     val indicatorRefreshTrigger = with(LocalDensity.current) { refreshTriggerDistance.toPx() }
-
-    val alpha = if (fade) {
-        (state.indicatorOffset / indicatorRefreshTrigger).coerceIn(0f, 1f)
-    } else {
-        1f
-    }
 
     val indicatorHeight = with(LocalDensity.current) { sizes.size.roundToPx() }
     val refreshingOffsetPx = with(LocalDensity.current) { refreshingOffset.toPx() }
@@ -190,6 +185,11 @@ fun SwipeRefreshIndicator(
         painter.arrowHeight = sizes.arrowHeight
         painter.arrowEnabled = arrowEnabled && !state.isRefreshing
         painter.color = contentColor
+        val alpha = if (fade) {
+            (state.indicatorOffset / indicatorRefreshTrigger).coerceIn(0f, 1f)
+        } else {
+            1f
+        }
         painter.alpha = alpha
 
         painter.startTrim = slingshot.startTrim
