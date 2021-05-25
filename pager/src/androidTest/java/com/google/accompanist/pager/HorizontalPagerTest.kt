@@ -52,49 +52,52 @@ class HorizontalPagerTest(
     override val offscreenLimit: Int,
     private val layoutDirection: LayoutDirection,
     private val reverseLayout: Boolean,
+    override val infiniteLoop: Boolean,
 ) : PagerTest() {
     companion object {
         @JvmStatic
         @Parameterized.Parameters
-        fun data(): Collection<Array<Any>> = listOf(
+        fun data(): Collection<Array<Any>> = dataset(false) + dataset(true)
+
+        private fun dataset(looping: Boolean): Collection<Array<Any>> = listOf(
             // itemWidthFraction, horizontalAlignment, itemSpacing,
-            // offscreenLimit, layoutDirection, reverseLayout
+            // offscreenLimit, layoutDirection, reverseLayout, infiniteLoop
 
             // Test typical full-width items
-            arrayOf(1f, Alignment.Start, 0, 2, LayoutDirection.Ltr, false),
-            arrayOf(1f, Alignment.CenterHorizontally, 0, 2, LayoutDirection.Ltr, false),
-            arrayOf(1f, Alignment.End, 0, 2, LayoutDirection.Ltr, false),
-            arrayOf(1f, Alignment.Start, 0, 2, LayoutDirection.Rtl, false),
-            arrayOf(1f, Alignment.CenterHorizontally, 0, 2, LayoutDirection.Rtl, false),
-            arrayOf(1f, Alignment.End, 0, 2, LayoutDirection.Rtl, false),
+            arrayOf(1f, Alignment.Start, 0, 2, LayoutDirection.Ltr, false, looping),
+            arrayOf(1f, Alignment.CenterHorizontally, 0, 2, LayoutDirection.Ltr, false, looping),
+            arrayOf(1f, Alignment.End, 0, 2, LayoutDirection.Ltr, false, looping),
+            arrayOf(1f, Alignment.Start, 0, 2, LayoutDirection.Rtl, false, looping),
+            arrayOf(1f, Alignment.CenterHorizontally, 0, 2, LayoutDirection.Rtl, false, looping),
+            arrayOf(1f, Alignment.End, 0, 2, LayoutDirection.Rtl, false, looping),
 
             // Full-width items with item spacing
-            arrayOf(1f, Alignment.Start, 4, 2, LayoutDirection.Ltr, false),
-            arrayOf(1f, Alignment.CenterHorizontally, 4, 2, LayoutDirection.Ltr, false),
-            arrayOf(1f, Alignment.End, 4, 2, LayoutDirection.Ltr, false),
-            arrayOf(1f, Alignment.Start, 4, 2, LayoutDirection.Rtl, false),
-            arrayOf(1f, Alignment.CenterHorizontally, 4, 2, LayoutDirection.Rtl, false),
-            arrayOf(1f, Alignment.End, 4, 2, LayoutDirection.Rtl, false),
+            arrayOf(1f, Alignment.Start, 4, 2, LayoutDirection.Ltr, false, looping),
+            arrayOf(1f, Alignment.CenterHorizontally, 4, 2, LayoutDirection.Ltr, false, looping),
+            arrayOf(1f, Alignment.End, 4, 2, LayoutDirection.Ltr, false, looping),
+            arrayOf(1f, Alignment.Start, 4, 2, LayoutDirection.Rtl, false, looping),
+            arrayOf(1f, Alignment.CenterHorizontally, 4, 2, LayoutDirection.Rtl, false, looping),
+            arrayOf(1f, Alignment.End, 4, 2, LayoutDirection.Rtl, false, looping),
 
             // Full-width items with reverseLayout = true
-            arrayOf(1f, Alignment.Start, 0, 2, LayoutDirection.Ltr, true),
-            arrayOf(1f, Alignment.CenterHorizontally, 0, 2, LayoutDirection.Ltr, true),
-            arrayOf(1f, Alignment.End, 0, 2, LayoutDirection.Ltr, true),
-            arrayOf(1f, Alignment.Start, 0, 2, LayoutDirection.Rtl, true),
-            arrayOf(1f, Alignment.CenterHorizontally, 0, 2, LayoutDirection.Rtl, true),
-            arrayOf(1f, Alignment.End, 0, 2, LayoutDirection.Rtl, true),
+            arrayOf(1f, Alignment.Start, 0, 2, LayoutDirection.Ltr, true, looping),
+            arrayOf(1f, Alignment.CenterHorizontally, 0, 2, LayoutDirection.Ltr, true, looping),
+            arrayOf(1f, Alignment.End, 0, 2, LayoutDirection.Ltr, true, looping),
+            arrayOf(1f, Alignment.Start, 0, 2, LayoutDirection.Rtl, true, looping),
+            arrayOf(1f, Alignment.CenterHorizontally, 0, 2, LayoutDirection.Rtl, true, looping),
+            arrayOf(1f, Alignment.End, 0, 2, LayoutDirection.Rtl, true, looping),
 
             // Test an increased offscreenLimit
-            arrayOf(1f, Alignment.CenterHorizontally, 0, 4, LayoutDirection.Ltr, false),
-            arrayOf(1f, Alignment.CenterHorizontally, 0, 4, LayoutDirection.Rtl, false),
+            arrayOf(1f, Alignment.CenterHorizontally, 0, 4, LayoutDirection.Ltr, false, looping),
+            arrayOf(1f, Alignment.CenterHorizontally, 0, 4, LayoutDirection.Rtl, false, looping),
 
             // Test items with 80% widths
-            arrayOf(0.8f, Alignment.Start, 0, 2, LayoutDirection.Ltr, false),
-            arrayOf(0.8f, Alignment.CenterHorizontally, 0, 2, LayoutDirection.Ltr, false),
-            arrayOf(0.8f, Alignment.End, 0, 2, LayoutDirection.Ltr, false),
-            arrayOf(0.8f, Alignment.Start, 0, 2, LayoutDirection.Rtl, false),
-            arrayOf(0.8f, Alignment.CenterHorizontally, 0, 2, LayoutDirection.Rtl, false),
-            arrayOf(0.8f, Alignment.End, 0, 2, LayoutDirection.Rtl, false),
+            arrayOf(0.8f, Alignment.Start, 0, 2, LayoutDirection.Ltr, false, looping),
+            arrayOf(0.8f, Alignment.CenterHorizontally, 0, 2, LayoutDirection.Ltr, false, looping),
+            arrayOf(0.8f, Alignment.End, 0, 2, LayoutDirection.Ltr, false, looping),
+            arrayOf(0.8f, Alignment.Start, 0, 2, LayoutDirection.Rtl, false, looping),
+            arrayOf(0.8f, Alignment.CenterHorizontally, 0, 2, LayoutDirection.Rtl, false, looping),
+            arrayOf(0.8f, Alignment.End, 0, 2, LayoutDirection.Rtl, false, looping),
         )
     }
 
@@ -158,7 +161,8 @@ class HorizontalPagerTest(
         val pagerState = PagerState(
             pageCount = pageCount,
             offscreenLimit = offscreenLimit,
-        )
+            infiniteLoop = infiniteLoop,
+        ).apply { testing = true }
         composeTestRule.setContent(layoutDirection) {
             applierScope = rememberCoroutineScope()
 
