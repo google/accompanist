@@ -124,7 +124,7 @@ fun SwipeRefreshIndicator(
     val indicatorRefreshTrigger = with(LocalDensity.current) { refreshTriggerDistance.toPx() }
 
     val alpha = if (fade) {
-        (state.indicatorOffset / indicatorRefreshTrigger).coerceIn(0f,  1f)
+        (state.indicatorOffset / indicatorRefreshTrigger).coerceIn(0f, 1f)
     } else {
         1f
     }
