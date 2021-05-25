@@ -85,6 +85,9 @@ subprojects {
 
             // FIXME figure out why this is needed
             freeCompilerArgs += "-Xallow-unstable-dependencies"
+
+            // Enable default methods in interfaces
+            freeCompilerArgs += "-Xjvm-default=all"
         }
     }
 
