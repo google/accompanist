@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntSize
 import kotlinx.coroutines.CoroutineScope
@@ -47,7 +48,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -113,6 +113,7 @@ fun <R> rememberLoadPainter(
     }
     painter.request = request
     painter.shouldRefetchOnSizeChange = shouldRefetchOnSizeChange
+    painter.rootViewSize = LocalView.current.let { IntSize(it.width, it.height) }
 
     // This runs our fade in animation
     animateFadeInColorFilter(
@@ -170,6 +171,11 @@ class LoadPainter<R> internal constructor(
     var request by mutableStateOf<R?>(null)
 
     /**
+     * The root view size.
+     */
+    internal var rootViewSize by mutableStateOf(IntSize(0, 0))
+
+    /**
      * Lambda which will be invoked when the size changes, allowing
      * optional re-fetching of the image.
      */
@@ -204,10 +210,7 @@ class LoadPainter<R> internal constructor(
 
     override fun DrawScope.onDraw() {
         // Update the request size, based on the provided canvas size
-        requestSize = IntSize(
-            width = if (size.width >= 0.5f) size.width.roundToInt() else -1,
-            height = if (size.height >= 0.5f) size.height.roundToInt() else -1,
-        )
+        updateRequestSize(canvasSize = size)
 
         val transitionColorFilter = transitionColorFilter
         if (colorFilter != null && transitionColorFilter != null) {
@@ -259,7 +262,7 @@ class LoadPainter<R> internal constructor(
         scope.launch {
             combine(
                 snapshotFlow { request },
-                snapshotFlow { requestSize }.filterNotNull(),
+                snapshotFlow { requestSize },
                 transform = { request, size -> request to size }
             ).collectLatest { (request, size) ->
                 execute(request, size)
@@ -270,9 +273,14 @@ class LoadPainter<R> internal constructor(
         // request size to be -1, -1 which will load the original size image.
         // The ideal fix for this is waiting on https://issuetracker.google.com/186012457
         scope.launch {
-            delay(32) // 32ms should be enough time for measure/layout/draw to happen.
             if (requestSize == null) {
-                requestSize = IntSize(-1, -1)
+                delay(32) // 32ms should be enough time for measure/layout/draw to happen.
+
+                if (requestSize == null) {
+                    // If we still don't have a request size, resolve the size without
+                    // the canvas size
+                    updateRequestSize(canvasSize = Size.Zero)
+                }
             }
         }
     }
@@ -281,8 +289,8 @@ class LoadPainter<R> internal constructor(
      * The function which executes the requests, and update [loadState] as appropriate with the
      * result.
      */
-    private suspend fun execute(request: R?, size: IntSize) {
-        if (request == null) {
+    private suspend fun execute(request: R?, size: IntSize?) {
+        if (request == null || size == null) {
             // If we don't have a request, set our state to Empty and return
             loadState = ImageLoadState.Empty
             return
@@ -317,6 +325,25 @@ class LoadPainter<R> internal constructor(
                 }
             }
             .collect { loadState = it }
+    }
+
+    private fun updateRequestSize(canvasSize: Size) {
+        requestSize = IntSize(
+            width = when {
+                // If we have a canvas width, use it...
+                canvasSize.width >= 0.5f -> canvasSize.width.roundToInt()
+                // Otherwise we fall-back to the root view size as an upper bound
+                rootViewSize.width > 0 -> rootViewSize.width
+                else -> -1
+            },
+            height = when {
+                // If we have a canvas height, use it...
+                canvasSize.height >= 0.5f -> canvasSize.height.roundToInt()
+                // Otherwise we fall-back to the root view size as an upper bound
+                rootViewSize.height > 0 -> rootViewSize.height
+                else -> -1
+            },
+        )
     }
 }
 
