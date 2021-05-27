@@ -259,9 +259,8 @@ fun rememberInsetsPaddingValues(
     additionalBottom: Dp = 0.dp,
 ): PaddingValues {
     val density = LocalDensity.current
-    val layoutDirection = LocalLayoutDirection.current
 
-    return remember(density, layoutDirection) {
+    return remember(density, insets) {
         InsetsPaddingValues(insets = insets, density = density)
     }.apply {
         this.applyStart = applyStart
