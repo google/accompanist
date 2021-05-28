@@ -29,7 +29,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
@@ -237,10 +236,10 @@ inline fun WindowInsets.Type.toPaddingValues(
  * composition being notified, and these padding values being re-read.
  *
  * @param insets The [WindowInsets.Type] to read from.
- * @param applyStart Whether to apply the inset on the start dimension. Defaults to false.
- * @param applyTop Whether to apply the inset on the top dimension. Defaults to false.
- * @param applyEnd Whether to apply the inset on the end dimension. Defaults to false.
- * @param applyBottom Whether to apply the inset on the bottom dimension. Defaults to false.
+ * @param applyStart Whether to apply the inset on the start dimension. Defaults to true.
+ * @param applyTop Whether to apply the inset on the top dimension. Defaults to true.
+ * @param applyEnd Whether to apply the inset on the end dimension. Defaults to true.
+ * @param applyBottom Whether to apply the inset on the bottom dimension. Defaults to true.
  * @param additionalStart Value to add to the start dimension.
  * @param additionalTop Value to add to the top dimension.
  * @param additionalEnd Value to add to the end dimension.
@@ -249,10 +248,10 @@ inline fun WindowInsets.Type.toPaddingValues(
 @Composable
 fun rememberInsetsPaddingValues(
     insets: Insets,
-    applyStart: Boolean = false,
-    applyTop: Boolean = false,
-    applyEnd: Boolean = false,
-    applyBottom: Boolean = false,
+    applyStart: Boolean = true,
+    applyTop: Boolean = true,
+    applyEnd: Boolean = true,
+    applyBottom: Boolean = true,
     additionalStart: Dp = 0.dp,
     additionalTop: Dp = 0.dp,
     additionalEnd: Dp = 0.dp,
