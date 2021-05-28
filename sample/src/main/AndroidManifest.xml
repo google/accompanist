@@ -112,6 +112,16 @@
             </intent-filter>
         </activity>
 
+
+        <activity
+            android:name="com.google.accompanist.sample.insets.EdgeToEdgeLazyColumnWithBottomNav"
+            android:label="@string/insets_title_list_bottomnav">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name="com.google.accompanist.sample.insets.EdgeToEdgeLazyColumn"
             android:label="@string/insets_title_list">

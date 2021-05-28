@@ -75,8 +75,6 @@ fun Sample_lazycolumn() {
     LazyColumn(
         contentPadding = rememberInsetsPaddingValues(
             insets = LocalWindowInsets.current.systemBars,
-            applyTop = true,
-            applyBottom = true,
         )
     ) {
         // content
@@ -88,9 +86,6 @@ fun BottomNavigation_Insets() {
     BottomNavigation(
         contentPadding = rememberInsetsPaddingValues(
             insets = LocalWindowInsets.current.navigationBars,
-            applyStart = true,
-            applyEnd = true,
-            applyBottom = true,
         )
     ) {
         // content
@@ -102,9 +97,7 @@ fun TopAppBar_Insets() {
     TopAppBar(
         contentPadding = rememberInsetsPaddingValues(
             insets = LocalWindowInsets.current.systemBars,
-            applyStart = true,
-            applyTop = true,
-            applyEnd = true,
+            applyBottom = false,
         )
     ) {
         // content

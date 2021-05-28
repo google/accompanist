@@ -63,6 +63,13 @@ class ImeAnimationSample : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
+            // Update the system bars to be translucent
+            val systemUiController = rememberSystemUiController()
+            val useDarkIcons = MaterialTheme.colors.isLight
+            SideEffect {
+                systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = useDarkIcons)
+            }
+
             AccompanistSampleTheme {
                 ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
                     Sample()
@@ -77,22 +84,17 @@ private val listItems = List(40) { randomSampleImageUrl(it) }
 @OptIn(ExperimentalAnimatedInsets::class)
 @Composable
 private fun Sample() {
-    val systemUiController = rememberSystemUiController()
-    val useDarkIcons = MaterialTheme.colors.isLight
-    SideEffect {
-        systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = useDarkIcons)
-    }
-
     Scaffold(
         topBar = {
-            /**
-             * We use [TopAppBar] from accompanist-insets-ui which allows us to provide
-             * content padding matching the system bars insets.
-             */
+            // We use TopAppBar from accompanist-insets-ui which allows us to provide
+            // content padding matching the system bars insets.
             TopAppBar(
                 title = { Text(stringResource(R.string.insets_title_imeanim)) },
                 backgroundColor = MaterialTheme.colors.surface,
-                contentPadding = rememberInsetsPaddingValues(LocalWindowInsets.current.statusBars),
+                contentPadding = rememberInsetsPaddingValues(
+                    LocalWindowInsets.current.statusBars,
+                    applyBottom = false,
+                ),
                 modifier = Modifier.fillMaxWidth(),
             )
         },
@@ -113,6 +115,7 @@ private fun Sample() {
         modifier = Modifier.fillMaxSize()
     ) { contentPadding ->
         Column {
+            // We apply the contentPadding passed to us from the Scaffold
             LazyColumn(
                 contentPadding = contentPadding,
                 reverseLayout = true,

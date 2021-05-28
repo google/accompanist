@@ -62,6 +62,8 @@ val LocalScaffoldPadding: ProvidableCompositionLocal<PaddingValues> = staticComp
  * A copy if [androidx.compose.material.Scaffold] which lays out [content] behind both the top bar
  * content, and the bottom bar content.
  *
+ * @sample com.google.accompanist.sample.insets.InsetsBasics
+ *
  */
 @Composable
 fun Scaffold(
