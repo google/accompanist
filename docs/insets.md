@@ -134,6 +134,35 @@ TopAppBar(
 }
 ```
 
+The library also provides a modified copy of Compose Material's [`Scaffold`](https://developer.android.com/reference/kotlin/androidx/compose/material/package-summary#Scaffold(androidx.compose.ui.Modifier,androidx.compose.material.ScaffoldState,kotlin.Function0,kotlin.Function0,kotlin.Function1,kotlin.Function0,androidx.compose.material.FabPosition,kotlin.Boolean,kotlin.Function1,kotlin.Boolean,androidx.compose.ui.graphics.Shape,androidx.compose.ui.unit.Dp,androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color,kotlin.Function1)) which better supports edge-to-edge layouts, by drawing the top and bottom bars over the content.
+
+``` kotlin
+Scaffold(
+    topBar = {
+        // We use TopAppBar from accompanist-insets-ui which allows us to provide
+        // content padding matching the system bars insets.
+        TopAppBar(
+            title = { Text(stringResource(R.string.insets_title_list)) },
+            backgroundColor = MaterialTheme.colors.surface.copy(alpha = 0.9f),
+            contentPadding = rememberInsetsPaddingValues(
+                LocalWindowInsets.current.statusBars,
+                applyBottom = false,
+            ),
+        )
+    },
+    bottomBar = {
+        // We add a spacer as a bottom bar, which is the same height as
+        // the navigation bar
+        Spacer(Modifier.navigationBarsHeight().fillMaxWidth())
+    },
+) { contentPadding ->
+    // We apply the contentPadding passed to us from the Scaffold
+    Box(Modifier.padding(contentPadding)) {
+        // content
+    }
+}
+```
+
 See the [API docs](../api/insets-ui/insets-ui/com.google.accompanist.insets.ui/) for a list of the other layouts provided in the library.
 
 ## 🚧 Experimental
