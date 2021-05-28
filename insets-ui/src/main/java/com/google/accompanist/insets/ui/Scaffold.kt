@@ -59,11 +59,49 @@ import androidx.compose.ui.unit.dp
 val LocalScaffoldPadding: ProvidableCompositionLocal<PaddingValues> = staticCompositionLocalOf { PaddingValues(0.dp) }
 
 /**
- * A copy if [androidx.compose.material.Scaffold] which lays out [content] behind both the top bar
- * content, and the bottom bar content.
+ * A copy of [androidx.compose.material.Scaffold] which lays out [content] behind both the top bar
+ * content, and the bottom bar content. See [androidx.compose.material.Scaffold] for more
+ * information about the features provided.
+ *
+ * A sample which demonstrates how to use this layout to achieve a edge-to-edge layout is
+ * below:
  *
  * @sample com.google.accompanist.sample.insets.InsetsBasics
  *
+ * @param modifier optional Modifier for the root of the [Scaffold]
+ * @param scaffoldState state of this scaffold widget. It contains the state of the screen, e.g.
+ * variables to provide manual control over the drawer behavior, sizes of components, etc
+ * @param topBar top app bar of the screen. Consider using [TopAppBar].
+ * @param bottomBar bottom bar of the screen. Consider using [BottomAppBar].
+ * @param snackbarHost component to host [Snackbar]s that are pushed to be shown via
+ * [SnackbarHostState.showSnackbar]. Usually it's a [SnackbarHost]
+ * @param floatingActionButton Main action button of your screen. Consider using
+ * [FloatingActionButton] for this slot.
+ * @param floatingActionButtonPosition position of the FAB on the screen. See [FabPosition] for
+ * possible options available.
+ * @param isFloatingActionButtonDocked whether [floatingActionButton] should overlap with
+ * [bottomBar] for half a height, if [bottomBar] exists. Ignored if there's no [bottomBar] or no
+ * [floatingActionButton].
+ * @param drawerContent content of the Drawer sheet that can be pulled from the left side (right
+ * for RTL).
+ * @param drawerGesturesEnabled whether or not drawer (if set) can be interacted with via gestures
+ * @param drawerShape shape of the drawer sheet (if set)
+ * @param drawerElevation drawer sheet elevation. This controls the size of the shadow
+ * below the drawer sheet (if set)
+ * @param drawerBackgroundColor background color to be used for the drawer sheet
+ * @param drawerContentColor color of the content to use inside the drawer sheet. Defaults to
+ * either the matching content color for [drawerBackgroundColor], or, if it is not a color from
+ * the theme, this will keep the same value set above this Surface.
+ * @param drawerScrimColor color of the scrim that obscures content when the drawer is open
+ * @param backgroundColor background of the scaffold body
+ * @param contentColor color of the content in scaffold body. Defaults to either the matching
+ * content color for [backgroundColor], or, if it is not a color from the theme, this will keep
+ * the same value set above this Surface.
+ * @param contentPadding Additional content padding to apply to the [content].
+ * @param content content of your screen. The lambda receives an [PaddingValues] that should be
+ * applied to the content root via Modifier.padding to properly offset top and bottom bars. If
+ * you're using VerticalScroller, apply this modifier to the child of the scroller, and not on
+ * the scroller itself.
  */
 @Composable
 fun Scaffold(
