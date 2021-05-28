@@ -6,7 +6,7 @@ site_url: 'https://google.github.io/accompanist/'
 edit_uri: 'tree/main/docs/'
 remote_branch: gh-pages
 
-docs_dir: docs
+docs_dir: docs-gen
 
 # Repository
 repo_name: 'Accompanist'
