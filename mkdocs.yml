@@ -3,6 +3,7 @@ site_name: 'Accompanist'
 site_description: 'A group of libraries to help write Jetpack Compose apps.'
 site_author: 'Google'
 site_url: 'https://google.github.io/accompanist/'
+edit_uri: 'tree/main/docs/'
 remote_branch: gh-pages
 
 docs_dir: docs-gen
