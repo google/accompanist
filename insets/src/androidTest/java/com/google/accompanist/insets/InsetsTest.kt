@@ -26,6 +26,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.test.filters.SdkSuppress
 import com.google.common.truth.Truth.assertThat
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
@@ -37,6 +38,7 @@ import org.junit.runner.RunWith
  * Ideally this would run on the host instead.
  */
 @RunWith(TestParameterInjector::class)
+@SdkSuppress(minSdkVersion = 24) // TestParameterInjector needs API 24+
 class InsetsTest {
     @get:Rule
     val composeTestRule = createComposeRule()
