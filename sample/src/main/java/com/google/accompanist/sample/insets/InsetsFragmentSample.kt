@@ -23,38 +23,15 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Face
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.commit
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ViewWindowInsetObserver
-import com.google.accompanist.insets.navigationBarsPadding
-import com.google.accompanist.insets.rememberInsetsPaddingValues
-import com.google.accompanist.insets.ui.TopAppBar
 import com.google.accompanist.sample.AccompanistSampleTheme
-import com.google.accompanist.sample.R
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class InsetsFragmentSample : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,48 +70,8 @@ class InsetsFragment : Fragment() {
                 // Instead of calling ProvideWindowInsets, we use CompositionLocalProvider to provide
                 // the WindowInsets instance from above to LocalWindowInsets
                 CompositionLocalProvider(LocalWindowInsets provides windowInsets) {
-                    Sample()
+                    InsetsBasics()
                 }
-            }
-        }
-    }
-}
-
-@Composable
-private fun Sample() {
-    val systemUiController = rememberSystemUiController()
-    val useDarkIcons = MaterialTheme.colors.isLight
-    SideEffect {
-        systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = useDarkIcons)
-    }
-
-    Surface {
-        Box(Modifier.fillMaxSize()) {
-            /**
-             * We use [TopAppBar] from accompanist-insets-ui which allows us to provide
-             * content padding matching the system bars insets.
-             */
-            TopAppBar(
-                title = { Text(stringResource(R.string.insets_title_fragment)) },
-                backgroundColor = MaterialTheme.colors.surface,
-                contentPadding = rememberInsetsPaddingValues(
-                    LocalWindowInsets.current.systemBars,
-                    applyBottom = false,
-                ),
-                modifier = Modifier.fillMaxWidth(),
-            )
-
-            FloatingActionButton(
-                onClick = { /* */ },
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .navigationBarsPadding()
-                    .padding(16.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Face,
-                    contentDescription = "Face icon"
-                )
             }
         }
     }

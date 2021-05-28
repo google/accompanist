@@ -27,7 +27,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -47,6 +46,7 @@ import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.google.accompanist.insets.rememberImeNestedScrollConnection
 import com.google.accompanist.insets.rememberInsetsPaddingValues
+import com.google.accompanist.insets.ui.Scaffold
 import com.google.accompanist.insets.ui.TopAppBar
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
@@ -90,31 +90,13 @@ private fun Sample() {
              * content padding matching the system bars insets.
              */
             TopAppBar(
-                title = {
-                    Text(stringResource(R.string.insets_title_imeanim))
-                },
+                title = { Text(stringResource(R.string.insets_title_imeanim)) },
                 backgroundColor = MaterialTheme.colors.surface,
-                contentPadding = rememberInsetsPaddingValues(
-                    LocalWindowInsets.current.systemBars,
-                    applyBottom = false,
-                ),
+                contentPadding = rememberInsetsPaddingValues(LocalWindowInsets.current.statusBars),
                 modifier = Modifier.fillMaxWidth(),
             )
         },
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Column {
-            LazyColumn(
-                reverseLayout = true,
-                modifier = Modifier
-                    .weight(1f)
-                    .nestedScroll(connection = rememberImeNestedScrollConnection())
-            ) {
-                items(listItems) { imageUrl ->
-                    ListItem(imageUrl, Modifier.fillMaxWidth())
-                }
-            }
-
+        bottomBar = {
             Surface(elevation = 1.dp) {
                 val text = remember { mutableStateOf(TextFieldValue()) }
                 OutlinedTextField(
@@ -126,6 +108,21 @@ private fun Sample() {
                         .padding(horizontal = 16.dp, vertical = 8.dp)
                         .navigationBarsWithImePadding()
                 )
+            }
+        },
+        modifier = Modifier.fillMaxSize()
+    ) { contentPadding ->
+        Column {
+            LazyColumn(
+                contentPadding = contentPadding,
+                reverseLayout = true,
+                modifier = Modifier
+                    .weight(1f)
+                    .nestedScroll(connection = rememberImeNestedScrollConnection())
+            ) {
+                items(listItems) { imageUrl ->
+                    ListItem(imageUrl, Modifier.fillMaxWidth())
+                }
             }
         }
     }
