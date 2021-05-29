@@ -64,7 +64,7 @@ VerticalPager(state = pagerState) { page ->
 
 Pages in both [`HorizontalPager`][api-horizpager] and [`VerticalPager`][api-vertpager] are lazily composed and laid-out as required by the layout. As the user scrolls through pages, any pages which are no longer required are removed from the content.
 
-### Initial Offscreen Limit
+### Offscreen Limit
 
 The [PagerState][pagerstate-api] API allows the setting of the `initialOffscreenLimit`, which defines the number of pages that should be retained on either side of the current page. Pages beyond this limit will be removed, and then recreated as needed. This value defaults to `1`, but can be increased to enable pre-loading of more content:
 
