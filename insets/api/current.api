@@ -12,8 +12,8 @@ package com.google.accompanist.insets {
   @com.google.accompanist.insets.ExperimentalAnimatedInsets public final class ImeNestedScrollConnection implements androidx.compose.ui.input.nestedscroll.NestedScrollConnection {
     ctor public ImeNestedScrollConnection(android.view.View view, boolean scrollImeOffScreenWhenVisible, boolean scrollImeOnScreenWhenNotVisible);
     method public suspend Object? onPostFling-k5p9STU(long consumed, long available, kotlin.coroutines.Continuation<? super androidx.compose.ui.unit.Velocity> p);
-    method public long onPostScroll-61dr0bI(long consumed, long available, androidx.compose.ui.input.nestedscroll.NestedScrollSource source);
-    method public long onPreScroll-ScU7Jk8(long available, androidx.compose.ui.input.nestedscroll.NestedScrollSource source);
+    method public long onPostScroll-61dr0bI(long consumed, long available, int source);
+    method public long onPreScroll-ScU7Jk8(long available, int source);
   }
 
   public final class ImeNestedScrollConnectionKt {
