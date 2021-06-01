@@ -35,19 +35,14 @@ jobs:
       - name: Decrypt secrets
         run: release/signing-setup.sh ${{ secrets.ENCRYPT_KEY }}
 
-      - name: Generate cache key
-        run: ./checksum.sh checksum.txt
-
-      - uses: actions/cache@v2
+      - uses: burrunan/gradle-cache-action@v1
+        name: Build
         with:
-          path: |
-            ~/.gradle/caches/modules-*
-            ~/.gradle/caches/jars-*
-            ~/.gradle/caches/build-cache-*
-          key: gradle-${{ hashFiles('checksum.txt') }}
-
-      - name: Build, lint and spotless
-        run: ./gradlew spotlessCheck assemble assembleAndroidTest lintDebug metalavaCheckCompatibility --scan
+          arguments: check --scan
+          save-local-build-cache: true
+          save-gradle-dependencies-cache: true
+          gradle-dependencies-cache-key: |
+            gradle/libs.versions.toml
 
       - name: Clean secrets
         if: always()
@@ -57,7 +52,7 @@ jobs:
     runs-on: macOS-latest
     needs: build
     timeout-minutes: 60
-    
+
     strategy:
       # Allow tests to continue on other devices if they fail on one device.
       fail-fast: false
@@ -89,16 +84,13 @@ jobs:
       - name: Decrypt secrets
         run: release/signing-setup.sh ${{ secrets.ENCRYPT_KEY }}
 
-      - name: Generate cache key
-        run: ./checksum.sh checksum.txt
-
-      - uses: actions/cache@v2
+      - uses: burrunan/gradle-cache-action@v1
+        name: Setup Gradle cache
         with:
-          path: |
-            ~/.gradle/caches/modules-*
-            ~/.gradle/caches/jars-*
-            ~/.gradle/caches/build-cache-*
-          key: gradle-${{ hashFiles('checksum.txt') }}
+          save-local-build-cache: true
+          save-gradle-dependencies-cache: true
+          gradle-dependencies-cache-key: |
+            gradle/libs.versions.toml
 
       - name: Build tests
         run: ./gradlew assembleDebugAndroidTest --scan
@@ -155,22 +147,17 @@ jobs:
       - name: Decrypt secrets
         run: release/signing-setup.sh ${{ secrets.ENCRYPT_KEY }}
 
-      - name: Generate cache key
-        run: ./checksum.sh checksum.txt
-
-      - uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches/modules-*
-            ~/.gradle/caches/jars-*
-            ~/.gradle/caches/build-cache-*
-          key: gradle-${{ hashFiles('checksum.txt') }}
-
-      - name: Deploy to Sonatype
-        run: ./gradlew publish --no-parallel
+      - uses: burrunan/gradle-cache-action@v1
+        name: Publish to Sonatype
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_NEXUS_PASSWORD }}
+        with:
+          arguments: publish --no-parallel --scan
+          save-local-build-cache: true
+          save-gradle-dependencies-cache: true
+          gradle-dependencies-cache-key: |
+            gradle/libs.versions.toml
 
       - name: Clean secrets
         if: always()
