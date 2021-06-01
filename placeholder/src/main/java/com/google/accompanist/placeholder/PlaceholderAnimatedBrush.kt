@@ -29,7 +29,7 @@ import androidx.compose.ui.graphics.lerp
 
 internal object PlaceholderDefaults {
     val PlaceholderColor = Color.Gray.copy(alpha = 0.5f)
-    val PlaceholderHighlightColor = Color.Gray.copy(alpha = 0f)
+    val PlaceholderHighlightColor = Color.Gray.copy(alpha = 0.3f)
 }
 
 @Composable
