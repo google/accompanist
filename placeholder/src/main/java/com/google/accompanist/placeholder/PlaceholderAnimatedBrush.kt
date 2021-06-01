@@ -16,6 +16,7 @@
 
 package com.google.accompanist.placeholder
 
+import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.InfiniteRepeatableSpec
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -32,6 +33,15 @@ internal object PlaceholderDefaults {
     val PlaceholderHighlightColor = Color.Gray.copy(alpha = 0.3f)
 }
 
+/**
+ * Creates a [Fade] brush with the given initial and target colors.
+ *
+ * @sample com.google.accompanist.sample.placeholder.PlaceholderFadeSample
+ *
+ * @param initialColor initial color of the fade.
+ * @param targetColor target color of the fade.
+ * @param animationSpec the [AnimationSpec] to configure the animation.
+ */
 @Composable
 fun fadeBrush(
     initialColor: Color = PlaceholderDefaults.PlaceholderColor,
@@ -52,6 +62,15 @@ fun fadeBrush(
     )
 }
 
+/**
+ * Creates a [Shimmer] brush with a highlight color over the given color.
+ *
+ * @sample com.google.accompanist.sample.placeholder.PlaceholderShimmerSample
+ *
+ * @param color
+ * @param highlightColor
+ * @param animationSpec the [AnimationSpec] to configure the animation.
+ */
 @Composable
 fun shimmerBrush(
     color: Color = PlaceholderDefaults.PlaceholderColor,

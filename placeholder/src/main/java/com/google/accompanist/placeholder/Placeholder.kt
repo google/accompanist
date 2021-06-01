@@ -35,6 +35,15 @@ import androidx.compose.ui.platform.InspectorValueInfo
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.LayoutDirection
 
+/**
+ * If [visible], draws [shape] with a solid [color] instead of content.
+ *
+ * @sample com.google.accompanist.sample.placeholder.PlaceholderBasicSample
+ *
+ * @param visible defines whether the placeholder should be visible
+ * @param color color to paint placeholder with
+ * @param shape desired shape of the placeholder
+ */
 fun Modifier.placeholder(
     visible: Boolean,
     color: Color = PlaceholderDefaults.PlaceholderColor,
@@ -52,6 +61,16 @@ fun Modifier.placeholder(
     )
 )
 
+/**
+ * If [visible], draw [shape] with [animatedBrush] instead of content.
+ *
+ * @sample com.google.accompanist.sample.placeholder.PlaceholderFadeSample
+ * @sample com.google.accompanist.sample.placeholder.PlaceholderShimmerSample
+ *
+ * @param visible defines whether the placeholder should be visible
+ * @param animatedBrush animated brush to paint placeholder with
+ * @param shape desired shape of the placeholder
+ */
 fun Modifier.placeholder(
     visible: Boolean,
     animatedBrush: PlaceholderAnimatedBrush,
