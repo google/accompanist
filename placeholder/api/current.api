@@ -14,8 +14,6 @@ package com.google.accompanist.placeholder {
   }
 
   public final class PlaceholderKt {
-    method @androidx.compose.runtime.Composable public static void Placeholder(androidx.compose.ui.Modifier modifier, com.google.accompanist.placeholder.PlaceholderAnimatedBrush animatedBrush, optional androidx.compose.ui.graphics.Shape shape);
-    method @androidx.compose.runtime.Composable public static void Placeholder-1xq40Q0(androidx.compose.ui.Modifier modifier, optional long color, optional androidx.compose.ui.graphics.Shape shape);
     method public static androidx.compose.ui.Modifier placeholder(androidx.compose.ui.Modifier, boolean visible, com.google.accompanist.placeholder.PlaceholderAnimatedBrush animatedBrush, optional androidx.compose.ui.graphics.Shape shape);
     method public static androidx.compose.ui.Modifier placeholder-WDF7WLI(androidx.compose.ui.Modifier, boolean visible, optional long color, optional androidx.compose.ui.graphics.Shape shape);
   }

@@ -18,7 +18,6 @@ package com.google.accompanist.placeholder
 
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -31,50 +30,10 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.drawscope.ContentDrawScope
-import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.InspectorInfo
 import androidx.compose.ui.platform.InspectorValueInfo
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.LayoutDirection
-
-@Composable
-fun Placeholder(
-    modifier: Modifier,
-    color: Color = PlaceholderDefaults.PlaceholderColor,
-    shape: Shape = RectangleShape
-) {
-    BasePlaceholder(
-        modifier = modifier.placeholder(
-            visible = true,
-            color = color,
-            shape = shape,
-        )
-    )
-}
-
-@Composable
-fun Placeholder(
-    modifier: Modifier,
-    animatedBrush: PlaceholderAnimatedBrush,
-    shape: Shape = RectangleShape
-) {
-    BasePlaceholder(
-        modifier = modifier.placeholder(
-            visible = true,
-            animatedBrush = animatedBrush,
-            shape = shape,
-        )
-    )
-}
-
-@Composable
-private fun BasePlaceholder(
-    modifier: Modifier
-) {
-    Layout({}, modifier) { _, constraints ->
-        layout(constraints.minWidth, constraints.minHeight) {}
-    }
-}
 
 fun Modifier.placeholder(
     visible: Boolean,
