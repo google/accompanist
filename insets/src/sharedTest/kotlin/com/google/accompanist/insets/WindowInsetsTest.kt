@@ -19,15 +19,13 @@ package com.google.accompanist.insets
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.test.filters.LargeTest
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 
-@LargeTest
-@RunWith(JUnit4::class)
+@RunWith(AndroidJUnit4::class)
 class WindowInsetsTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<InsetsTestActivity>()

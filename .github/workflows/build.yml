@@ -18,8 +18,6 @@ jobs:
 
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    env:
-      TERM: dumb
 
     steps:
       - uses: actions/checkout@v2
@@ -53,7 +51,7 @@ jobs:
         if: always()
         run: release/signing-cleanup.sh
 
-  test:
+  androidTest:
     runs-on: macOS-latest
     needs: build
     timeout-minutes: 70
@@ -71,9 +69,6 @@ jobs:
             target: default
           - api-level: 22
             target: default
-
-    env:
-      TERM: dumb
 
     steps:
       - uses: actions/checkout@v2
@@ -129,13 +124,61 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: test-results-${{ matrix.api-level }}-${{ matrix.target }}
-          path: "**/build/outputs/*/connected/*.xml"
+          path: |
+            "**/build/outputs/*/connected/*.xml"
+            "**/build/reports"
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Copy CI gradle.properties
+        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+      - name: set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Decrypt secrets
+        run: release/signing-setup.sh ${{ secrets.ENCRYPT_KEY }}
+
+      - name: Generate cache key
+        run: ./checksum.sh checksum.txt
+
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches/modules-*
+            ~/.gradle/caches/jars-*
+            ~/.gradle/caches/build-cache-*
+          key: gradle-${{ hashFiles('checksum.txt') }}
+
+      - name: Build tests
+        run: ./gradlew testDebug --scan
+
+      - name: Clean secrets
+        if: always()
+        run: release/signing-cleanup.sh
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results-robolectric
+          path: |
+            "**/build/test-results"
+            "**/build/reports"
 
   deploy:
     if: github.event_name == 'push' # only deploy for pushed commits (not PRs)
 
     runs-on: ubuntu-latest
-    needs: [build, test]
+    needs: [build, test, androidTest]
     timeout-minutes: 30
     env:
       TERM: dumb

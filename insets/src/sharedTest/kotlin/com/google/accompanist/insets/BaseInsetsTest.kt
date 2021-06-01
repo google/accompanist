@@ -26,36 +26,25 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.test.filters.SdkSuppress
+import com.google.accompanist.imageloading.test.combineWithParameters
+import com.google.accompanist.imageloading.test.parameterizedParams
 import com.google.common.truth.Truth.assertThat
-import com.google.testing.junit.testparameterinjector.TestParameter
-import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
-/**
- * Ideally this would run on the host instead.
- */
-@RunWith(TestParameterInjector::class)
-@SdkSuppress(minSdkVersion = 24) // TestParameterInjector needs API 24+
-class InsetsTest {
+abstract class BaseInsetsTest(
+    private val type: TestInsetType,
+    private val applyStart: Boolean,
+    private val applyTop: Boolean,
+    private val applyEnd: Boolean,
+    private val applyBottom: Boolean,
+    private val layoutDirection: LayoutDirection,
+) {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    companion object {
-        private const val ExpectedPx: Int = 30
-    }
-
     @Test
-    fun paddingValues(
-        @TestParameter type: TestInsetType,
-        @TestParameter applyStart: Boolean,
-        @TestParameter applyTop: Boolean,
-        @TestParameter applyEnd: Boolean,
-        @TestParameter applyBottom: Boolean,
-        @TestParameter layoutDirection: LayoutDirection,
-    ) {
+    fun paddingValues() {
         // Calculate left/right values which are used later
         val applyLeft = applyStart && layoutDirection == LayoutDirection.Ltr ||
             applyEnd && layoutDirection == LayoutDirection.Rtl
@@ -111,6 +100,21 @@ class InsetsTest {
             .isEqualTo(if (applyEnd) expectedPxInDp else 0.dp)
         assertThat(paddingValues.calculateBottomPadding())
             .isEqualTo(if (applyBottom) expectedPxInDp else 0.dp)
+    }
+
+    internal companion object {
+        private const val ExpectedPx: Int = 32
+
+        @JvmStatic
+        protected fun params(): Collection<Array<Any>> {
+            return parameterizedParams()
+                .combineWithParameters(*TestInsetType.values()) // type
+                .combineWithParameters(true, false) // applyStart
+                .combineWithParameters(true, false) // applyTop
+                .combineWithParameters(true, false) // applyEnd
+                .combineWithParameters(true, false) // applyBottom
+                .combineWithParameters(*LayoutDirection.values()) // layoutDirection
+        }
     }
 }
 
