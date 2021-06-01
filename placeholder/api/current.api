@@ -1,0 +1,24 @@
+// Signature format: 4.0
+package com.google.accompanist.placeholder {
+
+  public abstract sealed class PlaceholderAnimatedBrush {
+    method public abstract androidx.compose.animation.core.InfiniteRepeatableSpec<java.lang.Float> animationSpec();
+    method public abstract androidx.compose.ui.graphics.Brush brush(float progress);
+    method public abstract float initialValue();
+    method public abstract float targetValue();
+  }
+
+  public final class PlaceholderAnimatedBrushKt {
+    method @androidx.compose.runtime.Composable public static com.google.accompanist.placeholder.PlaceholderAnimatedBrush fadeBrush-r_0hINw(optional long initialColor, optional long targetColor, optional androidx.compose.animation.core.InfiniteRepeatableSpec<java.lang.Float> animationSpec);
+    method @androidx.compose.runtime.Composable public static com.google.accompanist.placeholder.PlaceholderAnimatedBrush shimmerBrush-r_0hINw(optional long color, optional long highlightColor, optional androidx.compose.animation.core.InfiniteRepeatableSpec<java.lang.Float> animationSpec);
+  }
+
+  public final class PlaceholderKt {
+    method @androidx.compose.runtime.Composable public static void Placeholder(androidx.compose.ui.Modifier modifier, com.google.accompanist.placeholder.PlaceholderAnimatedBrush animatedBrush, optional androidx.compose.ui.graphics.Shape shape);
+    method @androidx.compose.runtime.Composable public static void Placeholder-1xq40Q0(androidx.compose.ui.Modifier modifier, optional long color, optional androidx.compose.ui.graphics.Shape shape);
+    method public static androidx.compose.ui.Modifier placeholder(androidx.compose.ui.Modifier, boolean visible, com.google.accompanist.placeholder.PlaceholderAnimatedBrush animatedBrush, optional androidx.compose.ui.graphics.Shape shape);
+    method public static androidx.compose.ui.Modifier placeholder-WDF7WLI(androidx.compose.ui.Modifier, boolean visible, optional long color, optional androidx.compose.ui.graphics.Shape shape);
+  }
+
+}
+
