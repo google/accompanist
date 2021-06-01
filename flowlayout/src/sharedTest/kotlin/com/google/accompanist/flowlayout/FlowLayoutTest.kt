@@ -24,13 +24,16 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.node.Ref
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.junit.runner.RunWith
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
 
+@RunWith(AndroidJUnit4::class)
 class FlowTest : LayoutTest() {
     @Test
     fun testFlowRow() {
