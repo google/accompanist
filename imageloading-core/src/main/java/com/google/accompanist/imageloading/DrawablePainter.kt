@@ -129,18 +129,10 @@ class DrawablePainter(
             // Reading this ensures that we invalidate when invalidateDrawable() is called
             invalidateTick
 
+            // Update the Drawable's bounds
+            drawable.setBounds(0, 0, size.width.roundToInt(), size.height.roundToInt())
+
             canvas.withSave {
-                if (drawable.intrinsicWidth > 0 && drawable.intrinsicHeight > 0) {
-                    // Painters are responsible for scaling content to meet the canvas size
-                    canvas.scale(
-                        sx = size.width / drawable.intrinsicWidth,
-                        sy = size.height / drawable.intrinsicHeight
-                    )
-                } else {
-                    // If the drawable has no intrinsic bounds, set its bounds to be the
-                    // canvas size
-                    drawable.setBounds(0, 0, size.width.roundToInt(), size.height.roundToInt())
-                }
                 drawable.draw(canvas.nativeCanvas)
             }
         }
