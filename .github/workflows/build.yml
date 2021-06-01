@@ -114,7 +114,7 @@ jobs:
           target: ${{ matrix.target }}
           script: |
             adb logcat > logcat.txt &
-            ./gradlew --scan connectedCheck
+            ./gradlew connectedCheck --scan --continue
 
       - name: Clean secrets
         if: always()
