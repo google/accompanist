@@ -38,6 +38,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.ParentDataModifier
@@ -51,6 +55,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.launch
@@ -260,6 +265,8 @@ internal fun Pager(
         modifier = modifier
             .then(semantics)
             .then(scrollable)
+            // Add a NestedScrollConnection which consumes all post fling/scrolls
+            .nestedScroll(connection = ConsumeFlingNestedScrollConnection)
             .clipToBounds(),
         content = {
             if (DebugLog) {
@@ -351,6 +358,24 @@ internal fun Pager(
                 )
             }
         }
+    }
+}
+
+private object ConsumeFlingNestedScrollConnection : NestedScrollConnection {
+    override fun onPostScroll(
+        consumed: Offset,
+        available: Offset,
+        source: NestedScrollSource
+    ): Offset = when (source) {
+        // We can consume all resting fling scrolls so that they don't propagate up to the
+        // Pager
+        NestedScrollSource.Fling -> available
+        else -> Offset.Zero
+    }
+
+    override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
+        // We can consume all post fling velocity so that it doesn't propagate up to the Pager
+        return available
     }
 }
 
