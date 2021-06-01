@@ -107,7 +107,7 @@ jobs:
 
       - name: Run tests
         uses: reactivecircus/android-emulator-runner@v2
-        timeout-minutes: 40
+        timeout-minutes: 50
         with:
           api-level: ${{ matrix.api-level }}
           profile: 4in WVGA (Nexus S)

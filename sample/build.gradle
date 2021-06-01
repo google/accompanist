@@ -50,6 +50,7 @@ dependencies {
     implementation project(':coil')
     implementation project(':glide')
     implementation project(':insets')
+    implementation project(':insets-ui')
     implementation project(':pager')
     implementation project(':pager-indicators')
     implementation project(':flowlayout')

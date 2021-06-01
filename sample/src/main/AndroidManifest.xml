@@ -28,7 +28,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+        android:theme="@android:style/Theme.Material.Light.NoActionBar">
 
         <activity
             android:name="com.google.accompanist.sample.MainActivity"
@@ -106,6 +106,16 @@
         <activity
             android:name="com.google.accompanist.sample.insets.InsetsFragmentSample"
             android:label="@string/insets_title_fragment">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+
+        <activity
+            android:name="com.google.accompanist.sample.insets.EdgeToEdgeLazyColumnWithBottomNav"
+            android:label="@string/insets_title_list_bottomnav">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
