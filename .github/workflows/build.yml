@@ -69,8 +69,6 @@ jobs:
             target: default
           - api-level: 26
             target: default
-          - api-level: 24
-            target: default
           - api-level: 22
             target: default
 
