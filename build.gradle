@@ -117,6 +117,27 @@ subprojects {
         }
     }
 
+    // If we have a POM Artifact ID, we should generate API files
+    if (project.hasProperty('POM_ARTIFACT_ID')) {
+        apply plugin: 'me.tylerbwong.gradle.metalava'
+
+        metalava {
+            filename = "api/current.api"
+            reportLintsAsErrors = true
+        }
+
+        // Make the `check` task depend on `metalavaCheckCompatibility`. This is a workaround for
+        // https://github.com/tylerbwong/metalava-gradle/issues/12
+        afterEvaluate {
+            def metalavaCheckCompatibility = tasks.findByName('metalavaCheckCompatibility')
+            if (metalavaCheckCompatibility != null) {
+                tasks.named("check") { check ->
+                    check.dependsOn metalavaCheckCompatibility
+                }
+            }
+        }
+    }
+
     // Must be afterEvaluate or else com.vanniktech.maven.publish will overwrite our
     // dokka and version configuration.
     afterEvaluate {
@@ -170,7 +191,9 @@ subprojects {
                 }
             }
         }
+    }
 
+    afterEvaluate {
         def composeSnapshot = libs.versions.composesnapshot.get()
         if (composeSnapshot.length() > 1) {
             // We're depending on a Jetpack Compose snapshot, update the library version name
