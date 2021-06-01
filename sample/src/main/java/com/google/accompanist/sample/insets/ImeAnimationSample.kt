@@ -27,7 +27,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -42,9 +41,13 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import com.google.accompanist.insets.ExperimentalAnimatedInsets
+import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.google.accompanist.insets.rememberImeNestedScrollConnection
+import com.google.accompanist.insets.rememberInsetsPaddingValues
+import com.google.accompanist.insets.ui.Scaffold
+import com.google.accompanist.insets.ui.TopAppBar
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
@@ -60,6 +63,13 @@ class ImeAnimationSample : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
+            // Update the system bars to be translucent
+            val systemUiController = rememberSystemUiController()
+            val useDarkIcons = MaterialTheme.colors.isLight
+            SideEffect {
+                systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = useDarkIcons)
+            }
+
             AccompanistSampleTheme {
                 ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
                     Sample()
@@ -74,36 +84,21 @@ private val listItems = List(40) { randomSampleImageUrl(it) }
 @OptIn(ExperimentalAnimatedInsets::class)
 @Composable
 private fun Sample() {
-    val systemUiController = rememberSystemUiController()
-    val useDarkIcons = MaterialTheme.colors.isLight
-    SideEffect {
-        systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = useDarkIcons)
-    }
-
     Scaffold(
         topBar = {
-            InsetAwareTopAppBar(
-                title = {
-                    Text(stringResource(R.string.insets_title_imeanim))
-                },
+            // We use TopAppBar from accompanist-insets-ui which allows us to provide
+            // content padding matching the system bars insets.
+            TopAppBar(
+                title = { Text(stringResource(R.string.insets_title_imeanim)) },
                 backgroundColor = MaterialTheme.colors.surface,
-                modifier = Modifier.fillMaxWidth()
+                contentPadding = rememberInsetsPaddingValues(
+                    LocalWindowInsets.current.statusBars,
+                    applyBottom = false,
+                ),
+                modifier = Modifier.fillMaxWidth(),
             )
         },
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Column {
-            LazyColumn(
-                reverseLayout = true,
-                modifier = Modifier
-                    .weight(1f)
-                    .nestedScroll(connection = rememberImeNestedScrollConnection())
-            ) {
-                items(listItems) { imageUrl ->
-                    ListItem(imageUrl, Modifier.fillMaxWidth())
-                }
-            }
-
+        bottomBar = {
             Surface(elevation = 1.dp) {
                 val text = remember { mutableStateOf(TextFieldValue()) }
                 OutlinedTextField(
@@ -115,6 +110,22 @@ private fun Sample() {
                         .padding(horizontal = 16.dp, vertical = 8.dp)
                         .navigationBarsWithImePadding()
                 )
+            }
+        },
+        modifier = Modifier.fillMaxSize()
+    ) { contentPadding ->
+        Column {
+            // We apply the contentPadding passed to us from the Scaffold
+            LazyColumn(
+                contentPadding = contentPadding,
+                reverseLayout = true,
+                modifier = Modifier
+                    .weight(1f)
+                    .nestedScroll(connection = rememberImeNestedScrollConnection())
+            ) {
+                items(listItems) { imageUrl ->
+                    ListItem(imageUrl, Modifier.fillMaxWidth())
+                }
             }
         }
     }

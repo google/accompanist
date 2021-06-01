@@ -55,3 +55,4 @@ androidx-test-runner = { module = "androidx.test:runner", version.ref = "android
 androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidxtest" }
 junit = "junit:junit:4.13"
 truth = "com.google.truth:truth:1.1.2"
+testparameterinjection = "com.google.testparameterinjector:test-parameter-injector:1.3"

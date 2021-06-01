@@ -72,6 +72,17 @@ subprojects {
         }
     }
 
+    configurations.configureEach {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            // Make sure that we're using the Android version of Guava
+            if (details.requested.group == 'com.google.guava'
+                    && details.requested.module.name == 'guava'
+                    && details.requested.version.contains('jre')) {
+                details.useVersion details.requested.version.replace('jre', 'android')
+            }
+        }
+    }
+
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach { compile ->
         kotlinOptions {
             // Treat all Kotlin warnings as errors

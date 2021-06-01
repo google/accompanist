@@ -263,19 +263,19 @@ class ViewWindowInsetObserver(private val view: View) {
             // Go through each inset type and update its layoutInsets from the
             // WindowInsetsCompat values
             windowInsets.statusBars.run {
-                mutableLayoutInsets.updateFrom(wic.getInsets(WindowInsetsCompat.Type.statusBars()))
+                layoutInsets.updateFrom(wic.getInsets(WindowInsetsCompat.Type.statusBars()))
                 isVisible = wic.isVisible(WindowInsetsCompat.Type.statusBars())
             }
             windowInsets.navigationBars.run {
-                mutableLayoutInsets.updateFrom(wic.getInsets(WindowInsetsCompat.Type.navigationBars()))
+                layoutInsets.updateFrom(wic.getInsets(WindowInsetsCompat.Type.navigationBars()))
                 isVisible = wic.isVisible(WindowInsetsCompat.Type.navigationBars())
             }
             windowInsets.systemGestures.run {
-                mutableLayoutInsets.updateFrom(wic.getInsets(WindowInsetsCompat.Type.systemGestures()))
+                layoutInsets.updateFrom(wic.getInsets(WindowInsetsCompat.Type.systemGestures()))
                 isVisible = wic.isVisible(WindowInsetsCompat.Type.systemGestures())
             }
             windowInsets.ime.run {
-                mutableLayoutInsets.updateFrom(wic.getInsets(WindowInsetsCompat.Type.ime()))
+                layoutInsets.updateFrom(wic.getInsets(WindowInsetsCompat.Type.ime()))
                 isVisible = wic.isVisible(WindowInsetsCompat.Type.ime())
             }
 
@@ -460,7 +460,7 @@ private class InnerWindowInsetsAnimationCallback(
         // If there are animations of the given type...
         if (runningAnimations.any { it.typeMask or type != 0 }) {
             // Update our animated inset values
-            mutableAnimatedInsets.updateFrom(platformInsets.getInsets(type))
+            animatedInsets.updateFrom(platformInsets.getInsets(type))
             // And update the animation fraction. We use the maximum animation progress of any
             // ongoing animations for this type.
             animationFraction = runningAnimations.maxOf { it.fraction }
