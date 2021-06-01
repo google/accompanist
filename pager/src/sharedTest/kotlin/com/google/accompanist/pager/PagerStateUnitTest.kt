@@ -18,16 +18,16 @@ package com.google.accompanist.pager
 
 import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 
 @OptIn(ExperimentalPagerApi::class) // Pager is currently experimental
-@RunWith(JUnit4::class)
+@RunWith(AndroidJUnit4::class)
 class PagerStateUnitTest {
     @get:Rule
     val composeTestRule = createComposeRule()
