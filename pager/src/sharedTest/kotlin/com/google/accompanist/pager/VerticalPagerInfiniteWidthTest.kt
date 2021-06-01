@@ -34,15 +34,13 @@ import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.height
 import androidx.compose.ui.unit.width
-import androidx.test.filters.LargeTest
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 
 @OptIn(ExperimentalPagerApi::class) // Pager is currently experimental
-@LargeTest
-@RunWith(JUnit4::class)
+@RunWith(AndroidJUnit4::class)
 class VerticalPagerInfiniteWidthTest {
     @get:Rule
     val rule = createComposeRule()

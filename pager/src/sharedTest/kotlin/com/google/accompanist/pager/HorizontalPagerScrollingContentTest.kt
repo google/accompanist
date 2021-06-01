@@ -17,14 +17,15 @@
 package com.google.accompanist.pager
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -32,44 +33,42 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.test.filters.LargeTest
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 
 @OptIn(ExperimentalPagerApi::class) // Pager is currently experimental
-@LargeTest
-@RunWith(JUnit4::class)
-class VerticalPagerScrollingContentTest {
+@RunWith(AndroidJUnit4::class)
+class HorizontalPagerScrollingContentTest {
     @get:Rule
     val rule = createComposeRule()
 
     @Test
-    fun verticalPagerScrollingContentTest() {
+    fun horizontalPagerScrollingContentTest() {
         lateinit var pagerState: PagerState
 
         rule.setContent {
             pagerState = rememberPagerState(pageCount = 2)
 
-            VerticalPager(
+            HorizontalPager(
                 state = pagerState,
                 modifier = Modifier.fillMaxSize().testTag(TestTag)
             ) { page ->
-                BoxWithConstraints(Modifier.fillMaxSize()) {
-                    // We make the scrolling Column content 2x the height, so that it scrolls
-                    val width = with(LocalDensity.current) { (constraints.maxHeight * 2).toDp() }
+                BoxWithConstraints(Modifier.fillMaxWidth()) {
+                    // We make the scrolling Row content 2x the width, so that it scrolls
+                    val width = with(LocalDensity.current) { (constraints.maxWidth * 2).toDp() }
 
-                    Column(Modifier.verticalScroll(rememberScrollState())) {
+                    Row(Modifier.horizontalScroll(rememberScrollState())) {
                         val background = if (page == 0) Color.Green else Color.Red
 
                         Box(
                             Modifier
-                                .fillMaxWidth()
-                                .height(width)
+                                .fillMaxHeight()
+                                .width(width)
                                 .background(
-                                    brush = Brush.verticalGradient(
+                                    brush = Brush.horizontalGradient(
                                         listOf(background, Color.Black)
                                     )
                                 )
@@ -82,7 +81,7 @@ class VerticalPagerScrollingContentTest {
         // Perform a very quick, high velocity scroll which will scroll the inner content to it's
         // opposite/end edge
         rule.onNodeWithTag(TestTag)
-            .swipeAcrossCenterWithVelocity(velocity = 15_000f, distancePercentageY = -0.5f)
+            .swipeAcrossCenterWithVelocity(velocity = 15_000f, distancePercentageX = -0.5f)
 
         // Wait for the flings to end
         rule.waitForIdle()
