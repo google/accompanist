@@ -122,7 +122,9 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: test-results-${{ matrix.api-level }}-${{ matrix.target }}
-          path: "**/build/outputs/*/connected/*.xml"
+          path: |
+            **/build/reports/*
+            **/build/outputs/*/connected/*
 
   deploy:
     if: github.event_name == 'push' # only deploy for pushed commits (not PRs)
