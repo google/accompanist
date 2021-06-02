@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.dp
 inline fun Modifier.systemBarsPadding(enabled: Boolean = true): Modifier = composed {
     padding(
         rememberInsetsPaddingValues(
-            insets = LocalWindowInsets.current.navigationBars,
+            insets = LocalWindowInsets.current.systemBars,
             applyStart = enabled,
             applyTop = enabled,
             applyEnd = enabled,
