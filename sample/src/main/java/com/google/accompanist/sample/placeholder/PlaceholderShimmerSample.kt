@@ -19,26 +19,23 @@ package com.google.accompanist.sample.placeholder
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.glide.rememberGlidePainter
@@ -89,34 +86,24 @@ private fun Sample() {
             onRefresh = { refreshing = true },
         ) {
             LazyColumn {
-                items(30) { index ->
-                    Row(Modifier.padding(16.dp)) {
-                        Image(
-                            painter = rememberGlidePainter(randomSampleImageUrl(index)),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(64.dp)
-                                .placeholder(
-                                    visible = refreshing,
-                                    animatedBrush = shimmerBrush()
-                                ),
-                        )
-
-                        Spacer(Modifier.width(8.dp))
-
-                        Text(
-                            text = "Text",
-                            style = MaterialTheme.typography.subtitle2,
-                            modifier = Modifier
-                                .weight(1f)
-                                .align(Alignment.CenterVertically)
-                                .placeholder(
-                                    visible = refreshing,
-                                    animatedBrush = shimmerBrush(),
-                                    shape = MaterialTheme.shapes.small
-                                )
+                if (refreshing.not()) {
+                    item {
+                        ListItem(
+                            painter = rememberVectorPainter(Icons.Default.ArrowDownward),
+                            text = "Pull down"
                         )
                     }
+                }
+                items(30) { index ->
+                    ListItem(
+                        painter = rememberGlidePainter(randomSampleImageUrl(index)),
+                        text = "Text",
+                        childModifier = Modifier.placeholder(
+                            visible = refreshing,
+                            animatedBrush = shimmerBrush(),
+                            shape = RoundedCornerShape(4.dp)
+                        )
+                    )
                 }
             }
         }
