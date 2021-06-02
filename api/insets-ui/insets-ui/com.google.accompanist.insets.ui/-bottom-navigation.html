@@ -1,0 +1,83 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>BottomNavigation</title>
+</head><body><link href="../../../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script><script src="https://unpkg.com/kotlin-playground@1" data-selector="code.runnablesample"></script><script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../../scripts/main.js" async></script>
+  
+    <div id="container">
+      <div id="leftColumn"><a href="../../../index.html">
+            <div id="logo"></div>
+          </a>
+        <div id="paneSearch"></div>
+        <div id="sideMenu"></div>
+      </div>
+      <div id="main">
+        <script type="text/javascript" src="../../../scripts/main.js"></script><div id="leftToggler"><span class="icon-toggler"></span></div>
+
+        <div class="main-content" id="content" pageids="insets-ui::com.google.accompanist.insets.ui//BottomNavigation/#androidx.compose.ui.Modifier#androidx.compose.foundation.layout.PaddingValues#androidx.compose.ui.graphics.Color#androidx.compose.ui.graphics.Color#androidx.compose.ui.unit.Dp#kotlin.Function1[androidx.compose.foundation.layout.RowScope,kotlin.Unit]/PointingToDeclaration//-401418630">
+          <div class="navigation-wrapper" id="navigation-wrapper">
+            <div class="breadcrumbs"><a href="../../index.html">insets-ui</a>/<a href="index.html">com.google.accompanist.insets.ui</a>/<a href="-bottom-navigation.html">BottomNavigation</a></div>
+            <div class="pull-right d-flex">
+              <div id="searchBar"></div>
+            </div>
+          </div>
+          <div class="cover ">
+            <h1 class="cover"><span>Bottom</span><wbr><span>Navigation</span></h1>
+          </div>
+<div class="divergent-group" data-filterable-current=":insets-ui:dokkaHtmlPartial/release" data-filterable-set=":insets-ui:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":insets-ui:dokkaHtmlPartial/release"><div class="symbol monospace"><div class="block"><div class="block">@<a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html">Composable</a>()</div></div>fun <a href="-bottom-navigation.html">BottomNavigation</a>(modifier: <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier.html">Modifier</a> = Modifier, contentPadding: <a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/PaddingValues.html">PaddingValues</a> = PaddingValues(0.dp), backgroundColor: <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a> = MaterialTheme.colors.primarySurface, contentColor: <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a> = contentColorFor(backgroundColor), elevation: <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/unit/Dp.html">Dp</a> = BottomNavigationDefaults.Elevation, content: <span>@<a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html">Composable</a>()&nbsp;</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/RowScope.html">RowScope</a>.() -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+<p class="paragraph">A wrapper around <a href="https://developer.android.com/reference/kotlin/androidx/compose/material/package-summary.html">BottomNavigation</a> which supports the setting of <a href="-bottom-navigation.html">contentPadding</a> to add internal padding. This is especially useful in conjunction with insets.</p><p class="paragraph">For an edge-to-edge layout, typically you would use the <a href="../../../insets/insets/com.google.accompanist.insets/-window-insets/navigation-bars.html">com.google.accompanist.insets.WindowInsets.navigationBars</a> insets like so below:</p><h2 class="">Samples</h2><div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Samples"><div class="content sourceset-depenent-content" data-active="" data-togglable=":insets-ui:dokkaHtmlPartial/release"><div class="sample-container"><code class="runnablesample monospace" theme="idea"><pre>import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
+import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.dp
+import com.google.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.navigationBarsPadding
+import com.google.accompanist.insets.rememberInsetsPaddingValues
+import com.google.accompanist.insets.statusBarsHeight
+import com.google.accompanist.insets.ui.BottomNavigation
+fun main() { 
+   //sampleStart 
+   BottomNavigation(
+    contentPadding = rememberInsetsPaddingValues(
+        insets = LocalWindowInsets.current.navigationBars,
+    )
+) {
+    // content
+} 
+   //sampleEnd
+}</pre></code></div></div></div></div>
+          <h2 class="">Sources</h2>
+          <div class="table" data-togglable="Sources"><a data-name="-470474224%2FSource%2F1131068378" anchor-label="https://github.com/google/accompanist/blob/main/insets-ui/src/main/java/com/google/accompanist/insets/ui/BottomNavigation.kt#L34" id="-470474224%2FSource%2F1131068378" data-filterable-set=":insets-ui:dokkaHtmlPartial/main"></a>
+            <div class="table-row" data-filterable-current=":insets-ui:dokkaHtmlPartial/main" data-filterable-set=":insets-ui:dokkaHtmlPartial/main">
+              <div class="main-subrow keyValue ">
+                <div class=""><span class="inline-flex"><a href="https://github.com/google/accompanist/blob/main/insets-ui/src/main/java/com/google/accompanist/insets/ui/BottomNavigation.kt#L34">androidJvm source</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-470474224%2FSource%2F1131068378"></span>
+                      <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                    </span></span></div>
+                <div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="footer"><span class="go-to-top-icon"><a href="#content"></a></span><span>© 2021 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+      </div>
+    </div>
+  
+</body></html>
+
+
