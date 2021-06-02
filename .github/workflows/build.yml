@@ -108,7 +108,7 @@ jobs:
         timeout-minutes: 50
         with:
           api-level: ${{ matrix.api-level }}
-          profile: 4in WVGA (Nexus S)
+          profile: Galaxy Nexus
           target: ${{ matrix.target }}
           script: |
             adb logcat > logcat.txt &
