@@ -62,15 +62,8 @@ jobs:
       # Allow tests to continue on other devices if they fail on one device.
       fail-fast: false
       matrix:
-        include:
-          - api-level: 29
-            target: default
-          - api-level: 28
-            target: default
-          - api-level: 26
-            target: default
-          - api-level: 22
-            target: default
+        api-level: [22, 26, 28, 29]
+        shard: [0, 1, 2]
 
     env:
       TERM: dumb
@@ -108,10 +101,11 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           profile: Galaxy Nexus
-          target: ${{ matrix.target }}
           script: |
             adb logcat > logcat.txt &
-            ./gradlew connectedCheck --scan --continue
+            ./gradlew connectedCheck --scan --continue \
+                -Pandroid.testInstrumentationRunnerArguments.numShards=3 \
+                -Pandroid.testInstrumentationRunnerArguments.shardIndex=${{ matrix.shard }}
 
       - name: Clean secrets
         if: always()
@@ -121,14 +115,14 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: logs-${{ matrix.api-level }}-${{ matrix.target }}
+          name: logs-${{ matrix.api-level }}-${{ matrix.shard }}
           path: logcat.txt
 
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: test-results-${{ matrix.api-level }}-${{ matrix.target }}
+          name: test-results-${{ matrix.api-level }}-${{ matrix.shard }}
           path: "**/build/outputs/*/connected/*.xml"
 
   deploy:
