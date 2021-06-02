@@ -212,7 +212,7 @@ private fun Sample() {
                     modifier = Modifier
                         .clickable {
                             statusBarDarkIcons = !statusBarDarkIcons
-                            systemUiController.setStatusBarDarkIcons(statusBarDarkIcons)
+                            systemUiController.statusBarDarkContentEnabled = statusBarDarkIcons
                         }
                         .padding(8.dp),
                     verticalAlignment = Alignment.CenterVertically
@@ -222,7 +222,7 @@ private fun Sample() {
                         checked = statusBarDarkIcons,
                         onCheckedChange = {
                             statusBarDarkIcons = it
-                            systemUiController.setStatusBarDarkIcons(it)
+                            systemUiController.statusBarDarkContentEnabled = it
                         }
                     )
                 }
@@ -230,7 +230,7 @@ private fun Sample() {
                     modifier = Modifier
                         .clickable {
                             navigationBarDarkIcons = !navigationBarDarkIcons
-                            systemUiController.setNavigationBarDarkIcons(navigationBarDarkIcons)
+                            systemUiController.navigationBarDarkContentEnabled = navigationBarDarkIcons
                         }
                         .padding(8.dp),
                     verticalAlignment = Alignment.CenterVertically
@@ -240,7 +240,7 @@ private fun Sample() {
                         checked = navigationBarDarkIcons,
                         onCheckedChange = {
                             navigationBarDarkIcons = it
-                            systemUiController.setNavigationBarDarkIcons(it)
+                            systemUiController.navigationBarDarkContentEnabled = it
                         }
                     )
                 }

@@ -79,7 +79,9 @@ private fun Sample() {
             /** Status bar */
 
             Button(
-                onClick = { systemUiController.setStatusBarVisible() },
+                onClick = {
+                    systemUiController.isStatusBarVisible = true
+                },
                 modifier = Modifier
                     .fillMaxWidth(0.7f)
                     .padding(vertical = 8.dp)
@@ -87,7 +89,9 @@ private fun Sample() {
                 Text(text = "Show the status bar")
             }
             Button(
-                onClick = { systemUiController.setStatusBarVisible(false) },
+                onClick = {
+                    systemUiController.isStatusBarVisible = false
+                },
                 modifier = Modifier
                     .fillMaxWidth(0.7f)
                     .padding(vertical = 8.dp)
@@ -98,7 +102,7 @@ private fun Sample() {
             /** Navigation bar */
 
             Button(
-                onClick = { systemUiController.setNavigationBarVisible() },
+                onClick = { systemUiController.isNavigationBarVisible = true },
                 modifier = Modifier
                     .fillMaxWidth(0.7f)
                     .padding(vertical = 8.dp)
@@ -106,7 +110,9 @@ private fun Sample() {
                 Text(text = "Show the navigation bar")
             }
             Button(
-                onClick = { systemUiController.setNavigationBarVisible(false) },
+                onClick = {
+                    systemUiController.isNavigationBarVisible = false
+                },
                 modifier = Modifier
                     .fillMaxWidth(0.7f)
                     .padding(vertical = 8.dp)
@@ -117,7 +123,7 @@ private fun Sample() {
             /** System bars */
 
             Button(
-                onClick = { systemUiController.setSystemBarsVisible() },
+                onClick = { systemUiController.isSystemBarsVisible = true },
                 modifier = Modifier
                     .fillMaxWidth(0.7f)
                     .padding(vertical = 8.dp)
@@ -125,7 +131,7 @@ private fun Sample() {
                 Text(text = "Show the system bars")
             }
             Button(
-                onClick = { systemUiController.setSystemBarsVisible(false) },
+                onClick = { systemUiController.isSystemBarsVisible = false },
                 modifier = Modifier
                     .fillMaxWidth(0.7f)
                     .padding(vertical = 8.dp)
