@@ -30,8 +30,6 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.drawscope.ContentDrawScope
-import androidx.compose.ui.platform.InspectorInfo
-import androidx.compose.ui.platform.InspectorValueInfo
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.LayoutDirection
 
@@ -48,18 +46,20 @@ fun Modifier.placeholder(
     visible: Boolean,
     color: Color = PlaceholderDefaults.PlaceholderColor,
     shape: Shape = RectangleShape
-) = takeIf { visible.not() } ?: this.then(
+) = takeIf { visible.not() } ?: composed(
+    inspectorInfo = debugInspectorInfo {
+        name = "placeholder"
+        value = visible
+        properties["visible"] = visible
+        properties["color"] = color
+        properties["shape"] = shape
+    }
+) {
     PlaceholderModifier(
         color = color,
-        shape = shape,
-        inspectorInfo = debugInspectorInfo {
-            name = "placeholder"
-            properties["visible"] = visible
-            properties["color"] = color
-            properties["shape"] = shape
-        }
+        shape = shape
     )
-)
+}
 
 /**
  * If [visible], draw [shape] with [animatedBrush] instead of content.
@@ -75,7 +75,15 @@ fun Modifier.placeholder(
     visible: Boolean,
     animatedBrush: PlaceholderAnimatedBrush,
     shape: Shape = RectangleShape
-) = takeIf { visible.not() } ?: composed {
+) = takeIf { visible.not() } ?: composed(
+    inspectorInfo = debugInspectorInfo {
+        name = "placeholder"
+        value = visible
+        properties["visible"] = visible
+        properties["animatedBrush"] = animatedBrush
+        properties["shape"] = shape
+    }
+) {
     val infiniteTransition = rememberInfiniteTransition()
     val progress by infiniteTransition.animateFloat(
         initialValue = animatedBrush.initialValue(),
@@ -84,22 +92,15 @@ fun Modifier.placeholder(
     )
     PlaceholderModifier(
         brush = animatedBrush.brush(progress),
-        shape = shape,
-        inspectorInfo = debugInspectorInfo {
-            name = "placeholder"
-            properties["visible"] = visible
-            properties["animatedBrush"] = animatedBrush
-            properties["shape"] = shape
-        }
+        shape = shape
     )
 }
 
 private class PlaceholderModifier(
     private val color: Color? = null,
     private val brush: Brush? = null,
-    private val shape: Shape,
-    inspectorInfo: InspectorInfo.() -> Unit
-) : DrawModifier, InspectorValueInfo(inspectorInfo) {
+    private val shape: Shape
+) : DrawModifier {
 
     // naive cache outline calculation if size is the same
     private var lastSize: Size? = null

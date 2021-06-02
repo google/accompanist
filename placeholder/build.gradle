@@ -82,6 +82,8 @@ dependencies {
     // Test dependencies
     // ======================
 
+    androidTestImplementation project(':imageloading-testutils')
+
     androidTestImplementation libs.junit
     androidTestImplementation libs.truth
 
