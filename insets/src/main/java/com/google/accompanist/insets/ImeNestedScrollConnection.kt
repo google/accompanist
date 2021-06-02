@@ -64,7 +64,7 @@ fun rememberImeNestedScrollConnection(
  * You probably do not wish to use this directly, and should use
  * [rememberImeNestedScrollConnection] instead.
  *
- * @param view The host Compose [View]. Usually this comes from [AmbientView].
+ * @param view The host Compose [View]. Usually this comes from [LocalView].
  * @param scrollImeOffScreenWhenVisible Set to true to allow scrolling the IME off screen
  * (from being visible), by an downwards scroll. Defaults to `true`.
  * @param scrollImeOnScreenWhenNotVisible Set to true to allow scrolling the IME on screen

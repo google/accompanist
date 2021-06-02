@@ -28,15 +28,19 @@
     <string name="insets_title_basic">Insets: Basic</string>
     <string name="insets_title_fragment">Insets: Fragment</string>
     <string name="insets_title_list">Insets: Edge-to-edge list</string>
+    <string name="insets_title_list_bottomnav">Insets: Edge-to-edge list with Bottom Navigation</string>
     <string name="insets_title_imeanim">Insets: IME Animations</string>
 
     <string name="horiz_pager_title_basics">Horizontal Pager: Basic</string>
     <string name="horiz_pager_with_indicator_title">Horizontal Pager: Indicator</string>
     <string name="horiz_pager_with_transition_title">Horizontal Pager: Transition</string>
-    <string name="horiz_pager_title_tabs">HorizontalPager: Tabs</string>
+    <string name="horiz_pager_title_tabs">Horizontal Pager: Tabs</string>
+    <string name="horiz_pager_title_loop">Horizontal Pager: Loop</string>
+    <string name="horiz_pager_title_scroll_content">Horizontal Pager: Scrolling content</string>
 
     <string name="vertical_pager_title_basics">Vertical Pager: Basic</string>
     <string name="vertical_pager_with_indicator_title">Vertical Pager: Indicator</string>
+    <string name="vertical_pager_title_loop">Vertical Pager: Loop</string>
 
     <string name="pagers_title_nested">Pagers: Nested</string>
 
@@ -44,6 +48,7 @@
     <string name="flowlayout_title_row">Flow Layout: Row</string>
 
     <string name="swiperefresh_title_basics">Swipe Refresh: Basic</string>
+    <string name="swiperefresh_title_content_padding">Swipe Refresh: Edge-to-edge</string>
     <string name="swiperefresh_title_tweaked">Swipe Refresh: Tweaked indicator</string>
     <string name="swiperefresh_title_custom">Swipe Refresh: Custom indicator</string>
     <string name="swiperefresh_title_verticalpager">Swipe Refresh: VerticalPager</string>

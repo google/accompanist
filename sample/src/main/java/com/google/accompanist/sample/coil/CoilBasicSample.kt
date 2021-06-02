@@ -82,6 +82,20 @@ private fun Sample() {
             }
 
             item {
+                // Data parameter with placeholder
+                Image(
+                    painter = rememberCoilPainter(
+                        request = rememberRandomSampleImageUrl(),
+                        requestBuilder = {
+                            placeholder(R.drawable.placeholder)
+                        }
+                    ),
+                    contentDescription = null,
+                    modifier = Modifier.size(128.dp),
+                )
+            }
+
+            item {
                 // Load GIF
                 Image(
                     painter = rememberCoilPainter(
@@ -119,7 +133,7 @@ private fun Sample() {
                     )
 
                     Crossfade(coilPainter.loadState) { state ->
-                        if (state == ImageLoadState.Loading) {
+                        if (state is ImageLoadState.Loading) {
                             CircularProgressIndicator(Modifier.align(Alignment.Center))
                         }
                     }
@@ -171,6 +185,6 @@ fun PreviewSample() {
 
 fun gifImageLoader(context: Context): ImageLoader = ImageLoader.Builder(context)
     .componentRegistry {
-        if (SDK_INT >= 28) add(ImageDecoderDecoder()) else add(GifDecoder())
+        if (SDK_INT >= 28) add(ImageDecoderDecoder(context)) else add(GifDecoder())
     }
     .build()

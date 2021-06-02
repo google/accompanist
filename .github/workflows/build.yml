@@ -47,7 +47,7 @@ jobs:
           key: gradle-${{ hashFiles('checksum.txt') }}
 
       - name: Build, lint and spotless
-        run: ./gradlew spotlessCheck assemble assembleAndroidTest lintDebug apiCheck --scan
+        run: ./gradlew spotlessCheck assemble assembleAndroidTest lintDebug metalavaCheckCompatibility --scan
 
       - name: Clean secrets
         if: always()
@@ -68,8 +68,6 @@ jobs:
           - api-level: 28
             target: default
           - api-level: 26
-            target: default
-          - api-level: 24
             target: default
           - api-level: 22
             target: default
@@ -107,14 +105,14 @@ jobs:
 
       - name: Run tests
         uses: reactivecircus/android-emulator-runner@v2
-        timeout-minutes: 40
+        timeout-minutes: 50
         with:
           api-level: ${{ matrix.api-level }}
           profile: 4in WVGA (Nexus S)
           target: ${{ matrix.target }}
           script: |
             adb logcat > logcat.txt &
-            ./gradlew --scan connectedCheck
+            ./gradlew connectedCheck --scan --continue
 
       - name: Clean secrets
         if: always()
@@ -168,18 +166,11 @@ jobs:
             ~/.gradle/caches/build-cache-*
           key: gradle-${{ hashFiles('checksum.txt') }}
 
-      - name: Build docs
-        # We manually run assemble & dokka before uploadArchives. If we only run uploadArchives,
-        # the assemble and dokka tasks are run interleaved on each module, which can cause
-        # connection timeouts to Sonatype (since we need to wait for assemble+dokka to finish).
-        # By front-loading the assemble+dokka tasks, the upload below is much quicker.
-        run: ./gradlew assembleRelease dokkaHtml
-
       - name: Deploy to Sonatype
-        run: ./gradlew uploadArchives --no-parallel
+        run: ./gradlew publish --no-parallel
         env:
-          SONATYPE_NEXUS_USERNAME: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
-          SONATYPE_NEXUS_PASSWORD: ${{ secrets.SONATYPE_NEXUS_PASSWORD }}
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_NEXUS_PASSWORD }}
 
       - name: Clean secrets
         if: always()

@@ -15,7 +15,6 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.google.accompanist.imageloading.test">
 
     <!-- Needed for MockWebServer -->
@@ -24,11 +23,7 @@
     <!-- usesCleartextTraffic=true because we use MockWebServer -->
     <application
         android:name="com.google.accompanist.imageloading.test.TestApplication"
-        android:usesCleartextTraffic="true">
-        <activity
-            android:name="androidx.activity.ComponentActivity"
-            android:theme="@style/Theme.Test"
-            tools:replace="android:theme" />
-    </application>
+        android:usesCleartextTraffic="true"
+        android:theme="@style/Theme.Test" />
 
 </manifest>

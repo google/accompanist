@@ -16,9 +16,6 @@
 
 @file:Suppress("NOTHING_TO_INLINE", "unused")
 
-@file:JvmName("ComposeInsets")
-@file:JvmMultifileClass
-
 package com.google.accompanist.insets
 
 import androidx.compose.foundation.layout.height
@@ -34,6 +31,16 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+
+/**
+ * Represents a horizontal side of the display.
+ */
+enum class HorizontalSide { Left, Right }
+
+/**
+ * Represents a vertical side of the display.
+ */
+enum class VerticalSide { Top, Bottom }
 
 /**
  * Declare the height of the content to match the height of the status bars exactly.
@@ -154,7 +161,7 @@ fun Modifier.navigationBarsWidth(
  * issue tracker.
  */
 private data class InsetsSizeModifier(
-    private val insetsType: InsetsType,
+    private val insetsType: WindowInsets.Type,
     private val widthSide: HorizontalSide? = null,
     private val additionalWidth: Dp = 0.dp,
     private val heightSide: VerticalSide? = null,

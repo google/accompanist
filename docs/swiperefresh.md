@@ -36,6 +36,19 @@ SwipeRefresh(
 
 The full example, including the view model implementation can be found [here](https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/swiperefresh/DocsSamples.kt).
 
+The content needs to be 'scrollable' for `SwipeRefresh()` to be able to react to swipe gestures. Layouts such as [`LazyColumn`][lazycolumn] are automatically scrollable, but others such as [`Column`][column] are not. In those instances, you can provide a [`Modifier.verticalScroll`][verticalscroll] modifier to that content like so:
+
+``` kotlin
+SwipeRefresh(
+    // ...
+) {
+    Column(Modifier.verticalScroll(rememberScrollState())) {
+        // content
+    }
+}
+```
+
+
 ### Indicating a refresh without swiping
 
 As this library is built with a seperate state object, it's easy to display a refreshing indicator without a swipe to triggering it.
@@ -71,10 +84,11 @@ To customize the default indicator, we can provide our own `indicator` content b
     SwipeRefresh(
         state = /* ... */,
         onRefresh = /* ... */,
-        indicator = { state ->
+        indicator = { state, trigger ->
             SwipeRefreshIndicator(
-                // Pass the SwipeRefreshState through
+                // Pass the SwipeRefreshState + trigger through
                 state = state,
+                refreshTriggerDistance = trigger,
                 // Enable the scale animation
                 scale = true,
                 // Change the color and shape
@@ -124,3 +138,6 @@ Snapshots of the development version are available in [Sonatype's `snapshots` re
   [api_swiperefresh]: ../api/swiperefresh/swiperefresh/com.google.accompanist.swiperefresh/-swipe-refresh.html
   [api_rememberstate]: ../api/swiperefresh/swiperefresh/com.google.accompanist.swiperefresh/remember-swipe-refresh-state.html
   [sample_customindictor]: https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/swiperefresh/SwipeRefreshCustomIndicatorSample.kt
+  [lazycolumn]: https://developer.android.com/reference/kotlin/androidx/compose/foundation/lazy/package-summary#LazyColumn(androidx.compose.ui.Modifier,androidx.compose.foundation.lazy.LazyListState,androidx.compose.foundation.layout.PaddingValues,kotlin.Boolean,androidx.compose.foundation.layout.Arrangement.Vertical,androidx.compose.ui.Alignment.Horizontal,androidx.compose.foundation.gestures.FlingBehavior,kotlin.Function1)
+  [column]: https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/package-summary#Column(androidx.compose.ui.Modifier,androidx.compose.foundation.layout.Arrangement.Vertical,androidx.compose.ui.Alignment.Horizontal,kotlin.Function1)
+  [verticalscroll]: https://developer.android.com/jetpack/compose/gestures#scroll-modifiers

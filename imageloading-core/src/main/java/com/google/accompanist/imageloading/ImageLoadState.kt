@@ -16,10 +16,10 @@
 
 package com.google.accompanist.imageloading
 
-import android.graphics.drawable.Drawable
+import androidx.compose.ui.graphics.painter.Painter
 
 /**
- * Represents the state of a [Image]
+ * Represents the state of a [LoadPainter].
  */
 sealed class ImageLoadState {
     /**
@@ -30,17 +30,20 @@ sealed class ImageLoadState {
     /**
      * Indicates that the request is currently in progress.
      */
-    object Loading : ImageLoadState()
+    data class Loading(
+        val placeholder: Painter?,
+        val request: Any,
+    ) : ImageLoadState()
 
     /**
      * Indicates that the request completed successfully.
      *
-     * @param result The result image.
+     * @param result The result [Painter].
      * @param source The data source that the image was loaded from.
      * @param request The original request for this result.
      */
     data class Success(
-        val result: Drawable,
+        val result: Painter,
         val source: DataSource,
         val request: Any,
     ) : ImageLoadState()
@@ -53,9 +56,9 @@ sealed class ImageLoadState {
      * @param request The original request for this result.
      */
     data class Error(
-        val result: Drawable? = null,
         val request: Any,
-        val throwable: Throwable
+        val result: Painter? = null,
+        val throwable: Throwable? = null
     ) : ImageLoadState()
 }
 
@@ -66,10 +69,11 @@ fun ImageLoadState.isFinalState(): Boolean {
     return this is ImageLoadState.Success || this is ImageLoadState.Error
 }
 
-internal inline val ImageLoadState.drawable: Drawable?
+internal inline val ImageLoadState.painter: Painter?
     get() = when (this) {
         is ImageLoadState.Success -> result
         is ImageLoadState.Error -> result
+        is ImageLoadState.Loading -> placeholder
         else -> null
     }
 

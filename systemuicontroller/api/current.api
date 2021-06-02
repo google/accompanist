@@ -1,0 +1,38 @@
+// Signature format: 4.0
+package com.google.accompanist.systemuicontroller {
+
+  public final class AndroidSystemUiController implements com.google.accompanist.systemuicontroller.SystemUiController {
+    ctor public AndroidSystemUiController(android.view.View view);
+    method public boolean isDarkNavigationBarIcons();
+    method public boolean isDarkStatusBarIcons();
+    method public boolean isNavigationBarContrastEnforced();
+    method public void setNavigationBarColor-PQP5Tvw(long color, boolean darkIcons, boolean navigationBarContrastEnforced, kotlin.jvm.functions.Function1<? super androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color> transformColorForLightContent);
+    method public void setNavigationBarDarkIcons(boolean enabled);
+    method public void setNavigationBarVisible(boolean isVisible);
+    method public void setStatusBarColor-qhJFjJI(long color, boolean darkIcons, kotlin.jvm.functions.Function1<? super androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color> transformColorForLightContent);
+    method public void setStatusBarDarkIcons(boolean enabled);
+    method public void setStatusBarVisible(boolean isVisible);
+  }
+
+  @androidx.compose.runtime.Stable public interface SystemUiController {
+    method public boolean isDarkNavigationBarIcons();
+    method public boolean isDarkStatusBarIcons();
+    method public default boolean isDarkSystemBarsIcons();
+    method public boolean isNavigationBarContrastEnforced();
+    method public void setNavigationBarColor-PQP5Tvw(long color, optional boolean darkIcons, optional boolean navigationBarContrastEnforced, optional kotlin.jvm.functions.Function1<? super androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color> transformColorForLightContent);
+    method public void setNavigationBarDarkIcons(optional boolean enabled);
+    method public void setNavigationBarVisible(optional boolean isVisible);
+    method public void setStatusBarColor-qhJFjJI(long color, optional boolean darkIcons, optional kotlin.jvm.functions.Function1<? super androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color> transformColorForLightContent);
+    method public void setStatusBarDarkIcons(optional boolean enabled);
+    method public void setStatusBarVisible(optional boolean isVisible);
+    method public default void setSystemBarsColor-PQP5Tvw(long color, optional boolean darkIcons, optional boolean isNavigationBarContrastEnforced, optional kotlin.jvm.functions.Function1<? super androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color> transformColorForLightContent);
+    method public default void setSystemBarsDarkIcons(optional boolean enabled);
+    method public default void setSystemBarsVisible(optional boolean isVisible);
+  }
+
+  public final class SystemUiControllerKt {
+    method @androidx.compose.runtime.Composable public static com.google.accompanist.systemuicontroller.SystemUiController rememberSystemUiController();
+  }
+
+}
+

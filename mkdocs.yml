@@ -3,6 +3,7 @@ site_name: 'Accompanist'
 site_description: 'A group of libraries to help write Jetpack Compose apps.'
 site_author: 'Google'
 site_url: 'https://google.github.io/accompanist/'
+edit_uri: 'tree/main/docs/'
 remote_branch: gh-pages
 
 docs_dir: docs-gen
@@ -17,9 +18,11 @@ nav:
   - 'Coil':
     - 'Guide': coil.md
     - 'API': api/coil/
+    - 'Migration from CoilImage': coil/migration-coilimage.md
   - 'Glide':
     - 'Guide': glide.md
     - 'API': api/glide/
+    - 'Migration from GlideImage': glide/migration-glideimage.md
   - 'Image Loading Core':
     - 'API': api/imageloading-core/
   - 'Insets':
@@ -70,3 +73,4 @@ markdown_extensions:
   - pymdownx.betterem
   - pymdownx.superfences
   - pymdownx.tabbed
+  - pymdownx.details

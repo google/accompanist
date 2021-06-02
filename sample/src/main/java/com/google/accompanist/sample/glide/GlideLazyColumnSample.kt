@@ -35,7 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.coil.rememberCoilPainter
+import com.google.accompanist.glide.rememberGlidePainter
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.rememberRandomSampleImageUrl
@@ -67,7 +67,7 @@ private fun Sample() {
             items(NumberItems) { index ->
                 Row(Modifier.padding(16.dp)) {
                     Image(
-                        painter = rememberCoilPainter(
+                        painter = rememberGlidePainter(
                             request = rememberRandomSampleImageUrl(index),
                             fadeIn = true,
                         ),

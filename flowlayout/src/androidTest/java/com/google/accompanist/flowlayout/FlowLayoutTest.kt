@@ -22,27 +22,21 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.node.Ref
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.filters.SmallTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import org.junit.runner.RunWith
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
 
-@SmallTest
-@RunWith(AndroidJUnit4::class)
 class FlowTest : LayoutTest() {
     @Test
-    fun testFlowRow() = with(density) {
+    fun testFlowRow() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowWidth = 256
-        val flowWidthDp = flowWidth.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -52,7 +46,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxWidth = flowWidthDp),
+                    constraints = DpConstraints(maxWidth = with(LocalDensity.current) { flowWidth.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -61,7 +55,8 @@ class FlowTest : LayoutTest() {
                     FlowRow {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp, height = sizeDp,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -94,12 +89,10 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowRow_withMainAxisSize_wrap() = with(density) {
+    fun testFlowRow_withMainAxisSize_wrap() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowWidth = 256
-        val flowWidthDp = flowWidth.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -109,7 +102,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxWidth = flowWidthDp),
+                    constraints = DpConstraints(maxWidth = with(LocalDensity.current) { flowWidth.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -118,7 +111,8 @@ class FlowTest : LayoutTest() {
                     FlowRow(mainAxisSize = SizeMode.Wrap) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp, height = sizeDp,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -154,12 +148,10 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowRow_withMainAxisSize_expand() = with(density) {
+    fun testFlowRow_withMainAxisSize_expand() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowWidth = 256
-        val flowWidthDp = flowWidth.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -169,7 +161,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxWidth = flowWidthDp),
+                    constraints = DpConstraints(maxWidth = with(LocalDensity.current) { flowWidth.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -178,7 +170,8 @@ class FlowTest : LayoutTest() {
                     FlowRow(mainAxisSize = SizeMode.Expand) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp, height = sizeDp,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -214,12 +207,10 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowRow_withMainAxisAlignment_center() = with(density) {
+    fun testFlowRow_withMainAxisAlignment_center() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowWidth = 256
-        val flowWidthDp = flowWidth.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -229,7 +220,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxWidth = flowWidthDp),
+                    constraints = DpConstraints(maxWidth = with(LocalDensity.current) { flowWidth.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -241,7 +232,8 @@ class FlowTest : LayoutTest() {
                     ) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp, height = sizeDp,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -277,12 +269,10 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowRow_withMainAxisAlignment_start() = with(density) {
+    fun testFlowRow_withMainAxisAlignment_start() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowWidth = 256
-        val flowWidthDp = flowWidth.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -292,7 +282,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxWidth = flowWidthDp),
+                    constraints = DpConstraints(maxWidth = with(LocalDensity.current) { flowWidth.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -304,7 +294,8 @@ class FlowTest : LayoutTest() {
                     ) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp, height = sizeDp,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -340,12 +331,10 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowRow_withMainAxisAlignment_end() = with(density) {
+    fun testFlowRow_withMainAxisAlignment_end() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowWidth = 256
-        val flowWidthDp = flowWidth.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -355,7 +344,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxWidth = flowWidthDp),
+                    constraints = DpConstraints(maxWidth = with(LocalDensity.current) { flowWidth.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -367,7 +356,8 @@ class FlowTest : LayoutTest() {
                     ) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp, height = sizeDp,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -403,12 +393,10 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowRow_withMainAxisAlignment_spaceEvenly() = with(density) {
+    fun testFlowRow_withMainAxisAlignment_spaceEvenly() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowWidth = 256
-        val flowWidthDp = flowWidth.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -418,7 +406,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxWidth = flowWidthDp),
+                    constraints = DpConstraints(maxWidth = with(LocalDensity.current) { flowWidth.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -430,7 +418,8 @@ class FlowTest : LayoutTest() {
                     ) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp, height = sizeDp,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -467,12 +456,10 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowRow_withMainAxisAlignment_spaceBetween() = with(density) {
+    fun testFlowRow_withMainAxisAlignment_spaceBetween() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowWidth = 256
-        val flowWidthDp = flowWidth.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -482,7 +469,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxWidth = flowWidthDp),
+                    constraints = DpConstraints(maxWidth = with(LocalDensity.current) { flowWidth.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -494,7 +481,8 @@ class FlowTest : LayoutTest() {
                     ) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp, height = sizeDp,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -530,12 +518,10 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowRow_withMainAxisAlignment_spaceAround() = with(density) {
+    fun testFlowRow_withMainAxisAlignment_spaceAround() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowWidth = 256
-        val flowWidthDp = flowWidth.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -545,7 +531,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxWidth = flowWidthDp),
+                    constraints = DpConstraints(maxWidth = with(LocalDensity.current) { flowWidth.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -557,7 +543,8 @@ class FlowTest : LayoutTest() {
                     ) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp, height = sizeDp,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -594,12 +581,10 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowRow_withLastLineMainAxisAlignment_justify_center() = with(density) {
+    fun testFlowRow_withLastLineMainAxisAlignment_justify_center() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowWidth = 256
-        val flowWidthDp = flowWidth.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -609,7 +594,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxWidth = flowWidthDp),
+                    constraints = DpConstraints(maxWidth = with(LocalDensity.current) { flowWidth.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -622,7 +607,8 @@ class FlowTest : LayoutTest() {
                     ) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp, height = sizeDp,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -662,12 +648,10 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowRow_withLastLineMainAxisAlignment_justify_start() = with(density) {
+    fun testFlowRow_withLastLineMainAxisAlignment_justify_start() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowWidth = 256
-        val flowWidthDp = flowWidth.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -677,7 +661,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxWidth = flowWidthDp),
+                    constraints = DpConstraints(maxWidth = with(LocalDensity.current) { flowWidth.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -690,7 +674,8 @@ class FlowTest : LayoutTest() {
                     ) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp, height = sizeDp,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -730,12 +715,10 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowRow_withLastLineMainAxisAlignment_justify_end() = with(density) {
+    fun testFlowRow_withLastLineMainAxisAlignment_justify_end() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowWidth = 256
-        val flowWidthDp = flowWidth.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -745,7 +728,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxWidth = flowWidthDp),
+                    constraints = DpConstraints(maxWidth = with(LocalDensity.current) { flowWidth.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -758,7 +741,8 @@ class FlowTest : LayoutTest() {
                     ) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp, height = sizeDp,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -798,14 +782,11 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowRow_withMainAxisSpacing() = with(density) {
+    fun testFlowRow_withMainAxisSpacing() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val spacing = 32
-        val spacingDp = spacing.toDp()
         val flowWidth = 256
-        val flowWidthDp = flowWidth.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -815,16 +796,17 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxWidth = flowWidthDp),
+                    constraints = DpConstraints(maxWidth = with(LocalDensity.current) { flowWidth.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
                     }
                 ) {
-                    FlowRow(mainAxisSpacing = spacingDp) {
+                    FlowRow(mainAxisSpacing = with(LocalDensity.current) { spacing.toDp() }) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp, height = sizeDp,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -860,12 +842,10 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowRow_withCrossAxisAlignment_center() = with(density) {
+    fun testFlowRow_withCrossAxisAlignment_center() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowWidth = 256
-        val flowWidthDp = flowWidth.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -875,7 +855,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxWidth = flowWidthDp),
+                    constraints = DpConstraints(maxWidth = with(LocalDensity.current) { flowWidth.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -884,8 +864,10 @@ class FlowTest : LayoutTest() {
                     FlowRow(crossAxisAlignment = FlowCrossAxisAlignment.Center) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp,
-                                height = if (i % 2 == 0) sizeDp else sizeDp * 2,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = if (i % 2 == 0) with(LocalDensity.current) { size.toDp() } else with(
+                                    LocalDensity.current
+                                ) { size.toDp() } * 2,
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -925,12 +907,10 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowRow_withCrossAxisAlignment_start() = with(density) {
+    fun testFlowRow_withCrossAxisAlignment_start() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowWidth = 256
-        val flowWidthDp = flowWidth.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -940,7 +920,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxWidth = flowWidthDp),
+                    constraints = DpConstraints(maxWidth = with(LocalDensity.current) { flowWidth.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -949,8 +929,10 @@ class FlowTest : LayoutTest() {
                     FlowRow(crossAxisAlignment = FlowCrossAxisAlignment.Start) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp,
-                                height = if (i % 2 == 0) sizeDp else sizeDp * 2,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = if (i % 2 == 0) with(LocalDensity.current) { size.toDp() } else with(
+                                    LocalDensity.current
+                                ) { size.toDp() } * 2,
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -989,12 +971,10 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowRow_withCrossAxisAlignment_end() = with(density) {
+    fun testFlowRow_withCrossAxisAlignment_end() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowWidth = 256
-        val flowWidthDp = flowWidth.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -1004,7 +984,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxWidth = flowWidthDp),
+                    constraints = DpConstraints(maxWidth = with(LocalDensity.current) { flowWidth.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -1013,8 +993,10 @@ class FlowTest : LayoutTest() {
                     FlowRow(crossAxisAlignment = FlowCrossAxisAlignment.End) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp,
-                                height = if (i % 2 == 0) sizeDp else sizeDp * 2,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = if (i % 2 == 0) with(LocalDensity.current) { size.toDp() } else with(
+                                    LocalDensity.current
+                                ) { size.toDp() } * 2,
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -1053,14 +1035,11 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowRow_withCrossAxisSpacing() = with(density) {
+    fun testFlowRow_withCrossAxisSpacing() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val spacing = 32
-        val spacingDp = spacing.toDp()
         val flowWidth = 256
-        val flowWidthDp = flowWidth.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -1070,16 +1049,17 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxWidth = flowWidthDp),
+                    constraints = DpConstraints(maxWidth = with(LocalDensity.current) { flowWidth.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
                     }
                 ) {
-                    FlowRow(crossAxisSpacing = spacingDp) {
+                    FlowRow(crossAxisSpacing = with(LocalDensity.current) { spacing.toDp() }) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp, height = sizeDp,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -1115,12 +1095,10 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowColumn() = with(density) {
+    fun testFlowColumn() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowHeight = 256
-        val flowHeightDp = flowHeight.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -1130,7 +1108,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxHeight = flowHeightDp),
+                    constraints = DpConstraints(maxHeight = with(LocalDensity.current) { flowHeight.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -1139,7 +1117,8 @@ class FlowTest : LayoutTest() {
                     FlowColumn {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp, height = sizeDp,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -1175,12 +1154,10 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowColumn_withMainAxisSize_wrap() = with(density) {
+    fun testFlowColumn_withMainAxisSize_wrap() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowHeight = 256
-        val flowHeightDp = flowHeight.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -1190,7 +1167,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxHeight = flowHeightDp),
+                    constraints = DpConstraints(maxHeight = with(LocalDensity.current) { flowHeight.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -1199,7 +1176,8 @@ class FlowTest : LayoutTest() {
                     FlowColumn(mainAxisSize = SizeMode.Wrap) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp, height = sizeDp,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -1235,12 +1213,10 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowColumn_withMainAxisSize_expand() = with(density) {
+    fun testFlowColumn_withMainAxisSize_expand() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowHeight = 256
-        val flowHeightDp = flowHeight.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -1250,7 +1226,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxHeight = flowHeightDp),
+                    constraints = DpConstraints(maxHeight = with(LocalDensity.current) { flowHeight.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -1259,7 +1235,8 @@ class FlowTest : LayoutTest() {
                     FlowColumn(mainAxisSize = SizeMode.Expand) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp, height = sizeDp,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -1295,12 +1272,10 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowColumn_withMainAxisAlignment_center() = with(density) {
+    fun testFlowColumn_withMainAxisAlignment_center() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowHeight = 256
-        val flowHeightDp = flowHeight.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -1310,7 +1285,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxHeight = flowHeightDp),
+                    constraints = DpConstraints(maxHeight = with(LocalDensity.current) { flowHeight.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -1322,7 +1297,8 @@ class FlowTest : LayoutTest() {
                     ) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp, height = sizeDp,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -1358,12 +1334,10 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowColumn_withMainAxisAlignment_start() = with(density) {
+    fun testFlowColumn_withMainAxisAlignment_start() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowHeight = 256
-        val flowHeightDp = flowHeight.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -1373,7 +1347,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxHeight = flowHeightDp),
+                    constraints = DpConstraints(maxHeight = with(LocalDensity.current) { flowHeight.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -1385,7 +1359,8 @@ class FlowTest : LayoutTest() {
                     ) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp, height = sizeDp,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -1421,12 +1396,10 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowColumn_withMainAxisAlignment_end() = with(density) {
+    fun testFlowColumn_withMainAxisAlignment_end() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowHeight = 256
-        val flowHeightDp = flowHeight.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -1436,7 +1409,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxHeight = flowHeightDp),
+                    constraints = DpConstraints(maxHeight = with(LocalDensity.current) { flowHeight.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -1448,7 +1421,8 @@ class FlowTest : LayoutTest() {
                     ) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp, height = sizeDp,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -1484,12 +1458,10 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowColumn_withMainAxisAlignment_spaceEvenly() = with(density) {
+    fun testFlowColumn_withMainAxisAlignment_spaceEvenly() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowHeight = 256
-        val flowHeightDp = flowHeight.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -1499,7 +1471,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxHeight = flowHeightDp),
+                    constraints = DpConstraints(maxHeight = with(LocalDensity.current) { flowHeight.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -1511,7 +1483,8 @@ class FlowTest : LayoutTest() {
                     ) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp, height = sizeDp,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -1548,12 +1521,10 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowColumn_withMainAxisAlignment_spaceBetween() = with(density) {
+    fun testFlowColumn_withMainAxisAlignment_spaceBetween() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowHeight = 256
-        val flowHeightDp = flowHeight.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -1563,7 +1534,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxHeight = flowHeightDp),
+                    constraints = DpConstraints(maxHeight = with(LocalDensity.current) { flowHeight.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -1575,7 +1546,8 @@ class FlowTest : LayoutTest() {
                     ) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp, height = sizeDp,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -1611,12 +1583,10 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowColumn_withMainAxisAlignment_spaceAround() = with(density) {
+    fun testFlowColumn_withMainAxisAlignment_spaceAround() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowHeight = 256
-        val flowHeightDp = flowHeight.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -1626,7 +1596,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxHeight = flowHeightDp),
+                    constraints = DpConstraints(maxHeight = with(LocalDensity.current) { flowHeight.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -1638,7 +1608,8 @@ class FlowTest : LayoutTest() {
                     ) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp, height = sizeDp,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -1675,12 +1646,10 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowColumn_withLastLineMainAxisAlignment_justify_center() = with(density) {
+    fun testFlowColumn_withLastLineMainAxisAlignment_justify_center() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowHeight = 256
-        val flowHeightDp = flowHeight.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -1690,7 +1659,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxHeight = flowHeightDp),
+                    constraints = DpConstraints(maxHeight = with(LocalDensity.current) { flowHeight.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -1703,7 +1672,8 @@ class FlowTest : LayoutTest() {
                     ) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp, height = sizeDp,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -1743,12 +1713,10 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowColumn_withLastLineMainAxisAlignment_justify_start() = with(density) {
+    fun testFlowColumn_withLastLineMainAxisAlignment_justify_start() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowHeight = 256
-        val flowHeightDp = flowHeight.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -1758,7 +1726,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxHeight = flowHeightDp),
+                    constraints = DpConstraints(maxHeight = with(LocalDensity.current) { flowHeight.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -1771,7 +1739,8 @@ class FlowTest : LayoutTest() {
                     ) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp, height = sizeDp,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -1811,12 +1780,10 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowColumn_withLastLineMainAxisAlignment_justify_end() = with(density) {
+    fun testFlowColumn_withLastLineMainAxisAlignment_justify_end() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowHeight = 256
-        val flowHeightDp = flowHeight.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -1826,7 +1793,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxHeight = flowHeightDp),
+                    constraints = DpConstraints(maxHeight = with(LocalDensity.current) { flowHeight.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -1839,7 +1806,8 @@ class FlowTest : LayoutTest() {
                     ) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp, height = sizeDp,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -1879,14 +1847,11 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowColumn_withMainAxisSpacing() = with(density) {
+    fun testFlowColumn_withMainAxisSpacing() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val spacing = 32
-        val spacingDp = spacing.toDp()
         val flowHeight = 256
-        val flowHeightDp = flowHeight.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -1896,16 +1861,17 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxHeight = flowHeightDp),
+                    constraints = DpConstraints(maxHeight = with(LocalDensity.current) { flowHeight.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
                     }
                 ) {
-                    FlowColumn(mainAxisSpacing = spacingDp) {
+                    FlowColumn(mainAxisSpacing = with(LocalDensity.current) { spacing.toDp() }) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp, height = sizeDp,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -1941,12 +1907,10 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowColumn_withCrossAxisAlignment_center() = with(density) {
+    fun testFlowColumn_withCrossAxisAlignment_center() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowHeight = 256
-        val flowHeightDp = flowHeight.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -1956,7 +1920,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxHeight = flowHeightDp),
+                    constraints = DpConstraints(maxHeight = with(LocalDensity.current) { flowHeight.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -1965,8 +1929,10 @@ class FlowTest : LayoutTest() {
                     FlowColumn(crossAxisAlignment = FlowCrossAxisAlignment.Center) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = if (i % 2 == 0) sizeDp else sizeDp * 2,
-                                height = sizeDp,
+                                width = if (i % 2 == 0) with(LocalDensity.current) { size.toDp() } else with(
+                                    LocalDensity.current
+                                ) { size.toDp() } * 2,
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -2006,12 +1972,10 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowColumn_withCrossAxisAlignment_start() = with(density) {
+    fun testFlowColumn_withCrossAxisAlignment_start() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowHeight = 256
-        val flowHeightDp = flowHeight.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -2021,7 +1985,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxHeight = flowHeightDp),
+                    constraints = DpConstraints(maxHeight = with(LocalDensity.current) { flowHeight.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -2030,8 +1994,10 @@ class FlowTest : LayoutTest() {
                     FlowColumn(crossAxisAlignment = FlowCrossAxisAlignment.Start) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = if (i % 2 == 0) sizeDp else sizeDp * 2,
-                                height = sizeDp,
+                                width = if (i % 2 == 0) with(LocalDensity.current) { size.toDp() } else with(
+                                    LocalDensity.current
+                                ) { size.toDp() } * 2,
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -2067,12 +2033,10 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowColumn_withCrossAxisAlignment_end() = with(density) {
+    fun testFlowColumn_withCrossAxisAlignment_end() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val flowHeight = 256
-        val flowHeightDp = flowHeight.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -2082,7 +2046,7 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxHeight = flowHeightDp),
+                    constraints = DpConstraints(maxHeight = with(LocalDensity.current) { flowHeight.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
@@ -2091,8 +2055,10 @@ class FlowTest : LayoutTest() {
                     FlowColumn(crossAxisAlignment = FlowCrossAxisAlignment.End) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = if (i % 2 == 0) sizeDp else sizeDp * 2,
-                                height = sizeDp,
+                                width = if (i % 2 == 0) with(LocalDensity.current) { size.toDp() } else with(
+                                    LocalDensity.current
+                                ) { size.toDp() } * 2,
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],
@@ -2132,14 +2098,11 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowColumn_withCrossAxisSpacing() = with(density) {
+    fun testFlowColumn_withCrossAxisSpacing() {
         val numberOfSquares = 15
         val size = 48
-        val sizeDp = size.toDp()
         val spacing = 32
-        val spacingDp = spacing.toDp()
         val flowHeight = 256
-        val flowHeightDp = flowHeight.toDp()
 
         val flowSize = Ref<IntSize>()
         val childSize = Array(numberOfSquares) { Ref<IntSize>() }
@@ -2149,16 +2112,17 @@ class FlowTest : LayoutTest() {
         rule.setContent {
             Box {
                 ConstrainedBox(
-                    constraints = DpConstraints(maxHeight = flowHeightDp),
+                    constraints = DpConstraints(maxHeight = with(LocalDensity.current) { flowHeight.toDp() }),
                     modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
                         flowSize.value = coordinates.size
                         positionedLatch.countDown()
                     }
                 ) {
-                    FlowColumn(crossAxisSpacing = spacingDp) {
+                    FlowColumn(crossAxisSpacing = with(LocalDensity.current) { spacing.toDp() }) {
                         for (i in 0 until numberOfSquares) {
                             Container(
-                                width = sizeDp, height = sizeDp,
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
                                 modifier = Modifier.saveLayoutInfo(
                                     childSize[i],
                                     childPosition[i],

@@ -17,8 +17,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.google.accompanist.insets.test">
 
-    <uses-sdk android:targetSdkVersion="30" />
-
     <application>
         <activity
             android:name="com.google.accompanist.insets.InsetsTestActivity"

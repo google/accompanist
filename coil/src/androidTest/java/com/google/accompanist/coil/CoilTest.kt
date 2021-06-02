@@ -20,6 +20,7 @@ import android.graphics.drawable.ShapeDrawable
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -81,7 +82,7 @@ class CoilTest {
     // Our MockWebServer. We use a response delay to simulate real-world conditions
     private val server = ImageMockWebServer()
 
-    private val idlingResource = CoilIdlingResource()
+    private val coilRequestTracker = CoilIdlingResource()
 
     @Before
     fun setup() {
@@ -92,17 +93,17 @@ class CoilTest {
         val imageLoader = ImageLoader.Builder(composeTestRule.activity.applicationContext)
             .diskCachePolicy(CachePolicy.DISABLED)
             .memoryCachePolicy(CachePolicy.DISABLED)
-            .eventListener(idlingResource)
+            .eventListener(coilRequestTracker)
             .build()
 
         Coil.setImageLoader(imageLoader)
 
-        composeTestRule.registerIdlingResource(idlingResource)
+        composeTestRule.registerIdlingResource(coilRequestTracker)
     }
 
     @After
     fun teardown() {
-        composeTestRule.unregisterIdlingResource(idlingResource)
+        composeTestRule.unregisterIdlingResource(coilRequestTracker)
 
         // Shutdown our mock web server
         server.shutdown()
@@ -119,6 +120,8 @@ class CoilTest {
                     .testTag(CoilTestTags.Image),
             )
         }
+
+        waitForRequestComplete()
 
         composeTestRule.onNodeWithTag(CoilTestTags.Image)
             .assertIsDisplayed()
@@ -138,6 +141,8 @@ class CoilTest {
                     .testTag(CoilTestTags.Image),
             )
         }
+
+        waitForRequestComplete()
 
         composeTestRule.onNodeWithTag(CoilTestTags.Image)
             .assertWidthIsEqualTo(128.dp)
@@ -159,6 +164,8 @@ class CoilTest {
                     .testTag(CoilTestTags.Image),
             )
         }
+
+        waitForRequestComplete()
 
         composeTestRule.onNodeWithTag(CoilTestTags.Image)
             .assertWidthIsEqualTo(128.dp)
@@ -244,6 +251,8 @@ class CoilTest {
             )
         }
 
+        waitForRequestComplete()
+
         // Assert that the content is completely Red
         composeTestRule.onNodeWithTag(CoilTestTags.Image)
             .assertWidthIsEqualTo(128.dp)
@@ -318,6 +327,32 @@ class CoilTest {
             )
         }
 
+        waitForRequestComplete()
+
+        composeTestRule.onNodeWithTag(CoilTestTags.Image)
+            .assertWidthIsAtLeast(1.dp)
+            .assertHeightIsAtLeast(1.dp)
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun lazycolumn_nosize() {
+        composeTestRule.setContent {
+            LazyColumn {
+                item {
+                    Image(
+                        painter = rememberCoilPainter(server.url("/image")),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillParentMaxWidth()
+                            .testTag(CoilTestTags.Image),
+                    )
+                }
+            }
+        }
+
+        waitForRequestComplete()
+
         composeTestRule.onNodeWithTag(CoilTestTags.Image)
             .assertWidthIsAtLeast(1.dp)
             .assertHeightIsAtLeast(1.dp)
@@ -342,6 +377,8 @@ class CoilTest {
                     .size(128.dp),
             )
         }
+
+        waitForRequestComplete()
 
         // Assert that the error drawable was drawn
         composeTestRule.onNodeWithTag(CoilTestTags.Image)
@@ -391,6 +428,8 @@ class CoilTest {
                     .testTag(CoilTestTags.Image),
             )
         }
+
+        waitForRequestComplete()
 
         // Assert that the layout is in the tree and has the correct size
         composeTestRule.onNodeWithTag(CoilTestTags.Image)
@@ -447,5 +486,13 @@ class CoilTest {
                 modifier = Modifier.size(128.dp, 128.dp),
             )
         }
+    }
+
+    private fun waitForRequestComplete() {
+        composeTestRule.waitForIdle()
+        composeTestRule.waitUntil(5_000) {
+            coilRequestTracker.finishedRequests > 0
+        }
+        composeTestRule.waitForIdle()
     }
 }

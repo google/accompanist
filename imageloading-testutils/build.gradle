@@ -76,5 +76,5 @@ dependencies {
 
     implementation libs.kotlin.coroutines.test
 
-    implementation libs.compose.ui.test
+    implementation libs.compose.ui.test.junit4
 }

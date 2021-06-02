@@ -1,0 +1,15 @@
+// Signature format: 4.0
+package com.google.accompanist.coil {
+
+  public final class CoilKt {
+    method public static androidx.compose.runtime.ProvidableCompositionLocal<coil.ImageLoader> getLocalImageLoader();
+    method @androidx.compose.runtime.Composable public static com.google.accompanist.imageloading.LoadPainter<java.lang.Object> rememberCoilPainter(Object? request, optional coil.ImageLoader imageLoader, optional com.google.accompanist.imageloading.ShouldRefetchOnSizeChange shouldRefetchOnSizeChange, optional kotlin.jvm.functions.Function2<? super coil.request.ImageRequest.Builder,? super androidx.compose.ui.unit.IntSize,coil.request.ImageRequest.Builder>? requestBuilder, optional boolean fadeIn, optional int fadeInDurationMs, optional @DrawableRes int previewPlaceholder);
+  }
+
+  public final class CoilPainterDefaults {
+    method @androidx.compose.runtime.Composable public coil.ImageLoader defaultImageLoader();
+    field public static final com.google.accompanist.coil.CoilPainterDefaults INSTANCE;
+  }
+
+}
+

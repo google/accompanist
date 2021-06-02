@@ -1,0 +1,30 @@
+// Signature format: 4.0
+package com.google.accompanist.flowlayout {
+
+  public enum FlowCrossAxisAlignment {
+    enum_constant public static final com.google.accompanist.flowlayout.FlowCrossAxisAlignment Center;
+    enum_constant public static final com.google.accompanist.flowlayout.FlowCrossAxisAlignment End;
+    enum_constant public static final com.google.accompanist.flowlayout.FlowCrossAxisAlignment Start;
+  }
+
+  public final class FlowKt {
+    method @androidx.compose.runtime.Composable public static void FlowColumn-Hml-4y4(optional androidx.compose.ui.Modifier modifier, optional com.google.accompanist.flowlayout.SizeMode mainAxisSize, optional com.google.accompanist.flowlayout.MainAxisAlignment mainAxisAlignment, optional float mainAxisSpacing, optional com.google.accompanist.flowlayout.FlowCrossAxisAlignment crossAxisAlignment, optional float crossAxisSpacing, optional com.google.accompanist.flowlayout.MainAxisAlignment lastLineMainAxisAlignment, kotlin.jvm.functions.Function0<kotlin.Unit> content);
+    method @androidx.compose.runtime.Composable public static void FlowRow-Hml-4y4(optional androidx.compose.ui.Modifier modifier, optional com.google.accompanist.flowlayout.SizeMode mainAxisSize, optional com.google.accompanist.flowlayout.MainAxisAlignment mainAxisAlignment, optional float mainAxisSpacing, optional com.google.accompanist.flowlayout.FlowCrossAxisAlignment crossAxisAlignment, optional float crossAxisSpacing, optional com.google.accompanist.flowlayout.MainAxisAlignment lastLineMainAxisAlignment, kotlin.jvm.functions.Function0<kotlin.Unit> content);
+  }
+
+  public enum MainAxisAlignment {
+    enum_constant public static final com.google.accompanist.flowlayout.MainAxisAlignment Center;
+    enum_constant public static final com.google.accompanist.flowlayout.MainAxisAlignment End;
+    enum_constant public static final com.google.accompanist.flowlayout.MainAxisAlignment SpaceAround;
+    enum_constant public static final com.google.accompanist.flowlayout.MainAxisAlignment SpaceBetween;
+    enum_constant public static final com.google.accompanist.flowlayout.MainAxisAlignment SpaceEvenly;
+    enum_constant public static final com.google.accompanist.flowlayout.MainAxisAlignment Start;
+  }
+
+  public enum SizeMode {
+    enum_constant public static final com.google.accompanist.flowlayout.SizeMode Expand;
+    enum_constant public static final com.google.accompanist.flowlayout.SizeMode Wrap;
+  }
+
+}
+

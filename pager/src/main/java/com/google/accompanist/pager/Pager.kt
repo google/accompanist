@@ -18,12 +18,10 @@
 
 package com.google.accompanist.pager
 
-import android.util.Log
-import androidx.annotation.IntRange
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.DecayAnimationSpec
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.defaultDecayAnimationSpec
+import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.ScrollScope
@@ -40,6 +38,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.ParentDataModifier
@@ -53,7 +55,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -97,7 +101,7 @@ object PagerDefaults {
     @Composable
     fun defaultPagerFlingConfig(
         state: PagerState,
-        decayAnimationSpec: DecayAnimationSpec<Float> = defaultDecayAnimationSpec(),
+        decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
         snapAnimationSpec: AnimationSpec<Float> = spring(stiffness = SnapSpringStiffness),
     ): FlingBehavior = remember(state, decayAnimationSpec, snapAnimationSpec) {
         object : FlingBehavior {
@@ -116,11 +120,6 @@ object PagerDefaults {
 /**
  * A horizontally scrolling layout that allows users to flip between items to the left and right.
  *
- * This layout allows the setting of the [offscreenLimit], which defines the number of pages that
- * should be retained on either side of the current page. Pages beyond this limit will be
- * recreated as needed. This value defaults to `1`, but can be increased to enable pre-loading
- * of more content.
- *
  * @sample com.google.accompanist.sample.pager.HorizontalPagerSample
  *
  * @param state the state object to be used to control or observe the pager's state.
@@ -129,8 +128,6 @@ object PagerDefaults {
  * composed from the end to the start and [PagerState.currentPage] == 0 will mean
  * the first item is located at the end.
  * @param itemSpacing horizontal spacing to add between items.
- * @param offscreenLimit the number of pages that should be retained on either side of the
- * current page. This value is required to be `1` or greater.
  * @param dragEnabled toggle manual scrolling, when `false` the user can not drag the view to a
  * different page.
  * @param flingBehavior logic describing fling behavior.
@@ -144,7 +141,6 @@ fun HorizontalPager(
     modifier: Modifier = Modifier,
     reverseLayout: Boolean = false,
     itemSpacing: Dp = 0.dp,
-    @IntRange(from = 1) offscreenLimit: Int = 1,
     dragEnabled: Boolean = true,
     flingBehavior: FlingBehavior = PagerDefaults.defaultPagerFlingConfig(state),
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
@@ -159,7 +155,6 @@ fun HorizontalPager(
         itemSpacing = itemSpacing,
         verticalAlignment = verticalAlignment,
         horizontalAlignment = horizontalAlignment,
-        offscreenLimit = offscreenLimit,
         dragEnabled = dragEnabled,
         flingBehavior = flingBehavior,
         content = content
@@ -169,11 +164,6 @@ fun HorizontalPager(
 /**
  * A vertically scrolling layout that allows users to flip between items to the top and bottom.
  *
- * This layout allows the setting of the [offscreenLimit], which defines the number of pages that
- * should be retained on either side of the current page. Pages beyond this limit will be
- * recreated as needed. This value defaults to `1`, but can be increased to enable pre-loading
- * of more content.
- *
  * @sample com.google.accompanist.sample.pager.VerticalPagerSample
  *
  * @param state the state object to be used to control or observe the pager's state.
@@ -182,8 +172,6 @@ fun HorizontalPager(
  * composed from the bottom to the top and [PagerState.currentPage] == 0 will mean
  * the first item is located at the bottom.
  * @param itemSpacing vertical spacing to add between items.
- * @param offscreenLimit the number of pages that should be retained on either side of the
- * current page. This value is required to be `1` or greater.
  * @param dragEnabled toggle manual scrolling, when `false` the user can not drag the view to a
  * different page.
  * @param flingBehavior logic describing fling behavior.
@@ -197,7 +185,6 @@ fun VerticalPager(
     modifier: Modifier = Modifier,
     reverseLayout: Boolean = false,
     itemSpacing: Dp = 0.dp,
-    @IntRange(from = 1) offscreenLimit: Int = 1,
     dragEnabled: Boolean = true,
     flingBehavior: FlingBehavior = PagerDefaults.defaultPagerFlingConfig(state),
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
@@ -212,7 +199,6 @@ fun VerticalPager(
         itemSpacing = itemSpacing,
         verticalAlignment = verticalAlignment,
         horizontalAlignment = horizontalAlignment,
-        offscreenLimit = offscreenLimit,
         dragEnabled = dragEnabled,
         flingBehavior = flingBehavior,
         content = content
@@ -229,13 +215,10 @@ internal fun Pager(
     isVertical: Boolean,
     verticalAlignment: Alignment.Vertical,
     horizontalAlignment: Alignment.Horizontal,
-    @IntRange(from = 1) offscreenLimit: Int,
     dragEnabled: Boolean,
     flingBehavior: FlingBehavior,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
-    require(offscreenLimit >= 1) { "offscreenLimit is required to be >= 1" }
-
     // True if the scroll direction is RTL, false for LTR
     val reverseDirection = when {
         // If we're vertical, just use reverseLayout as-is
@@ -282,29 +265,36 @@ internal fun Pager(
         modifier = modifier
             .then(semantics)
             .then(scrollable)
+            // Add a NestedScrollConnection which consumes all post fling/scrolls
+            .nestedScroll(connection = ConsumeFlingNestedScrollConnection)
             .clipToBounds(),
         content = {
-            val firstPage = (state.currentLayoutPage - offscreenLimit).coerceAtLeast(0)
-            val lastPage = (state.currentLayoutPage + offscreenLimit).coerceAtMost(state.lastPageIndex)
-
             if (DebugLog) {
-                Log.d(
-                    LogTag,
-                    "Content: firstPage:$firstPage, " +
-                        "layoutPage:${state.currentLayoutPage}, " +
+                val firstPage = state.layoutPages.firstOrNull { it.page != null }
+                val lastPage = state.layoutPages.lastOrNull { it.page != null }
+                Napier.d(
+                    tag = LogTag,
+                    message = "Content: firstPage:${firstPage?.page ?: "none"}, " +
+                        "layoutPage:${state.currentLayoutPageInfo}, " +
                         "currentPage:${state.currentPage}, " +
-                        "lastPage:$lastPage"
+                        "lastPage:${lastPage?.page ?: "none"}"
                 )
             }
 
-            for (page in firstPage..lastPage) {
+            // FYI: We need to filter out null/empty pages *outside* of the loop. Compose uses the
+            // call stack as part of the key for state, so we need to ensure that the call stack
+            // for page content is consistent as the user scrolls, otherwise content will
+            // drop/recreate state.
+            val pages = state.layoutPages.mapNotNull { it.page }
+            for (_page in pages) {
+                val page = state.pageOf(_page)
                 key(page) {
                     val itemSemantics = Modifier.semantics {
                         this.selected = page == state.currentPage
                     }
                     Box(
                         contentAlignment = Alignment.Center,
-                        modifier = itemSemantics.then(PageData(page))
+                        modifier = itemSemantics.then(PageData(_page))
                     ) {
                         val scope = remember(this, state) {
                             PagerScopeImpl(this, state)
@@ -335,6 +325,7 @@ internal fun Pager(
 
             placeables.forEachIndexed { index, placeable ->
                 val page = measurables[index].page
+                val layoutInfo = state.layoutPages.firstOrNull { it.page == page }
 
                 val xCenterOffset = horizontalAlignment.align(
                     size = placeable.width,
@@ -351,14 +342,10 @@ internal fun Pager(
                 val offsetForPage = page - layoutPage - offset
 
                 if (isVertical) {
-                    if (layoutPage == page) {
-                        state.currentLayoutPageSize = placeable.height
-                    }
+                    layoutInfo?.layoutSize = placeable.height
                     yItemOffset = (offsetForPage * (placeable.height + itemSpacingPx)).roundToInt()
                 } else {
-                    if (layoutPage == page) {
-                        state.currentLayoutPageSize = placeable.width
-                    }
+                    layoutInfo?.layoutSize = placeable.width
                     xItemOffset = (offsetForPage * (placeable.width + itemSpacingPx)).roundToInt()
                 }
 
@@ -371,6 +358,24 @@ internal fun Pager(
                 )
             }
         }
+    }
+}
+
+private object ConsumeFlingNestedScrollConnection : NestedScrollConnection {
+    override fun onPostScroll(
+        consumed: Offset,
+        available: Offset,
+        source: NestedScrollSource
+    ): Offset = when (source) {
+        // We can consume all resting fling scrolls so that they don't propagate up to the
+        // Pager
+        NestedScrollSource.Fling -> available
+        else -> Offset.Zero
+    }
+
+    override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
+        // We can consume all post fling velocity so that it doesn't propagate up to the Pager
+        return available
     }
 }
 

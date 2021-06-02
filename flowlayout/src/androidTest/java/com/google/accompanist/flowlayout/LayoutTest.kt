@@ -16,8 +16,6 @@
 
 package com.google.accompanist.flowlayout
 
-import android.os.Handler
-import android.os.Looper
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -36,7 +34,7 @@ import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.node.Ref
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
@@ -50,36 +48,19 @@ import androidx.compose.ui.unit.offset
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.fail
-import org.junit.Before
 import org.junit.Rule
 import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 import kotlin.math.max
 
 open class LayoutTest {
     @get:Rule
-    val rule = createAndroidComposeRule<TestActivity>()
-
-    lateinit var activity: TestActivity
-    lateinit var handler: Handler
-    internal lateinit var density: Density
-
-    @Before
-    fun setup() {
-        activity = rule.activity
-        density = Density(activity)
-        activity.hasFocusLatch.await(5, TimeUnit.SECONDS)
-
-        rule.activity.runOnUiThread {
-            handler = Handler(Looper.getMainLooper())
-        }
-    }
+    val rule = createComposeRule()
 
     internal fun Modifier.saveLayoutInfo(
         size: Ref<IntSize>,
         position: Ref<Offset>,
         positionedLatch: CountDownLatch
-    ): Modifier = this.onGloballyPositioned { coordinates ->
+    ): Modifier = onGloballyPositioned { coordinates ->
         size.value = IntSize(coordinates.size.width, coordinates.size.height)
         position.value = coordinates.localToRoot(Offset(0f, 0f))
         positionedLatch.countDown()

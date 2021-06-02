@@ -36,11 +36,17 @@ import coil.request.ImageRequest
 import coil.request.ImageResult
 import coil.size.Precision
 import com.google.accompanist.imageloading.DataSource
+import com.google.accompanist.imageloading.DrawablePainter
 import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.imageloading.LoadPainter
 import com.google.accompanist.imageloading.LoadPainterDefaults
 import com.google.accompanist.imageloading.Loader
+import com.google.accompanist.imageloading.ShouldRefetchOnSizeChange
 import com.google.accompanist.imageloading.rememberLoadPainter
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.sendBlocking
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.channelFlow
 
 /**
  * Composition local containing the preferred [ImageLoader] to be used by
@@ -53,7 +59,8 @@ val LocalImageLoader = staticCompositionLocalOf<ImageLoader?> { null }
  */
 object CoilPainterDefaults {
     /**
-     * Returns the default [ImageLoader] value for the `imageLoader` parameter in [CoilImage].
+     * Returns the default [ImageLoader] value for the `imageLoader` parameter
+     * in [rememberCoilPainter].
      */
     @Composable
     fun defaultImageLoader(): ImageLoader {
@@ -82,7 +89,7 @@ object CoilPainterDefaults {
 fun rememberCoilPainter(
     request: Any?,
     imageLoader: ImageLoader = CoilPainterDefaults.defaultImageLoader(),
-    shouldRefetchOnSizeChange: (currentState: ImageLoadState, size: IntSize) -> Boolean = { _, _ -> false },
+    shouldRefetchOnSizeChange: ShouldRefetchOnSizeChange = ShouldRefetchOnSizeChange { _, _ -> false },
     requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
     fadeIn: Boolean = false,
     fadeInDurationMs: Int = LoadPainterDefaults.FadeInTransitionDuration,
@@ -116,7 +123,8 @@ internal class CoilLoader(
     var imageLoader by mutableStateOf(imageLoader)
     var requestBuilder by mutableStateOf(requestBuilder)
 
-    override suspend fun load(request: Any, size: IntSize): ImageLoadState {
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun load(request: Any, size: IntSize): Flow<ImageLoadState> = channelFlow {
         val baseRequest = when (request) {
             // If we've been given an ImageRequest instance, use it...
             is ImageRequest -> request.newBuilder()
@@ -131,7 +139,20 @@ internal class CoilLoader(
         }.apply {
             // Apply the request builder
             requestBuilder?.invoke(this, size)
-        }.build()
+        }.target(
+            onStart = { placeholder ->
+                // We need to send blocking, to ensure that Loading is sent
+                // before the execute result below.
+                if (!isClosedForSend) {
+                    sendBlocking(
+                        ImageLoadState.Loading(
+                            placeholder = placeholder?.let(::DrawablePainter),
+                            request = request
+                        )
+                    )
+                }
+            }
+        ).build()
 
         val sizedRequest = when {
             // If the request has a size resolver set we just execute the request as-is
@@ -146,24 +167,29 @@ internal class CoilLoader(
                     .build()
             }
             // Otherwise we have a zero size, so no point executing a request
-            else -> return ImageLoadState.Empty
+            else -> {
+                if (!isClosedForSend) send(ImageLoadState.Empty)
+                return@channelFlow
+            }
         }
 
-        return imageLoader.execute(sizedRequest).toResult(request)
+        val result = imageLoader.execute(sizedRequest).toResult(request)
+
+        if (!isClosedForSend) send(result)
     }
 }
 
 private fun ImageResult.toResult(request: Any): ImageLoadState = when (this) {
     is coil.request.SuccessResult -> {
         ImageLoadState.Success(
-            result = drawable,
+            result = DrawablePainter(drawable),
             request = request,
             source = metadata.dataSource.toDataSource()
         )
     }
     is coil.request.ErrorResult -> {
         ImageLoadState.Error(
-            result = drawable,
+            result = drawable?.let(::DrawablePainter),
             request = request,
             throwable = throwable
         )
