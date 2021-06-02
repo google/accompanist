@@ -22,7 +22,6 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.tween
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -42,7 +41,6 @@ internal object PlaceholderDefaults {
  * @param targetColor target color of the fade.
  * @param animationSpec the [AnimationSpec] to configure the animation.
  */
-@Composable
 fun fadeBrush(
     initialColor: Color = PlaceholderDefaults.PlaceholderColor,
     targetColor: Color = PlaceholderDefaults.PlaceholderHighlightColor,
@@ -71,7 +69,6 @@ fun fadeBrush(
  * @param highlightColor
  * @param animationSpec the [AnimationSpec] to configure the animation.
  */
-@Composable
 fun shimmerBrush(
     color: Color = PlaceholderDefaults.PlaceholderColor,
     highlightColor: Color = PlaceholderDefaults.PlaceholderHighlightColor,
