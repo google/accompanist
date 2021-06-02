@@ -55,4 +55,9 @@
 
     <string name="system_ui_controller_title_color">System Ui Controller: Color</string>
     <string name="system_ui_controller_title_visibility">System Ui Controller: Visibility</string>
+
+    <string name="placeholder_title_basics">Placeholder: Basic</string>
+    <string name="placeholder_title_fade">Placeholder: Fade</string>
+    <string name="placeholder_title_shimmer">Placeholder: Shimmer</string>
+
 </resources>

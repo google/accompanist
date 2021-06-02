@@ -314,6 +314,33 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".placeholder.PlaceholderBasicSample"
+            android:label="@string/placeholder_title_basics">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".placeholder.PlaceholderFadeSample"
+            android:label="@string/placeholder_title_fade">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".placeholder.PlaceholderShimmerSample"
+            android:label="@string/placeholder_title_shimmer">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>
