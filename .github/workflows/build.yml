@@ -103,9 +103,7 @@ jobs:
           profile: Galaxy Nexus
           script: |
             adb logcat > logcat.txt &
-            ./gradlew connectedCheck --scan --continue \
-                -Pandroid.testInstrumentationRunnerArguments.numShards=3 \
-                -Pandroid.testInstrumentationRunnerArguments.shardIndex=${{ matrix.shard }}
+            ./gradlew connectedCheck --scan --continue -Pandroid.testInstrumentationRunnerArguments.numShards=3 -Pandroid.testInstrumentationRunnerArguments.shardIndex=${{ matrix.shard }}
 
       - name: Clean secrets
         if: always()
