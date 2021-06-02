@@ -142,10 +142,10 @@ inline fun Modifier.navigationBarsWithImePadding(): Modifier = composed {
  * @param additionalVertical Value to add to the top and bottom dimensions.
  */
 @Deprecated(
-    "Replaced with rememberWindowInsetsTypePaddingValues()",
+    "Replaced with rememberInsetsPaddingValues()",
     ReplaceWith(
-        """rememberWindowInsetsTypePaddingValues(
-            type = this,
+        """rememberInsetsPaddingValues(
+            insets = this,
             applyStart = start,
             applyTop = top,
             applyEnd = end,
@@ -155,7 +155,7 @@ inline fun Modifier.navigationBarsWithImePadding(): Modifier = composed {
             additionalEnd = additionalHorizontal,
             additionalBottom = additionalVertical
         )""",
-        "com.google.accompanist.insets.rememberWindowInsetsTypePaddingValues"
+        "com.google.accompanist.insets.rememberInsetsPaddingValues"
     )
 )
 @Composable
@@ -191,10 +191,10 @@ inline fun WindowInsets.Type.toPaddingValues(
  * @param additionalBottom Value to add to the bottom dimension.
  */
 @Deprecated(
-    "Replaced with rememberWindowInsetsTypePaddingValues()",
+    "Replaced with rememberInsetsPaddingValues()",
     ReplaceWith(
-        """rememberWindowInsetsTypePaddingValues(
-            type = this,
+        """rememberInsetsPaddingValues(
+            insets = this,
             applyStart = start,
             applyTop = top,
             applyEnd = end,
@@ -204,7 +204,7 @@ inline fun WindowInsets.Type.toPaddingValues(
             additionalEnd = additionalEnd,
             additionalBottom = additionalBottom
         )""",
-        "com.google.accompanist.insets.rememberWindowInsetsTypePaddingValues"
+        "com.google.accompanist.insets.rememberInsetsPaddingValues"
     )
 )
 @Composable
