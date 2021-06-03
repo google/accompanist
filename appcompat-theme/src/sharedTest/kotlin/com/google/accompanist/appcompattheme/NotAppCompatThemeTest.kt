@@ -17,14 +17,12 @@
 package com.google.accompanist.appcompattheme
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.test.filters.MediumTest
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 
-@MediumTest
-@RunWith(JUnit4::class)
+@RunWith(AndroidJUnit4::class)
 class NotAppCompatThemeTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<NotAppCompatActivity>()

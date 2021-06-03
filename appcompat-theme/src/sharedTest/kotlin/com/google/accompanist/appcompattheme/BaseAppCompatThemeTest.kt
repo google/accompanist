@@ -33,26 +33,13 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.toFontFamily
-import androidx.test.filters.LargeTest
 import androidx.test.filters.SdkSuppress
 import com.google.accompanist.appcompattheme.test.R
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
 
-@LargeTest
-@RunWith(Parameterized::class)
-class AppCompatThemeTest<T : AppCompatActivity>(activityClass: Class<T>) {
-    companion object {
-        @JvmStatic
-        @Parameterized.Parameters
-        fun activities() = listOf(
-            DarkAppCompatActivity::class.java,
-            LightAppCompatActivity::class.java
-        )
-    }
+abstract class BaseAppCompatThemeTest<T : AppCompatActivity>(activityClass: Class<T>) {
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule(activityClass)
@@ -126,20 +113,8 @@ class AppCompatThemeTest<T : AppCompatActivity>(activityClass: Class<T>) {
     }
 
     @Test
-    @SdkSuppress(maxSdkVersion = 22) // On API 21-22, the family is loaded with only the 400 font
-    fun type_rubik_family_api21() = composeTestRule.setContent {
-        val rubik = Font(R.font.rubik, FontWeight.W400).toFontFamily()
-
-        WithThemeOverlay(R.style.ThemeOverlay_RubikFontFamily) {
-            AppCompatTheme {
-                MaterialTheme.typography.assertFontFamily(expected = rubik)
-            }
-        }
-    }
-
-    @Test
     @SdkSuppress(minSdkVersion = 23) // XML font families with >1 fonts are only supported on API 23+
-    fun type_rubik_family_api23() = composeTestRule.setContent {
+    open fun type_rubik_family_api23() = composeTestRule.setContent {
         val rubik = FontFamily(
             Font(R.font.rubik_300, FontWeight.W300),
             Font(R.font.rubik_400, FontWeight.W400),
@@ -165,7 +140,7 @@ class AppCompatThemeTest<T : AppCompatActivity>(activityClass: Class<T>) {
     }
 }
 
-private fun Typography.assertFontFamily(expected: FontFamily) {
+internal fun Typography.assertFontFamily(expected: FontFamily) {
     assertEquals(expected, h1.fontFamily)
     assertEquals(expected, h2.fontFamily)
     assertEquals(expected, h3.fontFamily)
