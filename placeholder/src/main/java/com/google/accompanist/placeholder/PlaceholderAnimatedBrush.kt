@@ -34,14 +34,31 @@ object PlaceholderDefaults {
     val PlaceholderHighlightColor = Color.Gray.copy(alpha = 0.3f)
 }
 
+/**
+ * A class which provides a brush to paint placeholder based on progress.
+ */
 sealed class PlaceholderAnimatedBrush {
 
-    abstract fun initialValue(): Float
+    /**
+     * A minimum value of animation's progress range.
+     */
+    abstract fun minimumProgress(): Float
 
-    abstract fun targetValue(): Float
+    /**
+     * A maximum value of animation's progress range.
+     */
+    abstract fun maximumProgress(): Float
 
+    /**
+     * An [AnimationSpec] that loops infinitely.
+     */
     abstract fun animationSpec(): InfiniteRepeatableSpec<Float>
 
+    /**
+     * Create a [Brush] along to the given [progress].
+     *
+     * @param progress this value lies in the specified range [minimumProgress]..[maximumProgress].
+     */
     abstract fun brush(progress: Float): Brush
 
     companion object {
@@ -108,9 +125,9 @@ internal class Fade(
     private val animationSpec: InfiniteRepeatableSpec<Float>
 ) : PlaceholderAnimatedBrush() {
 
-    override fun initialValue(): Float = 0f
+    override fun minimumProgress(): Float = 0f
 
-    override fun targetValue(): Float = 1f
+    override fun maximumProgress(): Float = 1f
 
     override fun animationSpec(): InfiniteRepeatableSpec<Float> = animationSpec
 
@@ -142,9 +159,9 @@ internal class Shimmer(
     private val animationSpec: InfiniteRepeatableSpec<Float>
 ) : PlaceholderAnimatedBrush() {
 
-    override fun initialValue(): Float = 0f - offset
+    override fun minimumProgress(): Float = 0f - offset
 
-    override fun targetValue(): Float = 1f + offset
+    override fun maximumProgress(): Float = 1f + offset
 
     override fun animationSpec(): InfiniteRepeatableSpec<Float> = animationSpec
 

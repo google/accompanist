@@ -4,8 +4,8 @@ package com.google.accompanist.placeholder {
   public abstract sealed class PlaceholderAnimatedBrush {
     method public abstract androidx.compose.animation.core.InfiniteRepeatableSpec<java.lang.Float> animationSpec();
     method public abstract androidx.compose.ui.graphics.Brush brush(float progress);
-    method public abstract float initialValue();
-    method public abstract float targetValue();
+    method public abstract float maximumProgress();
+    method public abstract float minimumProgress();
     field public static final com.google.accompanist.placeholder.PlaceholderAnimatedBrush.Companion Companion;
   }
 

@@ -88,8 +88,8 @@ fun Modifier.placeholder(
 ) {
     val infiniteTransition = rememberInfiniteTransition()
     val progress by infiniteTransition.animateFloat(
-        initialValue = animatedBrush.initialValue(),
-        targetValue = animatedBrush.targetValue(),
+        initialValue = animatedBrush.minimumProgress(),
+        targetValue = animatedBrush.maximumProgress(),
         animationSpec = animatedBrush.animationSpec()
     )
     remember {
