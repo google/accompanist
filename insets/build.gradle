@@ -103,9 +103,6 @@ dependencies {
     androidTestImplementation libs.truth
     testImplementation libs.truth
 
-    androidTestImplementation libs.testparameterinjection
-    testImplementation libs.testparameterinjection
-
     androidTestImplementation libs.compose.ui.test.junit4
     testImplementation libs.compose.ui.test.junit4
 
