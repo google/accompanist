@@ -39,7 +39,7 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.glide.rememberGlidePainter
-import com.google.accompanist.placeholder.fadeBrush
+import com.google.accompanist.placeholder.PlaceholderAnimatedBrush.Companion.fade
 import com.google.accompanist.placeholder.placeholder
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
@@ -100,7 +100,7 @@ private fun Sample() {
                         text = "Text",
                         childModifier = Modifier.placeholder(
                             visible = refreshing,
-                            animatedBrush = fadeBrush(),
+                            animatedBrush = fade(),
                             shape = RoundedCornerShape(4.dp)
                         )
                     )

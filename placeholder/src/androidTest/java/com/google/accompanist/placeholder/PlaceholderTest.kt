@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.test.filters.LargeTest
 import androidx.test.filters.SdkSuppress
 import com.google.accompanist.imageloading.test.assertPixels
+import com.google.accompanist.placeholder.PlaceholderAnimatedBrush.Companion.shimmer
 import com.google.common.truth.Truth.assertThat
 import org.junit.After
 import org.junit.Before
@@ -117,12 +118,12 @@ class PlaceholderTest {
 
     @Test
     fun placeholder_inspectableParameter2() {
-        val modifier = Modifier.placeholder(true, shimmerBrush()) as InspectableValue
+        val modifier = Modifier.placeholder(true, shimmer()) as InspectableValue
         assertThat(modifier.nameFallback).isEqualTo("placeholder")
         assertThat(modifier.valueOverride).isEqualTo(true)
         assertThat(modifier.inspectableElements.asIterable()).containsExactly(
             ValueElement("visible", true),
-            ValueElement("animatedBrush", shimmerBrush()),
+            ValueElement("animatedBrush", shimmer()),
             ValueElement("shape", RectangleShape)
         )
     }

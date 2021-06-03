@@ -19,11 +19,13 @@ package com.google.accompanist.placeholder
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.DrawModifier
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.RectangleShape
@@ -46,7 +48,7 @@ fun Modifier.placeholder(
     visible: Boolean,
     color: Color = PlaceholderDefaults.PlaceholderColor,
     shape: Shape = RectangleShape
-) = takeIf { visible.not() } ?: composed(
+): Modifier = takeIf { visible.not() } ?: composed(
     inspectorInfo = debugInspectorInfo {
         name = "placeholder"
         value = visible
@@ -75,7 +77,7 @@ fun Modifier.placeholder(
     visible: Boolean,
     animatedBrush: PlaceholderAnimatedBrush,
     shape: Shape = RectangleShape
-) = takeIf { visible.not() } ?: composed(
+): Modifier = takeIf { visible.not() } ?: composed(
     inspectorInfo = debugInspectorInfo {
         name = "placeholder"
         value = visible
@@ -90,17 +92,23 @@ fun Modifier.placeholder(
         targetValue = animatedBrush.targetValue(),
         animationSpec = animatedBrush.animationSpec()
     )
-    PlaceholderModifier(
-        brush = animatedBrush.brush(progress),
-        shape = shape
-    )
+    remember {
+        PlaceholderModifier(
+            brush = animatedBrush,
+            shape = shape
+        )
+    }.apply {
+        this.progress = progress
+    }
 }
 
 private class PlaceholderModifier(
     private val color: Color? = null,
-    private val brush: Brush? = null,
+    private val brush: PlaceholderAnimatedBrush? = null,
     private val shape: Shape
 ) : DrawModifier {
+
+    var progress: Float by mutableStateOf(0f)
 
     // naive cache outline calculation if size is the same
     private var lastSize: Size? = null
@@ -118,7 +126,7 @@ private class PlaceholderModifier(
 
     private fun ContentDrawScope.drawRect() {
         color?.let { drawRect(color = it) }
-        brush?.let { drawRect(brush = it) }
+        brush?.let { drawRect(brush = it.brush(progress)) }
     }
 
     private fun ContentDrawScope.drawOutline() {
@@ -126,23 +134,9 @@ private class PlaceholderModifier(
             lastOutline.takeIf { size == lastSize && layoutDirection == lastLayoutDirection }
                 ?: shape.createOutline(size, layoutDirection, this)
         color?.let { drawOutline(outline, color = color) }
-        brush?.let { drawOutline(outline, brush = brush) }
+        brush?.let { drawOutline(outline, brush = brush.brush(progress)) }
         lastOutline = outline
         lastSize = size
-    }
-
-    override fun hashCode(): Int {
-        var result = color?.hashCode() ?: 0
-        result = 31 * result + (brush?.hashCode() ?: 0)
-        result = 31 * result + shape.hashCode()
-        return result
-    }
-
-    override fun equals(other: Any?): Boolean {
-        val otherModifier = other as? PlaceholderModifier ?: return false
-        return color == otherModifier.color &&
-            brush == otherModifier.brush &&
-            shape == otherModifier.shape
     }
 
     override fun toString(): String =

@@ -18,6 +18,8 @@ package com.google.accompanist.placeholder
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.test.junit4.createComposeRule
+import com.google.accompanist.placeholder.PlaceholderAnimatedBrush.Companion.fade
+import com.google.accompanist.placeholder.PlaceholderAnimatedBrush.Companion.shimmer
 import com.google.common.truth.Truth.assertThat
 import org.junit.Rule
 import org.junit.Test
@@ -32,50 +34,50 @@ class PlaceholderAnimatedBrushTest {
     @Test
     fun fadeBrush_colorsDefault() {
         composeTestRule.setContent {
-            fadeBrush()
+            fade()
         }
     }
 
     @Test
     fun shimmerBrush_colorsDefault() {
         composeTestRule.setContent {
-            shimmerBrush()
+            shimmer()
         }
     }
 
     @Test
     fun fadeBrush_colorsCustom() {
         composeTestRule.setContent {
-            fadeBrush(initialColor = Color.Red, targetColor = Color.Blue)
+            fade(initialColor = Color.Red, targetColor = Color.Blue)
         }
     }
 
     @Test
     fun shimmerBrush_colorsCustom() {
         composeTestRule.setContent {
-            shimmerBrush(color = Color.Red, highlightColor = Color.Blue)
+            shimmer(color = Color.Red, highlightColor = Color.Blue)
         }
     }
 
     @Test
     fun fadeBrush_equalsDefault() {
-        assertThat(fadeBrush()).isEqualTo(fadeBrush())
+        assertThat(fade()).isEqualTo(fade())
     }
 
     @Test
     fun shimmerBrush_equalsDefault() {
-        assertThat(shimmerBrush()).isEqualTo(shimmerBrush())
+        assertThat(shimmer()).isEqualTo(shimmer())
     }
 
     @Test
     fun fadeBrush_equalsCustom() {
-        assertThat(fadeBrush(initialColor = Color.Red, targetColor = Color.Blue))
-            .isEqualTo(fadeBrush(initialColor = Color.Red, targetColor = Color.Blue))
+        assertThat(fade(initialColor = Color.Red, targetColor = Color.Blue))
+            .isEqualTo(fade(initialColor = Color.Red, targetColor = Color.Blue))
     }
 
     @Test
     fun shimmerBrush_equalsCustom() {
-        assertThat(shimmerBrush(color = Color.Red, highlightColor = Color.Blue))
-            .isEqualTo(shimmerBrush(color = Color.Red, highlightColor = Color.Blue))
+        assertThat(shimmer(color = Color.Red, highlightColor = Color.Blue))
+            .isEqualTo(shimmer(color = Color.Red, highlightColor = Color.Blue))
     }
 }

@@ -18,7 +18,6 @@ package com.google.accompanist.placeholder
 
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.InfiniteRepeatableSpec
-import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.tween
@@ -27,65 +26,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.lerp
 
-internal object PlaceholderDefaults {
+/**
+ * Contains some default values used by [PlaceholderAnimatedBrush].
+ */
+object PlaceholderDefaults {
     val PlaceholderColor = Color.Gray.copy(alpha = 0.5f)
     val PlaceholderHighlightColor = Color.Gray.copy(alpha = 0.3f)
-}
-
-/**
- * Creates a [Fade] brush with the given initial and target colors.
- *
- * @sample com.google.accompanist.sample.placeholder.PlaceholderFadeSample
- *
- * @param initialColor initial color of the fade.
- * @param targetColor target color of the fade.
- * @param animationSpec the [AnimationSpec] to configure the animation.
- */
-fun fadeBrush(
-    initialColor: Color = PlaceholderDefaults.PlaceholderColor,
-    targetColor: Color = PlaceholderDefaults.PlaceholderHighlightColor,
-    animationSpec: InfiniteRepeatableSpec<Float> = infiniteRepeatable(
-        animation = tween(
-            delayMillis = 0,
-            durationMillis = 500,
-            easing = LinearEasing
-        ),
-        repeatMode = RepeatMode.Reverse
-    ),
-): PlaceholderAnimatedBrush {
-    return Fade(
-        initialColor = initialColor,
-        targetColor = targetColor,
-        animationSpec = animationSpec,
-    )
-}
-
-/**
- * Creates a [Shimmer] brush with a highlight color over the given color.
- *
- * @sample com.google.accompanist.sample.placeholder.PlaceholderShimmerSample
- *
- * @param color
- * @param highlightColor
- * @param animationSpec the [AnimationSpec] to configure the animation.
- */
-fun shimmerBrush(
-    color: Color = PlaceholderDefaults.PlaceholderColor,
-    highlightColor: Color = PlaceholderDefaults.PlaceholderHighlightColor,
-    animationSpec: InfiniteRepeatableSpec<Float> = infiniteRepeatable(
-        animation = tween(
-            delayMillis = 500,
-            durationMillis = 500,
-            easing = LinearEasing
-        ),
-        repeatMode = RepeatMode.Restart
-    ),
-): PlaceholderAnimatedBrush {
-    return Shimmer(
-        color = color,
-        highlightColor = highlightColor,
-        animationSpec = animationSpec
-    )
 }
 
 sealed class PlaceholderAnimatedBrush {
@@ -97,6 +43,63 @@ sealed class PlaceholderAnimatedBrush {
     abstract fun animationSpec(): InfiniteRepeatableSpec<Float>
 
     abstract fun brush(progress: Float): Brush
+
+    companion object {
+
+        /**
+         * Creates a [Fade] brush with the given initial and target colors.
+         *
+         * @sample com.google.accompanist.sample.placeholder.PlaceholderFadeSample
+         *
+         * @param initialColor initial color of the fade.
+         * @param targetColor target color of the fade.
+         * @param animationSpec the [AnimationSpec] to configure the animation.
+         */
+        fun fade(
+            initialColor: Color = PlaceholderDefaults.PlaceholderColor,
+            targetColor: Color = PlaceholderDefaults.PlaceholderHighlightColor,
+            animationSpec: InfiniteRepeatableSpec<Float> = infiniteRepeatable(
+                animation = tween(
+                    delayMillis = 0,
+                    durationMillis = 500
+                ),
+                repeatMode = RepeatMode.Reverse
+            ),
+        ): PlaceholderAnimatedBrush {
+            return Fade(
+                initialColor = initialColor,
+                targetColor = targetColor,
+                animationSpec = animationSpec,
+            )
+        }
+
+        /**
+         * Creates a [Shimmer] brush with a highlight color over the given color.
+         *
+         * @sample com.google.accompanist.sample.placeholder.PlaceholderShimmerSample
+         *
+         * @param color
+         * @param highlightColor
+         * @param animationSpec the [AnimationSpec] to configure the animation.
+         */
+        fun shimmer(
+            color: Color = PlaceholderDefaults.PlaceholderColor,
+            highlightColor: Color = PlaceholderDefaults.PlaceholderHighlightColor,
+            animationSpec: InfiniteRepeatableSpec<Float> = infiniteRepeatable(
+                animation = tween(
+                    delayMillis = 500,
+                    durationMillis = 500
+                ),
+                repeatMode = RepeatMode.Restart
+            ),
+        ): PlaceholderAnimatedBrush {
+            return Shimmer(
+                color = color,
+                highlightColor = highlightColor,
+                animationSpec = animationSpec
+            )
+        }
+    }
 }
 
 internal class Fade(

@@ -6,11 +6,20 @@ package com.google.accompanist.placeholder {
     method public abstract androidx.compose.ui.graphics.Brush brush(float progress);
     method public abstract float initialValue();
     method public abstract float targetValue();
+    field public static final com.google.accompanist.placeholder.PlaceholderAnimatedBrush.Companion Companion;
   }
 
-  public final class PlaceholderAnimatedBrushKt {
-    method public static com.google.accompanist.placeholder.PlaceholderAnimatedBrush fadeBrush-r_0hINw(optional long initialColor, optional long targetColor, optional androidx.compose.animation.core.InfiniteRepeatableSpec<java.lang.Float> animationSpec);
-    method public static com.google.accompanist.placeholder.PlaceholderAnimatedBrush shimmerBrush-r_0hINw(optional long color, optional long highlightColor, optional androidx.compose.animation.core.InfiniteRepeatableSpec<java.lang.Float> animationSpec);
+  public static final class PlaceholderAnimatedBrush.Companion {
+    method public com.google.accompanist.placeholder.PlaceholderAnimatedBrush fade-r_0hINw(optional long initialColor, optional long targetColor, optional androidx.compose.animation.core.InfiniteRepeatableSpec<java.lang.Float> animationSpec);
+    method public com.google.accompanist.placeholder.PlaceholderAnimatedBrush shimmer-r_0hINw(optional long color, optional long highlightColor, optional androidx.compose.animation.core.InfiniteRepeatableSpec<java.lang.Float> animationSpec);
+  }
+
+  public final class PlaceholderDefaults {
+    method public long getPlaceholderColor-0d7_KjU();
+    method public long getPlaceholderHighlightColor-0d7_KjU();
+    property public final long PlaceholderColor;
+    property public final long PlaceholderHighlightColor;
+    field public static final com.google.accompanist.placeholder.PlaceholderDefaults INSTANCE;
   }
 
   public final class PlaceholderKt {

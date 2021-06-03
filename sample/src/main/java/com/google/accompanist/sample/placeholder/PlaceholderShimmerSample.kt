@@ -39,8 +39,8 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.glide.rememberGlidePainter
+import com.google.accompanist.placeholder.PlaceholderAnimatedBrush.Companion.shimmer
 import com.google.accompanist.placeholder.placeholder
-import com.google.accompanist.placeholder.shimmerBrush
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
@@ -100,7 +100,7 @@ private fun Sample() {
                         text = "Text",
                         childModifier = Modifier.placeholder(
                             visible = refreshing,
-                            animatedBrush = shimmerBrush(),
+                            animatedBrush = shimmer(),
                             shape = RoundedCornerShape(4.dp)
                         )
                     )
