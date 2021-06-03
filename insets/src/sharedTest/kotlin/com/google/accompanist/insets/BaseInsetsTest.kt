@@ -26,8 +26,8 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.imageloading.test.combineWithParameters
-import com.google.accompanist.imageloading.test.parameterizedParams
+import com.google.accompanist.internal.test.combineWithParameters
+import com.google.accompanist.internal.test.parameterizedParams
 import com.google.common.truth.Truth.assertThat
 import org.junit.Rule
 import org.junit.Test

@@ -37,8 +37,8 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.height
 import androidx.compose.ui.unit.width
-import com.google.accompanist.imageloading.test.combineWithParameters
-import com.google.accompanist.imageloading.test.parameterizedParams
+import com.google.accompanist.internal.test.combineWithParameters
+import com.google.accompanist.internal.test.parameterizedParams
 import com.google.common.truth.Truth.assertThat
 
 @OptIn(ExperimentalPagerApi::class) // Pager is currently experimental
