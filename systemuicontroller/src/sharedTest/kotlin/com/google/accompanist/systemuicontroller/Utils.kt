@@ -17,7 +17,9 @@
 package com.google.accompanist.systemuicontroller
 
 import android.app.Activity
+import android.os.Looper
 import androidx.test.core.app.ActivityScenario
+import com.google.common.truth.Truth.assertThat
 import java.util.concurrent.TimeoutException
 
 fun <A : Activity, T : Any> ActivityScenario<A>.withActivity(
@@ -31,6 +33,11 @@ fun <A : Activity, T : Any> ActivityScenario<A>.withActivity(
 }
 
 fun waitUntil(timeoutMillis: Long = 1_000, condition: () -> Boolean) {
+    if (Looper.getMainLooper() == Looper.myLooper()) {
+        assertThat(condition()).isTrue()
+        return
+    }
+
     val startTime = System.nanoTime()
     while (!condition()) {
         // Let Android run measure, draw and in general any other async operations.
