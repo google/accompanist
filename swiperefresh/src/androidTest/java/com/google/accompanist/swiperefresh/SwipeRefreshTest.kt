@@ -86,6 +86,7 @@ class SwipeRefreshTest {
         // Set refreshing to true and assert that the indicator is displayed
         state.isRefreshing = true
 
+        rule.waitForIdle()
         indicatorNode.assertIsDisplayed()
     }
 
