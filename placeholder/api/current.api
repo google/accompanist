@@ -9,8 +9,8 @@ package com.google.accompanist.placeholder {
   }
 
   public final class PlaceholderAnimatedBrushKt {
-    method @androidx.compose.runtime.Composable public static com.google.accompanist.placeholder.PlaceholderAnimatedBrush fadeBrush-r_0hINw(optional long initialColor, optional long targetColor, optional androidx.compose.animation.core.InfiniteRepeatableSpec<java.lang.Float> animationSpec);
-    method @androidx.compose.runtime.Composable public static com.google.accompanist.placeholder.PlaceholderAnimatedBrush shimmerBrush-r_0hINw(optional long color, optional long highlightColor, optional androidx.compose.animation.core.InfiniteRepeatableSpec<java.lang.Float> animationSpec);
+    method public static com.google.accompanist.placeholder.PlaceholderAnimatedBrush fadeBrush-r_0hINw(optional long initialColor, optional long targetColor, optional androidx.compose.animation.core.InfiniteRepeatableSpec<java.lang.Float> animationSpec);
+    method public static com.google.accompanist.placeholder.PlaceholderAnimatedBrush shimmerBrush-r_0hINw(optional long color, optional long highlightColor, optional androidx.compose.animation.core.InfiniteRepeatableSpec<java.lang.Float> animationSpec);
   }
 
   public final class PlaceholderKt {
