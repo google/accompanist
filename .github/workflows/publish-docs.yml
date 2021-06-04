@@ -22,17 +22,6 @@ jobs:
         with:
           java-version: 11
 
-      - name: Generate cache key
-        run: ./checksum.sh checksum.txt
-
-      - uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches/modules-*
-            ~/.gradle/caches/jars-*
-            ~/.gradle/caches/build-cache-*
-          key: gradle-${{ hashFiles('checksum.txt') }}
-
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
@@ -43,6 +32,14 @@ jobs:
           python3 -m pip install --upgrade pip
           python3 -m pip install mkdocs
           python3 -m pip install mkdocs-material
+
+      - uses: burrunan/gradle-cache-action@v1
+        name: Setup Gradle cache
+        with:
+          save-local-build-cache: true
+          save-gradle-dependencies-cache: true
+          gradle-dependencies-cache-key: |
+            gradle/libs.versions.toml
 
       - name: Generate docs
         run: ./generate_docs.sh
