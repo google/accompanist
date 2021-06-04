@@ -19,6 +19,10 @@ package com.google.accompanist.placeholder
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
@@ -35,7 +39,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.unit.dp
 import androidx.test.filters.LargeTest
 import androidx.test.filters.SdkSuppress
-import com.google.accompanist.imageloading.test.assertPixels
+import com.google.accompanist.placeholder.PlaceholderAnimatedBrush.Companion.fade
 import com.google.accompanist.placeholder.PlaceholderAnimatedBrush.Companion.shimmer
 import com.google.common.truth.Truth.assertThat
 import org.junit.After
@@ -66,42 +70,218 @@ class PlaceholderTest {
 
     @Test
     @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
-    fun placeholder_hideContentIfVisible() {
+    fun placeholder_switchVisible1() {
+        var visible by mutableStateOf(true)
+
         composeTestRule.setContent {
             Box(
                 Modifier
                     .size(128.dp)
                     .background(color = Color.Black)
-                    .placeholder(visible = true, color = Color.Red)
+                    .placeholder(visible = visible, color = Color.Red)
                     .testTag(contentTag)
             )
         }
+
         composeTestRule.onNodeWithTag(contentTag)
             .assertIsDisplayed()
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
             .captureToImage()
             .assertPixels(Color.Red)
-    }
 
-    @Test
-    @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
-    fun placeholder_showsContentIfNotVisible() {
-        composeTestRule.setContent {
-            Box(
-                Modifier
-                    .size(128.dp)
-                    .background(color = Color.Black)
-                    .placeholder(visible = false, color = Color.Red)
-                    .testTag(contentTag)
-            )
-        }
+        visible = false
+
         composeTestRule.onNodeWithTag(contentTag)
             .assertIsDisplayed()
             .assertWidthIsEqualTo(128.dp)
             .assertHeightIsEqualTo(128.dp)
             .captureToImage()
             .assertPixels(Color.Black)
+    }
+
+    @Test
+    @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
+    fun placeholder_switchVisible2() {
+        var visible by mutableStateOf(true)
+
+        composeTestRule.setContent {
+            Box(
+                Modifier
+                    .size(128.dp)
+                    .background(color = Color.Black)
+                    .placeholder(
+                        visible = visible,
+                        animatedBrush = shimmer(Color.Red, Color.Red)
+                    )
+                    .testTag(contentTag)
+            )
+        }
+
+        composeTestRule.onNodeWithTag(contentTag)
+            .assertIsDisplayed()
+            .assertWidthIsEqualTo(128.dp)
+            .assertHeightIsEqualTo(128.dp)
+            .captureToImage()
+            .assertPixels(Color.Red)
+
+        visible = false
+
+        composeTestRule.onNodeWithTag(contentTag)
+            .assertIsDisplayed()
+            .assertWidthIsEqualTo(128.dp)
+            .assertHeightIsEqualTo(128.dp)
+            .captureToImage()
+            .assertPixels(Color.Black)
+    }
+
+    @Test
+    @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
+    fun placeholder_switchColor() {
+        var color by mutableStateOf(Color.Red)
+
+        composeTestRule.setContent {
+            Box(
+                Modifier
+                    .size(128.dp)
+                    .background(color = Color.Black)
+                    .placeholder(visible = true, color = color)
+                    .testTag(contentTag)
+            )
+        }
+
+        composeTestRule.onNodeWithTag(contentTag)
+            .assertIsDisplayed()
+            .assertWidthIsEqualTo(128.dp)
+            .assertHeightIsEqualTo(128.dp)
+            .captureToImage()
+            .assertPixels(Color.Red)
+
+        color = Color.Blue
+
+        composeTestRule.onNodeWithTag(contentTag)
+            .assertIsDisplayed()
+            .assertWidthIsEqualTo(128.dp)
+            .assertHeightIsEqualTo(128.dp)
+            .captureToImage()
+            .assertPixels(Color.Blue)
+    }
+
+    @Test
+    @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
+    fun placeholder_switchAnimatedBrush() {
+        var animatedBrush by mutableStateOf(shimmer(Color.Red, Color.Red))
+
+        composeTestRule.setContent {
+            Box(
+                Modifier
+                    .size(128.dp)
+                    .background(color = Color.Black)
+                    .placeholder(
+                        visible = true,
+                        animatedBrush = animatedBrush
+                    )
+                    .testTag(contentTag)
+            )
+        }
+
+        composeTestRule.onNodeWithTag(contentTag)
+            .assertIsDisplayed()
+            .assertWidthIsEqualTo(128.dp)
+            .assertHeightIsEqualTo(128.dp)
+            .captureToImage()
+            .assertPixels(Color.Red)
+
+        animatedBrush = fade(Color.Blue, Color.Blue)
+
+        composeTestRule.onNodeWithTag(contentTag)
+            .assertIsDisplayed()
+            .assertWidthIsEqualTo(128.dp)
+            .assertHeightIsEqualTo(128.dp)
+            .captureToImage()
+            .assertPixels(Color.Blue)
+    }
+
+    @Test
+    @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
+    fun placeholder_switchShape1() {
+        var shape by mutableStateOf(RectangleShape)
+
+        composeTestRule.setContent {
+            Box(
+                Modifier
+                    .size(128.dp)
+                    .background(color = Color.Black)
+                    .placeholder(
+                        visible = true,
+                        color = Color.Red,
+                        shape = shape
+                    )
+                    .testTag(contentTag)
+            )
+        }
+
+        composeTestRule.onNodeWithTag(contentTag)
+            .assertIsDisplayed()
+            .assertWidthIsEqualTo(128.dp)
+            .assertHeightIsEqualTo(128.dp)
+            .captureToImage()
+            .assertPixels(Color.Red)
+
+        shape = CircleShape
+
+        composeTestRule.onNodeWithTag(contentTag)
+            .assertIsDisplayed()
+            .assertWidthIsEqualTo(128.dp)
+            .assertHeightIsEqualTo(128.dp)
+            .captureToImage()
+            .assertShape(
+                density = composeTestRule.density,
+                shape = CircleShape,
+                shapeColor = Color.Red,
+                backgroundColor = Color.Black
+            )
+    }
+
+    @Test
+    @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
+    fun placeholder_switchShape2() {
+        var shape by mutableStateOf(RectangleShape)
+
+        composeTestRule.setContent {
+            Box(
+                Modifier
+                    .size(128.dp)
+                    .background(color = Color.Black)
+                    .placeholder(
+                        visible = true,
+                        animatedBrush = shimmer(Color.Red, Color.Red),
+                        shape = shape
+                    )
+                    .testTag(contentTag)
+            )
+        }
+
+        composeTestRule.onNodeWithTag(contentTag)
+            .assertIsDisplayed()
+            .assertWidthIsEqualTo(128.dp)
+            .assertHeightIsEqualTo(128.dp)
+            .captureToImage()
+            .assertPixels(Color.Red)
+
+        shape = CircleShape
+
+        composeTestRule.onNodeWithTag(contentTag)
+            .assertIsDisplayed()
+            .assertWidthIsEqualTo(128.dp)
+            .assertHeightIsEqualTo(128.dp)
+            .captureToImage()
+            .assertShape(
+                density = composeTestRule.density,
+                shape = CircleShape,
+                shapeColor = Color.Red,
+                backgroundColor = Color.Black
+            )
     }
 
     @Test
