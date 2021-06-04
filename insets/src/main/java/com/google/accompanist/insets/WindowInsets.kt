@@ -217,31 +217,14 @@ class ViewWindowInsetObserver(private val view: View) {
     /**
      * Start observing window insets from [view]. Make sure to call [stop] if required.
      *
-     * @param consumeWindowInsets Whether to consume any [WindowInsetsCompat]s which are
-     * dispatched to the host view. Defaults to `true`.
-     */
-    fun start(
-        consumeWindowInsets: Boolean = true
-    ): WindowInsets = RootWindowInsets().also {
-        observeInto(
-            windowInsets = it,
-            consumeWindowInsets = consumeWindowInsets,
-            windowInsetsAnimationsEnabled = false
-        )
-    }
-
-    /**
-     * Start observing window insets from [view]. Make sure to call [stop] if required.
-     *
      * @param windowInsetsAnimationsEnabled Whether to listen for [WindowInsetsAnimation]s, such as
      * IME animations.
      * @param consumeWindowInsets Whether to consume any [WindowInsetsCompat]s which are
      * dispatched to the host view. Defaults to `true`.
      */
-    @ExperimentalAnimatedInsets
     fun start(
-        windowInsetsAnimationsEnabled: Boolean,
         consumeWindowInsets: Boolean = true,
+        windowInsetsAnimationsEnabled: Boolean = true,
     ): WindowInsets = RootWindowInsets().also {
         observeInto(
             windowInsets = it,
@@ -340,51 +323,15 @@ class ViewWindowInsetObserver(private val view: View) {
  * If you're using this in fragments, you may wish to take a look at
  * [ViewWindowInsetObserver] for a more optimal solution.
  *
- * @param consumeWindowInsets Whether to consume any [WindowInsetsCompat]s which are dispatched to
- * the host view. Defaults to `true`.
- */
-@Composable
-fun ProvideWindowInsets(
-    consumeWindowInsets: Boolean = true,
-    content: @Composable () -> Unit,
-) {
-    val view = LocalView.current
-    val windowInsets = RootWindowInsets()
-
-    DisposableEffect(view) {
-        val observer = ViewWindowInsetObserver(view)
-        observer.observeInto(
-            windowInsets = windowInsets,
-            consumeWindowInsets = consumeWindowInsets,
-            windowInsetsAnimationsEnabled = false
-        )
-        onDispose {
-            observer.stop()
-        }
-    }
-
-    CompositionLocalProvider(LocalWindowInsets provides windowInsets) {
-        content()
-    }
-}
-
-/**
- * Applies any [WindowInsetsCompat] values to [LocalWindowInsets], which are then available
- * within [content].
- *
- * If you're using this in fragments, you may wish to take a look at
- * [ViewWindowInsetObserver] for a more optimal solution.
- *
  * @param windowInsetsAnimationsEnabled Whether to listen for [WindowInsetsAnimation]s, such as
  * IME animations.
  * @param consumeWindowInsets Whether to consume any [WindowInsetsCompat]s which are dispatched to
  * the host view. Defaults to `true`.
  */
-@ExperimentalAnimatedInsets
 @Composable
 fun ProvideWindowInsets(
-    windowInsetsAnimationsEnabled: Boolean,
     consumeWindowInsets: Boolean = true,
+    windowInsetsAnimationsEnabled: Boolean = true,
     content: @Composable () -> Unit
 ) {
     val view = LocalView.current
