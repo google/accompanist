@@ -165,10 +165,6 @@ Scaffold(
 
 See the [API docs](../api/insets-ui/insets-ui/com.google.accompanist.insets.ui/) for a list of the other layouts provided in the library.
 
-## 🚧 Experimental
-
-The features below are experimental, and require developers to [opt-in](https://kotlinlang.org/docs/reference/opt-in-requirements.html).
-
 ### Animated Insets support
 
 === "Info"
@@ -211,6 +207,10 @@ If you're using the animation insets support for IME/keyboard animations, you al
 ```
 
 The default value of `windowSoftInputMode` _should_ work, but Compose does not currently set the flags necessary (see [here](https://issuetracker.google.com/154101484)).
+
+## 🚧 Experimental
+
+The features below are experimental, and require developers to [opt-in](https://kotlinlang.org/docs/reference/opt-in-requirements.html).
 
 ### Controlling the IME (on-screen keyboard)
 
