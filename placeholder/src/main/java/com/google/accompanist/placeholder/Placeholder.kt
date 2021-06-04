@@ -92,7 +92,7 @@ fun Modifier.placeholder(
         targetValue = animatedBrush.maximumProgress(),
         animationSpec = animatedBrush.animationSpec()
     )
-    remember {
+    remember(animatedBrush, shape) {
         PlaceholderModifier(
             brush = animatedBrush,
             shape = shape
