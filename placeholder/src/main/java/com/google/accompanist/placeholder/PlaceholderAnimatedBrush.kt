@@ -37,7 +37,7 @@ object PlaceholderDefaults {
 /**
  * A class which provides a brush to paint placeholder based on progress.
  */
-sealed class PlaceholderAnimatedBrush {
+abstract class PlaceholderAnimatedBrush {
 
     /**
      * A minimum value of animation's progress range.
