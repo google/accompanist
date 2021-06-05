@@ -236,12 +236,9 @@ class PlaceholderTest {
             .assertWidthIsEqualTo(20.dp)
             .assertHeightIsEqualTo(20.dp)
             .captureToImage()
-            .assertShape(
-                density = composeTestRule.density,
-                shape = CircleShape,
-                shapeColor = Color.Red,
-                backgroundColor = Color.Black
-            )
+            // There is no stable API to assert the shape.
+            // So check the color of the vertices simply.
+            .assertPixelsOfVertices(Color.Black)
     }
 
     @Test
@@ -277,12 +274,9 @@ class PlaceholderTest {
             .assertWidthIsEqualTo(20.dp)
             .assertHeightIsEqualTo(20.dp)
             .captureToImage()
-            .assertShape(
-                density = composeTestRule.density,
-                shape = CircleShape,
-                shapeColor = Color.Red,
-                backgroundColor = Color.Black
-            )
+            // There is no stable API to assert the shape.
+            // So check the color of the vertices simply.
+            .assertPixelsOfVertices(Color.Black)
     }
 
     @Test
