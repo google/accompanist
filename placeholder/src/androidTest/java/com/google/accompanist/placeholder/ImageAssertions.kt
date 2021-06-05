@@ -29,29 +29,18 @@ import androidx.compose.ui.graphics.addOutline
 import androidx.compose.ui.graphics.asAndroidPath
 import androidx.compose.ui.graphics.toPixelMap
 import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import com.google.common.truth.Truth.assertThat
 import org.junit.Assert
 import kotlin.math.roundToInt
 
-/**
- * Assert that all of the pixels in this image as of the [expected] color.
- */
-fun ImageBitmap.assertPixels(expected: Color, tolerance: Float = 0.001f) {
-    toPixelMap().buffer.forEach { pixel ->
-        val color = Color(pixel)
-        assertThat(color.red).isWithin(tolerance).of(expected.red)
-        assertThat(color.green).isWithin(tolerance).of(expected.green)
-        assertThat(color.blue).isWithin(tolerance).of(expected.blue)
-        assertThat(color.alpha).isWithin(tolerance).of(expected.alpha)
-    }
-}
+// Copied from AndroidX Compose test-utils:
+// https://github.com/androidx/androidx/blob/androidx-main/compose/test-utils/src/androidMain/kotlin/androidx/compose/testutils/ImageAssertions.android.kt
 
 /**
  * Asserts that the color at a specific pixel in the bitmap at ([x], [y]) is [expected].
  */
-fun PixelMap.assertPixelColor(expected: Color, x: Int, y: Int, tolerance: Float = 0.001f) {
+fun PixelMap.assertPixelColor(expected: Color, x: Int, y: Int, tolerance: Float = 0.02f) {
     val color = this[x, y]
     assertThat(color.red).isWithin(tolerance).of(expected.red)
     assertThat(color.green).isWithin(tolerance).of(expected.green)
@@ -176,48 +165,11 @@ fun ImageBitmap.assertShape(
     }
 }
 
-/**
- * Asserts that the bitmap is fully occupied by the given [shape] with the color [shapeColor]
- * without [horizontalPadding] and [verticalPadding] from the sides. The padded area is expected
- * to have [backgroundColor].
- *
- * @param density current [Density] or the screen
- * @param horizontalPadding the symmetrical padding to be applied from both left and right sides
- * @param verticalPadding the symmetrical padding to be applied from both top and bottom sides
- * @param backgroundColor the color of the background
- * @param shapeColor the color of the shape
- * @param shape defines the [Shape]
- * @param shapeOverlapPixelCount The size of the border area from the shape outline to leave it
- * untested as it is likely anti-aliased. The default is 1 pixel
- */
-fun ImageBitmap.assertShape(
-    density: Density,
-    horizontalPadding: Dp,
-    verticalPadding: Dp,
-    backgroundColor: Color,
-    shapeColor: Color,
-    shape: Shape = RectangleShape,
-    shapeOverlapPixelCount: Float = 1.0f
-) {
-    val fullHorizontalPadding = with(density) { horizontalPadding.toPx() * 2 }
-    val fullVerticalPadding = with(density) { verticalPadding.toPx() * 2 }
-    return assertShape(
-        density = density,
-        shape = shape,
-        shapeColor = shapeColor,
-        backgroundColor = backgroundColor,
-        backgroundShape = RectangleShape,
-        shapeSizeX = width.toFloat() - fullHorizontalPadding,
-        shapeSizeY = height.toFloat() - fullVerticalPadding,
-        shapeOverlapPixelCount = shapeOverlapPixelCount
-    )
-}
-
 private infix fun Float.until(until: Float): IntRange {
     val from = this.roundToInt()
     val to = until.roundToInt()
     if (from <= Int.MIN_VALUE) return IntRange.EMPTY
-    return from..(to - 1)
+    return from until to
 }
 
 private fun pixelCloserToCenter(

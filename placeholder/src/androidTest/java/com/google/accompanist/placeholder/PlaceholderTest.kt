@@ -39,6 +39,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.unit.dp
 import androidx.test.filters.LargeTest
 import androidx.test.filters.SdkSuppress
+import com.google.accompanist.imageloading.test.assertPixels
 import com.google.accompanist.placeholder.PlaceholderAnimatedBrush.Companion.fade
 import com.google.accompanist.placeholder.PlaceholderAnimatedBrush.Companion.shimmer
 import com.google.common.truth.Truth.assertThat
@@ -210,7 +211,7 @@ class PlaceholderTest {
         composeTestRule.setContent {
             Box(
                 Modifier
-                    .size(128.dp)
+                    .size(20.dp)
                     .background(color = Color.Black)
                     .placeholder(
                         visible = true,
@@ -223,8 +224,8 @@ class PlaceholderTest {
 
         composeTestRule.onNodeWithTag(contentTag)
             .assertIsDisplayed()
-            .assertWidthIsEqualTo(128.dp)
-            .assertHeightIsEqualTo(128.dp)
+            .assertWidthIsEqualTo(20.dp)
+            .assertHeightIsEqualTo(20.dp)
             .captureToImage()
             .assertPixels(Color.Red)
 
@@ -232,8 +233,8 @@ class PlaceholderTest {
 
         composeTestRule.onNodeWithTag(contentTag)
             .assertIsDisplayed()
-            .assertWidthIsEqualTo(128.dp)
-            .assertHeightIsEqualTo(128.dp)
+            .assertWidthIsEqualTo(20.dp)
+            .assertHeightIsEqualTo(20.dp)
             .captureToImage()
             .assertShape(
                 density = composeTestRule.density,
@@ -251,7 +252,7 @@ class PlaceholderTest {
         composeTestRule.setContent {
             Box(
                 Modifier
-                    .size(128.dp)
+                    .size(20.dp)
                     .background(color = Color.Black)
                     .placeholder(
                         visible = true,
@@ -264,8 +265,8 @@ class PlaceholderTest {
 
         composeTestRule.onNodeWithTag(contentTag)
             .assertIsDisplayed()
-            .assertWidthIsEqualTo(128.dp)
-            .assertHeightIsEqualTo(128.dp)
+            .assertWidthIsEqualTo(20.dp)
+            .assertHeightIsEqualTo(20.dp)
             .captureToImage()
             .assertPixels(Color.Red)
 
@@ -273,8 +274,8 @@ class PlaceholderTest {
 
         composeTestRule.onNodeWithTag(contentTag)
             .assertIsDisplayed()
-            .assertWidthIsEqualTo(128.dp)
-            .assertHeightIsEqualTo(128.dp)
+            .assertWidthIsEqualTo(20.dp)
+            .assertHeightIsEqualTo(20.dp)
             .captureToImage()
             .assertShape(
                 density = composeTestRule.density,
