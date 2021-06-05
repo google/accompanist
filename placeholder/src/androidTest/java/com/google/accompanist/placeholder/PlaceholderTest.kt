@@ -113,7 +113,7 @@ class PlaceholderTest {
                     .background(color = Color.Black)
                     .placeholder(
                         visible = visible,
-                        animatedBrush = shimmer(Color.Red, Color.Red)
+                        animatedBrush = Solid(Color.Red)
                     )
                     .testTag(contentTag)
             )
@@ -171,7 +171,7 @@ class PlaceholderTest {
     @Test
     @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
     fun placeholder_switchAnimatedBrush() {
-        var animatedBrush by mutableStateOf(shimmer(Color.Red, Color.Red))
+        var animatedBrush by mutableStateOf(Solid(Color.Red))
 
         composeTestRule.setContent {
             Box(
@@ -193,7 +193,7 @@ class PlaceholderTest {
             .captureToImage()
             .assertPixels(Color.Red)
 
-        animatedBrush = fade(Color.Blue, Color.Blue)
+        animatedBrush = Solid(Color.Blue)
 
         composeTestRule.onNodeWithTag(contentTag)
             .assertIsDisplayed()
@@ -256,7 +256,7 @@ class PlaceholderTest {
                     .background(color = Color.Black)
                     .placeholder(
                         visible = true,
-                        animatedBrush = shimmer(Color.Red, Color.Red),
+                        animatedBrush = Solid(Color.Red),
                         shape = shape
                     )
                     .testTag(contentTag)
@@ -305,6 +305,18 @@ class PlaceholderTest {
         assertThat(modifier.inspectableElements.asIterable()).containsExactly(
             ValueElement("visible", true),
             ValueElement("animatedBrush", shimmer()),
+            ValueElement("shape", RectangleShape)
+        )
+    }
+
+    @Test
+    fun placeholder_inspectableParameter3() {
+        val modifier = Modifier.placeholder(true, fade()) as InspectableValue
+        assertThat(modifier.nameFallback).isEqualTo("placeholder")
+        assertThat(modifier.valueOverride).isEqualTo(true)
+        assertThat(modifier.inspectableElements.asIterable()).containsExactly(
+            ValueElement("visible", true),
+            ValueElement("animatedBrush", fade()),
             ValueElement("shape", RectangleShape)
         )
     }

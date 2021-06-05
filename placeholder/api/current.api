@@ -1,7 +1,8 @@
 // Signature format: 4.0
 package com.google.accompanist.placeholder {
 
-  public abstract sealed class PlaceholderAnimatedBrush {
+  public abstract class PlaceholderAnimatedBrush {
+    ctor public PlaceholderAnimatedBrush();
     method public abstract androidx.compose.animation.core.InfiniteRepeatableSpec<java.lang.Float> animationSpec();
     method public abstract androidx.compose.ui.graphics.Brush brush(float progress);
     method public abstract float maximumProgress();
