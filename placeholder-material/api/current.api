@@ -1,0 +1,21 @@
+// Signature format: 4.0
+package com.google.accompanist.placeholder.material {
+
+  public final class PlaceholderDefaults {
+    method @androidx.compose.runtime.Composable public long color-8_81llA(optional long backgroundColor);
+    method @androidx.compose.runtime.Composable public long fadeHighlightColor-8_81llA(optional long backgroundColor);
+    method @androidx.compose.runtime.Composable public long shimmerHighlightColor-8_81llA(optional long backgroundColor);
+    field public static final com.google.accompanist.placeholder.material.PlaceholderDefaults INSTANCE;
+  }
+
+  public final class PlaceholderHighlightKt {
+    method @androidx.compose.runtime.Composable public static com.google.accompanist.placeholder.PlaceholderHighlight fade(com.google.accompanist.placeholder.PlaceholderHighlight.Companion, optional androidx.compose.animation.core.InfiniteRepeatableSpec<java.lang.Float> animationSpec);
+    method @androidx.compose.runtime.Composable public static com.google.accompanist.placeholder.PlaceholderHighlight shimmer(com.google.accompanist.placeholder.PlaceholderHighlight.Companion, optional androidx.compose.animation.core.InfiniteRepeatableSpec<java.lang.Float> animationSpec);
+  }
+
+  public final class PlaceholderKt {
+    method public static androidx.compose.ui.Modifier placeholder(androidx.compose.ui.Modifier, boolean visible, optional com.google.accompanist.placeholder.PlaceholderHighlight? highlight);
+  }
+
+}
+

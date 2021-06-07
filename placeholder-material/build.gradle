@@ -75,15 +75,13 @@ android {
 }
 
 dependencies {
-    implementation libs.compose.foundation.foundation
-    implementation libs.compose.ui.util
+    implementation libs.compose.material.material
+    api project(':placeholder')
     implementation libs.napier
 
     // ======================
     // Test dependencies
     // ======================
-
-    androidTestImplementation project(':imageloading-testutils')
 
     androidTestImplementation libs.junit
     androidTestImplementation libs.truth
