@@ -27,9 +27,15 @@ import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.placeholder
 
 /**
- * Contains some default values used by [Modifier.placeholder] and [PlaceholderHighlight].
+ * Contains default values used by [Modifier.placeholder] and [PlaceholderHighlight].
  */
 object PlaceholderDefaults {
+    /**
+     * Returns the value used as the the `color` parameter value on [Modifier.placeholder].
+     *
+     * @param backgroundColor The current background color of the layout. Defaults to
+     * `MaterialTheme.colors.surface`.
+     */
     @Composable
     fun color(
         backgroundColor: Color = MaterialTheme.colors.surface
@@ -37,6 +43,13 @@ object PlaceholderDefaults {
         return contentColorFor(backgroundColor).copy(alpha = 0.1f).compositeOver(backgroundColor)
     }
 
+    /**
+     * Returns the value used as the the `highlightColor` parameter value of
+     * [PlaceholderHighlight.Companion.fade].
+     *
+     * @param backgroundColor The current background color of the layout. Defaults to
+     * `MaterialTheme.colors.surface`.
+     */
     @Composable
     fun fadeHighlightColor(
         backgroundColor: Color = MaterialTheme.colors.surface
@@ -44,6 +57,13 @@ object PlaceholderDefaults {
         return backgroundColor.copy(alpha = 0.3f)
     }
 
+    /**
+     * Returns the value used as the the `highlightColor` parameter value of
+     * [PlaceholderHighlight.Companion.shimmer].
+     *
+     * @param backgroundColor The current background color of the layout. Defaults to
+     * `MaterialTheme.colors.surface`.
+     */
     @Composable
     fun shimmerHighlightColor(
         backgroundColor: Color = MaterialTheme.colors.surface
