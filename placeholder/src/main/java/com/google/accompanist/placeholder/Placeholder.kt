@@ -16,8 +16,12 @@
 
 package com.google.accompanist.placeholder
 
+import androidx.compose.animation.core.InfiniteRepeatableSpec
+import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,6 +37,30 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.LayoutDirection
+/**
+ * Contains default values used by [Modifier.placeholder] and [PlaceholderHighlight].
+ */
+object PlaceholderDefaults {
+    /**
+     * The default [InfiniteRepeatableSpec] to use for [fade].
+     */
+    val fadeAnimationSpec: InfiniteRepeatableSpec<Float> by lazy {
+        infiniteRepeatable(
+            animation = tween(delayMillis = 200, durationMillis = 600),
+            repeatMode = RepeatMode.Reverse,
+        )
+    }
+
+    /**
+     * The default [InfiniteRepeatableSpec] to use for [shimmer].
+     */
+    val shimmerAnimationSpec: InfiniteRepeatableSpec<Float> by lazy {
+        infiniteRepeatable(
+            animation = tween(durationMillis = 1700, delayMillis = 200),
+            repeatMode = RepeatMode.Restart
+        )
+    }
+}
 
 /**
  * Draws some skeleton UI which is typically used whilst content is 'loading'.
@@ -42,6 +70,10 @@ import androidx.compose.ui.unit.LayoutDirection
  *
  * You can provide a [PlaceholderHighlight] which runs an highlight animation on the placeholder.
  * The [shimmer] and [fade] implementations are provided for easy usage.
+ *
+ * You can find more information on the pattern at the Material Theming
+ * [Placeholder UI](https://material.io/design/communication/launch-screen.html#placeholder-ui)
+ * guidelines.
  *
  * @param visible whether the placeholder should be visible or not.
  * @param color the color used to draw the placeholder UI.
@@ -70,18 +102,19 @@ fun Modifier.placeholder(
     var lastOutline: Outline? by remember { mutableStateOf(null) }
     var progress: Float by remember { mutableStateOf(0f) }
 
-    progress = if (highlight != null) {
+    // Run the optional animation spec and update the progress
+    progress = highlight?.animationSpec?.let { spec ->
         val infiniteTransition = rememberInfiniteTransition()
         infiniteTransition.animateFloat(
             initialValue = 0f,
             targetValue = 1f,
-            animationSpec = highlight.animationSpec,
+            animationSpec = spec,
         ).value
-    } else 0f
+    } ?: 0f
 
     remember(color, shape, highlight) {
         drawWithContent {
-            // Draw normal composable content behind
+            // Draw normal composable content first
             drawContent()
 
             if (shape === RectangleShape) {
