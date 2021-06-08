@@ -93,14 +93,34 @@ jobs:
             ~/.gradle/caches/build-cache-*
           key: gradle-${{ hashFiles('checksum.txt') }}
 
+      # Cache the clean boot AVD
+      - uses: actions/cache@v2
+        id: avd-cache
+        with:
+          path: ~/.android/avd/*
+          key: avd-${{ matrix.api-level }}
+
       - name: Build tests
         run: ./gradlew assembleDebugAndroidTest --scan
 
+      # Run a clean boot emulator with snapshot enabled, if the emulator snapshot cache failed
+      - name: Run clean-boot emulator
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          profile: Galaxy Nexus
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
+          script: exit 0
+
+      # Now run the emulator again, but with snapshot saving disabled (but reading enabled), and
+      # run the test
       - name: Run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
           profile: Galaxy Nexus
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
           script: |
             adb logcat > logcat.txt &
             ./gradlew connectedCheck --scan --continue -Pandroid.testInstrumentationRunnerArguments.numShards=3 -Pandroid.testInstrumentationRunnerArguments.shardIndex=${{ matrix.shard }}
