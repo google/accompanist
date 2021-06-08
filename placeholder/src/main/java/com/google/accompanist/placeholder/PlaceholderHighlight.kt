@@ -41,7 +41,7 @@ interface PlaceholderHighlight {
     /**
      * Return a [Brush] to draw for the given [progress] and [size].
      *
-     * @param progress this animated progress in the range of 0f..1f.
+     * @param progress the current animated progress in the range of 0f..1f.
      * @param size The size of the current layout to draw in.
      */
     fun brush(
@@ -52,7 +52,7 @@ interface PlaceholderHighlight {
     /**
      * Return the desired alpha value used for drawing the [Brush] returned from [brush].
      *
-     * @param progress this animated progress in the range of 0f..1f.
+     * @param progress the current animated progress in the range of 0f..1f.
      */
     @FloatRange(from = 0.0, to = 1.0)
     fun alpha(progress: Float): Float
