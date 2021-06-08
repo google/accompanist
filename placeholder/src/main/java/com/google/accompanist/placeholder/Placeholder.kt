@@ -133,7 +133,7 @@ fun Modifier.placeholder(
                     size == lastSize && layoutDirection == lastLayoutDirection
                 } ?: shape.createOutline(size, layoutDirection, this)
 
-                // Draw the initial background color
+                // Draw the placeholder color
                 drawOutline(outline = outline, color = color)
 
                 if (highlight != null) {
