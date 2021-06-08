@@ -76,7 +76,7 @@ object PlaceholderDefaults {
  * Draws some skeleton UI which is typically used whilst content is 'loading'.
  *
  * To customize the color and shape of the placeholder, you can use the foundation version of
- * [Modifier.placeholder], along with the values provided bu [PlaceholderDefaults].
+ * [Modifier.placeholder], along with the values provided by [PlaceholderDefaults].
  *
  * You can provide a [PlaceholderHighlight] which runs an highlight animation on the placeholder.
  * The [shimmer] and [fade] implementations are provided for easy usage.
