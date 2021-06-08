@@ -72,6 +72,7 @@ class SwipeRefreshTest {
     }
 
     @Test
+    @Ignore("https://issuetracker.google.com/issues/185814751")
     fun indicatorVisibility() {
         lateinit var state: SwipeRefreshState
 
