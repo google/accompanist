@@ -93,9 +93,6 @@ jobs:
             ~/.gradle/caches/build-cache-*
           key: gradle-${{ hashFiles('checksum.txt') }}
 
-      - name: Build tests
-        run: ./gradlew assembleDebugAndroidTest --scan
-
       - name: Run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
