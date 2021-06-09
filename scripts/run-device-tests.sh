@@ -40,6 +40,14 @@ for i in "$@"; do
     LOG_FILE="${i#*=}"
     shift
     ;;
+    --run-affected)
+    RUN_AFFECTED=true
+    shift
+    ;;
+    --affected-base-ref=*)
+    BASE_REF="${i#*=}"
+    shift
+    ;;
     *)
     echo "Unknown option"
     exit 1
@@ -50,6 +58,15 @@ done
 # Start logcat if we have a file to log to
 if [[ ! -z "$LOG_FILE" ]]; then
   adb logcat > $LOG_FILE &
+fi
+
+# If we're set to only run affected test, update the Gradle task
+if [[ ! -z "$RUN_AFFECTED" ]]; then
+  TASK="runAffectedAndroidTests -Paffected_module_detector.enable"
+  # If we have a base branch set, add the Gradle property
+  if [[ ! -z "$BASE_REF" ]]; then
+    TASK="$TASK -Paffected_base_ref=$BASE_REF"
+  fi
 fi
 
 SHARD_OPTS=""

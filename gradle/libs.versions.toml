@@ -56,3 +56,5 @@ androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidxt
 junit = "junit:junit:4.13"
 truth = "com.google.truth:truth:1.1.2"
 testparameterinjection = "com.google.testparameterinjector:test-parameter-injector:1.3"
+
+affectedmoduledetector = "com.dropbox.affectedmoduledetector:affectedmoduledetector:0.1.2"

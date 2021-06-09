@@ -70,6 +70,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          # 0 == fetch all history, which is needed for affected module detection
+          fetch-depth: '0'
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
@@ -93,15 +96,13 @@ jobs:
             ~/.gradle/caches/build-cache-*
           key: gradle-${{ hashFiles('checksum.txt') }}
 
-      - name: Build tests
-        run: ./gradlew assembleDebugAndroidTest --scan
-
       - name: Run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
           profile: Galaxy Nexus
-          script: ./scripts/run-device-tests.sh --log-file=logcat.txt --shard-index=${{ matrix.shard }} --shard-count=3 
+          # We run all affected tests of the PR (or commit)
+          script: ./scripts/run-device-tests.sh --log-file=logcat.txt --run-affected --affected-base=ref=$BASE_REF
 
       - name: Clean secrets
         if: always()
@@ -119,7 +120,9 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: test-results-${{ matrix.api-level }}-${{ matrix.shard }}
-          path: "**/build/outputs/*/connected/*.xml"
+          path: |
+            "**/build/outputs/*/connected/**"
+            "**/build/reports/**"
 
   deploy:
     if: github.event_name == 'push' # only deploy for pushed commits (not PRs)
