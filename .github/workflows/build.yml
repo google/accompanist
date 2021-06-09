@@ -101,7 +101,7 @@ jobs:
           api-level: ${{ matrix.api-level }}
           profile: Galaxy Nexus
           # We run all affected tests of the PR (or commit)
-          script: ./scripts/run-device-tests.sh --log-file=logcat.txt --run-affected --affected-base=ref=$BASE_REF
+          script: ./scripts/run-device-tests.sh --log-file=logcat.txt --run-affected --affected-base-ref=$BASE_REF
 
       - name: Clean secrets
         if: always()
