@@ -61,7 +61,9 @@ affectedModuleDetector {
     String baseRef = findProperty("affected_base_ref")
     // If we have a base ref to diff against, extract the branch name and use it
     if (baseRef != null && !baseRef.isEmpty()) {
-        specifiedBranch = baseRef.split('/').last()
+        // Remove the prefix from the head.
+        // TODO: need to support other types of git refs
+        specifiedBranch = baseRef.replace('refs/heads/', '')
         compareFrom = "SpecifiedBranchCommit"
     } else {
         // Otherwise we use the previous commit. This is mostly used for commits to main.
