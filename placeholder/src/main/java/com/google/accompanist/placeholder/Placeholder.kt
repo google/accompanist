@@ -77,14 +77,14 @@ object PlaceholderDefaults {
  *
  * @param visible whether the placeholder should be visible or not.
  * @param color the color used to draw the placeholder UI.
+ * @param shape desired shape of the placeholder. Defaults to [RectangleShape].
  * @param highlight optional highlight animation.
- * @param shape desired shape of the placeholder.
  */
 fun Modifier.placeholder(
     visible: Boolean,
     color: Color,
-    highlight: PlaceholderHighlight? = null,
     shape: Shape = RectangleShape,
+    highlight: PlaceholderHighlight? = null,
 ): Modifier = takeIf { visible.not() } ?: composed(
     inspectorInfo = debugInspectorInfo {
         name = "placeholder"

@@ -22,7 +22,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.compositeOver
+import androidx.compose.ui.graphics.isSpecified
 import com.google.accompanist.placeholder.PlaceholderDefaults
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.placeholder
@@ -90,16 +92,22 @@ fun PlaceholderDefaults.shimmerHighlightColor(
  * @sample com.google.accompanist.sample.placeholder.PlaceholderShimmerSample
  *
  * @param visible whether the placeholder should be visible or not.
+ * @param color the color used to draw the placeholder UI. If [Color.Unspecified] is provided,
+ * the placeholder will use [PlaceholderDefaults.color].
+ * @param shape desired shape of the placeholder. If null is provided the placeholder
+ * will use the small shape set in [MaterialTheme.shapes].
  * @param highlight optional highlight animation.
  */
 fun Modifier.placeholder(
     visible: Boolean,
+    color: Color = Color.Unspecified,
+    shape: Shape? = null,
     highlight: PlaceholderHighlight? = null,
 ): Modifier = composed {
     Modifier.placeholder(
         visible = visible,
-        color = PlaceholderDefaults.color(),
+        color = if (color.isSpecified) color else PlaceholderDefaults.color(),
+        shape = shape ?: MaterialTheme.shapes.small,
         highlight = highlight,
-        shape = MaterialTheme.shapes.small,
     )
 }

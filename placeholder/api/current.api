@@ -26,7 +26,7 @@ package com.google.accompanist.placeholder {
   }
 
   public final class PlaceholderKt {
-    method public static androidx.compose.ui.Modifier placeholder-o6kjb5s(androidx.compose.ui.Modifier, boolean visible, long color, optional com.google.accompanist.placeholder.PlaceholderHighlight? highlight, optional androidx.compose.ui.graphics.Shape shape);
+    method public static androidx.compose.ui.Modifier placeholder-ryuEAks(androidx.compose.ui.Modifier, boolean visible, long color, optional androidx.compose.ui.graphics.Shape shape, optional com.google.accompanist.placeholder.PlaceholderHighlight? highlight);
   }
 
 }

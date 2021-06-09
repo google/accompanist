@@ -9,7 +9,7 @@ package com.google.accompanist.placeholder.material {
   public final class PlaceholderKt {
     method @androidx.compose.runtime.Composable public static long color-8irKtDA(com.google.accompanist.placeholder.PlaceholderDefaults, optional long backgroundColor, optional long contentColor, optional float contentAlpha);
     method @androidx.compose.runtime.Composable public static long fadeHighlightColor-OEFTRvM(com.google.accompanist.placeholder.PlaceholderDefaults, optional long backgroundColor, optional float alpha);
-    method public static androidx.compose.ui.Modifier placeholder(androidx.compose.ui.Modifier, boolean visible, optional com.google.accompanist.placeholder.PlaceholderHighlight? highlight);
+    method public static androidx.compose.ui.Modifier placeholder-Uo-R7fc(androidx.compose.ui.Modifier, boolean visible, optional long color, optional androidx.compose.ui.graphics.Shape? shape, optional com.google.accompanist.placeholder.PlaceholderHighlight? highlight);
     method @androidx.compose.runtime.Composable public static long shimmerHighlightColor-OEFTRvM(com.google.accompanist.placeholder.PlaceholderDefaults, optional long backgroundColor, optional float alpha);
   }
 
