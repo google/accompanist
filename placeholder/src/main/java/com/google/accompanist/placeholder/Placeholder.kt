@@ -35,6 +35,8 @@ import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawOutline
+import androidx.compose.ui.graphics.drawscope.ContentDrawScope
+import androidx.compose.ui.node.Ref
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.LayoutDirection
 /**
@@ -97,9 +99,12 @@ fun Modifier.placeholder(
 ) {
     // TODO: fade the placeholder in and out
 
-    var lastSize: Size? by remember { mutableStateOf(null) }
-    var lastLayoutDirection: LayoutDirection? by remember { mutableStateOf(null) }
-    var lastOutline: Outline? by remember { mutableStateOf(null) }
+    // Values used for caching purposes
+    val lastSize = remember { Ref<Size>() }
+    val lastLayoutDirection = remember { Ref<LayoutDirection>() }
+    val lastOutline = remember { Ref<Outline>() }
+
+    // The current animation progress
     var progress: Float by remember { mutableStateOf(0f) }
 
     // Run the optional animation spec and update the progress
@@ -120,37 +125,72 @@ fun Modifier.placeholder(
             if (shape === RectangleShape) {
                 // shortcut to avoid Outline calculation and allocation
                 // Draw the initial background color
-                drawRect(color = color)
-
-                if (highlight != null) {
-                    drawRect(
-                        brush = highlight.brush(progress, size),
-                        alpha = highlight.alpha(progress),
-                    )
-                }
+                drawRectPlaceholder(
+                    color = color,
+                    highlight = highlight,
+                    progress = progress
+                )
             } else {
-                val outline = lastOutline.takeIf {
-                    size == lastSize && layoutDirection == lastLayoutDirection
-                } ?: shape.createOutline(size, layoutDirection, this)
-
-                // Draw the placeholder color
-                drawOutline(outline = outline, color = color)
-
-                if (highlight != null) {
-                    drawOutline(
-                        outline = outline,
-                        brush = highlight.brush(progress, size),
-                        alpha = highlight.alpha(progress),
-                    )
-                }
-
                 // Keep track of our outline
-                lastOutline = outline
+                lastOutline.value = drawOutlinePlaceholder(
+                    shape = shape,
+                    color = color,
+                    highlight = highlight,
+                    progress = progress,
+                    lastOutline = lastOutline.value,
+                    lastLayoutDirection = lastLayoutDirection.value,
+                    lastSize = lastSize.value,
+                )
             }
 
             // Keep track of the last size & layout direction
-            lastSize = size
-            lastLayoutDirection = layoutDirection
+            lastSize.value = size
+            lastLayoutDirection.value = layoutDirection
         }
     }
+}
+
+private fun ContentDrawScope.drawRectPlaceholder(
+    color: Color,
+    highlight: PlaceholderHighlight?,
+    progress: Float,
+) {
+    // shortcut to avoid Outline calculation and allocation
+    // Draw the initial background color
+    drawRect(color = color)
+
+    if (highlight != null) {
+        drawRect(
+            brush = highlight.brush(progress, size),
+            alpha = highlight.alpha(progress),
+        )
+    }
+}
+
+private fun ContentDrawScope.drawOutlinePlaceholder(
+    shape: Shape,
+    color: Color,
+    highlight: PlaceholderHighlight?,
+    progress: Float,
+    lastOutline: Outline?,
+    lastLayoutDirection: LayoutDirection?,
+    lastSize: Size?,
+): Outline {
+    val outline = lastOutline.takeIf {
+        size == lastSize && layoutDirection == lastLayoutDirection
+    } ?: shape.createOutline(size, layoutDirection, this)
+
+    // Draw the placeholder color
+    drawOutline(outline = outline, color = color)
+
+    if (highlight != null) {
+        drawOutline(
+            outline = outline,
+            brush = highlight.brush(progress, size),
+            alpha = highlight.alpha(progress),
+        )
+    }
+
+    // Return the outline we used
+    return outline
 }
