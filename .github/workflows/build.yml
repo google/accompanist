@@ -56,7 +56,7 @@ jobs:
   test:
     runs-on: macOS-latest
     needs: build
-    timeout-minutes: 70
+    timeout-minutes: 45
     
     strategy:
       # Allow tests to continue on other devices if they fail on one device.
@@ -101,9 +101,7 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           profile: Galaxy Nexus
-          script: |
-            adb logcat > logcat.txt &
-            ./gradlew connectedCheck --scan --continue -Pandroid.testInstrumentationRunnerArguments.numShards=3 -Pandroid.testInstrumentationRunnerArguments.shardIndex=${{ matrix.shard }}
+          script: ./scripts/run-device-tests.sh --log-file=logcat.txt --shard-index=${{ matrix.shard }} --shard-count=3 
 
       - name: Clean secrets
         if: always()
