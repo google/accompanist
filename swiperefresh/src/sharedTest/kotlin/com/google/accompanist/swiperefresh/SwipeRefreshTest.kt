@@ -75,6 +75,26 @@ class SwipeRefreshTest {
     }
 
     @Test
+    @Ignore("https://issuetracker.google.com/issues/185814751")
+    fun indicatorVisibility() {
+        lateinit var state: SwipeRefreshState
+
+        rule.setContent {
+            state = rememberSwipeRefreshState(false)
+            SwipeRefreshTestContent(state) {}
+        }
+
+        // Assert that the indicator is not displayed
+        indicatorNode.assertIsNotDisplayed()
+
+        // Set refreshing to true and assert that the indicator is displayed
+        state.isRefreshing = true
+
+        rule.waitForIdle()
+        indicatorNode.assertIsDisplayed()
+    }
+
+    @Test
     fun refreshingInitially() {
         rule.setContent {
             SwipeRefreshTestContent(rememberSwipeRefreshState(true)) {}
