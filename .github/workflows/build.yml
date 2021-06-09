@@ -63,7 +63,6 @@ jobs:
       fail-fast: false
       matrix:
         api-level: [22, 26, 28, 29]
-        shard: [0, 1, 2]
 
     env:
       TERM: dumb
@@ -112,14 +111,14 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: logs-${{ matrix.api-level }}-${{ matrix.shard }}
+          name: logs-${{ matrix.api-level }}
           path: logcat.txt
 
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: test-results-${{ matrix.api-level }}-${{ matrix.shard }}
+          name: test-results-${{ matrix.api-level }}
           path: |
             "**/build/outputs/*/connected/**"
             "**/build/reports/**"
