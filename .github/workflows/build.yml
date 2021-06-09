@@ -56,7 +56,7 @@ jobs:
   test:
     runs-on: macOS-latest
     needs: build
-    timeout-minutes: 45
+    timeout-minutes: 70
     
     strategy:
       # Allow tests to continue on other devices if they fail on one device.
