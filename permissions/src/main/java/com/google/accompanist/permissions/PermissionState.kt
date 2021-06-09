@@ -23,6 +23,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,6 +39,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import kotlinx.coroutines.channels.Channel
 
+/**
+ * Creates a [PermissionState] that is remembered across compositions.
+ *
+ * It's recommended that apps exercise the permissions workflow as described in the
+ * [documentation](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions).
+ *
+ * @param permission the permission to control and observe.
+ */
 @Composable
 fun ActivityResultRegistry.rememberPermissionState(
     permission: String
@@ -45,7 +54,7 @@ fun ActivityResultRegistry.rememberPermissionState(
     val permissionRequested = rememberSaveable { mutableStateOf(false) }
     val permissionState = rememberPermissionGrantedState(permission)
     val (shouldShowRationaleState, refreshShouldShowRationaleState) =
-        produceShouldShowRationaleState(permission)
+        rememberShouldShowRationaleState(permission)
 
     val launcher = rememberActivityResultLauncher(ActivityResultContracts.RequestPermission()) {
         permissionRequested.value = true
@@ -65,6 +74,22 @@ fun ActivityResultRegistry.rememberPermissionState(
     }
 }
 
+/**
+ * A state object that can be hoisted to control and observe permission status changes.
+ *
+ * In most cases, this will be created via [rememberPermissionState].
+ *
+ * @param permission the permission to control and observe.
+ * @param refreshShouldShowRationaleState action to refresh whether or not a rationale should be
+ * presented to the user to explain why the permission should be granted.
+ * @param launcher [ActivityResultLauncher] to ask for this permission to the user.
+ * @param hasPermissionState [State] that represents if the permission is granted.
+ * @param shouldShowRationaleState [State] that represents if the user should be presented with a
+ * rationale.
+ * @param permissionRequestedState [State] that represents if the permission has been requested
+ * previously.
+ */
+@Stable
 class PermissionState(
     val permission: String,
     private val refreshShouldShowRationaleState: () -> Unit,
@@ -73,14 +98,48 @@ class PermissionState(
     shouldShowRationaleState: State<Boolean>,
     permissionRequestedState: State<Boolean>
 ) {
+    /**
+     * When `true`, the user has granted the permission.
+     */
     val hasPermission by hasPermissionState
+
+    /**
+     * When `true`, the user should be presented with a rationale.
+     */
     val shouldShowRationale by shouldShowRationaleState
+
+    /**
+     * When `true`, the permission request has been done previously.
+     */
     val permissionRequested by permissionRequestedState
 
+    /**
+     * Request the permission to the user.
+     *
+     * This triggers a system dialog that asks the user to grant or revoke the permission.
+     * Note that this dialog might not appear on the screen if the user doesn't want to be asked
+     * again or has denied the permission multiple times.
+     * This behavior varies depending on the Android level API.
+     */
     fun launchPermissionRequest() = launcher.launch(permission)
+
+    /**
+     * Check if the rationale should be presented to the user.
+     *
+     * This triggers a state update in the [shouldShowRationale] property.
+     */
     fun refreshShouldShowRationale() = refreshShouldShowRationaleState()
 }
 
+/**
+ * Creates a [MutableState] that represents if the user has granted the permission.
+ *
+ * This state is remembered across compositions and is updated every time the `lifecycle` of the
+ * current [LocalLifecycleOwner] receives the `ON_START` lifecycle event. This check is crucial
+ * when the user manually grants the permission on the Settings screen while the app is in the
+ * background. There's no need to check when the permission is revoked from the Settings screen
+ * as that triggers a process restart.
+ */
 @Composable
 private fun rememberPermissionGrantedState(permission: String): MutableState<Boolean> {
     val context = LocalContext.current
@@ -111,8 +170,11 @@ private fun rememberPermissionGrantedState(permission: String): MutableState<Boo
     return permissionState
 }
 
+/**
+ * Creates a [ShouldShowRationaleState] that is remembered across recompositions.
+ */
 @Composable
-private fun produceShouldShowRationaleState(permission: String): ShouldShowRationaleState {
+private fun rememberShouldShowRationaleState(permission: String): ShouldShowRationaleState {
     val currentActivity by rememberUpdatedState(LocalContext.current.findActivity())
     val shouldShow: () -> Boolean = {
         ActivityCompat.shouldShowRequestPermissionRationale(currentActivity, permission)
@@ -128,9 +190,17 @@ private fun produceShouldShowRationaleState(permission: String): ShouldShowRatio
             value = shouldShow()
         }
     }
-    return ShouldShowRationaleState(result) { refreshChannel.trySend(Unit) }
+    return remember {
+        ShouldShowRationaleState(result) { refreshChannel.trySend(Unit) }
+    }
 }
 
+/**
+ * A state object that is used to check if the user should be presented with a rationale for a
+ * certain permission and a lambda to refresh and update the state on demand.
+ *
+ * @param
+ */
 private data class ShouldShowRationaleState(
     val result: State<Boolean>,
     val onRefresh: () -> Unit

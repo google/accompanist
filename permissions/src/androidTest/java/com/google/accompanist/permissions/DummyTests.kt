@@ -18,8 +18,39 @@ package com.google.accompanist.permissions
 
 import org.junit.Test
 
-class DummyTest {
+/**
+ * Dummy test to avoid the "No tests found error" when running in Build.VERSION.SDK_INT < 23
+ */
+class DummyTests {
 
     @Test
     fun dummyTestToAvoidNoTestsFoundErrorInAPI22AndBelow() = Unit
+
+    // More dummy tests to help with sharding: https://github.com/android/android-test/issues/973
+    @Test
+    fun dummy1() = Unit
+
+    @Test
+    fun dummy2() = Unit
+
+    @Test
+    fun dummy3() = Unit
+
+    @Test
+    fun dummy4() = Unit
+
+    @Test
+    fun dummy5() = Unit
+
+    @Test
+    fun dummy6() = Unit
+
+    @Test
+    fun dummy7() = Unit
+
+    @Test
+    fun dummy8() = Unit
+
+    @Test
+    fun dummy9() = Unit
 }

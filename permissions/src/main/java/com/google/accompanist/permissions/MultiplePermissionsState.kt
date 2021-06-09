@@ -20,6 +20,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.ActivityResultRegistry
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -72,8 +73,9 @@ fun ActivityResultRegistry.rememberMultiplePermissionsState(
     }
 }
 
+@Stable
 class MultiplePermissionsState(
-    private val permissions: List<PermissionState>,
+    val permissions: List<PermissionState>,
     private val launcher: ActivityResultLauncher<Array<String>>,
     revokedPermissionsState: State<List<PermissionState>>,
     permissionRequestedState: State<Boolean>,
