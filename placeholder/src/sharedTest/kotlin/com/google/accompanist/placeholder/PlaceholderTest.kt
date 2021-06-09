@@ -44,19 +44,19 @@ import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.unit.dp
-import androidx.test.filters.LargeTest
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import com.google.accompanist.imageloading.test.assertPixels
+import com.google.accompanist.internal.test.IgnoreOnRobolectric
 import com.google.common.truth.Truth.assertThat
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 
-@LargeTest
-@RunWith(JUnit4::class)
+@RunWith(AndroidJUnit4::class)
 class PlaceholderTest {
 
     @get:Rule
@@ -76,6 +76,7 @@ class PlaceholderTest {
 
     @Test
     @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
+    @Category(IgnoreOnRobolectric::class) // captureToImage doesn't work on Robolectric
     fun placeholder_switchVisible1() {
         var visible by mutableStateOf(true)
 
@@ -108,6 +109,7 @@ class PlaceholderTest {
 
     @Test
     @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
+    @Category(IgnoreOnRobolectric::class) // captureToImage doesn't work on Robolectric
     fun placeholder_switchVisible2() {
         var visible by mutableStateOf(true)
 
@@ -144,6 +146,7 @@ class PlaceholderTest {
 
     @Test
     @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
+    @Category(IgnoreOnRobolectric::class) // captureToImage doesn't work on Robolectric
     fun placeholder_switchColor() {
         var color by mutableStateOf(Color.Red)
 
@@ -176,6 +179,7 @@ class PlaceholderTest {
 
     @Test
     @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
+    @Category(IgnoreOnRobolectric::class) // captureToImage doesn't work on Robolectric
     fun placeholder_switchAnimatedBrush() {
         var animatedBrush by mutableStateOf(Solid(Color.Red))
 
@@ -212,6 +216,7 @@ class PlaceholderTest {
 
     @Test
     @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
+    @Category(IgnoreOnRobolectric::class) // captureToImage doesn't work on Robolectric
     fun placeholder_switchShape1() {
         var shape by mutableStateOf(RectangleShape)
 
@@ -250,6 +255,7 @@ class PlaceholderTest {
 
     @Test
     @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
+    @Category(IgnoreOnRobolectric::class) // captureToImage doesn't work on Robolectric
     fun placeholder_switchShape2() {
         var shape by mutableStateOf(RectangleShape)
 
