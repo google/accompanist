@@ -44,6 +44,8 @@
 
     <string name="pagers_title_nested">Pagers: Nested</string>
 
+    <string name="permissions_title_one">Permissions: Request one</string>
+
     <string name="flowlayout_title_column">Flow Layout: Column</string>
     <string name="flowlayout_title_row">Flow Layout: Row</string>
 

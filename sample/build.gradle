@@ -53,6 +53,7 @@ dependencies {
     implementation project(':insets-ui')
     implementation project(':pager')
     implementation project(':pager-indicators')
+    implementation project(':permissions')
     implementation project(':placeholder')
     implementation project(':flowlayout')
     implementation project(':systemuicontroller')

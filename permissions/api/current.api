@@ -1,0 +1,43 @@
+// Signature format: 4.0
+package com.google.accompanist.permissions {
+
+  public final class MultiplePermissionsState {
+    ctor public MultiplePermissionsState(java.util.List<com.google.accompanist.permissions.PermissionState> permissions, androidx.activity.result.ActivityResultLauncher<java.lang.String[]> launcher, androidx.compose.runtime.State<? extends java.util.List<com.google.accompanist.permissions.PermissionState>> revokedPermissionsState, androidx.compose.runtime.State<java.lang.Boolean> permissionRequestedState, androidx.compose.runtime.State<java.lang.Boolean> shouldShowRationaleState);
+    method public boolean getAllPermissionsGranted();
+    method public boolean getPermissionRequested();
+    method public java.util.List<com.google.accompanist.permissions.PermissionState> getRevokedPermissions();
+    method public boolean getShouldShowRationale();
+    method public void launchMultiplePermissionRequest();
+    property public final boolean allPermissionsGranted;
+    property public final boolean permissionRequested;
+    property public final java.util.List<com.google.accompanist.permissions.PermissionState> revokedPermissions;
+    property public final boolean shouldShowRationale;
+  }
+
+  public final class MultiplePermissionsStateKt {
+    method @androidx.compose.runtime.Composable public static com.google.accompanist.permissions.MultiplePermissionsState rememberMultiplePermissionsState(androidx.activity.result.ActivityResultRegistry, java.lang.String... permissions);
+  }
+
+  public final class PermissionState {
+    ctor public PermissionState(String permission, kotlin.jvm.functions.Function0<kotlin.Unit> refreshShouldShowRationaleState, androidx.activity.result.ActivityResultLauncher<java.lang.String> launcher, androidx.compose.runtime.State<java.lang.Boolean> hasPermissionState, androidx.compose.runtime.State<java.lang.Boolean> shouldShowRationaleState, androidx.compose.runtime.State<java.lang.Boolean> permissionRequestedState);
+    method public boolean getHasPermission();
+    method public String getPermission();
+    method public boolean getPermissionRequested();
+    method public boolean getShouldShowRationale();
+    method public void launchPermissionRequest();
+    method public void refreshShouldShowRationale();
+    property public final boolean hasPermission;
+    property public final String permission;
+    property public final boolean permissionRequested;
+    property public final boolean shouldShowRationale;
+  }
+
+  public final class PermissionStateKt {
+    method @androidx.compose.runtime.Composable public static com.google.accompanist.permissions.PermissionState rememberPermissionState(androidx.activity.result.ActivityResultRegistry, String permission);
+  }
+
+  public final class PermissionsUtilKt {
+  }
+
+}
+

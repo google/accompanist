@@ -1,0 +1,131 @@
+/*
+ * Copyright 2021 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.accompanist.permissions
+
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material.Button
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.test.filters.SdkSuppress
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+
+@SdkSuppress(minSdkVersion = 23)
+class RequestMultiplePermissionsTest {
+
+    @get:Rule
+    val composeTestRule = createAndroidComposeRule<ComponentActivity>()
+
+    @Before
+    fun setup() {
+        composeTestRule.setContent { ComposableUnderTest() }
+    }
+
+    @Test
+    fun permissionTest_grantPermissions() {
+        grantPermissionInDialog() // Grant first permission
+        grantPermissionInDialog() // Grant second permission
+        composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
+    }
+
+    @Test
+    fun permissionTest_denyOnePermission() {
+        grantPermissionInDialog() // Grant first permission
+        denyPermissionInDialog() // Deny second permission
+        composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Request").performClick()
+        grantPermissionInDialog() // Grant second permission
+        composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
+    }
+
+    @Test
+    fun permissionTest_doNotAskAgainPermission() {
+        grantPermissionInDialog() // Grant first permission
+        denyPermissionInDialog() // Deny second permission
+        composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Request").performClick()
+        doNotAskAgainPermissionInDialog() // Do not ask again second permission
+        composeTestRule.onNodeWithText("Denied").assertIsDisplayed()
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @SdkSuppress(minSdkVersion = 29, maxSdkVersion = 29) // Only works in API 29 so far
+    @Test
+    fun permissionTest_grantInTheBackground() {
+        grantPermissionInDialog() // Grant first permission
+        denyPermissionInDialog() // Deny second permission
+        composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Request").performClick()
+        doNotAskAgainPermissionInDialog() // Do not ask again second permission
+        composeTestRule.onNodeWithText("Denied").assertIsDisplayed()
+
+        // This simulates the user going to the Settings screen and granting the permission
+        grantPermissionProgrammatically("android.permission.READ_EXTERNAL_STORAGE")
+
+        // Recreate Activity and set content again to check for the permission again
+        runBlocking {
+            launch(TestCoroutineDispatcher()) {
+                composeTestRule.activityRule.scenario.recreate()
+            }.join()
+        }
+        composeTestRule.activityRule.scenario.onActivity {
+            it.setContent { ComposableUnderTest() }
+        }
+
+        composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
+    }
+
+    @Composable
+    private fun ComposableUnderTest() {
+        val state =
+            composeTestRule.activity.activityResultRegistry.rememberMultiplePermissionsState(
+                android.Manifest.permission.READ_EXTERNAL_STORAGE, // Second permission asked
+                android.Manifest.permission.CAMERA // First permission asked
+            )
+        when {
+            state.allPermissionsGranted -> {
+                Text("Granted")
+            }
+            state.shouldShowRationale -> {
+                Column {
+                    Text("ShowRationale")
+                    Button(onClick = { state.launchMultiplePermissionRequest() }) {
+                        Text("Request")
+                    }
+                }
+            }
+            !state.permissionRequested -> {
+                Text("Requesting")
+                state.launchMultiplePermissionRequest()
+            }
+            else -> {
+                Text("Denied")
+            }
+        }
+    }
+}

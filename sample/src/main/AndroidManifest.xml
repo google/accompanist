@@ -21,6 +21,10 @@
     <!-- Used for loading images from the network -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- Used for the permissions sample -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:name="com.google.accompanist.sample.SampleApplication"
         android:allowBackup="true"
@@ -225,6 +229,15 @@
         <activity
             android:name=".pager.NestedPagersSample"
             android:label="@string/pagers_title_nested">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".permissions.RequestPermissionSample"
+            android:label="@string/permissions_title_one">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
