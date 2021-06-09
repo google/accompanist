@@ -51,9 +51,6 @@ for i in "$@"; do
   esac
 done
 
-# Trap and kill ADB when the shell script ends
-trap "kill 0" EXIT
-
 # Start logcat if we have a file to log to
 if [[ ! -z "$LOG_FILE" ]]; then
   adb logcat > $LOG_FILE &
