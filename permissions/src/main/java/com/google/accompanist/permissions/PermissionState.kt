@@ -99,7 +99,7 @@ class PermissionState(
     permissionRequestedState: State<Boolean>
 ) {
     /**
-     * When `true`, the user has granted the permission.
+     * When `true`, the user has granted the [permission].
      */
     val hasPermission by hasPermissionState
 
@@ -109,12 +109,12 @@ class PermissionState(
     val shouldShowRationale by shouldShowRationaleState
 
     /**
-     * When `true`, the permission request has been done previously.
+     * When `true`, the [permission] request has been done previously.
      */
     val permissionRequested by permissionRequestedState
 
     /**
-     * Request the permission to the user.
+     * Request the [permission] to the user.
      *
      * This triggers a system dialog that asks the user to grant or revoke the permission.
      * Note that this dialog might not appear on the screen if the user doesn't want to be asked

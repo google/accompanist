@@ -27,11 +27,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 
+/**
+ * Creates a [MultiplePermissionsState] that is remembered across compositions.
+ *
+ * It's recommended that apps exercise the permissions workflow as described in the
+ * [documentation](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions).
+ *
+ * @param permissions the permissions to control and observe.
+ */
 @Composable
 fun ActivityResultRegistry.rememberMultiplePermissionsState(
     vararg permissions: String
 ): MultiplePermissionsState {
-
     val permissionRequested = rememberSaveable { mutableStateOf(false) }
     val permissionsState = permissions.map {
         rememberPermissionState(permission = it)
@@ -67,28 +74,64 @@ fun ActivityResultRegistry.rememberMultiplePermissionsState(
             permissions = permissionsState,
             launcher = launcher,
             revokedPermissionsState = revokedPermissions,
-            permissionRequestedState = permissionRequested,
-            shouldShowRationaleState = shouldShowRationale
+            shouldShowRationaleState = shouldShowRationale,
+            permissionRequestedState = permissionRequested
         )
     }
 }
 
+/**
+ * A state object that can be hoisted to control and observe multiple permission status changes.
+ *
+ * In most cases, this will be created via [rememberMultiplePermissionsState].
+ *
+ * @param permissions list of permissions to control and observe.
+ * @param launcher [ActivityResultLauncher] to ask for all permissions to the user.
+ * @param revokedPermissionsState [State] with all revoked permissions.
+ * @param shouldShowRationaleState [State] that represents if the user should be presented with a
+ * rationale.
+ * @param permissionRequestedState [State] that represents if the permission has been requested
+ * previously.
+ */
 @Stable
 class MultiplePermissionsState(
     val permissions: List<PermissionState>,
     private val launcher: ActivityResultLauncher<Array<String>>,
     revokedPermissionsState: State<List<PermissionState>>,
-    permissionRequestedState: State<Boolean>,
-    shouldShowRationaleState: State<Boolean>
+    shouldShowRationaleState: State<Boolean>,
+    permissionRequestedState: State<Boolean>
 ) {
+    /**
+     * When `true`, the permission request has been done previously.
+     */
     val permissionRequested by permissionRequestedState
+
+    /**
+     * Subset of [permissions] that the user revoked.
+     */
     val revokedPermissions by revokedPermissionsState
+
+    /**
+     * When `true`, the user should be presented with a rationale.
+     */
     val shouldShowRationale by shouldShowRationaleState
 
+    /**
+     * When `true`, all [permissions] have been granted.
+     */
     val allPermissionsGranted: Boolean
         get() = permissions.all { it.hasPermission } || // Up to date when the lifecycle is STARTED
             revokedPermissions.isEmpty() // Up to date when the user launches the action
 
+    /**
+     * Request all [permissions] to the user.
+     *
+     * This triggers a system dialog per permission that asks the user to grant or revoke one
+     * permission at a time.
+     * Note that this dialog might not appear on the screen if the user doesn't want to be asked
+     * again or has denied the permission multiple times.
+     * This behavior varies depending on the Android level API.
+     */
     fun launchMultiplePermissionRequest() = launcher.launch(
         permissions.map { it.permission }.toTypedArray()
     )
