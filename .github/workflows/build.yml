@@ -60,17 +60,16 @@ jobs:
         if: always()
         run: release/signing-cleanup.sh
 
-  android-test:
+  test:
     runs-on: macOS-latest
     needs: build
-    timeout-minutes: 40
+    timeout-minutes: 30
     
     strategy:
       # Allow tests to continue on other devices if they fail on one device.
       fail-fast: false
       matrix:
         api-level: [22, 26, 28, 29]
-        shard: [0, 1, 2]
 
     steps:
       - uses: actions/checkout@v2
@@ -97,17 +96,13 @@ jobs:
             ~/.gradle/caches/build-cache-*
           key: gradle-${{ hashFiles('checksum.txt') }}
 
-      - name: Build tests
-        run: ./gradlew assembleDebugAndroidTest --scan
-
       - name: Run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
           profile: Galaxy Nexus
-          script: |
-            adb logcat > logcat.txt &
-            ./gradlew connectedCheck --scan --continue -Pandroid.testInstrumentationRunnerArguments.numShards=3 -Pandroid.testInstrumentationRunnerArguments.shardIndex=${{ matrix.shard }}
+          # We only run the tests which can't run on Robolectric (no need to shard)
+          script: ./scripts/run-device-tests.sh --only-build-tests --log-file=logcat.txt
 
       - name: Clean secrets
         if: always()
@@ -117,14 +112,14 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: logs-${{ matrix.api-level }}-${{ matrix.shard }}
+          name: logs-${{ matrix.api-level }}
           path: logcat.txt
 
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: test-results-${{ matrix.api-level }}-${{ matrix.shard }}
+          name: test-results-${{ matrix.api-level }}
           path: |
             "**/build/outputs/*/connected/*.xml"
             "**/build/reports"
@@ -133,7 +128,7 @@ jobs:
     if: github.event_name == 'push' # only deploy for pushed commits (not PRs)
 
     runs-on: ubuntu-latest
-    needs: [build, android-test]
+    needs: [build, test]
     timeout-minutes: 30
     env:
       TERM: dumb
