@@ -16,6 +16,9 @@
 
 package com.google.accompanist.imageloading
 
+/**
+ * EDIT to test affected modules
+ */
 enum class DataSource {
     /**
      * Represents an in-memory data source or cache (e.g. bitmap, ByteBuffer).
