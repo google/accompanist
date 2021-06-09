@@ -23,9 +23,11 @@ import androidx.compose.foundation.Image
 import com.google.accompanist.glide.rememberGlidePainter
 
 Image(
-    painter = rememberGlidePainter("https://picsum.photos/300/300"),
-    contentDescription = stringResource(R.string.image_content_desc),
-    previewPlaceholder = R.drawable.placeholder,
+    painter = rememberGlidePainter(
+        request = "https://picsum.photos/300/300",
+        previewPlaceholder = R.drawable.placeholder
+    ),
+    contentDescription = stringResource(R.string.image_content_desc)
 )
 ```
 
