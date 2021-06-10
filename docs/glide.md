@@ -31,7 +31,7 @@ Image(
 
 This painter loads the data passed in, using [Glide][glide], and then draws the resulting image.
 
-You can also customize the Glide [`RequestBuilder`](https://bumptech.github.io/glide/javadocs/4110/com/bumptech/glide/RequestBuilder.html) through the `requestBuilder` parameter. This allows usage of things like (but not limited to) transformations:
+You can also customize the Glide [`RequestBuilder`](https://bumptech.github.io/glide/javadocs/4110/com/bumptech/glide/RequestBuilder.html) through the `requestBuilder` parameter. This allows usage of things like (but not limited to) placeholder:
 
 ```kotlin
 import androidx.compose.foundation.Image
