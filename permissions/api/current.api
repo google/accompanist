@@ -1,15 +1,17 @@
 // Signature format: 4.0
 package com.google.accompanist.permissions {
 
-  public final class MultiplePermissionsState {
-    ctor public MultiplePermissionsState(java.util.List<com.google.accompanist.permissions.PermissionState> permissions, androidx.activity.result.ActivityResultLauncher<java.lang.String[]> launcher, androidx.compose.runtime.State<? extends java.util.List<com.google.accompanist.permissions.PermissionState>> revokedPermissionsState, androidx.compose.runtime.State<java.lang.Boolean> permissionRequestedState, androidx.compose.runtime.State<java.lang.Boolean> shouldShowRationaleState);
+  @androidx.compose.runtime.Stable public final class MultiplePermissionsState {
+    ctor public MultiplePermissionsState(java.util.List<com.google.accompanist.permissions.PermissionState> permissions, androidx.activity.result.ActivityResultLauncher<java.lang.String[]> launcher, androidx.compose.runtime.State<? extends java.util.List<com.google.accompanist.permissions.PermissionState>> revokedPermissionsState, androidx.compose.runtime.State<java.lang.Boolean> shouldShowRationaleState, androidx.compose.runtime.State<java.lang.Boolean> permissionRequestedState);
     method public boolean getAllPermissionsGranted();
     method public boolean getPermissionRequested();
+    method public java.util.List<com.google.accompanist.permissions.PermissionState> getPermissions();
     method public java.util.List<com.google.accompanist.permissions.PermissionState> getRevokedPermissions();
     method public boolean getShouldShowRationale();
     method public void launchMultiplePermissionRequest();
     property public final boolean allPermissionsGranted;
     property public final boolean permissionRequested;
+    property public final java.util.List<com.google.accompanist.permissions.PermissionState> permissions;
     property public final java.util.List<com.google.accompanist.permissions.PermissionState> revokedPermissions;
     property public final boolean shouldShowRationale;
   }
@@ -18,7 +20,7 @@ package com.google.accompanist.permissions {
     method @androidx.compose.runtime.Composable public static com.google.accompanist.permissions.MultiplePermissionsState rememberMultiplePermissionsState(androidx.activity.result.ActivityResultRegistry, java.lang.String... permissions);
   }
 
-  public final class PermissionState {
+  @androidx.compose.runtime.Stable public final class PermissionState {
     ctor public PermissionState(String permission, kotlin.jvm.functions.Function0<kotlin.Unit> refreshShouldShowRationaleState, androidx.activity.result.ActivityResultLauncher<java.lang.String> launcher, androidx.compose.runtime.State<java.lang.Boolean> hasPermissionState, androidx.compose.runtime.State<java.lang.Boolean> shouldShowRationaleState, androidx.compose.runtime.State<java.lang.Boolean> permissionRequestedState);
     method public boolean getHasPermission();
     method public String getPermission();

@@ -245,6 +245,15 @@
         </activity>
 
         <activity
+            android:name=".permissions.RequestMultiplePermissionsSample"
+            android:label="@string/permissions_title_multiple">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".flowlayout.FlowColumnSample"
             android:label="@string/flowlayout_title_column"
             android:windowSoftInputMode="adjustResize">

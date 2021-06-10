@@ -30,21 +30,23 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.permissions.PermissionState
-import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.MultiplePermissionsState
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.accompanist.sample.AccompanistSampleTheme
 
-class RequestPermissionSample : ComponentActivity() {
+class RequestMultiplePermissionsSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
             AccompanistSampleTheme {
-                val cameraPermissionState = activityResultRegistry.rememberPermissionState(
-                    android.Manifest.permission.CAMERA,
-                )
+                val multiplePermissionsState =
+                    activityResultRegistry.rememberMultiplePermissionsState(
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                        android.Manifest.permission.CAMERA,
+                    )
                 Sample(
-                    cameraPermissionState,
+                    multiplePermissionsState,
                     navigateToSettingsScreen = {
                         startActivity(
                             Intent(
@@ -61,30 +63,34 @@ class RequestPermissionSample : ComponentActivity() {
 
 @Composable
 private fun Sample(
-    cameraPermissionState: PermissionState,
+    multiplePermissionsState: MultiplePermissionsState,
     navigateToSettingsScreen: () -> Unit
 ) {
     when {
-        cameraPermissionState.hasPermission -> {
-            Text("Camera permission Granted")
+        multiplePermissionsState.allPermissionsGranted -> {
+            Text("Camera and Read storage permissions Granted! Thank you!")
         }
-        cameraPermissionState.shouldShowRationale -> {
+        multiplePermissionsState.shouldShowRationale -> {
             Column {
-                Text("The camera is important for this app. Please grant the permission.")
+                Text(
+                    "The camera and reading your storage features are important. " +
+                    "Please grant all the permissions."
+                )
                 Spacer(modifier = Modifier.height(8.dp))
-                Button(onClick = { cameraPermissionState.launchPermissionRequest() }) {
-                    Text("Request permission")
+                Button(onClick = { multiplePermissionsState.launchMultiplePermissionRequest() }) {
+                    Text("Request permissions")
                 }
             }
         }
-        !cameraPermissionState.permissionRequested -> {
-            cameraPermissionState.launchPermissionRequest()
+        !multiplePermissionsState.permissionRequested -> {
+            multiplePermissionsState.launchMultiplePermissionRequest()
         }
         else -> {
             Column {
                 Text(
-                    "Camera permission denied. See this FAQ with information about why we " +
-                        "need this permission. Please, grant us access on the Settings screen."
+                    "Camera and read storage permissions denied. See this FAQ with " +
+                        "information about why we need this permission. Please, grant us " +
+                        "access on the Settings screen."
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Button(onClick = navigateToSettingsScreen) {

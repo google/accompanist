@@ -199,7 +199,8 @@ private fun rememberShouldShowRationaleState(permission: String): ShouldShowRati
  * A state object that is used to check if the user should be presented with a rationale for a
  * certain permission and a lambda to refresh and update the state on demand.
  *
- * @param
+ * @param result the user should be presented with a rationale.
+ * @param onRefresh refresh and update the [result] state.
  */
 private data class ShouldShowRationaleState(
     val result: State<Boolean>,
