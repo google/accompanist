@@ -74,7 +74,7 @@ private fun Sample(
             Column {
                 Text(
                     "The camera and reading your storage features are important. " +
-                    "Please grant all the permissions."
+                        "Please grant all the permissions."
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Button(onClick = { multiplePermissionsState.launchMultiplePermissionRequest() }) {
