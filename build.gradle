@@ -87,16 +87,10 @@ subprojects {
         kotlinOptions {
             // Treat all Kotlin warnings as errors
             allWarningsAsErrors = true
-
             // Set JVM target to 1.8
             jvmTarget = "1.8"
-
             // Allow use of @OptIn
             freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
-
-            // FIXME figure out why this is needed
-            freeCompilerArgs += "-Xallow-unstable-dependencies"
-
             // Enable default methods in interfaces
             freeCompilerArgs += "-Xjvm-default=all"
         }
@@ -124,17 +118,6 @@ subprojects {
         metalava {
             filename = "api/current.api"
             reportLintsAsErrors = true
-        }
-
-        // Make the `check` task depend on `metalavaCheckCompatibility`. This is a workaround for
-        // https://github.com/tylerbwong/metalava-gradle/issues/12
-        afterEvaluate {
-            def metalavaCheckCompatibility = tasks.findByName('metalavaCheckCompatibility')
-            if (metalavaCheckCompatibility != null) {
-                tasks.named("check") { check ->
-                    check.dependsOn metalavaCheckCompatibility
-                }
-            }
         }
     }
 
