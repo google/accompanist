@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
@@ -34,8 +35,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
+import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.insets.statusBarsHeight
-import com.google.accompanist.insets.toPaddingValues
+import com.google.accompanist.insets.ui.BottomNavigation
 
 @Composable
 fun ImeAvoidingBox() {
@@ -71,7 +73,32 @@ fun Sample_spacer() {
 @Composable
 fun Sample_lazycolumn() {
     LazyColumn(
-        contentPadding = LocalWindowInsets.current.systemBars.toPaddingValues()
+        contentPadding = rememberInsetsPaddingValues(
+            insets = LocalWindowInsets.current.systemBars,
+        )
+    ) {
+        // content
+    }
+}
+
+@Composable
+fun BottomNavigation_Insets() {
+    BottomNavigation(
+        contentPadding = rememberInsetsPaddingValues(
+            insets = LocalWindowInsets.current.navigationBars,
+        )
+    ) {
+        // content
+    }
+}
+
+@Composable
+fun TopAppBar_Insets() {
+    TopAppBar(
+        contentPadding = rememberInsetsPaddingValues(
+            insets = LocalWindowInsets.current.systemBars,
+            applyBottom = false,
+        )
     ) {
         // content
     }

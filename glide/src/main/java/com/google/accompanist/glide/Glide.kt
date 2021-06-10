@@ -45,7 +45,7 @@ import com.google.accompanist.imageloading.ShouldRefetchOnSizeChange
 import com.google.accompanist.imageloading.rememberLoadPainter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.channels.sendBlocking
+import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
@@ -139,9 +139,7 @@ internal class GlideLoader(
             if (size.height > 0) size.height else Target.SIZE_ORIGINAL
         ) {
             override fun onLoadStarted(placeholder: Drawable?) {
-                if (isClosedForSend) return
-
-                sendBlocking(
+                trySendBlocking(
                     ImageLoadState.Loading(
                         placeholder = placeholder?.let(::DrawablePainter),
                         request = request
@@ -150,9 +148,7 @@ internal class GlideLoader(
             }
 
             override fun onLoadFailed(errorDrawable: Drawable?) {
-                if (isClosedForSend) return
-
-                sendBlocking(
+                trySendBlocking(
                     ImageLoadState.Error(
                         result = errorDrawable?.let(::DrawablePainter),
                         request = request,
@@ -165,11 +161,9 @@ internal class GlideLoader(
             }
 
             override fun onLoadCleared(resource: Drawable?) {
-                if (isClosedForSend) return
-
                 // Glide wants to free up the resource, so we need to clear
                 // the result, otherwise we might draw a recycled bitmap later.
-                sendBlocking(ImageLoadState.Empty)
+                trySendBlocking(ImageLoadState.Empty)
                 // Close the channel[Flow]
                 channel.close()
             }
@@ -183,9 +177,7 @@ internal class GlideLoader(
                 dataSource: com.bumptech.glide.load.DataSource,
                 isFirstResource: Boolean
             ): Boolean {
-                if (isClosedForSend) return true
-
-                sendBlocking(
+                trySendBlocking(
                     ImageLoadState.Success(
                         result = DrawablePainter(drawable),
                         source = dataSource.toDataSource(),

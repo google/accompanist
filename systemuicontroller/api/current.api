@@ -2,10 +2,30 @@
 package com.google.accompanist.systemuicontroller {
 
   @androidx.compose.runtime.Stable public interface SystemUiController {
+    method public boolean getNavigationBarDarkContentEnabled();
+    method public boolean getStatusBarDarkContentEnabled();
+    method public default boolean getSystemBarsDarkContentEnabled();
     method public boolean isNavigationBarContrastEnforced();
+    method public boolean isNavigationBarVisible();
+    method public boolean isStatusBarVisible();
+    method public default boolean isSystemBarsVisible();
     method public void setNavigationBarColor-PQP5Tvw(long color, optional boolean darkIcons, optional boolean navigationBarContrastEnforced, optional kotlin.jvm.functions.Function1<? super androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color> transformColorForLightContent);
+    method public void setNavigationBarContrastEnforced(boolean p);
+    method public void setNavigationBarDarkContentEnabled(boolean p);
+    method public void setNavigationBarVisible(boolean p);
     method public void setStatusBarColor-qhJFjJI(long color, optional boolean darkIcons, optional kotlin.jvm.functions.Function1<? super androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color> transformColorForLightContent);
+    method public void setStatusBarDarkContentEnabled(boolean p);
+    method public void setStatusBarVisible(boolean p);
     method public default void setSystemBarsColor-PQP5Tvw(long color, optional boolean darkIcons, optional boolean isNavigationBarContrastEnforced, optional kotlin.jvm.functions.Function1<? super androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color> transformColorForLightContent);
+    method public default void setSystemBarsDarkContentEnabled(boolean value);
+    method public default void setSystemBarsVisible(boolean value);
+    property public abstract boolean isNavigationBarContrastEnforced;
+    property public abstract boolean isNavigationBarVisible;
+    property public abstract boolean isStatusBarVisible;
+    property public default boolean isSystemBarsVisible;
+    property public abstract boolean navigationBarDarkContentEnabled;
+    property public abstract boolean statusBarDarkContentEnabled;
+    property public default boolean systemBarsDarkContentEnabled;
   }
 
   public final class SystemUiControllerKt {

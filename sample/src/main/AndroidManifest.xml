@@ -28,7 +28,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+        android:theme="@android:style/Theme.Material.Light.NoActionBar">
 
         <activity
             android:name="com.google.accompanist.sample.MainActivity"
@@ -112,6 +112,16 @@
             </intent-filter>
         </activity>
 
+
+        <activity
+            android:name="com.google.accompanist.sample.insets.EdgeToEdgeLazyColumnWithBottomNav"
+            android:label="@string/insets_title_list_bottomnav">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name="com.google.accompanist.sample.insets.EdgeToEdgeLazyColumn"
             android:label="@string/insets_title_list">
@@ -170,6 +180,15 @@
         <activity
             android:name=".pager.HorizontalPagerLoopSample"
             android:label="@string/horiz_pager_title_loop">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".pager.HorizontalPagerScrollingContentSample"
+            android:label="@string/horiz_pager_title_scroll_content">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -271,6 +290,51 @@
         <activity
             android:name=".swiperefresh.SwipeRefreshVerticalPagerSample"
             android:label="@string/swiperefresh_title_verticalpager">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".systemuicontroller.SystemBarsColorSample"
+            android:label="@string/system_ui_controller_title_color">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".systemuicontroller.SystemBarsVisibilitySample"
+            android:label="@string/system_ui_controller_title_visibility">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".placeholder.PlaceholderBasicSample"
+            android:label="@string/placeholder_title_basics">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".placeholder.PlaceholderFadeSample"
+            android:label="@string/placeholder_title_fade">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".placeholder.PlaceholderShimmerSample"
+            android:label="@string/placeholder_title_shimmer">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />

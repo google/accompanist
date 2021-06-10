@@ -27,8 +27,6 @@ import androidx.compose.runtime.setValue
  */
 internal class MutableWindowInsetsType : WindowInsets.Type {
     private var ongoingAnimationsCount by mutableStateOf(0)
-    val mutableLayoutInsets = MutableInsets()
-    val mutableAnimatedInsets = MutableInsets()
 
     /**
      * The layout inset values for this [WindowInsets.Type]. These are the insets which are defined from
@@ -37,8 +35,7 @@ internal class MutableWindowInsetsType : WindowInsets.Type {
      * You should not normally need to use this directly, and instead use [left], [top],
      * [right], and [bottom] to return the correct value for the current state.
      */
-    override val layoutInsets: Insets
-        get() = mutableLayoutInsets
+    override val layoutInsets: MutableInsets = MutableInsets()
 
     /**
      * The animated inset values for this [WindowInsets.Type]. These are the insets which are updated from
@@ -48,8 +45,7 @@ internal class MutableWindowInsetsType : WindowInsets.Type {
      * You should not normally need to use this directly, and instead use [left], [top],
      * [right], and [bottom] to return the correct value for the current state.
      */
-    override val animatedInsets: Insets
-        get() = mutableAnimatedInsets
+    override val animatedInsets: MutableInsets = MutableInsets()
 
     /**
      * Whether the insets are currently visible.
@@ -79,7 +75,7 @@ internal class MutableWindowInsetsType : WindowInsets.Type {
 
         if (ongoingAnimationsCount == 0) {
             // If there are no on-going animations, clear out the animated insets
-            mutableAnimatedInsets.reset()
+            animatedInsets.reset()
             animationFraction = 0f
         }
     }

@@ -20,7 +20,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.FloatingActionButton
@@ -31,14 +31,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
+import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.accompanist.insets.navigationBarsPadding
+import com.google.accompanist.insets.navigationBarsHeight
+import com.google.accompanist.insets.rememberInsetsPaddingValues
+import com.google.accompanist.insets.ui.Scaffold
+import com.google.accompanist.insets.ui.TopAppBar
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -52,11 +54,18 @@ class InsetsBasicSample : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
+            // Update the system bars to be translucent
+            val systemUiController = rememberSystemUiController()
+            val useDarkIcons = MaterialTheme.colors.isLight
+            SideEffect {
+                systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = useDarkIcons)
+            }
+
             AccompanistSampleTheme {
                 // We need to use ProvideWindowInsets to setup the necessary listeners which
                 // power the library
                 ProvideWindowInsets {
-                    Sample()
+                    InsetsBasics()
                 }
             }
         }
@@ -64,33 +73,40 @@ class InsetsBasicSample : ComponentActivity() {
 }
 
 @Composable
-private fun Sample() {
-    val systemUiController = rememberSystemUiController()
-    val useDarkIcons = MaterialTheme.colors.isLight
-    SideEffect {
-        systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = useDarkIcons)
-    }
-
-    Box(Modifier.fillMaxSize()) {
-        InsetAwareTopAppBar(
-            title = {
-                Text(stringResource(R.string.insets_title_basic))
-            },
-            backgroundColor = MaterialTheme.colors.surface,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        FloatingActionButton(
-            onClick = { /* */ },
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .navigationBarsPadding()
-                .padding(16.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Face,
-                contentDescription = "Face icon"
+internal fun InsetsBasics() {
+    Scaffold(
+        topBar = {
+            // We use TopAppBar from accompanist-insets-ui which allows us to provide
+            // content padding matching the system bars insets.
+            TopAppBar(
+                title = { Text(stringResource(R.string.insets_title_list)) },
+                backgroundColor = MaterialTheme.colors.surface.copy(alpha = 0.9f),
+                contentPadding = rememberInsetsPaddingValues(
+                    LocalWindowInsets.current.statusBars,
+                    applyBottom = false,
+                ),
+                modifier = Modifier.fillMaxWidth()
             )
+        },
+        bottomBar = {
+            // We add a spacer as a bottom bar, which is the same height as
+            // the navigation bar
+            Spacer(Modifier.navigationBarsHeight().fillMaxWidth())
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { /* TODO */ },
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Face,
+                    contentDescription = "Face icon"
+                )
+            }
+        }
+    ) { contentPadding ->
+        // We apply the contentPadding passed to us from the Scaffold
+        Box(Modifier.padding(contentPadding)) {
+            // content
         }
     }
 }

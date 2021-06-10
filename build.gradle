@@ -72,6 +72,17 @@ subprojects {
         }
     }
 
+    configurations.configureEach {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            // Make sure that we're using the Android version of Guava
+            if (details.requested.group == 'com.google.guava'
+                    && details.requested.module.name == 'guava'
+                    && details.requested.version.contains('jre')) {
+                details.useVersion details.requested.version.replace('jre', 'android')
+            }
+        }
+    }
+
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach { compile ->
         kotlinOptions {
             // Treat all Kotlin warnings as errors
@@ -102,6 +113,27 @@ subprojects {
                 project.ext.set(prop.key, rootProject.file(prop.value).absolutePath)
             } else {
                 project.ext.set(prop.key, prop.value)
+            }
+        }
+    }
+
+    // If we have a POM Artifact ID, we should generate API files
+    if (project.hasProperty('POM_ARTIFACT_ID')) {
+        apply plugin: 'me.tylerbwong.gradle.metalava'
+
+        metalava {
+            filename = "api/current.api"
+            reportLintsAsErrors = true
+        }
+
+        // Make the `check` task depend on `metalavaCheckCompatibility`. This is a workaround for
+        // https://github.com/tylerbwong/metalava-gradle/issues/12
+        afterEvaluate {
+            def metalavaCheckCompatibility = tasks.findByName('metalavaCheckCompatibility')
+            if (metalavaCheckCompatibility != null) {
+                tasks.named("check") { check ->
+                    check.dependsOn metalavaCheckCompatibility
+                }
             }
         }
     }
@@ -159,7 +191,9 @@ subprojects {
                 }
             }
         }
+    }
 
+    afterEvaluate {
         def composeSnapshot = libs.versions.composesnapshot.get()
         if (composeSnapshot.length() > 1) {
             // We're depending on a Jetpack Compose snapshot, update the library version name
