@@ -219,6 +219,7 @@ class SystemUiControllerTest {
     }
 
     @Test
+    @SdkSuppress(minSdkVersion = 23) // rootWindowInsets which work
     fun statusBarsVisibility() {
         // Now create an AndroidSystemUiController() and set the system bar colors
         val controller = rule.scenario.withActivity { AndroidSystemUiController(it.contentView) }
@@ -237,6 +238,7 @@ class SystemUiControllerTest {
     }
 
     @Test
+    @SdkSuppress(minSdkVersion = 23) // rootWindowInsets which work
     fun navigationBarsVisibility() {
         // Now create an AndroidSystemUiController() and set the system bar colors
         val controller = rule.scenario.withActivity { AndroidSystemUiController(it.contentView) }
@@ -255,6 +257,7 @@ class SystemUiControllerTest {
     }
 
     @Test
+    @SdkSuppress(minSdkVersion = 23) // rootWindowInsets which work
     fun systemBarsVisibility() {
         // Now create an AndroidSystemUiController() and set the system bar colors
         val controller = rule.scenario.withActivity { AndroidSystemUiController(it.contentView) }
@@ -276,7 +279,7 @@ class SystemUiControllerTest {
 
     private fun isRootWindowTypeVisible(type: Int): Boolean {
         return rule.scenario.withActivity {
-            ViewCompat.getRootWindowInsets(rule.contentView)?.isVisible(type) == true
+            ViewCompat.getRootWindowInsets(rule.contentView)!!.isVisible(type)
         }
     }
 }
