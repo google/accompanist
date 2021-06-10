@@ -93,9 +93,9 @@ internal data class MutablePermissionState(
 @Composable
 private fun rememberPermissionGrantedState(permission: String): MutableState<Boolean> {
     val context = LocalContext.current
-    val checkPermission = {
+
+    fun checkPermission(): Boolean =
         ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
-    }
 
     val permissionState = remember { mutableStateOf(checkPermission()) }
 
@@ -126,9 +126,9 @@ private fun rememberPermissionGrantedState(permission: String): MutableState<Boo
 @Composable
 private fun rememberShouldShowRationaleState(permission: String): ShouldShowRationaleState {
     val currentActivity by rememberUpdatedState(LocalContext.current.findActivity())
-    val shouldShow: () -> Boolean = {
+
+    fun shouldShow(): Boolean =
         ActivityCompat.shouldShowRequestPermissionRationale(currentActivity, permission)
-    }
 
     // Posting to this channel will trigger a single refresh. The channel conflates multiple
     // refresh events that could be sent while the state is being produced

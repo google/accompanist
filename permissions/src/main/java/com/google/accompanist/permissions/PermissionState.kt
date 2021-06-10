@@ -82,6 +82,9 @@ internal fun rememberPermissionState(
  *
  * In most cases, this will be created via [rememberPermissionState].
  *
+ * It's recommended that apps exercise the permissions workflow as described in the
+ * [documentation](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions).
+ *
  * @param permission the permission to control and observe.
  * @param launcher [ActivityResultLauncher] to ask for this permission to the user.
  * @param hasPermissionState [State] that represents if the permission is granted.
@@ -121,5 +124,5 @@ class PermissionState(
      * again or has denied the permission multiple times.
      * This behavior varies depending on the Android level API.
      */
-    fun launchPermissionRequest() = launcher.launch(permission)
+    fun launchPermissionRequest(): Unit = launcher.launch(permission)
 }

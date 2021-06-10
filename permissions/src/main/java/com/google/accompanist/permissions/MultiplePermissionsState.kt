@@ -153,7 +153,7 @@ class MultiplePermissionsState(
      * again or has denied the permission multiple times.
      * This behavior varies depending on the Android level API.
      */
-    fun launchMultiplePermissionRequest() = launcher.launch(
+    fun launchMultiplePermissionRequest(): Unit = launcher.launch(
         permissions.map { it.permission }.toTypedArray()
     )
 }

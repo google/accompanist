@@ -23,11 +23,17 @@ import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.permissions.PermissionState
@@ -65,16 +71,28 @@ private fun Sample(
     cameraPermissionState: PermissionState,
     navigateToSettingsScreen: () -> Unit
 ) {
+    var doNotShowRationale by rememberSaveable { mutableStateOf(false) }
+
     when {
         cameraPermissionState.hasPermission -> {
             Text("Camera permission Granted")
         }
         cameraPermissionState.shouldShowRationale -> {
-            Column {
-                Text("The camera is important for this app. Please grant the permission.")
-                Spacer(modifier = Modifier.height(8.dp))
-                Button(onClick = { cameraPermissionState.launchPermissionRequest() }) {
-                    Text("Request permission")
+            if (doNotShowRationale) {
+                Text("Feature not available")
+            } else {
+                Column {
+                    Text("The camera is important for this app. Please grant the permission.")
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row {
+                        Button(onClick = { cameraPermissionState.launchPermissionRequest() }) {
+                            Text("Request permission")
+                        }
+                        Spacer(Modifier.width(8.dp))
+                        Button(onClick = { doNotShowRationale = true }) {
+                            Text("Don't show rationale again")
+                        }
+                    }
                 }
             }
         }
