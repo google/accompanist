@@ -29,7 +29,7 @@ import com.google.accompanist.placeholder.shimmer
  * Creates a [PlaceholderHighlight] which fades in an appropriate color, using the
  * given [animationSpec].
  *
- * @sample com.google.accompanist.sample.placeholder.DocSample_PlaceholderFade
+ * @sample com.google.accompanist.sample.placeholder.DocSample_Material_PlaceholderFade
  *
  * @param animationSpec the [AnimationSpec] to configure the animation.
  */
@@ -48,7 +48,7 @@ fun PlaceholderHighlight.Companion.fade(
  * During that time it is also faded in, from 0f..progressForMaxAlpha, and then faded out from
  * progressForMaxAlpha..1f.
  *
- * @sample com.google.accompanist.sample.placeholder.DocSample_PlaceholderShimmer
+ * @sample com.google.accompanist.sample.placeholder.DocSample_Material_PlaceholderShimmer
  *
  * @param animationSpec the [AnimationSpec] to configure the animation.
  * @param progressForMaxAlpha The progress where the shimmer should be at it's peak opacity.
