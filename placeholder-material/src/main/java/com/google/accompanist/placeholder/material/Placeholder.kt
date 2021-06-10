@@ -88,8 +88,7 @@ fun PlaceholderDefaults.shimmerHighlightColor(
  * [Placeholder UI](https://material.io/design/communication/launch-screen.html#placeholder-ui)
  * guidelines.
  *
- * @sample com.google.accompanist.sample.placeholder.PlaceholderFadeSample
- * @sample com.google.accompanist.sample.placeholder.PlaceholderShimmerSample
+ * @sample com.google.accompanist.sample.placeholder.DocSample_Material_Placeholder
  *
  * @param visible whether the placeholder should be visible or not.
  * @param color the color used to draw the placeholder UI. If [Color.Unspecified] is provided,

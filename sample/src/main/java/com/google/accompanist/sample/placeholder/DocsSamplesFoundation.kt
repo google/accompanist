@@ -17,37 +17,64 @@
 package com.google.accompanist.sample.placeholder
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.material.fade
-import com.google.accompanist.placeholder.material.placeholder
-import com.google.accompanist.placeholder.material.shimmer
+import com.google.accompanist.placeholder.fade
+import com.google.accompanist.placeholder.placeholder
+import com.google.accompanist.placeholder.shimmer
 
 @Composable
-fun DocSample_PlaceholderFade() {
+fun DocSample_Foundation_Placeholder() {
     Text(
         text = "Content to display after content has loaded",
         modifier = Modifier
             .padding(16.dp)
             .placeholder(
                 visible = true,
-                highlight = PlaceholderHighlight.fade(),
+                color = Color.Gray,
+                // optional, defaults to RectangleShape
+                shape = RoundedCornerShape(4.dp),
             )
     )
 }
 
 @Composable
-fun DocSample_PlaceholderShimmer() {
+fun DocSample_Foundation_PlaceholderFade() {
     Text(
         text = "Content to display after content has loaded",
         modifier = Modifier
             .padding(16.dp)
             .placeholder(
                 visible = true,
-                highlight = PlaceholderHighlight.shimmer(),
+                color = Color.Gray,
+                // optional, defaults to RectangleShape
+                shape = RoundedCornerShape(4.dp),
+                highlight = PlaceholderHighlight.fade(
+                    highlightColor = Color.White,
+                ),
+            )
+    )
+}
+
+@Composable
+fun DocSample_Foundation_PlaceholderShimmer() {
+    Text(
+        text = "Content to display after content has loaded",
+        modifier = Modifier
+            .padding(16.dp)
+            .placeholder(
+                visible = true,
+                color = Color.Gray,
+                // optional, defaults to RectangleShape
+                shape = RoundedCornerShape(4.dp),
+                highlight = PlaceholderHighlight.shimmer(
+                    highlightColor = Color.White,
+                ),
             )
     )
 }
