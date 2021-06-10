@@ -15,7 +15,7 @@ You only need to use one or the other, and most apps should use *Placeholder Mat
 
 ## Basic usage
 
-At the most basic usage, the modifier will draw a shape above your composable content, filled with the provided color.
+At the most basic usage, the modifier will draw a shape over your composable content, filled with the provided color.
 
 ![Basic Placeholder demo](basic.jpg)
 
@@ -63,7 +63,7 @@ This highlight fades a color over the entire placeholder in and out.
     <source src="fade.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
-    <figcaption>Placeholder Shimmer demo</figcaption>
+    <figcaption>Placeholder Fade demo</figcaption>
 </figure>
 
 === "Placeholder Material"
