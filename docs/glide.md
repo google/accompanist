@@ -41,7 +41,7 @@ Image(
     painter = rememberGlidePainter(
         request = "https://picsum.photos/300/300",
         requestBuilder = {
-            transformations(CircleCropTransformation())
+            placeholder(R.drawable.placeholder)
         },
     ),
     contentDescription = stringResource(R.string.image_content_desc),
