@@ -80,12 +80,16 @@ class RequestMultiplePermissionsTest {
         doNotAskAgainPermissionInDialog() // Do not ask again second permission
         composeTestRule.onNodeWithText("Denied").assertIsDisplayed()
 
-        // This simulates the user going to the Settings screen and granting the permission
+        // This simulates the user going to the Settings screen and granting both permissions.
+        // This is cheating, I know, but the order in which the system request the permissions
+        // is unpredictable. Therefore, we need to grant both to make this test deterministic.
         grantPermissionProgrammatically("android.permission.CAMERA")
+        grantPermissionProgrammatically("android.permission.READ_EXTERNAL_STORAGE")
         simulateAppComingFromTheBackground(composeTestRule)
         composeTestRule.activityRule.scenario.onActivity {
             it.setContent { ComposableUnderTest() }
         }
+        composeTestRule.waitForIdle()
 
         composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
     }

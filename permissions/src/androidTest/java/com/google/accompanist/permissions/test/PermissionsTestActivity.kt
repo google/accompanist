@@ -16,7 +16,18 @@
 
 package com.google.accompanist.permissions.test
 
+import android.Manifest
+import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.material.Button
+import androidx.compose.material.Text
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.google.accompanist.permissions.rememberPermissionState
 
 class PermissionsTestActivity : ComponentActivity() {
 
@@ -27,5 +38,39 @@ class PermissionsTestActivity : ComponentActivity() {
             return shouldShowRequestPermissionRationale[permission]!!
         }
         return super.shouldShowRequestPermissionRationale(permission)
+    }
+
+    /**
+     * Code used in `MultipleAndSinglePermissionsTest`
+     */
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            val state = rememberPermissionState(activityResultRegistry, Manifest.permission.CAMERA)
+            Column {
+                Text("PermissionsTestActivity")
+                Spacer(Modifier.height(16.dp))
+                when {
+                    state.hasPermission -> {
+                        Text("Granted")
+                    }
+                    state.shouldShowRationale -> {
+                        Column {
+                            Text("ShowRationale")
+                            Button(onClick = { state.launchPermissionRequest() }) {
+                                Text("Request")
+                            }
+                        }
+                    }
+                    !state.permissionRequested -> {
+                        Text("Requesting")
+                        state.launchPermissionRequest()
+                    }
+                    else -> {
+                        Text("Denied")
+                    }
+                }
+            }
+        }
     }
 }

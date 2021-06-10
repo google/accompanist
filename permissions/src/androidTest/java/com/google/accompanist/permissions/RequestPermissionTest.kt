@@ -79,12 +79,10 @@ class RequestPermissionTest {
         // This simulates the user going to the Settings screen and granting the permission
         grantPermissionProgrammatically("android.permission.CAMERA")
         simulateAppComingFromTheBackground(composeTestRule)
-
         composeTestRule.activityRule.scenario.onActivity {
             it.setContent { ComposableUnderTest() }
         }
 
-        composeTestRule.waitForIdle()
         composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
     }
 

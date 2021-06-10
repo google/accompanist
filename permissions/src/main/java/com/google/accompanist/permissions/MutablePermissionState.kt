@@ -106,7 +106,7 @@ private fun rememberPermissionGrantedState(permission: String): MutableState<Boo
     val permissionCheckerObserver = remember(permission) {
         LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_START) {
-                permissionState.value = checkPermission()
+                if (!permissionState.value) { permissionState.value = checkPermission() }
             }
         }
     }
