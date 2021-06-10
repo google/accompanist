@@ -68,5 +68,5 @@ jobs:
         with:
           name: test-results-${{ matrix.api-level }}-${{ matrix.shard }}
           path: |
-            "**/build/outputs/*/connected/**"
-            "**/build/reports/**"
+             **/build/reports/*
+             **/build/outputs/*/connected/*

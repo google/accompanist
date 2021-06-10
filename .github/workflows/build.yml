@@ -120,8 +120,8 @@ jobs:
         with:
           name: test-results-${{ matrix.api-level }}
           path: |
-            "**/build/outputs/*/connected/**"
-            "**/build/reports/**"
+            **/build/reports/*
+            **/build/outputs/*/connected/*
 
   deploy:
     if: github.event_name == 'push' # only deploy for pushed commits (not PRs)
