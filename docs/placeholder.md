@@ -9,9 +9,10 @@ More information on the UX provided by this library can be found on the Material
 There are actually two versions of the library available:
 
 * *Placeholder Foundation*: Provides the base functionality and depends on Jetpack Compose Foundation. This version requires the app to provide all of the colors to display.
-* *Placeholder Material*. This uses the founation library above, but also provides sensible default colors from your app's Material color palette.
+* *Placeholder Material*. This uses the foundation library above, but also provides sensible default colors using your app's Material color palette.
 
-You only need to use one or the other, and most apps should use *Placeholder Material*. The API is mostly the same between the libraries, with only the imports being different. Where possible we have provided equivalent code samples below.
+!!! tip
+    You only need to use one of the libraries, and most apps should use **Placeholder Material**. The APIs of the libraries are (mostly) equivalent with only the imports being different. Where possible we have provided equivalent code samples below.
 
 ## Basic usage
 
@@ -50,7 +51,7 @@ At the most basic usage, the modifier will draw a shape over your composable con
     )
     ```
 
-## Placeholder highlights ✨
+## Placeholder highlights
 
 The library also provides some 'highlight' animations to entertain the user while they are waiting. There are two provided by the library, but you can also provide your own.
 
