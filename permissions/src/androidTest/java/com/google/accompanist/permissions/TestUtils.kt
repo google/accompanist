@@ -18,19 +18,38 @@ package com.google.accompanist.permissions
 
 import android.app.Instrumentation
 import android.os.Build
-import androidx.annotation.RequiresApi
+import androidx.activity.ComponentActivity
+import androidx.compose.ui.test.junit4.AndroidComposeTestRule
+import androidx.lifecycle.Lifecycle
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiSelector
 
-@RequiresApi(29)
+internal fun <T : ComponentActivity> simulateAppComingFromTheBackground(
+    composeTestRule: AndroidComposeTestRule<ActivityScenarioRule<T>, T>
+) {
+    // Recreate Activity and set content again to check for the permission again
+    composeTestRule.activityRule.scenario.moveToState(Lifecycle.State.STARTED)
+    // A weird dialog appears when moving to the STARTED state
+    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).pressBack()
+}
+
 internal fun grantPermissionProgrammatically(
     permission: String,
     instrumentation: Instrumentation = InstrumentationRegistry.getInstrumentation()
 ) {
-    instrumentation.uiAutomation.grantRuntimePermission(
-        instrumentation.targetContext.packageName, permission
-    )
+    if (Build.VERSION.SDK_INT < 28) {
+        val fileDescriptor = instrumentation.uiAutomation.executeShellCommand(
+            "pm grant ${instrumentation.targetContext.packageName} $permission"
+        )
+        fileDescriptor.checkError()
+        fileDescriptor.close()
+    } else {
+        instrumentation.uiAutomation.grantRuntimePermission(
+            instrumentation.targetContext.packageName, permission
+        )
+    }
 }
 
 internal fun grantPermissionInDialog(

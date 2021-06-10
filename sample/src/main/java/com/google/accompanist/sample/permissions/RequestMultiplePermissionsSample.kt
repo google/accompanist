@@ -40,11 +40,11 @@ class RequestMultiplePermissionsSample : ComponentActivity() {
 
         setContent {
             AccompanistSampleTheme {
-                val multiplePermissionsState =
-                    activityResultRegistry.rememberMultiplePermissionsState(
-                        android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                        android.Manifest.permission.CAMERA,
-                    )
+                val multiplePermissionsState = rememberMultiplePermissionsState(
+                    activityResultRegistry,
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                    android.Manifest.permission.CAMERA,
+                )
                 Sample(
                     multiplePermissionsState,
                     navigateToSettingsScreen = {

@@ -36,12 +36,19 @@ import androidx.compose.runtime.saveable.rememberSaveable
  * @param permissions the permissions to control and observe.
  */
 @Composable
-fun ActivityResultRegistry.rememberMultiplePermissionsState(
-    vararg permissions: String
+fun rememberMultiplePermissionsState(
+    activityResultRegistry: ActivityResultRegistry,
+    vararg permissions: String,
 ): MultiplePermissionsState {
     val permissionRequested = rememberSaveable { mutableStateOf(false) }
-    val permissionsState = permissions.map {
-        rememberPermissionState(permission = it)
+
+    val mutablePermissionsState = permissions.map {
+        rememberMutablePermissionState(permission = it)
+    }
+    val permissionsState = mutablePermissionsState.map { mutablePermissionState ->
+        rememberPermissionState(
+            activityResultRegistry, mutablePermissionState.permission, mutablePermissionState
+        )
     }
     val revokedPermissions = remember {
         mutableStateOf(permissionsState.filter { !it.hasPermission })
@@ -50,24 +57,38 @@ fun ActivityResultRegistry.rememberMultiplePermissionsState(
         mutableStateOf(permissionsState.firstOrNull { it.shouldShowRationale } != null)
     }
 
-    val launcher = rememberActivityResultLauncher(
+    val launcher = activityResultRegistry.rememberActivityResultLauncher(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissionsResult ->
         // The permission has been requested
         permissionRequested.value = true
         // Keep track of those permissions that were revoked by the user
-        val revokedPermissionsResult = mutableListOf<PermissionState>()
+        val revokedPermissionsResult = mutableListOf<MutablePermissionState>()
+
+        // Update all permissions with the result
         for (permission in permissionsResult.keys) {
-            if (permissionsResult[permission] == false) {
-                revokedPermissionsResult.add(permissionsState.first { it.permission == permission })
+            mutablePermissionsState.firstOrNull { it.permission == permission }?.apply {
+                permissionsResult[permission]?.let { granted ->
+                    hasPermissionState.value = granted
+                    // If permission is revoked, add it to the lest of revoked permissions
+                    // and check if rationale should be shown
+                    if (!granted) {
+                        revokedPermissionsResult.add(this)
+                        refreshShouldShowRationaleState()
+                    }
+                }
             }
         }
+
         // Update shouldShowRationale with the revoked permissions
         shouldShowRationale.value = revokedPermissionsResult
-            .onEach { it.refreshShouldShowRationale() }
-            .firstOrNull { it.shouldShowRationale } != null
+            .onEach { it.refreshShouldShowRationaleState() }
+            .firstOrNull { it.shouldShowRationaleState.value } != null
+
         // Update revokedPermissions state
-        revokedPermissions.value = revokedPermissionsResult
+        revokedPermissions.value = revokedPermissionsResult.map { individualPermission ->
+            permissionsState.find { it.permission == individualPermission.permission }!!
+        }
     }
     return remember(launcher) {
         MultiplePermissionsState(

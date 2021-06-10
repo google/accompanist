@@ -16,6 +16,7 @@
 
 package com.google.accompanist.permissions
 
+import androidx.test.filters.SdkSuppress
 import org.junit.Test
 
 /**
@@ -23,6 +24,7 @@ import org.junit.Test
  */
 class DummyTests {
 
+    @SdkSuppress(maxSdkVersion = 22)
     @Test
     fun dummyTestToAvoidNoTestsFoundErrorInAPI22AndBelow() = Unit
 

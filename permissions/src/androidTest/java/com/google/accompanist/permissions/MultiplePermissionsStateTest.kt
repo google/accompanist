@@ -34,19 +34,19 @@ class MultiplePermissionsStateTest {
     val composeTestRule = createAndroidComposeRule<PermissionsTestActivity>()
 
     @get:Rule
-    val permissionRule = GrantPermissionRule.grant(
+    val permissionRule: GrantPermissionRule = GrantPermissionRule.grant(
         "android.permission.CAMERA",
         "android.permission.READ_EXTERNAL_STORAGE"
-    )!!
+    )
 
     @Test
     fun permissionState_hasPermission() {
         composeTestRule.setContent {
-            val state =
-                composeTestRule.activity.activityResultRegistry.rememberMultiplePermissionsState(
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                    android.Manifest.permission.CAMERA
-                )
+            val state = rememberMultiplePermissionsState(
+                composeTestRule.activity.activityResultRegistry,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.CAMERA
+            )
 
             assertThat(state.allPermissionsGranted).isTrue()
             assertThat(state.shouldShowRationale).isFalse()
@@ -60,12 +60,12 @@ class MultiplePermissionsStateTest {
         )
 
         composeTestRule.setContent {
-            val state =
-                composeTestRule.activity.activityResultRegistry.rememberMultiplePermissionsState(
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                    android.Manifest.permission.CAMERA
-                )
+            val state = rememberMultiplePermissionsState(
+                composeTestRule.activity.activityResultRegistry,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.CAMERA
+            )
 
             assertThat(state.allPermissionsGranted).isFalse()
             assertThat(state.shouldShowRationale).isTrue()

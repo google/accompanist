@@ -28,9 +28,6 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.filters.SdkSuppress
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestCoroutineDispatcher
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -74,7 +71,6 @@ class RequestMultiplePermissionsTest {
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    @SdkSuppress(minSdkVersion = 29, maxSdkVersion = 29) // Only works in API 29 so far
     @Test
     fun permissionTest_grantInTheBackground() {
         grantPermissionInDialog() // Grant first permission
@@ -85,14 +81,8 @@ class RequestMultiplePermissionsTest {
         composeTestRule.onNodeWithText("Denied").assertIsDisplayed()
 
         // This simulates the user going to the Settings screen and granting the permission
-        grantPermissionProgrammatically("android.permission.READ_EXTERNAL_STORAGE")
-
-        // Recreate Activity and set content again to check for the permission again
-        runBlocking {
-            launch(TestCoroutineDispatcher()) {
-                composeTestRule.activityRule.scenario.recreate()
-            }.join()
-        }
+        grantPermissionProgrammatically("android.permission.CAMERA")
+        simulateAppComingFromTheBackground(composeTestRule)
         composeTestRule.activityRule.scenario.onActivity {
             it.setContent { ComposableUnderTest() }
         }
@@ -102,11 +92,11 @@ class RequestMultiplePermissionsTest {
 
     @Composable
     private fun ComposableUnderTest() {
-        val state =
-            composeTestRule.activity.activityResultRegistry.rememberMultiplePermissionsState(
-                android.Manifest.permission.READ_EXTERNAL_STORAGE, // Second permission asked
-                android.Manifest.permission.CAMERA // First permission asked
-            )
+        val state = rememberMultiplePermissionsState(
+            composeTestRule.activity.activityResultRegistry,
+            android.Manifest.permission.READ_EXTERNAL_STORAGE,
+            android.Manifest.permission.CAMERA
+        )
         when {
             state.allPermissionsGranted -> {
                 Text("Granted")

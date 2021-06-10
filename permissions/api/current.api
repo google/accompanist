@@ -17,17 +17,19 @@ package com.google.accompanist.permissions {
   }
 
   public final class MultiplePermissionsStateKt {
-    method @androidx.compose.runtime.Composable public static com.google.accompanist.permissions.MultiplePermissionsState rememberMultiplePermissionsState(androidx.activity.result.ActivityResultRegistry, java.lang.String... permissions);
+    method @androidx.compose.runtime.Composable public static com.google.accompanist.permissions.MultiplePermissionsState rememberMultiplePermissionsState(androidx.activity.result.ActivityResultRegistry activityResultRegistry, java.lang.String... permissions);
+  }
+
+  public final class MutablePermissionStateKt {
   }
 
   @androidx.compose.runtime.Stable public final class PermissionState {
-    ctor public PermissionState(String permission, kotlin.jvm.functions.Function0<kotlin.Unit> refreshShouldShowRationaleState, androidx.activity.result.ActivityResultLauncher<java.lang.String> launcher, androidx.compose.runtime.State<java.lang.Boolean> hasPermissionState, androidx.compose.runtime.State<java.lang.Boolean> shouldShowRationaleState, androidx.compose.runtime.State<java.lang.Boolean> permissionRequestedState);
+    ctor public PermissionState(String permission, androidx.activity.result.ActivityResultLauncher<java.lang.String> launcher, androidx.compose.runtime.State<java.lang.Boolean> hasPermissionState, androidx.compose.runtime.State<java.lang.Boolean> shouldShowRationaleState, androidx.compose.runtime.State<java.lang.Boolean> permissionRequestedState);
     method public boolean getHasPermission();
     method public String getPermission();
     method public boolean getPermissionRequested();
     method public boolean getShouldShowRationale();
     method public void launchPermissionRequest();
-    method public void refreshShouldShowRationale();
     property public final boolean hasPermission;
     property public final String permission;
     property public final boolean permissionRequested;
@@ -35,7 +37,7 @@ package com.google.accompanist.permissions {
   }
 
   public final class PermissionStateKt {
-    method @androidx.compose.runtime.Composable public static com.google.accompanist.permissions.PermissionState rememberPermissionState(androidx.activity.result.ActivityResultRegistry, String permission);
+    method @androidx.compose.runtime.Composable public static com.google.accompanist.permissions.PermissionState rememberPermissionState(androidx.activity.result.ActivityResultRegistry activityResultRegistry, String permission);
   }
 
   public final class PermissionsUtilKt {

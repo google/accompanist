@@ -28,9 +28,6 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.filters.SdkSuppress
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestCoroutineDispatcher
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -71,7 +68,6 @@ class RequestPermissionTest {
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    @SdkSuppress(minSdkVersion = 29, maxSdkVersion = 29) // Only works in API 29 so far
     @Test
     fun permissionTest_grantInTheBackground() {
         denyPermissionInDialog()
@@ -82,24 +78,20 @@ class RequestPermissionTest {
 
         // This simulates the user going to the Settings screen and granting the permission
         grantPermissionProgrammatically("android.permission.CAMERA")
+        simulateAppComingFromTheBackground(composeTestRule)
 
-        // Recreate Activity and set content again to check for the permission again
-        runBlocking {
-            launch(TestCoroutineDispatcher()) {
-                composeTestRule.activityRule.scenario.recreate()
-            }.join()
-        }
         composeTestRule.activityRule.scenario.onActivity {
             it.setContent { ComposableUnderTest() }
         }
 
-        Thread.sleep(5000)
+        composeTestRule.waitForIdle()
         composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
     }
 
     @Composable
     private fun ComposableUnderTest() {
-        val state = composeTestRule.activity.activityResultRegistry.rememberPermissionState(
+        val state = rememberPermissionState(
+            composeTestRule.activity.activityResultRegistry,
             android.Manifest.permission.CAMERA,
         )
         when {
