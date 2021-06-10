@@ -77,6 +77,8 @@ object PlaceholderDefaults {
  * [Placeholder UI](https://material.io/design/communication/launch-screen.html#placeholder-ui)
  * guidelines.
  *
+ * @sample com.google.accompanist.sample.placeholder.DocSample_Foundation_Placeholder
+ *
  * @param visible whether the placeholder should be visible or not.
  * @param color the color used to draw the placeholder UI.
  * @param shape desired shape of the placeholder. Defaults to [RectangleShape].
