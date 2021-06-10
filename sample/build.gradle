@@ -55,6 +55,7 @@ dependencies {
     implementation project(':pager-indicators')
     implementation project(':permissions')
     implementation project(':placeholder')
+    implementation project(':placeholder-material')
     implementation project(':flowlayout')
     implementation project(':systemuicontroller')
     implementation project(':swiperefresh')

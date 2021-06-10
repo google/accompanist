@@ -16,15 +16,19 @@
 
 package com.google.accompanist.placeholder
 
+import androidx.compose.animation.core.InfiniteRepeatableSpec
+import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.draw.DrawModifier
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
@@ -32,113 +36,161 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.drawscope.ContentDrawScope
+import androidx.compose.ui.node.Ref
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.LayoutDirection
+/**
+ * Contains default values used by [Modifier.placeholder] and [PlaceholderHighlight].
+ */
+object PlaceholderDefaults {
+    /**
+     * The default [InfiniteRepeatableSpec] to use for [fade].
+     */
+    val fadeAnimationSpec: InfiniteRepeatableSpec<Float> by lazy {
+        infiniteRepeatable(
+            animation = tween(delayMillis = 200, durationMillis = 600),
+            repeatMode = RepeatMode.Reverse,
+        )
+    }
+
+    /**
+     * The default [InfiniteRepeatableSpec] to use for [shimmer].
+     */
+    val shimmerAnimationSpec: InfiniteRepeatableSpec<Float> by lazy {
+        infiniteRepeatable(
+            animation = tween(durationMillis = 1700, delayMillis = 200),
+            repeatMode = RepeatMode.Restart
+        )
+    }
+}
 
 /**
- * If [visible], draws [shape] with a solid [color] instead of content.
+ * Draws some skeleton UI which is typically used whilst content is 'loading'.
  *
- * @sample com.google.accompanist.sample.placeholder.PlaceholderBasicSample
+ * A version of this modifier which uses appropriate values for Material themed apps is available
+ * in the 'Placeholder Material' library.
  *
- * @param visible defines whether the placeholder should be visible
- * @param color color to paint placeholder with
- * @param shape desired shape of the placeholder
+ * You can provide a [PlaceholderHighlight] which runs an highlight animation on the placeholder.
+ * The [shimmer] and [fade] implementations are provided for easy usage.
+ *
+ * You can find more information on the pattern at the Material Theming
+ * [Placeholder UI](https://material.io/design/communication/launch-screen.html#placeholder-ui)
+ * guidelines.
+ *
+ * @param visible whether the placeholder should be visible or not.
+ * @param color the color used to draw the placeholder UI.
+ * @param shape desired shape of the placeholder. Defaults to [RectangleShape].
+ * @param highlight optional highlight animation.
  */
 fun Modifier.placeholder(
     visible: Boolean,
-    color: Color = PlaceholderDefaults.PlaceholderColor,
-    shape: Shape = RectangleShape
+    color: Color,
+    shape: Shape = RectangleShape,
+    highlight: PlaceholderHighlight? = null,
 ): Modifier = takeIf { visible.not() } ?: composed(
     inspectorInfo = debugInspectorInfo {
         name = "placeholder"
         value = visible
         properties["visible"] = visible
         properties["color"] = color
+        properties["highlight"] = highlight
         properties["shape"] = shape
     }
 ) {
-    PlaceholderModifier(
-        color = color,
-        shape = shape
-    )
-}
+    // TODO: fade the placeholder in and out
 
-/**
- * If [visible], draw [shape] with [animatedBrush] instead of content.
- *
- * @sample com.google.accompanist.sample.placeholder.PlaceholderFadeSample
- * @sample com.google.accompanist.sample.placeholder.PlaceholderShimmerSample
- *
- * @param visible defines whether the placeholder should be visible
- * @param animatedBrush animated brush to paint placeholder with
- * @param shape desired shape of the placeholder
- */
-fun Modifier.placeholder(
-    visible: Boolean,
-    animatedBrush: PlaceholderAnimatedBrush,
-    shape: Shape = RectangleShape
-): Modifier = takeIf { visible.not() } ?: composed(
-    inspectorInfo = debugInspectorInfo {
-        name = "placeholder"
-        value = visible
-        properties["visible"] = visible
-        properties["animatedBrush"] = animatedBrush
-        properties["shape"] = shape
-    }
-) {
-    val infiniteTransition = rememberInfiniteTransition()
-    val progress by infiniteTransition.animateFloat(
-        initialValue = animatedBrush.minimumProgress(),
-        targetValue = animatedBrush.maximumProgress(),
-        animationSpec = animatedBrush.animationSpec()
-    )
-    remember(animatedBrush, shape) {
-        PlaceholderModifier(
-            brush = animatedBrush,
-            shape = shape
-        )
-    }.apply {
-        this.progress = progress
-    }
-}
+    // Values used for caching purposes
+    val lastSize = remember { Ref<Size>() }
+    val lastLayoutDirection = remember { Ref<LayoutDirection>() }
+    val lastOutline = remember { Ref<Outline>() }
 
-private class PlaceholderModifier(
-    private val color: Color? = null,
-    private val brush: PlaceholderAnimatedBrush? = null,
-    private val shape: Shape
-) : DrawModifier {
+    // The current animation progress
+    var progress: Float by remember { mutableStateOf(0f) }
 
-    var progress: Float by mutableStateOf(0f)
+    // Run the optional animation spec and update the progress
+    progress = highlight?.animationSpec?.let { spec ->
+        val infiniteTransition = rememberInfiniteTransition()
+        infiniteTransition.animateFloat(
+            initialValue = 0f,
+            targetValue = 1f,
+            animationSpec = spec,
+        ).value
+    } ?: 0f
 
-    // naive cache outline calculation if size is the same
-    private var lastSize: Size? = null
-    private var lastLayoutDirection: LayoutDirection? = null
-    private var lastOutline: Outline? = null
+    remember(color, shape, highlight) {
+        drawWithContent {
+            // Draw normal composable content first
+            drawContent()
 
-    override fun ContentDrawScope.draw() {
-        if (shape === RectangleShape) {
-            // shortcut to avoid Outline calculation and allocation
-            drawRect()
-        } else {
-            drawOutline()
+            if (shape === RectangleShape) {
+                // shortcut to avoid Outline calculation and allocation
+                // Draw the initial background color
+                drawRectPlaceholder(
+                    color = color,
+                    highlight = highlight,
+                    progress = progress
+                )
+            } else {
+                // Keep track of our outline
+                lastOutline.value = drawOutlinePlaceholder(
+                    shape = shape,
+                    color = color,
+                    highlight = highlight,
+                    progress = progress,
+                    lastOutline = lastOutline.value,
+                    lastLayoutDirection = lastLayoutDirection.value,
+                    lastSize = lastSize.value,
+                )
+            }
+
+            // Keep track of the last size & layout direction
+            lastSize.value = size
+            lastLayoutDirection.value = layoutDirection
         }
     }
+}
 
-    private fun ContentDrawScope.drawRect() {
-        color?.let { drawRect(color = it) }
-        brush?.let { drawRect(brush = it.brush(progress)) }
+private fun ContentDrawScope.drawRectPlaceholder(
+    color: Color,
+    highlight: PlaceholderHighlight?,
+    progress: Float,
+) {
+    // shortcut to avoid Outline calculation and allocation
+    // Draw the initial background color
+    drawRect(color = color)
+
+    if (highlight != null) {
+        drawRect(
+            brush = highlight.brush(progress, size),
+            alpha = highlight.alpha(progress),
+        )
+    }
+}
+
+private fun ContentDrawScope.drawOutlinePlaceholder(
+    shape: Shape,
+    color: Color,
+    highlight: PlaceholderHighlight?,
+    progress: Float,
+    lastOutline: Outline?,
+    lastLayoutDirection: LayoutDirection?,
+    lastSize: Size?,
+): Outline {
+    val outline = lastOutline.takeIf {
+        size == lastSize && layoutDirection == lastLayoutDirection
+    } ?: shape.createOutline(size, layoutDirection, this)
+
+    // Draw the placeholder color
+    drawOutline(outline = outline, color = color)
+
+    if (highlight != null) {
+        drawOutline(
+            outline = outline,
+            brush = highlight.brush(progress, size),
+            alpha = highlight.alpha(progress),
+        )
     }
 
-    private fun ContentDrawScope.drawOutline() {
-        val outline =
-            lastOutline.takeIf { size == lastSize && layoutDirection == lastLayoutDirection }
-                ?: shape.createOutline(size, layoutDirection, this)
-        color?.let { drawOutline(outline, color = color) }
-        brush?.let { drawOutline(outline, brush = brush.brush(progress)) }
-        lastOutline = outline
-        lastSize = size
-    }
-
-    override fun toString(): String =
-        "PlaceholderModifier(color=$color, brush=$brush, shape=$shape)"
+    // Return the outline we used
+    return outline
 }
