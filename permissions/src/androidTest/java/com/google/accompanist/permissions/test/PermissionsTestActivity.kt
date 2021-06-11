@@ -25,6 +25,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.Button
 import androidx.compose.material.Text
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.permissions.rememberPermissionState
@@ -46,6 +51,8 @@ class PermissionsTestActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            var launchPermissionRequest by rememberSaveable { mutableStateOf(false) }
+
             val state = rememberPermissionState(Manifest.permission.CAMERA)
             Column {
                 Text("PermissionsTestActivity")
@@ -64,11 +71,18 @@ class PermissionsTestActivity : ComponentActivity() {
                     }
                     !state.permissionRequested -> {
                         Text("Requesting")
-                        state.launchPermissionRequest()
+                        launchPermissionRequest = true
                     }
                     else -> {
                         Text("Denied")
                     }
+                }
+            }
+
+            LaunchedEffect(launchPermissionRequest, state) {
+                if (launchPermissionRequest) {
+                    state.launchPermissionRequest()
+                    launchPermissionRequest = false
                 }
             }
         }

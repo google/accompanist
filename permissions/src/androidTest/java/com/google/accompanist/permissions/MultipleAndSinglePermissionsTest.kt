@@ -25,6 +25,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -149,6 +154,8 @@ class MultipleAndSinglePermissionsTest {
 
     @Composable
     private fun ComposableUnderTest(vararg permissions: String) {
+        var launchPermissionRequest by rememberSaveable { mutableStateOf(false) }
+
         val state = rememberMultiplePermissionsState(*permissions)
         Column {
             Text("MultipleAndSinglePermissionsTest")
@@ -167,7 +174,7 @@ class MultipleAndSinglePermissionsTest {
                 }
                 !state.permissionRequested -> {
                     Text("Requesting")
-                    state.launchMultiplePermissionRequest()
+                    launchPermissionRequest = true
                 }
                 else -> {
                     Text("Denied")
@@ -182,6 +189,13 @@ class MultipleAndSinglePermissionsTest {
                 }
             ) {
                 Text("Navigate")
+            }
+        }
+
+        LaunchedEffect(launchPermissionRequest, state) {
+            if (launchPermissionRequest) {
+                state.launchMultiplePermissionRequest()
+                launchPermissionRequest = false
             }
         }
     }
