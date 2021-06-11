@@ -45,7 +45,11 @@ fun rememberMultiplePermissionsState(
         rememberMutablePermissionState(permission = it)
     }
     val permissionsState = mutablePermissionsState.map { mutablePermissionState ->
+<<<<<<< HEAD
         rememberPermissionState(mutablePermissionState.permission, mutablePermissionState)
+=======
+        rememberPermissionState(activityResultRegistry, mutablePermissionState)
+>>>>>>> 894ee469 (Experiment to improve PermissionState)
     }
     val revokedPermissions = remember {
         mutableStateOf(permissionsState.filter { !it.hasPermission })
@@ -66,7 +70,7 @@ fun rememberMultiplePermissionsState(
         for (permission in permissionsResult.keys) {
             mutablePermissionsState.firstOrNull { it.permission == permission }?.apply {
                 permissionsResult[permission]?.let { granted ->
-                    hasPermissionState.value = granted
+                    hasPermission = granted
                     // If permission is revoked, add it to the lest of revoked permissions
                     // and check if rationale should be shown
                     if (!granted) {
@@ -80,7 +84,7 @@ fun rememberMultiplePermissionsState(
         // Update shouldShowRationale with the revoked permissions
         shouldShowRationale.value = revokedPermissionsResult
             .onEach { it.refreshShouldShowRationaleState() }
-            .firstOrNull { it.shouldShowRationaleState.value } != null
+            .firstOrNull { it.shouldShowRationale } != null
 
         // Update revokedPermissions state
         revokedPermissions.value = revokedPermissionsResult.map { individualPermission ->

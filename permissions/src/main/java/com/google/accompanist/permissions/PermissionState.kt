@@ -17,12 +17,9 @@
 package com.google.accompanist.permissions
 
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 
@@ -60,19 +57,14 @@ internal fun rememberPermissionState(
 
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
-    ) {
-        permissionRequested.value = true
-        mutablePermissionState.hasPermissionState.value = it
+    ) { granted ->
+        mutablePermissionState.permissionRequested = true
+        mutablePermissionState.hasPermission = granted
         mutablePermissionState.refreshShouldShowRationaleState()
     }
-
-    return PermissionState(
-        permission = permission,
-        launcher = launcher,
-        hasPermissionState = mutablePermissionState.hasPermissionState,
-        shouldShowRationaleState = mutablePermissionState.shouldShowRationaleState,
-        permissionRequestedState = permissionRequested,
-    )
+    // Update the state to the current launcher
+    mutablePermissionState.launcher = launcher
+    return mutablePermissionState
 }
 
 /**
@@ -84,35 +76,26 @@ internal fun rememberPermissionState(
  * [documentation](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions).
  *
  * @param permission the permission to control and observe.
- * @param launcher [ActivityResultLauncher] to ask for this permission to the user.
- * @param hasPermissionState [State] that represents if the permission is granted.
- * @param shouldShowRationaleState [State] that represents if the user should be presented with a
- * rationale.
- * @param permissionRequestedState [State] that represents if the permission has been requested
- * previously.
  */
 @Stable
-class PermissionState(
-    val permission: String,
-    private val launcher: ActivityResultLauncher<String>,
-    hasPermissionState: State<Boolean>,
-    shouldShowRationaleState: State<Boolean>,
-    permissionRequestedState: State<Boolean>
-) {
+interface PermissionState {
+
+    val permission: String
+
     /**
      * When `true`, the user has granted the [permission].
      */
-    val hasPermission by hasPermissionState
+    val hasPermission: Boolean
 
     /**
      * When `true`, the user should be presented with a rationale.
      */
-    val shouldShowRationale by shouldShowRationaleState
+    val shouldShowRationale: Boolean
 
     /**
      * When `true`, the [permission] request has been done previously.
      */
-    val permissionRequested by permissionRequestedState
+    val permissionRequested: Boolean
 
     /**
      * Request the [permission] to the user.
@@ -125,5 +108,5 @@ class PermissionState(
      * again or has denied the permission multiple times.
      * This behavior varies depending on the Android level API.
      */
-    fun launchPermissionRequest(): Unit = launcher.launch(permission)
+    fun launchPermissionRequest()
 }
