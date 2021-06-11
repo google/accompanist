@@ -17,6 +17,7 @@
 package com.google.accompanist.permissions
 
 import android.content.Intent
+import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -139,6 +140,10 @@ class MultipleAndSinglePermissionsTest {
         composeTestRule.onNodeWithText("MultipleAndSinglePermissionsTest").assertIsDisplayed()
         composeTestRule.onNodeWithText("Request").performClick()
         grantPermissionInDialog() // only one permission to grant now
+        if (Build.VERSION.SDK_INT == 23) { // API 23 shows all permissions again
+            grantPermissionInDialog()
+        }
+
         composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
     }
 

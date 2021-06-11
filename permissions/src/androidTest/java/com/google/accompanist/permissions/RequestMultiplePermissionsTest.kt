@@ -16,6 +16,7 @@
 
 package com.google.accompanist.permissions
 
+import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
@@ -57,6 +58,10 @@ class RequestMultiplePermissionsTest {
         composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
         composeTestRule.onNodeWithText("Request").performClick()
         grantPermissionInDialog() // Grant second permission
+        if (Build.VERSION.SDK_INT == 23) { // API 23 shows all permissions again
+            grantPermissionInDialog()
+        }
+
         composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
     }
 
@@ -66,7 +71,12 @@ class RequestMultiplePermissionsTest {
         denyPermissionInDialog() // Deny second permission
         composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
         composeTestRule.onNodeWithText("Request").performClick()
+
+        if (Build.VERSION.SDK_INT == 23) { // API 23 shows all permissions again
+            grantPermissionInDialog()
+        }
         doNotAskAgainPermissionInDialog() // Do not ask again second permission
+
         composeTestRule.onNodeWithText("Denied").assertIsDisplayed()
     }
 
@@ -77,6 +87,10 @@ class RequestMultiplePermissionsTest {
         denyPermissionInDialog() // Deny second permission
         composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
         composeTestRule.onNodeWithText("Request").performClick()
+
+        if (Build.VERSION.SDK_INT == 23) { // API 23 shows all permissions again
+            grantPermissionInDialog()
+        }
         doNotAskAgainPermissionInDialog() // Do not ask again second permission
         composeTestRule.onNodeWithText("Denied").assertIsDisplayed()
 

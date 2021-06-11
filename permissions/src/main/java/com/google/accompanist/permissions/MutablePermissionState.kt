@@ -99,13 +99,13 @@ private fun rememberPermissionGrantedState(permission: String): MutableState<Boo
 
     val permissionState = remember { mutableStateOf(checkPermission()) }
 
-    // Check if the permission was granted when the app comes from the background
+    // Check if the permission was granted when the lifecycle is resumed.
     // The user might've gone to the Settings screen and granted the permission
     // We don't check if the permission was denied as that triggers a process restart
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val permissionCheckerObserver = remember(permission) {
         LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_START) {
+            if (event == Lifecycle.Event.ON_RESUME) {
                 if (!permissionState.value) { permissionState.value = checkPermission() }
             }
         }
