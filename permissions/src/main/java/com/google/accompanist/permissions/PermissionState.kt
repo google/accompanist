@@ -16,9 +16,8 @@
 
 package com.google.accompanist.permissions
 
-import androidx.activity.compose.LocalActivityResultRegistryOwner
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.ActivityResultRegistry
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
@@ -39,27 +38,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 fun rememberPermissionState(
     permission: String
 ): PermissionState {
-    val activityResultRegistry = LocalActivityResultRegistryOwner.current?.activityResultRegistry
-        ?: throw IllegalStateException()
-    return rememberPermissionState(activityResultRegistry, permission)
-}
-
-/**
- * Creates a [PermissionState] that is remembered across compositions.
- *
- * It's recommended that apps exercise the permissions workflow as described in the
- * [documentation](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions).
- *
- * @param activityResultRegistry to store the permission result callbacks.
- * @param permission the permission to control and observe.
- */
-@Composable
-fun rememberPermissionState(
-    activityResultRegistry: ActivityResultRegistry,
-    permission: String
-): PermissionState {
     val mutablePermissionState = rememberMutablePermissionState(permission)
-    return rememberPermissionState(activityResultRegistry, permission, mutablePermissionState)
+    return rememberPermissionState(permission, mutablePermissionState)
 }
 
 /**
@@ -73,13 +53,12 @@ fun rememberPermissionState(
  */
 @Composable
 internal fun rememberPermissionState(
-    activityResultRegistry: ActivityResultRegistry,
     permission: String,
     mutablePermissionState: MutablePermissionState
 ): PermissionState {
     val permissionRequested = rememberSaveable { mutableStateOf(false) }
 
-    val launcher = activityResultRegistry.rememberActivityResultLauncher(
+    val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) {
         permissionRequested.value = true
@@ -137,6 +116,9 @@ class PermissionState(
 
     /**
      * Request the [permission] to the user.
+     *
+     * This should always be triggered from a side-effect in Compose. Otherwise, this will
+     * result in an IllegalStateException.
      *
      * This triggers a system dialog that asks the user to grant or revoke the permission.
      * Note that this dialog might not appear on the screen if the user doesn't want to be asked

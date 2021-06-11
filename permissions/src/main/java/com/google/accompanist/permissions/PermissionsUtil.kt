@@ -19,16 +19,6 @@ package com.google.accompanist.permissions
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.ActivityResultRegistry
-import androidx.activity.result.contract.ActivityResultContract
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.saveable.rememberSaveable
-import java.util.UUID
 
 /**
  * Find the closest Activity in a given Context.
@@ -40,32 +30,4 @@ internal fun Context.findActivity(): Activity {
         context = context.baseContext
     }
     throw IllegalStateException("Permissions should be called in the context of an Activity")
-}
-
-/**
- * Remember an [ActivityResultLauncher] that is registered but not launched. The launcher is
- * unregistered when this composable leaves the Composition.
- */
-@Composable
-internal fun <I, O> ActivityResultRegistry.rememberActivityResultLauncher(
-    requestContract: ActivityResultContract<I, O>,
-    onResult: (O) -> Unit
-): ActivityResultLauncher<I> {
-    // Keep track of the current contract and onResult listener
-    val currentRequestContract by rememberUpdatedState(requestContract)
-    val currentOnResult by rememberUpdatedState(onResult)
-
-    // It doesn't really matter what the key is, just that it is unique
-    // and consistent across configuration changes
-    val key = rememberSaveable { UUID.randomUUID().toString() }
-
-    val launcher = remember {
-        register(key, currentRequestContract, currentOnResult)
-    }
-    DisposableEffect(launcher) {
-        onDispose {
-            launcher.unregister()
-        }
-    }
-    return launcher
 }

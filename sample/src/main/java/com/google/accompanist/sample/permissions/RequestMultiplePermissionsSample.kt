@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -72,6 +73,7 @@ private fun Sample(
     multiplePermissionsState: MultiplePermissionsState,
     navigateToSettingsScreen: () -> Unit
 ) {
+    var launchPermissionRequest by rememberSaveable { mutableStateOf(false) }
     var doNotShowRationale by rememberSaveable { mutableStateOf(false) }
 
     when {
@@ -108,7 +110,7 @@ private fun Sample(
             }
         }
         !multiplePermissionsState.permissionRequested -> {
-            multiplePermissionsState.launchMultiplePermissionRequest()
+            launchPermissionRequest = true
         }
         else -> {
             Column {
@@ -125,6 +127,12 @@ private fun Sample(
                     Text("Open Settings")
                 }
             }
+        }
+    }
+    LaunchedEffect(launchPermissionRequest, multiplePermissionsState) {
+        if (launchPermissionRequest) {
+            multiplePermissionsState.launchMultiplePermissionRequest()
+            launchPermissionRequest = false
         }
     }
 }
