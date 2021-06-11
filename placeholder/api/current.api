@@ -26,7 +26,7 @@ package com.google.accompanist.placeholder {
   }
 
   public final class PlaceholderKt {
-    method public static androidx.compose.ui.Modifier placeholder-ryuEAks(androidx.compose.ui.Modifier, boolean visible, long color, optional androidx.compose.ui.graphics.Shape shape, optional com.google.accompanist.placeholder.PlaceholderHighlight? highlight);
+    method public static androidx.compose.ui.Modifier placeholder-2Mgfux4(androidx.compose.ui.Modifier, boolean visible, long color, optional androidx.compose.ui.graphics.Shape shape, optional com.google.accompanist.placeholder.PlaceholderHighlight? highlight, optional kotlin.jvm.functions.Function1<? super androidx.compose.animation.core.Transition.Segment<java.lang.Boolean>,? extends androidx.compose.animation.core.FiniteAnimationSpec<java.lang.Float>> placeholderFadeTransitionSpec, optional kotlin.jvm.functions.Function1<? super androidx.compose.animation.core.Transition.Segment<java.lang.Boolean>,? extends androidx.compose.animation.core.FiniteAnimationSpec<java.lang.Float>> contentFadeTransitionSpec);
   }
 
 }
