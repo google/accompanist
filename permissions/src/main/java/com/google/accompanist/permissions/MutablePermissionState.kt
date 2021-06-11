@@ -16,21 +16,18 @@
 
 package com.google.accompanist.permissions
 
-import android.content.pm.PackageManager
+import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import kotlinx.coroutines.channels.Channel
@@ -47,18 +44,39 @@ import kotlinx.coroutines.channels.Channel
 internal fun rememberMutablePermissionState(
     permission: String
 ): MutablePermissionState {
-    val permissionState = rememberPermissionGrantedState(permission)
-    val (shouldShowRationaleState, refreshShouldShowRationaleState) =
-        rememberShouldShowRationaleState(permission)
+    val context = LocalContext.current
+    val currentActivity by rememberUpdatedState(context.findActivity())
 
-    return remember(permission) {
-        MutablePermissionState(
-            permission = permission,
-            refreshShouldShowRationaleState = refreshShouldShowRationaleState,
-            hasPermissionState = permissionState,
-            shouldShowRationaleState = shouldShowRationaleState
-        )
+    // FIXME: This should probably be rememberSaveable with a saver for the
+    //  permissionRequested value
+    val state = remember(permission) { MutablePermissionState(permission = permission) }
+
+    // Check if the permission was granted when the app comes from the background
+    // The user might've gone to the Settings screen and granted the permission
+    // We don't check if the permission was denied as that triggers a process restart
+    val permissionCheckerObserver = remember(permission) {
+        LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_START) {
+                if (!state.hasPermission) {
+                    state.hasPermission = context.checkPermission(permission)
+                }
+            }
+        }
     }
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    DisposableEffect(lifecycle, permissionCheckerObserver) {
+        lifecycle.addObserver(permissionCheckerObserver)
+        onDispose { lifecycle.removeObserver(permissionCheckerObserver) }
+    }
+
+    // Observe the state refresh channel, to trigger a refresh when requested.
+    LaunchedEffect(state) {
+        for (refreshEvent in state.refreshChannel) {
+            state.shouldShowRationale = currentActivity.shouldShowRationale(permission)
+        }
+    }
+
+    return state
 }
 
 /**
@@ -67,92 +85,25 @@ internal fun rememberMutablePermissionState(
  * In most cases, this will be created via [rememberMutablePermissionState].
  *
  * @param permission the permission to control and observe.
- * @param hasPermissionState [State] that represents if the permission is granted.
- * @param shouldShowRationaleState [State] that represents if the user should be presented with a
- * rationale.
- * @param refreshShouldShowRationaleState action to refresh whether or not a rationale should be
- * presented to the user to explain why the permission should be granted.
  */
 @Stable
-internal data class MutablePermissionState(
-    val permission: String,
-    val hasPermissionState: MutableState<Boolean>,
-    val shouldShowRationaleState: State<Boolean>,
-    val refreshShouldShowRationaleState: () -> Unit,
-)
+internal class MutablePermissionState(
+    override val permission: String,
+) : PermissionState {
+    override var hasPermission: Boolean by mutableStateOf(false)
+    override var shouldShowRationale: Boolean by mutableStateOf(false)
+    override var permissionRequested: Boolean by mutableStateOf(false)
 
-/**
- * Creates a [MutableState] that represents if the user has granted the permission.
- *
- * This state is remembered across compositions and is updated every time the `lifecycle` of the
- * current [LocalLifecycleOwner] receives the `ON_START` lifecycle event. This check is crucial
- * when the user manually grants the permission on the Settings screen while the app is in the
- * background. There's no need to check when the permission is revoked from the Settings screen
- * as that triggers a process restart.
- */
-@Composable
-private fun rememberPermissionGrantedState(permission: String): MutableState<Boolean> {
-    val context = LocalContext.current
+    // This feels a bit memory leaky
+    internal lateinit var launcher: ActivityResultLauncher<String>
 
-    fun checkPermission(): Boolean =
-        ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
+    internal val refreshChannel = Channel<Unit>(Channel.CONFLATED)
 
-    val permissionState = remember { mutableStateOf(checkPermission()) }
-
-    // Check if the permission was granted when the app comes from the background
-    // The user might've gone to the Settings screen and granted the permission
-    // We don't check if the permission was denied as that triggers a process restart
-    val lifecycle = LocalLifecycleOwner.current.lifecycle
-    val permissionCheckerObserver = remember(permission) {
-        LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_START) {
-                if (!permissionState.value) { permissionState.value = checkPermission() }
-            }
-        }
-    }
-    DisposableEffect(lifecycle, permissionCheckerObserver) {
-        lifecycle.addObserver(permissionCheckerObserver)
-        onDispose {
-            lifecycle.removeObserver(permissionCheckerObserver)
-        }
+    internal fun refreshShouldShowRationaleState() {
+        refreshChannel.trySend(Unit)
     }
 
-    return permissionState
-}
-
-/**
- * Creates a [ShouldShowRationaleState] that is remembered across recompositions.
- */
-@Composable
-private fun rememberShouldShowRationaleState(permission: String): ShouldShowRationaleState {
-    val currentActivity by rememberUpdatedState(LocalContext.current.findActivity())
-
-    fun shouldShow(): Boolean =
-        ActivityCompat.shouldShowRequestPermissionRationale(currentActivity, permission)
-
-    // Posting to this channel will trigger a single refresh. The channel conflates multiple
-    // refresh events that could be sent while the state is being produced
-    val refreshChannel = remember { Channel<Unit>(Channel.CONFLATED) }
-
-    val result = produceState(initialValue = shouldShow()) {
-        // This for-loop will loop until the [produceState] coroutine is cancelled.
-        for (refreshEvent in refreshChannel) {
-            value = shouldShow()
-        }
-    }
-    return remember {
-        ShouldShowRationaleState(result) { refreshChannel.trySend(Unit) }
+    override fun launchPermissionRequest() {
+        launcher.launch(permission)
     }
 }
-
-/**
- * A state object that is used to check if the user should be presented with a rationale for a
- * certain permission and a lambda to refresh and update the state on demand.
- *
- * @param result the user should be presented with a rationale.
- * @param onRefresh refresh and update the [result] state.
- */
-private data class ShouldShowRationaleState(
-    val result: State<Boolean>,
-    val onRefresh: () -> Unit
-)
