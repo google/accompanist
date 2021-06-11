@@ -169,7 +169,7 @@ fun Modifier.placeholder(
                     }
                 }
             } else if (contentAlpha >= 0.99f) {
-                // If the content alpha is between > 99%, draw it with no alpha
+                // If the content alpha is > 99%, draw it with no alpha
                 drawContent()
             }
 
@@ -194,7 +194,7 @@ fun Modifier.placeholder(
                     drawPlaceholder()
                 }
             } else if (placeholderAlpha >= 0.99f) {
-                // If the placeholder alpha is between > 99%, draw it with no alpha
+                // If the placeholder alpha is > 99%, draw it with no alpha
                 drawPlaceholder()
             }
 
