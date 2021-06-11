@@ -127,10 +127,10 @@ internal fun doNotAskAgainPermissionInDialog(
 private fun UiObject.clickForPermission() {
     var objectExists = false
     var timesRetried = 0
-    while (!objectExists && timesRetried < 3) {
+    while (!objectExists && timesRetried < 5) {
         objectExists = exists()
         if (!objectExists) {
-            Thread.sleep(250)
+            Thread.sleep(300)
             timesRetried++
         }
     }
@@ -138,10 +138,10 @@ private fun UiObject.clickForPermission() {
 
     var clicked = false
     timesRetried = 0
-    while (exists() && !clicked && timesRetried < 3) {
+    while (exists() && !clicked && timesRetried < 5) {
         clicked = click()
         if (!clicked) {
-            Thread.sleep(250)
+            Thread.sleep(300)
             timesRetried++
         }
     }
