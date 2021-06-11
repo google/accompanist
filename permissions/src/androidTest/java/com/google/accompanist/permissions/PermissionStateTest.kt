@@ -25,7 +25,7 @@ import org.junit.Rule
 import org.junit.Test
 
 /**
- * Test that proves the data comes from the right place
+ * Simple tests that prove the data comes from the right place
  */
 @SdkSuppress(minSdkVersion = 23)
 class PermissionStateTest {
@@ -40,10 +40,7 @@ class PermissionStateTest {
     @Test
     fun permissionState_hasPermission() {
         composeTestRule.setContent {
-            val state = rememberPermissionState(
-                composeTestRule.activity.activityResultRegistry,
-                android.Manifest.permission.CAMERA
-            )
+            val state = rememberPermissionState(android.Manifest.permission.CAMERA)
             assertThat(state.hasPermission).isTrue()
             assertThat(state.shouldShowRationale).isFalse()
         }
@@ -57,9 +54,7 @@ class PermissionStateTest {
         )
 
         composeTestRule.setContent {
-            val state = rememberPermissionState(
-                composeTestRule.activity.activityResultRegistry, permission
-            )
+            val state = rememberPermissionState(permission)
 
             assertThat(state.hasPermission).isFalse()
             assertThat(state.shouldShowRationale).isTrue()

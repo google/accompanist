@@ -30,12 +30,14 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.dp
+import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.google.accompanist.permissions.test.PermissionsTestActivity
 import org.junit.Rule
 import org.junit.Test
 
+@SdkSuppress(minSdkVersion = 23)
 class MultipleAndSinglePermissionsTest {
 
     @get:Rule
@@ -142,9 +144,7 @@ class MultipleAndSinglePermissionsTest {
 
     @Composable
     private fun ComposableUnderTest(vararg permissions: String) {
-        val state = rememberMultiplePermissionsState(
-            composeTestRule.activity.activityResultRegistry, *permissions
-        )
+        val state = rememberMultiplePermissionsState(*permissions)
         Column {
             Text("MultipleAndSinglePermissionsTest")
             Spacer(Modifier.height(16.dp))

@@ -16,6 +16,7 @@
 
 package com.google.accompanist.permissions
 
+import androidx.activity.compose.LocalActivityResultRegistryOwner
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.ActivityResultRegistry
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,6 +33,24 @@ import androidx.compose.runtime.saveable.rememberSaveable
  * It's recommended that apps exercise the permissions workflow as described in the
  * [documentation](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions).
  *
+ * @param permission the permission to control and observe.
+ */
+@Composable
+fun rememberPermissionState(
+    permission: String
+): PermissionState {
+    val activityResultRegistry = LocalActivityResultRegistryOwner.current?.activityResultRegistry
+        ?: throw IllegalStateException()
+    return rememberPermissionState(activityResultRegistry, permission)
+}
+
+/**
+ * Creates a [PermissionState] that is remembered across compositions.
+ *
+ * It's recommended that apps exercise the permissions workflow as described in the
+ * [documentation](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions).
+ *
+ * @param activityResultRegistry to store the permission result callbacks.
  * @param permission the permission to control and observe.
  */
 @Composable

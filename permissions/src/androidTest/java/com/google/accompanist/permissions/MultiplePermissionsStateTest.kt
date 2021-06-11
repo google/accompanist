@@ -25,7 +25,7 @@ import org.junit.Rule
 import org.junit.Test
 
 /**
- * Test that proves the data comes from the right place
+ * Simple tests that prove the data comes from the right place
  */
 @SdkSuppress(minSdkVersion = 23)
 class MultiplePermissionsStateTest {
@@ -43,7 +43,6 @@ class MultiplePermissionsStateTest {
     fun permissionState_hasPermission() {
         composeTestRule.setContent {
             val state = rememberMultiplePermissionsState(
-                composeTestRule.activity.activityResultRegistry,
                 android.Manifest.permission.READ_EXTERNAL_STORAGE,
                 android.Manifest.permission.CAMERA
             )
@@ -61,7 +60,6 @@ class MultiplePermissionsStateTest {
 
         composeTestRule.setContent {
             val state = rememberMultiplePermissionsState(
-                composeTestRule.activity.activityResultRegistry,
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 android.Manifest.permission.READ_EXTERNAL_STORAGE,
                 android.Manifest.permission.CAMERA

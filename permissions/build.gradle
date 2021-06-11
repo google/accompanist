@@ -77,7 +77,7 @@ android {
 }
 
 dependencies {
-    implementation libs.androidx.activity.activity
+    implementation libs.androidx.activity.compose
     implementation libs.compose.foundation.foundation
     implementation libs.kotlin.coroutines.android
     implementation libs.napier

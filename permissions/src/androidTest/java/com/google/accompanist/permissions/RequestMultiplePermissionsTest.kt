@@ -97,7 +97,6 @@ class RequestMultiplePermissionsTest {
     @Composable
     private fun ComposableUnderTest() {
         val state = rememberMultiplePermissionsState(
-            composeTestRule.activity.activityResultRegistry,
             android.Manifest.permission.READ_EXTERNAL_STORAGE,
             android.Manifest.permission.CAMERA
         )

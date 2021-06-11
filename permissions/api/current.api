@@ -17,6 +17,7 @@ package com.google.accompanist.permissions {
   }
 
   public final class MultiplePermissionsStateKt {
+    method @androidx.compose.runtime.Composable public static com.google.accompanist.permissions.MultiplePermissionsState rememberMultiplePermissionsState(java.lang.String... permissions);
     method @androidx.compose.runtime.Composable public static com.google.accompanist.permissions.MultiplePermissionsState rememberMultiplePermissionsState(androidx.activity.result.ActivityResultRegistry activityResultRegistry, java.lang.String... permissions);
   }
 
@@ -37,6 +38,7 @@ package com.google.accompanist.permissions {
   }
 
   public final class PermissionStateKt {
+    method @androidx.compose.runtime.Composable public static com.google.accompanist.permissions.PermissionState rememberPermissionState(String permission);
     method @androidx.compose.runtime.Composable public static com.google.accompanist.permissions.PermissionState rememberPermissionState(androidx.activity.result.ActivityResultRegistry activityResultRegistry, String permission);
   }
 

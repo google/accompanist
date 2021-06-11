@@ -88,10 +88,7 @@ class RequestPermissionTest {
 
     @Composable
     private fun ComposableUnderTest() {
-        val state = rememberPermissionState(
-            composeTestRule.activity.activityResultRegistry,
-            android.Manifest.permission.CAMERA,
-        )
+        val state = rememberPermissionState(android.Manifest.permission.CAMERA)
         when {
             state.hasPermission -> {
                 Text("Granted")

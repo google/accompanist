@@ -24,15 +24,15 @@ import androidx.lifecycle.Lifecycle
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.UiObject
 import androidx.test.uiautomator.UiSelector
 
 internal fun <T : ComponentActivity> simulateAppComingFromTheBackground(
     composeTestRule: AndroidComposeTestRule<ActivityScenarioRule<T>, T>
 ) {
-    // Recreate Activity and set content again to check for the permission again
+    // Make Activity go through ON_START, and ON_RESUME
     composeTestRule.activityRule.scenario.moveToState(Lifecycle.State.STARTED)
-    // A weird dialog appears when moving to the STARTED state
-    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).pressBack()
+    composeTestRule.activityRule.scenario.moveToState(Lifecycle.State.RESUMED)
 }
 
 internal fun grantPermissionProgrammatically(
@@ -57,20 +57,20 @@ internal fun grantPermissionInDialog(
 ) {
     val allowButton = uiDevice.findObject(
         UiSelector().text(
-            when {
-                Build.VERSION.SDK_INT <= 28 && Build.VERSION.SDK_INT != 23 -> "ALLOW"
+            when (Build.VERSION.SDK_INT) {
+                in 24..28 -> "ALLOW"
                 else -> "Allow"
             }
         )
     )
-    if (allowButton.exists()) { allowButton.click() }
+    allowButton.clickForPermission()
 
     // Or maybe this permission doesn't have the Allow option
     if (Build.VERSION.SDK_INT == 30) {
         val whileUsingTheAppButton = uiDevice.findObject(
             UiSelector().text("While using the app")
         )
-        if (whileUsingTheAppButton.exists()) { whileUsingTheAppButton.click() }
+        whileUsingTheAppButton.clickForPermission()
     }
 }
 
@@ -79,13 +79,13 @@ internal fun denyPermissionInDialog(
 ) {
     val denyButton = uiDevice.findObject(
         UiSelector().text(
-            when {
-                Build.VERSION.SDK_INT <= 28 && Build.VERSION.SDK_INT != 23 -> "DENY"
+            when (Build.VERSION.SDK_INT) {
+                in 24..28 -> "DENY"
                 else -> "Deny"
             }
         )
     )
-    if (denyButton.exists()) { denyButton.click() }
+    denyButton.clickForPermission()
 }
 
 internal fun doNotAskAgainPermissionInDialog(
@@ -101,9 +101,7 @@ internal fun doNotAskAgainPermissionInDialog(
                     "Deny & don’t ask again"
                 )
             )
-            if (denyAndDoNotAskAgainButton.exists()) {
-                denyAndDoNotAskAgainButton.click()
-            }
+            denyAndDoNotAskAgainButton.clickForPermission()
         }
         Build.VERSION.SDK_INT == 23 -> {
             val doNotAskAgainCheckbox = uiDevice.findObject(
@@ -111,9 +109,7 @@ internal fun doNotAskAgainPermissionInDialog(
                     "Never ask again"
                 )
             )
-            if (doNotAskAgainCheckbox.exists()) {
-                doNotAskAgainCheckbox.click()
-            }
+            doNotAskAgainCheckbox.clickForPermission()
             denyPermissionInDialog(uiDevice)
         }
         else -> {
@@ -122,10 +118,31 @@ internal fun doNotAskAgainPermissionInDialog(
                     "Don't ask again"
                 )
             )
-            if (doNotAskAgainCheckbox.exists()) {
-                doNotAskAgainCheckbox.click()
-            }
+            doNotAskAgainCheckbox.clickForPermission()
             denyPermissionInDialog(uiDevice)
+        }
+    }
+}
+
+private fun UiObject.clickForPermission() {
+    var objectExists = false
+    var timesRetried = 0
+    while (!objectExists && timesRetried < 3) {
+        objectExists = exists()
+        if (!objectExists) {
+            Thread.sleep(250)
+            timesRetried++
+        }
+    }
+    if (!objectExists) return
+
+    var clicked = false
+    timesRetried = 0
+    while (exists() && !clicked && timesRetried < 3) {
+        clicked = click()
+        if (!clicked) {
+            Thread.sleep(250)
+            timesRetried++
         }
     }
 }

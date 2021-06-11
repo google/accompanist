@@ -46,7 +46,7 @@ class PermissionsTestActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val state = rememberPermissionState(activityResultRegistry, Manifest.permission.CAMERA)
+            val state = rememberPermissionState(Manifest.permission.CAMERA)
             Column {
                 Text("PermissionsTestActivity")
                 Spacer(Modifier.height(16.dp))

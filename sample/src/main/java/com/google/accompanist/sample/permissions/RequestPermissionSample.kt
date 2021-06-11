@@ -47,8 +47,7 @@ class RequestPermissionSample : ComponentActivity() {
         setContent {
             AccompanistSampleTheme {
                 val cameraPermissionState = rememberPermissionState(
-                    activityResultRegistry,
-                    android.Manifest.permission.CAMERA,
+                    android.Manifest.permission.CAMERA
                 )
                 Sample(
                     cameraPermissionState,
