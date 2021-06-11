@@ -63,7 +63,7 @@ interface PlaceholderHighlight {
 /**
  * Creates a [Fade] brush with the given initial and target colors.
  *
- * @sample com.google.accompanist.sample.placeholder.DocSample_PlaceholderFade
+ * @sample com.google.accompanist.sample.placeholder.DocSample_Foundation_PlaceholderFade
  *
  * @param highlightColor the color of the highlight which is faded in/out.
  * @param animationSpec the [AnimationSpec] to configure the animation.
@@ -83,7 +83,7 @@ fun PlaceholderHighlight.Companion.fade(
  * During that time it is also faded in, from 0f..progressForMaxAlpha, and then faded out from
  * progressForMaxAlpha..1f.
  *
- * @sample com.google.accompanist.sample.placeholder.DocSample_PlaceholderShimmer
+ * @sample com.google.accompanist.sample.placeholder.DocSample_Foundation_PlaceholderShimmer
  *
  * @param highlightColor the color of the highlight 'shimmer'.
  * @param animationSpec the [AnimationSpec] to configure the animation.

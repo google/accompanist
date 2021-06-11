@@ -40,6 +40,10 @@ nav:
   - 'Swipe Refresh':
     - 'Guide': swiperefresh.md
     - 'API': api/swiperefresh/
+  - 'Placeholder':
+    - 'Guide': placeholder.md
+    - 'Foundation API': api/placeholder/
+    - 'Material API': api/placeholder-material/    
   - 'Flow layouts':
     - 'Guide': flowlayout.md
     - 'API': api/flowlayout/

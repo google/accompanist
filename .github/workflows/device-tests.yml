@@ -1,0 +1,71 @@
+name: Instrumented tests on device
+
+on:
+  schedule:
+    # Run this twice per day, at 6:13 and 16:13
+    - cron:  '13 6,16 * * *'
+
+jobs:
+  android-test:
+    runs-on: macOS-latest
+    timeout-minutes: 40
+
+    strategy:
+      # Allow tests to continue on other devices if they fail on one device.
+      fail-fast: false
+      matrix:
+        api-level: [22, 26, 28, 29]
+        shard: [0, 1, 2] # Need to update shard-count below if this changes
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Copy CI gradle.properties
+        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+      - name: set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Decrypt secrets
+        run: release/signing-setup.sh ${{ secrets.ENCRYPT_KEY }}
+
+      - name: Generate cache key
+        run: ./checksum.sh checksum.txt
+
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches/modules-*
+            ~/.gradle/caches/jars-*
+            ~/.gradle/caches/build-cache-*
+          key: gradle-${{ hashFiles('checksum.txt') }}
+
+      - name: Run tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          profile: Galaxy Nexus
+          # We run all tests, sharding them over 3 shards
+          script: ./scripts/run-device-tests.sh --log-file=logcat.txt --shard-index=${{ matrix.shard }} --shard-count=3
+
+      - name: Clean secrets
+        if: always()
+        run: release/signing-cleanup.sh
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: logs-${{ matrix.api-level }}-${{ matrix.shard }}
+          path: logcat.txt
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results-${{ matrix.api-level }}-${{ matrix.shard }}
+          path: |
+             **/build/reports/*
+             **/build/outputs/*/connected/*
