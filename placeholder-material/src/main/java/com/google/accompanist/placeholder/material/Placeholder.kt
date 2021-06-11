@@ -16,6 +16,9 @@
 
 package com.google.accompanist.placeholder.material
 
+import androidx.compose.animation.core.FiniteAnimationSpec
+import androidx.compose.animation.core.Transition
+import androidx.compose.animation.core.spring
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.Composable
@@ -81,6 +84,10 @@ fun PlaceholderDefaults.shimmerHighlightColor(
  * To customize the color and shape of the placeholder, you can use the foundation version of
  * [Modifier.placeholder], along with the values provided by [PlaceholderDefaults].
  *
+ * A cross-fade transition will be applied to the content and placeholder UI when the [visible]
+ * value changes. The transition can be customized via the [contentFadeTransitionSpec] and
+ * [placeholderFadeTransitionSpec] parameters.
+ *
  * You can provide a [PlaceholderHighlight] which runs an highlight animation on the placeholder.
  * The [shimmer] and [fade] implementations are provided for easy usage.
  *
@@ -96,17 +103,25 @@ fun PlaceholderDefaults.shimmerHighlightColor(
  * @param shape desired shape of the placeholder. If null is provided the placeholder
  * will use the small shape set in [MaterialTheme.shapes].
  * @param highlight optional highlight animation.
+ * @param placeholderFadeTransitionSpec The transition spec to use when fading the placeholder
+ * on/off screen. The boolean parameter defined for the transition is [visible].
+ * @param contentFadeTransitionSpec The transition spec to use when fading the content
+ * on/off screen. The boolean parameter defined for the transition is [visible].
  */
 fun Modifier.placeholder(
     visible: Boolean,
     color: Color = Color.Unspecified,
     shape: Shape? = null,
     highlight: PlaceholderHighlight? = null,
+    placeholderFadeTransitionSpec: @Composable Transition.Segment<Boolean>.() -> FiniteAnimationSpec<Float> = { spring() },
+    contentFadeTransitionSpec: @Composable Transition.Segment<Boolean>.() -> FiniteAnimationSpec<Float> = { spring() },
 ): Modifier = composed {
     Modifier.placeholder(
         visible = visible,
         color = if (color.isSpecified) color else PlaceholderDefaults.color(),
         shape = shape ?: MaterialTheme.shapes.small,
         highlight = highlight,
+        placeholderFadeTransitionSpec = placeholderFadeTransitionSpec,
+        contentFadeTransitionSpec = contentFadeTransitionSpec,
     )
 }
