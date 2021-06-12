@@ -99,7 +99,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          profile: Galaxy Nexus
+          profile: Nexus 6
           # We run all affected tests of the PR (or commit)
           script: ./scripts/run-device-tests.sh --log-file=logcat.txt --run-affected --affected-base-ref=$BASE_REF
 
