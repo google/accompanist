@@ -62,7 +62,7 @@ jobs:
       # Allow tests to continue on other devices if they fail on one device.
       fail-fast: false
       matrix:
-        api-level: [22, 26, 28, 29]
+        api-level: [22, 26, 28, 30]
 
     env:
       TERM: dumb
@@ -99,7 +99,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          profile: Nexus 6
+          profile: Galaxy Nexus
           # We run all affected tests of the PR (or commit)
           script: ./scripts/run-device-tests.sh --log-file=logcat.txt --run-affected --affected-base-ref=$BASE_REF
 
