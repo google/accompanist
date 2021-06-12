@@ -173,9 +173,24 @@ fun Modifier.placeholder(
                 drawContent()
             }
 
-            fun drawPlaceholder() {
-                // Keep track of our outline
-                lastOutline.value = drawPlaceholder(
+            if (placeholderAlpha in 0.01f..0.99f) {
+                // If the placeholder alpha is between 1% and 99%, draw it in a layer with
+                // the alpha applied
+                paint.alpha = placeholderAlpha
+                withLayer(paint) {
+                    drawPlaceholder(
+                        shape = shape,
+                        color = color,
+                        highlight = highlight,
+                        progress = highlightProgress,
+                        lastOutline = lastOutline.value,
+                        lastLayoutDirection = lastLayoutDirection.value,
+                        lastSize = lastSize.value,
+                    )
+                }
+            } else if (placeholderAlpha >= 0.99f) {
+                // If the placeholder alpha is > 99%, draw it with no alpha
+                drawPlaceholder(
                     shape = shape,
                     color = color,
                     highlight = highlight,
@@ -184,18 +199,6 @@ fun Modifier.placeholder(
                     lastLayoutDirection = lastLayoutDirection.value,
                     lastSize = lastSize.value,
                 )
-            }
-
-            if (placeholderAlpha in 0.01f..0.99f) {
-                // If the placeholder alpha is between 1% and 99%, draw it in a layer with
-                // the alpha applied
-                paint.alpha = placeholderAlpha
-                withLayer(paint) {
-                    drawPlaceholder()
-                }
-            } else if (placeholderAlpha >= 0.99f) {
-                // If the placeholder alpha is > 99%, draw it with no alpha
-                drawPlaceholder()
             }
 
             // Keep track of the last size & layout direction
