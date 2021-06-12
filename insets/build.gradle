@@ -32,6 +32,8 @@ android {
         // targetSdkVersion has no effect for libraries. This is only used for the test APK
         targetSdkVersion 30
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        consumerProguardFiles 'consumer-proguard-rules.pro'
     }
 
     compileOptions {
