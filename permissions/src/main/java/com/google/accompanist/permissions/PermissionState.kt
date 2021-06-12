@@ -16,12 +16,8 @@
 
 package com.google.accompanist.permissions
 
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 
 /**
  * Creates a [PermissionState] that is remembered across compositions.
@@ -35,51 +31,23 @@ import androidx.compose.runtime.saveable.rememberSaveable
 fun rememberPermissionState(
     permission: String
 ): PermissionState {
-    val mutablePermissionState = rememberMutablePermissionState(permission)
-    return rememberPermissionState(permission, mutablePermissionState)
+    return rememberMutablePermissionState(permission)
 }
 
 /**
- * Creates a [PermissionState] that is remembered across compositions.
- *
- * It's recommended that apps exercise the permissions workflow as described in the
- * [documentation](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions).
- *
- * @param permission the permission to control and observe.
- * @param mutablePermissionState state to control the an individual permission.
- */
-@Composable
-internal fun rememberPermissionState(
-    permission: String,
-    mutablePermissionState: MutablePermissionState
-): PermissionState {
-    val permissionRequested = rememberSaveable { mutableStateOf(false) }
-
-    val launcher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { granted ->
-        mutablePermissionState.permissionRequested = true
-        mutablePermissionState.hasPermission = granted
-        mutablePermissionState.refreshShouldShowRationaleState()
-    }
-    // Update the state to the current launcher
-    mutablePermissionState.launcher = launcher
-    return mutablePermissionState
-}
-
-/**
- * A state object that can be hoisted to control and observe permission status changes.
+ * A state object that can be hoisted to control and observe [permission] status changes.
  *
  * In most cases, this will be created via [rememberPermissionState].
  *
  * It's recommended that apps exercise the permissions workflow as described in the
  * [documentation](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions).
- *
- * @param permission the permission to control and observe.
  */
 @Stable
 interface PermissionState {
 
+    /**
+     * The permission to control and observe.
+     */
     val permission: String
 
     /**
@@ -100,13 +68,13 @@ interface PermissionState {
     /**
      * Request the [permission] to the user.
      *
-     * This should always be triggered from a side-effect in Compose. Otherwise, this will
-     * result in an IllegalStateException.
+     * This should always be triggered from non-composable scope, for example, from a side-effect
+     * or a non-composable callback. Otherwise, this will result in an IllegalStateException.
      *
      * This triggers a system dialog that asks the user to grant or revoke the permission.
      * Note that this dialog might not appear on the screen if the user doesn't want to be asked
      * again or has denied the permission multiple times.
      * This behavior varies depending on the Android level API.
      */
-    fun launchPermissionRequest()
+    fun launchPermissionRequest(): Unit
 }

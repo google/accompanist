@@ -118,8 +118,10 @@ class RequestMultiplePermissionsTest {
         var launchPermissionRequest by rememberSaveable { mutableStateOf(false) }
 
         val state = rememberMultiplePermissionsState(
-            android.Manifest.permission.READ_EXTERNAL_STORAGE,
-            android.Manifest.permission.CAMERA
+            listOf(
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.CAMERA
+            )
         )
         when {
             state.allPermissionsGranted -> {

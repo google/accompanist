@@ -43,8 +43,10 @@ class MultiplePermissionsStateTest {
     fun permissionState_hasPermission() {
         composeTestRule.setContent {
             val state = rememberMultiplePermissionsState(
-                android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                android.Manifest.permission.CAMERA
+                listOf(
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                    android.Manifest.permission.CAMERA
+                )
             )
 
             assertThat(state.allPermissionsGranted).isTrue()
@@ -60,9 +62,11 @@ class MultiplePermissionsStateTest {
 
         composeTestRule.setContent {
             val state = rememberMultiplePermissionsState(
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                android.Manifest.permission.CAMERA
+                listOf(
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                    android.Manifest.permission.CAMERA
+                )
             )
 
             assertThat(state.allPermissionsGranted).isFalse()

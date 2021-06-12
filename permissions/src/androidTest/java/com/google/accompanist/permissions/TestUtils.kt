@@ -56,7 +56,7 @@ internal fun grantPermissionInDialog(
     uiDevice: UiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 ) {
     val allowButton = uiDevice.findObject(
-        UiSelector().text(
+        UiSelector().textMatches(
             when (Build.VERSION.SDK_INT) {
                 in 24..28 -> "ALLOW"
                 else -> "Allow"
@@ -68,7 +68,7 @@ internal fun grantPermissionInDialog(
     // Or maybe this permission doesn't have the Allow option
     if (Build.VERSION.SDK_INT == 30) {
         val whileUsingTheAppButton = uiDevice.findObject(
-            UiSelector().text("While using the app")
+            UiSelector().text("While using the app").clickable(true)
         )
         whileUsingTheAppButton.clickForPermission()
     }
@@ -83,7 +83,7 @@ internal fun denyPermissionInDialog(
                 in 24..28 -> "DENY"
                 else -> "Deny"
             }
-        )
+        ).clickable(true)
     )
     denyButton.clickForPermission()
 }
@@ -125,24 +125,19 @@ internal fun doNotAskAgainPermissionInDialog(
 }
 
 private fun UiObject.clickForPermission() {
-    var objectExists = false
-    var timesRetried = 0
-    while (!objectExists && timesRetried < 5) {
-        objectExists = exists()
-        if (!objectExists) {
-            Thread.sleep(300)
-            timesRetried++
-        }
-    }
-    if (!objectExists) return
+    waitUntil { exists() }
+    if (!exists()) return
 
-    var clicked = false
-    timesRetried = 0
-    while (exists() && !clicked && timesRetried < 5) {
-        clicked = click()
-        if (!clicked) {
-            Thread.sleep(300)
-            timesRetried++
+    waitUntil { exists() && click() }
+}
+
+private fun waitUntil(timeoutMillis: Long = 1_000, condition: () -> Boolean) {
+    val startTime = System.nanoTime()
+    while (!condition()) {
+        // Let Android run measure, draw and in general any other async operations.
+        Thread.sleep(10)
+        if (System.nanoTime() - startTime > timeoutMillis * 1_000_000) {
+            break
         }
     }
 }

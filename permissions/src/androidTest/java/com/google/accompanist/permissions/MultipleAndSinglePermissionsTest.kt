@@ -56,7 +56,7 @@ class MultipleAndSinglePermissionsTest {
     @Test
     fun singlePermission_granted() {
         composeTestRule.setContent {
-            ComposableUnderTest(android.Manifest.permission.CAMERA)
+            ComposableUnderTest(listOf(android.Manifest.permission.CAMERA))
         }
 
         grantPermissionInDialog()
@@ -69,7 +69,7 @@ class MultipleAndSinglePermissionsTest {
     @Test
     fun singlePermission_deniedAndGrantedInSecondActivity() {
         composeTestRule.setContent {
-            ComposableUnderTest(android.Manifest.permission.CAMERA)
+            ComposableUnderTest(listOf(android.Manifest.permission.CAMERA))
         }
 
         denyPermissionInDialog()
@@ -88,7 +88,31 @@ class MultipleAndSinglePermissionsTest {
     @Test
     fun singlePermission_deniedAndGrantedInFirstActivity() {
         composeTestRule.setContent {
-            ComposableUnderTest(android.Manifest.permission.CAMERA)
+            ComposableUnderTest(listOf(android.Manifest.permission.CAMERA))
+        }
+
+        denyPermissionInDialog()
+        composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Navigate").performClick()
+        composeTestRule.onNodeWithText("PermissionsTestActivity").assertIsDisplayed()
+        composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
+        uiDevice.pressBack()
+        composeTestRule.onNodeWithText("MultipleAndSinglePermissionsTest").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Request").performClick()
+        grantPermissionInDialog()
+        composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Navigate").performClick()
+        composeTestRule.onNodeWithText("PermissionsTestActivity").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
+    }
+
+    @Test
+    fun singlePermission_deniedAndGrantedInFirstActivity_singlePermission() {
+        composeTestRule.setContent {
+            ComposableUnderTest(
+                listOf(android.Manifest.permission.CAMERA),
+                requestSinglePermission = true
+            )
         }
 
         denyPermissionInDialog()
@@ -110,8 +134,10 @@ class MultipleAndSinglePermissionsTest {
     fun multiplePermissions_granted() {
         composeTestRule.setContent {
             ComposableUnderTest(
-                android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                android.Manifest.permission.CAMERA
+                listOf(
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                    android.Manifest.permission.CAMERA
+                )
             )
         }
 
@@ -127,8 +153,10 @@ class MultipleAndSinglePermissionsTest {
     fun multiplePermissions_denied() {
         composeTestRule.setContent {
             ComposableUnderTest(
-                android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                android.Manifest.permission.CAMERA
+                listOf(
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                    android.Manifest.permission.CAMERA
+                )
             )
         }
 
@@ -153,10 +181,13 @@ class MultipleAndSinglePermissionsTest {
     }
 
     @Composable
-    private fun ComposableUnderTest(vararg permissions: String) {
+    private fun ComposableUnderTest(
+        permissions: List<String>,
+        requestSinglePermission: Boolean = false
+    ) {
         var launchPermissionRequest by rememberSaveable { mutableStateOf(false) }
 
-        val state = rememberMultiplePermissionsState(*permissions)
+        val state = rememberMultiplePermissionsState(permissions)
         Column {
             Text("MultipleAndSinglePermissionsTest")
             Spacer(Modifier.height(16.dp))
@@ -194,7 +225,11 @@ class MultipleAndSinglePermissionsTest {
 
         LaunchedEffect(launchPermissionRequest, state) {
             if (launchPermissionRequest) {
-                state.launchMultiplePermissionRequest()
+                if (requestSinglePermission && state.revokedPermissions.size == 1) {
+                    state.revokedPermissions[0].launchPermissionRequest()
+                } else {
+                    state.launchMultiplePermissionRequest()
+                }
                 launchPermissionRequest = false
             }
         }
