@@ -365,21 +365,30 @@ class GlideTest {
     @Test
     @SdkSuppress(minSdkVersion = 26) // captureToImage is SDK 26+
     fun basicLoad_error() {
+        var requestCompleted = false
+
         composeTestRule.setContent {
+            val painter = rememberGlidePainter(
+                request = server.url("/noimage"),
+                requestBuilder = {
+                    // Display a red rectangle when errors occur
+                    error(R.drawable.red_rectangle)
+                }
+            )
+
             Image(
-                painter = rememberGlidePainter(
-                    request = server.url("/noimage"),
-                    requestBuilder = {
-                        // Display a red rectangle when errors occur
-                        error(R.drawable.red_rectangle)
-                    }
-                ),
+                painter = painter,
                 contentDescription = null,
                 modifier = Modifier
                     .testTag(GlideTestTags.Image)
                     .size(128.dp),
             )
+
+            LaunchedOnRequestComplete(painter) { requestCompleted = true }
         }
+
+        // Wait until the first image loads
+        composeTestRule.waitUntil(10_000) { requestCompleted }
 
         // Assert that the error drawable was drawn
         composeTestRule.onNodeWithTag(GlideTestTags.Image)
