@@ -53,6 +53,8 @@ napier = "io.github.aakira:napier:1.4.1"
 
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidxtest" }
 androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidxtest" }
+androidx-test-orchestrator = { module = "androidx.test:orchestrator", version.ref = "androidxtest" }
+androidx-test-uiAutomator = "androidx.test.uiautomator:uiautomator:2.2.0"
 junit = "junit:junit:4.13"
 truth = "com.google.truth:truth:1.1.2"
 testparameterinjection = "com.google.testparameterinjector:test-parameter-injector:1.3"
