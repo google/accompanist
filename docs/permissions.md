@@ -22,7 +22,7 @@ Both APIs expose properties for you to follow the workflow as described in the
 The following code exercises the [permission request workflow](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions)
 and is nice with the user by letting them decide if they don't want to see the rationale again.
 
-```
+```kotlin
 @Composable
 private fun FeatureThatRequiresCameraPermission(
     navigateToSettingsScreen: () -> Unit
