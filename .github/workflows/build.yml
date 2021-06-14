@@ -57,19 +57,12 @@ jobs:
     runs-on: macOS-latest
     needs: build
     timeout-minutes: 70
-    
+
     strategy:
       # Allow tests to continue on other devices if they fail on one device.
       fail-fast: false
       matrix:
-        api-level: [22, 26, 28]
-        target: [default]
-        # Using API 29 and 30 with a different target
-        include:
-          - api-level: 29
-            target: google_apis
-          - api-level: 30
-            target: google_apis
+        api-level: [ 22, 26, 28, 29, 30 ]
 
     env:
       TERM: dumb
@@ -114,7 +107,6 @@ jobs:
             TARGET="google_apis"
           fi
           echo "::set-output name=TARGET::$TARGET"
-
       - name: Run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -132,18 +124,17 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: logs-${{ matrix.api-level }}-${{ matrix.target }}-${{ steps.determine-target.outputs.TARGET }}
+          name: logs-${{ matrix.api-level }}-${{ steps.determine-target.outputs.TARGET }}
           path: logcat.txt
 
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: test-results-${{ matrix.api-level }}-${{ matrix.target }}-${{ steps.determine-target.outputs.TARGET }}
+          name: test-results-${{ matrix.api-level }}-${{ steps.determine-target.outputs.TARGET }}
           path: |
             **/build/reports/*
             **/build/outputs/*/connected/*
-
   deploy:
     if: github.event_name == 'push' # only deploy for pushed commits (not PRs)
 
