@@ -21,7 +21,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -37,9 +36,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.google.accompanist.glide.rememberGlidePainter
-import com.google.accompanist.placeholder.placeholder
+import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
@@ -97,10 +95,9 @@ private fun Sample() {
                     ListItem(
                         painter = rememberGlidePainter(randomSampleImageUrl(index)),
                         text = "Text",
-                        childModifier = Modifier.placeholder(
-                            visible = refreshing,
-                            shape = RoundedCornerShape(4.dp)
-                        )
+                        // We're using the modifier provided by placeholder-material which
+                        // uses good default values for the color
+                        childModifier = Modifier.placeholder(visible = refreshing)
                     )
                 }
             }

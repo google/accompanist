@@ -19,6 +19,12 @@ A library that enables reuse of [AppCompat][appcompat] XML themes for theming in
 ### 📖 [Pager](./pager/)
 A library which provides paging layouts for Jetpack Compose, similar to Android's [`ViewPager`](https://developer.android.com/reference/kotlin/androidx/viewpager/widget/ViewPager).
 
+### 📫 [Permissions](./permissions/)
+A library which provides [Android runtime permissions](https://developer.android.com/guide/topics/permissions/overview) support for Jetpack Compose.
+
+### ⏳ [Placeholder](./placeholder/)
+A library which provides easy-to-use modifiers for displaying 'placeholder' UI while content is loading.
+
 ### 🌊 [Flow layouts](./flowlayout/)
 A library that adds a 'flexbox'-like layout to [Jetpack Compose][compose].
 

@@ -1,0 +1,48 @@
+// Signature format: 4.0
+package com.google.accompanist.permissions {
+
+  @androidx.compose.runtime.Stable public interface MultiplePermissionsState {
+    method public boolean getAllPermissionsGranted();
+    method public boolean getPermissionRequested();
+    method public java.util.List<com.google.accompanist.permissions.PermissionState> getPermissions();
+    method public java.util.List<com.google.accompanist.permissions.PermissionState> getRevokedPermissions();
+    method public boolean getShouldShowRationale();
+    method public void launchMultiplePermissionRequest();
+    property public abstract boolean allPermissionsGranted;
+    property public abstract boolean permissionRequested;
+    property public abstract java.util.List<com.google.accompanist.permissions.PermissionState> permissions;
+    property public abstract java.util.List<com.google.accompanist.permissions.PermissionState> revokedPermissions;
+    property public abstract boolean shouldShowRationale;
+  }
+
+  public final class MultiplePermissionsStateKt {
+    method @androidx.compose.runtime.Composable public static com.google.accompanist.permissions.MultiplePermissionsState rememberMultiplePermissionsState(java.util.List<java.lang.String> permissions);
+  }
+
+  public final class MutableMultiplePermissionsStateKt {
+  }
+
+  public final class MutablePermissionStateKt {
+  }
+
+  @androidx.compose.runtime.Stable public interface PermissionState {
+    method public boolean getHasPermission();
+    method public String getPermission();
+    method public boolean getPermissionRequested();
+    method public boolean getShouldShowRationale();
+    method public void launchPermissionRequest();
+    property public abstract boolean hasPermission;
+    property public abstract String permission;
+    property public abstract boolean permissionRequested;
+    property public abstract boolean shouldShowRationale;
+  }
+
+  public final class PermissionStateKt {
+    method @androidx.compose.runtime.Composable public static com.google.accompanist.permissions.PermissionState rememberPermissionState(String permission);
+  }
+
+  public final class PermissionsUtilKt {
+  }
+
+}
+

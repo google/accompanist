@@ -1,31 +1,32 @@
 // Signature format: 4.0
 package com.google.accompanist.placeholder {
 
-  public abstract class PlaceholderAnimatedBrush {
-    ctor public PlaceholderAnimatedBrush();
-    method public abstract androidx.compose.animation.core.InfiniteRepeatableSpec<java.lang.Float> animationSpec();
-    method public abstract androidx.compose.ui.graphics.Brush brush(float progress);
-    method public abstract float maximumProgress();
-    method public abstract float minimumProgress();
-    field public static final com.google.accompanist.placeholder.PlaceholderAnimatedBrush.Companion Companion;
-  }
-
-  public static final class PlaceholderAnimatedBrush.Companion {
-    method public com.google.accompanist.placeholder.PlaceholderAnimatedBrush fade-r_0hINw(optional long initialColor, optional long targetColor, optional androidx.compose.animation.core.InfiniteRepeatableSpec<java.lang.Float> animationSpec);
-    method public com.google.accompanist.placeholder.PlaceholderAnimatedBrush shimmer-r_0hINw(optional long color, optional long highlightColor, optional androidx.compose.animation.core.InfiniteRepeatableSpec<java.lang.Float> animationSpec);
-  }
-
   public final class PlaceholderDefaults {
-    method public long getPlaceholderColor-0d7_KjU();
-    method public long getPlaceholderHighlightColor-0d7_KjU();
-    property public final long PlaceholderColor;
-    property public final long PlaceholderHighlightColor;
+    method public androidx.compose.animation.core.InfiniteRepeatableSpec<java.lang.Float> getFadeAnimationSpec();
+    method public androidx.compose.animation.core.InfiniteRepeatableSpec<java.lang.Float> getShimmerAnimationSpec();
+    property public final androidx.compose.animation.core.InfiniteRepeatableSpec<java.lang.Float> fadeAnimationSpec;
+    property public final androidx.compose.animation.core.InfiniteRepeatableSpec<java.lang.Float> shimmerAnimationSpec;
     field public static final com.google.accompanist.placeholder.PlaceholderDefaults INSTANCE;
   }
 
+  @androidx.compose.runtime.Stable public interface PlaceholderHighlight {
+    method @FloatRange(from=0.0, to=1.0) public float alpha(float progress);
+    method public androidx.compose.ui.graphics.Brush brush-2DtskRk(@FloatRange(from=0.0, to=1.0) float progress, long size);
+    method public androidx.compose.animation.core.InfiniteRepeatableSpec<java.lang.Float>? getAnimationSpec();
+    property public abstract androidx.compose.animation.core.InfiniteRepeatableSpec<java.lang.Float>? animationSpec;
+    field public static final com.google.accompanist.placeholder.PlaceholderHighlight.Companion Companion;
+  }
+
+  public static final class PlaceholderHighlight.Companion {
+  }
+
+  public final class PlaceholderHighlightKt {
+    method public static com.google.accompanist.placeholder.PlaceholderHighlight fade-TDAGmlQ(com.google.accompanist.placeholder.PlaceholderHighlight.Companion, long highlightColor, optional androidx.compose.animation.core.InfiniteRepeatableSpec<java.lang.Float> animationSpec);
+    method public static com.google.accompanist.placeholder.PlaceholderHighlight shimmer-tTDiALM(com.google.accompanist.placeholder.PlaceholderHighlight.Companion, long highlightColor, optional androidx.compose.animation.core.InfiniteRepeatableSpec<java.lang.Float> animationSpec, optional @FloatRange(from=0.0, to=1.0) float progressForMaxAlpha);
+  }
+
   public final class PlaceholderKt {
-    method public static androidx.compose.ui.Modifier placeholder(androidx.compose.ui.Modifier, boolean visible, com.google.accompanist.placeholder.PlaceholderAnimatedBrush animatedBrush, optional androidx.compose.ui.graphics.Shape shape);
-    method public static androidx.compose.ui.Modifier placeholder-WDF7WLI(androidx.compose.ui.Modifier, boolean visible, optional long color, optional androidx.compose.ui.graphics.Shape shape);
+    method public static androidx.compose.ui.Modifier placeholder-2Mgfux4(androidx.compose.ui.Modifier, boolean visible, long color, optional androidx.compose.ui.graphics.Shape shape, optional com.google.accompanist.placeholder.PlaceholderHighlight? highlight, optional kotlin.jvm.functions.Function1<? super androidx.compose.animation.core.Transition.Segment<java.lang.Boolean>,? extends androidx.compose.animation.core.FiniteAnimationSpec<java.lang.Float>> placeholderFadeTransitionSpec, optional kotlin.jvm.functions.Function1<? super androidx.compose.animation.core.Transition.Segment<java.lang.Boolean>,? extends androidx.compose.animation.core.FiniteAnimationSpec<java.lang.Float>> contentFadeTransitionSpec);
   }
 
 }

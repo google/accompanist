@@ -18,7 +18,6 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
     id 'org.jetbrains.dokka'
-    id 'me.tylerbwong.gradle.metalava'
 }
 
 kotlin {
@@ -54,9 +53,6 @@ android {
         textOutput 'stdout'
         // We run a full lint analysis as build part in CI, so skip vital checks for assemble tasks
         checkReleaseBuilds false
-
-        // Not much we can do about unsafe lint rules from libraries
-        disable "UnsafeExperimentalUsageError", "UnsafeExperimentalUsageWarning"
     }
 
     packagingOptions {
@@ -76,6 +72,7 @@ android {
 
 dependencies {
     implementation libs.compose.foundation.foundation
+    implementation libs.compose.ui.util
     implementation libs.napier
 
     // ======================
@@ -91,11 +88,6 @@ dependencies {
     androidTestImplementation libs.compose.ui.test.manifest
     androidTestImplementation libs.compose.foundation.foundation
     androidTestImplementation libs.androidx.test.runner
-}
-
-metalava {
-    filename = "api/current.api"
-    reportLintsAsErrors = true
 }
 
 apply plugin: "com.vanniktech.maven.publish"
