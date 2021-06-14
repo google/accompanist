@@ -56,6 +56,7 @@ internal fun rememberMutableMultiplePermissionsState(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissionsResult ->
         multiplePermissionsState.updatePermissionsStatus(permissionsResult)
+        multiplePermissionsState.permissionRequested = true
     }
     DisposableEffect(multiplePermissionsState, launcher) {
         multiplePermissionsState.launcher = launcher
@@ -125,10 +126,8 @@ internal class MutableMultiplePermissionsState(
     }
 
     override var permissionRequested: Boolean by mutableStateOf(false)
-        private set
 
     override fun launchMultiplePermissionRequest() {
-        permissionRequested = true
         launcher?.launch(
             permissions.map { it.permission }.toTypedArray()
         ) ?: throw IllegalStateException("ActivityResultLauncher cannot be null")
