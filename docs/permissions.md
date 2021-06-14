@@ -1,74 +1,30 @@
-/*
- * Copyright 2021 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+# Jetpack Compose Permissions
 
-package com.google.accompanist.sample.permissions
+[![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-permissions)](https://search.maven.org/search?q=g:com.google.accompanist)
 
-import android.content.Intent
-import android.net.Uri
-import android.os.Bundle
-import android.provider.Settings
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.Button
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.google.accompanist.permissions.PermissionState
-import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.sample.AccompanistSampleTheme
+A library which provides [Android runtime permissions](https://developer.android.com/guide/topics/permissions/overview) support for Jetpack Compose.
 
-class RequestPermissionSample : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+## Usage
 
-        setContent {
-            AccompanistSampleTheme {
-                val cameraPermissionState = rememberPermissionState(
-                    android.Manifest.permission.CAMERA
-                )
-                Sample(
-                    cameraPermissionState,
-                    navigateToSettingsScreen = {
-                        startActivity(
-                            Intent(
-                                Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                                Uri.fromParts("package", packageName, null)
-                            )
-                        )
-                    }
-                )
-            }
-        }
-    }
-}
+The `rememberPermissionState(permission: String)` API allows you to request a certain permission
+to the user and check for the status of the permission.
+`rememberMultiplePermissionsState(permissions: List<String>)` offers the same but for multiple
+permissions at the same time.
 
+Both APIs expose properties for you to follow the workflow as described in the
+[permissions documentation](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions).
+
+!!! caution
+    The call to the method that requests the permission to the user (e.g. `PermissionState.launchPermissionRequest()`)
+    needs to be invoked from a non-composable scope. For example, from a side-effect or from a
+    non-composable callback such as a `Button`'s `onClick` lambda.
+
+The following code exercises the [permission request workflow](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions)
+and is nice with the user by letting them decide if they don't want to see the rationale again.
+
+```
 @Composable
-private fun Sample(
-    cameraPermissionState: PermissionState,
+private fun FeatureThatRequiresCameraPermission(
     navigateToSettingsScreen: () -> Unit
 ) {
     // When `true`, the permission request must be presented to the user.
@@ -77,6 +33,11 @@ private fun Sample(
 
     // Track if the user doesn't want to see the rationale any more.
     var doNotShowRationale by rememberSaveable { mutableStateOf(false) }
+
+    // Camera permission state
+    val cameraPermissionState = rememberPermissionState(
+        android.Manifest.permission.CAMERA
+    )
 
     when {
         // If the camera permission is granted, then show screen with the feature enabled
@@ -136,3 +97,25 @@ private fun Sample(
         }
     }
 }
+```
+
+For more examples, refer to the [samples](https://github.com/google/accompanist/tree/main/sample/src/main/java/com/google/accompanist/sample/permissions).
+
+## Download
+
+[![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-permissions)](https://search.maven.org/search?q=g:com.google.accompanist)
+
+```groovy
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "com.google.accompanist:accompanist-permissions:<version>"
+}
+```
+
+Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap]. These are updated on every commit.
+
+[compose]: https://developer.android.com/jetpack/compose
+[snap]: https://oss.sonatype.org/content/repositories/snapshots/com/google/accompanist/accompanist-permissions/

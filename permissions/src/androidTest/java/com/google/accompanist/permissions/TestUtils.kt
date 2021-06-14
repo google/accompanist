@@ -65,16 +65,12 @@ internal fun grantPermissionInDialog(
 
     // Or maybe this permission doesn't have the Allow option
     if (!clicked && sdkVersion > 28) {
-        when (sdkVersion) {
-            29 -> {
-                uiDevice.findPermissionButton(
-                    "Allow only while using the app"
-                ).clickForPermission()
+        uiDevice.findPermissionButton(
+            when (sdkVersion) {
+                29 -> "Allow only while using the app"
+                else -> "While using the app"
             }
-            30 -> {
-                uiDevice.findPermissionButton("While using the app").clickForPermission()
-            }
-        }
+        ).clickForPermission()
     }
 }
 
@@ -125,7 +121,7 @@ private fun UiObject.clickForPermission(): Boolean {
     return waitUntil { exists() && click() }
 }
 
-private fun waitUntil(timeoutMillis: Long = 500, condition: () -> Boolean): Boolean {
+private fun waitUntil(timeoutMillis: Long = 1_000, condition: () -> Boolean): Boolean {
     val startTime = System.nanoTime()
     while (true) {
         if (condition()) return true
