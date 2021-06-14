@@ -55,16 +55,26 @@ internal fun grantPermissionProgrammatically(
 internal fun grantPermissionInDialog(
     uiDevice: UiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 ) {
-    uiDevice.findPermissionButton(
-        when (Build.VERSION.SDK_INT) {
+    val sdkVersion = Build.VERSION.SDK_INT
+    val clicked = uiDevice.findPermissionButton(
+        when (sdkVersion) {
             in 24..28 -> "ALLOW"
             else -> "Allow"
         }
     ).clickForPermission()
 
     // Or maybe this permission doesn't have the Allow option
-    if (Build.VERSION.SDK_INT == 30) {
-        uiDevice.findPermissionButton("While using the app").clickForPermission()
+    if (!clicked && sdkVersion > 28) {
+        when(sdkVersion) {
+            29 -> {
+                uiDevice.findPermissionButton(
+                    "Allow only while using the app"
+                ).clickForPermission()
+            }
+            30 -> {
+                uiDevice.findPermissionButton("While using the app").clickForPermission()
+            }
+        }
     }
 }
 
@@ -108,20 +118,21 @@ private fun UiDevice.findPermissionButton(text: String): UiObject =
             .className("android.widget.Button")
     )
 
-private fun UiObject.clickForPermission() {
+private fun UiObject.clickForPermission(): Boolean {
     waitUntil { exists() }
-    if (!exists()) return
+    if (!exists()) return false
 
-    waitUntil { exists() && click() }
+    return waitUntil { exists() && click() }
 }
 
-private fun waitUntil(timeoutMillis: Long = 1_000, condition: () -> Boolean) {
+private fun waitUntil(timeoutMillis: Long = 500, condition: () -> Boolean): Boolean {
     val startTime = System.nanoTime()
-    while (!condition()) {
+    while (true) {
+        if (condition()) return true
         // Let Android run measure, draw and in general any other async operations.
         Thread.sleep(10)
         if (System.nanoTime() - startTime > timeoutMillis * 1_000_000) {
-            break
+            return false
         }
     }
 }
