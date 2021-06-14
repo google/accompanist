@@ -28,6 +28,15 @@ jobs:
 
         # We need to manually API 30 as it needs a different target
         include:
+          - api-level: 29
+            target: google_apis
+            shard: 0
+          - api-level: 29
+            target: google_apis
+            shard: 1
+          - api-level: 29
+            target: google_apis
+            shard: 2        
           - api-level: 30
             target: google_apis
             shard: 0

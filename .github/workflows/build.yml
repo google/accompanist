@@ -66,6 +66,8 @@ jobs:
         target: [default]
         # We need to manually API 30 as it needs a different target
         include:
+          - api-level: 29
+            target: google_apis        
           - api-level: 30
             target: google_apis
 
