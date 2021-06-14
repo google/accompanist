@@ -47,6 +47,9 @@ nav:
   - 'Flow layouts':
     - 'Guide': flowlayout.md
     - 'API': api/flowlayout/
+  - 'Permissions':
+    - 'Guide': permissions.md
+    - 'API': api/permissions/
   - 'Snapshots': using-snapshot-version.md
   - 'Contributing': contributing.md
   - 'Maintainers':
