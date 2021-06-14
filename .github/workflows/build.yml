@@ -107,6 +107,7 @@ jobs:
             TARGET="google_apis"
           fi
           echo "::set-output name=TARGET::$TARGET"
+
       - name: Run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -135,6 +136,7 @@ jobs:
           path: |
             **/build/reports/*
             **/build/outputs/*/connected/*
+
   deploy:
     if: github.event_name == 'push' # only deploy for pushed commits (not PRs)
 
