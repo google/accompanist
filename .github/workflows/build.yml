@@ -63,6 +63,11 @@ jobs:
       fail-fast: false
       matrix:
         api-level: [22, 26, 28, 29]
+        target: [default]
+        # We need to manually API 30 as it needs a different target
+        include:
+          - api-level: 30
+            target: google_apis
 
     env:
       TERM: dumb
@@ -99,6 +104,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
+          target: ${{ matrix.target }}
           profile: Galaxy Nexus
           # We run all affected tests of the PR (or commit)
           script: ./scripts/run-device-tests.sh --log-file=logcat.txt --run-affected --affected-base-ref=$BASE_REF
@@ -111,14 +117,14 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: logs-${{ matrix.api-level }}
+          name: logs-${{ matrix.api-level }}-${{ matrix.target }}
           path: logcat.txt
 
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: test-results-${{ matrix.api-level }}
+          name: test-results-${{ matrix.api-level }}-${{ matrix.target }}
           path: |
             **/build/reports/*
             **/build/outputs/*/connected/*

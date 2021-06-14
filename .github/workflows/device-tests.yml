@@ -5,6 +5,14 @@ on:
     # Run this twice per day, at 6:13 and 16:13
     - cron:  '13 6,16 * * *'
 
+  # Also run this workflow whenever we update this file
+  push:
+    paths:
+      - '.github/workflows/device-tests.yml'
+  pull_request:
+    paths:
+      - '.github/workflows/device-tests.yml'
+
 jobs:
   android-test:
     runs-on: macOS-latest
@@ -15,7 +23,20 @@ jobs:
       fail-fast: false
       matrix:
         api-level: [22, 26, 28, 29]
+        target: [default]
         shard: [0, 1, 2] # Need to update shard-count below if this changes
+
+        # We need to manually API 30 as it needs a different target
+        include:
+          - api-level: 30
+            target: google_apis
+            shard: 0
+          - api-level: 30
+            target: google_apis
+            shard: 1
+          - api-level: 30
+            target: google_apis
+            shard: 2
 
     steps:
       - uses: actions/checkout@v2
@@ -46,6 +67,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
+          target: ${{ matrix.target }}
           profile: Galaxy Nexus
           # We run all tests, sharding them over 3 shards
           script: ./scripts/run-device-tests.sh --log-file=logcat.txt --shard-index=${{ matrix.shard }} --shard-count=3
@@ -58,14 +80,14 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: logs-${{ matrix.api-level }}-${{ matrix.shard }}
+          name: logs-${{ matrix.api-level }}-${{ matrix.target }}-${{ matrix.shard }}
           path: logcat.txt
 
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: test-results-${{ matrix.api-level }}-${{ matrix.shard }}
+          name: test-results-${{ matrix.api-level }}-${{ matrix.target }}-${{ matrix.shard }}
           path: |
              **/build/reports/*
              **/build/outputs/*/connected/*
