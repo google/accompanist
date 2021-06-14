@@ -35,18 +35,18 @@ import androidx.lifecycle.LifecycleEventObserver
  */
 @Composable
 internal fun PermissionLifecycleCheckerEffect(
-    permission: MutablePermissionState,
+    permissionState: MutablePermissionState,
     lifecycleEvent: Lifecycle.Event = Lifecycle.Event.ON_RESUME
 ) {
     // Check if the permission was granted when the lifecycle is resumed.
     // The user might've gone to the Settings screen and granted the permission.
-    val permissionCheckerObserver = remember(permission) {
+    val permissionCheckerObserver = remember(permissionState) {
         LifecycleEventObserver { _, event ->
             if (event == lifecycleEvent) {
                 // If the permission is revoked, check again.
                 // We don't check if the permission was denied as that triggers a process restart.
-                if (!permission.hasPermission) {
-                    permission.refreshHasPermission()
+                if (!permissionState.hasPermission) {
+                    permissionState.refreshHasPermission()
                 }
             }
         }

@@ -74,8 +74,9 @@ private fun rememberMutablePermissionsState(
 ): List<MutablePermissionState> {
     // Create list of MutablePermissionState for each permission
     val context = LocalContext.current
+    val activity = context.findActivity()
     val mutablePermissions: List<MutablePermissionState> = remember(permissions) {
-        permissions.map { MutablePermissionState(it, context, context.findActivity()) }
+        permissions.map { MutablePermissionState(it, context, activity) }
     }
     // Update each permission with its own launcher
     for (permissionState in mutablePermissions) {
@@ -84,7 +85,7 @@ private fun rememberMutablePermissionsState(
             val launcher = rememberLauncherForActivityResult(
                 ActivityResultContracts.RequestPermission()
             ) {
-                permissionState.setHasPermission(it)
+                permissionState.hasPermission = it
             }
             DisposableEffect(launcher) {
                 permissionState.launcher = launcher
@@ -122,7 +123,7 @@ internal class MutableMultiplePermissionsState(
     }
 
     override val shouldShowRationale: Boolean by derivedStateOf {
-        permissions.firstOrNull { it.shouldShowRationale } != null
+        permissions.any { it.shouldShowRationale }
     }
 
     override var permissionRequested: Boolean by mutableStateOf(false)
@@ -140,7 +141,7 @@ internal class MutableMultiplePermissionsState(
         for (permission in permissionsStatus.keys) {
             mutablePermissions.firstOrNull { it.permission == permission }?.apply {
                 permissionsStatus[permission]?.let { granted ->
-                    this.setHasPermission(granted)
+                    this.hasPermission = granted
                 }
             }
         }

@@ -55,37 +55,28 @@ internal fun grantPermissionProgrammatically(
 internal fun grantPermissionInDialog(
     uiDevice: UiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 ) {
-    val allowButton = uiDevice.findObject(
-        UiSelector().textMatches(
-            when (Build.VERSION.SDK_INT) {
-                in 24..28 -> "ALLOW"
-                else -> "Allow"
-            }
-        )
-    )
-    allowButton.clickForPermission()
+    uiDevice.findPermissionButton(
+        when (Build.VERSION.SDK_INT) {
+            in 24..28 -> "ALLOW"
+            else -> "Allow"
+        }
+    ).clickForPermission()
 
     // Or maybe this permission doesn't have the Allow option
     if (Build.VERSION.SDK_INT == 30) {
-        val whileUsingTheAppButton = uiDevice.findObject(
-            UiSelector().text("While using the app").clickable(true)
-        )
-        whileUsingTheAppButton.clickForPermission()
+        uiDevice.findPermissionButton("While using the app").clickForPermission()
     }
 }
 
 internal fun denyPermissionInDialog(
     uiDevice: UiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 ) {
-    val denyButton = uiDevice.findObject(
-        UiSelector().text(
-            when (Build.VERSION.SDK_INT) {
-                in 24..28 -> "DENY"
-                else -> "Deny"
-            }
-        ).clickable(true)
-    )
-    denyButton.clickForPermission()
+    uiDevice.findPermissionButton(
+        when (Build.VERSION.SDK_INT) {
+            in 24..28 -> "DENY"
+            else -> "Deny"
+        }
+    ).clickForPermission()
 }
 
 internal fun doNotAskAgainPermissionInDialog(
@@ -96,33 +87,26 @@ internal fun doNotAskAgainPermissionInDialog(
             denyPermissionInDialog(uiDevice)
         }
         Build.VERSION.SDK_INT > 28 -> {
-            val denyAndDoNotAskAgainButton = uiDevice.findObject(
-                UiSelector().text(
-                    "Deny & don’t ask again"
-                )
-            )
-            denyAndDoNotAskAgainButton.clickForPermission()
+            uiDevice.findPermissionButton("Deny & don’t ask again").clickForPermission()
         }
         Build.VERSION.SDK_INT == 23 -> {
-            val doNotAskAgainCheckbox = uiDevice.findObject(
-                UiSelector().text(
-                    "Never ask again"
-                )
-            )
-            doNotAskAgainCheckbox.clickForPermission()
+            uiDevice.findObject(UiSelector().text("Never ask again")).clickForPermission()
             denyPermissionInDialog(uiDevice)
         }
         else -> {
-            val doNotAskAgainCheckbox = uiDevice.findObject(
-                UiSelector().text(
-                    "Don't ask again"
-                )
-            )
-            doNotAskAgainCheckbox.clickForPermission()
+            uiDevice.findObject(UiSelector().text("Don't ask again")).clickForPermission()
             denyPermissionInDialog(uiDevice)
         }
     }
 }
+
+private fun UiDevice.findPermissionButton(text: String): UiObject =
+    findObject(
+        UiSelector()
+            .textMatches(text)
+            .clickable(true)
+            .className("android.widget.Button")
+    )
 
 private fun UiObject.clickForPermission() {
     waitUntil { exists() }

@@ -52,7 +52,7 @@ internal fun rememberMutablePermissionState(
 
     // Remember RequestPermission launcher and assign it to permissionState
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
-        permissionState.setHasPermission(it)
+        permissionState.hasPermission = it
         permissionState.permissionRequested = true
     }
     DisposableEffect(permissionState, launcher) {
@@ -81,10 +81,17 @@ internal class MutablePermissionState(
     private val activity: Activity
 ) : PermissionState {
 
-    override var hasPermission: Boolean by mutableStateOf(checkHasPermission())
-        private set
+    private var _hasPermission by mutableStateOf(context.checkPermission(permission))
+    override var hasPermission: Boolean
+        internal set(value) {
+            _hasPermission = value
+            refreshShouldShowRationale()
+        }
+        get() = _hasPermission
 
-    override var shouldShowRationale: Boolean by mutableStateOf(checkShouldShowRationale())
+    override var shouldShowRationale: Boolean by mutableStateOf(
+        activity.shouldShowRationale(permission)
+    )
         private set
 
     override var permissionRequested: Boolean by mutableStateOf(false)
@@ -98,18 +105,10 @@ internal class MutablePermissionState(
     internal var launcher: ActivityResultLauncher<String>? = null
 
     internal fun refreshHasPermission() {
-        hasPermission = checkHasPermission()
-    }
-
-    internal fun setHasPermission(granted: Boolean) {
-        hasPermission = granted
-        refreshShouldShowRationale()
+        hasPermission = context.checkPermission(permission)
     }
 
     private fun refreshShouldShowRationale() {
-        shouldShowRationale = checkShouldShowRationale()
+        shouldShowRationale = activity.shouldShowRationale(permission)
     }
-
-    private fun checkHasPermission(): Boolean = context.checkPermission(permission)
-    private fun checkShouldShowRationale(): Boolean = activity.shouldShowRationale(permission)
 }
