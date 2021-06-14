@@ -65,7 +65,7 @@ internal fun grantPermissionInDialog(
 
     // Or maybe this permission doesn't have the Allow option
     if (!clicked && sdkVersion > 28) {
-        when(sdkVersion) {
+        when (sdkVersion) {
             29 -> {
                 uiDevice.findPermissionButton(
                     "Allow only while using the app"
