@@ -64,9 +64,11 @@ jobs:
       matrix:
         api-level: [22, 26, 28]
         target: [default]
-        # Using API 29 with a different target
+        # Using API 29 and 30 with a different target
         include:
           - api-level: 29
+            target: google_apis
+          - api-level: 30
             target: google_apis
 
     env:
@@ -100,11 +102,24 @@ jobs:
             ~/.gradle/caches/build-cache-*
           key: gradle-${{ hashFiles('checksum.txt') }}
 
+      # Determine what emulator image to use. We run all API 29+ emulators using
+      # the google_apis image
+      - name: Determine emulator target
+        id: determine-target
+        env:
+          API_LEVEL: ${{ matrix.api-level }}
+        run: |
+          TARGET="default"
+          if [ "$API_LEVEL" -ge "29" ]; then
+            TARGET="google_apis"
+          fi
+          echo "::set-output name=TARGET::$TARGET"
+
       - name: Run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          target: ${{ matrix.target }}
+          target: ${{ steps.determine-target.outputs.TARGET }}
           profile: Galaxy Nexus
           # We run all affected tests of the PR (or commit)
           script: ./scripts/run-device-tests.sh --log-file=logcat.txt --run-affected --affected-base-ref=$BASE_REF
@@ -117,14 +132,14 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: logs-${{ matrix.api-level }}-${{ matrix.target }}
+          name: logs-${{ matrix.api-level }}-${{ matrix.target }}-${{ steps.determine-target.outputs.TARGET }}
           path: logcat.txt
 
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: test-results-${{ matrix.api-level }}-${{ matrix.target }}
+          name: test-results-${{ matrix.api-level }}-${{ matrix.target }}-${{ steps.determine-target.outputs.TARGET }}
           path: |
             **/build/reports/*
             **/build/outputs/*/connected/*
