@@ -30,7 +30,7 @@ fun <A : Activity, T : Any> ActivityScenario<A>.withActivity(
     return result
 }
 
-fun waitUntil(timeoutMillis: Long = 1_000, condition: () -> Boolean) {
+fun waitUntil(timeoutMillis: Long = 3_000, condition: () -> Boolean) {
     val startTime = System.nanoTime()
     while (!condition()) {
         // Let Android run measure, draw and in general any other async operations.
