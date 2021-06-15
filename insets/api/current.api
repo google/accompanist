@@ -11,9 +11,9 @@ package com.google.accompanist.insets {
 
   @com.google.accompanist.insets.ExperimentalAnimatedInsets public final class ImeNestedScrollConnection implements androidx.compose.ui.input.nestedscroll.NestedScrollConnection {
     ctor public ImeNestedScrollConnection(android.view.View view, boolean scrollImeOffScreenWhenVisible, boolean scrollImeOnScreenWhenNotVisible);
-    method public suspend Object? onPostFling-k5p9STU(long consumed, long available, kotlin.coroutines.Continuation<? super androidx.compose.ui.unit.Velocity> p);
-    method public long onPostScroll-61dr0bI(long consumed, long available, int source);
-    method public long onPreScroll-ScU7Jk8(long available, int source);
+    method public suspend Object? onPostFling(long consumed, long available, kotlin.coroutines.Continuation<? super androidx.compose.ui.unit.Velocity> p);
+    method public long onPostScroll(long consumed, long available, int source);
+    method public long onPreScroll(long available, int source);
   }
 
   public final class ImeNestedScrollConnectionKt {
@@ -49,20 +49,20 @@ package com.google.accompanist.insets {
     method public static inline androidx.compose.ui.Modifier imePadding(androidx.compose.ui.Modifier);
     method public static inline androidx.compose.ui.Modifier navigationBarsPadding(androidx.compose.ui.Modifier, optional boolean bottom, optional boolean start, optional boolean end);
     method public static inline androidx.compose.ui.Modifier navigationBarsWithImePadding(androidx.compose.ui.Modifier);
-    method @androidx.compose.runtime.Composable public static androidx.compose.foundation.layout.PaddingValues rememberInsetsPaddingValues-fykm15M(com.google.accompanist.insets.Insets insets, optional boolean applyStart, optional boolean applyTop, optional boolean applyEnd, optional boolean applyBottom, optional float additionalStart, optional float additionalTop, optional float additionalEnd, optional float additionalBottom);
+    method @androidx.compose.runtime.Composable public static androidx.compose.foundation.layout.PaddingValues rememberInsetsPaddingValues(com.google.accompanist.insets.Insets insets, optional boolean applyStart, optional boolean applyTop, optional boolean applyEnd, optional boolean applyBottom, optional float additionalStart, optional float additionalTop, optional float additionalEnd, optional float additionalBottom);
     method public static inline androidx.compose.ui.Modifier statusBarsPadding(androidx.compose.ui.Modifier);
     method public static inline androidx.compose.ui.Modifier systemBarsPadding(androidx.compose.ui.Modifier, optional boolean enabled);
-    method @Deprecated @androidx.compose.runtime.Composable public static inline androidx.compose.foundation.layout.PaddingValues toPaddingValues-J9vYEFM(com.google.accompanist.insets.WindowInsets.Type, optional boolean start, optional boolean top, optional boolean end, optional boolean bottom, optional float additionalHorizontal, optional float additionalVertical);
-    method @Deprecated @androidx.compose.runtime.Composable public static inline androidx.compose.foundation.layout.PaddingValues toPaddingValues-ye5NoXI(com.google.accompanist.insets.WindowInsets.Type, optional boolean start, optional boolean top, optional boolean end, optional boolean bottom, optional float additionalStart, optional float additionalTop, optional float additionalEnd, optional float additionalBottom);
+    method @Deprecated @androidx.compose.runtime.Composable public static inline androidx.compose.foundation.layout.PaddingValues toPaddingValues(com.google.accompanist.insets.WindowInsets.Type, optional boolean start, optional boolean top, optional boolean end, optional boolean bottom, optional float additionalHorizontal, optional float additionalVertical);
+    method @Deprecated @androidx.compose.runtime.Composable public static inline androidx.compose.foundation.layout.PaddingValues toPaddingValues(com.google.accompanist.insets.WindowInsets.Type, optional boolean start, optional boolean top, optional boolean end, optional boolean bottom, optional float additionalStart, optional float additionalTop, optional float additionalEnd, optional float additionalBottom);
   }
 
   public final class SimpleImeAnimationControllerKt {
   }
 
   public final class SizeKt {
-    method public static androidx.compose.ui.Modifier navigationBarsHeight-wxomhCo(androidx.compose.ui.Modifier, optional float additional);
-    method public static androidx.compose.ui.Modifier navigationBarsWidth-8ffaRSw(androidx.compose.ui.Modifier, com.google.accompanist.insets.HorizontalSide side, optional float additional);
-    method public static androidx.compose.ui.Modifier statusBarsHeight-wxomhCo(androidx.compose.ui.Modifier, optional float additional);
+    method public static androidx.compose.ui.Modifier navigationBarsHeight(androidx.compose.ui.Modifier, optional float additional);
+    method public static androidx.compose.ui.Modifier navigationBarsWidth(androidx.compose.ui.Modifier, com.google.accompanist.insets.HorizontalSide side, optional float additional);
+    method public static androidx.compose.ui.Modifier statusBarsHeight(androidx.compose.ui.Modifier, optional float additional);
   }
 
   public enum VerticalSide {
