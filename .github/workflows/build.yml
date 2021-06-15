@@ -63,6 +63,7 @@ jobs:
       fail-fast: false
       matrix:
         api-level: [ 22, 26, 28, 29, 30 ]
+        shard: [ 0, 1 ] # Need to update shard-count below if this changes
 
     env:
       TERM: dumb
@@ -115,7 +116,7 @@ jobs:
           target: ${{ steps.determine-target.outputs.TARGET }}
           profile: Galaxy Nexus
           # We run all affected tests of the PR (or commit)
-          script: ./scripts/run-device-tests.sh --log-file=logcat.txt --run-affected --affected-base-ref=$BASE_REF
+          script: ./scripts/run-device-tests.sh --log-file=logcat.txt --run-affected --affected-base-ref=$BASE_REF --shard-index=${{ matrix.shard }} --shard-count=2
 
       - name: Clean secrets
         if: always()
@@ -125,14 +126,14 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: logs-${{ matrix.api-level }}-${{ steps.determine-target.outputs.TARGET }}
+          name: logs-${{ matrix.api-level }}-${{ steps.determine-target.outputs.TARGET }}-${{ matrix.shard }}
           path: logcat.txt
 
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: test-results-${{ matrix.api-level }}-${{ steps.determine-target.outputs.TARGET }}
+          name: test-results-${{ matrix.api-level }}-${{ steps.determine-target.outputs.TARGET }}-${{ matrix.shard }}
           path: |
             **/build/reports/*
             **/build/outputs/*/connected/*
