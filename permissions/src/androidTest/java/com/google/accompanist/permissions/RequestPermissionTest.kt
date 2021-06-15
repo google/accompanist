@@ -31,14 +31,12 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.test.filters.FlakyTest
 import androidx.test.filters.SdkSuppress
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-@FlakyTest(detail = "https://github.com/google/accompanist/issues/490")
 @SdkSuppress(minSdkVersion = 23)
 class RequestPermissionTest {
 
