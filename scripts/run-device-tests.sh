@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Copyright 2021 The Android Open Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -39,9 +40,12 @@ for i in "$@"; do
     LOG_FILE="${i#*=}"
     shift
     ;;
-    --only-build-tests)
-    # These tests can't run on Robolectric so we need to run these on commit/PRs
-    TASK="coil:connectedCheck glide:connectedCheck systemuicontroller:connectedCheck"
+    --run-affected)
+    RUN_AFFECTED=true
+    shift
+    ;;
+    --affected-base-ref=*)
+    BASE_REF="${i#*=}"
     shift
     ;;
     *)
@@ -56,11 +60,21 @@ if [[ ! -z "$LOG_FILE" ]]; then
   adb logcat > $LOG_FILE &
 fi
 
+# If we're set to only run affected test, update the Gradle task
+if [[ ! -z "$RUN_AFFECTED" ]]; then
+  TASK="runAffectedAndroidTests -Paffected_module_detector.enable"
+  # If we have a base branch set, add the Gradle property
+  if [[ ! -z "$BASE_REF" ]]; then
+    TASK="$TASK -Paffected_base_ref=$BASE_REF"
+  fi
+fi
+
 SHARD_OPTS=""
 if [ "$SHARD_COUNT" -gt "0" ]; then
   # If we have a shard count value, create the necessary Gradle property args.
   # We assume that SHARD_INDEX has been set too
-  SHARD_OPTS="-Pandroid.testInstrumentationRunnerArguments.numShards=$SHARD_COUNT"
+  SHARD_OPTS="--no-configuration-cache"
+  SHARD_OPTS="$SHARD_OPTS -Pandroid.testInstrumentationRunnerArguments.numShards=$SHARD_COUNT"
   SHARD_OPTS="$SHARD_OPTS -Pandroid.testInstrumentationRunnerArguments.shardIndex=$SHARD_INDEX"
 fi
 

@@ -3,20 +3,24 @@ name: Instrumented tests on device
 on:
   schedule:
     # Run this twice per day, at 6:13 and 16:13
-    - cron:  '13 6,16 * * *'
+    - cron: '13 6,16 * * *'
+
+  # Also run this workflow whenever we update this file
+  push:
+    paths:
+      - '.github/workflows/device-tests.yml'
 
 jobs:
   android-test:
     runs-on: macOS-latest
-    needs: build
-    timeout-minutes: 40
+    timeout-minutes: 60
 
     strategy:
       # Allow tests to continue on other devices if they fail on one device.
       fail-fast: false
       matrix:
-        api-level: [22, 26, 28, 29]
-        shard: [0, 1, 2] # Need to update shard-count below if this changes
+        api-level: [ 22, 26, 28, 29, 30 ]
+        shard: [ 0, 1, 2 ] # Need to update shard-count below if this changes
 
     steps:
       - uses: actions/checkout@v2
@@ -43,13 +47,27 @@ jobs:
             ~/.gradle/caches/build-cache-*
           key: gradle-${{ hashFiles('checksum.txt') }}
 
+      # Determine what emulator image to use. We run all API 29+ emulators using
+      # the google_apis image
+      - name: Determine emulator target
+        id: determine-target
+        env:
+          API_LEVEL: ${{ matrix.api-level }}
+        run: |
+          TARGET="default"
+          if [ "$API_LEVEL" -ge "29" ]; then
+            TARGET="google_apis"
+          fi
+          echo "::set-output name=TARGET::$TARGET"
+
       - name: Run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
+          target: ${{ steps.determine-target.outputs.TARGET }}
           profile: Galaxy Nexus
           # We run all tests, sharding them over 3 shards
-          script: ./scripts/run-device-tests.sh --log-file=logcat.txt --shard-index=${{ matrix.shard }} --shard-count=3 
+          script: ./scripts/run-device-tests.sh --log-file=logcat.txt --shard-index=${{ matrix.shard }} --shard-count=3
 
       - name: Clean secrets
         if: always()
@@ -59,14 +77,14 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: logs-${{ matrix.api-level }}-${{ matrix.shard }}
+          name: logs-${{ matrix.api-level }}-${{ steps.determine-target.outputs.TARGET }}-${{ matrix.shard }}
           path: logcat.txt
 
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: test-results-${{ matrix.api-level }}-${{ matrix.shard }}
+          name: test-results-${{ matrix.api-level }}-${{ steps.determine-target.outputs.TARGET }}-${{ matrix.shard }}
           path: |
-            "**/build/outputs/*/connected/*.xml"
-            "**/build/reports"
+            **/build/reports/*
+            **/build/outputs/*/connected/*

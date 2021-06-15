@@ -32,7 +32,7 @@ fun <A : Activity, T : Any> ActivityScenario<A>.withActivity(
     return result
 }
 
-fun waitUntil(timeoutMillis: Long = 1_000, condition: () -> Boolean) {
+fun waitUntil(timeoutMillis: Long = 3_000, condition: () -> Boolean) {
     if (Looper.getMainLooper() == Looper.myLooper()) {
         assertThat(condition()).isTrue()
         return

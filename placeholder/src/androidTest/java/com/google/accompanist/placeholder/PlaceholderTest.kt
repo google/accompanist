@@ -16,6 +16,10 @@
 
 package com.google.accompanist.placeholder
 
+import androidx.compose.animation.core.InfiniteRepeatableSpec
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
@@ -24,8 +28,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.InspectableValue
 import androidx.compose.ui.platform.ValueElement
 import androidx.compose.ui.platform.isDebugInspectorInfoEnabled
@@ -40,8 +47,6 @@ import androidx.compose.ui.unit.dp
 import androidx.test.filters.LargeTest
 import androidx.test.filters.SdkSuppress
 import com.google.accompanist.imageloading.test.assertPixels
-import com.google.accompanist.placeholder.PlaceholderAnimatedBrush.Companion.fade
-import com.google.accompanist.placeholder.PlaceholderAnimatedBrush.Companion.shimmer
 import com.google.common.truth.Truth.assertThat
 import org.junit.After
 import org.junit.Before
@@ -113,7 +118,8 @@ class PlaceholderTest {
                     .background(color = Color.Black)
                     .placeholder(
                         visible = visible,
-                        animatedBrush = Solid(Color.Red)
+                        color = Color.Gray,
+                        highlight = Solid(Color.Red)
                     )
                     .testTag(contentTag)
             )
@@ -180,7 +186,8 @@ class PlaceholderTest {
                     .background(color = Color.Black)
                     .placeholder(
                         visible = true,
-                        animatedBrush = animatedBrush
+                        color = Color.Gray,
+                        highlight = animatedBrush
                     )
                     .testTag(contentTag)
             )
@@ -253,7 +260,8 @@ class PlaceholderTest {
                     .background(color = Color.Black)
                     .placeholder(
                         visible = true,
-                        animatedBrush = Solid(Color.Red),
+                        color = Color.Gray,
+                        highlight = Solid(Color.Red),
                         shape = shape
                     )
                     .testTag(contentTag)
@@ -281,37 +289,53 @@ class PlaceholderTest {
 
     @Test
     fun placeholder_inspectableParameter1() {
-        val modifier = Modifier.placeholder(true, Color.Magenta) as InspectableValue
+        val highlight = PlaceholderHighlight.shimmer(Color.Red)
+        val modifier = Modifier.placeholder(
+            visible = true,
+            color = Color.Blue,
+            highlight = highlight,
+        ) as InspectableValue
+
         assertThat(modifier.nameFallback).isEqualTo("placeholder")
         assertThat(modifier.valueOverride).isEqualTo(true)
         assertThat(modifier.inspectableElements.asIterable()).containsExactly(
             ValueElement("visible", true),
-            ValueElement("color", Color.Magenta),
+            ValueElement("color", Color.Blue),
+            ValueElement("highlight", highlight),
             ValueElement("shape", RectangleShape)
         )
     }
 
     @Test
     fun placeholder_inspectableParameter2() {
-        val modifier = Modifier.placeholder(true, shimmer()) as InspectableValue
+        val highlight = PlaceholderHighlight.fade(Color.Red)
+        val modifier = Modifier.placeholder(
+            visible = true,
+            color = Color.Blue,
+            highlight = highlight,
+        ) as InspectableValue
+
         assertThat(modifier.nameFallback).isEqualTo("placeholder")
         assertThat(modifier.valueOverride).isEqualTo(true)
         assertThat(modifier.inspectableElements.asIterable()).containsExactly(
             ValueElement("visible", true),
-            ValueElement("animatedBrush", shimmer()),
+            ValueElement("color", Color.Blue),
+            ValueElement("highlight", highlight),
             ValueElement("shape", RectangleShape)
         )
     }
+}
 
-    @Test
-    fun placeholder_inspectableParameter3() {
-        val modifier = Modifier.placeholder(true, fade()) as InspectableValue
-        assertThat(modifier.nameFallback).isEqualTo("placeholder")
-        assertThat(modifier.valueOverride).isEqualTo(true)
-        assertThat(modifier.inspectableElements.asIterable()).containsExactly(
-            ValueElement("visible", true),
-            ValueElement("animatedBrush", fade()),
-            ValueElement("shape", RectangleShape)
-        )
+internal class Solid(
+    private val color: Color,
+    override val animationSpec: InfiniteRepeatableSpec<Float> = infiniteRepeatable(
+        animation = tween(delayMillis = 0, durationMillis = 500),
+        repeatMode = RepeatMode.Restart
+    )
+) : PlaceholderHighlight {
+    override fun alpha(progress: Float): Float = 1f
+
+    override fun brush(progress: Float, size: Size): Brush {
+        return SolidColor(color)
     }
 }

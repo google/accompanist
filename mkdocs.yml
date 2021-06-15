@@ -40,9 +40,16 @@ nav:
   - 'Swipe Refresh':
     - 'Guide': swiperefresh.md
     - 'API': api/swiperefresh/
+  - 'Placeholder':
+    - 'Guide': placeholder.md
+    - 'Foundation API': api/placeholder/
+    - 'Material API': api/placeholder-material/    
   - 'Flow layouts':
     - 'Guide': flowlayout.md
     - 'API': api/flowlayout/
+  - 'Permissions':
+    - 'Guide': permissions.md
+    - 'API': api/permissions/
   - 'Snapshots': using-snapshot-version.md
   - 'Contributing': contributing.md
   - 'Maintainers':
