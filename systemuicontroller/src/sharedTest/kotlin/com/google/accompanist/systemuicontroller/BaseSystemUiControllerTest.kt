@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.test.ext.junit.rules.ActivityScenarioRule
+import androidx.test.filters.FlakyTest
 import androidx.test.filters.SdkSuppress
 import com.google.accompanist.internal.test.IgnoreOnRobolectric
 import com.google.accompanist.internal.test.waitUntil
@@ -233,6 +234,7 @@ abstract class BaseSystemUiControllerTest {
     }
 
     @Test
+    @FlakyTest(detail = "https://github.com/google/accompanist/issues/491")
     @SdkSuppress(minSdkVersion = 23) // rootWindowInsets which work
     @Category(IgnoreOnRobolectric::class)
     fun statusBarsVisibility() {
@@ -253,6 +255,7 @@ abstract class BaseSystemUiControllerTest {
     }
 
     @Test
+    @FlakyTest(detail = "https://github.com/google/accompanist/issues/491")
     @SdkSuppress(minSdkVersion = 23) // rootWindowInsets which work
     @Category(IgnoreOnRobolectric::class)
     fun navigationBarsVisibility() {
@@ -274,6 +277,7 @@ abstract class BaseSystemUiControllerTest {
 
     @Test
     @Category(IgnoreOnRobolectric::class)
+    @FlakyTest(detail = "https://github.com/google/accompanist/issues/491")
     @SdkSuppress(minSdkVersion = 23) // rootWindowInsets which work
     fun systemBarsVisibility() {
         // Now create an AndroidSystemUiController() and set the system bar colors

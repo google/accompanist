@@ -44,6 +44,10 @@ for i in "$@"; do
     RUN_AFFECTED=true
     shift
     ;;
+    --run-flaky-tests)
+    RUN_FLAKY=true
+    shift
+    ;;
     --affected-base-ref=*)
     BASE_REF="${i#*=}"
     shift
@@ -58,6 +62,12 @@ done
 # Start logcat if we have a file to log to
 if [[ ! -z "$LOG_FILE" ]]; then
   adb logcat > $LOG_FILE &
+fi
+
+FILTER_OPTS=""
+# Filter out flaky tests if we're not set to run them
+if [[ -z "$RUN_FLAKY" ]]; then
+  FILTER_OPTS="$FILTER_OPTS -Pandroid.testInstrumentationRunnerArguments.notAnnotation=androidx.test.filters.FlakyTest"
 fi
 
 # If we're set to only run affected test, update the Gradle task
@@ -78,4 +88,4 @@ if [ "$SHARD_COUNT" -gt "0" ]; then
   SHARD_OPTS="$SHARD_OPTS -Pandroid.testInstrumentationRunnerArguments.shardIndex=$SHARD_INDEX"
 fi
 
-./gradlew  --scan --continue $TASK $SHARD_OPTS
+./gradlew  --scan --continue $TASK $FILTER_OPTS $SHARD_OPTS
