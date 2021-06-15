@@ -26,6 +26,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject
 import androidx.test.uiautomator.UiSelector
+import com.google.accompanist.internal.test.waitUntil
 
 internal fun <T : ComponentActivity> simulateAppComingFromTheBackground(
     composeTestRule: AndroidComposeTestRule<ActivityScenarioRule<T>, T>
@@ -118,17 +119,6 @@ private fun UiObject.clickForPermission(): Boolean {
     waitUntil { exists() }
     if (!exists()) return false
 
-    return waitUntil { exists() && click() }
-}
-
-private fun waitUntil(timeoutMillis: Long = 2_000, condition: () -> Boolean): Boolean {
-    val startTime = System.nanoTime()
-    while (true) {
-        if (condition()) return true
-        // Let Android run measure, draw and in general any other async operations.
-        Thread.sleep(10)
-        if (System.nanoTime() - startTime > timeoutMillis * 1_000_000) {
-            return false
-        }
-    }
+    waitUntil { exists() && click() }
+    return true
 }

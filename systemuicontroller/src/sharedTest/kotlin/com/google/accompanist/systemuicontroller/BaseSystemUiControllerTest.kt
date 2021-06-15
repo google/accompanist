@@ -27,6 +27,8 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.filters.SdkSuppress
 import com.google.accompanist.internal.test.IgnoreOnRobolectric
+import com.google.accompanist.internal.test.waitUntil
+import com.google.accompanist.internal.test.withActivity
 import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Rule

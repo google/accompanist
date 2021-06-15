@@ -54,4 +54,7 @@ android {
 dependencies {
     implementation libs.kotlin.stdlib
     implementation libs.kotlin.coroutines.android
+
+    api libs.androidx.test.core
+    implementation libs.truth
 }

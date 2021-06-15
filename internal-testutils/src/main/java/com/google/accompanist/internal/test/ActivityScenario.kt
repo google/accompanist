@@ -14,36 +14,15 @@
  * limitations under the License.
  */
 
-package com.google.accompanist.systemuicontroller
+package com.google.accompanist.internal.test
 
 import android.app.Activity
-import android.os.Looper
 import androidx.test.core.app.ActivityScenario
-import com.google.common.truth.Truth.assertThat
-import java.util.concurrent.TimeoutException
 
 fun <A : Activity, T : Any> ActivityScenario<A>.withActivity(
     action: (A) -> T
 ): T {
     lateinit var result: T
-    onActivity {
-        result = action(it)
-    }
+    onActivity { result = action(it) }
     return result
-}
-
-fun waitUntil(timeoutMillis: Long = 3_000, condition: () -> Boolean) {
-    if (Looper.getMainLooper() == Looper.myLooper()) {
-        assertThat(condition()).isTrue()
-        return
-    }
-
-    val startTime = System.nanoTime()
-    while (!condition()) {
-        // Let Android run measure, draw and in general any other async operations.
-        Thread.sleep(10)
-        if (System.nanoTime() - startTime > timeoutMillis * 1_000_000) {
-            throw TimeoutException("Condition still not satisfied after $timeoutMillis ms")
-        }
-    }
 }
