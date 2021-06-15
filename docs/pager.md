@@ -35,6 +35,8 @@ HorizontalPager(state = pagerState) { page ->
 }
 ```
 
+If you want to jump to a specific page, you either call call `pagerState.scrollToPage(index)` or  `pagerState.animateScrollToPage(index)` method in a `CoroutineScope`.
+
 ## VerticalPager
 
 [`VerticalPager`][api-vertpager] is very similar to [`HorizontalPager`][api-horizpager] but items are laid out vertically, and react to vertical swipes:

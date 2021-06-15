@@ -23,7 +23,7 @@ compose-material-iconsext = { module = "androidx.compose.material:material-icons
 
 android-gradlePlugin = "com.android.tools.build:gradle:7.0.0-beta03"
 gradleMavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.15.1"
-metalavaGradle = "me.tylerbwong.gradle:metalava-gradle:0.1.7"
+metalavaGradle = "me.tylerbwong.gradle:metalava-gradle:0.1.8"
 
 glide = "com.github.bumptech.glide:glide:4.12.0"
 
