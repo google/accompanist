@@ -35,7 +35,7 @@ HorizontalPager(state = pagerState) { page ->
 }
 ```
 
-If you want to jump to a specific page, for example in a video, after pressing a button to jump to the previous page, you can call the `pagerState.animateScrollToPage(n)` method in a `Coroutine Scope`
+If you want to jump to a specific page, you either call call `pagerState.scrollToPage(index)` or  `pagerState.animateScrollToPage(index)` method in a `CoroutineScope`.
 
 ## VerticalPager
 
