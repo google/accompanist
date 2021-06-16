@@ -38,6 +38,7 @@ import androidx.compose.ui.platform.LocalContext
  *
  * @param permissions the permissions to control and observe.
  */
+@ExperimentalPermissionsApi
 @Composable
 internal fun rememberMutableMultiplePermissionsState(
     permissions: List<String>
@@ -68,6 +69,7 @@ internal fun rememberMutableMultiplePermissionsState(
     return multiplePermissionsState
 }
 
+@ExperimentalPermissionsApi
 @Composable
 private fun rememberMutablePermissionsState(
     permissions: List<String>
@@ -106,6 +108,7 @@ private fun rememberMutablePermissionsState(
  *
  * @param mutablePermissions list of mutable permissions to control and observe.
  */
+@ExperimentalPermissionsApi
 @Stable
 internal class MutableMultiplePermissionsState(
     private val mutablePermissions: List<MutablePermissionState>

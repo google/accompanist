@@ -1,7 +1,10 @@
 // Signature format: 4.0
 package com.google.accompanist.permissions {
 
-  @androidx.compose.runtime.Stable public interface MultiplePermissionsState {
+  @kotlin.RequiresOptIn(message="Accompanist Permissions is experimental. The API may be changed in the future.") @kotlin.annotation.Retention(kotlin.annotation.AnnotationRetention) public @interface ExperimentalPermissionsApi {
+  }
+
+  @androidx.compose.runtime.Stable @com.google.accompanist.permissions.ExperimentalPermissionsApi public interface MultiplePermissionsState {
     method public boolean getAllPermissionsGranted();
     method public boolean getPermissionRequested();
     method public java.util.List<com.google.accompanist.permissions.PermissionState> getPermissions();
@@ -16,7 +19,7 @@ package com.google.accompanist.permissions {
   }
 
   public final class MultiplePermissionsStateKt {
-    method @androidx.compose.runtime.Composable public static com.google.accompanist.permissions.MultiplePermissionsState rememberMultiplePermissionsState(java.util.List<java.lang.String> permissions);
+    method @androidx.compose.runtime.Composable @com.google.accompanist.permissions.ExperimentalPermissionsApi public static com.google.accompanist.permissions.MultiplePermissionsState rememberMultiplePermissionsState(java.util.List<java.lang.String> permissions);
   }
 
   public final class MutableMultiplePermissionsStateKt {
@@ -25,7 +28,7 @@ package com.google.accompanist.permissions {
   public final class MutablePermissionStateKt {
   }
 
-  @androidx.compose.runtime.Stable public interface PermissionState {
+  @androidx.compose.runtime.Stable @com.google.accompanist.permissions.ExperimentalPermissionsApi public interface PermissionState {
     method public boolean getHasPermission();
     method public String getPermission();
     method public boolean getPermissionRequested();
@@ -38,7 +41,7 @@ package com.google.accompanist.permissions {
   }
 
   public final class PermissionStateKt {
-    method @androidx.compose.runtime.Composable public static com.google.accompanist.permissions.PermissionState rememberPermissionState(String permission);
+    method @androidx.compose.runtime.Composable @com.google.accompanist.permissions.ExperimentalPermissionsApi public static com.google.accompanist.permissions.PermissionState rememberPermissionState(String permission);
   }
 
   public final class PermissionsRequiredKt {

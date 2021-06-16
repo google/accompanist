@@ -4,6 +4,10 @@
 
 A library which provides [Android runtime permissions](https://developer.android.com/guide/topics/permissions/overview) support for Jetpack Compose.
 
+!!! warning
+    The permission APIs are currently experimental and they could change at any time.
+    All of the APIs are marked with the `@ExperimentalPermissionsApi` annotation.
+
 ## Usage
 
 The `rememberPermissionState(permission: String)` API allows you to request a certain permission
