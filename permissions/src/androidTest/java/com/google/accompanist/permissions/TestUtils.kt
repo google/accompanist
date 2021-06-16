@@ -134,7 +134,7 @@ private fun UiObject.clickForPermission(
     return clicked
 }
 
-private fun waitUntil(timeoutMillis: Long = 1_000, condition: () -> Boolean): Boolean {
+private fun waitUntil(timeoutMillis: Long = 2_000, condition: () -> Boolean): Boolean {
     val startTime = System.nanoTime()
     while (true) {
         if (condition()) return true
