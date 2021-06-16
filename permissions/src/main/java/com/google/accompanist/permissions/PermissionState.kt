@@ -27,6 +27,7 @@ import androidx.compose.runtime.Stable
  *
  * @param permission the permission to control and observe.
  */
+@ExperimentalPermissionsApi
 @Composable
 fun rememberPermissionState(
     permission: String
@@ -42,6 +43,7 @@ fun rememberPermissionState(
  * It's recommended that apps exercise the permissions workflow as described in the
  * [documentation](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions).
  */
+@ExperimentalPermissionsApi
 @Stable
 interface PermissionState {
 
