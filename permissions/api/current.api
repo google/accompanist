@@ -41,6 +41,11 @@ package com.google.accompanist.permissions {
     method @androidx.compose.runtime.Composable public static com.google.accompanist.permissions.PermissionState rememberPermissionState(String permission);
   }
 
+  public final class PermissionsRequiredKt {
+    method @androidx.compose.runtime.Composable public static void PermissionRequired(com.google.accompanist.permissions.PermissionState permissionState, kotlin.jvm.functions.Function0<kotlin.Unit> permissionsGrantedContent, kotlin.jvm.functions.Function0<kotlin.Unit> permissionsRationaleContent, kotlin.jvm.functions.Function0<kotlin.Unit> permissionsDeniedContent, optional kotlin.jvm.functions.Function0<kotlin.Unit>? permissionsRequestedContent);
+    method @androidx.compose.runtime.Composable public static void PermissionsRequired(com.google.accompanist.permissions.MultiplePermissionsState multiplePermissionsState, kotlin.jvm.functions.Function0<kotlin.Unit> permissionsGrantedContent, kotlin.jvm.functions.Function0<kotlin.Unit> permissionsRationaleContent, kotlin.jvm.functions.Function0<kotlin.Unit> permissionsDeniedContent, optional kotlin.jvm.functions.Function0<kotlin.Unit>? permissionsRequestedContent);
+  }
+
   public final class PermissionsUtilKt {
   }
 
