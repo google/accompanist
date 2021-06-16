@@ -36,7 +36,6 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.dp
-import androidx.test.filters.FlakyTest
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
@@ -45,7 +44,6 @@ import org.junit.Rule
 import org.junit.Test
 
 @OptIn(ExperimentalPermissionsApi::class)
-@FlakyTest(detail = "https://github.com/google/accompanist/issues/490")
 @SdkSuppress(minSdkVersion = 23)
 class MultipleAndSinglePermissionsTest {
 
