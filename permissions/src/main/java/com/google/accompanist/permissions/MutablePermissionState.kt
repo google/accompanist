@@ -38,6 +38,7 @@ import androidx.compose.ui.platform.LocalContext
  *
  * @param permission the permission to control and observe.
  */
+@ExperimentalPermissionsApi
 @Composable
 internal fun rememberMutablePermissionState(
     permission: String
@@ -74,6 +75,7 @@ internal fun rememberMutablePermissionState(
  * @param context to check the status of the [permission].
  * @param activity to check if the user should be presented with a rationale for [permission].
  */
+@ExperimentalPermissionsApi
 @Stable
 internal class MutablePermissionState(
     override val permission: String,

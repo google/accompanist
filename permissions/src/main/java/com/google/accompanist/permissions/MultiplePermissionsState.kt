@@ -27,6 +27,7 @@ import androidx.compose.runtime.Stable
  *
  * @param permissions the permissions to control and observe.
  */
+@ExperimentalPermissionsApi
 @Composable
 fun rememberMultiplePermissionsState(
     permissions: List<String>
@@ -42,6 +43,7 @@ fun rememberMultiplePermissionsState(
  * It's recommended that apps exercise the permissions workflow as described in the
  * [documentation](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions).
  */
+@ExperimentalPermissionsApi
 @Stable
 interface MultiplePermissionsState {
 
