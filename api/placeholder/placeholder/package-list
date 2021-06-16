@@ -1,0 +1,16 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:com.google.accompanist.placeholder////PointingToDeclaration/placeholder/com.google.accompanist.placeholder/index.html
+$dokka.location:com.google.accompanist.placeholder//fade/com.google.accompanist.placeholder.PlaceholderHighlight.Companion#androidx.compose.ui.graphics.Color#androidx.compose.animation.core.InfiniteRepeatableSpec[kotlin.Float]/PointingToDeclaration/placeholder/com.google.accompanist.placeholder/fade.html
+$dokka.location:com.google.accompanist.placeholder//placeholder/androidx.compose.ui.Modifier#kotlin.Boolean#androidx.compose.ui.graphics.Color#androidx.compose.ui.graphics.Shape#com.google.accompanist.placeholder.PlaceholderHighlight?#kotlin.Function1[androidx.compose.animation.core.Transition.Segment[kotlin.Boolean],androidx.compose.animation.core.FiniteAnimationSpec[kotlin.Float]]#kotlin.Function1[androidx.compose.animation.core.Transition.Segment[kotlin.Boolean],androidx.compose.animation.core.FiniteAnimationSpec[kotlin.Float]]/PointingToDeclaration/placeholder/com.google.accompanist.placeholder/placeholder.html
+$dokka.location:com.google.accompanist.placeholder//shimmer/com.google.accompanist.placeholder.PlaceholderHighlight.Companion#androidx.compose.ui.graphics.Color#androidx.compose.animation.core.InfiniteRepeatableSpec[kotlin.Float]#kotlin.Float/PointingToDeclaration/placeholder/com.google.accompanist.placeholder/shimmer.html
+$dokka.location:com.google.accompanist.placeholder/PlaceholderDefaults///PointingToDeclaration/placeholder/com.google.accompanist.placeholder/-placeholder-defaults/index.html
+$dokka.location:com.google.accompanist.placeholder/PlaceholderDefaults/fadeAnimationSpec/#/PointingToDeclaration/placeholder/com.google.accompanist.placeholder/-placeholder-defaults/fade-animation-spec.html
+$dokka.location:com.google.accompanist.placeholder/PlaceholderDefaults/shimmerAnimationSpec/#/PointingToDeclaration/placeholder/com.google.accompanist.placeholder/-placeholder-defaults/shimmer-animation-spec.html
+$dokka.location:com.google.accompanist.placeholder/PlaceholderHighlight.Companion///PointingToDeclaration/placeholder/com.google.accompanist.placeholder/-placeholder-highlight/-companion/index.html
+$dokka.location:com.google.accompanist.placeholder/PlaceholderHighlight///PointingToDeclaration/placeholder/com.google.accompanist.placeholder/-placeholder-highlight/index.html
+$dokka.location:com.google.accompanist.placeholder/PlaceholderHighlight/alpha/#kotlin.Float/PointingToDeclaration/placeholder/com.google.accompanist.placeholder/-placeholder-highlight/alpha.html
+$dokka.location:com.google.accompanist.placeholder/PlaceholderHighlight/animationSpec/#/PointingToDeclaration/placeholder/com.google.accompanist.placeholder/-placeholder-highlight/animation-spec.html
+$dokka.location:com.google.accompanist.placeholder/PlaceholderHighlight/brush/#kotlin.Float#androidx.compose.ui.geometry.Size/PointingToDeclaration/placeholder/com.google.accompanist.placeholder/-placeholder-highlight/brush.html
+com.google.accompanist.placeholder
+

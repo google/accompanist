@@ -3,7 +3,6 @@ $dokka.linkExtension:html
 $dokka.location:com.google.accompanist.insets////PointingToDeclaration/insets/com.google.accompanist.insets/index.html
 $dokka.location:com.google.accompanist.insets//LocalWindowInsets/#/PointingToDeclaration/insets/com.google.accompanist.insets/-local-window-insets.html
 $dokka.location:com.google.accompanist.insets//ProvideWindowInsets/#kotlin.Boolean#kotlin.Boolean#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/insets/com.google.accompanist.insets/-provide-window-insets.html
-$dokka.location:com.google.accompanist.insets//ProvideWindowInsets/#kotlin.Boolean#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/insets/com.google.accompanist.insets/-provide-window-insets.html
 $dokka.location:com.google.accompanist.insets//coerceEachDimensionAtLeast/com.google.accompanist.insets.Insets#com.google.accompanist.insets.Insets/PointingToDeclaration/insets/com.google.accompanist.insets/coerce-each-dimension-at-least.html
 $dokka.location:com.google.accompanist.insets//derivedWindowInsetsTypeOf/#kotlin.Array[com.google.accompanist.insets.WindowInsets.Type]/PointingToDeclaration/insets/com.google.accompanist.insets/derived-window-insets-type-of.html
 $dokka.location:com.google.accompanist.insets//imePadding/androidx.compose.ui.Modifier#/PointingToDeclaration/insets/com.google.accompanist.insets/ime-padding.html
@@ -52,7 +51,6 @@ $dokka.location:com.google.accompanist.insets/ViewWindowInsetObserver///Pointing
 $dokka.location:com.google.accompanist.insets/ViewWindowInsetObserver/ViewWindowInsetObserver/#android.view.View/PointingToDeclaration/insets/com.google.accompanist.insets/-view-window-inset-observer/-view-window-inset-observer.html
 $dokka.location:com.google.accompanist.insets/ViewWindowInsetObserver/isObserving/#/PointingToDeclaration/insets/com.google.accompanist.insets/-view-window-inset-observer/is-observing.html
 $dokka.location:com.google.accompanist.insets/ViewWindowInsetObserver/start/#kotlin.Boolean#kotlin.Boolean/PointingToDeclaration/insets/com.google.accompanist.insets/-view-window-inset-observer/start.html
-$dokka.location:com.google.accompanist.insets/ViewWindowInsetObserver/start/#kotlin.Boolean/PointingToDeclaration/insets/com.google.accompanist.insets/-view-window-inset-observer/start.html
 $dokka.location:com.google.accompanist.insets/ViewWindowInsetObserver/stop/#/PointingToDeclaration/insets/com.google.accompanist.insets/-view-window-inset-observer/stop.html
 $dokka.location:com.google.accompanist.insets/WindowInsets.Companion///PointingToDeclaration/insets/com.google.accompanist.insets/-window-insets/-companion/index.html
 $dokka.location:com.google.accompanist.insets/WindowInsets.Companion/Empty/#/PointingToDeclaration/insets/com.google.accompanist.insets/-window-insets/-companion/-empty.html

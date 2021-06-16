@@ -1,0 +1,22 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:com.google.accompanist.permissions////PointingToDeclaration/permissions/com.google.accompanist.permissions/index.html
+$dokka.location:com.google.accompanist.permissions//rememberMultiplePermissionsState/#kotlin.collections.List[kotlin.String]/PointingToDeclaration/permissions/com.google.accompanist.permissions/remember-multiple-permissions-state.html
+$dokka.location:com.google.accompanist.permissions//rememberPermissionState/#kotlin.String/PointingToDeclaration/permissions/com.google.accompanist.permissions/remember-permission-state.html
+$dokka.location:com.google.accompanist.permissions/ExperimentalPermissionsApi///PointingToDeclaration/permissions/com.google.accompanist.permissions/-experimental-permissions-api/index.html
+$dokka.location:com.google.accompanist.permissions/ExperimentalPermissionsApi/ExperimentalPermissionsApi/#/PointingToDeclaration/permissions/com.google.accompanist.permissions/-experimental-permissions-api/-experimental-permissions-api.html
+$dokka.location:com.google.accompanist.permissions/MultiplePermissionsState///PointingToDeclaration/permissions/com.google.accompanist.permissions/-multiple-permissions-state/index.html
+$dokka.location:com.google.accompanist.permissions/MultiplePermissionsState/allPermissionsGranted/#/PointingToDeclaration/permissions/com.google.accompanist.permissions/-multiple-permissions-state/all-permissions-granted.html
+$dokka.location:com.google.accompanist.permissions/MultiplePermissionsState/launchMultiplePermissionRequest/#/PointingToDeclaration/permissions/com.google.accompanist.permissions/-multiple-permissions-state/launch-multiple-permission-request.html
+$dokka.location:com.google.accompanist.permissions/MultiplePermissionsState/permissionRequested/#/PointingToDeclaration/permissions/com.google.accompanist.permissions/-multiple-permissions-state/permission-requested.html
+$dokka.location:com.google.accompanist.permissions/MultiplePermissionsState/permissions/#/PointingToDeclaration/permissions/com.google.accompanist.permissions/-multiple-permissions-state/permissions.html
+$dokka.location:com.google.accompanist.permissions/MultiplePermissionsState/revokedPermissions/#/PointingToDeclaration/permissions/com.google.accompanist.permissions/-multiple-permissions-state/revoked-permissions.html
+$dokka.location:com.google.accompanist.permissions/MultiplePermissionsState/shouldShowRationale/#/PointingToDeclaration/permissions/com.google.accompanist.permissions/-multiple-permissions-state/should-show-rationale.html
+$dokka.location:com.google.accompanist.permissions/PermissionState///PointingToDeclaration/permissions/com.google.accompanist.permissions/-permission-state/index.html
+$dokka.location:com.google.accompanist.permissions/PermissionState/hasPermission/#/PointingToDeclaration/permissions/com.google.accompanist.permissions/-permission-state/has-permission.html
+$dokka.location:com.google.accompanist.permissions/PermissionState/launchPermissionRequest/#/PointingToDeclaration/permissions/com.google.accompanist.permissions/-permission-state/launch-permission-request.html
+$dokka.location:com.google.accompanist.permissions/PermissionState/permission/#/PointingToDeclaration/permissions/com.google.accompanist.permissions/-permission-state/permission.html
+$dokka.location:com.google.accompanist.permissions/PermissionState/permissionRequested/#/PointingToDeclaration/permissions/com.google.accompanist.permissions/-permission-state/permission-requested.html
+$dokka.location:com.google.accompanist.permissions/PermissionState/shouldShowRationale/#/PointingToDeclaration/permissions/com.google.accompanist.permissions/-permission-state/should-show-rationale.html
+com.google.accompanist.permissions
+
