@@ -44,6 +44,7 @@ import com.google.accompanist.permissions.test.PermissionsTestActivity
 import org.junit.Rule
 import org.junit.Test
 
+@OptIn(ExperimentalPermissionsApi::class)
 @FlakyTest(detail = "https://github.com/google/accompanist/issues/490")
 @SdkSuppress(minSdkVersion = 23)
 class MultipleAndSinglePermissionsTest {
