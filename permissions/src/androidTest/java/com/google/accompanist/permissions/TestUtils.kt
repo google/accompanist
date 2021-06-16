@@ -53,15 +53,16 @@ internal fun grantPermissionProgrammatically(
 }
 
 internal fun grantPermissionInDialog(
-    uiDevice: UiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+    instrumentation: Instrumentation = InstrumentationRegistry.getInstrumentation()
 ) {
+    val uiDevice = UiDevice.getInstance(instrumentation)
     val sdkVersion = Build.VERSION.SDK_INT
     val clicked = uiDevice.findPermissionButton(
         when (sdkVersion) {
             in 24..28 -> "ALLOW"
             else -> "Allow"
         }
-    ).clickForPermission()
+    ).clickForPermission(instrumentation)
 
     // Or maybe this permission doesn't have the Allow option
     if (!clicked && sdkVersion > 28) {
@@ -70,38 +71,45 @@ internal fun grantPermissionInDialog(
                 29 -> "Allow only while using the app"
                 else -> "While using the app"
             }
-        ).clickForPermission()
+        ).clickForPermission(instrumentation)
     }
 }
 
 internal fun denyPermissionInDialog(
-    uiDevice: UiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+    instrumentation: Instrumentation = InstrumentationRegistry.getInstrumentation()
 ) {
-    uiDevice.findPermissionButton(
+    UiDevice.getInstance(instrumentation).findPermissionButton(
         when (Build.VERSION.SDK_INT) {
             in 24..28 -> "DENY"
             else -> "Deny"
         }
-    ).clickForPermission()
+    ).clickForPermission(instrumentation)
 }
 
 internal fun doNotAskAgainPermissionInDialog(
-    uiDevice: UiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+    instrumentation: Instrumentation = InstrumentationRegistry.getInstrumentation()
 ) {
+    val uiDevice = UiDevice.getInstance(instrumentation)
     when {
         Build.VERSION.SDK_INT == 30 -> {
-            denyPermissionInDialog(uiDevice)
+            denyPermissionInDialog(instrumentation)
         }
         Build.VERSION.SDK_INT > 28 -> {
-            uiDevice.findPermissionButton("Deny & don’t ask again").clickForPermission()
+            uiDevice
+                .findPermissionButton("Deny & don’t ask again")
+                .clickForPermission(instrumentation)
         }
         Build.VERSION.SDK_INT == 23 -> {
-            uiDevice.findObject(UiSelector().text("Never ask again")).clickForPermission()
-            denyPermissionInDialog(uiDevice)
+            uiDevice.findObject(
+                UiSelector().text("Never ask again")
+            ).clickForPermission(instrumentation)
+            denyPermissionInDialog(instrumentation)
         }
         else -> {
-            uiDevice.findObject(UiSelector().text("Don't ask again")).clickForPermission()
-            denyPermissionInDialog(uiDevice)
+            uiDevice.findObject(
+                UiSelector().text("Don't ask again")
+            ).clickForPermission(instrumentation)
+            denyPermissionInDialog(instrumentation)
         }
     }
 }
@@ -114,14 +122,19 @@ private fun UiDevice.findPermissionButton(text: String): UiObject =
             .className("android.widget.Button")
     )
 
-private fun UiObject.clickForPermission(): Boolean {
+private fun UiObject.clickForPermission(
+    instrumentation: Instrumentation = InstrumentationRegistry.getInstrumentation()
+): Boolean {
     waitUntil { exists() }
     if (!exists()) return false
 
-    return waitUntil { exists() && click() }
+    val clicked = waitUntil { exists() && click() }
+    // Make sure that the tests waits for this click to be processed
+    if (clicked) { instrumentation.waitForIdleSync() }
+    return clicked
 }
 
-private fun waitUntil(timeoutMillis: Long = 2_000, condition: () -> Boolean): Boolean {
+private fun waitUntil(timeoutMillis: Long = 1_000, condition: () -> Boolean): Boolean {
     val startTime = System.nanoTime()
     while (true) {
         if (condition()) return true
