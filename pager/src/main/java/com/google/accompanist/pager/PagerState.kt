@@ -462,6 +462,8 @@ class PagerState(
      * Updates the [layoutPages] so that [page] is the current laid out page.
      */
     private fun updateLayoutPages(page: Int) {
+        requireCurrentPage(page, "page")
+
         layoutPages.forEachIndexed { index, layoutPage ->
             val pg = page + index - offscreenLimit
             layoutPage.page = if (pg < firstPageIndex || pg > lastPageIndex) null else pg
@@ -632,7 +634,7 @@ class PagerState(
             require(value == 0) { "$name must be 0 when pageCount is 0" }
         } else {
             require(value in 0 until pageCount) {
-                "$name must be >= 0 and < pageCount"
+                "$name ($value) must be >= 0 and < pageCount ($pageCount)"
             }
         }
     }
