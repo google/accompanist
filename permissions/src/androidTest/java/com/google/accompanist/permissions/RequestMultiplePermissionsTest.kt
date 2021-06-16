@@ -23,11 +23,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
@@ -116,19 +111,18 @@ class RequestMultiplePermissionsTest {
 
     @Composable
     private fun ComposableUnderTest() {
-        var launchPermissionRequest by rememberSaveable { mutableStateOf(false) }
-
         val state = rememberMultiplePermissionsState(
             listOf(
                 android.Manifest.permission.READ_EXTERNAL_STORAGE,
                 android.Manifest.permission.CAMERA
             )
         )
-        when {
-            state.allPermissionsGranted -> {
-                Text("Granted")
-            }
-            state.shouldShowRationale -> {
+        PermissionsRequired(
+            multiplePermissionsState = state,
+            permissionsGrantedContent = { Text("Granted") },
+            permissionsDeniedContent = { Text("Denied") },
+            permissionsRequestedContent = { Text("Requesting") },
+            permissionsRationaleContent = {
                 Column {
                     Text("ShowRationale")
                     Button(onClick = { state.launchMultiplePermissionRequest() }) {
@@ -136,20 +130,6 @@ class RequestMultiplePermissionsTest {
                     }
                 }
             }
-            !state.permissionRequested -> {
-                Text("Requesting")
-                launchPermissionRequest = true
-            }
-            else -> {
-                Text("Denied")
-            }
-        }
-
-        LaunchedEffect(launchPermissionRequest, state) {
-            if (launchPermissionRequest) {
-                state.launchMultiplePermissionRequest()
-                launchPermissionRequest = false
-            }
-        }
+        )
     }
 }

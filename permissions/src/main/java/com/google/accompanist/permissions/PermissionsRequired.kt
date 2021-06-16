@@ -27,13 +27,14 @@ import androidx.compose.runtime.setValue
  * Composable that exercises the permissions flows as described in the
  * [documentation](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions).
  *
- * @param permissionState permission that [content] requires to be granted.
+ * @param permissionState required permission to be granted.
  * @param permissionsGrantedContent content to show when the permission is granted.
  * @param permissionsRationaleContent content to show when the user needs to be presented with
  * a rationale for the required permission.
  * @param permissionsDeniedContent content to show when the user denied the permission.
  * @param permissionsRequestedContent content to show while the permission is being requested.
  */
+@ExperimentalPermissionsApi
 @Composable
 fun PermissionRequired(
     permissionState: PermissionState,
@@ -81,6 +82,7 @@ fun PermissionRequired(
  * @param permissionsDeniedContent content to show when the user denied the permissions.
  * @param permissionsRequestedContent content to show while the permissions are being requested.
  */
+@ExperimentalPermissionsApi
 @Composable
 fun PermissionsRequired(
     multiplePermissionsState: MultiplePermissionsState,
