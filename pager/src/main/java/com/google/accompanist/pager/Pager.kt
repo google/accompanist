@@ -37,7 +37,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
@@ -267,7 +266,7 @@ internal fun Pager(
             .then(scrollable)
             // Add a NestedScrollConnection which consumes all post fling/scrolls
             .nestedScroll(connection = ConsumeFlingNestedScrollConnection)
-            .clipToBounds(),
+            .clipScrollableContainer(isVertical),
         content = {
             if (DebugLog) {
                 val firstPage = state.layoutPages.firstOrNull { it.page != null }
