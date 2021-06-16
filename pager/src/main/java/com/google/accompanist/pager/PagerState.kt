@@ -166,11 +166,7 @@ class PagerState(
         get() = if (infiniteLoop) Int.MIN_VALUE else 0
 
     internal inline val lastPageIndex: Int
-        get() = if (infiniteLoop) {
-            Int.MAX_VALUE
-        } else {
-            (pageCount - 1).coerceAtLeast(0)
-        }
+        get() = if (infiniteLoop) Int.MAX_VALUE else (pageCount - 1).coerceAtLeast(0)
 
     /**
      * The ScrollableController instance. We keep it as we need to call stopAnimation on it once
@@ -453,15 +449,17 @@ class PagerState(
      * Updates the [layoutPages] so that for the given [position].
      */
     private fun updateLayoutForScrollPosition(position: Float) {
-        val newIndex = floor(position).toInt()
+        val newIndex = floor(position).toInt().coerceIn(firstPageIndex, lastPageIndex)
         updateLayoutPages(newIndex)
-        currentLayoutPageOffset = position - newIndex
+        currentLayoutPageOffset = (position - newIndex).coerceIn(0f, 1f)
     }
 
     /**
      * Updates the [layoutPages] so that [page] is the current laid out page.
      */
     private fun updateLayoutPages(page: Int) {
+        requireCurrentPage(page, "page")
+
         layoutPages.forEachIndexed { index, layoutPage ->
             val pg = page + index - offscreenLimit
             layoutPage.page = if (pg < firstPageIndex || pg > lastPageIndex) null else pg
@@ -631,8 +629,8 @@ class PagerState(
         if (pageCount == 0) {
             require(value == 0) { "$name must be 0 when pageCount is 0" }
         } else {
-            require(value in 0 until pageCount) {
-                "$name must be >= 0 and < pageCount"
+            require(value in firstPageIndex..lastPageIndex) {
+                "$name[$value] must be >= firstPageIndex[$firstPageIndex] and <= lastPageIndex[$lastPageIndex]"
             }
         }
     }
