@@ -28,38 +28,39 @@ import androidx.compose.runtime.setValue
  * [documentation](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions).
  *
  * @param permissionState required permission to be granted.
- * @param permissionsGrantedContent content to show when the permission is granted.
- * @param permissionsRationaleContent content to show when the user needs to be presented with
+ * @param permissionGrantedContent content to show when the permission is granted.
+ * @param permissionRationaleContent content to show when the user needs to be presented with
  * a rationale for the required permission.
- * @param permissionsDeniedContent content to show when the user denied the permission.
- * @param permissionsRequestedContent content to show while the permission is being requested.
+ * @param doNotAskAgainPermissionContent content to show when the user denied the permission.
+ * @param requestingPermissionContent content to show while the permission is being requested. This
+ * will be rendered below the system permission dialog.
  */
 @ExperimentalPermissionsApi
 @Composable
 fun PermissionRequired(
     permissionState: PermissionState,
-    permissionsGrantedContent: @Composable (() -> Unit),
-    permissionsRationaleContent: @Composable (() -> Unit),
-    permissionsDeniedContent: @Composable (() -> Unit),
-    permissionsRequestedContent: @Composable (() -> Unit)? = null
+    permissionGrantedContent: @Composable (() -> Unit),
+    permissionRationaleContent: @Composable (() -> Unit),
+    doNotAskAgainPermissionContent: @Composable (() -> Unit),
+    requestingPermissionContent: @Composable (() -> Unit)? = null
 ) {
     var launchPermissionRequest by rememberSaveable { mutableStateOf(false) }
 
     when {
         permissionState.hasPermission -> {
-            permissionsGrantedContent()
+            permissionGrantedContent()
         }
         permissionState.shouldShowRationale -> {
-            permissionsRationaleContent()
+            permissionRationaleContent()
         }
         !permissionState.permissionRequested -> {
-            if (permissionsRequestedContent != null) {
-                permissionsRequestedContent()
+            if (requestingPermissionContent != null) {
+                requestingPermissionContent()
             }
             launchPermissionRequest = true
         }
         else -> {
-            permissionsDeniedContent()
+            doNotAskAgainPermissionContent()
         }
     }
 
@@ -79,8 +80,9 @@ fun PermissionRequired(
  * @param permissionsGrantedContent content to show when the permissions are granted.
  * @param permissionsRationaleContent content to show when the user needs to be presented with
  * a rationale for the required permissions.
- * @param permissionsDeniedContent content to show when the user denied the permissions.
- * @param permissionsRequestedContent content to show while the permissions are being requested.
+ * @param doNotAskAgainPermissionsContent content to show when the user denied the permissions.
+ * @param requestingPermissionsContent content to show while the permissions are being requested.
+ * This will be rendered below the system permission dialog.
  */
 @ExperimentalPermissionsApi
 @Composable
@@ -88,8 +90,8 @@ fun PermissionsRequired(
     multiplePermissionsState: MultiplePermissionsState,
     permissionsGrantedContent: @Composable (() -> Unit),
     permissionsRationaleContent: @Composable (() -> Unit),
-    permissionsDeniedContent: @Composable (() -> Unit),
-    permissionsRequestedContent: @Composable (() -> Unit)? = null
+    doNotAskAgainPermissionsContent: @Composable (() -> Unit),
+    requestingPermissionsContent: @Composable (() -> Unit)? = null
 ) {
     var launchPermissionRequest by rememberSaveable { mutableStateOf(false) }
 
@@ -101,13 +103,13 @@ fun PermissionsRequired(
             permissionsRationaleContent()
         }
         !multiplePermissionsState.permissionRequested -> {
-            if (permissionsRequestedContent != null) {
-                permissionsRequestedContent()
+            if (requestingPermissionsContent != null) {
+                requestingPermissionsContent()
             }
             launchPermissionRequest = true
         }
         else -> {
-            permissionsDeniedContent()
+            doNotAskAgainPermissionsContent()
         }
     }
 

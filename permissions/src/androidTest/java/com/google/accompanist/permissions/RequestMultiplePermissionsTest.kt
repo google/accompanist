@@ -120,8 +120,8 @@ class RequestMultiplePermissionsTest {
         PermissionsRequired(
             multiplePermissionsState = state,
             permissionsGrantedContent = { Text("Granted") },
-            permissionsDeniedContent = { Text("Denied") },
-            permissionsRequestedContent = { Text("Requesting") },
+            doNotAskAgainPermissionsContent = { Text("Denied") },
+            requestingPermissionsContent = { Text("Requesting") },
             permissionsRationaleContent = {
                 Column {
                     Text("ShowRationale")

@@ -51,19 +51,19 @@ class PermissionsTestActivity : ComponentActivity() {
                 val state = rememberPermissionState(Manifest.permission.CAMERA)
                 PermissionRequired(
                     permissionState = state,
-                    permissionsGrantedContent = {
+                    permissionGrantedContent = {
                         Text("Granted")
                     },
-                    permissionsRationaleContent = {
+                    permissionRationaleContent = {
                         Text("ShowRationale")
                         Button(onClick = { state.launchPermissionRequest() }) {
                             Text("Request")
                         }
                     },
-                    permissionsDeniedContent = {
+                    doNotAskAgainPermissionContent = {
                         Text("Denied")
                     },
-                    permissionsRequestedContent = {
+                    requestingPermissionContent = {
                         Text("Requesting")
                     }
                 )
