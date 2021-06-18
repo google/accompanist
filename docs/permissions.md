@@ -10,6 +10,62 @@ A library which provides [Android runtime permissions](https://developer.android
 
 ## Usage
 
+### `PermissionRequired` and `PermissionsRequired` APIs
+
+The `PermissionRequired` and `PermissionsRequired` composables offer an opinionated way of handling
+the permissions status workflow as described in the
+[documentation](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions).
+
+```kotlin
+@Composable
+private fun FeatureThatRequiresCameraPermission(
+    navigateToSettingsScreen: () -> Unit
+) {
+    // Track if the user doesn't want to see the rationale any more.
+    var doNotShowRationale by rememberSaveable { mutableStateOf(false) }
+
+    val cameraPermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
+    PermissionRequired(
+        permissionState = cameraPermissionState,
+        noPermissionContent = {
+            if (doNotShowRationale) {
+                Text("Feature not available")
+            } else {
+                Column {
+                    Text("The camera is important for this app. Please grant the permission.")
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row {
+                        Button(onClick = { cameraPermissionState.launchPermissionRequest() }) {
+                            Text("Ok!")
+                        }
+                        Spacer(Modifier.width(8.dp))
+                        Button(onClick = { doNotShowRationale = true }) {
+                            Text("Nope")
+                        }
+                    }
+                }
+            }
+        },
+        doNotAskAgainPermissionContent = {
+            Column {
+                Text(
+                    "Camera permission denied. See this FAQ with information about why we " +
+                        "need this permission. Please, grant us access on the Settings screen."
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Button(onClick = navigateToSettingsScreen) {
+                    Text("Open Settings")
+                }
+            }
+        }
+    ) {
+        Text("Camera permission Granted")
+    }
+}
+```
+
+### `rememberPermissionState` and `rememberMultiplePermissionsState` APIs
+
 The `rememberPermissionState(permission: String)` API allows you to request a certain permission
 to the user and check for the status of the permission.
 `rememberMultiplePermissionsState(permissions: List<String>)` offers the same but for multiple

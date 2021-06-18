@@ -76,7 +76,6 @@ private fun Sample(navigateToSettingsScreen: () -> Unit) {
                 Text("Feature not available")
             } else {
                 Rationale(
-                    doNotShowRationale = doNotShowRationale,
                     onDoNotShowRationale = { doNotShowRationale = true },
                     onRequestPermission = { cameraPermissionState.launchPermissionRequest() }
                 )
@@ -92,24 +91,19 @@ private fun Sample(navigateToSettingsScreen: () -> Unit) {
 
 @Composable
 private fun Rationale(
-    doNotShowRationale: Boolean,
     onDoNotShowRationale: () -> Unit,
     onRequestPermission: () -> Unit
 ) {
-    if (doNotShowRationale) {
-        Text("Feature not available")
-    } else {
-        Column {
-            Text("The camera is important for this app. Please grant the permission.")
-            Spacer(modifier = Modifier.height(8.dp))
-            Row {
-                Button(onClick = { onRequestPermission() }) {
-                    Text("Request permission")
-                }
-                Spacer(Modifier.width(8.dp))
-                Button(onClick = { onDoNotShowRationale() }) {
-                    Text("Don't show rationale again")
-                }
+    Column {
+        Text("The camera is important for this app. Please grant the permission.")
+        Spacer(modifier = Modifier.height(8.dp))
+        Row {
+            Button(onClick = onRequestPermission) {
+                Text("Request permission")
+            }
+            Spacer(Modifier.width(8.dp))
+            Button(onClick = onDoNotShowRationale) {
+                Text("Don't show rationale again")
             }
         }
     }
