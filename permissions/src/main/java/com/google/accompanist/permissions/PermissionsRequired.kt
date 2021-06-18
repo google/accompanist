@@ -17,106 +17,85 @@
 package com.google.accompanist.permissions
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 
 /**
  * Composable that exercises the permissions flows as described in the
- * [documentation](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions).
+ * [documentation](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions)
+ * when a permission is *required* to be granted for [content].
+ *
+ * If the permission is not granted or a rationale should be shown, [noPermissionContent] will
+ * be added to Composition. If the user doesn't want to be asked for permissions again,
+ * [doNotAskAgainPermissionContent] will be added instead.
  *
  * @param permissionState required permission to be granted.
- * @param permissionGrantedContent content to show when the permission is granted.
- * @param permissionRationaleContent content to show when the user needs to be presented with
- * a rationale for the required permission.
- * @param doNotAskAgainPermissionContent content to show when the user denied the permission.
- * @param requestingPermissionContent content to show while the permission is being requested. This
- * will be rendered below the system permission dialog.
+ * @param noPermissionContent content to show when the user hasn't granted the permission.
+ * Requesting the permission to the user is allowed using [PermissionState.launchPermissionRequest]
+ * in a side-effect or non-Composable lambda.
+ * @param doNotAskAgainPermissionContent content to show when the user doesn't want to be asked
+ * again for this permission. Attempting to request the permission to the user in this part of
+ * Composition has no effect.
+ * @param content content to show when the permission is granted.
  */
 @ExperimentalPermissionsApi
 @Composable
 fun PermissionRequired(
     permissionState: PermissionState,
-    permissionGrantedContent: @Composable (() -> Unit),
-    permissionRationaleContent: @Composable (() -> Unit),
+    noPermissionContent: @Composable (() -> Unit),
     doNotAskAgainPermissionContent: @Composable (() -> Unit),
-    requestingPermissionContent: @Composable (() -> Unit)? = null
+    content: @Composable (() -> Unit),
 ) {
-    var launchPermissionRequest by rememberSaveable { mutableStateOf(false) }
-
     when {
         permissionState.hasPermission -> {
-            permissionGrantedContent()
+            content()
         }
-        permissionState.shouldShowRationale -> {
-            permissionRationaleContent()
-        }
-        !permissionState.permissionRequested -> {
-            if (requestingPermissionContent != null) {
-                requestingPermissionContent()
-            }
-            launchPermissionRequest = true
+        permissionState.shouldShowRationale || !permissionState.permissionRequested -> {
+            noPermissionContent()
         }
         else -> {
             doNotAskAgainPermissionContent()
-        }
-    }
-
-    if (launchPermissionRequest) {
-        LaunchedEffect(permissionState) {
-            permissionState.launchPermissionRequest()
-            launchPermissionRequest = false
         }
     }
 }
 
 /**
  * Composable that exercises the permissions flows as described in the
- * [documentation](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions).
+ * [documentation](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions)
+ * when multiple permissions are *required* to be granted for [content].
+ *
+ * If any permission is not granted and a rationale should be shown, or the user hasn't been
+ * presented with the permissions yet, [noPermissionsContent] will be added to Composition.
+ * If the user doesn't want to be asked for permissions again, [doNotAskAgainPermissionsContent]
+ * will be added instead.
  *
  * @param multiplePermissionsState required permissions to be granted.
- * @param permissionsGrantedContent content to show when the permissions are granted.
- * @param permissionsRationaleContent content to show when the user needs to be presented with
- * a rationale for the required permissions.
- * @param doNotAskAgainPermissionsContent content to show when the user denied the permissions.
- * @param requestingPermissionsContent content to show while the permissions are being requested.
- * This will be rendered below the system permission dialog.
+ * @param noPermissionsContent content to show when the user hasn't granted all permissions.
+ * Requesting the permissions to the user is allowed using
+ * [MultiplePermissionsState.launchMultiplePermissionRequest] in a side-effect or
+ * non-Composable lambda.
+ * @param doNotAskAgainPermissionsContent content to show when the user doesn't want to be asked
+ * again for these permissions. Attempting to request the permissions to the user in this part of
+ * Composition has no effect.
+ * @param content content to show when all permissions are granted.
  */
 @ExperimentalPermissionsApi
 @Composable
 fun PermissionsRequired(
     multiplePermissionsState: MultiplePermissionsState,
-    permissionsGrantedContent: @Composable (() -> Unit),
-    permissionsRationaleContent: @Composable (() -> Unit),
+    noPermissionsContent: @Composable (() -> Unit),
     doNotAskAgainPermissionsContent: @Composable (() -> Unit),
-    requestingPermissionsContent: @Composable (() -> Unit)? = null
+    content: @Composable (() -> Unit),
 ) {
-    var launchPermissionRequest by rememberSaveable { mutableStateOf(false) }
-
     when {
         multiplePermissionsState.allPermissionsGranted -> {
-            permissionsGrantedContent()
+            content()
         }
-        multiplePermissionsState.shouldShowRationale -> {
-            permissionsRationaleContent()
-        }
-        !multiplePermissionsState.permissionRequested -> {
-            if (requestingPermissionsContent != null) {
-                requestingPermissionsContent()
+        multiplePermissionsState.shouldShowRationale ||
+            !multiplePermissionsState.permissionRequested ->
+            {
+                noPermissionsContent()
             }
-            launchPermissionRequest = true
-        }
         else -> {
             doNotAskAgainPermissionsContent()
-        }
-    }
-
-    if (launchPermissionRequest) {
-        LaunchedEffect(multiplePermissionsState) {
-            multiplePermissionsState.launchMultiplePermissionRequest()
-            launchPermissionRequest = false
         }
     }
 }

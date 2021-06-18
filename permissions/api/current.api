@@ -45,8 +45,8 @@ package com.google.accompanist.permissions {
   }
 
   public final class PermissionsRequiredKt {
-    method @androidx.compose.runtime.Composable @com.google.accompanist.permissions.ExperimentalPermissionsApi public static void PermissionRequired(com.google.accompanist.permissions.PermissionState permissionState, kotlin.jvm.functions.Function0<kotlin.Unit> permissionGrantedContent, kotlin.jvm.functions.Function0<kotlin.Unit> permissionRationaleContent, kotlin.jvm.functions.Function0<kotlin.Unit> doNotAskAgainPermissionContent, optional kotlin.jvm.functions.Function0<kotlin.Unit>? requestingPermissionContent);
-    method @androidx.compose.runtime.Composable @com.google.accompanist.permissions.ExperimentalPermissionsApi public static void PermissionsRequired(com.google.accompanist.permissions.MultiplePermissionsState multiplePermissionsState, kotlin.jvm.functions.Function0<kotlin.Unit> permissionsGrantedContent, kotlin.jvm.functions.Function0<kotlin.Unit> permissionsRationaleContent, kotlin.jvm.functions.Function0<kotlin.Unit> doNotAskAgainPermissionsContent, optional kotlin.jvm.functions.Function0<kotlin.Unit>? requestingPermissionsContent);
+    method @androidx.compose.runtime.Composable @com.google.accompanist.permissions.ExperimentalPermissionsApi public static void PermissionRequired(com.google.accompanist.permissions.PermissionState permissionState, kotlin.jvm.functions.Function0<kotlin.Unit> noPermissionContent, kotlin.jvm.functions.Function0<kotlin.Unit> doNotAskAgainPermissionContent, kotlin.jvm.functions.Function0<kotlin.Unit> content);
+    method @androidx.compose.runtime.Composable @com.google.accompanist.permissions.ExperimentalPermissionsApi public static void PermissionsRequired(com.google.accompanist.permissions.MultiplePermissionsState multiplePermissionsState, kotlin.jvm.functions.Function0<kotlin.Unit> noPermissionsContent, kotlin.jvm.functions.Function0<kotlin.Unit> doNotAskAgainPermissionsContent, kotlin.jvm.functions.Function0<kotlin.Unit> content);
   }
 
   public final class PermissionsUtilKt {

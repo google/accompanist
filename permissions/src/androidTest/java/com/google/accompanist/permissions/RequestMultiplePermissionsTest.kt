@@ -47,6 +47,7 @@ class RequestMultiplePermissionsTest {
 
     @Test
     fun permissionTest_grantPermissions() {
+        composeTestRule.onNodeWithText("Request").performClick()
         grantPermissionInDialog() // Grant first permission
         grantPermissionInDialog() // Grant second permission
         composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
@@ -54,6 +55,7 @@ class RequestMultiplePermissionsTest {
 
     @Test
     fun permissionTest_denyOnePermission() {
+        composeTestRule.onNodeWithText("Request").performClick()
         grantPermissionInDialog() // Grant first permission
         denyPermissionInDialog() // Deny second permission
         composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
@@ -68,6 +70,7 @@ class RequestMultiplePermissionsTest {
 
     @Test
     fun permissionTest_doNotAskAgainPermission() {
+        composeTestRule.onNodeWithText("Request").performClick()
         grantPermissionInDialog() // Grant first permission
         denyPermissionInDialog() // Deny second permission
         composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
@@ -84,6 +87,7 @@ class RequestMultiplePermissionsTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun permissionTest_grantInTheBackground() {
+        composeTestRule.onNodeWithText("Request").performClick()
         grantPermissionInDialog() // Grant first permission
         denyPermissionInDialog() // Deny second permission
         composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
@@ -119,10 +123,8 @@ class RequestMultiplePermissionsTest {
         )
         PermissionsRequired(
             multiplePermissionsState = state,
-            permissionsGrantedContent = { Text("Granted") },
             doNotAskAgainPermissionsContent = { Text("Denied") },
-            requestingPermissionsContent = { Text("Requesting") },
-            permissionsRationaleContent = {
+            noPermissionsContent = {
                 Column {
                     Text("ShowRationale")
                     Button(onClick = { state.launchMultiplePermissionRequest() }) {
@@ -130,6 +132,8 @@ class RequestMultiplePermissionsTest {
                     }
                 }
             }
-        )
+        ) {
+            Text("Granted")
+        }
     }
 }
