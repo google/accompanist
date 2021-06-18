@@ -2,6 +2,10 @@
 compose = "1.0.0-beta09"
 composesnapshot = "-" # a single character = no snapshot
 
+# gradlePlugin and lint need to be updated together
+gradlePlugin = "7.0.0-beta03"
+lint = "30.0.0-beta03"
+
 ktlint = "0.41.0"
 kotlin = "1.5.10"
 coroutines = "1.5.0"
@@ -21,14 +25,18 @@ compose-foundation-layout = { module = "androidx.compose.foundation:foundation-l
 compose-material-material = { module = "androidx.compose.material:material", version.ref = "compose" }
 compose-material-iconsext = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose" }
 
-android-gradlePlugin = "com.android.tools.build:gradle:7.0.0-beta03"
+android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "gradlePlugin" }
 gradleMavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.15.1"
 metalavaGradle = "me.tylerbwong.gradle:metalava-gradle:0.1.8"
 
 glide = "com.github.bumptech.glide:glide:4.12.0"
 
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+kotlin-stdlibJdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
+kotlin-metadataJvm = "org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.3.0"
+
 
 kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
@@ -60,3 +68,8 @@ truth = "com.google.truth:truth:1.1.2"
 testparameterinjection = "com.google.testparameterinjector:test-parameter-injector:1.3"
 
 affectedmoduledetector = "com.dropbox.affectedmoduledetector:affectedmoduledetector:0.1.2"
+
+android-tools-build-gradle = { module = "com.android.tools.build:gradle", version.ref = "gradlePlugin" }
+android-tools-lint-lint = { module = "com.android.tools.lint:lint", version.ref = "lint" }
+android-tools-lint-api = { module = "com.android.tools.lint:lint-api", version.ref = "lint" }
+android-tools-lint-tests = { module = "com.android.tools.lint:lint-tests", version.ref = "lint" }
