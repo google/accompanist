@@ -30,7 +30,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -74,10 +73,6 @@ private fun Sample(
     cameraPermissionState: PermissionState,
     navigateToSettingsScreen: () -> Unit
 ) {
-    // When `true`, the permission request must be presented to the user.
-    // This could happen when the user opens the screen for the first time.
-    var launchPermissionRequest by rememberSaveable { mutableStateOf(false) }
-
     // Track if the user doesn't want to see the rationale any more.
     var doNotShowRationale by rememberSaveable { mutableStateOf(false) }
 
@@ -86,10 +81,10 @@ private fun Sample(
         cameraPermissionState.hasPermission -> {
             Text("Camera permission Granted")
         }
-        // If the user denied the permission but a rationale should be shown, explain why the
-        // feature is needed by the app and allow the user to be presented with the permission
-        // again or to not see the rationale any more
-        cameraPermissionState.shouldShowRationale -> {
+        // If the user denied the permission but a rationale should be shown, or the user sees
+        // the permission for the first time, explain why the feature is needed by the app and allow
+        // the user to be presented with the permission again or to not see the rationale any more.
+        cameraPermissionState.shouldShowRationale || !cameraPermissionState.permissionRequested -> {
             if (doNotShowRationale) {
                 Text("Feature not available")
             } else {
@@ -108,12 +103,6 @@ private fun Sample(
                 }
             }
         }
-        // The permission is not granted, the rationale shouldn't be shown to the user, and the
-        // permission hasn't been requested previously. Let's update the launchPermissionRequest
-        // flag to trigger the `LaunchedEffect` below.
-        !cameraPermissionState.permissionRequested -> {
-            launchPermissionRequest = true
-        }
         // If the criteria above hasn't been met, the user denied the permission. Let's present
         // the user with a FAQ in case they want to know more and send them to the Settings screen
         // to enable it the future there if they want to.
@@ -128,14 +117,6 @@ private fun Sample(
                     Text("Open Settings")
                 }
             }
-        }
-    }
-
-    // Trigger a side-effect to request the camera permission if it needs to be presented to the user
-    if (launchPermissionRequest) {
-        LaunchedEffect(cameraPermissionState) {
-            cameraPermissionState.launchPermissionRequest()
-            launchPermissionRequest = false
         }
     }
 }
