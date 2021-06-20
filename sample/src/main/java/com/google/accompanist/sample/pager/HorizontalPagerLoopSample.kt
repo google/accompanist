@@ -138,6 +138,12 @@ private fun Sample() {
                     .align(Alignment.CenterHorizontally)
                     .padding(16.dp),
             )
+
+            ActionsRow(
+                pagerState = pagerState,
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                infiniteLoop = true
+            )
         }
     }
 }
