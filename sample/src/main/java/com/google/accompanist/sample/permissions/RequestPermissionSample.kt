@@ -71,7 +71,7 @@ private fun Sample(navigateToSettingsScreen: () -> Unit) {
     val cameraPermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
     PermissionRequired(
         permissionState = cameraPermissionState,
-        noPermissionContent = {
+        permissionNotGrantedContent = {
             if (doNotShowRationale) {
                 Text("Feature not available")
             } else {
@@ -81,7 +81,7 @@ private fun Sample(navigateToSettingsScreen: () -> Unit) {
                 )
             }
         },
-        doNotAskAgainPermissionContent = {
+        permissionNotAvailableContent = {
             PermissionDenied(navigateToSettingsScreen)
         }
     ) {

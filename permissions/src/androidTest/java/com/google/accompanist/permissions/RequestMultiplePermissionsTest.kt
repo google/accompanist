@@ -123,8 +123,8 @@ class RequestMultiplePermissionsTest {
         )
         PermissionsRequired(
             multiplePermissionsState = state,
-            doNotAskAgainPermissionsContent = { Text("Denied") },
-            noPermissionsContent = {
+            permissionsNotAvailableContent = { Text("Denied") },
+            permissionsNotGrantedContent = {
                 Column {
                     Text("ShowRationale")
                     Button(onClick = { state.launchMultiplePermissionRequest() }) {

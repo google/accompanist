@@ -27,7 +27,7 @@ private fun FeatureThatRequiresCameraPermission(
     val cameraPermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
     PermissionRequired(
         permissionState = cameraPermissionState,
-        noPermissionContent = {
+        permissionNotGrantedContent = {
             if (doNotShowRationale) {
                 Text("Feature not available")
             } else {
@@ -46,7 +46,7 @@ private fun FeatureThatRequiresCameraPermission(
                 }
             }
         },
-        doNotAskAgainPermissionContent = {
+        permissionNotAvailableContent = {
             Column {
                 Text(
                     "Camera permission denied. See this FAQ with information about why we " +

@@ -52,8 +52,12 @@ class MultipleAndSinglePermissionsTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
+    private val instrumentation by lazy {
+        InstrumentationRegistry.getInstrumentation()
+    }
+
     private val uiDevice by lazy {
-        UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        UiDevice.getInstance(instrumentation)
     }
 
     @Test
@@ -65,6 +69,7 @@ class MultipleAndSinglePermissionsTest {
         grantPermissionInDialog()
         composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
         composeTestRule.onNodeWithText("Navigate").performClick()
+        instrumentation.waitForIdleSync()
         composeTestRule.onNodeWithText("PermissionsTestActivity").assertIsDisplayed()
         composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
     }
@@ -78,12 +83,14 @@ class MultipleAndSinglePermissionsTest {
         denyPermissionInDialog()
         composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
         composeTestRule.onNodeWithText("Navigate").performClick()
+        instrumentation.waitForIdleSync()
         composeTestRule.onNodeWithText("PermissionsTestActivity").assertIsDisplayed()
         composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
         composeTestRule.onNodeWithText("Request").performClick()
         grantPermissionInDialog()
         composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
         uiDevice.pressBack()
+        instrumentation.waitForIdleSync()
         composeTestRule.onNodeWithText("MultipleAndSinglePermissionsTest").assertIsDisplayed()
         composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
     }
@@ -97,14 +104,17 @@ class MultipleAndSinglePermissionsTest {
         denyPermissionInDialog()
         composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
         composeTestRule.onNodeWithText("Navigate").performClick()
+        instrumentation.waitForIdleSync()
         composeTestRule.onNodeWithText("PermissionsTestActivity").assertIsDisplayed()
         composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
         uiDevice.pressBack()
+        instrumentation.waitForIdleSync()
         composeTestRule.onNodeWithText("MultipleAndSinglePermissionsTest").assertIsDisplayed()
         composeTestRule.onNodeWithText("Request").performClick()
         grantPermissionInDialog()
         composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
         composeTestRule.onNodeWithText("Navigate").performClick()
+        instrumentation.waitForIdleSync()
         composeTestRule.onNodeWithText("PermissionsTestActivity").assertIsDisplayed()
         composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
     }
@@ -121,14 +131,17 @@ class MultipleAndSinglePermissionsTest {
         denyPermissionInDialog()
         composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
         composeTestRule.onNodeWithText("Navigate").performClick()
+        instrumentation.waitForIdleSync()
         composeTestRule.onNodeWithText("PermissionsTestActivity").assertIsDisplayed()
         composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
         uiDevice.pressBack()
+        instrumentation.waitForIdleSync()
         composeTestRule.onNodeWithText("MultipleAndSinglePermissionsTest").assertIsDisplayed()
         composeTestRule.onNodeWithText("Request").performClick()
         grantPermissionInDialog()
         composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
         composeTestRule.onNodeWithText("Navigate").performClick()
+        instrumentation.waitForIdleSync()
         composeTestRule.onNodeWithText("PermissionsTestActivity").assertIsDisplayed()
         composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
     }
@@ -148,6 +161,7 @@ class MultipleAndSinglePermissionsTest {
         grantPermissionInDialog() // Grant second permission
         composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
         composeTestRule.onNodeWithText("Navigate").performClick()
+        instrumentation.waitForIdleSync()
         composeTestRule.onNodeWithText("PermissionsTestActivity").assertIsDisplayed()
         composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
     }
@@ -167,12 +181,14 @@ class MultipleAndSinglePermissionsTest {
         denyPermissionInDialog() // Deny second permission
         composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
         composeTestRule.onNodeWithText("Navigate").performClick()
+        instrumentation.waitForIdleSync()
         composeTestRule.onNodeWithText("PermissionsTestActivity").assertIsDisplayed()
         composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
         composeTestRule.onNodeWithText("Request").performClick()
         grantPermissionInDialog() // Grant the permission
         composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
         uiDevice.pressBack()
+        instrumentation.waitForIdleSync()
         composeTestRule.onNodeWithText("MultipleAndSinglePermissionsTest").assertIsDisplayed()
         composeTestRule.onNodeWithText("Request").performClick()
         grantPermissionInDialog() // only one permission to grant now
