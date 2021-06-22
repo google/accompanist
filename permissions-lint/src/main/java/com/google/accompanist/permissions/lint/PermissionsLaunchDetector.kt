@@ -36,8 +36,9 @@ import org.jetbrains.uast.UCallExpression
 import java.util.EnumSet
 
 /**
- * [Detector] that checks `async` and `launch` calls to make sure they don't happen inside the
- * body of a composable function / lambda.
+ * [Detector] that checks `PermissionState.launchPermissionRequest]` and
+ * `MultiplePermissionsState.launchMultiplePermissionRequest` calls to make sure they don't happen
+ * inside the body of a composable function / lambda.
  */
 public class PermissionsLaunchDetector : Detector(), SourceCodeScanner {
 
@@ -80,10 +81,8 @@ public class PermissionsLaunchDetector : Detector(), SourceCodeScanner {
 /**
  * Returns whether [this] has [packageName] as its package name.
  */
-private fun PsiMethod.isInPackageName(packageName: PackageName): Boolean {
-    val actual = (containingFile as? PsiJavaFile)?.packageName
-    return packageName.javaPackageName == actual
-}
+private fun PsiMethod.isInPackageName(packageName: PackageName): Boolean =
+    packageName.javaPackageName == (containingFile as? PsiJavaFile)?.packageName
 
 private val PermissionsPackageName = Package("com.google.accompanist.permissions")
 private val LaunchPermissionRequest =
