@@ -47,6 +47,7 @@ class RequestMultiplePermissionsTest {
 
     @Test
     fun permissionTest_grantPermissions() {
+        composeTestRule.onNodeWithText("No permission").assertIsDisplayed()
         composeTestRule.onNodeWithText("Request").performClick()
         grantPermissionInDialog() // Grant first permission
         grantPermissionInDialog() // Grant second permission
@@ -55,6 +56,7 @@ class RequestMultiplePermissionsTest {
 
     @Test
     fun permissionTest_denyOnePermission() {
+        composeTestRule.onNodeWithText("No permission").assertIsDisplayed()
         composeTestRule.onNodeWithText("Request").performClick()
         grantPermissionInDialog() // Grant first permission
         denyPermissionInDialog() // Deny second permission
@@ -70,6 +72,7 @@ class RequestMultiplePermissionsTest {
 
     @Test
     fun permissionTest_doNotAskAgainPermission() {
+        composeTestRule.onNodeWithText("No permission").assertIsDisplayed()
         composeTestRule.onNodeWithText("Request").performClick()
         grantPermissionInDialog() // Grant first permission
         denyPermissionInDialog() // Deny second permission
@@ -87,6 +90,7 @@ class RequestMultiplePermissionsTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun permissionTest_grantInTheBackground() {
+        composeTestRule.onNodeWithText("No permission").assertIsDisplayed()
         composeTestRule.onNodeWithText("Request").performClick()
         grantPermissionInDialog() // Grant first permission
         denyPermissionInDialog() // Deny second permission
@@ -126,7 +130,11 @@ class RequestMultiplePermissionsTest {
             permissionsNotAvailableContent = { Text("Denied") },
             permissionsNotGrantedContent = {
                 Column {
-                    Text("ShowRationale")
+                    if (state.permissionRequested) {
+                        Text("ShowRationale")
+                    } else {
+                        Text("No permission")
+                    }
                     Button(onClick = { state.launchMultiplePermissionRequest() }) {
                         Text("Request")
                     }

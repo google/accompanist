@@ -25,11 +25,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -66,6 +61,9 @@ class MultipleAndSinglePermissionsTest {
             ComposableUnderTest(listOf(android.Manifest.permission.CAMERA))
         }
 
+        composeTestRule.onNodeWithText("MultipleAndSinglePermissionsTest").assertIsDisplayed()
+        composeTestRule.onNodeWithText("No permission").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Request").performClick()
         grantPermissionInDialog()
         composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
         composeTestRule.onNodeWithText("Navigate").performClick()
@@ -80,12 +78,15 @@ class MultipleAndSinglePermissionsTest {
             ComposableUnderTest(listOf(android.Manifest.permission.CAMERA))
         }
 
+        composeTestRule.onNodeWithText("MultipleAndSinglePermissionsTest").assertIsDisplayed()
+        composeTestRule.onNodeWithText("No permission").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Request").performClick()
         denyPermissionInDialog()
         composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
         composeTestRule.onNodeWithText("Navigate").performClick()
         instrumentation.waitForIdleSync()
         composeTestRule.onNodeWithText("PermissionsTestActivity").assertIsDisplayed()
-        composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
+        composeTestRule.onNodeWithText("No permission").assertIsDisplayed()
         composeTestRule.onNodeWithText("Request").performClick()
         grantPermissionInDialog()
         composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
@@ -101,12 +102,15 @@ class MultipleAndSinglePermissionsTest {
             ComposableUnderTest(listOf(android.Manifest.permission.CAMERA))
         }
 
+        composeTestRule.onNodeWithText("MultipleAndSinglePermissionsTest").assertIsDisplayed()
+        composeTestRule.onNodeWithText("No permission").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Request").performClick()
         denyPermissionInDialog()
         composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
         composeTestRule.onNodeWithText("Navigate").performClick()
         instrumentation.waitForIdleSync()
         composeTestRule.onNodeWithText("PermissionsTestActivity").assertIsDisplayed()
-        composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
+        composeTestRule.onNodeWithText("No permission").assertIsDisplayed()
         uiDevice.pressBack()
         instrumentation.waitForIdleSync()
         composeTestRule.onNodeWithText("MultipleAndSinglePermissionsTest").assertIsDisplayed()
@@ -128,12 +132,15 @@ class MultipleAndSinglePermissionsTest {
             )
         }
 
+        composeTestRule.onNodeWithText("MultipleAndSinglePermissionsTest").assertIsDisplayed()
+        composeTestRule.onNodeWithText("No permission").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Request").performClick()
         denyPermissionInDialog()
         composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
         composeTestRule.onNodeWithText("Navigate").performClick()
         instrumentation.waitForIdleSync()
         composeTestRule.onNodeWithText("PermissionsTestActivity").assertIsDisplayed()
-        composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
+        composeTestRule.onNodeWithText("No permission").assertIsDisplayed()
         uiDevice.pressBack()
         instrumentation.waitForIdleSync()
         composeTestRule.onNodeWithText("MultipleAndSinglePermissionsTest").assertIsDisplayed()
@@ -157,6 +164,9 @@ class MultipleAndSinglePermissionsTest {
             )
         }
 
+        composeTestRule.onNodeWithText("MultipleAndSinglePermissionsTest").assertIsDisplayed()
+        composeTestRule.onNodeWithText("No permission").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Request").performClick()
         grantPermissionInDialog() // Grant first permission
         grantPermissionInDialog() // Grant second permission
         composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
@@ -177,13 +187,16 @@ class MultipleAndSinglePermissionsTest {
             )
         }
 
+        composeTestRule.onNodeWithText("MultipleAndSinglePermissionsTest").assertIsDisplayed()
+        composeTestRule.onNodeWithText("No permission").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Request").performClick()
         denyPermissionInDialog() // Deny first permission
         denyPermissionInDialog() // Deny second permission
         composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
         composeTestRule.onNodeWithText("Navigate").performClick()
         instrumentation.waitForIdleSync()
         composeTestRule.onNodeWithText("PermissionsTestActivity").assertIsDisplayed()
-        composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
+        composeTestRule.onNodeWithText("No permission").assertIsDisplayed()
         composeTestRule.onNodeWithText("Request").performClick()
         grantPermissionInDialog() // Grant the permission
         composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
@@ -204,8 +217,6 @@ class MultipleAndSinglePermissionsTest {
         permissions: List<String>,
         requestSinglePermission: Boolean = false
     ) {
-        var launchPermissionRequest by rememberSaveable { mutableStateOf(false) }
-
         val state = rememberMultiplePermissionsState(permissions)
         Column {
             Text("MultipleAndSinglePermissionsTest")
@@ -214,17 +225,29 @@ class MultipleAndSinglePermissionsTest {
                 state.allPermissionsGranted -> {
                     Text("Granted")
                 }
-                state.shouldShowRationale -> {
+                state.shouldShowRationale || !state.permissionRequested -> {
                     Column {
-                        Text("ShowRationale")
-                        Button(onClick = { state.launchMultiplePermissionRequest() }) {
+                        if (state.permissionRequested) {
+                            Text("ShowRationale")
+                        } else {
+                            Text("No permission")
+                        }
+                        Button(
+                            onClick = {
+                                if (
+                                    requestSinglePermission &&
+                                    state.permissionRequested &&
+                                    state.revokedPermissions.size == 1
+                                ) {
+                                    state.revokedPermissions[0].launchPermissionRequest()
+                                } else {
+                                    state.launchMultiplePermissionRequest()
+                                }
+                            }
+                        ) {
                             Text("Request")
                         }
                     }
-                }
-                !state.permissionRequested -> {
-                    Text("Requesting")
-                    launchPermissionRequest = true
                 }
                 else -> {
                     Text("Denied")
@@ -239,17 +262,6 @@ class MultipleAndSinglePermissionsTest {
                 }
             ) {
                 Text("Navigate")
-            }
-        }
-
-        LaunchedEffect(launchPermissionRequest, state) {
-            if (launchPermissionRequest) {
-                if (requestSinglePermission && state.revokedPermissions.size == 1) {
-                    state.revokedPermissions[0].launchPermissionRequest()
-                } else {
-                    state.launchMultiplePermissionRequest()
-                }
-                launchPermissionRequest = false
             }
         }
     }
