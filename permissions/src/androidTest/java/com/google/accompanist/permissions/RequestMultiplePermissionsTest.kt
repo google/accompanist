@@ -125,11 +125,10 @@ class RequestMultiplePermissionsTest {
                 android.Manifest.permission.CAMERA
             )
         )
-        when {
-            state.allPermissionsGranted -> {
-                Text("Granted")
-            }
-            state.shouldShowRationale || !state.permissionRequested -> {
+        PermissionsRequired(
+            multiplePermissionsState = state,
+            permissionsNotAvailableContent = { Text("Denied") },
+            permissionsNotGrantedContent = {
                 Column {
                     if (state.permissionRequested) {
                         Text("ShowRationale")
@@ -141,9 +140,8 @@ class RequestMultiplePermissionsTest {
                     }
                 }
             }
-            else -> {
-                Text("Denied")
-            }
+        ) {
+            Text("Granted")
         }
     }
 }

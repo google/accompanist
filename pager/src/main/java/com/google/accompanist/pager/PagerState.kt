@@ -278,9 +278,13 @@ class PagerState(
         // We don't specifically use the ScrollScope's scrollBy, but
         // we do want to use it's mutex
         scroll {
-            val target = page.floorMod(pageCount)
-
             val currentIndex = currentLayoutPage
+            val target = if (infiniteLoop) {
+                // In infinite loop mode, allow scrolling to pages out of bounds.
+                page
+            } else {
+                page.floorMod(pageCount)
+            }
             val distance = (target - currentIndex).absoluteValue
 
             /**
@@ -673,7 +677,7 @@ class PagerState(
         private fun Int.floorMod(other: Int): Int {
             return when (other) {
                 0 -> this
-                else -> (this % other + other) % other
+                else -> this - this.floorDiv(other) * other
             }
         }
     }

@@ -91,6 +91,7 @@ class MultipleAndSinglePermissionsTest {
         grantPermissionInDialog()
         composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
         uiDevice.pressBack()
+        instrumentation.waitForIdleSync()
         composeTestRule.onNodeWithText("MultipleAndSinglePermissionsTest").assertIsDisplayed()
         composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
     }
@@ -111,6 +112,7 @@ class MultipleAndSinglePermissionsTest {
         composeTestRule.onNodeWithText("PermissionsTestActivity").assertIsDisplayed()
         composeTestRule.onNodeWithText("No permission").assertIsDisplayed()
         uiDevice.pressBack()
+        instrumentation.waitForIdleSync()
         composeTestRule.onNodeWithText("MultipleAndSinglePermissionsTest").assertIsDisplayed()
         composeTestRule.onNodeWithText("Request").performClick()
         grantPermissionInDialog()
@@ -140,6 +142,7 @@ class MultipleAndSinglePermissionsTest {
         composeTestRule.onNodeWithText("PermissionsTestActivity").assertIsDisplayed()
         composeTestRule.onNodeWithText("No permission").assertIsDisplayed()
         uiDevice.pressBack()
+        instrumentation.waitForIdleSync()
         composeTestRule.onNodeWithText("MultipleAndSinglePermissionsTest").assertIsDisplayed()
         composeTestRule.onNodeWithText("Request").performClick()
         grantPermissionInDialog()
@@ -198,6 +201,7 @@ class MultipleAndSinglePermissionsTest {
         grantPermissionInDialog() // Grant the permission
         composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
         uiDevice.pressBack()
+        instrumentation.waitForIdleSync()
         composeTestRule.onNodeWithText("MultipleAndSinglePermissionsTest").assertIsDisplayed()
         composeTestRule.onNodeWithText("Request").performClick()
         grantPermissionInDialog() // only one permission to grant now
