@@ -677,7 +677,7 @@ class PagerState(
         private fun Int.floorMod(other: Int): Int {
             return when (other) {
                 0 -> this
-                else -> (this % other + other) % other
+                else -> this - this.floorDiv(other) * other
             }
         }
     }
