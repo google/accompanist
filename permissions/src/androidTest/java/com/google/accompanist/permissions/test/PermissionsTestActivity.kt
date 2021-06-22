@@ -52,7 +52,11 @@ class PermissionsTestActivity : ComponentActivity() {
                 PermissionRequired(
                     permissionState = state,
                     permissionNotGrantedContent = {
-                        Text("ShowRationale")
+                        if (state.permissionRequested) {
+                            Text("ShowRationale")
+                        } else {
+                            Text("No permission")
+                        }
                         Button(onClick = { state.launchPermissionRequest() }) {
                             Text("Request")
                         }
