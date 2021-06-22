@@ -78,4 +78,6 @@ dependencies {
     implementation libs.androidx.lifecycle.runtime
 
     implementation libs.kotlin.stdlib
+
+    lintChecks(project(":permissions-lint"))
 }
