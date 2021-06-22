@@ -36,7 +36,7 @@ import org.jetbrains.uast.UCallExpression
 import java.util.EnumSet
 
 /**
- * [Detector] that checks `PermissionState.launchPermissionRequest]` and
+ * [Detector] that checks `PermissionState.launchPermissionRequest` and
  * `MultiplePermissionsState.launchMultiplePermissionRequest` calls to make sure they don't happen
  * inside the body of a composable function / lambda.
  */
