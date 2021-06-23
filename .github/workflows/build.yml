@@ -54,7 +54,7 @@ jobs:
         run: release/signing-cleanup.sh
 
   test:
-    runs-on: macOS-latest
+    runs-on: macos-11.0
     needs: build
     timeout-minutes: 70
 
