@@ -29,10 +29,15 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 
+@RequiresOptIn(message = "Accompanist Permissions is experimental. The API may be changed in the future.")
+@Retention(AnnotationRetention.BINARY)
+annotation class ExperimentalPermissionsApi
+
 /**
  * Effect that updates the `hasPermission` state of a revoked [MutablePermissionState] permission
  * when the lifecycle gets called with [lifecycleEvent].
  */
+@ExperimentalPermissionsApi
 @Composable
 internal fun PermissionLifecycleCheckerEffect(
     permissionState: MutablePermissionState,
@@ -62,6 +67,7 @@ internal fun PermissionLifecycleCheckerEffect(
  * Effect that updates the `hasPermission` state of a list of permissions
  * when the lifecycle gets called with [lifecycleEvent] and the permission is revoked.
  */
+@ExperimentalPermissionsApi
 @Composable
 internal fun PermissionsLifecycleCheckerEffect(
     permissions: List<MutablePermissionState>,

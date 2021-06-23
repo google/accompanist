@@ -4,7 +4,67 @@
 
 A library which provides [Android runtime permissions](https://developer.android.com/guide/topics/permissions/overview) support for Jetpack Compose.
 
+!!! warning
+    The permission APIs are currently experimental and they could change at any time.
+    All of the APIs are marked with the `@ExperimentalPermissionsApi` annotation.
+
 ## Usage
+
+### `PermissionRequired` and `PermissionsRequired` APIs
+
+The `PermissionRequired` and `PermissionsRequired` composables offer an opinionated way of handling
+the permissions status workflow as described in the
+[documentation](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions).
+
+```kotlin
+@Composable
+private fun FeatureThatRequiresCameraPermission(
+    navigateToSettingsScreen: () -> Unit
+) {
+    // Track if the user doesn't want to see the rationale any more.
+    var doNotShowRationale by rememberSaveable { mutableStateOf(false) }
+
+    val cameraPermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
+    PermissionRequired(
+        permissionState = cameraPermissionState,
+        permissionNotGrantedContent = {
+            if (doNotShowRationale) {
+                Text("Feature not available")
+            } else {
+                Column {
+                    Text("The camera is important for this app. Please grant the permission.")
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row {
+                        Button(onClick = { cameraPermissionState.launchPermissionRequest() }) {
+                            Text("Ok!")
+                        }
+                        Spacer(Modifier.width(8.dp))
+                        Button(onClick = { doNotShowRationale = true }) {
+                            Text("Nope")
+                        }
+                    }
+                }
+            }
+        },
+        permissionNotAvailableContent = {
+            Column {
+                Text(
+                    "Camera permission denied. See this FAQ with information about why we " +
+                        "need this permission. Please, grant us access on the Settings screen."
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Button(onClick = navigateToSettingsScreen) {
+                    Text("Open Settings")
+                }
+            }
+        }
+    ) {
+        Text("Camera permission Granted")
+    }
+}
+```
+
+### `rememberPermissionState` and `rememberMultiplePermissionsState` APIs
 
 The `rememberPermissionState(permission: String)` API allows you to request a certain permission
 to the user and check for the status of the permission.
@@ -27,10 +87,6 @@ and is nice with the user by letting them decide if they don't want to see the r
 private fun FeatureThatRequiresCameraPermission(
     navigateToSettingsScreen: () -> Unit
 ) {
-    // When `true`, the permission request must be presented to the user.
-    // This could happen when the user opens the screen for the first time.
-    var launchPermissionRequest by rememberSaveable { mutableStateOf(false) }
-
     // Track if the user doesn't want to see the rationale any more.
     var doNotShowRationale by rememberSaveable { mutableStateOf(false) }
 
@@ -44,10 +100,10 @@ private fun FeatureThatRequiresCameraPermission(
         cameraPermissionState.hasPermission -> {
             Text("Camera permission Granted")
         }
-        // If the user denied the permission but a rationale should be shown, explain why the
-        // feature is needed by the app and allow the user to be presented with the permission
-        // again or to not see the rationale any more
-        cameraPermissionState.shouldShowRationale -> {
+        // If the user denied the permission but a rationale should be shown, or the user sees
+        // the permission for the first time, explain why the feature is needed by the app and allow
+        // the user to be presented with the permission again or to not see the rationale any more.
+        cameraPermissionState.shouldShowRationale !cameraPermissionState.permissionRequested -> {
             if (doNotShowRationale) {
                 Text("Feature not available")
             } else {
@@ -66,12 +122,6 @@ private fun FeatureThatRequiresCameraPermission(
                 }
             }
         }
-        // The permission is not granted, the rationale shouldn't be shown to the user, and the
-        // permission hasn't been requested previously. Let's update the launchPermissionRequest
-        // flag to trigger the `LaunchedEffect` below.
-        !cameraPermissionState.permissionRequested -> {
-            launchPermissionRequest = true
-        }
         // If the criteria above hasn't been met, the user denied the permission. Let's present
         // the user with a FAQ in case they want to know more and send them to the Settings screen
         // to enable it the future there if they want to.
@@ -86,14 +136,6 @@ private fun FeatureThatRequiresCameraPermission(
                     Text("Open Settings")
                 }
             }
-        }
-    }
-
-    // Trigger a side-effect to request the camera permission if it needs to be presented to the user
-    if (launchPermissionRequest) {
-        LaunchedEffect(cameraPermissionState) {
-            cameraPermissionState.launchPermissionRequest()
-            launchPermissionRequest = false
         }
     }
 }

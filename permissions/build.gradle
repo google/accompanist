@@ -82,6 +82,9 @@ dependencies {
     implementation libs.kotlin.coroutines.android
     implementation libs.napier
 
+    lintChecks(project(":permissions-lint"))
+    lintPublish(project(":permissions-lint"))
+
     // ======================
     // Test dependencies
     // ======================

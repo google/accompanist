@@ -27,6 +27,7 @@ import org.junit.Test
 /**
  * Simple tests that prove the data comes from the right place
  */
+@OptIn(ExperimentalPermissionsApi::class)
 @SdkSuppress(minSdkVersion = 23)
 class MultiplePermissionsStateTest {
 

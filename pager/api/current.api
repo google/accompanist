@@ -1,6 +1,9 @@
 // Signature format: 4.0
 package com.google.accompanist.pager {
 
+  public final class ClippingKt {
+  }
+
   @kotlin.RequiresOptIn(message="Accompanist Pager is experimental. The API may be changed in the future.") @kotlin.annotation.Retention(kotlin.annotation.AnnotationRetention) public @interface ExperimentalPagerApi {
   }
 

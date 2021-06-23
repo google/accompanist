@@ -21,19 +21,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionRequired
 import com.google.accompanist.permissions.rememberPermissionState
 
+@OptIn(ExperimentalPermissionsApi::class)
 class PermissionsTestActivity : ComponentActivity() {
 
     var shouldShowRequestPermissionRationale: Map<String, Boolean> = emptyMap()
@@ -51,38 +45,27 @@ class PermissionsTestActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            var launchPermissionRequest by rememberSaveable { mutableStateOf(false) }
-
-            val state = rememberPermissionState(Manifest.permission.CAMERA)
             Column {
                 Text("PermissionsTestActivity")
-                Spacer(Modifier.height(16.dp))
-                when {
-                    state.hasPermission -> {
-                        Text("Granted")
-                    }
-                    state.shouldShowRationale -> {
-                        Column {
+
+                val state = rememberPermissionState(Manifest.permission.CAMERA)
+                PermissionRequired(
+                    permissionState = state,
+                    permissionNotGrantedContent = {
+                        if (state.permissionRequested) {
                             Text("ShowRationale")
-                            Button(onClick = { state.launchPermissionRequest() }) {
-                                Text("Request")
-                            }
+                        } else {
+                            Text("No permission")
                         }
-                    }
-                    !state.permissionRequested -> {
-                        Text("Requesting")
-                        launchPermissionRequest = true
-                    }
-                    else -> {
+                        Button(onClick = { state.launchPermissionRequest() }) {
+                            Text("Request")
+                        }
+                    },
+                    permissionNotAvailableContent = {
                         Text("Denied")
                     }
-                }
-            }
-
-            LaunchedEffect(launchPermissionRequest, state) {
-                if (launchPermissionRequest) {
-                    state.launchPermissionRequest()
-                    launchPermissionRequest = false
+                ) {
+                    Text("Granted")
                 }
             }
         }
