@@ -37,8 +37,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.height
 import androidx.compose.ui.unit.width
-import com.google.accompanist.internal.test.combineWithParameters
-import com.google.accompanist.internal.test.parameterizedParams
 import com.google.common.truth.Truth.assertThat
 
 @OptIn(ExperimentalPagerApi::class) // Pager is currently experimental
@@ -50,20 +48,6 @@ abstract class BaseVerticalPagerTest(
     private val reverseLayout: Boolean,
     override val infiniteLoop: Boolean,
 ) : PagerTest() {
-    protected companion object {
-        @JvmStatic
-        protected fun params(): Collection<Array<Any>> = parameterizedParams()
-            // verticalAlignment
-            .combineWithParameters(Alignment.CenterVertically, Alignment.Top, Alignment.Bottom)
-            // itemSpacingDp
-            .combineWithParameters(0, 4)
-            // offscreenLimit
-            .combineWithParameters(1, 2)
-            // reverseLayout
-            .combineWithParameters(true, false)
-            // looping
-            .combineWithParameters(true, false)
-    }
 
     override fun SemanticsNodeInteraction.swipeAcrossCenter(
         distancePercentage: Float,

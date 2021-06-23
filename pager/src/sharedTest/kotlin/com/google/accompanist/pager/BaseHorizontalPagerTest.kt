@@ -37,8 +37,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.height
 import androidx.compose.ui.unit.width
-import com.google.accompanist.internal.test.combineWithParameters
-import com.google.accompanist.internal.test.parameterizedParams
 
 @OptIn(ExperimentalPagerApi::class) // Pager is currently experimental
 abstract class BaseHorizontalPagerTest(
@@ -51,24 +49,6 @@ abstract class BaseHorizontalPagerTest(
     private val reverseLayout: Boolean,
     override val infiniteLoop: Boolean,
 ) : PagerTest() {
-    protected companion object {
-        @JvmStatic
-        protected fun params(): Collection<Array<Any>> = parameterizedParams()
-            // itemWidthFraction
-            .combineWithParameters(1f, 0.8f)
-            // horizontalAlignment
-            .combineWithParameters(Alignment.CenterHorizontally, Alignment.Start, Alignment.End)
-            // itemSpacing
-            .combineWithParameters(0, 4)
-            // offscreenLimit
-            .combineWithParameters(1, 2)
-            // layoutDirection
-            .combineWithParameters(LayoutDirection.Ltr, LayoutDirection.Rtl)
-            // reverseLayout
-            .combineWithParameters(true, false)
-            // looping
-            .combineWithParameters(true, false)
-    }
 
     /**
      * Returns the expected resolved layout direction for pages

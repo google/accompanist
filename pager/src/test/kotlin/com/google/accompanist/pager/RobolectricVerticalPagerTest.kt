@@ -17,6 +17,8 @@
 package com.google.accompanist.pager
 
 import androidx.compose.ui.Alignment
+import com.google.accompanist.internal.test.combineWithParameters
+import com.google.accompanist.internal.test.parameterizedParams
 import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
 import org.robolectric.annotation.Config
@@ -39,6 +41,16 @@ class RobolectricVerticalPagerTest(
     companion object {
         @JvmStatic
         @ParameterizedRobolectricTestRunner.Parameters
-        fun data() = params()
+        fun data() = parameterizedParams()
+            // verticalAlignment
+            .combineWithParameters(Alignment.CenterVertically, Alignment.Top, Alignment.Bottom)
+            // itemSpacingDp
+            .combineWithParameters(0, 4)
+            // offscreenLimit
+            .combineWithParameters(1, 2)
+            // reverseLayout
+            .combineWithParameters(true, false)
+            // looping
+            .combineWithParameters(true, false)
     }
 }

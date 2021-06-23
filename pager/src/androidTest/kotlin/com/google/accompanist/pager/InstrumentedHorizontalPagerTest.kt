@@ -18,6 +18,8 @@ package com.google.accompanist.pager
 
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.LayoutDirection
+import com.google.accompanist.internal.test.combineWithParameters
+import com.google.accompanist.internal.test.parameterizedParams
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
@@ -40,8 +42,25 @@ class InstrumentedHorizontalPagerTest(
     infiniteLoop,
 ) {
     companion object {
+        /**
+         * On device we only test a subset of the combined parameters.
+         */
         @JvmStatic
         @Parameterized.Parameters
-        fun data() = params()
+        fun data() = parameterizedParams()
+            // itemWidthFraction
+            .combineWithParameters(1f)
+            // horizontalAlignment
+            .combineWithParameters(Alignment.CenterHorizontally, Alignment.Start, Alignment.End)
+            // itemSpacing
+            .combineWithParameters(0, 4)
+            // offscreenLimit
+            .combineWithParameters(1)
+            // layoutDirection
+            .combineWithParameters(LayoutDirection.Ltr, LayoutDirection.Rtl)
+            // reverseLayout
+            .combineWithParameters(false)
+            // looping
+            .combineWithParameters(false)
     }
 }

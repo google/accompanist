@@ -18,6 +18,8 @@ package com.google.accompanist.pager
 
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.LayoutDirection
+import com.google.accompanist.internal.test.combineWithParameters
+import com.google.accompanist.internal.test.parameterizedParams
 import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
 import org.robolectric.annotation.Config
@@ -44,6 +46,20 @@ class RobolectricHorizontalPagerTest(
     companion object {
         @JvmStatic
         @ParameterizedRobolectricTestRunner.Parameters
-        fun data() = params()
+        fun data() = parameterizedParams()
+            // itemWidthFraction
+            .combineWithParameters(1f, 0.8f)
+            // horizontalAlignment
+            .combineWithParameters(Alignment.CenterHorizontally, Alignment.Start, Alignment.End)
+            // itemSpacing
+            .combineWithParameters(0, 4)
+            // offscreenLimit
+            .combineWithParameters(1, 2)
+            // layoutDirection
+            .combineWithParameters(LayoutDirection.Ltr, LayoutDirection.Rtl)
+            // reverseLayout
+            .combineWithParameters(true, false)
+            // looping
+            .combineWithParameters(true, false)
     }
 }

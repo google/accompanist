@@ -17,6 +17,8 @@
 package com.google.accompanist.pager
 
 import androidx.compose.ui.Alignment
+import com.google.accompanist.internal.test.combineWithParameters
+import com.google.accompanist.internal.test.parameterizedParams
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
@@ -35,8 +37,21 @@ class InstrumentedVerticalPagerTest(
     infiniteLoop
 ) {
     companion object {
+        /**
+         * On device we only test a subset of the combined parameters.
+         */
         @JvmStatic
         @Parameterized.Parameters
-        fun data() = params()
+        fun data() = parameterizedParams()
+            // verticalAlignment
+            .combineWithParameters(Alignment.CenterVertically, Alignment.Top, Alignment.Bottom)
+            // itemSpacingDp
+            .combineWithParameters(0, 4)
+            // offscreenLimit
+            .combineWithParameters(1)
+            // reverseLayout
+            .combineWithParameters(false)
+            // looping
+            .combineWithParameters(false)
     }
 }
