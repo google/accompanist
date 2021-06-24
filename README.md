@@ -1,35 +1,35 @@
 ![Accompanist logo](docs/header.png)
 
-Accompanist is a group of libraries which aim to supplement [Jetpack Compose][compose] with features which are commonly required by developers, but not yet available.
+Accompanist is a group of libraries that aim to supplement [Jetpack Compose][compose] with features that are commonly required by developers but not yet available.
 
-Currently Accompanist contains:
+Currently, Accompanist contains:
 
-### 🖼️ Image loading
-A number of libraries which integrate popular image loading libraries into Jetpack Compose: [Coil](./coil/) and [Glide](./glide/).
+### 🖼️ Image loading libraries
+Jetpack Compose implementations of two popular image loading libraries: [Coil](./coil/) and [Glide](./glide/).
 
 ### 📐 [Insets](./insets/)
-A library which brings [WindowInsets](https://developer.android.com/reference/kotlin/android/view/WindowInsets) support to Jetpack Compose.
+A library that brings [WindowInsets][windowinsets] support to Jetpack Compose.
 
 ### 🍫 [System UI Controller](./systemuicontroller/)
-A library which provides easy-to-use utilities for updating the System UI (status and navigation bars) colors from Jetpack Compose.
+A library that provides easy-to-use utilities for recoloring the Android system bars from Jetpack Compose.
 
 ### 🎨 [AppCompat Theme Adapter](./appcompat-theme/)
-A library that enables reuse of [AppCompat][appcompat] XML themes for theming in [Jetpack Compose][compose].
+A library that enables the reuse of [AppCompat][appcompat] XML themes for theming in Jetpack Compose.
 
 ### 📖 [Pager](./pager/)
-A library which provides paging layouts for Jetpack Compose, similar to Android's [`ViewPager`](https://developer.android.com/reference/kotlin/androidx/viewpager/widget/ViewPager).
+A library that provides utilities for building paginated layouts in Jetpack Compose, similar to Android's [ViewPager][viewpager].
 
 ### 📫 [Permissions](./permissions/)
-A library which provides [Android runtime permissions](https://developer.android.com/guide/topics/permissions/overview) support for Jetpack Compose.
+A library that provides [Android runtime permissions][runtimepermissions] support for Jetpack Compose.
 
 ### ⏳ [Placeholder](./placeholder/)
-A library which provides easy-to-use modifiers for displaying 'placeholder' UI while content is loading.
+A library that provides easy-to-use modifiers for displaying a placeholder UI while content is loading.
 
-### 🌊 [Flow layouts](./flowlayout/)
-A library that adds a 'flexbox'-like layout to [Jetpack Compose][compose].
+### 🌊 [Flow Layouts](./flowlayout/)
+A library that adds Flexbox-like layout components to Jetpack Compose.
 
-### ⬆️ [Swipe To refresh](./swiperefresh/)
-A library which provides a layout which provides the swipe-to-refresh UX pattern, similar to Android's SwipeRefreshLayout.
+### ⬇️ [Swipe to Refresh](./swiperefresh/)
+A library that provides a layout implementing the swipe-to-refresh UX pattern, similar to Android's [SwipeRefreshLayout](https://developer.android.com/jetpack/androidx/releases/swiperefreshlayout).
 
 ---
 
@@ -82,3 +82,6 @@ limitations under the License.
 [compose]: https://developer.android.com/jetpack/compose
 [snap]: https://oss.sonatype.org/content/repositories/snapshots/com/google/accompanist/
 [mdc]: https://material.io/develop/android/
+[windowinsets]: https://developer.android.com/reference/kotlin/android/view/WindowInsets
+[viewpager]: https://developer.android.com/reference/kotlin/androidx/viewpager/widget/ViewPager
+[runtimepermissions]: https://developer.android.com/guide/topics/permissions/overview
