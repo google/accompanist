@@ -40,6 +40,9 @@ lintOptions {
  * lint jar manually. (b/182319899)
  */
 def bundle = configurations.create("bundleInside")
+// bundleInside dependencies should be included as compileOnly and testImplementation as well
+configurations.getByName("compileOnly").setExtendsFrom([bundle])
+configurations.getByName("testImplementation").setExtendsFrom([bundle])
 tasks.named("jar").configure { task ->
     def jarTask = task as Jar
     jarTask.dependsOn(bundle)
@@ -48,7 +51,7 @@ tasks.named("jar").configure { task ->
                 // The stdlib is already bundled with lint, so no need to include it manually
                 // in the lint.jar if any dependencies here depend on it
                 .filter { !it.name.contains("kotlin-stdlib") }
-                .each { file ->
+                .collect { file ->
                     if (file.isDirectory()) {
                         file
                     } else {
@@ -63,7 +66,6 @@ dependencies {
     bundleInside libs.kotlin.metadataJvm
 
     compileOnly libs.android.tools.lint.api
-    compileOnly libs.kotlin.metadataJvm
     compileOnly libs.kotlin.reflect
     compileOnly libs.kotlin.stdlibJdk8 // Needed, cannot use `stdlib`
 
