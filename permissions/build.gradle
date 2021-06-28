@@ -83,8 +83,7 @@ dependencies {
     implementation libs.napier
 
     lintChecks(project(":permissions-lint"))
-    // TODO: permissions-lint needs to be built as a fat jar
-    // lintPublish(project(":permissions-lint"))
+    lintPublish(project(":permissions-lint"))
 
     // ======================
     // Test dependencies
