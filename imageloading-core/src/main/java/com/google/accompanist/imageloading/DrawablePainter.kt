@@ -56,7 +56,7 @@ private val MAIN_HANDLER by lazy(LazyThreadSafetyMode.NONE) {
  * Instances are usually retrieved from [rememberDrawablePainter].
  */
 class DrawablePainter(
-    private val drawable: Drawable
+    val drawable: Drawable
 ) : Painter(), RememberObserver {
     private var invalidateTick by mutableStateOf(0)
 

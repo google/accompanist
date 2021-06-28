@@ -9,11 +9,13 @@ package com.google.accompanist.imageloading {
 
   public final class DrawablePainter extends androidx.compose.ui.graphics.painter.Painter implements androidx.compose.runtime.RememberObserver {
     ctor public DrawablePainter(android.graphics.drawable.Drawable drawable);
+    method public android.graphics.drawable.Drawable getDrawable();
     method public long getIntrinsicSize();
     method public void onAbandoned();
     method protected void onDraw(androidx.compose.ui.graphics.drawscope.DrawScope);
     method public void onForgotten();
     method public void onRemembered();
+    property public final android.graphics.drawable.Drawable drawable;
     property public long intrinsicSize;
   }
 
