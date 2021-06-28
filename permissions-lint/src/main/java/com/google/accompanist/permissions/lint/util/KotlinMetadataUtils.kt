@@ -38,7 +38,7 @@ import kotlinx.metadata.jvm.signature
  * corresponding [KmFunction]. This method is only meaningful if this [PsiMethod] represents a
  * method defined in bytecode (most often a [ClsMethodImpl]).
  */
-internal fun PsiMethod.toKmFunction(): KmFunction? =
+public fun PsiMethod.toKmFunction(): KmFunction? =
     containingClass!!.getKmDeclarationContainer()?.findKmFunctionForPsiMethod(this)
 
 // TODO: https://youtrack.jetbrains.com/issue/KT-45310

@@ -53,7 +53,7 @@ import org.jetbrains.uast.withContainingElements
  * This searches parent declarations until we find a lambda expression or a function, and looks
  * to see if these are Composable.
  */
-internal fun UCallExpression.isInvokedWithinComposable(): Boolean {
+public fun UCallExpression.isInvokedWithinComposable(): Boolean {
     return ComposableBodyVisitor(this).isComposable()
 }
 
@@ -63,13 +63,13 @@ internal fun UCallExpression.isInvokedWithinComposable(): Boolean {
 /**
  * Returns whether this method is @Composable or not
  */
-internal val UMethod.isComposable
+public val UMethod.isComposable: Boolean
     get() = uAnnotations.any { it.qualifiedName == Composable.javaFqn }
 
 /**
  * Returns whether this variable's type is @Composable or not
  */
-internal val UVariable.isComposable: Boolean
+public val UVariable.isComposable: Boolean
     get() {
         // Annotation on the lambda
         val annotationOnLambda = when (val initializer = uastInitializer) {
@@ -93,7 +93,7 @@ internal val UVariable.isComposable: Boolean
 /**
  * Returns whether this parameter's type is @Composable or not
  */
-internal val UParameter.isComposable: Boolean
+public val UParameter.isComposable: Boolean
     get() = when {
         // The parameter is in a class file. Currently type annotations aren't currently added to
         // the underlying type (https://youtrack.jetbrains.com/issue/KT-45307), so instead we use
@@ -125,7 +125,7 @@ internal val UParameter.isComposable: Boolean
 /**
  * Returns whether this lambda expression is @Composable or not
  */
-internal val ULambdaExpression.isComposable: Boolean
+public val ULambdaExpression.isComposable: Boolean
     get() = when (val lambdaParent = uastParent) {
         // Function call with a lambda parameter
         is UCallExpression -> {
