@@ -16,6 +16,7 @@ $dokka.location:com.google.accompanist.imageloading/DataSource.NETWORK/ordinal/#
 $dokka.location:com.google.accompanist.imageloading/DataSource///PointingToDeclaration/imageloading-core/com.google.accompanist.imageloading/-data-source/index.html
 $dokka.location:com.google.accompanist.imageloading/DrawablePainter///PointingToDeclaration/imageloading-core/com.google.accompanist.imageloading/-drawable-painter/index.html
 $dokka.location:com.google.accompanist.imageloading/DrawablePainter/DrawablePainter/#android.graphics.drawable.Drawable/PointingToDeclaration/imageloading-core/com.google.accompanist.imageloading/-drawable-painter/-drawable-painter.html
+$dokka.location:com.google.accompanist.imageloading/DrawablePainter/drawable/#/PointingToDeclaration/imageloading-core/com.google.accompanist.imageloading/-drawable-painter/drawable.html
 $dokka.location:com.google.accompanist.imageloading/DrawablePainter/intrinsicSize/#/PointingToDeclaration/imageloading-core/com.google.accompanist.imageloading/-drawable-painter/intrinsic-size.html
 $dokka.location:com.google.accompanist.imageloading/DrawablePainter/onAbandoned/#/PointingToDeclaration/imageloading-core/com.google.accompanist.imageloading/-drawable-painter/on-abandoned.html
 $dokka.location:com.google.accompanist.imageloading/DrawablePainter/onForgotten/#/PointingToDeclaration/imageloading-core/com.google.accompanist.imageloading/-drawable-painter/on-forgotten.html
