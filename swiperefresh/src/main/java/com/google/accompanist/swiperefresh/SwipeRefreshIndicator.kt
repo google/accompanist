@@ -225,4 +225,129 @@ fun SwipeRefreshIndicator(
     }
 }
 
+@Composable
+fun BottomSwipeRefreshIndicator(
+    state: SwipeRefreshState,
+    refreshTriggerDistance: Dp,
+    modifier: Modifier = Modifier,
+    fade: Boolean = true,
+    scale: Boolean = false,
+    arrowEnabled: Boolean = true,
+    backgroundColor: Color = MaterialTheme.colors.surface,
+    contentColor: Color = contentColorFor(backgroundColor),
+    shape: Shape = MaterialTheme.shapes.small.copy(CornerSize(percent = 50)),
+    refreshingOffset: Dp = 16.dp,
+    largeIndication: Boolean = false,
+    elevation: Dp = 6.dp,
+) {
+    val adjustedElevation = when {
+        state.isRefreshing -> elevation
+        state.indicatorOffset > 0.5f -> elevation
+        else -> 0.dp
+    }
+    val sizes = if (largeIndication) LargeSizes else DefaultSizes
+
+    val indicatorRefreshTrigger = with(LocalDensity.current) { refreshTriggerDistance.toPx() }
+
+    val indicatorHeight = with(LocalDensity.current) { sizes.size.roundToPx() }
+    val refreshingOffsetPx = with(LocalDensity.current) { refreshingOffset.toPx() }
+
+    val slingshot = rememberUpdatedBottomSlingshot(
+        offsetY = state.indicatorOffset,
+        maxOffsetY = indicatorRefreshTrigger,
+        height = indicatorHeight,
+    )
+
+    var offset by remember { mutableStateOf(0f) }
+
+    // If the user is currently swiping, we use the 'slingshot' offset directly
+    if (state.isSwipeInProgress) {
+        offset = slingshot.offset.toFloat()
+    }
+
+    LaunchedEffect(state.isSwipeInProgress, state.isRefreshing) {
+        // If there's no swipe currently in progress, animate to the correct resting position
+        if (!state.isSwipeInProgress) {
+            animate(
+                initialValue = offset,
+                targetValue = when {
+                    state.isRefreshing -> indicatorHeight + refreshingOffsetPx
+                    else -> 0f
+                }
+            ) { value, _ ->
+                offset = value
+            }
+        }
+    }
+
+    Surface(
+        modifier = modifier
+            .size(size = sizes.size)
+            .graphicsLayer {
+                // Translate the indicator according to the slingshot
+                translationY = indicatorHeight - offset
+
+                val scaleFraction = if (scale && !state.isRefreshing) {
+                    val progress = offset / indicatorRefreshTrigger.coerceAtLeast(1f)
+
+                    // We use LinearOutSlowInEasing to speed up the scale in
+                    LinearOutSlowInEasing
+                        .transform(progress)
+                        .coerceIn(0f, 1f)
+                } else 1f
+
+                scaleX = scaleFraction
+                scaleY = scaleFraction
+            },
+        shape = shape,
+        color = backgroundColor,
+        elevation = adjustedElevation
+    ) {
+        val painter = remember { BottomCircularProgressPainter() }
+        painter.arcRadius = sizes.arcRadius
+        painter.strokeWidth = sizes.strokeWidth
+        painter.arrowWidth = sizes.arrowWidth
+        painter.arrowHeight = sizes.arrowHeight
+        painter.arrowEnabled = arrowEnabled && !state.isRefreshing
+        painter.color = contentColor
+        val alpha = if (fade) {
+            (state.indicatorOffset / indicatorRefreshTrigger).coerceIn(0f, 1f)
+        } else {
+            1f
+        }
+        painter.alpha = alpha
+
+        painter.startTrim = slingshot.startTrim
+        painter.endTrim = slingshot.endTrim
+        painter.rotation = slingshot.rotation
+        painter.arrowScale = slingshot.arrowScale
+
+        // This shows either an Image with CircularProgressPainter or a CircularProgressIndicator,
+        // depending on refresh state
+        Crossfade(
+            targetState = state.isRefreshing,
+            animationSpec = tween(durationMillis = CrossfadeDurationMs)
+        ) { refreshing ->
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                if (refreshing) {
+                    val circleSize = (sizes.arcRadius + sizes.strokeWidth) * 2
+                    CircularProgressIndicator(
+                        color = contentColor,
+                        strokeWidth = sizes.strokeWidth,
+                        modifier = Modifier.size(circleSize),
+                    )
+                } else {
+                    Image(
+                        painter = painter,
+                        contentDescription = "Refreshing"
+                    )
+                }
+            }
+        }
+    }
+}
+
 private const val CrossfadeDurationMs = 100
