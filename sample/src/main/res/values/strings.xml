@@ -55,6 +55,7 @@
     <string name="swiperefresh_title_tweaked">Swipe Refresh: Tweaked indicator</string>
     <string name="swiperefresh_title_custom">Swipe Refresh: Custom indicator</string>
     <string name="swiperefresh_title_verticalpager">Swipe Refresh: VerticalPager</string>
+    <string name="swiperefresh_title_bottom_position">Swipe Refresh: Bottom Position</string>
 
     <string name="system_ui_controller_title_color">System Ui Controller: Color</string>
     <string name="system_ui_controller_title_visibility">System Ui Controller: Visibility</string>
