@@ -297,14 +297,20 @@ private class SwipeRefreshNestedScrollConnection(
  *
  * @sample com.google.accompanist.sample.swiperefresh.SwipeRefreshSample
  *
- * @param topSwipeRefreshState the state object to be used to control or observe the [SwipeRefresh] state.
+ * @param topSwipeRefreshState the state object to be used to control or observe the
+ * [SwipeRefresh]'s top state.
+ * @param bottomSwipeRefreshState the state object to be used to control or observe the
+ * [SwipeRefresh]'s bottom state.
  * @param onRefresh Lambda which is invoked when a swipe to refresh gesture is completed.
  * @param modifier the modifier to apply to this layout.
  * @param swipeEnabled Whether the the layout should react to swipe gestures or not.
  * @param refreshTriggerDistance The minimum swipe distance which would trigger a refresh.
- * @param topIndicatorAlignment The alignment of the indicator. Defaults to [Alignment.TopCenter].
+ * @param topIndicatorAlignment The alignment of the top indicator. Defaults to [Alignment.TopCenter].
+ * @param bottomIndicatorAlignment The alignment of the bottom indicator. Defaults to [Alignment.BottomCenter].
  * @param indicatorPadding Content padding for the indicator, to inset the indicator in if required.
- * @param indicator the indicator that represents the current state. By default this
+ * @param topIndicator the indicator that represents the top refreshing state. By default this
+ * will use a [SwipeRefreshIndicator].
+ * @param bottomIndicator the indicator that represents the bottom refreshing state. By default this
  * will use a [SwipeRefreshIndicator].
  * @param clipIndicatorToPadding Whether to clip the indicator to [indicatorPadding]. If false is
  * provided the indicator will be clipped to the [content] bounds. Defaults to true.
