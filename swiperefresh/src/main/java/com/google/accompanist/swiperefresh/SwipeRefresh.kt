@@ -137,13 +137,22 @@ enum class SwipeRefreshPosition {
 }
 
 private class SwipeRefreshNestedScrollConnection(
-    private val topSwipeRefreshState: SwipeRefreshState,
+    private val topSwipeRefreshState: SwipeRefreshState? = null,
     private val coroutineScope: CoroutineScope,
     private val onRefresh: (SwipeRefreshPosition) -> Unit,
     private val bottomSwipeRefreshState: SwipeRefreshState? = null,
 ) : NestedScrollConnection {
     var enabled: Boolean = false
     var refreshTrigger: Float = 0f
+
+    init {
+        if (topSwipeRefreshState == null && bottomSwipeRefreshState == null) {
+            throw IllegalArgumentException(
+                """`topSwipeRefreshState` and `bottomSwipeRefreshState` ar both null.
+                | At least one [SwipeRefreshState] most be provided.""".trimMargin(),
+            )
+        }
+    }
 
     override fun onPreScroll(
         available: Offset,
@@ -153,11 +162,15 @@ private class SwipeRefreshNestedScrollConnection(
             // If swiping isn't enabled, return zero
             !enabled -> Offset.Zero
             // If we're refreshing, return zero
-            topSwipeRefreshState.isRefreshing ||
+            topSwipeRefreshState?.isRefreshing ?: false ||
                 bottomSwipeRefreshState?.isRefreshing ?: false -> Offset.Zero
             // If the user is swiping up, handle it
             source == NestedScrollSource.Drag && available.y < 0 -> {
-                onScrollToTop(available)
+                if (topSwipeRefreshState == null) {
+                    Offset.Zero
+                } else {
+                    onScrollToTop(available)
+                }
             }
             else -> Offset.Zero
         }
@@ -171,10 +184,16 @@ private class SwipeRefreshNestedScrollConnection(
         // If swiping isn't enabled, return zero
         !enabled -> Offset.Zero
         // If we're refreshing, return zero
-        topSwipeRefreshState.isRefreshing ||
+        topSwipeRefreshState?.isRefreshing ?: false ||
             bottomSwipeRefreshState?.isRefreshing ?: false -> Offset.Zero
         // If the user is swiping down and there's y remaining, handle it
-        source == NestedScrollSource.Drag && available.y > 0 -> onScrollToTop(available)
+        source == NestedScrollSource.Drag && available.y > 0 -> {
+            if (topSwipeRefreshState == null) {
+                Offset.Zero
+            } else {
+                onScrollToTop(available)
+            }
+        }
         // If the user is swiping up and there's y remaining, handle it
         source == NestedScrollSource.Drag && available.y < 0 -> {
             if (bottomSwipeRefreshState == null) {
@@ -205,7 +224,7 @@ private class SwipeRefreshNestedScrollConnection(
     }
 
     private fun onScrollToTop(available: Offset): Offset {
-        topSwipeRefreshState.isSwipeInProgress = true
+        topSwipeRefreshState!!.isSwipeInProgress = true
 
         val newOffset = (available.y * DragMultiplier + topSwipeRefreshState.indicatorOffset)
             .coerceAtLeast(0f)
@@ -226,7 +245,7 @@ private class SwipeRefreshNestedScrollConnection(
         // If we're dragging, not currently refreshing and scrolled
         // past the trigger point, refresh!
         //TODO Refactoring && improve readability
-        if (!topSwipeRefreshState.isRefreshing &&
+        if (topSwipeRefreshState != null && !topSwipeRefreshState.isRefreshing &&
             topSwipeRefreshState.indicatorOffset >= refreshTrigger) {
             onRefresh(topSwipeRefreshState.swipeRefreshPosition)
             // Reset the drag in progress state
@@ -236,7 +255,7 @@ private class SwipeRefreshNestedScrollConnection(
             // Reset the drag in progress state
         }
 
-        topSwipeRefreshState.isSwipeInProgress = false
+        topSwipeRefreshState?.isSwipeInProgress = false
         bottomSwipeRefreshState?.isSwipeInProgress = false
 
         // Don't consume any velocity, to allow the scrolling layout to fling
@@ -283,9 +302,9 @@ private class SwipeRefreshNestedScrollConnection(
  */
 @Composable
 fun SwipeRefresh(
-    topSwipeRefreshState: SwipeRefreshState,
     onRefresh: (SwipeRefreshPosition) -> Unit,
     modifier: Modifier = Modifier,
+    topSwipeRefreshState: SwipeRefreshState? = null,
     bottomSwipeRefreshState: SwipeRefreshState? = null,
     swipeEnabled: Boolean = true,
     refreshTriggerDistance: Dp = 80.dp,
@@ -301,17 +320,26 @@ fun SwipeRefresh(
     clipIndicatorToPadding: Boolean = true,
     content: @Composable () -> Unit,
 ) {
-    topSwipeRefreshState.swipeRefreshPosition = SwipeRefreshPosition.TOP
+    if (topSwipeRefreshState == null && bottomSwipeRefreshState == null) {
+        throw IllegalArgumentException(
+            """`topSwipeRefreshState` and `bottomSwipeRefreshState` ar both null.
+            | At least one [SwipeRefreshState] most be provided.""".trimMargin(),
+        )
+    }
+
+    topSwipeRefreshState?.swipeRefreshPosition = SwipeRefreshPosition.TOP
     bottomSwipeRefreshState?.swipeRefreshPosition = SwipeRefreshPosition.BOTTOM
 
     val coroutineScope = rememberCoroutineScope()
     val updatedOnRefresh = rememberUpdatedState(onRefresh)
 
     // Our LaunchedEffect, which animates the indicator to its resting position
-    LaunchedEffect(topSwipeRefreshState.isSwipeInProgress) {
-        if (!topSwipeRefreshState.isSwipeInProgress) {
-            // If there's not a swipe in progress, rest the indicator at 0f
-            topSwipeRefreshState.animateOffsetTo(0f)
+    LaunchedEffect(topSwipeRefreshState?.isSwipeInProgress) {
+        if (topSwipeRefreshState != null) {
+            if (!topSwipeRefreshState.isSwipeInProgress) {
+                // If there's not a swipe in progress, rest the indicator at 0f
+                topSwipeRefreshState.animateOffsetTo(0f)
+            }
         }
     }
 
@@ -352,7 +380,9 @@ fun SwipeRefresh(
                 .let { if (clipIndicatorToPadding) it.clipToBounds() else it }
         ) {
             Box(Modifier.align(topIndicatorAlignment)) {
-                topIndicator(topSwipeRefreshState, refreshTriggerDistance)
+                if (topSwipeRefreshState != null) {
+                    topIndicator(topSwipeRefreshState, refreshTriggerDistance)
+                }
             }
 
             if (bottomSwipeRefreshState != null) {
