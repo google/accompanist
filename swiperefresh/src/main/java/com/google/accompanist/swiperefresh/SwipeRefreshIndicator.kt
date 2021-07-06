@@ -159,8 +159,13 @@ fun SwipeRefreshIndicator(
         modifier = modifier
             .size(size = sizes.size)
             .graphicsLayer {
-                // Translate the indicator according to the slingshot
-                translationY = offset - indicatorHeight
+                // Translate the indicator according to the slingshot and the Position of the Swipe
+                // to refresh.
+                translationY = if (state.swipeRefreshPosition == SwipeRefreshPosition.BOTTOM) {
+                    indicatorHeight - offset
+                } else {
+                    offset - indicatorHeight
+                }
 
                 val scaleFraction = if (scale && !state.isRefreshing) {
                     val progress = offset / indicatorRefreshTrigger.coerceAtLeast(1f)
@@ -178,7 +183,15 @@ fun SwipeRefreshIndicator(
         color = backgroundColor,
         elevation = adjustedElevation
     ) {
-        val painter = remember { CircularProgressPainter() }
+        val painter = remember {
+            CircularProgressPainter(
+                senseOfRotation = if (state.swipeRefreshPosition == SwipeRefreshPosition.TOP) {
+                    SenseOfRotation.CLOCKWISE
+                } else {
+                    SenseOfRotation.COUNTERCLOCKWISE
+                }
+            )
+        }
         painter.arcRadius = sizes.arcRadius
         painter.strokeWidth = sizes.strokeWidth
         painter.arrowWidth = sizes.arrowWidth
@@ -285,7 +298,11 @@ fun BottomSwipeRefreshIndicator(
             .size(size = sizes.size)
             .graphicsLayer {
                 // Translate the indicator according to the slingshot
-                translationY = indicatorHeight - offset
+                translationY = if (state.swipeRefreshPosition == SwipeRefreshPosition.TOP) {
+                    offset - indicatorHeight
+                } else {
+                    indicatorHeight - offset
+                }
 
                 val scaleFraction = if (scale && !state.isRefreshing) {
                     val progress = offset / indicatorRefreshTrigger.coerceAtLeast(1f)

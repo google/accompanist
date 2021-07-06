@@ -34,12 +34,17 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import kotlin.math.min
 
+internal enum class SenseOfRotation {
+    CLOCKWISE,
+    COUNTERCLOCKWISE,
+}
+
 /**
  * A private class to do all the drawing of SwipeRefreshIndicator, which includes progress spinner
  * and the arrow. This class is to separate drawing from animation.
  * Adapted from CircularProgressDrawable.
  */
-internal class CircularProgressPainter : Painter() {
+internal class CircularProgressPainter(private val senseOfRotation: SenseOfRotation = SenseOfRotation.CLOCKWISE) : Painter() {
     var color by mutableStateOf(Color.Unspecified)
     var alpha by mutableStateOf(1f)
     var arcRadius by mutableStateOf(0.dp)
@@ -74,9 +79,20 @@ internal class CircularProgressPainter : Painter() {
                 size.center.x + arcRadius,
                 size.center.y + arcRadius
             )
-            val startAngle = (startTrim + rotation) * 360
-            val endAngle = (endTrim + rotation) * 360
-            val sweepAngle = endAngle - startAngle
+            val startAngle: Float
+            val endAngle: Float
+            val sweepAngle: Float
+
+            if(senseOfRotation == SenseOfRotation.CLOCKWISE){
+                startAngle = (startTrim + rotation) * 360
+                endAngle = (endTrim + rotation) * 360
+                sweepAngle = endAngle - startAngle
+            }else {
+                startAngle = (startTrim - rotation) * 360
+                endAngle = (endTrim - rotation) * 360
+                sweepAngle = startAngle - endAngle
+            }
+
             drawArc(
                 color = color,
                 alpha = alpha,
@@ -103,9 +119,15 @@ internal class CircularProgressPainter : Painter() {
             x = arrowWidth.toPx() * arrowScale,
             y = 0f
         )
+        val arrowHeightPx = if(senseOfRotation == SenseOfRotation.CLOCKWISE){
+            arrowHeight.toPx()
+        }else{
+            -arrowHeight.toPx()
+        }
+
         arrow.lineTo(
             x = arrowWidth.toPx() * arrowScale / 2,
-            y = arrowHeight.toPx() * arrowScale
+            y = arrowHeightPx * arrowScale
         )
         val radius = min(bounds.width, bounds.height) / 2f
         val inset = arrowWidth.toPx() * arrowScale / 2f

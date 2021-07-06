@@ -91,7 +91,7 @@ private fun Sample() {
         }
 
         SwipeRefresh(
-            state = rememberSwipeRefreshState(isRefreshing = refreshing),
+            topSwipeRefreshState = rememberSwipeRefreshState(isRefreshing = refreshing),
             onRefresh = { refreshing = true },
         ) {
             VerticalPager(

@@ -137,7 +137,7 @@ private fun SwipeRefreshTestContent(
 ) {
     MaterialTheme {
         SwipeRefresh(
-            state = state,
+            topSwipeRefreshState = state,
             onRefresh = onRefresh,
             modifier = Modifier.testTag(SwipeRefreshTag),
             indicator = { state, trigger ->

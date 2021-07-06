@@ -84,9 +84,9 @@ private fun Sample() {
         }
 
         SwipeRefresh(
-            state = rememberSwipeRefreshState(isRefreshing = refreshing),
+            topSwipeRefreshState = rememberSwipeRefreshState(isRefreshing = refreshing),
             onRefresh = { refreshing = true },
-            indicator = { state, trigger ->
+            topIndicator = { state, trigger ->
                 SwipeRefreshIndicator(
                     state = state,
                     refreshTriggerDistance = trigger,
