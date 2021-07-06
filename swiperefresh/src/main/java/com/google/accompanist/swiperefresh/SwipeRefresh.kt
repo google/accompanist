@@ -172,6 +172,15 @@ private class SwipeRefreshNestedScrollConnection(
                     onScrollToTop(available)
                 }
             }
+            // If the user is swiping down, handle it
+            source == NestedScrollSource.Drag && available.y > 0 -> {
+                if (bottomSwipeRefreshState == null) {
+                    Offset.Zero
+                } else {
+                    onScrollToBottom(available)
+                }
+            }
+
             else -> Offset.Zero
         }
     }
@@ -202,6 +211,7 @@ private class SwipeRefreshNestedScrollConnection(
                 onScrollToBottom(available)
             }
         }
+
         else -> Offset.Zero
     }
 
@@ -217,7 +227,7 @@ private class SwipeRefreshNestedScrollConnection(
                 bottomSwipeRefreshState.dispatchScrollDelta(dragConsumed)
             }
             // Return the consumed Y
-            Offset(x = 0f, y = dragConsumed * DragMultiplier)
+            Offset(x = 0f, y = dragConsumed / DragMultiplier)
         } else {
             Offset.Zero
         }
