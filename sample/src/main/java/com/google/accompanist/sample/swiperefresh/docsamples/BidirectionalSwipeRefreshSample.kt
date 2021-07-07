@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("UNUSED_ANONYMOUS_PARAMETER")
-
-package com.google.accompanist.sample.swiperefresh
+package com.google.accompanist.sample.swiperefresh.docsamples
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
@@ -25,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.accompanist.swiperefresh.RefreshIndicatorPosition
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.delay
@@ -33,35 +32,55 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class MyViewModel : ViewModel() {
+class SampleViewModel : ViewModel() {
     private val _isRefreshing = MutableStateFlow(false)
+    private val _isLoadingNextPage = MutableStateFlow(false)
 
     val isRefreshing: StateFlow<Boolean>
         get() = _isRefreshing.asStateFlow()
 
-    fun refresh() {
-        // This doesn't handle multiple 'refreshing' tasks, don't use this
+    val isLoadingNextPage: StateFlow<Boolean>
+        get() = _isLoadingNextPage.asStateFlow()
+
+    fun refreshList() {
         viewModelScope.launch {
-            // A fake 2 second 'refresh'
+            // Simulate refreshing time
             _isRefreshing.emit(true)
             delay(2000)
             _isRefreshing.emit(false)
         }
     }
+
+    fun loadNextPage() {
+        viewModelScope.launch {
+            // Simulate loading time
+            _isLoadingNextPage.emit(true)
+            delay(2000)
+            _isLoadingNextPage.emit(false)
+        }
+    }
+
 }
 
 @Composable
-fun SwipeRefreshSample() {
-    val viewModel: MyViewModel = viewModel()
-    val isRefreshing by viewModel.isRefreshing.collectAsState()
+fun BidirectionalSwipeRefreshSample() {
+    val viewModel = viewModel<SampleViewModel>()
+    val isTopIndicatorRefreshing by viewModel.isRefreshing.collectAsState()
+    val isBottomIndicatorRefreshing by viewModel.isLoadingNextPage.collectAsState()
 
     SwipeRefresh(
-        topRefreshIndicatorState = rememberSwipeRefreshState(isRefreshing),
-        onRefresh = { viewModel.refresh() },
+        topRefreshIndicatorState = rememberSwipeRefreshState(isTopIndicatorRefreshing),
+        bottomRefreshIndicatorState = rememberSwipeRefreshState(isBottomIndicatorRefreshing),
+        onRefresh =  { refreshIndicatorPosition ->
+            when (refreshIndicatorPosition) {
+                RefreshIndicatorPosition.TOP -> viewModel.refreshList()
+                RefreshIndicatorPosition.BOTTOM -> viewModel.loadNextPage()
+            }
+        },
     ) {
         LazyColumn {
             items(30) { index ->
-                // TODO: list items
+                TODO(" SHOW ITEM $index ")
             }
         }
     }
