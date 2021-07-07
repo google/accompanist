@@ -161,7 +161,7 @@ fun SwipeRefreshIndicator(
             .graphicsLayer {
                 // Translate the indicator according to the slingshot and the Position of the Swipe
                 // to refresh.
-                translationY = if (state.swipeRefreshPosition == SwipeRefreshPosition.BOTTOM) {
+                translationY = if (state.refreshIndicatorPosition == RefreshIndicatorPosition.BOTTOM) {
                     indicatorHeight - offset
                 } else {
                     offset - indicatorHeight
@@ -185,7 +185,7 @@ fun SwipeRefreshIndicator(
     ) {
         val painter = remember {
             CircularProgressPainter(
-                senseOfRotation = if (state.swipeRefreshPosition == SwipeRefreshPosition.TOP) {
+                senseOfRotation = if (state.refreshIndicatorPosition == RefreshIndicatorPosition.TOP) {
                     SenseOfRotation.CLOCKWISE
                 } else {
                     SenseOfRotation.COUNTERCLOCKWISE

@@ -207,12 +207,12 @@ private const val ListItemCount = 30
 private fun SwipeRefreshTestContent(
     topSwipeRefreshState: SwipeRefreshState? = null,
     bottomSwipeRefreshState: SwipeRefreshState? = null,
-    onRefresh: (SwipeRefreshPosition) -> Unit,
+    onRefresh: (RefreshIndicatorPosition) -> Unit,
 ) {
     MaterialTheme {
         SwipeRefresh(
-            topSwipeRefreshState = topSwipeRefreshState,
-            bottomSwipeRefreshState = bottomSwipeRefreshState,
+            topRefreshIndicatorState = topSwipeRefreshState,
+            bottomRefreshIndicatorState = bottomSwipeRefreshState,
             onRefresh = onRefresh,
             modifier = Modifier.testTag(SwipeRefreshTag),
             topIndicator = { state, trigger ->

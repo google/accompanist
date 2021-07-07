@@ -93,7 +93,7 @@ private fun Sample() {
         }
 
         SwipeRefresh(
-            topSwipeRefreshState = rememberSwipeRefreshState(isRefreshing = refreshing),
+            topRefreshIndicatorState = rememberSwipeRefreshState(isRefreshing = refreshing),
             onRefresh = { refreshing = true },
             topIndicator = { state, trigger ->
                 GlowIndicator(

@@ -96,7 +96,7 @@ private fun Sample() {
             )
 
             SwipeRefresh(
-                topSwipeRefreshState = rememberSwipeRefreshState(refreshing),
+                topRefreshIndicatorState = rememberSwipeRefreshState(refreshing),
                 onRefresh = { refreshing = true },
                 // Shift the indicator to match the list content padding
                 indicatorPadding = contentPadding,

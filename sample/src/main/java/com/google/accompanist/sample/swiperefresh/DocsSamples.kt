@@ -56,7 +56,7 @@ fun SwipeRefreshSample() {
     val isRefreshing by viewModel.isRefreshing.collectAsState()
 
     SwipeRefresh(
-        topSwipeRefreshState = rememberSwipeRefreshState(isRefreshing),
+        topRefreshIndicatorState = rememberSwipeRefreshState(isRefreshing),
         onRefresh = { viewModel.refresh() },
     ) {
         LazyColumn {
