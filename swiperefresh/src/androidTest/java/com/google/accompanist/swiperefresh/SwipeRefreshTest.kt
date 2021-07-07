@@ -193,7 +193,6 @@ class SwipeRefreshTest {
         // Assert that the indicator is displayed
         bottomIndicatorNode.assertIsDisplayed()
     }
-
 }
 
 private const val SwipeRefreshTag = "swipe_refresh"

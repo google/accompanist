@@ -122,7 +122,6 @@ class SwipeRefreshState(
                 _indicatorOffset.snapTo(_indicatorOffset.value + delta)
             } else {
                 _indicatorOffset.snapTo(_indicatorOffset.value - delta)
-
             }
         }
     }
@@ -254,13 +253,15 @@ private class SwipeRefreshNestedScrollConnection(
     override suspend fun onPreFling(available: Velocity): Velocity {
         // If we're dragging, not currently refreshing and scrolled
         // past the trigger point, refresh!
-        //TODO Refactoring && improve readability
+        // TODO Refactoring && improve readability
         if (topSwipeRefreshState != null && !topSwipeRefreshState.isRefreshing &&
-            topSwipeRefreshState.indicatorOffset >= refreshTrigger) {
+            topSwipeRefreshState.indicatorOffset >= refreshTrigger
+        ) {
             onRefresh(topSwipeRefreshState.refreshIndicatorPosition)
             // Reset the drag in progress state
         } else if (bottomSwipeRefreshState != null && !bottomSwipeRefreshState.isRefreshing &&
-            bottomSwipeRefreshState.indicatorOffset >= refreshTrigger) {
+            bottomSwipeRefreshState.indicatorOffset >= refreshTrigger
+        ) {
             onRefresh(bottomSwipeRefreshState.refreshIndicatorPosition)
             // Reset the drag in progress state
         }
@@ -364,7 +365,6 @@ fun SwipeRefresh(
             bottomRefreshIndicatorState.animateOffsetTo(0f)
         }
     }
-
 
     val refreshTriggerPx = with(LocalDensity.current) { refreshTriggerDistance.toPx() }
 

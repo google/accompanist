@@ -83,11 +83,11 @@ internal class CircularProgressPainter(private val senseOfRotation: SenseOfRotat
             val endAngle: Float
             val sweepAngle: Float
 
-            if(senseOfRotation == SenseOfRotation.CLOCKWISE){
+            if (senseOfRotation == SenseOfRotation.CLOCKWISE) {
                 startAngle = (startTrim + rotation) * 360
                 endAngle = (endTrim + rotation) * 360
                 sweepAngle = endAngle - startAngle
-            }else {
+            } else {
                 startAngle = (startTrim - rotation) * 360
                 endAngle = (endTrim - rotation) * 360
                 sweepAngle = startAngle - endAngle
@@ -119,9 +119,9 @@ internal class CircularProgressPainter(private val senseOfRotation: SenseOfRotat
             x = arrowWidth.toPx() * arrowScale,
             y = 0f
         )
-        val arrowHeightPx = if(senseOfRotation == SenseOfRotation.CLOCKWISE){
+        val arrowHeightPx = if (senseOfRotation == SenseOfRotation.CLOCKWISE) {
             arrowHeight.toPx()
-        }else{
+        } else {
             -arrowHeight.toPx()
         }
 
@@ -190,7 +190,7 @@ internal class BottomCircularProgressPainter : Painter() {
             )
             val startAngle = (startTrim - rotation) * 360
             val endAngle = (endTrim - rotation) * 360
-            val sweepAngle =  startAngle - endAngle
+            val sweepAngle = startAngle - endAngle
             drawArc(
                 color = color,
                 alpha = alpha,
