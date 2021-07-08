@@ -39,6 +39,11 @@ import androidx.compose.ui.unit.height
 import androidx.compose.ui.unit.width
 import com.google.common.truth.Truth.assertThat
 
+/**
+ * Contains the [VerticalPager] tests. This class is extended
+ * in both the `androidTest` and `test` source sets for setup of the relevant
+ * test runner.
+ */
 @OptIn(ExperimentalPagerApi::class) // Pager is currently experimental
 abstract class BaseVerticalPagerTest(
     private val verticalAlignment: Alignment.Vertical,

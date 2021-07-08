@@ -32,6 +32,10 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.Rule
 import org.junit.Test
 
+/**
+ * Contains the base insets tests. This class is extended in both the `androidTest` and
+ * `test` source sets for setup of the relevant test runner.
+ */
 abstract class BaseInsetsTest(
     private val type: TestInsetType,
     private val applyStart: Boolean,
@@ -81,7 +85,7 @@ abstract class BaseInsetsTest(
         assertThat(paddingValues.calculateBottomPadding()).isEqualTo(0.dp)
 
         // Now update the WindowInsets as appropriately for the test
-        (windowInsets.getTestTypeToUpdate(type).layoutInsets).apply {
+        windowInsets.getTestTypeToUpdate(type).layoutInsets.apply {
             left = if (applyLeft) ExpectedPx else 0
             top = if (applyTop) ExpectedPx else 0
             right = if (applyRight) ExpectedPx else 0

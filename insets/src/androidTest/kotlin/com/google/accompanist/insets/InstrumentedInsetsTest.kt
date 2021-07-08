@@ -20,6 +20,9 @@ import androidx.compose.ui.unit.LayoutDirection
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
+/**
+ * Version of [BaseInsetsTest] which is designed to be ran on device/emulators.
+ */
 @RunWith(Parameterized::class)
 class InstrumentedInsetsTest(
     type: TestInsetType,
@@ -29,7 +32,6 @@ class InstrumentedInsetsTest(
     applyBottom: Boolean,
     layoutDirection: LayoutDirection,
 ) : BaseInsetsTest(type, applyStart, applyTop, applyEnd, applyBottom, layoutDirection) {
-
     companion object {
         @JvmStatic
         @Parameterized.Parameters

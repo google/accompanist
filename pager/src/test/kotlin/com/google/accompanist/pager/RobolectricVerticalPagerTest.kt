@@ -23,6 +23,9 @@ import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
 import org.robolectric.annotation.Config
 
+/**
+ * Version of [BaseVerticalPagerTest] which is designed to be ran on Robolectric.
+ */
 @Config(qualifiers = "w360dp-h640dp-xhdpi")
 @RunWith(ParameterizedRobolectricTestRunner::class)
 class RobolectricVerticalPagerTest(

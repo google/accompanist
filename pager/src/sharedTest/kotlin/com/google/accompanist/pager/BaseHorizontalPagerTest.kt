@@ -38,6 +38,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.height
 import androidx.compose.ui.unit.width
 
+/**
+ * Contains [HorizontalPager] tests. This class is extended
+ * in both the `androidTest` and `test` source sets for setup of the relevant
+ * test runner.
+ */
 @OptIn(ExperimentalPagerApi::class) // Pager is currently experimental
 abstract class BaseHorizontalPagerTest(
     private val itemWidthFraction: Float,

@@ -20,6 +20,11 @@ import androidx.appcompat.app.AppCompatActivity
 import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
 
+/**
+ * Version of [BaseAppCompatThemeTest] which is designed to be ran using Robolectric.
+ *
+ * All of the tests are provided by [BaseAppCompatThemeTest].
+ */
 @RunWith(ParameterizedRobolectricTestRunner::class)
 class RobolectricAppCompatThemeTest<T : AppCompatActivity>(
     activityClass: Class<T>

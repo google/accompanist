@@ -58,7 +58,6 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class PlaceholderTest {
-
     @get:Rule
     val composeTestRule = createComposeRule()
 

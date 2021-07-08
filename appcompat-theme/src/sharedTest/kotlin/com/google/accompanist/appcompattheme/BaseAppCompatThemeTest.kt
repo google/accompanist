@@ -39,8 +39,14 @@ import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 
-abstract class BaseAppCompatThemeTest<T : AppCompatActivity>(activityClass: Class<T>) {
-
+/**
+ * Class which contains the majority of the tests. This class is extended
+ * in both the `androidTest` and `test` source sets for setup of the relevant
+ * test runner.
+ */
+abstract class BaseAppCompatThemeTest<T : AppCompatActivity>(
+    activityClass: Class<T>
+) {
     @get:Rule
     val composeTestRule = createAndroidComposeRule(activityClass)
 

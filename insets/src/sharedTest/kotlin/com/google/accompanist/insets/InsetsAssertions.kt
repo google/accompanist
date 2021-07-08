@@ -34,6 +34,7 @@ internal fun WindowInsets.assertEqualTo(insets: WindowInsetsCompat) {
         .isEqualTo(insets.isVisible(WindowInsetsCompat.Type.ime()))
 
     systemBars.assertEqualTo(insets.getInsets(WindowInsetsCompat.Type.systemBars()))
+
     // It's difficult to create an expected value for isVisible as it depends on the system ui
     // of the device.
 }

@@ -27,6 +27,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
+/**
+ * Version of [BaseAppCompatThemeTest] which is designed to be ran on device/emulators.
+ */
 @RunWith(Parameterized::class)
 class InstrumentedAppCompatThemeTest<T : AppCompatActivity>(
     activityClass: Class<T>
@@ -43,8 +46,8 @@ class InstrumentedAppCompatThemeTest<T : AppCompatActivity>(
     /**
      * On API 21-22, the family is loaded with only the 400 font.
      *
-     * This only works on device as Robolectric seems to use the behavior from API 23+, which
-     * is not what we want to test.
+     * This only works on device as Robolectric seems to always use the behavior from API 23+,
+     * which is not what we want to test.
      */
     @Test
     @SdkSuppress(maxSdkVersion = 22)

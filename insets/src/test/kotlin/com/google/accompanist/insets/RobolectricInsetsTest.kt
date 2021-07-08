@@ -20,6 +20,9 @@ import androidx.compose.ui.unit.LayoutDirection
 import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
 
+/**
+ * Version of [BaseInsetsTest] which is designed to be ran on Robolectric.
+ */
 @RunWith(ParameterizedRobolectricTestRunner::class)
 class RobolectricInsetsTest(
     type: TestInsetType,
@@ -29,7 +32,6 @@ class RobolectricInsetsTest(
     applyBottom: Boolean,
     layoutDirection: LayoutDirection,
 ) : BaseInsetsTest(type, applyStart, applyTop, applyEnd, applyBottom, layoutDirection) {
-
     companion object {
         @JvmStatic
         @ParameterizedRobolectricTestRunner.Parameters

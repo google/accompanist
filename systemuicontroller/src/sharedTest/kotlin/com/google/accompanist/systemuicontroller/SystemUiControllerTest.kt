@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.test.ext.junit.rules.ActivityScenarioRule
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.FlakyTest
 import androidx.test.filters.SdkSuppress
 import com.google.accompanist.internal.test.IgnoreOnRobolectric
@@ -35,8 +36,10 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.experimental.categories.Category
+import org.junit.runner.RunWith
 
-abstract class BaseSystemUiControllerTest {
+@RunWith(AndroidJUnit4::class)
+class SystemUiControllerTest {
     @get:Rule
     val rule = ActivityScenarioRule(ComponentActivity::class.java)
 
@@ -99,7 +102,7 @@ abstract class BaseSystemUiControllerTest {
     @Test
     @Category(IgnoreOnRobolectric::class) // Robolectric implements the new behavior from 23+
     @SdkSuppress(maxSdkVersion = 22)
-    open fun statusBarIcons_scrim() {
+    fun statusBarIcons_scrim() {
         val window = rule.window
 
         // Now create an AndroidSystemUiController() and set the navigation bar with dark icons
