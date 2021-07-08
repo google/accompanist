@@ -59,7 +59,6 @@ class SampleViewModel : ViewModel() {
             _isLoadingNextPage.emit(false)
         }
     }
-
 }
 
 @Composable
@@ -71,7 +70,7 @@ fun BidirectionalSwipeRefreshSample() {
     SwipeRefresh(
         topRefreshIndicatorState = rememberSwipeRefreshState(isTopIndicatorRefreshing),
         bottomRefreshIndicatorState = rememberSwipeRefreshState(isBottomIndicatorRefreshing),
-        onRefresh =  { refreshIndicatorPosition ->
+        onRefresh = { refreshIndicatorPosition ->
             when (refreshIndicatorPosition) {
                 RefreshIndicatorPosition.TOP -> viewModel.refreshList()
                 RefreshIndicatorPosition.BOTTOM -> viewModel.loadNextPage()
