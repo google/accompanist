@@ -45,7 +45,7 @@ jobs:
           key: gradle-${{ hashFiles('checksum.txt') }}
 
       - name: Build
-        run: ./gradlew build --scan
+        run: ./gradlew spotlessCheck assemble metalavaCheckCompatibility lintDebug testDebug --scan
 
       - name: Upload test results
         if: always()
