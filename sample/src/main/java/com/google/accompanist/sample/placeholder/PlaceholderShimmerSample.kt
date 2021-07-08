@@ -81,7 +81,7 @@ private fun Sample() {
         }
 
         SwipeRefresh(
-            state = rememberSwipeRefreshState(isRefreshing = refreshing),
+            topRefreshIndicatorState = rememberSwipeRefreshState(isRefreshing = refreshing),
             onRefresh = { refreshing = true },
         ) {
             LazyColumn {

@@ -4,13 +4,26 @@
 
 A library which provides a layout which provides the swipe-to-refresh UX pattern, similar to Android's [`SwipeRefreshLayout`](https://developer.android.com/training/swipe/add-swipe-interface).
 
-<figure>
-    <video width="400" controls loop>
-    <source src="demo.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
-    <figcaption>SwipeRefresh demo</figcaption>
-</figure>
+=== "Top"
+
+    <figure>
+        <video width="400" controls loop>
+        <source src="demo.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <figcaption>SwipeRefresh demo</figcaption>
+    </figure>
+
+=== "Bottom"
+
+    <figure>
+        <video width="400" controls loop>
+        <source src="bottom_indicator.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <figcaption>Bottom Refresh Indicator demo</figcaption>
+    </figure>
+    
 
 ## Usage 
 
@@ -34,7 +47,34 @@ SwipeRefresh(
 }
 ```
 
-The full example, including the view model implementation can be found [here](https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/swiperefresh/DocsSamples.kt).
+The full example, including the view model implementation can be found [here](https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/swiperefresh/docsamples/SimpleSample.kt).
+
+Alternatively, you can use a bottom refresh indicator or even both a top and bottom indicator (e.g: If you are loading the list items by page, each time the user triggers the bottom refresh indicator, you load the next page. If the user triggers the top refresh indicator, you refresh the list):
+
+``` kotlin
+val viewModel = viewModel<SampleViewModel>()
+val isTopIndicatorRefreshing by viewModel.isRefreshing.collectAsState()
+val isBottomIndicatorRefreshing by viewModel.isLoadingNextPage.collectAsState()
+    
+SwipeRefresh(
+    topRefreshIndicatorState = rememberSwipeRefreshState(isTopIndicatorRefreshing),
+    bottomRefreshIndicatorState = rememberSwipeRefreshState(isBottomIndicatorRefreshing),
+    onRefresh =  { refreshIndicatorPosition ->
+        when (refreshIndicatorPosition) {
+            RefreshIndicatorPosition.TOP -> viewModel.refreshList()
+            RefreshIndicatorPosition.BOTTOM -> viewModel.loadNextPage()
+        }
+    },
+) {
+    LazyColumn {
+        items(30) { index ->
+            TODO(" SHOW ITEM $index ")
+        }
+    }
+}
+```
+
+You can find the full code [here](https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/swiperefresh/docsamples/BidirectionalSwipeRefreshSample.kt).
 
 The content needs to be 'scrollable' for `SwipeRefresh()` to be able to react to swipe gestures. Layouts such as [`LazyColumn`][lazycolumn] are automatically scrollable, but others such as [`Column`][column] are not. In those instances, you can provide a [`Modifier.verticalScroll`][verticalscroll] modifier to that content like so:
 

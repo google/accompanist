@@ -20,17 +20,15 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
@@ -44,9 +42,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.glide.rememberGlidePainter
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.VerticalPager
-import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
@@ -54,27 +49,24 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.delay
 
-class SwipeRefreshVerticalPagerSample : ComponentActivity() {
+class SwipeRefreshBottomPositionSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
             AccompanistSampleTheme {
-                Surface {
-                    Sample()
-                }
+                Sample()
             }
         }
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun Sample() {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.swiperefresh_title_verticalpager)) },
+                title = { Text(stringResource(R.string.swiperefresh_title_bottom_position)) },
                 backgroundColor = MaterialTheme.colors.surface,
             )
         },
@@ -91,34 +83,28 @@ private fun Sample() {
         }
 
         SwipeRefresh(
-            topRefreshIndicatorState = rememberSwipeRefreshState(isRefreshing = refreshing),
+            bottomRefreshIndicatorState = rememberSwipeRefreshState(isRefreshing = refreshing),
             onRefresh = { refreshing = true },
         ) {
-            VerticalPager(
-                state = rememberPagerState(pageCount = 10),
-                itemSpacing = 8.dp,
-                modifier = Modifier.fillMaxSize(),
-            ) { page ->
-                Box {
-                    // Our page content, displaying a random image
-                    Image(
-                        painter = rememberGlidePainter(randomSampleImageUrl(width = 600)),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(1f)
-                    )
+            LazyColumn {
+                items(30) { index ->
+                    Row(Modifier.padding(16.dp)) {
+                        Image(
+                            painter = rememberGlidePainter(randomSampleImageUrl(index)),
+                            contentDescription = null,
+                            modifier = Modifier.size(64.dp),
+                        )
 
-                    // Displays the page index
-                    Text(
-                        text = page.toString(),
-                        modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .padding(16.dp)
-                            .background(MaterialTheme.colors.surface, RoundedCornerShape(4.dp))
-                            .padding(4.dp)
-                            .wrapContentSize(Alignment.Center)
-                    )
+                        Spacer(Modifier.width(8.dp))
+
+                        Text(
+                            text = "Text",
+                            style = MaterialTheme.typography.subtitle2,
+                            modifier = Modifier
+                                .weight(1f)
+                                .align(Alignment.CenterVertically)
+                        )
+                    }
                 }
             }
         }

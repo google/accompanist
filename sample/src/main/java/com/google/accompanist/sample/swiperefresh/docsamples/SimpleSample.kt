@@ -16,7 +16,7 @@
 
 @file:Suppress("UNUSED_ANONYMOUS_PARAMETER")
 
-package com.google.accompanist.sample.swiperefresh
+package com.google.accompanist.sample.swiperefresh.docsamples
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
@@ -56,7 +56,7 @@ fun SwipeRefreshSample() {
     val isRefreshing by viewModel.isRefreshing.collectAsState()
 
     SwipeRefresh(
-        state = rememberSwipeRefreshState(isRefreshing),
+        topRefreshIndicatorState = rememberSwipeRefreshState(isRefreshing),
         onRefresh = { viewModel.refresh() },
     ) {
         LazyColumn {
