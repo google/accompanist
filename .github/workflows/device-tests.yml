@@ -60,14 +60,14 @@ jobs:
           fi
           echo "::set-output name=TARGET::$TARGET"
 
-      - name: Run tests
+      - name: Run device tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
           target: ${{ steps.determine-target.outputs.TARGET }}
           profile: Galaxy Nexus
           # We run all tests, sharding them over 3 shards
-          script: ./scripts/run-device-tests.sh --log-file=logcat.txt --shard-index=${{ matrix.shard }} --shard-count=3
+          script: ./scripts/run-tests.sh --log-file=logcat.txt --shard-index=${{ matrix.shard }} --shard-count=3
 
       - name: Clean secrets
         if: always()

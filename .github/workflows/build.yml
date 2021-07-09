@@ -45,7 +45,19 @@ jobs:
           key: gradle-${{ hashFiles('checksum.txt') }}
 
       - name: Build
-        run: ./gradlew spotlessCheck assemble metalavaCheckCompatibility lintDebug testDebug --scan
+        run: |
+          ./gradlew --scan \
+              spotlessCheck \
+              assemble \
+              metalavaCheckCompatibility \
+              lintDebug
+
+      - name: Unit Tests
+        run: |
+          ./scripts/run-tests.sh \
+              --unit-tests \
+              --run-affected \
+              --affected-base-ref=$BASE_REF
 
       - name: Upload test results
         if: always()
@@ -123,7 +135,7 @@ jobs:
           target: ${{ steps.determine-target.outputs.TARGET }}
           profile: Galaxy Nexus
           # We run all affected tests of the PR (or commit)
-          script: ./scripts/run-device-tests.sh --log-file=logcat.txt --run-affected --affected-base-ref=$BASE_REF --shard-index=${{ matrix.shard }} --shard-count=2
+          script: ./scripts/run-tests.sh --log-file=logcat.txt --run-affected --affected-base-ref=$BASE_REF --shard-index=${{ matrix.shard }} --shard-count=2
 
       - name: Clean secrets
         if: always()
@@ -149,7 +161,7 @@ jobs:
     if: github.event_name == 'push' # only deploy for pushed commits (not PRs)
 
     runs-on: ubuntu-latest
-    needs: [build, test]
+    needs: [ build, test ]
     timeout-minutes: 30
     env:
       TERM: dumb
