@@ -68,6 +68,17 @@ android {
         }
         animationsDisabled true
     }
+
+    sourceSets {
+        test {
+            java.srcDirs += 'src/sharedTest/kotlin'
+            res.srcDirs += 'src/sharedTest/res'
+        }
+        androidTest {
+            java.srcDirs += 'src/sharedTest/kotlin'
+            res.srcDirs += 'src/sharedTest/res'
+        }
+    }
 }
 
 dependencies {
@@ -76,9 +87,23 @@ dependencies {
 
     api libs.androidx.appcompat
 
+    // ======================
+    // Test dependencies
+    // ======================
+
+    androidTestImplementation project(':internal-testutils')
+    testImplementation project(':internal-testutils')
+
     androidTestImplementation libs.junit
+    testImplementation libs.junit
+
     androidTestImplementation libs.compose.ui.test.junit4
+    testImplementation libs.compose.ui.test.junit4
+
     androidTestImplementation libs.androidx.test.runner
+    testImplementation libs.androidx.test.runner
+
+    testImplementation libs.robolectric
 }
 
 apply plugin: 'com.vanniktech.maven.publish'
