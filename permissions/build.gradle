@@ -91,6 +91,7 @@ dependencies {
 
     androidTestUtil libs.androidx.test.orchestrator
 
+    androidTestImplementation project(':internal-testutils')
     androidTestImplementation libs.androidx.activity.compose
     androidTestImplementation libs.compose.material.material
 

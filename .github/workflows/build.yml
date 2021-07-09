@@ -18,11 +18,12 @@ jobs:
 
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    env:
-      TERM: dumb
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          # Fetch expanded history, which is needed for affected module detection
+          fetch-depth: '500'
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
@@ -46,8 +47,29 @@ jobs:
             ~/.gradle/caches/build-cache-*
           key: gradle-${{ hashFiles('checksum.txt') }}
 
-      - name: Build, lint and spotless
-        run: ./gradlew spotlessCheck assemble assembleAndroidTest lintDebug metalavaCheckCompatibility --scan
+      - name: Build
+        run: |
+          ./gradlew --scan --stacktrace \
+              spotlessCheck \
+              assemble \
+              metalavaCheckCompatibility \
+              lintDebug
+
+      - name: Unit Tests
+        run: |
+          ./scripts/run-tests.sh \
+              --unit-tests \
+              --run-affected \
+              --affected-base-ref=$BASE_REF
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results-robolectric
+          path: |
+            **/build/test-results/*
+            **/build/reports/*
 
       - name: Clean secrets
         if: always()
@@ -56,7 +78,7 @@ jobs:
   test:
     runs-on: macos-11.0
     needs: build
-    timeout-minutes: 70
+    timeout-minutes: 50
 
     strategy:
       # Allow tests to continue on other devices if they fail on one device.
@@ -71,8 +93,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          # 0 == fetch all history, which is needed for affected module detection
-          fetch-depth: '0'
+          # Fetch expanded history, which is needed for affected module detection
+          fetch-depth: '500'
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
@@ -116,7 +138,7 @@ jobs:
           target: ${{ steps.determine-target.outputs.TARGET }}
           profile: Galaxy Nexus
           # We run all affected tests of the PR (or commit)
-          script: ./scripts/run-device-tests.sh --log-file=logcat.txt --run-affected --affected-base-ref=$BASE_REF --shard-index=${{ matrix.shard }} --shard-count=2
+          script: ./scripts/run-tests.sh --log-file=logcat.txt --run-affected --affected-base-ref=$BASE_REF --shard-index=${{ matrix.shard }} --shard-count=2
 
       - name: Clean secrets
         if: always()
@@ -142,7 +164,7 @@ jobs:
     if: github.event_name == 'push' # only deploy for pushed commits (not PRs)
 
     runs-on: ubuntu-latest
-    needs: [build, test]
+    needs: [ build, test ]
     timeout-minutes: 30
     env:
       TERM: dumb
@@ -173,7 +195,7 @@ jobs:
           key: gradle-${{ hashFiles('checksum.txt') }}
 
       - name: Deploy to Sonatype
-        run: ./gradlew publish --no-parallel
+        run: ./gradlew publish --no-parallel --stacktrace
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_NEXUS_PASSWORD }}
