@@ -25,7 +25,7 @@ import org.robolectric.ParameterizedRobolectricTestRunner
 import org.robolectric.annotation.Config
 
 /**
- * Version of [BaseHorizontalPagerTest] which is designed to be ran on Robolectric.
+ * Version of [BaseHorizontalPagerTest] which is designed to be run on Robolectric.
  */
 @Config(qualifiers = "w360dp-h640dp-xhdpi")
 @RunWith(ParameterizedRobolectricTestRunner::class)

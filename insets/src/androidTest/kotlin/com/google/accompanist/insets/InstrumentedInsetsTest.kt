@@ -21,7 +21,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
 /**
- * Version of [BaseInsetsTest] which is designed to be ran on device/emulators.
+ * Version of [BaseInsetsTest] which is designed to be run on device/emulators.
  */
 @RunWith(Parameterized::class)
 class InstrumentedInsetsTest(

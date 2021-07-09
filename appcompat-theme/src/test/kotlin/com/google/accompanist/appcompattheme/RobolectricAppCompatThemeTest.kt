@@ -21,7 +21,7 @@ import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
 
 /**
- * Version of [BaseAppCompatThemeTest] which is designed to be ran using Robolectric.
+ * Version of [BaseAppCompatThemeTest] which is designed to be run using Robolectric.
  *
  * All of the tests are provided by [BaseAppCompatThemeTest].
  */

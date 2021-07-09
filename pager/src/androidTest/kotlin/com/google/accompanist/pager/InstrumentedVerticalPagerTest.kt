@@ -23,7 +23,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
 /**
- * Version of [BaseVerticalPagerTest] which is designed to be ran on device/emulators.
+ * Version of [BaseVerticalPagerTest] which is designed to be run on device/emulators.
  */
 @RunWith(Parameterized::class)
 class InstrumentedVerticalPagerTest(
