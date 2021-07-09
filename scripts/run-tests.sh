@@ -102,9 +102,8 @@ SHARD_OPTS=""
 if [ "$SHARD_COUNT" -gt "0" ]; then
   # If we have a shard count value, create the necessary Gradle property args.
   # We assume that SHARD_INDEX has been set too
-  SHARD_OPTS="--no-configuration-cache"
   SHARD_OPTS="$SHARD_OPTS -Pandroid.testInstrumentationRunnerArguments.numShards=$SHARD_COUNT"
   SHARD_OPTS="$SHARD_OPTS -Pandroid.testInstrumentationRunnerArguments.shardIndex=$SHARD_INDEX"
 fi
 
-./gradlew --scan --continue $TASK $FILTER_OPTS $SHARD_OPTS
+./gradlew --scan --continue --no-configuration-cache $TASK $FILTER_OPTS $SHARD_OPTS

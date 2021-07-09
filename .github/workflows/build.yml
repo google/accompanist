@@ -21,6 +21,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          # 0 == fetch all history, which is needed for affected module detection
+          fetch-depth: '0'
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
