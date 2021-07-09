@@ -106,4 +106,4 @@ if [ "$SHARD_COUNT" -gt "0" ]; then
   SHARD_OPTS="$SHARD_OPTS -Pandroid.testInstrumentationRunnerArguments.shardIndex=$SHARD_INDEX"
 fi
 
-./gradlew --scan --continue --no-configuration-cache $TASK $FILTER_OPTS $SHARD_OPTS
+./gradlew --scan --continue --no-configuration-cache --stacktrace $TASK $FILTER_OPTS $SHARD_OPTS

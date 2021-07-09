@@ -49,7 +49,7 @@ jobs:
 
       - name: Build
         run: |
-          ./gradlew --scan \
+          ./gradlew --scan --stacktrace \
               spotlessCheck \
               assemble \
               metalavaCheckCompatibility \
@@ -195,7 +195,7 @@ jobs:
           key: gradle-${{ hashFiles('checksum.txt') }}
 
       - name: Deploy to Sonatype
-        run: ./gradlew publish --no-parallel
+        run: ./gradlew publish --no-parallel --stacktrace
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_NEXUS_PASSWORD }}
