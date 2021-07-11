@@ -72,7 +72,7 @@ android {
 
 dependencies {
     api project(':imageloading-core')
-    api libs.coil.coil
+    api libs.coil.compose
 
     implementation libs.androidx.core
     implementation libs.compose.foundation.foundation

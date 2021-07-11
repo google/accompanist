@@ -24,14 +24,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.IntSize
 import coil.ImageLoader
-import coil.imageLoader
+import coil.compose.LocalImageLoader
 import coil.request.ImageRequest
 import coil.request.ImageResult
 import coil.size.Precision
@@ -52,20 +51,33 @@ import kotlinx.coroutines.flow.channelFlow
  * Composition local containing the preferred [ImageLoader] to be used by
  * [rememberCoilPainter].
  */
-val LocalImageLoader = staticCompositionLocalOf<ImageLoader?> { null }
+@Deprecated(
+    "Replace with coil-compose LocalImageLoader. See https://coil-kt.github.io/coil/compose",
+    ReplaceWith(
+        "LocalImageLoader",
+        "coil.compose.LocalImageLoader"
+    )
+)
+val LocalImageLoader = coil.compose.LocalImageLoader
 
 /**
  * Contains some default values used by [rememberCoilPainter].
  */
+@Deprecated("No longer necessary with coil-compose. See https://coil-kt.github.io/coil/compose")
 object CoilPainterDefaults {
     /**
      * Returns the default [ImageLoader] value for the `imageLoader` parameter
      * in [rememberCoilPainter].
      */
+    @Deprecated(
+        "Replace with coil-compose LocalImageLoader. See https://coil-kt.github.io/coil/compose",
+        ReplaceWith(
+            "LocalImageLoader.current",
+            "coil.compose.LocalImageLoader"
+        )
+    )
     @Composable
-    fun defaultImageLoader(): ImageLoader {
-        return LocalImageLoader.current ?: LocalContext.current.imageLoader
-    }
+    fun defaultImageLoader(): ImageLoader = LocalImageLoader.current
 }
 
 /**
@@ -85,12 +97,29 @@ object CoilPainterDefaults {
  * @param previewPlaceholder Drawable resource ID which will be displayed when this function is
  * ran in preview mode.
  */
+@Deprecated(
+    "Replace with coil-compose rememberImagePainter(). See https://coil-kt.github.io/coil/compose",
+    ReplaceWith(
+        """rememberImagePainter(
+                data = request,
+                imageLoader = imageLoader,
+                builder = {
+                    if (fadeIn == true) crossfade(fadeInDurationMs)
+                    placeholder(previewPlaceholder)
+                    requestBuilder(this)
+                }
+            )""",
+        "coil.compose.rememberImagePainter",
+        "coil.compose.LocalImageLoader",
+        "com.google.accompanist.imageloading.LoadPainterDefaults",
+    )
+)
 @Composable
 fun rememberCoilPainter(
     request: Any?,
-    imageLoader: ImageLoader = CoilPainterDefaults.defaultImageLoader(),
-    shouldRefetchOnSizeChange: ShouldRefetchOnSizeChange = ShouldRefetchOnSizeChange { _, _ -> false },
-    requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = null,
+    imageLoader: ImageLoader = LocalImageLoader.current,
+    shouldRefetchOnSizeChange: ShouldRefetchOnSizeChange? = null,
+    requestBuilder: (ImageRequest.Builder.(size: IntSize) -> ImageRequest.Builder)? = { this },
     fadeIn: Boolean = false,
     fadeInDurationMs: Int = LoadPainterDefaults.FadeInTransitionDuration,
     @DrawableRes previewPlaceholder: Int = 0,
@@ -107,7 +136,7 @@ fun rememberCoilPainter(
     return rememberLoadPainter(
         loader = coilLoader,
         request = checkData(request),
-        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange,
+        shouldRefetchOnSizeChange = shouldRefetchOnSizeChange ?: ShouldRefetchOnSizeChange { _, _ -> false },
         fadeIn = fadeIn,
         fadeInDurationMs = fadeInDurationMs,
         previewPlaceholder = previewPlaceholder,

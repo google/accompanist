@@ -15,7 +15,7 @@ repo_url: 'https://github.com/google/accompanist'
 # Navigation
 nav:
   - 'Overview': index.md
-  - 'Coil':
+  - 'Coil (deprecated)':
     - 'Guide': coil.md
     - 'API': api/coil/
     - 'Migration from CoilImage': coil/migration-coilimage.md
