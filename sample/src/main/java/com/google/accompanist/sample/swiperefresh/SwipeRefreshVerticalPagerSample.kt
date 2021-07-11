@@ -43,7 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.glide.rememberGlidePainter
+import coil.compose.rememberImagePainter
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.VerticalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -102,7 +102,7 @@ private fun Sample() {
                 Box {
                     // Our page content, displaying a random image
                     Image(
-                        painter = rememberGlidePainter(randomSampleImageUrl(width = 600)),
+                        painter = rememberImagePainter(randomSampleImageUrl(width = 600)),
                         contentDescription = null,
                         modifier = Modifier
                             .fillMaxWidth()

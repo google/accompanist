@@ -52,7 +52,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
-import com.google.accompanist.coil.rememberCoilPainter
+import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.systemBarsPadding
 import com.google.accompanist.sample.AccompanistSampleTheme
@@ -120,15 +120,14 @@ private fun Sample() {
     BoxWithConstraints(Modifier.fillMaxSize()) {
         // Displaying a random image
         Image(
-            painter = rememberCoilPainter(
-                request = with(LocalDensity.current) {
+            painter = rememberImagePainter(
+                data = with(LocalDensity.current) {
                     rememberRandomSampleImageUrl(
                         seed = 16,
                         width = maxWidth.roundToPx(),
                         height = maxHeight.roundToPx()
                     )
                 },
-                fadeIn = true,
             ),
             contentDescription = null,
             contentScale = ContentScale.Crop,

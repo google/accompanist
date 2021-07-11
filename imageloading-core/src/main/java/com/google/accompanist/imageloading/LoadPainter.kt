@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
+
 package com.google.accompanist.imageloading
 
 import android.annotation.SuppressLint
@@ -61,6 +63,7 @@ import kotlin.math.roundToInt
  * @param R The data or input parameter type.
  */
 @Stable
+@Deprecated("Accompanist-ImageLoading is now deprecated. Consider using Coil: https://coil-kt.github.io/coil/compose")
 fun interface Loader<R> {
     /**
      * Execute the 'load' with the given parameters.
@@ -75,10 +78,12 @@ fun interface Loader<R> {
 /**
  * Object which holds default values for [rememberLoadPainter].
  */
+@Deprecated("Accompanist-ImageLoading is now deprecated. Consider using Coil: https://coil-kt.github.io/coil/compose")
 object LoadPainterDefaults {
     /**
      * Default duration in milliseconds for the fade-in animation.
      */
+    @Deprecated("Accompanist-ImageLoading is now deprecated. Consider using Coil: https://coil-kt.github.io/coil/compose")
     const val FadeInTransitionDuration: Int = 1000
 }
 
@@ -97,6 +102,7 @@ object LoadPainterDefaults {
  * ran in preview mode.
  */
 @Composable
+@Deprecated("Accompanist-ImageLoading is now deprecated. Consider using Coil: https://coil-kt.github.io/coil/compose")
 fun <R> rememberLoadPainter(
     loader: Loader<R>,
     request: R?,
@@ -136,6 +142,7 @@ fun <R> rememberLoadPainter(
 /**
  * Interface that allows apps to control whether a request is re-run once the size changes.
  */
+@Deprecated("Accompanist-ImageLoading is now deprecated. Consider using Coil: https://coil-kt.github.io/coil/compose")
 fun interface ShouldRefetchOnSizeChange {
     /**
      * Return `true` if the request should be re-run if the [size] has changed.
@@ -153,6 +160,7 @@ fun interface ShouldRefetchOnSizeChange {
  *
  * Instances can be created and remembered via the [rememberLoadPainter] function.
  */
+@Deprecated("Accompanist-ImageLoading is now deprecated. Consider using Coil: https://coil-kt.github.io/coil/compose")
 class LoadPainter<R> internal constructor(
     private val loader: Loader<R>,
     private val coroutineScope: CoroutineScope,

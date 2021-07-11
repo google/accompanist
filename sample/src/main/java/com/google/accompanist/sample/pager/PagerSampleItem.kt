@@ -29,7 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.coil.rememberCoilPainter
+import coil.compose.rememberImagePainter
 import com.google.accompanist.sample.rememberRandomSampleImageUrl
 
 /**
@@ -43,9 +43,8 @@ internal fun PagerSampleItem(
     Box(modifier) {
         // Our page content, displaying a random image
         Image(
-            painter = rememberCoilPainter(
-                request = rememberRandomSampleImageUrl(width = 600),
-                fadeIn = true,
+            painter = rememberImagePainter(
+                data = rememberRandomSampleImageUrl(width = 600),
             ),
             contentDescription = null,
             modifier = Modifier.matchParentSize()
