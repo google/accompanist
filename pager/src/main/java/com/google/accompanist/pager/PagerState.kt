@@ -669,6 +669,7 @@ class PagerState(
                 listOf<Any>(
                     it.pageCount,
                     it.currentPage,
+                    it.offscreenLimit,
                     it.infiniteLoop,
                 )
             },
@@ -676,7 +677,8 @@ class PagerState(
                 PagerState(
                     pageCount = it[0] as Int,
                     currentPage = it[1] as Int,
-                    infiniteLoop = it[2] as Boolean,
+                    offscreenLimit = it[2] as Int,
+                    infiniteLoop = it[3] as Boolean,
                 )
             }
         )
