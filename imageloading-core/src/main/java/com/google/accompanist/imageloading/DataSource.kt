@@ -16,6 +16,7 @@
 
 package com.google.accompanist.imageloading
 
+@Deprecated("Accompanist-ImageLoading is now deprecated. Consider using Coil: https://coil-kt.github.io/coil/compose")
 enum class DataSource {
     /**
      * Represents an in-memory data source or cache (e.g. bitmap, ByteBuffer).

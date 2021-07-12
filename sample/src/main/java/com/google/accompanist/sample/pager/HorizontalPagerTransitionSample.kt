@@ -43,7 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
-import com.google.accompanist.coil.rememberCoilPainter
+import coil.compose.rememberImagePainter
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
@@ -126,9 +126,8 @@ fun HorizontalPagerWithOffsetTransition() {
         ) {
             Box {
                 Image(
-                    painter = rememberCoilPainter(
-                        request = rememberRandomSampleImageUrl(width = 600),
-                        fadeIn = true,
+                    painter = rememberImagePainter(
+                        data = rememberRandomSampleImageUrl(width = 600),
                     ),
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize(),
@@ -164,7 +163,7 @@ private fun ProfilePicture(modifier: Modifier = Modifier) {
         border = BorderStroke(4.dp, MaterialTheme.colors.surface)
     ) {
         Image(
-            painter = rememberCoilPainter(request = rememberRandomSampleImageUrl(), fadeIn = true),
+            painter = rememberImagePainter(rememberRandomSampleImageUrl()),
             contentDescription = null,
             modifier = Modifier.size(72.dp),
         )

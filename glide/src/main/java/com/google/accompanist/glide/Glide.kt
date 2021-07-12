@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("DeprecatedCallableAddReplaceWith", "DEPRECATION")
+
 package com.google.accompanist.glide
 
 import android.graphics.drawable.Drawable
@@ -53,16 +55,19 @@ import kotlinx.coroutines.flow.callbackFlow
  * Composition local containing the preferred [RequestManager] to use
  * for [rememberGlidePainter].
  */
+@Deprecated("Accompanist-Glide is now deprecated. Consider using Coil: https://coil-kt.github.io/coil/compose")
 val LocalRequestManager = staticCompositionLocalOf<RequestManager?> { null }
 
 /**
  * Contains some default values used for [rememberGlidePainter].
  */
+@Deprecated("Accompanist-Glide is now deprecated. Consider using Coil: https://coil-kt.github.io/coil/compose")
 object GlidePainterDefaults {
     /**
      * Returns the default [RequestManager] value for the `requestManager` parameter
      * in [rememberGlidePainter].
      */
+    @Deprecated("Accompanist-Glide is now deprecated. Consider using Coil: https://coil-kt.github.io/coil/compose")
     @Composable
     fun defaultRequestManager(): RequestManager {
         // By default Glide tries to install lifecycle listeners to automatically re-trigger
@@ -88,6 +93,7 @@ object GlidePainterDefaults {
  * @param previewPlaceholder Drawable resource ID which will be displayed when this function is
  * ran in preview mode.
  */
+@Deprecated("Accompanist-Glide is now deprecated. Consider using Coil: https://coil-kt.github.io/coil/compose")
 @Composable
 fun rememberGlidePainter(
     request: Any?,
