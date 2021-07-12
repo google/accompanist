@@ -466,7 +466,10 @@ class PagerState(
 
         layoutPages.forEachIndexed { index, layoutPage ->
             val pg = page + index - offscreenLimit
-            layoutPage.page = if (pg < firstPageIndex || pg > lastPageIndex) null else pg
+            layoutPage.page = when {
+                pageCount == 0 || pg < firstPageIndex || pg > lastPageIndex -> null
+                else -> pg
+            }
         }
     }
 
