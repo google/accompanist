@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("DeprecatedCallableAddReplaceWith", "DEPRECATION")
+
 package com.google.accompanist.imageloading
 
 import androidx.compose.ui.graphics.painter.Painter
@@ -21,15 +23,18 @@ import androidx.compose.ui.graphics.painter.Painter
 /**
  * Represents the state of a [LoadPainter].
  */
+@Deprecated("Accompanist-ImageLoading is now deprecated. Consider using Coil: https://coil-kt.github.io/coil/compose")
 sealed class ImageLoadState {
     /**
      * Indicates that a request is not in progress.
      */
+    @Deprecated("Accompanist-ImageLoading is now deprecated. Consider using Coil: https://coil-kt.github.io/coil/compose")
     object Empty : ImageLoadState()
 
     /**
      * Indicates that the request is currently in progress.
      */
+    @Deprecated("Accompanist-ImageLoading is now deprecated. Consider using Coil: https://coil-kt.github.io/coil/compose")
     data class Loading(
         val placeholder: Painter?,
         val request: Any,
@@ -42,6 +47,7 @@ sealed class ImageLoadState {
      * @param source The data source that the image was loaded from.
      * @param request The original request for this result.
      */
+    @Deprecated("Accompanist-ImageLoading is now deprecated. Consider using Coil: https://coil-kt.github.io/coil/compose")
     data class Success(
         val result: Painter,
         val source: DataSource,
@@ -55,6 +61,7 @@ sealed class ImageLoadState {
      * @param throwable The optional throwable that caused the request failure.
      * @param request The original request for this result.
      */
+    @Deprecated("Accompanist-ImageLoading is now deprecated. Consider using Coil: https://coil-kt.github.io/coil/compose")
     data class Error(
         val request: Any,
         val result: Painter? = null,
@@ -65,6 +72,7 @@ sealed class ImageLoadState {
 /**
  * Returns true if this state represents the final state for the current request.
  */
+@Deprecated("Accompanist-ImageLoading is now deprecated. Consider using Coil: https://coil-kt.github.io/coil/compose")
 fun ImageLoadState.isFinalState(): Boolean {
     return this is ImageLoadState.Success || this is ImageLoadState.Error
 }

@@ -2,6 +2,13 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-coil)](https://search.maven.org/search?q=g:com.google.accompanist)
 
+!!! warning
+    The Accompanist-Coil library is now deprecated (as of v0.14), replaced with the Coil for Jetpack Compose extension library.
+    Automated replacements have been added to the relevant functions, but there may be instances where manual migration is necessary.
+    See [here](https://coil-kt.github.io/coil/compose/) for more information. The Accompanist-Coil library library will be removed at a future point in time (before v1.0).
+
+---
+
 This library provides easy-to-use [Painter][painter] which can fetch and display images from external sources, such as network, using the [Coil][coil] image loading library.
 
 <img src="https://coil-kt.github.io/coil/logo.svg" width="480" alt="Coil logo">

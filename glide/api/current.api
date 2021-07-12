@@ -2,13 +2,13 @@
 package com.google.accompanist.glide {
 
   public final class GlideKt {
-    method public static androidx.compose.runtime.ProvidableCompositionLocal<com.bumptech.glide.RequestManager> getLocalRequestManager();
-    method @androidx.compose.runtime.Composable public static com.google.accompanist.imageloading.LoadPainter<java.lang.Object> rememberGlidePainter(Object? request, optional com.bumptech.glide.RequestManager requestManager, optional com.google.accompanist.imageloading.ShouldRefetchOnSizeChange shouldRefetchOnSizeChange, optional kotlin.jvm.functions.Function2<? super com.bumptech.glide.RequestBuilder<android.graphics.drawable.Drawable>,? super androidx.compose.ui.unit.IntSize,? extends com.bumptech.glide.RequestBuilder<android.graphics.drawable.Drawable>>? requestBuilder, optional boolean fadeIn, optional int fadeInDurationMs, optional @DrawableRes int previewPlaceholder);
+    method @Deprecated public static androidx.compose.runtime.ProvidableCompositionLocal<com.bumptech.glide.RequestManager> getLocalRequestManager();
+    method @Deprecated @androidx.compose.runtime.Composable public static com.google.accompanist.imageloading.LoadPainter<java.lang.Object> rememberGlidePainter(Object? request, optional com.bumptech.glide.RequestManager requestManager, optional com.google.accompanist.imageloading.ShouldRefetchOnSizeChange shouldRefetchOnSizeChange, optional kotlin.jvm.functions.Function2<? super com.bumptech.glide.RequestBuilder<android.graphics.drawable.Drawable>,? super androidx.compose.ui.unit.IntSize,? extends com.bumptech.glide.RequestBuilder<android.graphics.drawable.Drawable>>? requestBuilder, optional boolean fadeIn, optional int fadeInDurationMs, optional @DrawableRes int previewPlaceholder);
   }
 
-  public final class GlidePainterDefaults {
-    method @androidx.compose.runtime.Composable public com.bumptech.glide.RequestManager defaultRequestManager();
-    field public static final com.google.accompanist.glide.GlidePainterDefaults INSTANCE;
+  @Deprecated public final class GlidePainterDefaults {
+    method @Deprecated @androidx.compose.runtime.Composable public com.bumptech.glide.RequestManager defaultRequestManager();
+    field @Deprecated public static final com.google.accompanist.glide.GlidePainterDefaults INSTANCE;
   }
 
 }

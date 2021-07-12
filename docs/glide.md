@@ -2,6 +2,12 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-glide)](https://search.maven.org/search?q=g:com.google.accompanist)
 
+!!! warning
+    The Accompanist-Glide library is now deprecated (as of v0.14), and will be removed at a future point in time (before v1.0).
+    Apps should consider migrating to [Coil](https://coil-kt.github.io/coil/compose/) for similar functionality.
+
+---
+
 This library brings easy-to-use [Painter][painter] which can fetch and display images from external sources, such as network, using the [Glide][glide] image loading library.
 
 <img src="https://github.com/bumptech/glide/blob/master/static/glide_logo.png?raw=true" width="480" alt="Glide logo">

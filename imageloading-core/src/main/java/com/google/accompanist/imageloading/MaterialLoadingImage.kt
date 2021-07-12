@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
 @file:JvmName("MaterialLoadingImage")
 
 package com.google.accompanist.imageloading
