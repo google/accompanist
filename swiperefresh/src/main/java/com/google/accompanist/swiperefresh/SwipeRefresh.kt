@@ -70,7 +70,6 @@ fun rememberSwipeRefreshState(
     }
 }
 
-
 /**
  * A state object that can be hoisted to control and observe changes for [SwipeRefresh].
  *
@@ -275,7 +274,7 @@ private class BottomSwipeRefreshNestedScrollConnection(
  * @param modifier the modifier to apply to this layout.
  * @param swipeEnabled Whether the the layout should react to swipe gestures or not.
  * @param refreshTriggerDistance The minimum swipe distance which would trigger a refresh.
- * @param indicatorAlignment The alignment of the indicator. Defaults to [Alignment.TopCenter].
+ * @param indicatorHorizontalAlignment The alignment of the indicator. Defaults to [Alignment.TopCenter].
  * @param indicatorPadding Content padding for the indicator, to inset the indicator in if required.
  * @param indicator the indicator that represents the current state. By default this
  * will use a [SwipeRefreshIndicator].
@@ -291,11 +290,7 @@ fun SwipeRefresh(
     position: Position = Position.TOP,
     swipeEnabled: Boolean = true,
     refreshTriggerDistance: Dp = 80.dp,
-    indicatorAlignment: Alignment = if(position == Position.TOP) {
-        Alignment.TopCenter
-    }else{
-         Alignment.BottomCenter
-    },
+    indicatorHorizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     indicatorPadding: PaddingValues = PaddingValues(0.dp),
     indicator: @Composable (state: SwipeRefreshState, refreshTrigger: Dp) -> Unit = { s, trigger ->
         SwipeRefreshIndicator(
@@ -355,9 +350,28 @@ fun SwipeRefresh(
                 // the padding() modifier.
                 .let { if (clipIndicatorToPadding) it.clipToBounds() else it }
         ) {
-            Box(Modifier.align(indicatorAlignment)) {
+            Box(Modifier.align(indicatorHorizontalAlignment.toAlignment(position))) {
                 indicator(state, refreshTriggerDistance)
             }
         }
+    }
+}
+
+fun Alignment.Horizontal.toAlignment(position: Position) = when (position) {
+
+    Position.TOP -> when (this) {
+        Alignment.Start -> Alignment.TopStart
+        Alignment.CenterHorizontally -> Alignment.TopCenter
+        Alignment.End -> Alignment.TopEnd
+        else -> throw IllegalStateException() // The [Alignment.Horizontal] has only 3 possible
+        // values (Start, CenterHorizontally, End)
+    }
+
+    Position.BOTTOM -> when (this) {
+        Alignment.Start -> Alignment.BottomStart
+        Alignment.CenterHorizontally -> Alignment.BottomCenter
+        Alignment.End -> Alignment.BottomEnd
+        else -> throw IllegalStateException() // The [Alignment.Horizontal] has only 3 possible
+        // values (Start, CenterHorizontally, End)
     }
 }
