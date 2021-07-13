@@ -143,7 +143,10 @@ class SwipeRefreshTest {
         var refreshCallCount = 0
 
         rule.setContent {
-            SwipeRefreshTestContent(bottomSwipeRefreshState = state) {
+            SwipeRefreshTestContent(
+                swipeRefreshState = state,
+                position = Position.BOTTOM,
+            ) {
                 state.isRefreshing = true
                 refreshCallCount++
             }
@@ -156,8 +159,8 @@ class SwipeRefreshTest {
         swipeRefreshNode.performGesture { swipeUp() }
 
         // Assert that the onRefresh lambda was called and that we're refreshing
-        assertThat(refreshCallCount).isEqualTo(1)
         assertThat(state.isRefreshing).isTrue()
+        assertThat(refreshCallCount).isEqualTo(1)
 
         // Assert that the indicator is displayed
         bottomIndicatorNode.assertIsDisplayed()
@@ -169,7 +172,10 @@ class SwipeRefreshTest {
     @Test
     fun refreshingBottomIndicator_returnsToRest() {
         rule.setContent {
-            SwipeRefreshTestContent(bottomSwipeRefreshState = SwipeRefreshState(true)) {}
+            SwipeRefreshTestContent(
+                swipeRefreshState = rememberSwipeRefreshState(true),
+                position = Position.BOTTOM,
+            )
         }
 
         // Assert that the indicator is displayed
@@ -187,7 +193,10 @@ class SwipeRefreshTest {
     @Test
     fun bottomIndicator_refreshingInitially() {
         rule.setContent {
-            SwipeRefreshTestContent(bottomSwipeRefreshState = rememberSwipeRefreshState(true)) {}
+            SwipeRefreshTestContent(
+                swipeRefreshState = rememberSwipeRefreshState(true),
+                position = Position.BOTTOM,
+            )
         }
 
         // Assert that the indicator is displayed
@@ -204,24 +213,32 @@ private const val ListItemCount = 30
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun SwipeRefreshTestContent(
-    topSwipeRefreshState: SwipeRefreshState? = null,
-    bottomSwipeRefreshState: SwipeRefreshState? = null,
-    onRefresh: (Position) -> Unit,
+    swipeRefreshState: SwipeRefreshState,
+    position: Position = Position.TOP,
+    onRefresh: () -> Unit = {},
 ) {
     MaterialTheme {
         SwipeRefresh(
-            topRefreshIndicatorState = topSwipeRefreshState,
-            bottomRefreshIndicatorState = bottomSwipeRefreshState,
+            state = swipeRefreshState,
+            position = position,
             onRefresh = onRefresh,
             modifier = Modifier.testTag(SwipeRefreshTag),
-            topIndicator = { state, trigger ->
-                SwipeRefreshIndicator(state, trigger, Modifier.testTag(SwipeRefreshIndicatorTag))
-            },
-            bottomIndicator = { state, trigger ->
+            indicator = { state, trigger ->
                 SwipeRefreshIndicator(
-                    state,
-                    trigger,
-                    Modifier.testTag(BottomSwipeRefreshIndicatorTag)
+                    state = state,
+                    refreshTriggerDistance = trigger,
+                    senseOfRotation = if (position == Position.TOP) {
+                        SenseOfRotation.CLOCKWISE
+                    } else {
+                        SenseOfRotation.COUNTERCLOCKWISE
+                    },
+                    modifier = Modifier.testTag(
+                        if (position == Position.TOP) {
+                            SwipeRefreshIndicatorTag
+                        } else {
+                            BottomSwipeRefreshIndicatorTag
+                        }
+                    ),
                 )
             },
         ) {

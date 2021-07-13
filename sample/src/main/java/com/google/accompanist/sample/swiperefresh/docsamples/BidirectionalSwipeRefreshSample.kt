@@ -23,7 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.accompanist.swiperefresh.RefreshIndicatorPosition
+import com.google.accompanist.swiperefresh.Position
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.delay
@@ -68,18 +68,18 @@ fun BidirectionalSwipeRefreshSample() {
     val isBottomIndicatorRefreshing by viewModel.isLoadingNextPage.collectAsState()
 
     SwipeRefresh(
-        topRefreshIndicatorState = rememberSwipeRefreshState(isTopIndicatorRefreshing),
-        bottomRefreshIndicatorState = rememberSwipeRefreshState(isBottomIndicatorRefreshing),
-        onRefresh = { refreshIndicatorPosition ->
-            when (refreshIndicatorPosition) {
-                RefreshIndicatorPosition.TOP -> viewModel.refreshList()
-                RefreshIndicatorPosition.BOTTOM -> viewModel.loadNextPage()
-            }
-        },
+        state = rememberSwipeRefreshState(isTopIndicatorRefreshing),
+        onRefresh = { viewModel.refreshList() },
     ) {
-        LazyColumn {
-            items(30) { index ->
-                TODO(" SHOW ITEM $index ")
+        SwipeRefresh(
+            state = rememberSwipeRefreshState(isBottomIndicatorRefreshing),
+            position = Position.BOTTOM,
+            onRefresh = { viewModel.loadNextPage() },
+        ) {
+            LazyColumn {
+                items(30) { index ->
+                    TODO(" SHOW ITEM $index ")
+                }
             }
         }
     }
