@@ -26,8 +26,8 @@ compose-material-material = { module = "androidx.compose.material:material", ver
 compose-material-iconsext = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose" }
 
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "gradlePlugin" }
-gradleMavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.15.1"
-metalavaGradle = "me.tylerbwong.gradle:metalava-gradle:0.1.8"
+gradleMavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.17.0"
+metalavaGradle = "me.tylerbwong.gradle:metalava-gradle:0.1.9"
 
 glide = "com.github.bumptech.glide:glide:4.12.0"
 
@@ -36,7 +36,6 @@ kotlin-stdlibJdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", versio
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 kotlin-metadataJvm = "org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.3.0"
-
 
 kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
