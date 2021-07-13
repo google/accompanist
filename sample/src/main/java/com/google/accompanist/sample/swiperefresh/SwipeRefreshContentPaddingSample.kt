@@ -46,6 +46,7 @@ import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.insets.ListItem
 import com.google.accompanist.sample.randomSampleImageUrl
+import com.google.accompanist.swiperefresh.SenseOfRotation
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -96,18 +97,19 @@ private fun Sample() {
             )
 
             SwipeRefresh(
-                topRefreshIndicatorState = rememberSwipeRefreshState(refreshing),
+                state = rememberSwipeRefreshState(refreshing),
                 onRefresh = { refreshing = true },
                 // Shift the indicator to match the list content padding
                 indicatorPadding = contentPadding,
                 // We want the indicator to draw within the padding
                 clipIndicatorToPadding = false,
                 // Tweak the indicator to scale up/down
-                topIndicator = { state, refreshTriggerDistance ->
+                indicator = { state, refreshTriggerDistance ->
                     SwipeRefreshIndicator(
                         state = state,
                         refreshTriggerDistance = refreshTriggerDistance,
-                        scale = true
+                        scale = true,
+                        senseOfRotation = SenseOfRotation.CLOCKWISE
                     )
                 }
             ) {

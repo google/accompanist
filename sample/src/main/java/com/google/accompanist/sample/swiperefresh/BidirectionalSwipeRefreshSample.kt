@@ -45,7 +45,7 @@ import com.google.accompanist.glide.rememberGlidePainter
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
-import com.google.accompanist.swiperefresh.RefreshIndicatorPosition
+import com.google.accompanist.swiperefresh.Position
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.delay
@@ -94,33 +94,33 @@ private fun Sample() {
         }
 
         SwipeRefresh(
-            topRefreshIndicatorState = rememberSwipeRefreshState(isRefreshing = isTopIndicatorRefreshing),
-            bottomRefreshIndicatorState = rememberSwipeRefreshState(isRefreshing = isBottomIndicatorRefreshing),
-            onRefresh = { refreshIndicatorPosition ->
-                when (refreshIndicatorPosition) {
-                    RefreshIndicatorPosition.TOP -> isTopIndicatorRefreshing = true
-                    RefreshIndicatorPosition.BOTTOM -> isBottomIndicatorRefreshing = true
-                }
-            },
+            state = rememberSwipeRefreshState(isRefreshing = isTopIndicatorRefreshing),
+            onRefresh = { isTopIndicatorRefreshing = true },
         ) {
-            LazyColumn {
-                items(30) { index ->
-                    Row(Modifier.padding(16.dp)) {
-                        Image(
-                            painter = rememberGlidePainter(randomSampleImageUrl(index)),
-                            contentDescription = null,
-                            modifier = Modifier.size(64.dp),
-                        )
+            SwipeRefresh(
+                state = rememberSwipeRefreshState(isRefreshing = isBottomIndicatorRefreshing),
+                onRefresh = { isBottomIndicatorRefreshing = true },
+                position = Position.BOTTOM,
+            ) {
+                LazyColumn {
+                    items(30) { index ->
+                        Row(Modifier.padding(16.dp)) {
+                            Image(
+                                painter = rememberGlidePainter(randomSampleImageUrl(index)),
+                                contentDescription = null,
+                                modifier = Modifier.size(64.dp),
+                            )
 
-                        Spacer(Modifier.width(8.dp))
+                            Spacer(Modifier.width(8.dp))
 
-                        Text(
-                            text = "Text",
-                            style = MaterialTheme.typography.subtitle2,
-                            modifier = Modifier
-                                .weight(1f)
-                                .align(Alignment.CenterVertically)
-                        )
+                            Text(
+                                text = "Text",
+                                style = MaterialTheme.typography.subtitle2,
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .align(Alignment.CenterVertically)
+                            )
+                        }
                     }
                 }
             }
