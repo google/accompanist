@@ -35,7 +35,7 @@ fun ImeAvoidingBox() {
 }
 ```
 
-...but we also provide some easy-to-use [Modifier][modifier]s.
+...but we also provide some easy-to-use [Modifier][modifiers].
 
 ### Modifiers
 
