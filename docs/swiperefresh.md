@@ -49,33 +49,6 @@ SwipeRefresh(
 
 The full example, including the view model implementation can be found [here](https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/swiperefresh/docsamples/SimpleSample.kt).
 
-Alternatively, you can use a bottom refresh indicator or even both a top and bottom indicator (e.g: If you are loading the list items by page, each time the user triggers the bottom refresh indicator, you load the next page. If the user triggers the top refresh indicator, you refresh the list):
-
-``` kotlin
-val viewModel = viewModel<SampleViewModel>()
-val isTopIndicatorRefreshing by viewModel.isRefreshing.collectAsState()
-val isBottomIndicatorRefreshing by viewModel.isLoadingNextPage.collectAsState()
-    
-SwipeRefresh(
-    topRefreshIndicatorState = rememberSwipeRefreshState(isTopIndicatorRefreshing),
-    bottomRefreshIndicatorState = rememberSwipeRefreshState(isBottomIndicatorRefreshing),
-    onRefresh =  { refreshIndicatorPosition ->
-        when (refreshIndicatorPosition) {
-            RefreshIndicatorPosition.TOP -> viewModel.refreshList()
-            RefreshIndicatorPosition.BOTTOM -> viewModel.loadNextPage()
-        }
-    },
-) {
-    LazyColumn {
-        items(30) { index ->
-            TODO(" SHOW ITEM $index ")
-        }
-    }
-}
-```
-
-You can find the full code [here](https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/swiperefresh/docsamples/BidirectionalSwipeRefreshSample.kt).
-
 The content needs to be 'scrollable' for `SwipeRefresh()` to be able to react to swipe gestures. Layouts such as [`LazyColumn`][lazycolumn] are automatically scrollable, but others such as [`Column`][column] are not. In those instances, you can provide a [`Modifier.verticalScroll`][verticalscroll] modifier to that content like so:
 
 ``` kotlin
@@ -88,10 +61,49 @@ SwipeRefresh(
 }
 ```
 
+### Indicator position
+
+Alternatively, you can use a bottom refresh indicator by setting the `position` parameter to `Position.BOTTOM` (the default value is `Position.TOP`):
+``` kotlin
+SwipeRefresh(
+    state = rememberSwipeRefreshState(isRefreshing),
+    position = Position.BOTTOM,
+) {
+    // ...
+}
+```
+
+You can also have both top and bottom indicator (e.g: If you are loading the list's items by page, each time the user triggers the bottom refresh indicator, you load the next page. If the user triggers the top refresh indicator, you refresh the list), to achieve this, you will need 2 `SwipeRefresh` with different positions and put one inside another:
+
+``` kotlin
+val viewModel = viewModel<SampleViewModel>()
+val isTopIndicatorRefreshing by viewModel.isRefreshing.collectAsState()
+val isBottomIndicatorRefreshing by viewModel.isLoadingNextPage.collectAsState()
+
+SwipeRefresh(
+    state = rememberSwipeRefreshState(isTopIndicatorRefreshing),
+    onRefresh = { viewModel.refreshList() },
+    // by default the position is `Position.TOP`
+) {
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(isBottomIndicatorRefreshing),
+        position = Position.BOTTOM,
+        onRefresh = { viewModel.loadNextPage() },
+    ) {
+        LazyColumn {
+            items(30) { index ->
+                TODO(" SHOW ITEM $index ")
+            }
+        }
+    }
+}
+```
+
+You can find the full code [here](https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/swiperefresh/docsamples/BidirectionalSwipeRefreshSample.kt).
 
 ### Indicating a refresh without swiping
 
-As this library is built with a seperate state object, it's easy to display a refreshing indicator without a swipe to triggering it.
+As this library is built with a separate state object, it's easy to display a refreshing indicator without a swipe to triggering it.
 
 The unrealistic example below displays a forever refreshing indicator:
 
