@@ -2,7 +2,7 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-placeholder)](https://search.maven.org/search?q=g:com.google.accompanist)
 
-A library which provides a [modifier][modifier] for display 'placeholder' UI while content is loading.
+A library which provides a [modifier][modifier] for display `placeholder` UI while content is loading.
 
 More information on the UX provided by this library can be found on the Material Theming [Placeholder UI](https://material.io/design/communication/launch-screen.html#placeholder-ui) guidelines.
 
@@ -53,7 +53,7 @@ At the most basic usage, the modifier will draw a shape over your composable con
 
 ## Placeholder highlights
 
-The library also provides some 'highlight' animations to entertain the user while they are waiting. There are two provided by the library, but you can also provide your own.
+The library also provides some `highlight` animations to entertain the user while they are waiting. There are two provided by the library, but you can also provide your own.
 
 ### Fade
 
