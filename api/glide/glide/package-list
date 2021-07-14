@@ -1,9 +1,0 @@
-$dokka.format:html-v1
-$dokka.linkExtension:html
-$dokka.location:com.google.accompanist.glide////PointingToDeclaration/glide/com.google.accompanist.glide/index.html
-$dokka.location:com.google.accompanist.glide//LocalRequestManager/#/PointingToDeclaration/glide/com.google.accompanist.glide/-local-request-manager.html
-$dokka.location:com.google.accompanist.glide//rememberGlidePainter/#kotlin.Any?#com.bumptech.glide.RequestManager#com.google.accompanist.imageloading.ShouldRefetchOnSizeChange#kotlin.Function2[com.bumptech.glide.RequestBuilder[android.graphics.drawable.Drawable],androidx.compose.ui.unit.IntSize,com.bumptech.glide.RequestBuilder[android.graphics.drawable.Drawable]]?#kotlin.Boolean#kotlin.Int#kotlin.Int/PointingToDeclaration/glide/com.google.accompanist.glide/remember-glide-painter.html
-$dokka.location:com.google.accompanist.glide/GlidePainterDefaults///PointingToDeclaration/glide/com.google.accompanist.glide/-glide-painter-defaults/index.html
-$dokka.location:com.google.accompanist.glide/GlidePainterDefaults/defaultRequestManager/#/PointingToDeclaration/glide/com.google.accompanist.glide/-glide-painter-defaults/default-request-manager.html
-com.google.accompanist.glide
-
