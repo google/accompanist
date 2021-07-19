@@ -103,7 +103,8 @@ private fun FeatureThatRequiresCameraPermission(
         // If the user denied the permission but a rationale should be shown, or the user sees
         // the permission for the first time, explain why the feature is needed by the app and allow
         // the user to be presented with the permission again or to not see the rationale any more.
-        cameraPermissionState.shouldShowRationale !cameraPermissionState.permissionRequested -> {
+        cameraPermissionState.shouldShowRationale ||
+            !cameraPermissionState.permissionRequested -> {
             if (doNotShowRationale) {
                 Text("Feature not available")
             } else {
