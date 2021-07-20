@@ -12,7 +12,7 @@ on:
 
 jobs:
   android-test:
-    runs-on: macos-11.0
+    runs-on: macos-latest
     timeout-minutes: 60
 
     strategy:
@@ -66,6 +66,7 @@ jobs:
           api-level: ${{ matrix.api-level }}
           target: ${{ steps.determine-target.outputs.TARGET }}
           profile: Galaxy Nexus
+          emulator-build: 7425822 # https://github.com/ReactiveCircus/android-emulator-runner/issues/160
           # We run all tests, sharding them over 3 shards
           script: ./scripts/run-tests.sh --log-file=logcat.txt --shard-index=${{ matrix.shard }} --shard-count=3
 
