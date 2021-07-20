@@ -76,7 +76,7 @@ jobs:
         run: release/signing-cleanup.sh
 
   test:
-    runs-on: macos-11.0
+    runs-on: macos-latest
     needs: build
     timeout-minutes: 50
 
@@ -84,7 +84,7 @@ jobs:
       # Allow tests to continue on other devices if they fail on one device.
       fail-fast: false
       matrix:
-        api-level: [ 22, 26, 28, 29 ]
+        api-level: [ 22, 26, 29 ]
         shard: [ 0, 1 ] # Need to update shard-count below if this changes
 
     env:
@@ -137,6 +137,7 @@ jobs:
           api-level: ${{ matrix.api-level }}
           target: ${{ steps.determine-target.outputs.TARGET }}
           profile: Galaxy Nexus
+          emulator-build: 7425822 # https://github.com/ReactiveCircus/android-emulator-runner/issues/160
           # We run all affected tests of the PR (or commit)
           script: ./scripts/run-tests.sh --log-file=logcat.txt --run-affected --affected-base-ref=$BASE_REF --shard-index=${{ matrix.shard }} --shard-count=2
 
