@@ -6,7 +6,7 @@ A library which provides [Compose Animation](https://developer.android.com/jetpa
 
 !!! warning
     The navigation APIs are currently experimental and they could change at any time.
-    All of the APIs are marked with the `@ExperimentalPermissionsApi` annotation.
+    All of the APIs are marked with the `@ExperimentalAnimationApi` annotation.
 
 ## Usage
 
@@ -74,18 +74,6 @@ private fun ExperimentalAnimationNav() {
                                 animationSpec = tween(2000)
                             )
                         }
-                    "Green" ->
-                        if (navController.previousBackStackEntry != initial) {
-                            slideInVertically(
-                                initialOffsetY = { -1800 },
-                                animationSpec = tween(2000)
-                            )
-                        } else {
-                            slideInVertically(
-                                initialOffsetY = { 1800 },
-                                animationSpec = tween(2000)
-                            )
-                        }
                     else -> null
                 }
             },
@@ -103,66 +91,10 @@ private fun ExperimentalAnimationNav() {
                                 animationSpec = tween(2000)
                             )
                         }
-                    "Green" ->
-                        if (navController.previousBackStackEntry != initial) {
-                            slideOutVertically(
-                                targetOffsetY = { 1800 },
-                                animationSpec = tween(2000)
-                            )
-                        } else {
-                            slideOutVertically(
-                                targetOffsetY = { -1800 },
-                                animationSpec = tween(2000)
-                            )
-                        }
                     else -> null
                 }
             }
         ) { RedScreen(navController) }
-        navigation(
-            startDestination = "Green",
-            route = "Inner",
-            enterTransition = { _, _ -> expandIn(animationSpec = tween(2000)) },
-            exitTransition = { _, _ -> shrinkOut(animationSpec = tween(2000)) }
-        ) {
-            composable(
-                "Green",
-                enterTransition = { initial, _ ->
-                    when (initial.destination.route) {
-                        "Red" ->
-                            if (navController.previousBackStackEntry != initial) {
-                                slideInVertically(
-                                    initialOffsetY = { 1800 },
-                                    animationSpec = tween(2000)
-                                )
-                            } else {
-                                slideInVertically(
-                                    initialOffsetY = { -1800 },
-                                    animationSpec = tween(2000)
-                                )
-                            }
-                        else -> null
-                    }
-                },
-                exitTransition = { initial, target ->
-                    when (target.destination.route) {
-                        "Red" ->
-                            if (navController.previousBackStackEntry != initial) {
-                                slideOutVertically(
-                                    targetOffsetY = { -1800 },
-                                    animationSpec = tween(2000)
-                                )
-                            } else {
-                                slideOutVertically(
-                                    targetOffsetY = { 1800 },
-                                    animationSpec = tween(2000)
-                                )
-                            }
-                        else -> null
-                    }
-                }
-            ) { GreenScreen(navController) }
-        }
     }
 }
 ```
