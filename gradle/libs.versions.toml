@@ -6,6 +6,8 @@ composesnapshot = "7593337" # a single character = no snapshot
 gradlePlugin = "7.0.0"
 lint = "30.0.0"
 
+navigation = "2.4.0-SNAPSHOT"
+
 ktlint = "0.41.0"
 kotlin = "1.5.21"
 coroutines = "1.5.1"
