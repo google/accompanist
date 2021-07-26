@@ -56,7 +56,8 @@ import androidx.compose.ui.unit.dp
 /**
  * Provides the current [Scaffold] content padding values.
  */
-val LocalScaffoldPadding: ProvidableCompositionLocal<PaddingValues> = staticCompositionLocalOf { PaddingValues(0.dp) }
+val LocalScaffoldPadding: ProvidableCompositionLocal<PaddingValues> =
+    staticCompositionLocalOf { PaddingValues(0.dp) }
 
 /**
  * A copy of [androidx.compose.material.Scaffold] which lays out [content] behind both the top bar
@@ -242,7 +243,9 @@ private fun ScaffoldLayout(
             val bottomBarHeight = bottomBarPlaceables.maxByOrNull { it.height }?.height ?: 0
             val fabOffsetFromBottom = fabPlacement?.let {
                 if (bottomBarHeight == 0) {
-                    it.height + FabSpacing.roundToPx()
+                    it.height +
+                        FabSpacing.roundToPx() +
+                        contentPadding.calculateBottomPadding().roundToPx()
                 } else {
                     if (isFabDocked) {
                         // Total height is the bottom bar height + half the FAB height
