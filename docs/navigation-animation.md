@@ -1,6 +1,6 @@
-# Jetpack Compose Navigation
+# Jetpack Navigation Compose Animation
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-navigation)](https://search.maven.org/search?q=g:com.google.accompanist)
+[![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-navigation-animation)](https://search.maven.org/search?q=g:com.google.accompanist)
 
 A library which provides [Compose Animation](https://developer.android.com/jetpack/compose/animation) support for [Jetpack Navigation Compose](https://developer.android.com/jetpack/compose/navigation).
 
@@ -99,11 +99,11 @@ private fun ExperimentalAnimationNav() {
 }
 ```
 
-For more examples, refer to the [samples](https://github.com/google/accompanist/tree/main/sample/src/main/java/com/google/accompanist/sample/navigation).
+For more examples, refer to the [samples](https://github.com/google/accompanist/tree/main/sample/src/main/java/com/google/accompanist/sample/navigation-animation).
 
 ## Download
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-navigation)](https://search.maven.org/search?q=g:com.google.accompanist)
+[![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-navigation-animation)](https://search.maven.org/search?q=g:com.google.accompanist)
 
 ```groovy
 repositories {
@@ -111,11 +111,11 @@ repositories {
 }
 
 dependencies {
-    implementation "com.google.accompanist:accompanist-navigation:<version>"
+    implementation "com.google.accompanist:accompanist-navigation-animation:<version>"
 }
 ```
 
 Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap]. These are updated on every commit.
 
 [compose]: https://developer.android.com/jetpack/compose
-[snap]: https://oss.sonatype.org/content/repositories/snapshots/com/google/accompanist/accompanist-navigation/
+[snap]: https://oss.sonatype.org/content/repositories/snapshots/com/google/accompanist/accompanist-navigation-animation/

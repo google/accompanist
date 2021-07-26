@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.accompanist.permissions
+package com.google.accompanist.navigation.animation
 
 import android.app.Activity
 import android.content.Intent
@@ -31,9 +31,6 @@ import androidx.navigation.navDeepLink
 import androidx.navigation.plusAssign
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import com.google.accompanist.navigation.AnimatedComposeNavigator
-import com.google.accompanist.navigation.AnimatedNavHost
-import com.google.accompanist.navigation.composable
 import com.google.common.truth.Truth.assertThat
 import org.junit.Rule
 import org.junit.Test

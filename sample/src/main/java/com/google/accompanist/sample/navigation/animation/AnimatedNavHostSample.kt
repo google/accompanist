@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.accompanist.sample.navigation
+package com.google.accompanist.sample.navigation.animation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -47,10 +47,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.plusAssign
-import com.google.accompanist.navigation.AnimatedComposeNavigator
-import com.google.accompanist.navigation.AnimatedNavHost
-import com.google.accompanist.navigation.composable
-import com.google.accompanist.navigation.navigation
+import com.google.accompanist.navigation.animation.AnimatedComposeNavigator
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.navigation
 import com.google.accompanist.sample.AccompanistSampleTheme
 
 @ExperimentalAnimationApi
@@ -222,7 +222,8 @@ fun BlueScreen(navController: NavHostController) {
     Column(
         Modifier
             .fillMaxSize()
-            .background(Color.Blue)) {
+            .background(Color.Blue)
+    ) {
         Spacer(Modifier.height(Dp(25f)))
         NavigateButton(
             "Navigate Horizontal",
@@ -247,7 +248,8 @@ fun RedScreen(navController: NavHostController) {
     Column(
         Modifier
             .fillMaxSize()
-            .background(Color.Red)) {
+            .background(Color.Red)
+    ) {
         Spacer(Modifier.height(Dp(25f)))
         NavigateButton(
             "Navigate Horizontal",
@@ -272,7 +274,8 @@ fun GreenScreen(navController: NavHostController) {
     Column(
         Modifier
             .fillMaxSize()
-            .background(Color.Green)) {
+            .background(Color.Green)
+    ) {
         Spacer(Modifier.height(Dp(25f)))
         NavigateButton(
             "Navigate to Red",

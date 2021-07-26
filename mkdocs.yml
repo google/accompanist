@@ -50,9 +50,9 @@ nav:
   - 'Permissions':
     - 'Guide': permissions.md
     - 'API': api/permissions/
-  - 'Navigation':
-      - 'Guide': navigation.md
-      - 'API': api/navigation/
+  - 'Navigation-Animation':
+      - 'Guide': navigation-animation.md
+      - 'API': api/navigation-animation/
   - 'Snapshots': using-snapshot-version.md
   - 'Contributing': contributing.md
   - 'Maintainers':

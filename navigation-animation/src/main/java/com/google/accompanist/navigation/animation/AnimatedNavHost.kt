@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.accompanist.navigation
+package com.google.accompanist.navigation.animation
 
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.animation.AnimatedContent

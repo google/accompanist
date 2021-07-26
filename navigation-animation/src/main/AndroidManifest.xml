@@ -14,5 +14,5 @@
   ~ limitations under the License.
   -->
 
-<manifest package="com.google.accompanist.navigation.test">
+<manifest package="com.google.accompanist.navigation.animation">
 </manifest>

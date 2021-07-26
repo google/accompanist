@@ -236,7 +236,7 @@
         </activity>
 
         <activity
-            android:name=".navigation.AnimatedNavHostSample"
+            android:name=".navigation.animation.AnimatedNavHostSample"
             android:label="@string/navigation_title_animated">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
