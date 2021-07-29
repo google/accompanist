@@ -18,6 +18,7 @@ package com.google.accompanist.pager
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -100,7 +101,10 @@ abstract class BaseVerticalPagerTest(
             }
     }
 
-    override fun setPagerContent(pageCount: Int): PagerState {
+    override fun setPagerContent(
+        pageCount: Int,
+        observeStateInContent: Boolean,
+    ): PagerState {
         val pagerState = PagerState(
             pageCount = pageCount,
             offscreenLimit = offscreenLimit,
@@ -110,24 +114,30 @@ abstract class BaseVerticalPagerTest(
         composeTestRule.setContent(LayoutDirection.Ltr) {
             applierScope = rememberCoroutineScope()
 
-            VerticalPager(
-                state = pagerState,
-                itemSpacing = itemSpacingDp.dp,
-                reverseLayout = reverseLayout,
-                verticalAlignment = verticalAlignment,
-                modifier = Modifier.fillMaxSize()
-            ) { page ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(1f)
-                        .background(randomColor())
-                        .testTag(page.toString())
-                ) {
-                    BasicText(
-                        text = page.toString(),
-                        modifier = Modifier.align(Alignment.Center)
-                    )
+            Column {
+                if (observeStateInContent) {
+                    BasicText(text = "${pagerState.isScrollInProgress}")
+                }
+
+                VerticalPager(
+                    state = pagerState,
+                    itemSpacing = itemSpacingDp.dp,
+                    reverseLayout = reverseLayout,
+                    verticalAlignment = verticalAlignment,
+                    modifier = Modifier.fillMaxSize()
+                ) { page ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(1f)
+                            .background(randomColor())
+                            .testTag(page.toString())
+                    ) {
+                        BasicText(
+                            text = page.toString(),
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+                    }
                 }
             }
         }
