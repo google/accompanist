@@ -20,6 +20,7 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
 import androidx.navigation.NavOptions
@@ -37,6 +38,8 @@ public class AnimatedComposeNavigator : Navigator<AnimatedComposeNavigator.Desti
 
     internal val backStack get() = state.backStack
 
+    internal val isPop = mutableStateOf(false)
+
     override fun navigate(
         entries: List<NavBackStackEntry>,
         navOptions: NavOptions?,
@@ -45,6 +48,7 @@ public class AnimatedComposeNavigator : Navigator<AnimatedComposeNavigator.Desti
         entries.forEach { entry ->
             state.pushWithTransition(entry)
         }
+        isPop.value = false
     }
 
     override fun createDestination(): Destination {
@@ -53,6 +57,11 @@ public class AnimatedComposeNavigator : Navigator<AnimatedComposeNavigator.Desti
 
     override fun popBackStack(popUpTo: NavBackStackEntry, savedState: Boolean) {
         state.popWithTransition(popUpTo, savedState)
+        isPop.value = true
+    }
+
+    internal fun markTransitionComplete(entry: NavBackStackEntry) {
+        state.markTransitionComplete(entry)
     }
 
     /**
@@ -66,7 +75,13 @@ public class AnimatedComposeNavigator : Navigator<AnimatedComposeNavigator.Desti
         internal var enterTransition:
             ((initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition?)? = null,
         internal var exitTransition:
-            ((initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition?)? = null
+            ((initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition?)? = null,
+        internal var popEnterTransition:
+            ((initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition?)? =
+                enterTransition,
+        internal var popExitTransition:
+            ((initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition?)? =
+                exitTransition
     ) : NavDestination(navigator)
 
     internal companion object {

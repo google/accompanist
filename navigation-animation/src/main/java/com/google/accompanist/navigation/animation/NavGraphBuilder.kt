@@ -19,6 +19,8 @@ package com.google.accompanist.navigation.animation
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDeepLink
@@ -36,6 +38,8 @@ import androidx.navigation.navigation
  * @param deepLinks list of deep links to associate with the destinations
  * @param enterTransition callback to determine the destination's enter transition
  * @param exitTransition callback to determine the destination's exit transition
+ * @param popEnterTransition callback to determine the destination's popEnter transition
+ * @param popExitTransition callback to determine the destination's popExit transition
  * @param content composable for the destination
  */
 @ExperimentalAnimationApi
@@ -49,6 +53,12 @@ public fun NavGraphBuilder.composable(
     exitTransition: (
         (initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition?
     )? = null,
+    popEnterTransition: (
+        (initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition?
+    )? = enterTransition,
+    popExitTransition: (
+        (initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition?
+    )? = exitTransition,
     content: @Composable (NavBackStackEntry) -> Unit
 ) {
     addDestination(
@@ -56,7 +66,9 @@ public fun NavGraphBuilder.composable(
             provider[AnimatedComposeNavigator::class],
             content,
             enterTransition,
-            exitTransition
+            exitTransition,
+            popEnterTransition,
+            popExitTransition
         ).apply {
             this.route = route
             arguments.forEach { (argumentName, argument) ->
@@ -76,6 +88,9 @@ public fun NavGraphBuilder.composable(
  * @param route the destination's unique route
  * @param enterTransition callback to define enter transitions for destination in this NavGraph
  * @param exitTransition callback to define exit transitions for destination in this NavGraph
+ * @param popEnterTransition callback to define pop enter transitions for destination in this
+ * NavGraph
+ * @param popExitTransition callback to define pop exit transitions for destination in this NavGraph
  * @param builder the builder used to construct the graph
  *
  * @return the newly constructed nested NavGraph
@@ -85,13 +100,21 @@ public fun NavGraphBuilder.navigation(
     startDestination: String,
     route: String,
     enterTransition: ((initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition)? =
-        null,
+        { _, _ -> fadeIn() },
     exitTransition: ((initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition)? =
-        null,
+        { _, _ -> fadeOut() },
+    popEnterTransition: (
+        (initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition
+    )? = enterTransition,
+    popExitTransition: (
+        (initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition
+    )? = exitTransition,
     builder: NavGraphBuilder.() -> Unit
 ) {
     navigation(startDestination, route, builder).apply {
         enterTransition?.let { enterTransitions[route] = enterTransition }
         exitTransition?.let { exitTransitions[route] = exitTransition }
+        popEnterTransition?.let { popEnterTransitions[route] = popEnterTransition }
+        popExitTransition?.let { popExitTransitions[route] = popExitTransition }
     }
 }

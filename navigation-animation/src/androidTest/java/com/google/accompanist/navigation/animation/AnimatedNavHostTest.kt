@@ -133,7 +133,7 @@ class AnimatedNavHostTest {
     }
 
     @Test
-    fun testNavHostCrossFadeDeeplink() {
+    fun testAnimatedNavHostDeeplink() {
         lateinit var navController: NavHostController
 
         composeTestRule.mainClock.autoAdvance = false
