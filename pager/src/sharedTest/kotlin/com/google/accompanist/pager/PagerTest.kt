@@ -289,6 +289,23 @@ abstract class PagerTest {
         assertPagerLayout(1, pagerState.pageCount)
     }
 
+    @Test
+    fun scrollWhenStateObserved() {
+        val pagerState = setPagerContent(pageCount = 4, observeStateInContent = true)
+
+        // Now swipe towards start, from page 0 to page 1
+        composeTestRule.onNodeWithTag("0")
+            .swipeAcrossCenter(distancePercentage = -MediumSwipeDistance)
+        // ...and assert that we now laid out from page 1
+        assertPagerLayout(1, pagerState.pageCount)
+
+        // Now swipe towards the end, from page 1 to page 0
+        composeTestRule.onNodeWithTag("1")
+            .swipeAcrossCenter(distancePercentage = MediumSwipeDistance)
+        // ...and assert that we now laid out from page 0
+        assertPagerLayout(0, pagerState.pageCount)
+    }
+
     /**
      * Swipe across the center of the node. The major axis of the swipe is defined by the
      * overriding test.
@@ -339,5 +356,8 @@ abstract class PagerTest {
         currentPage: Int,
     ): SemanticsNodeInteraction
 
-    protected abstract fun setPagerContent(pageCount: Int): PagerState
+    protected abstract fun setPagerContent(
+        pageCount: Int,
+        observeStateInContent: Boolean = false,
+    ): PagerState
 }

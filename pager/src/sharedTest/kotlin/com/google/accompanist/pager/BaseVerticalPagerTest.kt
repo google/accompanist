@@ -100,7 +100,10 @@ abstract class BaseVerticalPagerTest(
             }
     }
 
-    override fun setPagerContent(pageCount: Int): PagerState {
+    override fun setPagerContent(
+        pageCount: Int,
+        observeStateInContent: Boolean,
+    ): PagerState {
         val pagerState = PagerState(
             pageCount = pageCount,
             offscreenLimit = offscreenLimit,
@@ -110,24 +113,30 @@ abstract class BaseVerticalPagerTest(
         composeTestRule.setContent(LayoutDirection.Ltr) {
             applierScope = rememberCoroutineScope()
 
-            VerticalPager(
-                state = pagerState,
-                itemSpacing = itemSpacingDp.dp,
-                reverseLayout = reverseLayout,
-                verticalAlignment = verticalAlignment,
-                modifier = Modifier.fillMaxSize()
-            ) { page ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(1f)
-                        .background(randomColor())
-                        .testTag(page.toString())
-                ) {
-                    BasicText(
-                        text = page.toString(),
-                        modifier = Modifier.align(Alignment.Center)
-                    )
+            Box {
+                if (observeStateInContent) {
+                    BasicText(text = "${pagerState.isScrollInProgress}")
+                }
+
+                VerticalPager(
+                    state = pagerState,
+                    itemSpacing = itemSpacingDp.dp,
+                    reverseLayout = reverseLayout,
+                    verticalAlignment = verticalAlignment,
+                    modifier = Modifier.fillMaxSize()
+                ) { page ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(1f)
+                            .background(randomColor())
+                            .testTag(page.toString())
+                    ) {
+                        BasicText(
+                            text = page.toString(),
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+                    }
                 }
             }
         }

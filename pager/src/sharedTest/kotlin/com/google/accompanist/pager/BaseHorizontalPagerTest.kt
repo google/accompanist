@@ -111,6 +111,7 @@ abstract class BaseHorizontalPagerTest(
 
     override fun setPagerContent(
         pageCount: Int,
+        observeStateInContent: Boolean,
     ): PagerState {
         val pagerState = PagerState(
             pageCount = pageCount,
@@ -120,24 +121,30 @@ abstract class BaseHorizontalPagerTest(
         composeTestRule.setContent(layoutDirection) {
             applierScope = rememberCoroutineScope()
 
-            HorizontalPager(
-                state = pagerState,
-                itemSpacing = itemSpacingDp.dp,
-                reverseLayout = reverseLayout,
-                horizontalAlignment = horizontalAlignment,
-                modifier = Modifier.fillMaxSize()
-            ) { page ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(itemWidthFraction)
-                        .aspectRatio(1f)
-                        .background(randomColor())
-                        .testTag(page.toString())
-                ) {
-                    BasicText(
-                        text = page.toString(),
-                        modifier = Modifier.align(Alignment.Center)
-                    )
+            Box {
+                if (observeStateInContent) {
+                    BasicText(text = "${pagerState.isScrollInProgress}")
+                }
+
+                HorizontalPager(
+                    state = pagerState,
+                    itemSpacing = itemSpacingDp.dp,
+                    reverseLayout = reverseLayout,
+                    horizontalAlignment = horizontalAlignment,
+                    modifier = Modifier.fillMaxSize()
+                ) { page ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(itemWidthFraction)
+                            .aspectRatio(1f)
+                            .background(randomColor())
+                            .testTag(page.toString())
+                    ) {
+                        BasicText(
+                            text = page.toString(),
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+                    }
                 }
             }
         }
