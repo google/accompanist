@@ -18,7 +18,6 @@ package com.google.accompanist.pager
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -122,7 +121,7 @@ abstract class BaseHorizontalPagerTest(
         composeTestRule.setContent(layoutDirection) {
             applierScope = rememberCoroutineScope()
 
-            Column {
+            Box {
                 if (observeStateInContent) {
                     BasicText(text = "${pagerState.isScrollInProgress}")
                 }
