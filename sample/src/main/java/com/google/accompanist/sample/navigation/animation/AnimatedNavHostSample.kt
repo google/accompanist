@@ -77,28 +77,28 @@ fun ExperimentalAnimationNav() {
             enterTransition = { initial, _ ->
                 when (initial.destination.route) {
                     "Red" ->
-                        slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(2000))
+                        slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(700))
                     else -> null
                 }
             },
             exitTransition = { _, target ->
                 when (target.destination.route) {
                     "Red" ->
-                        slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween(2000))
+                        slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween(700))
                     else -> null
                 }
             },
             popEnterTransition = { initial, _ ->
                 when (initial.destination.route) {
                     "Red" ->
-                        slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(2000))
+                        slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(700))
                     else -> null
                 }
             },
             popExitTransition = { _, target ->
                 when (target.destination.route) {
                     "Red" ->
-                        slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(2000))
+                        slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(700))
                     else -> null
                 }
             }
@@ -108,36 +108,36 @@ fun ExperimentalAnimationNav() {
             enterTransition = { initial, _ ->
                 when (initial.destination.route) {
                     "Blue" ->
-                        slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(2000))
+                        slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(700))
                     "Green" ->
-                        slideInVertically(initialOffsetY = { 1800 }, animationSpec = tween(2000))
+                        slideInVertically(initialOffsetY = { 1800 }, animationSpec = tween(700))
                     else -> null
                 }
             },
             exitTransition = { _, target ->
                 when (target.destination.route) {
                     "Blue" ->
-                        slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween(2000))
+                        slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween(700))
                     "Green" ->
-                        slideOutVertically(targetOffsetY = { -1800 }, animationSpec = tween(2000))
+                        slideOutVertically(targetOffsetY = { -1800 }, animationSpec = tween(700))
                     else -> null
                 }
             },
             popEnterTransition = { initial, _ ->
                 when (initial.destination.route) {
                     "Blue" ->
-                        slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(2000))
+                        slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(700))
                     "Green" ->
-                        slideInVertically(initialOffsetY = { -1800 }, animationSpec = tween(2000))
+                        slideInVertically(initialOffsetY = { -1800 }, animationSpec = tween(700))
                     else -> null
                 }
             },
             popExitTransition = { _, target ->
                 when (target.destination.route) {
                     "Blue" ->
-                        slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(2000))
+                        slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(700))
                     "Green" ->
-                        slideOutVertically(targetOffsetY = { 1800 }, animationSpec = tween(2000))
+                        slideOutVertically(targetOffsetY = { 1800 }, animationSpec = tween(700))
                     else -> null
                 }
             }
@@ -145,8 +145,8 @@ fun ExperimentalAnimationNav() {
         navigation(
             startDestination = "Green",
             route = "Inner",
-            enterTransition = { _, _ -> expandIn(animationSpec = tween(2000)) },
-            exitTransition = { _, _ -> shrinkOut(animationSpec = tween(2000)) }
+            enterTransition = { _, _ -> expandIn(animationSpec = tween(700)) },
+            exitTransition = { _, _ -> shrinkOut(animationSpec = tween(700)) }
         ) {
             composable(
                 "Green",
@@ -154,7 +154,7 @@ fun ExperimentalAnimationNav() {
                     when (initial.destination.route) {
                         "Red" ->
                             slideInVertically(
-                                initialOffsetY = { 1800 }, animationSpec = tween(2000)
+                                initialOffsetY = { 1800 }, animationSpec = tween(700)
                             )
                         else -> null
                     }
@@ -163,7 +163,7 @@ fun ExperimentalAnimationNav() {
                     when (target.destination.route) {
                         "Red" ->
                             slideOutVertically(
-                                targetOffsetY = { -1800 }, animationSpec = tween(2000)
+                                targetOffsetY = { -1800 }, animationSpec = tween(700)
                             )
                         else -> null
                     }
@@ -172,7 +172,7 @@ fun ExperimentalAnimationNav() {
                     when (initial.destination.route) {
                         "Red" ->
                             slideInVertically(
-                                initialOffsetY = { -1800 }, animationSpec = tween(2000)
+                                initialOffsetY = { -1800 }, animationSpec = tween(700)
                             )
                         else -> null
                     }
@@ -181,7 +181,7 @@ fun ExperimentalAnimationNav() {
                     when (target.destination.route) {
                         "Red" ->
                             slideOutVertically(
-                                targetOffsetY = { 1800 }, animationSpec = tween(2000)
+                                targetOffsetY = { 1800 }, animationSpec = tween(700)
                             )
                         else -> null
                     }

@@ -75,9 +75,9 @@ public fun AnimatedNavHost(
     modifier: Modifier = Modifier,
     route: String? = null,
     enterTransition: (initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition =
-        { _, _ -> fadeIn(animationSpec = tween(2000)) },
+        { _, _ -> fadeIn(animationSpec = tween(700)) },
     exitTransition: (initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition =
-        { _, _ -> fadeOut(animationSpec = tween(2000)) },
+        { _, _ -> fadeOut(animationSpec = tween(700)) },
     popEnterTransition: (initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition =
         enterTransition,
     popExitTransition: (initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition =
@@ -118,9 +118,9 @@ public fun AnimatedNavHost(
     graph: NavGraph,
     modifier: Modifier = Modifier,
     enterTransition: (initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition =
-        { _, _ -> fadeIn(animationSpec = tween(2000)) },
+        { _, _ -> fadeIn(animationSpec = tween(700)) },
     exitTransition: (initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition =
-        { _, _ -> fadeOut(animationSpec = tween(2000)) },
+        { _, _ -> fadeOut(animationSpec = tween(700)) },
     popEnterTransition: (initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition =
         enterTransition,
     popExitTransition: (initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition =
