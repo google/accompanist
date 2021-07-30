@@ -39,12 +39,11 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
 import kotlin.math.absoluteValue
 import kotlin.math.floor
 import kotlin.math.roundToInt
-
-private const val LogTag = "PagerState"
 
 /**
  * Creates a [PagerState] that is remembered across compositions.
@@ -173,6 +172,10 @@ class PagerState(
      * we reached the end of the list.
      */
     private val scrollableState = ScrollableState { deltaPixels ->
+        if (DebugLog) {
+            Napier.d(message = "ScrollableState onScroll $deltaPixels")
+        }
+
         // scrollByOffset expects values in an opposite sign to what we're passed, so we need
         // to negate the value passed in, and the value returned.
         val size = currentLayoutPageSize
@@ -199,7 +202,6 @@ class PagerState(
             require(value >= 0) { "pageCount must be >= 0" }
             _pageCount = value
             currentPage = currentPage.coerceIn(firstPageIndex, lastPageIndex)
-            updateLayoutPages(currentPage)
         }
 
     /**
@@ -212,12 +214,15 @@ class PagerState(
     var currentPage: Int
         get() = _currentPage
         private set(value) {
-            _currentPage = value.floorMod(pageCount)
-            if (DebugLog) {
-                Napier.d(tag = LogTag, message = "Current page changed: $_currentPage")
+            val moddedValue = value.floorMod(pageCount)
+            if (moddedValue != _currentPage) {
+                _currentPage = moddedValue
+                if (DebugLog) {
+                    Napier.d(message = "Current page changed: $_currentPage")
+                }
+                // If the current page is changed, update the layout page too
+                updateLayoutPages(_currentPage)
             }
-            // If the current page is changed, update the layout page too
-            updateLayoutPages(_currentPage)
         }
 
     /**
@@ -333,7 +338,6 @@ class PagerState(
     private fun snapToPage(page: Int, offset: Float = 0f) {
         if (DebugLog) {
             Napier.d(
-                tag = LogTag,
                 message = "snapToPage. page:$currentLayoutPage, offset:$currentLayoutPageOffset"
             )
         }
@@ -420,10 +424,7 @@ class PagerState(
                 )
             }
             if (DebugLog) {
-                Napier.d(
-                    tag = LogTag,
-                    message = "animateToPageSkip: $layoutPages"
-                )
+                Napier.d(message = "animateToPageSkip: $layoutPages")
             }
 
             // Then derive the remaining offset from the index
@@ -463,6 +464,7 @@ class PagerState(
      */
     private fun updateLayoutPages(page: Int) {
         requireCurrentPage(page, "page")
+        if (DebugLog) Napier.d(message = "updateLayoutPages(page = $page)")
 
         layoutPages.forEachIndexed { index, layoutPage ->
             val pg = page + index - offscreenLimit
@@ -489,7 +491,6 @@ class PagerState(
 
         if (DebugLog) {
             Napier.d(
-                tag = LogTag,
                 message = "scrollByOffset [before]. delta:%.4f, current:%.4f, target:%.4f"
                     .format(deltaOffset, current, target),
             )
@@ -499,7 +500,7 @@ class PagerState(
 
         if (DebugLog) {
             Napier.d(
-                tag = LogTag,
+
                 message = "scrollByOffset [after]. delta:%.4f, new-page:%d, new-offset:%.4f"
                     .format(deltaOffset, currentLayoutPage, currentLayoutPageOffset),
             )
@@ -534,7 +535,6 @@ class PagerState(
 
         if (DebugLog) {
             Napier.d(
-                tag = LogTag,
                 message = "fling. velocity:%.4f, page: %d, offset:%.4f, targetOffset:%.4f"
                     .format(
                         initialVelocity,
@@ -565,7 +565,6 @@ class PagerState(
             ).animateDecay(decayAnimationSpec) {
                 if (DebugLog) {
                     Napier.d(
-                        tag = LogTag,
                         message = "fling. decay. value:%.4f, page: %d, offset:%.4f"
                             .format(value, currentPage, currentPageOffset)
                     )
@@ -682,6 +681,12 @@ class PagerState(
                 )
             }
         )
+
+        init {
+            if (DebugLog) {
+                Napier.base(DebugAntilog(defaultTag = "Pager"))
+            }
+        }
 
         /**
          * Calculates the floor modulus in the range of -abs([other]) < r < +abs([other]).
