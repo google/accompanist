@@ -45,12 +45,10 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.plusAssign
-import com.google.accompanist.navigation.animation.AnimatedComposeNavigator
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.navigation
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.sample.AccompanistSampleTheme
 
 @ExperimentalAnimationApi
@@ -69,8 +67,7 @@ class AnimatedNavHostSample : ComponentActivity() {
 @ExperimentalAnimationApi
 @Composable
 fun ExperimentalAnimationNav() {
-    val navController = rememberNavController()
-    navController.navigatorProvider += AnimatedComposeNavigator()
+    val navController = rememberAnimatedNavController()
     AnimatedNavHost(navController, startDestination = "Blue") {
         composable(
             "Blue",
