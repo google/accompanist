@@ -81,13 +81,16 @@ dependencies {
     implementation libs.compose.foundation.foundation
     implementation libs.compose.material.material
 
+    // FIXME: Needed because navigation-compose 2.4.0-SNAPSHOT forces activity-compose 1.3.0-rc02,
+    //  and our test dependencies depend on 1.3.0. We need to explicitly tell Gradle what version
+    //  to use.
+    implementation libs.androidx.activity.compose
+
     // ======================
     // Test dependencies
     // ======================
 
     androidTestImplementation project(':internal-testutils')
-    androidTestImplementation libs.androidx.activity.compose
-    androidTestImplementation libs.compose.material.material
 
     androidTestImplementation libs.junit
     androidTestImplementation libs.truth
