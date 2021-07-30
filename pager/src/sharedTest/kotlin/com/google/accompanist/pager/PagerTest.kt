@@ -290,6 +290,7 @@ abstract class PagerTest {
     }
 
     @Test
+    @Ignore("https://github.com/google/accompanist/issues/590")
     fun scrollWhenStateObserved() {
         val pagerState = setPagerContent(pageCount = 4, observeStateInContent = true)
 
