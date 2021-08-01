@@ -97,10 +97,12 @@ internal fun SheetContentHost(
             }
             onDispose {
                 scope.launch {
-                    // Yikes
                     hideCalled = true
-                    sheetState.internalHide()
-                    hideCalled = false
+                    try {
+                        sheetState.internalHide()
+                    } finally {
+                        hideCalled = false
+                    }
                 }
             }
         }
