@@ -32,6 +32,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
@@ -45,8 +46,6 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
-
-typealias SwipeRefreshIndicator = @Composable (state: SwipeRefreshState, refreshTrigger: Dp) -> Unit
 
 private const val DragMultiplier = 0.5f
 
@@ -116,18 +115,11 @@ class SwipeRefreshState(
     }
 }
 
-/**
- * The position for which the "swipe to refresh" must be enabled:
- */
-enum class Position {
-    TOP,
-    BOTTOM,
-}
-
-private open class SwipeRefreshNestedScrollConnection(
-    protected val state: SwipeRefreshState,
-    protected val coroutineScope: CoroutineScope,
-    protected val onRefresh: () -> Unit,
+private class SwipeRefreshNestedScrollConnection(
+    private val state: SwipeRefreshState,
+    private val coroutineScope: CoroutineScope,
+    private val onRefresh: () -> Unit,
+    private val scrollFromTop: Boolean = true,
 ) : NestedScrollConnection {
     var enabled: Boolean = false
     var refreshTrigger: Float = 0f
@@ -140,22 +132,10 @@ private open class SwipeRefreshNestedScrollConnection(
         !enabled -> Offset.Zero
         // If we're refreshing, return zero
         state.isRefreshing -> Offset.Zero
-        else -> handleOnPreScroll(available, source)
-    }
-
-    // By handling the pre scroll in a method we will be able to override the method in a subclass
-    // (e.g [BottomSwipeRefreshNestedScrollConnection]) without override the whole `onPreScroll`,
-    // instead we will reuse the common parts.
-    protected open fun handleOnPreScroll(
-        available: Offset,
-        source: NestedScrollSource
-    ): Offset {
-        return if (source == NestedScrollSource.Drag && available.y < 0) {
-            // If the user is swiping up, handle it
-            onScroll(available)
-        } else {
-            Offset.Zero
-        }
+        // If the user is swiping and there's y remaining, handle it
+        scrollFromTop && source == NestedScrollSource.Drag && available.y < 0f -> onScroll(available)
+        !scrollFromTop && source == NestedScrollSource.Drag && available.y > 0f -> onScroll(available)
+        else -> Offset.Zero
     }
 
     override fun onPostScroll(
@@ -167,19 +147,13 @@ private open class SwipeRefreshNestedScrollConnection(
         !enabled -> Offset.Zero
         // If we're refreshing, return zero
         state.isRefreshing -> Offset.Zero
-        else -> handleOnPostScroll(available, source)
+        // If the user is swiping and there's y remaining, handle it
+        scrollFromTop && source == NestedScrollSource.Drag && available.y > 0f -> onScroll(available)
+        !scrollFromTop && source == NestedScrollSource.Drag && available.y < 0f -> onScroll(available)
+        else -> Offset.Zero
     }
 
-    protected open fun handleOnPostScroll(available: Offset, source: NestedScrollSource): Offset {
-        return if (source == NestedScrollSource.Drag && available.y > 0) {
-            // If the user is swiping down and there's y remaining, handle it
-            onScroll(available)
-        } else {
-            Offset.Zero
-        }
-    }
-
-    protected fun onScroll(available: Offset): Offset {
+    private fun onScroll(available: Offset): Offset {
         state.isSwipeInProgress = true
 
         val dragConsumed = getDragConsumed(available)
@@ -189,7 +163,11 @@ private open class SwipeRefreshNestedScrollConnection(
                 state.dispatchScrollDelta(dragConsumed)
             }
             // Return the consumed Y
-            Offset(x = 0f, y = dragConsumed / DragMultiplier)
+            if (scrollFromTop) {
+                Offset(x = 0f, y = dragConsumed / DragMultiplier)
+            } else {
+                Offset(x = 0f, y = -dragConsumed / DragMultiplier)
+            }
         } else {
             Offset.Zero
         }
@@ -209,39 +187,14 @@ private open class SwipeRefreshNestedScrollConnection(
         return Velocity.Zero
     }
 
-    protected open fun getDragConsumed(available: Offset): Float {
-        val newOffset = (available.y * DragMultiplier + state.indicatorOffset).coerceAtLeast(0f)
-        return newOffset - state.indicatorOffset
-    }
-}
-
-private class BottomSwipeRefreshNestedScrollConnection(
-    state: SwipeRefreshState,
-    coroutineScope: CoroutineScope,
-    onRefresh: () -> Unit,
-) : SwipeRefreshNestedScrollConnection(state, coroutineScope, onRefresh) {
-
-    override fun handleOnPreScroll(available: Offset, source: NestedScrollSource): Offset {
-        return if (source == NestedScrollSource.Drag && available.y > 0) {
-            // If the user is swiping down, handle it
-            onScroll(available)
+    private fun getDragConsumed(available: Offset): Float {
+        return if (scrollFromTop) {
+            val newOffset = (available.y * DragMultiplier + state.indicatorOffset).coerceAtLeast(0f)
+            newOffset - state.indicatorOffset
         } else {
-            Offset.Zero
+            val newOffset = (available.y * DragMultiplier - state.indicatorOffset).coerceAtMost(0f)
+            -(newOffset + state.indicatorOffset)
         }
-    }
-
-    override fun handleOnPostScroll(available: Offset, source: NestedScrollSource): Offset {
-        return if (source == NestedScrollSource.Drag && available.y < 0) {
-            // If the user is swiping up and there's y remaining, handle it
-            onScroll(available)
-        } else {
-            Offset.Zero
-        }
-    }
-
-    override fun getDragConsumed(available: Offset): Float {
-        val newOffset = (available.y * DragMultiplier - state.indicatorOffset).coerceAtMost(0f)
-        return -(newOffset + state.indicatorOffset)
     }
 }
 
@@ -274,7 +227,7 @@ private class BottomSwipeRefreshNestedScrollConnection(
  * @param modifier the modifier to apply to this layout.
  * @param swipeEnabled Whether the the layout should react to swipe gestures or not.
  * @param refreshTriggerDistance The minimum swipe distance which would trigger a refresh.
- * @param indicatorHorizontalAlignment The alignment of the indicator. Defaults to [Alignment.TopCenter].
+ * @param indicatorAlignment The alignment of the indicator. Defaults to [Alignment.TopCenter].
  * @param indicatorPadding Content padding for the indicator, to inset the indicator in if required.
  * @param indicator the indicator that represents the current state. By default this
  * will use a [SwipeRefreshIndicator].
@@ -287,20 +240,15 @@ fun SwipeRefresh(
     state: SwipeRefreshState,
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
-    position: Position = Position.TOP,
     swipeEnabled: Boolean = true,
     refreshTriggerDistance: Dp = 80.dp,
-    indicatorHorizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
+    indicatorAlignment: Alignment = Alignment.TopCenter,
     indicatorPadding: PaddingValues = PaddingValues(0.dp),
     indicator: @Composable (state: SwipeRefreshState, refreshTrigger: Dp) -> Unit = { s, trigger ->
         SwipeRefreshIndicator(
             state = s,
             refreshTriggerDistance = trigger,
-            senseOfRotation = if (position == Position.TOP) {
-                SenseOfRotation.CLOCKWISE
-            } else {
-                SenseOfRotation.COUNTERCLOCKWISE
-            }
+            clockwise = (indicatorAlignment as BiasAlignment).verticalBias != 1f
         )
     },
     clipIndicatorToPadding: Boolean = true,
@@ -321,16 +269,15 @@ fun SwipeRefresh(
 
     // Our nested scroll connection, which updates our state.
     val nestedScrollConnection = remember(state, coroutineScope) {
-        if (position == Position.TOP) {
-            SwipeRefreshNestedScrollConnection(state, coroutineScope) {
+        SwipeRefreshNestedScrollConnection(
+            state = state,
+            coroutineScope = coroutineScope,
+            onRefresh = {
                 // On refresh, re-dispatch to the update onRefresh block
                 updatedOnRefresh.value.invoke()
-            }
-        } else {
-            BottomSwipeRefreshNestedScrollConnection(state, coroutineScope) {
-                updatedOnRefresh.value.invoke()
-            }
-        }
+            },
+            scrollFromTop = (indicatorAlignment as BiasAlignment).verticalBias != 1f
+        )
     }.apply {
         this.enabled = swipeEnabled
         this.refreshTrigger = refreshTriggerPx
@@ -350,28 +297,10 @@ fun SwipeRefresh(
                 // the padding() modifier.
                 .let { if (clipIndicatorToPadding) it.clipToBounds() else it }
         ) {
-            Box(Modifier.align(indicatorHorizontalAlignment.toAlignment(position))) {
+            Box(Modifier.align(indicatorAlignment)) {
+                (Alignment.TopCenter as BiasAlignment).verticalBias
                 indicator(state, refreshTriggerDistance)
             }
         }
-    }
-}
-
-fun Alignment.Horizontal.toAlignment(position: Position) = when (position) {
-
-    Position.TOP -> when (this) {
-        Alignment.Start -> Alignment.TopStart
-        Alignment.CenterHorizontally -> Alignment.TopCenter
-        Alignment.End -> Alignment.TopEnd
-        else -> throw IllegalStateException() // The [Alignment.Horizontal] has only 3 possible
-        // values (Start, CenterHorizontally, End)
-    }
-
-    Position.BOTTOM -> when (this) {
-        Alignment.Start -> Alignment.BottomStart
-        Alignment.CenterHorizontally -> Alignment.BottomCenter
-        Alignment.End -> Alignment.BottomEnd
-        else -> throw IllegalStateException() // The [Alignment.Horizontal] has only 3 possible
-        // values (Start, CenterHorizontally, End)
     }
 }

@@ -34,17 +34,12 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import kotlin.math.min
 
-enum class SenseOfRotation {
-    CLOCKWISE,
-    COUNTERCLOCKWISE,
-}
-
 /**
  * A private class to do all the drawing of SwipeRefreshIndicator, which includes progress spinner
  * and the arrow. This class is to separate drawing from animation.
  * Adapted from CircularProgressDrawable.
  */
-internal class CircularProgressPainter(private val senseOfRotation: SenseOfRotation = SenseOfRotation.CLOCKWISE) : Painter() {
+internal class CircularProgressPainter(private val clockwise: Boolean = true) : Painter() {
     var color by mutableStateOf(Color.Unspecified)
     var alpha by mutableStateOf(1f)
     var arcRadius by mutableStateOf(0.dp)
@@ -83,7 +78,7 @@ internal class CircularProgressPainter(private val senseOfRotation: SenseOfRotat
             val endAngle: Float
             val sweepAngle: Float
 
-            if (senseOfRotation == SenseOfRotation.CLOCKWISE) {
+            if (clockwise) {
                 startAngle = (startTrim + rotation) * 360
                 endAngle = (endTrim + rotation) * 360
                 sweepAngle = endAngle - startAngle
@@ -119,7 +114,7 @@ internal class CircularProgressPainter(private val senseOfRotation: SenseOfRotat
             x = arrowWidth.toPx() * arrowScale,
             y = 0f
         )
-        val arrowHeightPx = if (senseOfRotation == SenseOfRotation.CLOCKWISE) {
+        val arrowHeightPx = if (clockwise) {
             arrowHeight.toPx()
         } else {
             -arrowHeight.toPx()

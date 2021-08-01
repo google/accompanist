@@ -46,7 +46,6 @@ import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.insets.ListItem
 import com.google.accompanist.sample.randomSampleImageUrl
-import com.google.accompanist.swiperefresh.SenseOfRotation
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -109,7 +108,6 @@ private fun Sample() {
                         state = state,
                         refreshTriggerDistance = refreshTriggerDistance,
                         scale = true,
-                        senseOfRotation = SenseOfRotation.CLOCKWISE
                     )
                 }
             ) {

@@ -45,7 +45,6 @@ import com.google.accompanist.glide.rememberGlidePainter
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
-import com.google.accompanist.swiperefresh.Position
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.delay
@@ -100,7 +99,7 @@ private fun Sample() {
             SwipeRefresh(
                 state = rememberSwipeRefreshState(isRefreshing = isBottomIndicatorRefreshing),
                 onRefresh = { isBottomIndicatorRefreshing = true },
-                position = Position.BOTTOM,
+                indicatorAlignment = Alignment.BottomCenter,
             ) {
                 LazyColumn {
                     items(30) { index ->

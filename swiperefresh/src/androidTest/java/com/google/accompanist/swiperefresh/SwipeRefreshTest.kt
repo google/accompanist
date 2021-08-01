@@ -24,6 +24,8 @@ import androidx.compose.material.ListItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.ExperimentalTestApi
@@ -145,7 +147,7 @@ class SwipeRefreshTest {
         rule.setContent {
             SwipeRefreshTestContent(
                 swipeRefreshState = state,
-                position = Position.BOTTOM,
+                indicatorAlignment = Alignment.BottomCenter,
             ) {
                 state.isRefreshing = true
                 refreshCallCount++
@@ -174,7 +176,7 @@ class SwipeRefreshTest {
         rule.setContent {
             SwipeRefreshTestContent(
                 swipeRefreshState = rememberSwipeRefreshState(true),
-                position = Position.BOTTOM,
+                indicatorAlignment = Alignment.BottomCenter,
             )
         }
 
@@ -195,7 +197,7 @@ class SwipeRefreshTest {
         rule.setContent {
             SwipeRefreshTestContent(
                 swipeRefreshState = rememberSwipeRefreshState(true),
-                position = Position.BOTTOM,
+                indicatorAlignment = Alignment.BottomCenter,
             )
         }
 
@@ -214,26 +216,23 @@ private const val ListItemCount = 30
 @Composable
 private fun SwipeRefreshTestContent(
     swipeRefreshState: SwipeRefreshState,
-    position: Position = Position.TOP,
+    indicatorAlignment: Alignment = Alignment.TopCenter,
     onRefresh: () -> Unit = {},
 ) {
+    val isTopPosition = (indicatorAlignment as BiasAlignment).verticalBias != 1f
     MaterialTheme {
         SwipeRefresh(
             state = swipeRefreshState,
-            position = position,
+            indicatorAlignment = indicatorAlignment,
             onRefresh = onRefresh,
             modifier = Modifier.testTag(SwipeRefreshTag),
             indicator = { state, trigger ->
                 SwipeRefreshIndicator(
                     state = state,
                     refreshTriggerDistance = trigger,
-                    senseOfRotation = if (position == Position.TOP) {
-                        SenseOfRotation.CLOCKWISE
-                    } else {
-                        SenseOfRotation.COUNTERCLOCKWISE
-                    },
+                    clockwise = isTopPosition,
                     modifier = Modifier.testTag(
-                        if (position == Position.TOP) {
+                        if (isTopPosition) {
                             SwipeRefreshIndicatorTag
                         } else {
                             BottomSwipeRefreshIndicatorTag

@@ -20,10 +20,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.accompanist.swiperefresh.Position
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.delay
@@ -73,7 +73,7 @@ fun BidirectionalSwipeRefreshSample() {
     ) {
         SwipeRefresh(
             state = rememberSwipeRefreshState(isBottomIndicatorRefreshing),
-            position = Position.BOTTOM,
+            indicatorAlignment = Alignment.BottomCenter,
             onRefresh = { viewModel.loadNextPage() },
         ) {
             LazyColumn {

@@ -45,7 +45,6 @@ import com.google.accompanist.glide.rememberGlidePainter
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
-import com.google.accompanist.swiperefresh.SenseOfRotation
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -97,7 +96,6 @@ private fun Sample() {
                     shape = MaterialTheme.shapes.small,
                     largeIndication = true,
                     elevation = 16.dp,
-                    senseOfRotation = SenseOfRotation.CLOCKWISE,
                 )
             },
         ) {

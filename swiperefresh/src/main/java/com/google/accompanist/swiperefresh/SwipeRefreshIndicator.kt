@@ -104,8 +104,8 @@ private val LargeSizes = SwipeRefreshIndicatorSizes(
 fun SwipeRefreshIndicator(
     state: SwipeRefreshState,
     refreshTriggerDistance: Dp,
-    senseOfRotation: SenseOfRotation,
     modifier: Modifier = Modifier,
+    clockwise: Boolean = true,
     fade: Boolean = true,
     scale: Boolean = false,
     arrowEnabled: Boolean = true,
@@ -162,10 +162,10 @@ fun SwipeRefreshIndicator(
             .graphicsLayer {
                 // Translate the indicator according to the slingshot and the Position of the Swipe
                 // to refresh.
-                translationY = if (senseOfRotation == SenseOfRotation.COUNTERCLOCKWISE) {
-                    indicatorHeight - offset
-                } else {
+                translationY = if (clockwise) {
                     offset - indicatorHeight
+                } else {
+                    indicatorHeight - offset
                 }
 
                 val scaleFraction = if (scale && !state.isRefreshing) {
@@ -185,7 +185,7 @@ fun SwipeRefreshIndicator(
         elevation = adjustedElevation
     ) {
         val painter = remember {
-            CircularProgressPainter(senseOfRotation)
+            CircularProgressPainter(clockwise)
         }
         painter.arcRadius = sizes.arcRadius
         painter.strokeWidth = sizes.strokeWidth

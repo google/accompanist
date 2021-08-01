@@ -63,17 +63,18 @@ SwipeRefresh(
 
 ### Indicator position
 
-Alternatively, you can use a bottom refresh indicator by setting the `position` parameter to `Position.BOTTOM` (the default value is `Position.TOP`):
+Alternatively, you can use a bottom refresh indicator by setting the `indicatorAlignment` parameter to `Alignment.BottomCenter` (the default value is `Alignment.TopCenter`):
 ``` kotlin
 SwipeRefresh(
     state = rememberSwipeRefreshState(isRefreshing),
-    position = Position.BOTTOM,
+    indicatorAlignment = Alignment.BottomCenter,
+    // ...
 ) {
     // ...
 }
 ```
 
-You can also have both top and bottom indicator (e.g: If you are loading the list's items by page, each time the user triggers the bottom refresh indicator, you load the next page. If the user triggers the top refresh indicator, you refresh the list), to achieve this, you will need 2 `SwipeRefresh` with different positions and put one inside another:
+You can also have both top and bottom indicator (e.g: If you are loading the list's items by page, each time the user triggers the bottom refresh indicator, you load the next page. If the user triggers the top refresh indicator, you refresh the list), to achieve this, you will need 2 `SwipeRefresh` with different alignments and put one inside another:
 
 ``` kotlin
 val viewModel = viewModel<SampleViewModel>()
@@ -83,11 +84,11 @@ val isBottomIndicatorRefreshing by viewModel.isLoadingNextPage.collectAsState()
 SwipeRefresh(
     state = rememberSwipeRefreshState(isTopIndicatorRefreshing),
     onRefresh = { viewModel.refreshList() },
-    // by default the position is `Position.TOP`
+    // by default the indicatorAlignment is `Alignment.BottomCenter`
 ) {
     SwipeRefresh(
         state = rememberSwipeRefreshState(isBottomIndicatorRefreshing),
-        position = Position.BOTTOM,
+        indicatorAlignment = Alignment.BottomCenter,
         onRefresh = { viewModel.loadNextPage() },
     ) {
         LazyColumn {
