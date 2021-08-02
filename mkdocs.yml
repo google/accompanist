@@ -33,7 +33,10 @@ nav:
   - 'Placeholder':
     - 'Guide': placeholder.md
     - 'Foundation API': api/placeholder/
-    - 'Material API': api/placeholder-material/    
+    - 'Material API': api/placeholder-material/
+  - 'Drawable Painter':
+    - 'Guide': drawablepainter.md
+    - 'API': api/drawablepainter/ 
   - 'Flow layouts':
     - 'Guide': flowlayout.md
     - 'API': api/flowlayout/
