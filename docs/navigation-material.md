@@ -3,60 +3,63 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-navigation-material)](https://search.maven.org/search?q=g:com.google.accompanist)
 
 A library which provides [Compose Material](https://developer.android.com/jetpack/compose/material) support for [Jetpack Navigation Compose](https://developer.android.com/jetpack/compose/navigation).
+This features composable bottom sheet destinations.
 
 !!! warning
-The navigation APIs are currently experimental and they could change at any time.
-All of the APIs are marked with the `@ExperimentalMaterialApi` annotation.
+    The navigation APIs are currently experimental and they could change at any time.
+    All of the APIs are marked with the `@ExperimentalMaterialNavigationApi` annotation.
 
 ## Usage
 
+### Bottom Sheet Destinations
+
 1. Create a `BottomSheetNavigator` and add it to the `NavController`:
 
-```kotlin
-@Composable
-fun MyApp() {
-    val navController = rememberNavController()
-    val bottomSheetNavigator = rememberBottomSheetNavigator()
-    navController.navigatorProvider += bottomSheetNavigator
-}
-```
+    ```kotlin
+    @Composable
+    fun MyApp() {
+        val navController = rememberNavController()
+        val bottomSheetNavigator = rememberBottomSheetNavigator()
+        navController.navigatorProvider += bottomSheetNavigator
+    }
+    ```
 
 2. Wrap your `NavHost` in the `ModalBottomSheetLayout` composable that accepts a `BottomSheetNavigator`.
 
-```kotlin
-@Composable
-fun MyApp() {
-    val navController = rememberNavController()
-    val bottomSheetNavigator = rememberBottomSheetNavigator()
-    navController.navigatorProvider += bottomSheetNavigator
-    ModalBottomSheetLayout(bottomSheetNavigator) {
-        NavHost(navController, Destinations.Home) {
-           // We'll define our graph here in a bit!
+    ```kotlin
+    @Composable
+    fun MyApp() {
+        val navController = rememberNavController()
+        val bottomSheetNavigator = rememberBottomSheetNavigator()
+        navController.navigatorProvider += bottomSheetNavigator
+        ModalBottomSheetLayout(bottomSheetNavigator) {
+            NavHost(navController, Destinations.Home) {
+               // We'll define our graph here in a bit!
+            }
         }
     }
-}
-```
+    ```
 
 3. Register a bottom sheet destination
 
-```kotlin
-@Composable
-fun MyApp() {
-    val navController = rememberNavController()
-    val bottomSheetNavigator = rememberBottomSheetNavigator()
-    navController.navigatorProvider += bottomSheetNavigator
-    ModalBottomSheetLayout(bottomSheetNavigator) {
-        NavHost(navController, Destinations.Home) {
-           composable(route = "home") {
-               ...
-           }
-           bottomSheet(route = "sheet") {
-               Text("This is a cool bottom sheet!")
-           }
+    ```kotlin
+    @Composable
+    fun MyApp() {
+        val navController = rememberNavController()
+        val bottomSheetNavigator = rememberBottomSheetNavigator()
+        navController.navigatorProvider += bottomSheetNavigator
+        ModalBottomSheetLayout(bottomSheetNavigator) {
+            NavHost(navController, Destinations.Home) {
+               composable(route = "home") {
+                   ...
+               }
+               bottomSheet(route = "sheet") {
+                   Text("This is a cool bottom sheet!")
+               }
+            }
         }
     }
-}
-```
+    ```
 
 For more examples, refer to the [samples](https://github.com/google/accompanist/tree/main/sample/src/main/java/com/google/accompanist/sample/navigation-material).
 
