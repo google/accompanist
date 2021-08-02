@@ -42,7 +42,6 @@ import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.withSave
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.LayoutDirection
 import kotlin.math.roundToInt
 
