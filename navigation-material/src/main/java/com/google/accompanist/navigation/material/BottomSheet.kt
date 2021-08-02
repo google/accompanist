@@ -32,7 +32,8 @@ import androidx.compose.ui.unit.Dp
  *
  * @see [ModalBottomSheetLayout]
  */
-@ExperimentalMaterialApi
+@ExperimentalMaterialNavigationApi
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 public fun ModalBottomSheetLayout(
     bottomSheetNavigator: BottomSheetNavigator,

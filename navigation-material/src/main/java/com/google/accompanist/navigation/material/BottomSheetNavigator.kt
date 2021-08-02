@@ -43,7 +43,8 @@ import com.google.accompanist.navigation.material.BottomSheetNavigator.Destinati
  *
  * @param sheetState The sheet state that is driven by the [BottomSheetNavigator]
  */
-@ExperimentalMaterialApi
+@ExperimentalMaterialNavigationApi
+@OptIn(ExperimentalMaterialApi::class)
 public class BottomSheetNavigatorSheetState(private val sheetState: ModalBottomSheetState) {
     /**
      * @see ModalBottomSheetState.isVisible
@@ -67,6 +68,7 @@ public class BottomSheetNavigatorSheetState(private val sheetState: ModalBottomS
 /**
  * Create and remember a [BottomSheetNavigator]
  */
+@ExperimentalMaterialNavigationApi
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 public fun rememberBottomSheetNavigator(
@@ -97,6 +99,7 @@ public fun rememberBottomSheetNavigator(
  * @param sheetState The [ModalBottomSheetState] that the [BottomSheetNavigator] will use to
  * drive the sheet state
  */
+@ExperimentalMaterialNavigationApi
 @OptIn(ExperimentalMaterialApi::class)
 @Navigator.Name("BottomSheetNavigator")
 public class BottomSheetNavigator(

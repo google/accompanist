@@ -60,6 +60,7 @@ import kotlinx.coroutines.launch
  * @param onSheetDismissed Callback when the sheet has been dismissed. Typically, you'll want to
  * pop the back stack here.
  */
+@ExperimentalMaterialNavigationApi
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun SheetContentHost(

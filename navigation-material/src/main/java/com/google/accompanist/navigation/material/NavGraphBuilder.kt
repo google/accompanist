@@ -32,6 +32,7 @@ import androidx.navigation.get
  * @param deepLinks list of deep links to associate with the destinations
  * @param content the sheet content at the given destination
  */
+@ExperimentalMaterialNavigationApi
 public fun NavGraphBuilder.bottomSheet(
     route: String,
     arguments: List<NamedNavArgument> = emptyList(),
