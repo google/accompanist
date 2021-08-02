@@ -34,13 +34,12 @@ import androidx.navigation.testing.TestNavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.google.common.truth.Truth.assertThat
-import com.google.common.truth.Truth.assertWithMessage
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-@OptIn(ExperimentalCoroutinesApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalCoroutinesApi::class, ExperimentalMaterialApi::class, ExperimentalMaterialNavigationApi::class)
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 internal class NavGraphBuilderTest {
@@ -115,27 +114,6 @@ internal class NavGraphBuilderTest {
         composeTestRule.runOnUiThread {
             navController.navigate(uriString.toUri())
             assertThat(navController.currentBackStackEntry!!.destination.hasDeepLink(deeplink))
-                .isTrue()
-        }
-    }
-
-    @Test
-    fun testNavigationNestedStart() {
-        lateinit var navController: TestNavHostController
-        composeTestRule.setContent {
-            navController = TestNavHostController(LocalContext.current)
-            navController.navigatorProvider += createBottomSheetNavigator()
-
-            NavHost(navController, startDestination = firstRoute) {
-                navigation(startDestination = secondRoute, route = firstRoute) {
-                    bottomSheet(secondRoute) { }
-                }
-            }
-        }
-
-        composeTestRule.runOnUiThread {
-            assertWithMessage("Sheet destination should be added to the graph")
-                .that(secondRoute in navController.graph)
                 .isTrue()
         }
     }

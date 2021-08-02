@@ -52,7 +52,7 @@ import org.junit.runner.RunWith
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterialNavigationApi::class)
 internal class BottomSheetNavigatorTest {
 
     @get:Rule

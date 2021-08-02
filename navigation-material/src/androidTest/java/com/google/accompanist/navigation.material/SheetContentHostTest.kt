@@ -41,7 +41,6 @@ import com.google.common.truth.Truth.assertThat
 import com.google.common.truth.Truth.assertWithMessage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Rule
@@ -50,7 +49,7 @@ import org.junit.runner.RunWith
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
-@OptIn(ExperimentalMaterialApi::class, ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class, ExperimentalMaterialApi::class, ExperimentalMaterialNavigationApi::class)
 internal class SheetContentHostTest {
 
     private val testDispatcher = TestCoroutineDispatcher()
@@ -108,33 +107,6 @@ internal class SheetContentHostTest {
                 .that(dismissedBackStackEntries)
                 .containsExactly(backStackEntry)
         }
-    }
-
-    @Test
-    fun testOnSheetDismissedCalled_programmaticDismiss(): Unit = runBlockingTest(testClock) {
-        val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
-        val backStackEntry = createBackStackEntry(sheetState)
-
-        val dismissedBackStackEntries = mutableListOf<NavBackStackEntry>()
-
-        composeTestRule.setBottomSheetContent(
-            mutableStateOf(backStackEntry),
-            sheetState,
-            onSheetShown = { },
-            onSheetDismissed = { entry -> dismissedBackStackEntries.add(entry) }
-        )
-
-        assertThat(sheetState.currentValue == ModalBottomSheetValue.Expanded)
-
-        testDispatcher.pauseDispatcher {
-            launch { sheetState.hide() }
-        }
-
-        assertWithMessage("Sheet is visible")
-            .that(sheetState.isVisible).isFalse()
-        assertWithMessage("Back stack entry should be in the dismissed entries list")
-            .that(dismissedBackStackEntries)
-            .containsExactly(backStackEntry)
     }
 
     @Test
