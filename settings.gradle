@@ -25,10 +25,6 @@ gradleEnterprise {
     }
 }
 
-include ':coil'
-include ':glide'
-include ':imageloading-core'
-include ':imageloading-testutils'
 include ':internal-testutils'
 include ':insets'
 include ':insets-ui'
