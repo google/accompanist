@@ -31,6 +31,9 @@ A library that adds Flexbox-like layout components to Jetpack Compose.
 ### 🗺 [Navigation-Animation](./navigation-animation/)
 A library which provides [Compose Animation](https://developer.android.com/jetpack/compose/animation) support for Jetpack Navigation Compose.
 
+### 🖌️ [Drawable Painter](./drawablepainter/)
+A library which provides a way to use Android Drawables as Jetpack Compose Painters.
+
 ### ⬇️ [Swipe to Refresh](./swiperefresh/)
 A library that provides a layout implementing the swipe-to-refresh UX pattern, similar to Android's [SwipeRefreshLayout](https://developer.android.com/jetpack/androidx/releases/swiperefreshlayout).
 
