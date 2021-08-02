@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.accompanist.imageloading.test
+package com.google.accompanist.internal.test
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap

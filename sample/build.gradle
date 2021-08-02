@@ -47,9 +47,7 @@ android {
 }
 
 dependencies {
-    implementation project(':coil')
     implementation project(':drawablepainter')
-    implementation project(':glide')
     implementation project(':insets')
     implementation project(':insets-ui')
     implementation project(':navigation-animation')
@@ -64,6 +62,7 @@ dependencies {
 
     implementation libs.androidx.appcompat
 
+    implementation libs.coil.compose
     implementation libs.coil.gif
 
     implementation libs.compose.material.material

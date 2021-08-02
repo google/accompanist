@@ -46,8 +46,8 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
-import com.google.accompanist.imageloading.test.assertPixels
 import com.google.accompanist.internal.test.IgnoreOnRobolectric
+import com.google.accompanist.internal.test.assertPixels
 import com.google.common.truth.Truth.assertThat
 import org.junit.After
 import org.junit.Before

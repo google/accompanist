@@ -34,6 +34,11 @@ android {
 
     buildFeatures {
         buildConfig false
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.compose.get()
     }
 
     lintOptions {
@@ -54,6 +59,9 @@ android {
 dependencies {
     implementation libs.kotlin.stdlib
     implementation libs.kotlin.coroutines.android
+
+    implementation libs.compose.foundation.foundation
+    api libs.compose.ui.test.junit4
 
     api libs.androidx.test.core
     implementation libs.truth

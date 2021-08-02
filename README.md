@@ -4,9 +4,6 @@ Accompanist is a group of libraries that aim to supplement [Jetpack Compose][com
 
 Currently, Accompanist contains:
 
-### 🖼️ Image loading libraries
-Jetpack Compose implementations of two popular image loading libraries: [Coil](./coil/) and [Glide](./glide/).
-
 ### 📐 [Insets](./insets/)
 A library that brings [WindowInsets][windowinsets] support to Jetpack Compose.
 
