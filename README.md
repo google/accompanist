@@ -28,6 +28,9 @@ A library that provides easy-to-use modifiers for displaying a placeholder UI wh
 ### 🌊 [Flow Layouts](./flowlayout/)
 A library that adds Flexbox-like layout components to Jetpack Compose.
 
+### 🗺 [Navigation-Animation](./navigation-animation/)
+A library which provides [Compose Animation](https://developer.android.com/jetpack/compose/animation) support for Jetpack Navigation Compose.
+
 ### ⬇️ [Swipe to Refresh](./swiperefresh/)
 A library that provides a layout implementing the swipe-to-refresh UX pattern, similar to Android's [SwipeRefreshLayout](https://developer.android.com/jetpack/androidx/releases/swiperefreshlayout).
 
