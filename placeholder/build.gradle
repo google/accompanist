@@ -95,9 +95,6 @@ dependencies {
     // Test dependencies
     // ======================
 
-    androidTestImplementation project(':imageloading-testutils')
-    testImplementation project(':imageloading-testutils')
-
     androidTestImplementation project(':internal-testutils')
     testImplementation project(':internal-testutils')
 

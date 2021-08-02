@@ -47,8 +47,6 @@ android {
 }
 
 dependencies {
-    implementation project(':coil')
-    implementation project(':glide')
     implementation project(':insets')
     implementation project(':insets-ui')
     implementation project(':pager')
@@ -62,6 +60,7 @@ dependencies {
 
     implementation libs.androidx.appcompat
 
+    implementation libs.coil.compose
     implementation libs.coil.gif
 
     implementation libs.compose.material.material
