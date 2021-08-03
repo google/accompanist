@@ -18,42 +18,35 @@ Navigation Compose.
 ```kotlin
 @Composable
 private fun ExperimentalAnimationNav() {
-    val navController = rememberNavController()
-    navController.navigatorProvider += AnimatedComposeNavigator()
+    val navController = rememberAnimatedNavController()
     AnimatedNavHost(navController, startDestination = "Blue") {
         composable(
             "Blue",
             enterTransition = { initial, _ ->
                 when (initial.destination.route) {
                     "Red" ->
-                        if (navController.previousBackStackEntry != initial) {
-                            slideInHorizontally(
-                                initialOffsetX = { -1000 },
-                                animationSpec = tween(2000)
-                            )
-                        } else {
-                            slideInHorizontally(
-                                initialOffsetX = { 1000 },
-                                animationSpec = tween(2000)
-                            )
-                        }
+                        slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(700))
                     else -> null
                 }
             },
-            exitTransition = { initial, target ->
+            exitTransition = { _, target ->
                 when (target.destination.route) {
                     "Red" ->
-                        if (navController.previousBackStackEntry != initial) {
-                            slideOutHorizontally(
-                                targetOffsetX = { 1000 },
-                                animationSpec = tween(2000)
-                            )
-                        } else {
-                            slideOutHorizontally(
-                                targetOffsetX = { -1000 },
-                                animationSpec = tween(2000)
-                            )
-                        }
+                        slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween(700))
+                     else -> null
+                }
+            },
+            popEnterTransition = { initial, _ ->
+                            when (initial.destination.route) {
+                                "Red" ->
+                                    slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(700))
+                                else -> null
+                            }
+                        },
+            popExitTransition = { _, target ->
+                when (target.destination.route) {
+                    "Red" ->
+                        slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(700))
                     else -> null
                 }
             }
@@ -63,34 +56,28 @@ private fun ExperimentalAnimationNav() {
             enterTransition = { initial, _ ->
                 when (initial.destination.route) {
                     "Blue" ->
-                        if (navController.previousBackStackEntry != initial) {
-                            slideInHorizontally(
-                                initialOffsetX = { -1000 },
-                                animationSpec = tween(2000)
-                            )
-                        } else {
-                            slideInHorizontally(
-                                initialOffsetX = { 1000 },
-                                animationSpec = tween(2000)
-                            )
-                        }
+                        slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(700))
                     else -> null
                 }
             },
-            exitTransition = { initial, target ->
+            exitTransition = { _, target ->
                 when (target.destination.route) {
                     "Blue" ->
-                        if (navController.previousBackStackEntry != initial) {
-                            slideOutHorizontally(
-                                targetOffsetX = { 1000 },
-                                animationSpec = tween(2000)
-                            )
-                        } else {
-                            slideOutHorizontally(
-                                targetOffsetX = { -1000 },
-                                animationSpec = tween(2000)
-                            )
-                        }
+                        slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween(700))
+                    else -> null
+                }
+            },
+            popEnterTransition = { initial, _ ->
+                when (initial.destination.route) {
+                    "Blue" ->
+                        slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(700))
+                    else -> null
+                }
+            },
+            popExitTransition = { _, target ->
+                when (target.destination.route) {
+                    "Blue" ->
+                        slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(700))
                     else -> null
                 }
             }
