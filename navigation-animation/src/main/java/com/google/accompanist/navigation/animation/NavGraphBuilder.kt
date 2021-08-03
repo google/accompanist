@@ -19,9 +19,6 @@ package com.google.accompanist.navigation.animation
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDeepLink
@@ -100,10 +97,12 @@ public fun NavGraphBuilder.composable(
 public fun NavGraphBuilder.navigation(
     startDestination: String,
     route: String,
-    enterTransition: ((initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition)? =
-        { _, _ -> fadeIn(animationSpec = tween(700)) },
-    exitTransition: ((initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition)? =
-        { _, _ -> fadeOut(animationSpec = tween(700)) },
+    enterTransition: (
+        (initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition
+    )? = null,
+    exitTransition: (
+        (initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition
+    )? = null,
     popEnterTransition: (
         (initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition
     )? = enterTransition,
