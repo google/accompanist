@@ -2,7 +2,7 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-navigation-material)](https://search.maven.org/search?q=g:com.google.accompanist)
 
-A library which provides [Compose Material](https://developer.android.com/jetpack/compose/material) support for [Jetpack Navigation Compose](https://developer.android.com/jetpack/compose/navigation).
+A library which provides [Compose Material](https://developer.android.com/jetpack/androidx/releases/compose-material) support for [Jetpack Navigation Compose](https://developer.android.com/jetpack/compose/navigation).
 This features composable bottom sheet destinations.
 
 !!! warning
