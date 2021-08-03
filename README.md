@@ -25,10 +25,10 @@ A library that provides easy-to-use modifiers for displaying a placeholder UI wh
 ### 🌊 [Flow Layouts](./flowlayout/)
 A library that adds Flexbox-like layout components to Jetpack Compose.
 
-### 🗺 [Navigation-Animation](./navigation-animation/)
+### 🧭✨[Navigation-Animation](./navigation-animation/)
 A library which provides [Compose Animation](https://developer.android.com/jetpack/compose/animation) support for Jetpack Navigation Compose.
 
-### 🧭📱 [Navigation-Material](./navigation-material/)
+### 🧭🎨️ [Navigation-Material](./navigation-material/)
 A library which provides [Compose Material](https://developer.android.com/jetpack/androidx/releases/compose-material) support, such as modal bottom sheets, for Jetpack Navigation Compose.
 
 ### 🖌️ [Drawable Painter](./drawablepainter/)
