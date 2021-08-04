@@ -1,9 +1,8 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
 $dokka.location:com.google.accompanist.permissions.lint.util////PointingToDeclaration/permissions-lint/com.google.accompanist.permissions.lint.util/index.html
+$dokka.location:com.google.accompanist.permissions.lint.util//isComposable/com.intellij.psi.PsiMethod#/PointingToDeclaration/permissions-lint/com.google.accompanist.permissions.lint.util/is-composable.html
 $dokka.location:com.google.accompanist.permissions.lint.util//isComposable/org.jetbrains.uast.ULambdaExpression#/PointingToDeclaration/permissions-lint/com.google.accompanist.permissions.lint.util/is-composable.html
-$dokka.location:com.google.accompanist.permissions.lint.util//isComposable/org.jetbrains.uast.UMethod#/PointingToDeclaration/permissions-lint/com.google.accompanist.permissions.lint.util/is-composable.html
-$dokka.location:com.google.accompanist.permissions.lint.util//isComposable/org.jetbrains.uast.UParameter#/PointingToDeclaration/permissions-lint/com.google.accompanist.permissions.lint.util/is-composable.html
 $dokka.location:com.google.accompanist.permissions.lint.util//isComposable/org.jetbrains.uast.UVariable#/PointingToDeclaration/permissions-lint/com.google.accompanist.permissions.lint.util/is-composable.html
 $dokka.location:com.google.accompanist.permissions.lint.util//isInvokedWithinComposable/org.jetbrains.uast.UCallExpression#/PointingToDeclaration/permissions-lint/com.google.accompanist.permissions.lint.util/is-invoked-within-composable.html
 $dokka.location:com.google.accompanist.permissions.lint.util//toKmFunction/com.intellij.psi.PsiMethod#/PointingToDeclaration/permissions-lint/com.google.accompanist.permissions.lint.util/to-km-function.html
