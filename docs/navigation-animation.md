@@ -10,16 +10,13 @@ A library which provides [Compose Animation](https://developer.android.com/jetpa
 
 ## Usage
 
-### `AnimatedNavHost`
-
 The `AnimatedNavHost` composable offers a way to add custom transitions to composables in
 Navigation Compose.
 
 ```kotlin
 @Composable
 private fun ExperimentalAnimationNav() {
-    val navController = rememberNavController()
-    navController.navigatorProvider += AnimatedComposeNavigator()
+    val navController = rememberAnimatedNavController()
     AnimatedNavHost(navController, startDestination = "Blue") {
         composable(
             "Blue",
