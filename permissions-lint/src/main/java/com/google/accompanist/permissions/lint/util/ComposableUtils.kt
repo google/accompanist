@@ -18,7 +18,9 @@
 
 package com.google.accompanist.permissions.lint.util
 
+import com.intellij.lang.java.JavaLanguage
 import com.intellij.psi.PsiMethod
+import com.intellij.psi.PsiParameter
 import com.intellij.psi.impl.compiled.ClsParameterImpl
 import com.intellij.psi.impl.light.LightParameter
 import kotlinx.metadata.jvm.annotations
@@ -63,8 +65,8 @@ public fun UCallExpression.isInvokedWithinComposable(): Boolean {
 /**
  * Returns whether this method is @Composable or not
  */
-public val UMethod.isComposable: Boolean
-    get() = uAnnotations.any { it.qualifiedName == Composable.javaFqn }
+public val PsiMethod.isComposable: Boolean
+    get() = annotations.any { it.qualifiedName == Composable.javaFqn }
 
 /**
  * Returns whether this variable's type is @Composable or not
@@ -93,21 +95,21 @@ public val UVariable.isComposable: Boolean
 /**
  * Returns whether this parameter's type is @Composable or not
  */
-public val UParameter.isComposable: Boolean
+private val PsiParameter.isComposable: Boolean
     get() = when {
         // The parameter is in a class file. Currently type annotations aren't currently added to
         // the underlying type (https://youtrack.jetbrains.com/issue/KT-45307), so instead we use
         // the metadata annotation.
-        sourcePsi is ClsParameterImpl
+        this is ClsParameterImpl
             // In some cases when a method is defined in bytecode and the call fails to resolve
-            // to the ClsMethodImpl, sourcePsi can be null. In this case we can instead use javaPsi
-            // which will have a light implementation. Note that javaPsi will return a light
-            // implementation for most Kotlin declarations too, so we need to first check to see if
-            // the sourcePsi is null.
+            // to the ClsMethodImpl, we will instead get a LightParameter. Note that some Kotlin
+            // declarations too will also appear as a LightParameter, so we can check to see if
+            // the source language is Java, which means that this is a LightParameter for
+            // bytecode, as opposed to for a Kotlin declaration.
             // https://youtrack.jetbrains.com/issue/KT-46883
-            || (sourcePsi == null && javaPsi is LightParameter) -> {
+            || (this is LightParameter && this.language is JavaLanguage) -> {
             // Find the containing method, so we can get metadata from the containing class
-            val containingMethod = javaPsi!!.getParentOfType<PsiMethod>(true)
+            val containingMethod = getParentOfType<PsiMethod>(true)
             val kmFunction = containingMethod!!.toKmFunction()
 
             val kmValueParameter = kmFunction?.valueParameters?.find {
@@ -119,7 +121,7 @@ public val UParameter.isComposable: Boolean
             } != null
         }
         // The parameter is in a source declaration
-        else -> typeReference!!.isComposable
+        else -> (toUElement() as UParameter).typeReference!!.isComposable
     }
 
 /**
@@ -130,7 +132,7 @@ public val ULambdaExpression.isComposable: Boolean
         // Function call with a lambda parameter
         is UCallExpression -> {
             val parameter = lambdaParent.getParameterForArgument(this)
-            (parameter.toUElement() as? UParameter)?.isComposable == true
+            parameter?.isComposable == true
         }
         // A local / non-local lambda variable
         is UVariable -> {
@@ -229,7 +231,7 @@ private val UTypeReferenceExpression.isComposable: Boolean
 
         // Annotations on the types of local properties (val foo: @Composable () -> Unit = {})
         // are currently not present on the PsiType, we so need to manually check the underlying
-        // type reference. (https://youtrack.jetbrains.com/issue/KT-45244)
+        // type reference. (https://youtrack.jetbrains.com/issue/KTIJ-18821)
         return (sourcePsi as? KtTypeReference)?.hasComposableAnnotation == true
     }
 

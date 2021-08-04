@@ -22,6 +22,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.plusAssign
 
+/**
+ * Creates a NavHostController that handles the adding of the [ComposeNavigator], [DialogNavigator]
+ * and [AnimatedComposeNavigator]. Additional [androidx.navigation.Navigator] instances should be
+ * added in a [androidx.compose.runtime.SideEffect] block.
+ *
+ * @see AnimatedNavHost
+ */
 @ExperimentalAnimationApi
 @Composable
 public fun rememberAnimatedNavController(): NavHostController {
