@@ -43,10 +43,10 @@ nav:
   - 'Permissions':
     - 'Guide': permissions.md
     - 'API': api/permissions/
-  - 'Navigation-Animation':
+  - 'Navigation Animation':
       - 'Guide': navigation-animation.md
       - 'API': api/navigation-animation/
-  - 'Navigation-Material':
+  - 'Navigation Material':
       - 'Guide': navigation-material.md
       - 'API': api/navigation-material/
   - 'Snapshots': using-snapshot-version.md
