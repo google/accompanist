@@ -50,8 +50,7 @@ class AnimatedNavHostTest {
         composeTestRule.mainClock.autoAdvance = false
 
         composeTestRule.setContent {
-            navController = rememberNavController()
-            navController.navigatorProvider += AnimatedComposeNavigator()
+            navController = rememberAnimatedNavController()
             AnimatedNavHost(navController, startDestination = first) {
                 composable(first) { BasicText(first) }
                 composable(second) { BasicText(second) }
@@ -144,8 +143,7 @@ class AnimatedNavHostTest {
             activity?.intent?.run {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             }
-            navController = rememberNavController()
-            navController.navigatorProvider += AnimatedComposeNavigator()
+            navController = rememberAnimatedNavController()
             AnimatedNavHost(navController, startDestination = first) {
                 composable(first) { BasicText(first) }
                 composable(
