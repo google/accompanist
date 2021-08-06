@@ -44,60 +44,6 @@
         </activity>
 
         <activity
-            android:name="com.google.accompanist.sample.coil.CoilBasicSample"
-            android:label="@string/coil_title_basic">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name="com.google.accompanist.sample.coil.CoilLazyColumnSample"
-            android:label="@string/coil_title_lazy_row">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name="com.google.accompanist.sample.coil.CoilLazyGridSample"
-            android:label="@string/coil_title_lazy_grid">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name="com.google.accompanist.sample.glide.GlideBasicSample"
-            android:label="@string/glide_title_basic">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name="com.google.accompanist.sample.glide.GlideLazyColumnSample"
-            android:label="@string/glide_title_lazy_row">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name="com.google.accompanist.sample.glide.GlideLazyGridSample"
-            android:label="@string/glide_title_lazy_grid">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
             android:name="com.google.accompanist.sample.insets.InsetsBasicSample"
             android:label="@string/insets_title_basic">
             <intent-filter>
