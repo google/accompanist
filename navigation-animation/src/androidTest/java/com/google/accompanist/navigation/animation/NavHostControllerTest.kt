@@ -18,16 +18,12 @@ package com.google.accompanist.navigation.animation
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.text.BasicText
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.get
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread
 import com.google.common.truth.Truth.assertThat
 import org.junit.Rule
 import org.junit.Test
@@ -53,7 +49,6 @@ class NavHostControllerTest {
                 composable(second) { BasicText(second) }
             }
         }
-
 
         val navigator = composeTestRule.runOnIdle {
             navController.navigatorProvider[AnimatedComposeNavigator::class]
