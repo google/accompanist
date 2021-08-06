@@ -26,7 +26,6 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navDeepLink
 import androidx.navigation.plusAssign
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -50,8 +49,7 @@ class AnimatedNavHostTest {
         composeTestRule.mainClock.autoAdvance = false
 
         composeTestRule.setContent {
-            navController = rememberNavController()
-            navController.navigatorProvider += AnimatedComposeNavigator()
+            navController = rememberAnimatedNavController()
             AnimatedNavHost(navController, startDestination = first) {
                 composable(first) { BasicText(first) }
                 composable(second) { BasicText(second) }
@@ -144,8 +142,7 @@ class AnimatedNavHostTest {
             activity?.intent?.run {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             }
-            navController = rememberNavController()
-            navController.navigatorProvider += AnimatedComposeNavigator()
+            navController = rememberAnimatedNavController()
             AnimatedNavHost(navController, startDestination = first) {
                 composable(first) { BasicText(first) }
                 composable(

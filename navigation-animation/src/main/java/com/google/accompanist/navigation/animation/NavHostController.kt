@@ -18,6 +18,7 @@ package com.google.accompanist.navigation.animation
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.plusAssign
@@ -33,6 +34,6 @@ import androidx.navigation.plusAssign
 @Composable
 public fun rememberAnimatedNavController(): NavHostController {
     return rememberNavController().apply {
-        navigatorProvider += AnimatedComposeNavigator()
+        navigatorProvider += remember(this) { AnimatedComposeNavigator() }
     }
 }
