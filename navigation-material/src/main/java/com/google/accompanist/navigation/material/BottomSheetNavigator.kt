@@ -27,8 +27,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.FloatingWindow
 import androidx.navigation.NavBackStackEntry
@@ -37,6 +39,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
 import androidx.navigation.NavigatorState
 import com.google.accompanist.navigation.material.BottomSheetNavigator.Destination
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 /**
  * The state of a [ModalBottomSheetLayout] that the [BottomSheetNavigator] drives
@@ -106,6 +110,20 @@ public class BottomSheetNavigator(
     internal val sheetState: ModalBottomSheetState
 ) : Navigator<BottomSheetNavigator.Destination>() {
 
+    private var attached by mutableStateOf(false)
+
+    /**
+     * Get the back stack from the [state]. In some cases, the [sheetContent] might be composed
+     * before the Navigator is attached, so we specifically return an empty flow if we aren't
+     * attached yet.
+     */
+    private val backStack: StateFlow<List<NavBackStackEntry>>
+        get() = if (attached) {
+            state.backStack
+        } else {
+            MutableStateFlow(emptyList())
+        }
+
     /**
      * Access properties of the [ModalBottomSheetLayout]'s [ModalBottomSheetState]
      */
@@ -118,7 +136,7 @@ public class BottomSheetNavigator(
     public val sheetContent: @Composable ColumnScope.() -> Unit = @Composable {
         val columnScope = this
         val saveableStateHolder = rememberSaveableStateHolder()
-        val backStackEntries by state.backStack.collectAsState()
+        val backStackEntries by backStack.collectAsState()
 
         // We always replace the sheet's content instead of overlaying and nesting floating
         // window destinations. That means that only *one* concurrent destination is supported by
@@ -157,6 +175,11 @@ public class BottomSheetNavigator(
                 }
             }
         )
+    }
+
+    override fun onAttach(state: NavigatorState) {
+        super.onAttach(state)
+        attached = true
     }
 
     override fun createDestination(): Destination = Destination(navigator = this, content = {})
