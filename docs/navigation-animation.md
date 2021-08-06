@@ -84,7 +84,7 @@ private fun ExperimentalAnimationNav() {
 }
 ```
 
-For more examples, refer to the [samples](https://github.com/google/accompanist/tree/main/sample/src/main/java/com/google/accompanist/sample/navigation-animation).
+For more examples, refer to the [samples](https://github.com/google/accompanist/tree/main/sample/src/main/java/com/google/accompanist/sample/navigation/animation).
 
 ## Download
 
