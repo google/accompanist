@@ -272,6 +272,40 @@ internal class BottomSheetNavigatorTest {
             .doesNotContain(backStackEntry2)
     }
 
+    @Test
+    fun testComposeSheetContentBeforeNavigatorAttached(): Unit = runBlocking {
+        val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
+        val navigator = BottomSheetNavigator(sheetState)
+        val navigatorState = TestNavigatorState()
+
+        composeTestRule.setContent {
+            ModalBottomSheetLayout(
+                bottomSheetNavigator = navigator,
+                content = { Box(Modifier.fillMaxSize()) }
+            )
+        }
+
+        // Attach the state only after accessing the navigator's sheetContent in
+        // ModalBottomSheetLayout
+        navigator.onAttach(navigatorState)
+
+        val entry = navigatorState.createBackStackEntry(
+            navigator.createFakeDestination(), null
+        )
+
+        navigator.navigate(
+            entries = listOf(entry),
+            navOptions = null,
+            navigatorExtras = null
+        )
+
+        composeTestRule.awaitIdle()
+
+        assertWithMessage("The back stack entry has been added to the back stack")
+            .that(navigatorState.backStack.value)
+            .containsExactly(entry)
+    }
+
     /**
      * Create a [BottomSheetNavigator.Destination] with some fake content
      * Having an empty Composable will result in the sheet's height being 0 which crashes
