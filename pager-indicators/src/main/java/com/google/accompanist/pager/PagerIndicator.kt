@@ -70,6 +70,7 @@ fun HorizontalPagerIndicator(
 ) {
 
     val indicatorWidthPx = LocalDensity.current.run { indicatorWidth.roundToPx() }
+    val spacingPx = LocalDensity.current.run { spacing.roundToPx() }
 
     Box(
         modifier = modifier,
@@ -94,7 +95,7 @@ fun HorizontalPagerIndicator(
                     val scrollPosition = (pagerState.currentPage + pagerState.currentPageOffset)
                         .coerceIn(0f, (pagerState.pageCount - 1).toFloat())
                     IntOffset(
-                        x = ((spacing.roundToPx() + indicatorWidthPx) * scrollPosition).toInt(),
+                        x = ((spacingPx + indicatorWidthPx) * scrollPosition).toInt(),
                         y = 0
                     )
                 }
@@ -140,6 +141,7 @@ fun VerticalPagerIndicator(
 ) {
 
     val indicatorHeightPx = LocalDensity.current.run { indicatorHeight.roundToPx() }
+    val spacingPx = LocalDensity.current.run { spacing.roundToPx() }
 
     Box(
         modifier = modifier,
@@ -165,7 +167,7 @@ fun VerticalPagerIndicator(
                         .coerceIn(0f, (pagerState.pageCount - 1).toFloat())
                     IntOffset(
                         x = 0,
-                        y = ((spacing.roundToPx() + indicatorHeightPx) * scrollPosition).toInt(),
+                        y = ((spacingPx + indicatorHeightPx) * scrollPosition).toInt(),
                     )
                 }
                 .size(width = indicatorWidth, height = indicatorHeight)
