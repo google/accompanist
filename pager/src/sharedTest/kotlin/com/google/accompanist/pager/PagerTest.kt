@@ -61,6 +61,19 @@ abstract class PagerTest {
     }
 
     @Test
+    fun layout_initialEmpty() {
+        // Initially lay out with a count of 0
+        val pagerState = setPagerContent(pageCount = 0)
+        assertPagerLayout(0, pagerState.pageCount)
+
+        // Now update to have a count of 10 and assert the layout.
+        // This models a count which is driven by dynamic data
+        pagerState.pageCount = 10
+        composeTestRule.waitForIdle()
+        assertPagerLayout(0, pagerState.pageCount)
+    }
+
+    @Test
     fun swipe() {
         val pagerState = setPagerContent(pageCount = 10)
 
