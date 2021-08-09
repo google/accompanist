@@ -49,7 +49,6 @@ import androidx.compose.ui.semantics.ScrollAxisRange
 import androidx.compose.ui.semantics.horizontalScrollAxisRange
 import androidx.compose.ui.semantics.scrollBy
 import androidx.compose.ui.semantics.selectableGroup
-import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
@@ -288,12 +287,9 @@ internal fun Pager(
             for (_page in pages) {
                 val page = state.pageOf(_page)
                 key(page) {
-                    val itemSemantics = Modifier.semantics {
-                        this.selected = page == state.currentPage
-                    }
                     Box(
                         contentAlignment = Alignment.Center,
-                        modifier = itemSemantics.then(PageData(_page))
+                        modifier = PageData(_page)
                     ) {
                         val scope = remember(this, state) {
                             PagerScopeImpl(this, state)
