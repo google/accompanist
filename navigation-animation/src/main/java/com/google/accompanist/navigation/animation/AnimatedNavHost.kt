@@ -74,14 +74,12 @@ public fun AnimatedNavHost(
     startDestination: String,
     modifier: Modifier = Modifier,
     route: String? = null,
-    enterTransition: (initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition =
+    enterTransition: ((initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition)? =
         { _, _ -> fadeIn(animationSpec = tween(700)) },
-    exitTransition: (initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition =
+    exitTransition: ((initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition)? =
         { _, _ -> fadeOut(animationSpec = tween(700)) },
-    popEnterTransition: (initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition =
-        enterTransition,
-    popExitTransition: (initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition =
-        exitTransition,
+    popEnterTransition: ((initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition)? = enterTransition,
+    popExitTransition: ((initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition)? = exitTransition,
     builder: NavGraphBuilder.() -> Unit
 ) {
     AnimatedNavHost(
@@ -117,14 +115,12 @@ public fun AnimatedNavHost(
     navController: NavHostController,
     graph: NavGraph,
     modifier: Modifier = Modifier,
-    enterTransition: (initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition =
+    enterTransition: ((initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition)? =
         { _, _ -> fadeIn(animationSpec = tween(700)) },
-    exitTransition: (initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition =
+    exitTransition: ((initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition)? =
         { _, _ -> fadeOut(animationSpec = tween(700)) },
-    popEnterTransition: (initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition =
-        enterTransition,
-    popExitTransition: (initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition =
-        exitTransition,
+    popEnterTransition: ((initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition)? = enterTransition,
+    popExitTransition: ((initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition)? = exitTransition,
 ) {
 
     enterTransitions[graph.route] = enterTransition
@@ -252,19 +248,19 @@ public fun AnimatedNavHost(
 @ExperimentalAnimationApi
 internal val enterTransitions =
     mutableMapOf<String?,
-        (initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition>()
+        ((initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition)?>()
 
 @ExperimentalAnimationApi
 internal val exitTransitions =
     mutableMapOf<String?,
-        (initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition>()
+        ((initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition)?>()
 
 @ExperimentalAnimationApi
 internal val popEnterTransitions =
     mutableMapOf<String?,
-        (initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition>()
+        ((initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition)?>()
 
 @ExperimentalAnimationApi
 internal val popExitTransitions =
     mutableMapOf<String?,
-        (initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition>()
+        ((initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition)?>()
