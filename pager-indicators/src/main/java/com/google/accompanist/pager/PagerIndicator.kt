@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -67,6 +68,10 @@ fun HorizontalPagerIndicator(
     spacing: Dp = indicatorWidth,
     indicatorShape: Shape = CircleShape,
 ) {
+
+    val indicatorWidthPx = LocalDensity.current.run { indicatorWidth.roundToPx() }
+    val spacingPx = LocalDensity.current.run { spacing.roundToPx() }
+
     Box(
         modifier = modifier,
         contentAlignment = Alignment.CenterStart
@@ -90,7 +95,7 @@ fun HorizontalPagerIndicator(
                     val scrollPosition = (pagerState.currentPage + pagerState.currentPageOffset)
                         .coerceIn(0f, (pagerState.pageCount - 1).toFloat())
                     IntOffset(
-                        x = ((spacing + indicatorWidth) * scrollPosition).roundToPx(),
+                        x = ((spacingPx + indicatorWidthPx) * scrollPosition).toInt(),
                         y = 0
                     )
                 }
@@ -134,6 +139,10 @@ fun VerticalPagerIndicator(
     spacing: Dp = indicatorHeight,
     indicatorShape: Shape = CircleShape,
 ) {
+
+    val indicatorHeightPx = LocalDensity.current.run { indicatorHeight.roundToPx() }
+    val spacingPx = LocalDensity.current.run { spacing.roundToPx() }
+
     Box(
         modifier = modifier,
         contentAlignment = Alignment.TopCenter
@@ -158,7 +167,7 @@ fun VerticalPagerIndicator(
                         .coerceIn(0f, (pagerState.pageCount - 1).toFloat())
                     IntOffset(
                         x = 0,
-                        y = ((spacing + indicatorHeight) * scrollPosition).roundToPx(),
+                        y = ((spacingPx + indicatorHeightPx) * scrollPosition).toInt(),
                     )
                 }
                 .size(width = indicatorWidth, height = indicatorHeight)
