@@ -17,12 +17,8 @@
 package com.google.accompanist.pager
 
 import androidx.compose.ui.test.SemanticsNodeInteraction
-import androidx.compose.ui.test.assertIsNotSelected
-import androidx.compose.ui.test.assertIsSelectable
-import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performScrollTo
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.CoroutineScope
@@ -340,10 +336,6 @@ abstract class PagerTest {
                 composeTestRule.onNodeWithTag(page.toString())
                     .assertExists()
                     .assertLaidOutItemPosition(page, currentPage)
-                    .onParent()
-                    .assertIsSelectable()
-                    .assertWhen(page == currentPage) { assertIsSelected() }
-                    .assertWhen(page != currentPage) { assertIsNotSelected() }
             } else {
                 // If this page is not expected to be laid out, assert that it doesn't exist
                 composeTestRule.onNodeWithTag(_page.toString()).assertDoesNotExist()
