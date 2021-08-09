@@ -200,8 +200,14 @@ class PagerState(
         get() = _pageCount
         set(@IntRange(from = 0) value) {
             require(value >= 0) { "pageCount must be >= 0" }
-            _pageCount = value
-            currentPage = currentPage.coerceIn(firstPageIndex, lastPageIndex)
+            if (value != _pageCount) {
+                _pageCount = value
+                if (DebugLog) {
+                    Napier.d(message = "Page count changed: $value")
+                }
+                currentPage = currentPage.coerceIn(firstPageIndex, lastPageIndex)
+                updateLayoutPages(currentPage)
+            }
         }
 
     /**
@@ -221,7 +227,7 @@ class PagerState(
                     Napier.d(message = "Current page changed: $_currentPage")
                 }
                 // If the current page is changed, update the layout page too
-                updateLayoutPages(_currentPage)
+                updateLayoutPages(moddedValue)
             }
         }
 
