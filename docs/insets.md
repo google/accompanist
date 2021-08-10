@@ -218,7 +218,7 @@ The features below are experimental, and require developers to [opt-in](https://
 
     ![](images/ime-scroll.gif){: loading=lazy align=right }
 
-    This library also has support for controlling the IME from scroll gestures, allowing your scrollable components to pull/push the IME on/off screen. This is acheived through the built-in [`NestedScrollConnection`](https://developer.android.com/reference/kotlin/androidx/compose/ui/gesture/nestedscroll/NestedScrollConnection) implementation returned by [`rememberImeNestedScrollConnection()`](../api/insets/insets/com.google.accompanist.insets/remember-ime-nested-scroll-connection.html).
+    This library also has support for controlling the IME from scroll gestures, allowing your scrollable components to pull/push the IME on/off screen. This is achieved through the built-in [`NestedScrollConnection`](https://developer.android.com/reference/kotlin/androidx/compose/ui/gesture/nestedscroll/NestedScrollConnection) implementation returned by [`rememberImeNestedScrollConnection()`](../api/insets/insets/com.google.accompanist.insets/remember-ime-nested-scroll-connection.html).
 
     This functionality only works when running on devices with API 30+.
 
