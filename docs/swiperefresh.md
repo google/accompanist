@@ -51,7 +51,7 @@ SwipeRefresh(
 
 ### Indicating a refresh without swiping
 
-As this library is built with a seperate state object, it's easy to display a refreshing indicator without a swipe to triggering it.
+As this library is built with a separate state object, it's easy to display a refreshing indicator without a swipe to triggering it.
 
 The unrealistic example below displays a forever refreshing indicator:
 
