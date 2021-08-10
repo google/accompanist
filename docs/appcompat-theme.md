@@ -44,7 +44,7 @@ This is especially handy when you're migrating an existing app, a fragment (or o
 
 ### Customizing the theme
 
-The [`AppCompatTheme()`][appcompatheme] function will automatically read the host context's AppCompat theme and pass them to [`MaterialTheme`][materialtheme] on your behalf, but if you want to customize the generated values, you can do so via the [`createAppCompatTheme()`][createappcompattheme] function:
+The [`AppCompatTheme()`][appcompattheme] function will automatically read the host context's AppCompat theme and pass them to [`MaterialTheme`][materialtheme] on your behalf, but if you want to customize the generated values, you can do so via the [`createAppCompatTheme()`][createappcompattheme] function:
 
 ``` kotlin
 val context = LocalContext.current
@@ -71,7 +71,7 @@ Going through the pillars of material theming:
 
 ### Colors
 
-AppCompat has a limited set of top-level color attributes, which means that [`AppCompatTheme()`][appcompatheme]
+AppCompat has a limited set of top-level color attributes, which means that [`AppCompatTheme()`][appcompattheme]
 has to generate/select alternative colors in certain situations. The mapping is currently:
 
 | MaterialTheme color | AppCompat attribute                                            |
@@ -169,7 +169,7 @@ limitations under the License.
 
  [compose]: https://developer.android.com/jetpack/compose
  [appcompat]: https://developer.android.com/jetpack/androidx/releases/appcompat
- [appcompatheme]: ../api/appcompat-theme/appcompat-theme/com.google.accompanist.appcompattheme/-app-compat-theme.html
+ [appcompattheme]: ../api/appcompat-theme/appcompat-theme/com.google.accompanist.appcompattheme/-app-compat-theme.html
  [createappcompattheme]: ../api/appcompat-theme/appcompat-theme/com.google.accompanist.appcompattheme/create-app-compat-theme.html
  [materialtheme]: https://developer.android.com/reference/kotlin/androidx/compose/material/MaterialTheme
  [shapes]: https://developer.android.com/reference/kotlin/androidx/compose/material/Shapes
