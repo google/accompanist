@@ -25,6 +25,7 @@ import androidx.compose.material.SwipeableDefaults
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -67,6 +68,12 @@ public class BottomSheetNavigatorSheetState(private val sheetState: ModalBottomS
      */
     public val targetValue: ModalBottomSheetValue
         get() = sheetState.targetValue
+
+    /**
+     * @see ModalBottomSheetState.offset
+     */
+    public val offset: State<Float>
+        get() = sheetState.offset
 }
 
 /**
