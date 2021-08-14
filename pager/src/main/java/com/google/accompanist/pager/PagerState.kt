@@ -150,7 +150,7 @@ class PagerState(
      * The page which is currently laid out.
      */
     internal inline val currentLayoutPage: Int
-        get() = currentLayoutPageInfo.page!!
+        get() = currentLayoutPageInfo.page ?: 0
 
     internal inline val currentLayoutPageInfo: PageLayoutInfo
         get() = layoutPages[currentLayoutPageIndex]
