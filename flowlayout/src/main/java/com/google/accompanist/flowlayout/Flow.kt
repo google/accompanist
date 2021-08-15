@@ -20,7 +20,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.IntrinsicMeasurable
+import androidx.compose.ui.layout.IntrinsicMeasureScope
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.Measurable
+import androidx.compose.ui.layout.MeasurePolicy
+import androidx.compose.ui.layout.MeasureResult
+import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
@@ -145,133 +151,162 @@ private fun Flow(
     fun Placeable.crossAxisSize() =
         if (orientation == LayoutOrientation.Horizontal) height else width
 
-    Layout(content, modifier) { measurables, outerConstraints ->
-        val sequences = mutableListOf<List<Placeable>>()
-        val crossAxisSizes = mutableListOf<Int>()
-        val crossAxisPositions = mutableListOf<Int>()
+    val measurePolicy = object: MeasurePolicy {
+        override fun MeasureScope.measure(
+            measurables: List<Measurable>,
+            constraints: Constraints
+        ): MeasureResult {
 
-        var mainAxisSpace = 0
-        var crossAxisSpace = 0
+            val sequences = mutableListOf<List<Placeable>>()
+            val crossAxisSizes = mutableListOf<Int>()
+            val crossAxisPositions = mutableListOf<Int>()
 
-        val currentSequence = mutableListOf<Placeable>()
-        var currentMainAxisSize = 0
-        var currentCrossAxisSize = 0
+            var mainAxisSpace = 0
+            var crossAxisSpace = 0
 
-        val constraints = OrientationIndependentConstraints(outerConstraints, orientation)
+            val currentSequence = mutableListOf<Placeable>()
+            var currentMainAxisSize = 0
+            var currentCrossAxisSize = 0
 
-        val childConstraints = if (orientation == LayoutOrientation.Horizontal) {
-            Constraints(maxWidth = constraints.mainAxisMax)
-        } else {
-            Constraints(maxHeight = constraints.mainAxisMax)
-        }
+            val orientationIndependentConstraints =
+                OrientationIndependentConstraints(constraints, orientation)
 
-        // Return whether the placeable can be added to the current sequence.
-        fun canAddToCurrentSequence(placeable: Placeable) =
-            currentSequence.isEmpty() || currentMainAxisSize + mainAxisSpacing.roundToPx() +
-                placeable.mainAxisSize() <= constraints.mainAxisMax
-
-        // Store current sequence information and start a new sequence.
-        fun startNewSequence() {
-            if (sequences.isNotEmpty()) {
-                crossAxisSpace += crossAxisSpacing.roundToPx()
+            val childConstraints = if (orientation == LayoutOrientation.Horizontal) {
+                Constraints(maxWidth = orientationIndependentConstraints.mainAxisMax)
+            } else {
+                Constraints(maxHeight = orientationIndependentConstraints.mainAxisMax)
             }
-            sequences += currentSequence.toList()
-            crossAxisSizes += currentCrossAxisSize
-            crossAxisPositions += crossAxisSpace
 
-            crossAxisSpace += currentCrossAxisSize
-            mainAxisSpace = max(mainAxisSpace, currentMainAxisSize)
+            // Return whether the placeable can be added to the current sequence.
+            fun canAddToCurrentSequence(placeable: Placeable) =
+                currentSequence.isEmpty() || currentMainAxisSize + mainAxisSpacing.roundToPx() +
+                    placeable.mainAxisSize() <= orientationIndependentConstraints.mainAxisMax
 
-            currentSequence.clear()
-            currentMainAxisSize = 0
-            currentCrossAxisSize = 0
-        }
+            // Store current sequence information and start a new sequence.
+            fun startNewSequence() {
+                if (sequences.isNotEmpty()) {
+                    crossAxisSpace += crossAxisSpacing.roundToPx()
+                }
+                sequences += currentSequence.toList()
+                crossAxisSizes += currentCrossAxisSize
+                crossAxisPositions += crossAxisSpace
 
-        for (measurable in measurables) {
-            // Ask the child for its preferred size.
-            val placeable = measurable.measure(childConstraints)
+                crossAxisSpace += currentCrossAxisSize
+                mainAxisSpace = max(mainAxisSpace, currentMainAxisSize)
 
-            // Start a new sequence if there is not enough space.
-            if (!canAddToCurrentSequence(placeable)) startNewSequence()
-
-            // Add the child to the current sequence.
-            if (currentSequence.isNotEmpty()) {
-                currentMainAxisSize += mainAxisSpacing.roundToPx()
+                currentSequence.clear()
+                currentMainAxisSize = 0
+                currentCrossAxisSize = 0
             }
-            currentSequence.add(placeable)
-            currentMainAxisSize += placeable.mainAxisSize()
-            currentCrossAxisSize = max(currentCrossAxisSize, placeable.crossAxisSize())
-        }
 
-        if (currentSequence.isNotEmpty()) startNewSequence()
+            for (measurable in measurables) {
+                // Ask the child for its preferred size.
+                val placeable = measurable.measure(childConstraints)
 
-        val mainAxisLayoutSize = if (constraints.mainAxisMax != Constraints.Infinity &&
-            mainAxisSize == SizeMode.Expand
-        ) {
-            constraints.mainAxisMax
-        } else {
-            max(mainAxisSpace, constraints.mainAxisMin)
-        }
-        val crossAxisLayoutSize = max(crossAxisSpace, constraints.crossAxisMin)
+                // Start a new sequence if there is not enough space.
+                if (!canAddToCurrentSequence(placeable)) startNewSequence()
 
-        val layoutWidth = if (orientation == LayoutOrientation.Horizontal) {
-            mainAxisLayoutSize
-        } else {
-            crossAxisLayoutSize
-        }
-        val layoutHeight = if (orientation == LayoutOrientation.Horizontal) {
-            crossAxisLayoutSize
-        } else {
-            mainAxisLayoutSize
-        }
-
-        layout(layoutWidth, layoutHeight) {
-            sequences.forEachIndexed { i, placeables ->
-                val childrenMainAxisSizes = IntArray(placeables.size) { j ->
-                    placeables[j].mainAxisSize() +
-                        if (j < placeables.lastIndex) mainAxisSpacing.roundToPx() else 0
+                // Add the child to the current sequence.
+                if (currentSequence.isNotEmpty()) {
+                    currentMainAxisSize += mainAxisSpacing.roundToPx()
                 }
-                val arrangement = if (i < sequences.lastIndex) {
-                    mainAxisAlignment.arrangement
-                } else {
-                    lastLineMainAxisAlignment.arrangement
-                }
-                // TODO(soboleva): rtl support
-                // Handle vertical direction
-                val mainAxisPositions = IntArray(childrenMainAxisSizes.size) { 0 }
-                with(arrangement) {
-                    arrange(mainAxisLayoutSize, childrenMainAxisSizes, mainAxisPositions)
-                }
-                placeables.forEachIndexed { j, placeable ->
-                    val crossAxis = when (crossAxisAlignment) {
-                        FlowCrossAxisAlignment.Start -> 0
-                        FlowCrossAxisAlignment.End ->
-                            crossAxisSizes[i] - placeable.crossAxisSize()
-                        FlowCrossAxisAlignment.Center ->
-                            Alignment.Center.align(
-                                IntSize.Zero,
-                                IntSize(
-                                    width = 0,
-                                    height = crossAxisSizes[i] - placeable.crossAxisSize()
-                                ),
-                                LayoutDirection.Ltr
-                            ).y
+                currentSequence.add(placeable)
+                currentMainAxisSize += placeable.mainAxisSize()
+                currentCrossAxisSize = max(currentCrossAxisSize, placeable.crossAxisSize())
+            }
+
+            if (currentSequence.isNotEmpty()) startNewSequence()
+
+            val mainAxisLayoutSize = if (orientationIndependentConstraints.mainAxisMax != Constraints.Infinity &&
+                mainAxisSize == SizeMode.Expand
+            ) {
+                orientationIndependentConstraints.mainAxisMax
+            } else {
+                max(mainAxisSpace, orientationIndependentConstraints.mainAxisMin)
+            }
+            val crossAxisLayoutSize = max(crossAxisSpace, orientationIndependentConstraints.crossAxisMin)
+
+            val layoutWidth = if (orientation == LayoutOrientation.Horizontal) {
+                mainAxisLayoutSize
+            } else {
+                crossAxisLayoutSize
+            }
+            val layoutHeight = if (orientation == LayoutOrientation.Horizontal) {
+                crossAxisLayoutSize
+            } else {
+                mainAxisLayoutSize
+            }
+
+            return layout(layoutWidth, layoutHeight) {
+                sequences.forEachIndexed { i, placeables ->
+                    val childrenMainAxisSizes = IntArray(placeables.size) { j ->
+                        placeables[j].mainAxisSize() +
+                            if (j < placeables.lastIndex) mainAxisSpacing.roundToPx() else 0
                     }
-                    if (orientation == LayoutOrientation.Horizontal) {
-                        placeable.place(
-                            x = mainAxisPositions[j],
-                            y = crossAxisPositions[i] + crossAxis
-                        )
+                    val arrangement = if (i < sequences.lastIndex) {
+                        mainAxisAlignment.arrangement
                     } else {
-                        placeable.place(
-                            x = crossAxisPositions[i] + crossAxis,
-                            y = mainAxisPositions[j]
-                        )
+                        lastLineMainAxisAlignment.arrangement
+                    }
+                    // TODO(soboleva): rtl support
+                    // Handle vertical direction
+                    val mainAxisPositions = IntArray(childrenMainAxisSizes.size) { 0 }
+                    with(arrangement) {
+                        arrange(mainAxisLayoutSize, childrenMainAxisSizes, mainAxisPositions)
+                    }
+                    placeables.forEachIndexed { j, placeable ->
+                        val crossAxis = when (crossAxisAlignment) {
+                            FlowCrossAxisAlignment.Start -> 0
+                            FlowCrossAxisAlignment.End ->
+                                crossAxisSizes[i] - placeable.crossAxisSize()
+                            FlowCrossAxisAlignment.Center ->
+                                Alignment.Center.align(
+                                    IntSize.Zero,
+                                    IntSize(
+                                        width = 0,
+                                        height = crossAxisSizes[i] - placeable.crossAxisSize()
+                                    ),
+                                    LayoutDirection.Ltr
+                                ).y
+                        }
+                        if (orientation == LayoutOrientation.Horizontal) {
+                            placeable.place(
+                                x = mainAxisPositions[j],
+                                y = crossAxisPositions[i] + crossAxis
+                            )
+                        } else {
+                            placeable.place(
+                                x = crossAxisPositions[i] + crossAxis,
+                                y = mainAxisPositions[j]
+                            )
+                        }
                     }
                 }
             }
         }
+
+        override fun IntrinsicMeasureScope.minIntrinsicWidth(
+            measurables: List<IntrinsicMeasurable>,
+            height: Int
+        ) = (measurables.map { it.minIntrinsicWidth(height) }.maxByOrNull { it } ?: 0)
+
+        override fun IntrinsicMeasureScope.minIntrinsicHeight(
+            measurables: List<IntrinsicMeasurable>,
+            width: Int
+        ) = (measurables.map { it.minIntrinsicHeight(width) }.maxByOrNull { it } ?: 0)
+
+        override fun IntrinsicMeasureScope.maxIntrinsicWidth(
+            measurables: List<IntrinsicMeasurable>,
+            height: Int
+        ) = (measurables.map { it.maxIntrinsicWidth(height) }.maxByOrNull { it } ?: 0)
+
+        override fun IntrinsicMeasureScope.maxIntrinsicHeight(
+            measurables: List<IntrinsicMeasurable>,
+            width: Int
+        ) = (measurables.map { it.maxIntrinsicHeight(width) }.maxByOrNull { it } ?: 0)
     }
+
+    Layout(content, modifier, measurePolicy)
 }
 
 /**
