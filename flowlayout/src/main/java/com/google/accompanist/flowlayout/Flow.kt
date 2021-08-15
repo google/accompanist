@@ -119,10 +119,12 @@ public enum class FlowCrossAxisAlignment {
      * Place children such that their center is in the middle of the cross axis.
      */
     Center,
+
     /**
      * Place children such that their start edge is aligned to the start edge of the cross axis.
      */
     Start,
+
     /**
      * Place children such that their end edge is aligned to the end edge of the cross axis.
      */
@@ -148,10 +150,11 @@ private fun Flow(
 ) {
     fun Placeable.mainAxisSize() =
         if (orientation == LayoutOrientation.Horizontal) width else height
+
     fun Placeable.crossAxisSize() =
         if (orientation == LayoutOrientation.Horizontal) height else width
 
-    val measurePolicy = object: MeasurePolicy {
+    val measurePolicy = object : MeasurePolicy {
         override fun MeasureScope.measure(
             measurables: List<Measurable>,
             constraints: Constraints
@@ -217,14 +220,16 @@ private fun Flow(
 
             if (currentSequence.isNotEmpty()) startNewSequence()
 
-            val mainAxisLayoutSize = if (orientationIndependentConstraints.mainAxisMax != Constraints.Infinity &&
-                mainAxisSize == SizeMode.Expand
-            ) {
-                orientationIndependentConstraints.mainAxisMax
-            } else {
-                max(mainAxisSpace, orientationIndependentConstraints.mainAxisMin)
-            }
-            val crossAxisLayoutSize = max(crossAxisSpace, orientationIndependentConstraints.crossAxisMin)
+            val mainAxisLayoutSize =
+                if (orientationIndependentConstraints.mainAxisMax != Constraints.Infinity &&
+                    mainAxisSize == SizeMode.Expand
+                ) {
+                    orientationIndependentConstraints.mainAxisMax
+                } else {
+                    max(mainAxisSpace, orientationIndependentConstraints.mainAxisMin)
+                }
+            val crossAxisLayoutSize =
+                max(crossAxisSpace, orientationIndependentConstraints.crossAxisMin)
 
             val layoutWidth = if (orientation == LayoutOrientation.Horizontal) {
                 mainAxisLayoutSize
@@ -319,6 +324,7 @@ public enum class SizeMode {
      * subject to the incoming layout constraints.
      */
     Wrap,
+
     /**
      * Maximize the amount of free space by expanding to fill the available space,
      * subject to the incoming layout constraints.
