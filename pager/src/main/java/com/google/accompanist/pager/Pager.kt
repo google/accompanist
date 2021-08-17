@@ -90,14 +90,14 @@ private val Measurable.page: Int
 @ExperimentalPagerApi
 object PagerDefaults {
     /**
-     * Create and remember default [FlingBehavior] that will represent the scroll curve.
+     * Create and remember the default [FlingBehavior] that represents the scroll curve.
      *
      * @param state The [PagerState] to update.
      * @param decayAnimationSpec The decay animation spec to use for decayed flings.
      * @param snapAnimationSpec The animation spec to use when snapping.
      */
     @Composable
-    fun defaultPagerFlingConfig(
+    fun rememberPagerFlingConfig(
         state: PagerState,
         decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
         snapAnimationSpec: AnimationSpec<Float> = spring(stiffness = SnapSpringStiffness),
@@ -113,6 +113,17 @@ object PagerDefaults {
             )
         }
     }
+
+    @Deprecated(
+        "Replaced with PagerDefaults.rememberPagerFlingConfig()",
+        ReplaceWith("PagerDefaults.rememberPagerFlingConfig(state, decayAnimationSpec, snapAnimationSpec)")
+    )
+    @Composable
+    fun defaultPagerFlingConfig(
+        state: PagerState,
+        decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
+        snapAnimationSpec: AnimationSpec<Float> = spring(stiffness = SnapSpringStiffness),
+    ): FlingBehavior = rememberPagerFlingConfig(state, decayAnimationSpec, snapAnimationSpec)
 }
 
 /**
@@ -140,7 +151,7 @@ fun HorizontalPager(
     reverseLayout: Boolean = false,
     itemSpacing: Dp = 0.dp,
     dragEnabled: Boolean = true,
-    flingBehavior: FlingBehavior = PagerDefaults.defaultPagerFlingConfig(state),
+    flingBehavior: FlingBehavior = PagerDefaults.rememberPagerFlingConfig(state),
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     content: @Composable PagerScope.(page: Int) -> Unit,
@@ -184,7 +195,7 @@ fun VerticalPager(
     reverseLayout: Boolean = false,
     itemSpacing: Dp = 0.dp,
     dragEnabled: Boolean = true,
-    flingBehavior: FlingBehavior = PagerDefaults.defaultPagerFlingConfig(state),
+    flingBehavior: FlingBehavior = PagerDefaults.rememberPagerFlingConfig(state),
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     content: @Composable PagerScope.(page: Int) -> Unit,
