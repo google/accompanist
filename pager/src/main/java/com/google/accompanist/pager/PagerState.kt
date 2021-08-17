@@ -246,12 +246,14 @@ class PagerState(
 
     /**
      * The target page for any on-going animations or scrolls by the user.
-     * Returns null if a scroll or animation is not currently in progress.
+     * Returns the current page if a scroll or animation is not currently in progress.
      */
-    val targetPage: Int?
+    val targetPage: Int
         get() = _animationTargetPage ?: when {
-            // If a scroll isn't in progress, return null
-            !isScrollInProgress -> null
+            // If a scroll isn't in progress, return the current page
+            !isScrollInProgress -> currentPage
+            // If the offset is 0f (or very close), return the current page
+            currentPageOffset < 0.001f -> currentPage
             // If we're offset towards the start, guess the previous page
             currentPageOffset < 0 -> (currentPage - 1).coerceAtLeast(0)
             // If we're offset towards the end, guess the next page
