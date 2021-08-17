@@ -32,7 +32,7 @@ package com.google.accompanist.pager {
     method @IntRange(from=0) public int getCurrentPage();
     method public float getCurrentPageOffset();
     method @IntRange(from=0) public int getPageCount();
-    method public Integer? getTargetPage();
+    method public int getTargetPage();
     method public boolean isScrollInProgress();
     method public suspend Object? scroll(androidx.compose.foundation.MutatePriority scrollPriority, kotlin.jvm.functions.Function2<? super androidx.compose.foundation.gestures.ScrollScope,? super kotlin.coroutines.Continuation<? super kotlin.Unit>,?> block, kotlin.coroutines.Continuation<? super kotlin.Unit> p);
     method public suspend Object? scrollToPage(@IntRange(from=0) int page, optional @FloatRange(from=0.0, to=1.0) float pageOffset, optional kotlin.coroutines.Continuation<? super kotlin.Unit> p);
@@ -41,7 +41,7 @@ package com.google.accompanist.pager {
     property public final float currentPageOffset;
     property public boolean isScrollInProgress;
     property @IntRange(from=0) public final int pageCount;
-    property public final Integer? targetPage;
+    property public final int targetPage;
     field public static final com.google.accompanist.pager.PagerState.Companion Companion;
   }
 
