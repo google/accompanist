@@ -212,7 +212,8 @@ fun AnimatedVisibilityScope.BlueScreen(navController: NavHostController) {
                 .wrapContentWidth()
                 .then(Modifier.align(Alignment.CenterHorizontally))
         ) { navController.navigate("Inner") }
-        Text("Blue",
+        Text(
+            "Blue",
             modifier = Modifier.fillMaxWidth().weight(1f).animateEnterExit(
                 enter = fadeIn(animationSpec = tween(250, delayMillis = 450)),
                 exit = ExitTransition.None
@@ -245,7 +246,8 @@ fun AnimatedVisibilityScope.RedScreen(navController: NavHostController) {
                 .wrapContentWidth()
                 .then(Modifier.align(Alignment.CenterHorizontally))
         ) { navController.navigate("Green") }
-        Text("Red",
+        Text(
+            "Red",
             modifier = Modifier.fillMaxWidth().weight(1f).animateEnterExit(
                 enter = fadeIn(animationSpec = tween(250, delayMillis = 450)),
                 exit = ExitTransition.None
@@ -271,7 +273,8 @@ fun AnimatedVisibilityScope.GreenScreen(navController: NavHostController) {
                 .wrapContentWidth()
                 .then(Modifier.align(Alignment.CenterHorizontally))
         ) { navController.navigate("Red") }
-        Text("Green",
+        Text(
+            "Green",
             modifier = Modifier.fillMaxWidth().weight(1f).animateEnterExit(
                 enter = fadeIn(animationSpec = tween(250, delayMillis = 450)),
                 exit = ExitTransition.None
