@@ -16,6 +16,8 @@
 
 package com.google.accompanist.navigation.animation
 
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -46,18 +48,18 @@ public fun NavGraphBuilder.composable(
     arguments: List<NamedNavArgument> = emptyList(),
     deepLinks: List<NavDeepLink> = emptyList(),
     enterTransition: (
-        (initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition?
+        AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition?
     )? = null,
     exitTransition: (
-        (initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition?
+        AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition?
     )? = null,
     popEnterTransition: (
-        (initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition?
+        AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition?
     )? = enterTransition,
     popExitTransition: (
-        (initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition?
+        AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition?
     )? = exitTransition,
-    content: @Composable (NavBackStackEntry) -> Unit
+    content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
 ) {
     addDestination(
         AnimatedComposeNavigator.Destination(
@@ -98,16 +100,16 @@ public fun NavGraphBuilder.navigation(
     startDestination: String,
     route: String,
     enterTransition: (
-        (initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition
+        AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition
     )? = null,
     exitTransition: (
-        (initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition
+        AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition
     )? = null,
     popEnterTransition: (
-        (initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition
+        AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition
     )? = enterTransition,
     popExitTransition: (
-        (initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition
+        AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition
     )? = exitTransition,
     builder: NavGraphBuilder.() -> Unit
 ) {

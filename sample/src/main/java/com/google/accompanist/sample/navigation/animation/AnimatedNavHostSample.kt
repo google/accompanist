@@ -19,14 +19,14 @@ package com.google.accompanist.sample.navigation.animation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandIn
+import androidx.compose.animation.fadeIn
 import androidx.compose.animation.shrinkOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -42,7 +42,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -74,28 +76,28 @@ fun ExperimentalAnimationNav() {
             enterTransition = { initial, _ ->
                 when (initial.destination.route) {
                     "Red" ->
-                        slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(700))
+                        slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
                     else -> null
                 }
             },
             exitTransition = { _, target ->
                 when (target.destination.route) {
                     "Red" ->
-                        slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween(700))
+                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
                     else -> null
                 }
             },
             popEnterTransition = { initial, _ ->
                 when (initial.destination.route) {
                     "Red" ->
-                        slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(700))
+                        slideIntoContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
                     else -> null
                 }
             },
             popExitTransition = { _, target ->
                 when (target.destination.route) {
                     "Red" ->
-                        slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(700))
+                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
                     else -> null
                 }
             }
@@ -105,36 +107,36 @@ fun ExperimentalAnimationNav() {
             enterTransition = { initial, _ ->
                 when (initial.destination.route) {
                     "Blue" ->
-                        slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(700))
+                        slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
                     "Green" ->
-                        slideInVertically(initialOffsetY = { 1800 }, animationSpec = tween(700))
+                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
                     else -> null
                 }
             },
             exitTransition = { _, target ->
                 when (target.destination.route) {
                     "Blue" ->
-                        slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween(700))
+                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
                     "Green" ->
-                        slideOutVertically(targetOffsetY = { -1800 }, animationSpec = tween(700))
+                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
                     else -> null
                 }
             },
             popEnterTransition = { initial, _ ->
                 when (initial.destination.route) {
                     "Blue" ->
-                        slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(700))
+                        slideIntoContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
                     "Green" ->
-                        slideInVertically(initialOffsetY = { -1800 }, animationSpec = tween(700))
+                        slideIntoContainer(AnimatedContentScope.SlideDirection.Down, animationSpec = tween(700))
                     else -> null
                 }
             },
             popExitTransition = { _, target ->
                 when (target.destination.route) {
                     "Blue" ->
-                        slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(700))
+                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
                     "Green" ->
-                        slideOutVertically(targetOffsetY = { 1800 }, animationSpec = tween(700))
+                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Down, animationSpec = tween(700))
                     else -> null
                 }
             }
@@ -150,8 +152,8 @@ fun ExperimentalAnimationNav() {
                 enterTransition = { initial, _ ->
                     when (initial.destination.route) {
                         "Red" ->
-                            slideInVertically(
-                                initialOffsetY = { 1800 }, animationSpec = tween(700)
+                            slideIntoContainer(
+                                AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700)
                             )
                         else -> null
                     }
@@ -159,8 +161,8 @@ fun ExperimentalAnimationNav() {
                 exitTransition = { _, target ->
                     when (target.destination.route) {
                         "Red" ->
-                            slideOutVertically(
-                                targetOffsetY = { -1800 }, animationSpec = tween(700)
+                            slideOutOfContainer(
+                                AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700)
                             )
                         else -> null
                     }
@@ -168,8 +170,8 @@ fun ExperimentalAnimationNav() {
                 popEnterTransition = { initial, _ ->
                     when (initial.destination.route) {
                         "Red" ->
-                            slideInVertically(
-                                initialOffsetY = { -1800 }, animationSpec = tween(700)
+                            slideIntoContainer(
+                                AnimatedContentScope.SlideDirection.Down, animationSpec = tween(700)
                             )
                         else -> null
                     }
@@ -177,8 +179,8 @@ fun ExperimentalAnimationNav() {
                 popExitTransition = { _, target ->
                     when (target.destination.route) {
                         "Red" ->
-                            slideOutVertically(
-                                targetOffsetY = { 1800 }, animationSpec = tween(700)
+                            slideOutOfContainer(
+                                AnimatedContentScope.SlideDirection.Down, animationSpec = tween(700)
                             )
                         else -> null
                     }
@@ -188,8 +190,9 @@ fun ExperimentalAnimationNav() {
     }
 }
 
+@ExperimentalAnimationApi
 @Composable
-fun BlueScreen(navController: NavHostController) {
+fun AnimatedVisibilityScope.BlueScreen(navController: NavHostController) {
     Column(
         Modifier
             .fillMaxSize()
@@ -209,13 +212,21 @@ fun BlueScreen(navController: NavHostController) {
                 .wrapContentWidth()
                 .then(Modifier.align(Alignment.CenterHorizontally))
         ) { navController.navigate("Inner") }
-        Spacer(Modifier.weight(1f))
+        Text(
+            "Blue",
+            modifier = Modifier.fillMaxWidth().weight(1f).animateEnterExit(
+                enter = fadeIn(animationSpec = tween(250, delayMillis = 450)),
+                exit = ExitTransition.None
+            ),
+            color = Color.White, fontSize = 80.sp, textAlign = TextAlign.Center
+        )
         NavigateBackButton(navController)
     }
 }
 
+@ExperimentalAnimationApi
 @Composable
-fun RedScreen(navController: NavHostController) {
+fun AnimatedVisibilityScope.RedScreen(navController: NavHostController) {
     Column(
         Modifier
             .fillMaxSize()
@@ -235,13 +246,21 @@ fun RedScreen(navController: NavHostController) {
                 .wrapContentWidth()
                 .then(Modifier.align(Alignment.CenterHorizontally))
         ) { navController.navigate("Green") }
-        Spacer(Modifier.weight(1f))
+        Text(
+            "Red",
+            modifier = Modifier.fillMaxWidth().weight(1f).animateEnterExit(
+                enter = fadeIn(animationSpec = tween(250, delayMillis = 450)),
+                exit = ExitTransition.None
+            ),
+            color = Color.White, fontSize = 80.sp, textAlign = TextAlign.Center
+        )
         NavigateBackButton(navController)
     }
 }
 
+@ExperimentalAnimationApi
 @Composable
-fun GreenScreen(navController: NavHostController) {
+fun AnimatedVisibilityScope.GreenScreen(navController: NavHostController) {
     Column(
         Modifier
             .fillMaxSize()
@@ -254,7 +273,14 @@ fun GreenScreen(navController: NavHostController) {
                 .wrapContentWidth()
                 .then(Modifier.align(Alignment.CenterHorizontally))
         ) { navController.navigate("Red") }
-        Spacer(Modifier.weight(1f))
+        Text(
+            "Green",
+            modifier = Modifier.fillMaxWidth().weight(1f).animateEnterExit(
+                enter = fadeIn(animationSpec = tween(250, delayMillis = 450)),
+                exit = ExitTransition.None
+            ),
+            color = Color.White, fontSize = 80.sp, textAlign = TextAlign.Center
+        )
         NavigateBackButton(navController)
     }
 }
