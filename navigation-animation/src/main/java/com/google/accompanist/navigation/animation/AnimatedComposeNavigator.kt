@@ -16,6 +16,7 @@
 
 package com.google.accompanist.navigation.animation
 
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -73,14 +74,14 @@ public class AnimatedComposeNavigator : Navigator<AnimatedComposeNavigator.Desti
         navigator: AnimatedComposeNavigator,
         internal val content: @Composable (NavBackStackEntry) -> Unit,
         internal var enterTransition:
-            ((initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition?)? = null,
+            (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition?)? = null,
         internal var exitTransition:
-            ((initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition?)? = null,
+            (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition?)? = null,
         internal var popEnterTransition:
-            ((initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition?)? =
+            (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition?)? =
                 enterTransition,
         internal var popExitTransition:
-            ((initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition?)? =
+            (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition?)? =
                 exitTransition
     ) : NavDestination(navigator)
 

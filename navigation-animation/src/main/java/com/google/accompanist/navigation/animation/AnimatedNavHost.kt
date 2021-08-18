@@ -18,6 +18,7 @@ package com.google.accompanist.navigation.animation
 
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -74,12 +75,12 @@ public fun AnimatedNavHost(
     startDestination: String,
     modifier: Modifier = Modifier,
     route: String? = null,
-    enterTransition: ((initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition)? =
-        { _, _ -> fadeIn(animationSpec = tween(700)) },
-    exitTransition: ((initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition)? =
-        { _, _ -> fadeOut(animationSpec = tween(700)) },
-    popEnterTransition: ((initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition)? = enterTransition,
-    popExitTransition: ((initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition)? = exitTransition,
+    enterTransition: (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition)? =
+        { fadeIn(animationSpec = tween(700)) },
+    exitTransition: (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition)? =
+        { fadeOut(animationSpec = tween(700)) },
+    popEnterTransition: (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition)? = enterTransition,
+    popExitTransition: (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition)? = exitTransition,
     builder: NavGraphBuilder.() -> Unit
 ) {
     AnimatedNavHost(
@@ -115,12 +116,12 @@ public fun AnimatedNavHost(
     navController: NavHostController,
     graph: NavGraph,
     modifier: Modifier = Modifier,
-    enterTransition: ((initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition)? =
-        { _, _ -> fadeIn(animationSpec = tween(700)) },
-    exitTransition: ((initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition)? =
-        { _, _ -> fadeOut(animationSpec = tween(700)) },
-    popEnterTransition: ((initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition)? = enterTransition,
-    popExitTransition: ((initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition)? = exitTransition,
+    enterTransition: (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition)? =
+        { fadeIn(animationSpec = tween(700)) },
+    exitTransition: (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition)? =
+        { fadeOut(animationSpec = tween(700)) },
+    popEnterTransition: (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition)? = enterTransition,
+    popExitTransition: (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition)? = exitTransition,
 ) {
 
     enterTransitions[graph.route] = enterTransition
@@ -164,64 +165,55 @@ public fun AnimatedNavHost(
     if (backStackEntry != null) {
         val destination = backStackEntry.destination as AnimatedComposeNavigator.Destination
 
-        val leavingEntry = transitionsInProgress.lastOrNull { entry ->
-            !entry.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
-        }
-
-        // When there is no leaving entry, that means this is the start destination so this
-        // transition never happens.
-        val finalEnter = if (leavingEntry != null) {
+        val finalEnter: AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition = {
             if (composeNavigator.isPop.value) {
-                destination.popEnterTransition?.invoke(leavingEntry, backStackEntry)
+                destination.popEnterTransition?.invoke(this)
                     ?: popEnterTransitions[
                         (
                             destination.hierarchy.first {
                                 popEnterTransitions.containsKey(it.route)
                             }
                             ).route
-                    ]?.invoke(leavingEntry, backStackEntry) as EnterTransition
+                    ]?.invoke(this) as EnterTransition
             } else {
-                destination.enterTransition?.invoke(leavingEntry, backStackEntry)
+                destination.enterTransition?.invoke(this)
                     ?: enterTransitions[
                         (
                             destination.hierarchy.first { enterTransitions.containsKey(it.route) }
                             ).route
-                    ]?.invoke(leavingEntry, backStackEntry) as EnterTransition
+                    ]?.invoke(this) as EnterTransition
             }
-        } else {
-            EnterTransition.None
         }
 
-        val finalExit = if (leavingEntry != null) {
+        val finalExit: AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition = {
             if (composeNavigator.isPop.value) {
-                (leavingEntry.destination as? AnimatedComposeNavigator.Destination)
+                (initialState.destination as? AnimatedComposeNavigator.Destination)
                     ?.popExitTransition?.invoke(
-                        leavingEntry, backStackEntry
+                        this
                     ) ?: popExitTransitions[
                     (
-                        leavingEntry.destination.hierarchy.first {
+                        initialState.destination.hierarchy.first {
                             popExitTransitions.containsKey(it.route)
                         }
                         ).route
-                ]?.invoke(leavingEntry, backStackEntry) as ExitTransition
+                ]?.invoke(this) as ExitTransition
             } else {
-                (leavingEntry.destination as? AnimatedComposeNavigator.Destination)
+                (initialState.destination as? AnimatedComposeNavigator.Destination)
                     ?.exitTransition?.invoke(
-                        leavingEntry, backStackEntry
+                        this
                     ) ?: exitTransitions[
                     (
-                        leavingEntry.destination.hierarchy.first {
+                        initialState.destination.hierarchy.first {
                             exitTransitions.containsKey(it.route)
                         }
                         ).route
-                ]?.invoke(leavingEntry, backStackEntry) as ExitTransition
+                ]?.invoke(this) as ExitTransition
             }
-        } else {
-            ExitTransition.None
         }
+
         val transition = updateTransition(backStackEntry, label = "entry")
         transition.AnimatedContent(
-            modifier, transitionSpec = { finalEnter with finalExit }
+            modifier, transitionSpec = { finalEnter(this) with finalExit(this) }
         ) { currentEntry ->
             // while in the scope of the composable, we provide the navBackStackEntry as the
             // ViewModelStoreOwner and LifecycleOwner
@@ -248,19 +240,19 @@ public fun AnimatedNavHost(
 @ExperimentalAnimationApi
 internal val enterTransitions =
     mutableMapOf<String?,
-        ((initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition)?>()
+        (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition)?>()
 
 @ExperimentalAnimationApi
 internal val exitTransitions =
     mutableMapOf<String?,
-        ((initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition)?>()
+        (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition)?>()
 
 @ExperimentalAnimationApi
 internal val popEnterTransitions =
     mutableMapOf<String?,
-        ((initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition)?>()
+        (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition)?>()
 
 @ExperimentalAnimationApi
 internal val popExitTransitions =
     mutableMapOf<String?,
-        ((initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition)?>()
+        (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition)?>()

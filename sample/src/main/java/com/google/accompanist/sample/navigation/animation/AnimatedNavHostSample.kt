@@ -19,14 +19,11 @@ package com.google.accompanist.sample.navigation.animation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandIn
 import androidx.compose.animation.shrinkOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -71,70 +68,70 @@ fun ExperimentalAnimationNav() {
     AnimatedNavHost(navController, startDestination = "Blue") {
         composable(
             "Blue",
-            enterTransition = { initial, _ ->
-                when (initial.destination.route) {
+            enterTransition = {
+                when (initialState.destination.route) {
                     "Red" ->
-                        slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(700))
+                        slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
                     else -> null
                 }
             },
-            exitTransition = { _, target ->
-                when (target.destination.route) {
+            exitTransition = {
+                when (targetState.destination.route) {
                     "Red" ->
-                        slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween(700))
+                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
                     else -> null
                 }
             },
-            popEnterTransition = { initial, _ ->
-                when (initial.destination.route) {
+            popEnterTransition = {
+                when (initialState.destination.route) {
                     "Red" ->
-                        slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(700))
+                        slideIntoContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
                     else -> null
                 }
             },
-            popExitTransition = { _, target ->
-                when (target.destination.route) {
+            popExitTransition = {
+                when (targetState.destination.route) {
                     "Red" ->
-                        slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(700))
+                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
                     else -> null
                 }
             }
         ) { BlueScreen(navController) }
         composable(
             "Red",
-            enterTransition = { initial, _ ->
-                when (initial.destination.route) {
+            enterTransition = {
+                when (initialState.destination.route) {
                     "Blue" ->
-                        slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(700))
+                        slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
                     "Green" ->
-                        slideInVertically(initialOffsetY = { 1800 }, animationSpec = tween(700))
+                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
                     else -> null
                 }
             },
-            exitTransition = { _, target ->
-                when (target.destination.route) {
+            exitTransition = {
+                when (targetState.destination.route) {
                     "Blue" ->
-                        slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween(700))
+                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
                     "Green" ->
-                        slideOutVertically(targetOffsetY = { -1800 }, animationSpec = tween(700))
+                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
                     else -> null
                 }
             },
-            popEnterTransition = { initial, _ ->
-                when (initial.destination.route) {
+            popEnterTransition = {
+                when (initialState.destination.route) {
                     "Blue" ->
-                        slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(700))
+                        slideIntoContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
                     "Green" ->
-                        slideInVertically(initialOffsetY = { -1800 }, animationSpec = tween(700))
+                        slideIntoContainer(AnimatedContentScope.SlideDirection.Down, animationSpec = tween(700))
                     else -> null
                 }
             },
-            popExitTransition = { _, target ->
-                when (target.destination.route) {
+            popExitTransition = {
+                when (targetState.destination.route) {
                     "Blue" ->
-                        slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(700))
+                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
                     "Green" ->
-                        slideOutVertically(targetOffsetY = { 1800 }, animationSpec = tween(700))
+                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Down, animationSpec = tween(700))
                     else -> null
                 }
             }
@@ -142,43 +139,43 @@ fun ExperimentalAnimationNav() {
         navigation(
             startDestination = "Green",
             route = "Inner",
-            enterTransition = { _, _ -> expandIn(animationSpec = tween(700)) },
-            exitTransition = { _, _ -> shrinkOut(animationSpec = tween(700)) }
+            enterTransition = { expandIn(animationSpec = tween(700)) },
+            exitTransition = { shrinkOut(animationSpec = tween(700)) }
         ) {
             composable(
                 "Green",
-                enterTransition = { initial, _ ->
-                    when (initial.destination.route) {
+                enterTransition = {
+                    when (initialState.destination.route) {
                         "Red" ->
-                            slideInVertically(
-                                initialOffsetY = { 1800 }, animationSpec = tween(700)
+                            slideIntoContainer(
+                                AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700)
                             )
                         else -> null
                     }
                 },
-                exitTransition = { _, target ->
-                    when (target.destination.route) {
+                exitTransition = {
+                    when (targetState.destination.route) {
                         "Red" ->
-                            slideOutVertically(
-                                targetOffsetY = { -1800 }, animationSpec = tween(700)
+                            slideOutOfContainer(
+                                AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700)
                             )
                         else -> null
                     }
                 },
-                popEnterTransition = { initial, _ ->
-                    when (initial.destination.route) {
+                popEnterTransition = {
+                    when (initialState.destination.route) {
                         "Red" ->
-                            slideInVertically(
-                                initialOffsetY = { -1800 }, animationSpec = tween(700)
+                            slideIntoContainer(
+                                AnimatedContentScope.SlideDirection.Down, animationSpec = tween(700)
                             )
                         else -> null
                     }
                 },
-                popExitTransition = { _, target ->
-                    when (target.destination.route) {
+                popExitTransition = {
+                    when (targetState.destination.route) {
                         "Red" ->
-                            slideOutVertically(
-                                targetOffsetY = { 1800 }, animationSpec = tween(700)
+                            slideOutOfContainer(
+                                AnimatedContentScope.SlideDirection.Down, animationSpec = tween(700)
                             )
                         else -> null
                     }
