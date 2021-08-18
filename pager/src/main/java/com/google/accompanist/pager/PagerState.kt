@@ -31,6 +31,8 @@ import androidx.compose.animation.core.spring
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.gestures.ScrollableState
+import androidx.compose.foundation.interaction.InteractionSource
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -182,6 +184,16 @@ class PagerState(
         require(size > 0) { "Layout size for current item is 0" }
         -scrollByOffset(-deltaPixels / size) * size
     }
+
+    /**
+     * [InteractionSource] that will be used to dispatch drag events when this
+     * list is being dragged. If you want to know whether the fling (or animated scroll) is in
+     * progress, use [isScrollInProgress].
+     */
+    val interactionSource: InteractionSource
+        get() = internalInteractionSource
+
+    internal val internalInteractionSource: MutableInteractionSource = MutableInteractionSource()
 
     init {
         require(offscreenLimit >= 1) { "offscreenLimit is required to be >= 1" }
