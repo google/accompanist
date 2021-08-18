@@ -100,7 +100,7 @@ dependencies {
 }
 ```
 
-## Migration
+## Migrating to Accompanist Navigation Animation
 
 To migrate from using the Navigation Compose APIs do the following:
 
