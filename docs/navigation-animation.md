@@ -100,7 +100,18 @@ dependencies {
 }
 ```
 
+## Migration
+
+To migrate from using the Navigation Compose APIs do the following:
+
+* Replace `rememberNavController()` with `rememberAnimatedNavController()`
+* Replace `NavHost` with `AnimatedNavHost`
+* Replace `import androidx.navigation.compose.navigation` with `import com.google.accompanist.navigation.animation.navigation`
+* Replace `import androidx.navigation.compose.composable` with `import com.google.accompanist.navigation.animation.composable`
+
 Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap]. These are updated on every commit.
 
 [compose]: https://developer.android.com/jetpack/compose
 [snap]: https://oss.sonatype.org/content/repositories/snapshots/com/google/accompanist/accompanist-navigation-animation/
+
+For more details see [Animations in Navigation Compose](https://medium.com/androiddevelopers/animations-in-navigation-compose-36d48870776b)
