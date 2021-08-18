@@ -17,6 +17,7 @@
 package com.google.accompanist.navigation.animation
 
 import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -72,7 +73,7 @@ public class AnimatedComposeNavigator : Navigator<AnimatedComposeNavigator.Desti
     @NavDestination.ClassType(Composable::class)
     public class Destination(
         navigator: AnimatedComposeNavigator,
-        internal val content: @Composable (NavBackStackEntry) -> Unit,
+        internal val content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit,
         internal var enterTransition:
             (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition?)? = null,
         internal var exitTransition:

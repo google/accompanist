@@ -219,7 +219,7 @@ public fun AnimatedNavHost(
             // ViewModelStoreOwner and LifecycleOwner
             currentEntry.LocalOwnersProvider(saveableStateHolder) {
                 (currentEntry.destination as AnimatedComposeNavigator.Destination)
-                    .content(currentEntry)
+                    .content(this, currentEntry)
             }
         }
         if (transition.currentState == transition.targetState) {

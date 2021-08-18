@@ -17,6 +17,7 @@
 package com.google.accompanist.navigation.animation
 
 import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -58,7 +59,7 @@ public fun NavGraphBuilder.composable(
     popExitTransition: (
         AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition?
     )? = exitTransition,
-    content: @Composable (NavBackStackEntry) -> Unit
+    content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
 ) {
     addDestination(
         AnimatedComposeNavigator.Destination(

@@ -20,9 +20,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandIn
+import androidx.compose.animation.fadeIn
 import androidx.compose.animation.shrinkOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -39,7 +42,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -185,8 +190,9 @@ fun ExperimentalAnimationNav() {
     }
 }
 
+@ExperimentalAnimationApi
 @Composable
-fun BlueScreen(navController: NavHostController) {
+fun AnimatedVisibilityScope.BlueScreen(navController: NavHostController) {
     Column(
         Modifier
             .fillMaxSize()
@@ -206,13 +212,20 @@ fun BlueScreen(navController: NavHostController) {
                 .wrapContentWidth()
                 .then(Modifier.align(Alignment.CenterHorizontally))
         ) { navController.navigate("Inner") }
-        Spacer(Modifier.weight(1f))
+        Text("Blue",
+            modifier = Modifier.fillMaxWidth().weight(1f).animateEnterExit(
+                enter = fadeIn(animationSpec = tween(250, delayMillis = 450)),
+                exit = ExitTransition.None
+            ),
+            color = Color.White, fontSize = 80.sp, textAlign = TextAlign.Center
+        )
         NavigateBackButton(navController)
     }
 }
 
+@ExperimentalAnimationApi
 @Composable
-fun RedScreen(navController: NavHostController) {
+fun AnimatedVisibilityScope.RedScreen(navController: NavHostController) {
     Column(
         Modifier
             .fillMaxSize()
@@ -232,13 +245,20 @@ fun RedScreen(navController: NavHostController) {
                 .wrapContentWidth()
                 .then(Modifier.align(Alignment.CenterHorizontally))
         ) { navController.navigate("Green") }
-        Spacer(Modifier.weight(1f))
+        Text("Red",
+            modifier = Modifier.fillMaxWidth().weight(1f).animateEnterExit(
+                enter = fadeIn(animationSpec = tween(250, delayMillis = 450)),
+                exit = ExitTransition.None
+            ),
+            color = Color.White, fontSize = 80.sp, textAlign = TextAlign.Center
+        )
         NavigateBackButton(navController)
     }
 }
 
+@ExperimentalAnimationApi
 @Composable
-fun GreenScreen(navController: NavHostController) {
+fun AnimatedVisibilityScope.GreenScreen(navController: NavHostController) {
     Column(
         Modifier
             .fillMaxSize()
@@ -251,7 +271,13 @@ fun GreenScreen(navController: NavHostController) {
                 .wrapContentWidth()
                 .then(Modifier.align(Alignment.CenterHorizontally))
         ) { navController.navigate("Red") }
-        Spacer(Modifier.weight(1f))
+        Text("Green",
+            modifier = Modifier.fillMaxWidth().weight(1f).animateEnterExit(
+                enter = fadeIn(animationSpec = tween(250, delayMillis = 450)),
+                exit = ExitTransition.None
+            ),
+            color = Color.White, fontSize = 80.sp, textAlign = TextAlign.Center
+        )
         NavigateBackButton(navController)
     }
 }
