@@ -21,11 +21,10 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application>
-        <activity
-            android:name="androidx.activity.ComponentActivity"
-            android:theme="@android:style/Theme.Material.NoActionBar" />
+
         <activity
             android:name=".PermissionsTestActivity"
+            android:exported="true"
             android:theme="@android:style/Theme.Material.NoActionBar" />
     </application>
 

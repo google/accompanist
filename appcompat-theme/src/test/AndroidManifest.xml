@@ -20,14 +20,17 @@
     <application>
         <activity
             android:name=".LightAppCompatActivity"
+            android:exported="true"
             android:theme="@style/Theme.AppCompatThemeTest" />
 
         <activity
             android:name=".DarkAppCompatActivity"
+            android:exported="true"
             android:theme="@style/Theme.AppCompatThemeTest" />
 
         <activity
             android:name=".NotAppCompatActivity"
+            android:exported="true"
             android:theme="@android:style/Theme.Material" />
     </application>
 
