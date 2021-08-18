@@ -20,11 +20,17 @@ import android.app.Activity
 import android.content.Intent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.AnimationConstants
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.material.TextField
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.navDeepLink
 import androidx.navigation.plusAssign
@@ -167,6 +173,55 @@ class AnimatedNavHostTest {
             assertThat(secondEntry.lifecycle.currentState)
                 .isEqualTo(Lifecycle.State.RESUMED)
         }
+    }
+
+    @Test
+    fun testStateSavedByCrossFade() {
+        lateinit var navController: NavHostController
+        lateinit var text: MutableState<String>
+
+        composeTestRule.setContent {
+            navController = rememberAnimatedNavController()
+            AnimatedNavHost(navController, "start") {
+                composable("start") {
+                    text = rememberSaveable { mutableStateOf("") }
+                    Column {
+                        TextField(value = text.value, onValueChange = { text.value = it })
+                    }
+                }
+                composable("second") { }
+            }
+        }
+
+        composeTestRule.onNodeWithText("test").assertDoesNotExist()
+
+        text.value = "test"
+
+        composeTestRule.onNodeWithText("test").assertExists()
+
+        composeTestRule.runOnIdle {
+            navController.navigate("second") {
+                popUpTo(navController.graph.findStartDestination().id) {
+                    saveState = true
+                }
+
+                launchSingleTop = true
+                restoreState = true
+            }
+        }
+
+        composeTestRule.runOnIdle {
+            navController.navigate("start") {
+                popUpTo(navController.graph.findStartDestination().id) {
+                    saveState = true
+                }
+
+                launchSingleTop = true
+                restoreState = true
+            }
+        }
+
+        composeTestRule.onNodeWithText("test").assertExists()
     }
 }
 
