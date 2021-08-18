@@ -75,14 +75,14 @@ public class AnimatedComposeNavigator : Navigator<AnimatedComposeNavigator.Desti
         navigator: AnimatedComposeNavigator,
         internal val content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit,
         internal var enterTransition:
-            (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition?)? = null,
+            (AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition?)? = null,
         internal var exitTransition:
-            (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition?)? = null,
+            (AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition?)? = null,
         internal var popEnterTransition:
-            (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition?)? =
+            (AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition?)? =
                 enterTransition,
         internal var popExitTransition:
-            (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition?)? =
+            (AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition?)? =
                 exitTransition
     ) : NavDestination(navigator)
 
