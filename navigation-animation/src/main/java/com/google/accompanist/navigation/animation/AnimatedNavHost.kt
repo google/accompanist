@@ -27,13 +27,16 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.with
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
@@ -154,12 +157,12 @@ public fun AnimatedNavHost(
     ) as? AnimatedComposeNavigator ?: return
     val backStack by composeNavigator.backStack.collectAsState()
     val transitionsInProgress by composeNavigator.transitionsInProgress.collectAsState()
+    val visibleTransitionsInProgress = rememberVisibleList(transitionsInProgress)
+    val visibleBackStack = rememberVisibleList(backStack)
+    visibleTransitionsInProgress.PopulateVisibleList(transitionsInProgress)
+    visibleBackStack.PopulateVisibleList(backStack)
 
-    val backStackEntry = transitionsInProgress.lastOrNull { entry ->
-        entry.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
-    } ?: backStack.lastOrNull { entry ->
-        entry.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
-    }
+    val backStackEntry = visibleTransitionsInProgress.lastOrNull() ?: visibleBackStack.lastOrNull()
 
     if (backStackEntry != null) {
         val destination = backStackEntry.destination as AnimatedComposeNavigator.Destination
@@ -219,13 +222,18 @@ public fun AnimatedNavHost(
         } else {
             ExitTransition.None
         }
-        val transition = updateTransition(backStackEntry, label = "entry")
+        val transition = updateTransition(backStackEntry.id, label = "entry")
         transition.AnimatedContent(
             modifier, transitionSpec = { finalEnter with finalExit }
-        ) { currentEntry ->
+        ) {
+            val currentEntry = transitionsInProgress.lastOrNull { entry ->
+                it == entry.id
+            } ?: backStack.lastOrNull { entry ->
+                it == entry.id
+            }
             // while in the scope of the composable, we provide the navBackStackEntry as the
             // ViewModelStoreOwner and LifecycleOwner
-            currentEntry.LocalOwnersProvider(saveableStateHolder) {
+            currentEntry?.LocalOwnersProvider(saveableStateHolder) {
                 (currentEntry.destination as AnimatedComposeNavigator.Destination)
                     .content(currentEntry)
             }
@@ -264,3 +272,38 @@ internal val popEnterTransitions =
 internal val popExitTransitions =
     mutableMapOf<String?,
         ((initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition)?>()
+
+@Composable
+private fun MutableList<NavBackStackEntry>.PopulateVisibleList(
+    transitionsInProgress: Collection<NavBackStackEntry>
+) {
+    transitionsInProgress.forEach { entry ->
+        DisposableEffect(entry.lifecycle) {
+            val observer = LifecycleEventObserver { _, event ->
+                // ON_START -> add to visibleBackStack, ON_STOP -> remove from visibleBackStack
+                if (event == Lifecycle.Event.ON_START) {
+                    add(entry)
+                }
+                if (event == Lifecycle.Event.ON_STOP) {
+                    remove(entry)
+                }
+            }
+            entry.lifecycle.addObserver(observer)
+            onDispose {
+                entry.lifecycle.removeObserver(observer)
+            }
+        }
+    }
+}
+
+@Composable
+private fun rememberVisibleList(transitionsInProgress: Collection<NavBackStackEntry>) =
+    remember(transitionsInProgress) {
+        mutableStateListOf<NavBackStackEntry>().also {
+            it.addAll(
+                transitionsInProgress.filter { entry ->
+                    entry.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
+                }
+            )
+        }
+    }
