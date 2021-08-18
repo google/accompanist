@@ -33,6 +33,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
@@ -76,6 +77,7 @@ public fun AnimatedNavHost(
     navController: NavHostController,
     startDestination: String,
     modifier: Modifier = Modifier,
+    contentAlignment: Alignment = Alignment.Center,
     route: String? = null,
     enterTransition: ((initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition)? =
         { _, _ -> fadeIn(animationSpec = tween(700)) },
@@ -91,6 +93,7 @@ public fun AnimatedNavHost(
             navController.createGraph(startDestination, route, builder)
         },
         modifier,
+        contentAlignment,
         enterTransition,
         exitTransition,
         popEnterTransition,
@@ -118,6 +121,7 @@ public fun AnimatedNavHost(
     navController: NavHostController,
     graph: NavGraph,
     modifier: Modifier = Modifier,
+    contentAlignment: Alignment = Alignment.Center,
     enterTransition: ((initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition)? =
         { _, _ -> fadeIn(animationSpec = tween(700)) },
     exitTransition: ((initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition)? =
@@ -224,7 +228,7 @@ public fun AnimatedNavHost(
         }
         val transition = updateTransition(backStackEntry.id, label = "entry")
         transition.AnimatedContent(
-            modifier, transitionSpec = { finalEnter with finalExit }
+            modifier, transitionSpec = { finalEnter with finalExit }, contentAlignment
         ) {
             val currentEntry = transitionsInProgress.lastOrNull { entry ->
                 it == entry.id
