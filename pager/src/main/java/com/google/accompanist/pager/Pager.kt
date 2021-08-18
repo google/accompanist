@@ -267,6 +267,7 @@ internal fun Pager(
         flingBehavior = flingBehavior,
         reverseDirection = reverseDirection,
         state = state,
+        interactionSource = state.internalInteractionSource,
         enabled = dragEnabled,
     )
 

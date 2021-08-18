@@ -32,6 +32,7 @@ package com.google.accompanist.pager {
     method public float dispatchRawDelta(float delta);
     method @IntRange(from=0) public int getCurrentPage();
     method public float getCurrentPageOffset();
+    method public androidx.compose.foundation.interaction.InteractionSource getInteractionSource();
     method @IntRange(from=0) public int getPageCount();
     method public int getTargetPage();
     method public boolean isScrollInProgress();
@@ -40,6 +41,7 @@ package com.google.accompanist.pager {
     method public void setPageCount(@IntRange(from=0) int value);
     property @IntRange(from=0) public final int currentPage;
     property public final float currentPageOffset;
+    property public final androidx.compose.foundation.interaction.InteractionSource interactionSource;
     property public boolean isScrollInProgress;
     property @IntRange(from=0) public final int pageCount;
     property public final int targetPage;
