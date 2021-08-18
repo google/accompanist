@@ -19,12 +19,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     defaultConfig {
         applicationId "com.google.accompanist.sample"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 31
 
         versionCode 1
         versionName "1.0"
