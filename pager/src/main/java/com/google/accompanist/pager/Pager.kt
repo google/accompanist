@@ -27,8 +27,13 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
@@ -156,7 +161,7 @@ fun HorizontalPager(
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
-    Pager(
+    PagerLazy(
         state = state,
         modifier = modifier,
         isVertical = false,
@@ -200,7 +205,7 @@ fun VerticalPager(
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
-    Pager(
+    PagerLazy(
         state = state,
         modifier = modifier,
         isVertical = true,
@@ -212,6 +217,62 @@ fun VerticalPager(
         flingBehavior = flingBehavior,
         content = content
     )
+}
+
+@ExperimentalPagerApi
+@Composable
+@Suppress("UNUSED_PARAMETER")
+internal fun PagerLazy(
+    state: PagerState,
+    modifier: Modifier,
+    reverseLayout: Boolean,
+    itemSpacing: Dp,
+    isVertical: Boolean,
+    verticalAlignment: Alignment.Vertical,
+    horizontalAlignment: Alignment.Horizontal,
+    dragEnabled: Boolean,
+    flingBehavior: FlingBehavior,
+    content: @Composable PagerScope.(page: Int) -> Unit,
+) {
+    val lazyListState = rememberLazyListState()
+
+    BoxWithConstraints(
+        modifier = modifier,
+        propagateMinConstraints = true
+    ) {
+        if (isVertical) {
+            // TODO
+        } else {
+            // TODO: add consuming touch handler if dragEnabled = false
+
+            LazyRow(
+                state = lazyListState,
+                verticalAlignment = verticalAlignment,
+                horizontalArrangement = Arrangement.spacedBy(itemSpacing, horizontalAlignment),
+                flingBehavior = flingBehavior,
+                reverseLayout = reverseLayout,
+                modifier = modifier
+                    .nestedScroll(connection = ConsumeFlingNestedScrollConnection),
+            ) {
+                items(
+                    count = state.pageCount,
+                    // TODO: expose key
+                ) { page ->
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .sizeIn(maxWidth = maxWidth, maxHeight = maxHeight)
+                            .then(PageData(page)) // TODO: Need this?
+                    ) {
+                        val scope = remember(this, state) {
+                            PagerScopeImpl(this, state)
+                        }
+                        scope.content(page)
+                    }
+                }
+            }
+        }
+    }
 }
 
 @ExperimentalPagerApi
