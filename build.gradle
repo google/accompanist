@@ -188,19 +188,6 @@ subprojects {
                     packageListUrl.set(new URL("https://developer.android.com/reference/kotlin/androidx/package-list"))
                 }
 
-                // Coil docs
-                if (rootProject.file('package-list-coil-base').exists()) {
-                    externalDocumentationLink {
-                        url.set(new URL("https://coil-kt.github.io/coil/api/coil-base/"))
-                        packageListUrl.set(new URL("file://$rootDir/package-list-coil-base"))
-                    }
-                }
-
-                // Glide docs
-                externalDocumentationLink {
-                    url.set(new URL("https://bumptech.github.io/glide/javadocs/4110/"))
-                }
-
                 sourceLink {
                     localDirectory.set(project.file("src/main/java"))
                     // URL showing where the source code can be accessed through the web browser
