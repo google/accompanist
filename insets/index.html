@@ -16,7 +16,7 @@
         <link rel="canonical" href="https://google.github.io/accompanist/insets/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.2">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.4">
     
     
       
@@ -24,10 +24,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.1118c9be.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.bde7dde4.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.ba0d045b.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ef6f36e2.min.css">
         
           
           
@@ -48,8 +48,6 @@
     
     
       
-
-
     
     
   </head>
@@ -118,18 +116,14 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
       <label class="md-search__icon md-icon" for="__search">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
       </label>
-      <nav class="md-search__options" aria-label="Search">
-        
-        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
-        </button>
-      </nav>
-      
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
     </form>
     <div class="md-search__output">
       <div class="md-search__scrollwrap" data-md-scrollfix>
@@ -1209,12 +1203,12 @@ wrap your content. This would typically be done near the top level of your compo
 </div>
 <p><code>ProvideWindowInsets</code> allows the library to set an <a href="https://developer.android.com/reference/kotlin/androidx/core/view/OnApplyWindowInsetsListener"><code>OnApplyWindowInsetsListener</code></a> on your content's host view. That listener is used to update the value of a composition local bundled in this library: <code>LocalWindowInsets</code>.</p>
 <p><code>LocalWindowInsets</code> holds an instance of <code>WindowInsets</code> which contains the value of various <a href="https://developer.android.com/reference/kotlin/androidx/core/view/WindowInsetsCompat">WindowInsets</a> <a href="https://developer.android.com/reference/kotlin/androidx/core/view/WindowInsetsCompat.Type">types</a>. You can use the values manually like so:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@Composable</span>
-<span class="kd">fun</span> <span class="nf">ImeAvoidingBox</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">val</span> <span class="nv">insets</span> <span class="o">=</span> <span class="n">LocalWindowInsets</span><span class="p">.</span><span class="na">current</span>
+<div class="highlight"><pre><span></span><code><span class="n">@Composable</span>
+<span class="k">fun</span> <span class="nf">ImeAvoidingBox</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">val</span> <span class="py">insets</span> <span class="p">=</span> <span class="n">LocalWindowInsets</span><span class="p">.</span><span class="n">current</span>
 
-    <span class="kd">val</span> <span class="nv">imeBottom</span> <span class="o">=</span> <span class="n">with</span><span class="p">(</span><span class="n">LocalDensity</span><span class="p">.</span><span class="na">current</span><span class="p">)</span> <span class="p">{</span> <span class="n">insets</span><span class="p">.</span><span class="na">ime</span><span class="p">.</span><span class="na">bottom</span><span class="p">.</span><span class="na">toDp</span><span class="p">()</span> <span class="p">}</span>
-    <span class="n">Box</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="na">padding</span><span class="p">(</span><span class="n">bottom</span> <span class="o">=</span> <span class="n">imeBottom</span><span class="p">))</span>
+    <span class="k">val</span> <span class="py">imeBottom</span> <span class="p">=</span> <span class="n">with</span><span class="p">(</span><span class="n">LocalDensity</span><span class="p">.</span><span class="n">current</span><span class="p">)</span> <span class="p">{</span> <span class="n">insets</span><span class="p">.</span><span class="n">ime</span><span class="p">.</span><span class="n">bottom</span><span class="p">.</span><span class="n">toDp</span><span class="p">()</span> <span class="p">}</span>
+    <span class="n">Box</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="n">padding</span><span class="p">(</span><span class="n">bottom</span> <span class="p">=</span> <span class="n">imeBottom</span><span class="p">))</span>
 <span class="p">}</span>
 </code></pre></div>
 <p>...but we also provide some easy-to-use <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier">Modifier</a>s.</p>
@@ -1231,13 +1225,13 @@ wrap your content. This would typically be done near the top level of your compo
 </ul>
 <p>These are commonly used to move composables out from under the system bars. The common example would be a <a href="https://developer.android.com/reference/kotlin/androidx/compose/material/package-summary#floatingactionbutton"><code>FloatingActionButton</code></a>:</p>
 <div class="highlight"><pre><span></span><code><span class="n">FloatingActionButton</span><span class="p">(</span>
-    <span class="n">onClick</span> <span class="o">=</span> <span class="p">{</span> <span class="cm">/* TODO */</span> <span class="p">},</span>
-    <span class="n">modifier</span> <span class="o">=</span> <span class="n">Modifier</span>
-        <span class="p">.</span><span class="na">align</span><span class="p">(</span><span class="n">Alignment</span><span class="p">.</span><span class="na">BottomEnd</span><span class="p">)</span>
-        <span class="p">.</span><span class="na">padding</span><span class="p">(</span><span class="m">16.</span><span class="n">dp</span><span class="p">)</span> <span class="c1">// normal 16dp of padding for FABs</span>
-        <span class="p">.</span><span class="na">navigationBarsPadding</span><span class="p">()</span> <span class="c1">// Move it out from under the nav bar</span>
+    <span class="n">onClick</span> <span class="p">=</span> <span class="p">{</span> <span class="cm">/* TODO */</span> <span class="p">},</span>
+    <span class="n">modifier</span> <span class="p">=</span> <span class="n">Modifier</span>
+        <span class="p">.</span><span class="n">align</span><span class="p">(</span><span class="n">Alignment</span><span class="p">.</span><span class="n">BottomEnd</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">padding</span><span class="p">(</span><span class="m">16.</span><span class="n">dp</span><span class="p">)</span> <span class="c1">// normal 16dp of padding for FABs</span>
+        <span class="p">.</span><span class="n">navigationBarsPadding</span><span class="p">()</span> <span class="c1">// Move it out from under the nav bar</span>
 <span class="p">)</span> <span class="p">{</span>
-    <span class="n">Icon</span><span class="p">(</span><span class="n">imageVector</span> <span class="o">=</span> <span class="n">Icons</span><span class="p">.</span><span class="na">Default</span><span class="p">.</span><span class="na">Add</span><span class="p">,</span> <span class="n">contentDescription</span> <span class="o">=</span> <span class="kc">null</span><span class="p">)</span>
+    <span class="n">Icon</span><span class="p">(</span><span class="n">imageVector</span> <span class="p">=</span> <span class="n">Icons</span><span class="p">.</span><span class="n">Default</span><span class="p">.</span><span class="n">Add</span><span class="p">,</span> <span class="n">contentDescription</span> <span class="p">=</span> <span class="k">null</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
 <h4 id="size-modifiers">Size modifiers<a class="headerlink" href="#size-modifiers" title="Permanent link">&para;</a></h4>
@@ -1250,19 +1244,19 @@ wrap your content. This would typically be done near the top level of your compo
 <p>These are commonly used to allow composables behind the system bars, to provide background protection, or similar:</p>
 <div class="highlight"><pre><span></span><code><span class="n">Spacer</span><span class="p">(</span>
     <span class="n">Modifier</span>
-        <span class="p">.</span><span class="na">background</span><span class="p">(</span><span class="n">Color</span><span class="p">.</span><span class="na">Black</span><span class="p">.</span><span class="na">copy</span><span class="p">(</span><span class="n">alpha</span> <span class="o">=</span> <span class="m">0.7f</span><span class="p">))</span>
-        <span class="p">.</span><span class="na">statusBarsHeight</span><span class="p">()</span> <span class="c1">// Match the height of the status bar</span>
-        <span class="p">.</span><span class="na">fillMaxWidth</span><span class="p">()</span>
+        <span class="p">.</span><span class="n">background</span><span class="p">(</span><span class="n">Color</span><span class="p">.</span><span class="n">Black</span><span class="p">.</span><span class="n">copy</span><span class="p">(</span><span class="n">alpha</span> <span class="p">=</span> <span class="m">0.7f</span><span class="p">))</span>
+        <span class="p">.</span><span class="n">statusBarsHeight</span><span class="p">()</span> <span class="c1">// Match the height of the status bar</span>
+        <span class="p">.</span><span class="n">fillMaxWidth</span><span class="p">()</span>
 <span class="p">)</span>
 </code></pre></div>
 <h3 id="paddingvalues">PaddingValues<a class="headerlink" href="#paddingvalues" title="Permanent link">&para;</a></h3>
 <p>Compose also provides the concept of <a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/PaddingValues"><code>PaddingValues</code></a>, a data class which contains the padding values to be applied on all dimensions (similar to a rect). This is commonly used with container composables, such as <a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/lazy/package-summary#lazycolumn"><code>LazyColumn</code></a>, to set the content padding.</p>
 <p>You may want to use inset values for content padding, so this library provides the <a href="..//api/insets/insets/com.google.accompanist.insets/remember-insets-padding-values.html"><code>rememberInsetsPaddingValues()</code></a> extension function to convert between <code>Insets</code> and <a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/PaddingValues"><code>PaddingValues</code></a>. Here's an example of using the system bars insets:</p>
 <div class="highlight"><pre><span></span><code><span class="n">LazyColumn</span><span class="p">(</span>
-    <span class="n">contentPadding</span> <span class="o">=</span> <span class="n">rememberInsetsPaddingValues</span><span class="p">(</span>
-        <span class="n">insets</span> <span class="o">=</span> <span class="n">LocalWindowInsets</span><span class="p">.</span><span class="na">current</span><span class="p">.</span><span class="na">systemBars</span><span class="p">,</span>
-        <span class="n">applyTop</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
-        <span class="n">applyBottom</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="n">contentPadding</span> <span class="p">=</span> <span class="n">rememberInsetsPaddingValues</span><span class="p">(</span>
+        <span class="n">insets</span> <span class="p">=</span> <span class="n">LocalWindowInsets</span><span class="p">.</span><span class="n">current</span><span class="p">.</span><span class="n">systemBars</span><span class="p">,</span>
+        <span class="n">applyTop</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
+        <span class="n">applyBottom</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
     <span class="p">)</span>
 <span class="p">)</span> <span class="p">{</span>
     <span class="c1">// content</span>
@@ -1277,18 +1271,18 @@ wrap your content. This would typically be done near the top level of your compo
 <div class="highlight"><pre><span></span><code><span class="c1">// 😥 This likely doesn&#39;t do what you want</span>
 <span class="n">TopAppBar</span><span class="p">(</span>
     <span class="c1">// content</span>
-    <span class="n">modifier</span> <span class="o">=</span> <span class="n">Modifier</span><span class="p">.</span><span class="na">statusBarsPadding</span><span class="p">()</span>
+    <span class="n">modifier</span> <span class="p">=</span> <span class="n">Modifier</span><span class="p">.</span><span class="n">statusBarsPadding</span><span class="p">()</span>
 <span class="p">)</span>
 </code></pre></div>
 <p>To workaround this, we provide the <code>insets-ui</code> companion library which contains versions of commonly used layouts, with the addition of a <code>contentPadding</code> parameter. The example below is using our <a href="../api/insets-ui/insets-ui/com.google.accompanist.insets.ui/-top-app-bar.html"><code>TopAppBar</code></a> layout, providing the status bar insets to use as content padding:</p>
 <div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">com.google.accompanist.insets.ui.TopAppBar</span>
 
 <span class="n">TopAppBar</span><span class="p">(</span>
-    <span class="n">contentPadding</span> <span class="o">=</span> <span class="n">rememberInsetsPaddingValues</span><span class="p">(</span>
-        <span class="n">insets</span> <span class="o">=</span> <span class="n">LocalWindowInsets</span><span class="p">.</span><span class="na">current</span><span class="p">.</span><span class="na">statusBars</span><span class="p">,</span>
-        <span class="n">applyStart</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
-        <span class="n">applyTop</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
-        <span class="n">applyEnd</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="n">contentPadding</span> <span class="p">=</span> <span class="n">rememberInsetsPaddingValues</span><span class="p">(</span>
+        <span class="n">insets</span> <span class="p">=</span> <span class="n">LocalWindowInsets</span><span class="p">.</span><span class="n">current</span><span class="p">.</span><span class="n">statusBars</span><span class="p">,</span>
+        <span class="n">applyStart</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
+        <span class="n">applyTop</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
+        <span class="n">applyEnd</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
     <span class="p">)</span>
 <span class="p">)</span> <span class="p">{</span>
     <span class="c1">// content</span>
@@ -1296,26 +1290,26 @@ wrap your content. This would typically be done near the top level of your compo
 </code></pre></div>
 <p>The library also provides a modified copy of Compose Material's <a href="https://developer.android.com/reference/kotlin/androidx/compose/material/package-summary#Scaffold(androidx.compose.ui.Modifier,androidx.compose.material.ScaffoldState,kotlin.Function0,kotlin.Function0,kotlin.Function1,kotlin.Function0,androidx.compose.material.FabPosition,kotlin.Boolean,kotlin.Function1,kotlin.Boolean,androidx.compose.ui.graphics.Shape,androidx.compose.ui.unit.Dp,androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color,kotlin.Function1)"><code>Scaffold</code></a> which better supports edge-to-edge layouts, by drawing the top and bottom bars over the content.</p>
 <div class="highlight"><pre><span></span><code><span class="n">Scaffold</span><span class="p">(</span>
-    <span class="n">topBar</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">topBar</span> <span class="p">=</span> <span class="p">{</span>
         <span class="c1">// We use TopAppBar from accompanist-insets-ui which allows us to provide</span>
         <span class="c1">// content padding matching the system bars insets.</span>
         <span class="n">TopAppBar</span><span class="p">(</span>
-            <span class="n">title</span> <span class="o">=</span> <span class="p">{</span> <span class="n">Text</span><span class="p">(</span><span class="n">stringResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="na">string</span><span class="p">.</span><span class="na">insets_title_list</span><span class="p">))</span> <span class="p">},</span>
-            <span class="n">backgroundColor</span> <span class="o">=</span> <span class="n">MaterialTheme</span><span class="p">.</span><span class="na">colors</span><span class="p">.</span><span class="na">surface</span><span class="p">.</span><span class="na">copy</span><span class="p">(</span><span class="n">alpha</span> <span class="o">=</span> <span class="m">0.9f</span><span class="p">),</span>
-            <span class="n">contentPadding</span> <span class="o">=</span> <span class="n">rememberInsetsPaddingValues</span><span class="p">(</span>
-                <span class="n">LocalWindowInsets</span><span class="p">.</span><span class="na">current</span><span class="p">.</span><span class="na">statusBars</span><span class="p">,</span>
-                <span class="n">applyBottom</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+            <span class="n">title</span> <span class="p">=</span> <span class="p">{</span> <span class="n">Text</span><span class="p">(</span><span class="n">stringResource</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="n">string</span><span class="p">.</span><span class="n">insets_title_list</span><span class="p">))</span> <span class="p">},</span>
+            <span class="n">backgroundColor</span> <span class="p">=</span> <span class="n">MaterialTheme</span><span class="p">.</span><span class="n">colors</span><span class="p">.</span><span class="n">surface</span><span class="p">.</span><span class="n">copy</span><span class="p">(</span><span class="n">alpha</span> <span class="p">=</span> <span class="m">0.9f</span><span class="p">),</span>
+            <span class="n">contentPadding</span> <span class="p">=</span> <span class="n">rememberInsetsPaddingValues</span><span class="p">(</span>
+                <span class="n">LocalWindowInsets</span><span class="p">.</span><span class="n">current</span><span class="p">.</span><span class="n">statusBars</span><span class="p">,</span>
+                <span class="n">applyBottom</span> <span class="p">=</span> <span class="k">false</span><span class="p">,</span>
             <span class="p">),</span>
         <span class="p">)</span>
     <span class="p">},</span>
-    <span class="n">bottomBar</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">bottomBar</span> <span class="p">=</span> <span class="p">{</span>
         <span class="c1">// We add a spacer as a bottom bar, which is the same height as</span>
         <span class="c1">// the navigation bar</span>
-        <span class="n">Spacer</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="na">navigationBarsHeight</span><span class="p">().</span><span class="na">fillMaxWidth</span><span class="p">())</span>
+        <span class="n">Spacer</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="n">navigationBarsHeight</span><span class="p">().</span><span class="n">fillMaxWidth</span><span class="p">())</span>
     <span class="p">},</span>
-<span class="p">)</span> <span class="p">{</span> <span class="n">contentPadding</span> <span class="o">-&gt;</span>
+<span class="p">)</span> <span class="p">{</span> <span class="n">contentPadding</span> <span class="p">-&gt;</span>
     <span class="c1">// We apply the contentPadding passed to us from the Scaffold</span>
-    <span class="n">Box</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="na">padding</span><span class="p">(</span><span class="n">contentPadding</span><span class="p">))</span> <span class="p">{</span>
+    <span class="n">Box</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="n">padding</span><span class="p">(</span><span class="n">contentPadding</span><span class="p">))</span> <span class="p">{</span>
         <span class="c1">// content</span>
     <span class="p">}</span>
 <span class="p">}</span>
@@ -1329,14 +1323,14 @@ wrap your content. This would typically be done near the top level of your compo
 <p>To enable animated insets support, you need need to new <code>ProvideWindowInsets</code> overload, and set <code>windowInsetsAnimationsEnabled = true</code>.</p>
 </div>
 <input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Usage</label><div class="tabbed-content">
-<div class="highlight"><pre><span></span><code><span class="n">ProvideWindowInsets</span><span class="p">(</span><span class="n">windowInsetsAnimationsEnabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="n">ProvideWindowInsets</span><span class="p">(</span><span class="n">windowInsetsAnimationsEnabled</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// content</span>
 <span class="p">}</span>
 </code></pre></div>
 <p>You can then use the new <code>navigationBarsWithImePadding()</code> modifier like so:</p>
 <div class="highlight"><pre><span></span><code><span class="n">OutlinedTextField</span><span class="p">(</span>
     <span class="c1">// other params,</span>
-    <span class="n">modifier</span> <span class="o">=</span> <span class="n">Modifier</span><span class="p">.</span><span class="na">navigationBarsWithImePadding</span><span class="p">()</span>
+    <span class="n">modifier</span> <span class="p">=</span> <span class="n">Modifier</span><span class="p">.</span><span class="n">navigationBarsWithImePadding</span><span class="p">()</span>
 <span class="p">)</span>
 </code></pre></div>
 <p>See the <a href="https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/insets/ImeAnimationSample.kt">ImeAnimationSample</a> for a working example.</p>
@@ -1355,7 +1349,7 @@ wrap your content. This would typically be done near the top level of your compo
 <h3 id="controlling-the-ime-on-screen-keyboard">Controlling the IME (on-screen keyboard)<a class="headerlink" href="#controlling-the-ime-on-screen-keyboard" title="Permanent link">&para;</a></h3>
 <div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Info</label><div class="tabbed-content">
 <p><img align="right" alt="" loading="lazy" src="images/ime-scroll.gif" /></p>
-<p>This library also has support for controlling the IME from scroll gestures, allowing your scrollable components to pull/push the IME on/off screen. This is acheived through the built-in <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/gesture/nestedscroll/NestedScrollConnection"><code>NestedScrollConnection</code></a> implementation returned by <a href="../api/insets/insets/com.google.accompanist.insets/remember-ime-nested-scroll-connection.html"><code>rememberImeNestedScrollConnection()</code></a>.</p>
+<p>This library also has support for controlling the IME from scroll gestures, allowing your scrollable components to pull/push the IME on/off screen. This is achieved through the built-in <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/gesture/nestedscroll/NestedScrollConnection"><code>NestedScrollConnection</code></a> implementation returned by <a href="../api/insets/insets/com.google.accompanist.insets/remember-ime-nested-scroll-connection.html"><code>rememberImeNestedScrollConnection()</code></a>.</p>
 <p>This functionality only works when running on devices with API 30+.</p>
 </div>
 <input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">Usage</label><div class="tabbed-content">
@@ -1363,8 +1357,8 @@ wrap your content. This would typically be done near the top level of your compo
 <span class="n">ScrollableColumn</span><span class="p">(</span>
     <span class="c1">// We use the nestedScroll modifier, passing in the </span>
     <span class="c1">// the connection from rememberImeNestedScrollConnection()</span>
-    <span class="n">modifier</span> <span class="o">=</span> <span class="n">Modifier</span><span class="p">.</span><span class="na">nestedScroll</span><span class="p">(</span>
-        <span class="n">connection</span> <span class="o">=</span> <span class="n">rememberImeNestedScrollConnection</span><span class="p">()</span>
+    <span class="n">modifier</span> <span class="p">=</span> <span class="n">Modifier</span><span class="p">.</span><span class="n">nestedScroll</span><span class="p">(</span>
+        <span class="n">connection</span> <span class="p">=</span> <span class="n">rememberImeNestedScrollConnection</span><span class="p">()</span>
     <span class="p">)</span>
 <span class="p">)</span> <span class="p">{</span>
     <span class="c1">// list content</span>
@@ -1412,8 +1406,7 @@ wrap your content. This would typically be done near the top level of your compo
   
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
-        
-        <a href=".." class="md-footer__link md-footer__link--prev" aria-label="Previous: Overview" rel="prev">
+        <a href=".." class="md-footer__link md-footer__link--prev" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -1428,8 +1421,7 @@ wrap your content. This would typically be done near the top level of your compo
         </a>
       
       
-        
-        <a href="../systemuicontroller/" class="md-footer__link md-footer__link--next" aria-label="Next: Guide" rel="next">
+        <a href="../systemuicontroller/" class="md-footer__link md-footer__link--next" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
@@ -1464,10 +1456,10 @@ wrap your content. This would typically be done near the top level of your compo
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.709b4209.min.js", "version": null}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../assets/javascripts/workers/search.4fa0e4ee.min.js", "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.2b46852b.min.js"></script>
+      <script src="../assets/javascripts/bundle.1d3bfcf1.min.js"></script>
       
     
   </body>

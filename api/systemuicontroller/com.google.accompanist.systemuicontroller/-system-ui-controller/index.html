@@ -1,0 +1,221 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>SystemUiController</title>
+</head><body><link href="../../../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script><script src="https://unpkg.com/kotlin-playground@1" data-selector="code.runnablesample"></script><script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../../scripts/main.js" async></script>
+  
+    <div id="container">
+      <div id="leftColumn"><a href="../../../index.html">
+            <div id="logo"></div>
+          </a>
+        <div id="paneSearch"></div>
+        <div id="sideMenu"></div>
+      </div>
+      <div id="main">
+        <script type="text/javascript" src="../../../scripts/main.js"></script><div id="leftToggler"><span class="icon-toggler"></span></div>
+
+        <div class="main-content" id="content" pageids="systemuicontroller::com.google.accompanist.systemuicontroller/SystemUiController///PointingToDeclaration//-2105613612">
+          <div class="navigation-wrapper" id="navigation-wrapper">
+            <div class="breadcrumbs"><a href="../../index.html">systemuicontroller</a>/<a href="../index.html">com.google.accompanist.systemuicontroller</a>/<a href="index.html">SystemUiController</a></div>
+            <div class="pull-right d-flex">
+              <div id="searchBar"></div>
+            </div>
+          </div>
+          <div class="cover ">
+            <h1 class="cover"><span>System</span><wbr><span>Ui</span><wbr><span>Controller</span></h1>
+            <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":systemuicontroller:dokkaHtmlPartial/release"><div class="symbol monospace"><div class="block"><div class="block">@<a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Stable.html">Stable</a>()</div></div>interface <a href="index.html">SystemUiController</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">A class which provides easy-to-use utilities for updating the System UI bar colors within Jetpack Compose.</p></div></div>
+          </div>
+          <div class="tabbedcontent">
+            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button><button class="section-tab" data-togglable="Sources">Sources</button><button class="section-tab" data-togglable="Samples">Samples</button></div>
+            <div class="tabs-section-body">
+              <h2 class="">Samples</h2>
+              <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Samples"><div class="content sourceset-depenent-content" data-active="" data-togglable=":systemuicontroller:dokkaHtmlPartial/release"><div class="sample-container"><code class="runnablesample monospace" theme="idea"><pre>import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
+fun main() { 
+   //sampleStart 
+   // Get the current SystemUiController
+val systemUiController = rememberSystemUiController()
+val useDarkIcons = MaterialTheme.colors.isLight
+
+SideEffect {
+    // Update all of the system bar colors to be transparent, and use
+    // dark icons if we're in light theme
+    systemUiController.setSystemBarsColor(
+        color = Color.Transparent,
+        darkIcons = useDarkIcons
+    )
+
+    // setStatusBarsColor() and setNavigationBarsColor() also exist
+} 
+   //sampleEnd
+}</pre></code></div></div></div>
+              <h2 class="">Functions</h2>
+              <div class="table" data-togglable="Functions"><a data-name="-1650722357%2FFunctions%2F-2105613612" anchor-label="setNavigationBarColor" id="-1650722357%2FFunctions%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a>
+                <div class="table-row" data-filterable-current=":systemuicontroller:dokkaHtmlPartial/release" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="set-navigation-bar-color.html">setNavigationBarColor</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1650722357%2FFunctions%2F-2105613612"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":systemuicontroller:dokkaHtmlPartial/release" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":systemuicontroller:dokkaHtmlPartial/release"><div class="symbol monospace">abstract fun <a href="set-navigation-bar-color.html">setNavigationBarColor</a>(color: <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a>, darkIcons: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a> = color.luminance() &gt; 0.5f, navigationBarContrastEnforced: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a> = true, transformColorForLightContent: (<a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a>) -&gt; <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a> = BlackScrimmed)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+<a data-name="-1650722357%2FFunctions%2F-2105613612" anchor-label="setNavigationBarColor" id="-1650722357%2FFunctions%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a><div class="brief "><a data-name="-1650722357%2FFunctions%2F-2105613612" anchor-label="setNavigationBarColor" id="-1650722357%2FFunctions%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a>Set the navigation bar color.</div></div>
+</div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="932380573%2FFunctions%2F-2105613612" anchor-label="setStatusBarColor" id="932380573%2FFunctions%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a>
+                <div class="table-row" data-filterable-current=":systemuicontroller:dokkaHtmlPartial/release" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="set-status-bar-color.html">setStatusBarColor</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="932380573%2FFunctions%2F-2105613612"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":systemuicontroller:dokkaHtmlPartial/release" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":systemuicontroller:dokkaHtmlPartial/release"><div class="symbol monospace">abstract fun <a href="set-status-bar-color.html">setStatusBarColor</a>(color: <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a>, darkIcons: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a> = color.luminance() &gt; 0.5f, transformColorForLightContent: (<a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a>) -&gt; <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a> = BlackScrimmed)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+<a data-name="932380573%2FFunctions%2F-2105613612" anchor-label="setStatusBarColor" id="932380573%2FFunctions%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a><div class="brief "><a data-name="932380573%2FFunctions%2F-2105613612" anchor-label="setStatusBarColor" id="932380573%2FFunctions%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a>Set the status bar color.</div></div>
+</div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="1077243371%2FFunctions%2F-2105613612" anchor-label="setSystemBarsColor" id="1077243371%2FFunctions%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a>
+                <div class="table-row" data-filterable-current=":systemuicontroller:dokkaHtmlPartial/release" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="set-system-bars-color.html">setSystemBarsColor</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1077243371%2FFunctions%2F-2105613612"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":systemuicontroller:dokkaHtmlPartial/release" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":systemuicontroller:dokkaHtmlPartial/release"><div class="symbol monospace">open fun <a href="set-system-bars-color.html">setSystemBarsColor</a>(color: <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a>, darkIcons: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a> = color.luminance() &gt; 0.5f, isNavigationBarContrastEnforced: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a> = true, transformColorForLightContent: (<a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a>) -&gt; <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a> = BlackScrimmed)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+<a data-name="1077243371%2FFunctions%2F-2105613612" anchor-label="setSystemBarsColor" id="1077243371%2FFunctions%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a><div class="brief "><a data-name="1077243371%2FFunctions%2F-2105613612" anchor-label="setSystemBarsColor" id="1077243371%2FFunctions%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a>Set the status and navigation bars to <a href="set-system-bars-color.html">color</a>.</div></div>
+</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h2 class="">Properties</h2>
+              <div class="table" data-togglable="Properties"><a data-name="914921294%2FProperties%2F-2105613612" anchor-label="isNavigationBarContrastEnforced" id="914921294%2FProperties%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a>
+                <div class="table-row" data-filterable-current=":systemuicontroller:dokkaHtmlPartial/release" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="is-navigation-bar-contrast-enforced.html">isNavigationBarContrastEnforced</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="914921294%2FProperties%2F-2105613612"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":systemuicontroller:dokkaHtmlPartial/release"><a data-name="914921294%2FProperties%2F-2105613612" anchor-label="isNavigationBarContrastEnforced" id="914921294%2FProperties%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a><div class="symbol monospace">abstract var <a href="is-navigation-bar-contrast-enforced.html">isNavigationBarContrastEnforced</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="914921294%2FProperties%2F-2105613612" anchor-label="isNavigationBarContrastEnforced" id="914921294%2FProperties%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a>Property which holds whether the system is ensuring that the navigation bar has enough contrast when a fully transparent background is requested.</div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="19546870%2FProperties%2F-2105613612" anchor-label="isNavigationBarVisible" id="19546870%2FProperties%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a>
+                <div class="table-row" data-filterable-current=":systemuicontroller:dokkaHtmlPartial/release" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="is-navigation-bar-visible.html">isNavigationBarVisible</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="19546870%2FProperties%2F-2105613612"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":systemuicontroller:dokkaHtmlPartial/release"><a data-name="19546870%2FProperties%2F-2105613612" anchor-label="isNavigationBarVisible" id="19546870%2FProperties%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a><div class="symbol monospace">abstract var <a href="is-navigation-bar-visible.html">isNavigationBarVisible</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="19546870%2FProperties%2F-2105613612" anchor-label="isNavigationBarVisible" id="19546870%2FProperties%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a>Property which holds the navigation bar visibility.</div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="2029327960%2FProperties%2F-2105613612" anchor-label="isStatusBarVisible" id="2029327960%2FProperties%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a>
+                <div class="table-row" data-filterable-current=":systemuicontroller:dokkaHtmlPartial/release" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="is-status-bar-visible.html">isStatusBarVisible</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2029327960%2FProperties%2F-2105613612"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":systemuicontroller:dokkaHtmlPartial/release"><a data-name="2029327960%2FProperties%2F-2105613612" anchor-label="isStatusBarVisible" id="2029327960%2FProperties%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a><div class="symbol monospace">abstract var <a href="is-status-bar-visible.html">isStatusBarVisible</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="2029327960%2FProperties%2F-2105613612" anchor-label="isStatusBarVisible" id="2029327960%2FProperties%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a>Property which holds the status bar visibility.</div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-486001970%2FProperties%2F-2105613612" anchor-label="isSystemBarsVisible" id="-486001970%2FProperties%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a>
+                <div class="table-row" data-filterable-current=":systemuicontroller:dokkaHtmlPartial/release" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="is-system-bars-visible.html">isSystemBarsVisible</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-486001970%2FProperties%2F-2105613612"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":systemuicontroller:dokkaHtmlPartial/release"><a data-name="-486001970%2FProperties%2F-2105613612" anchor-label="isSystemBarsVisible" id="-486001970%2FProperties%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a><div class="symbol monospace">open var <a href="is-system-bars-visible.html">isSystemBarsVisible</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-486001970%2FProperties%2F-2105613612" anchor-label="isSystemBarsVisible" id="-486001970%2FProperties%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a>Property which holds the status &amp; navigation bar visibility.</div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-288306486%2FProperties%2F-2105613612" anchor-label="navigationBarDarkContentEnabled" id="-288306486%2FProperties%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a>
+                <div class="table-row" data-filterable-current=":systemuicontroller:dokkaHtmlPartial/release" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="navigation-bar-dark-content-enabled.html">navigationBarDarkContentEnabled</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-288306486%2FProperties%2F-2105613612"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":systemuicontroller:dokkaHtmlPartial/release"><a data-name="-288306486%2FProperties%2F-2105613612" anchor-label="navigationBarDarkContentEnabled" id="-288306486%2FProperties%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a><div class="symbol monospace">abstract var <a href="navigation-bar-dark-content-enabled.html">navigationBarDarkContentEnabled</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-288306486%2FProperties%2F-2105613612" anchor-label="navigationBarDarkContentEnabled" id="-288306486%2FProperties%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a>Property which holds whether the navigation bar icons + content are 'dark' or not.</div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="1606512936%2FProperties%2F-2105613612" anchor-label="statusBarDarkContentEnabled" id="1606512936%2FProperties%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a>
+                <div class="table-row" data-filterable-current=":systemuicontroller:dokkaHtmlPartial/release" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="status-bar-dark-content-enabled.html">statusBarDarkContentEnabled</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1606512936%2FProperties%2F-2105613612"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":systemuicontroller:dokkaHtmlPartial/release"><a data-name="1606512936%2FProperties%2F-2105613612" anchor-label="statusBarDarkContentEnabled" id="1606512936%2FProperties%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a><div class="symbol monospace">abstract var <a href="status-bar-dark-content-enabled.html">statusBarDarkContentEnabled</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="1606512936%2FProperties%2F-2105613612" anchor-label="statusBarDarkContentEnabled" id="1606512936%2FProperties%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a>Property which holds whether the status bar icons + content are 'dark' or not.</div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-1568014010%2FProperties%2F-2105613612" anchor-label="systemBarsDarkContentEnabled" id="-1568014010%2FProperties%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a>
+                <div class="table-row" data-filterable-current=":systemuicontroller:dokkaHtmlPartial/release" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="system-bars-dark-content-enabled.html">systemBarsDarkContentEnabled</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1568014010%2FProperties%2F-2105613612"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":systemuicontroller:dokkaHtmlPartial/release"><a data-name="-1568014010%2FProperties%2F-2105613612" anchor-label="systemBarsDarkContentEnabled" id="-1568014010%2FProperties%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a><div class="symbol monospace">open var <a href="system-bars-dark-content-enabled.html">systemBarsDarkContentEnabled</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-1568014010%2FProperties%2F-2105613612" anchor-label="systemBarsDarkContentEnabled" id="-1568014010%2FProperties%2F-2105613612" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/release"></a>Property which holds whether the status &amp; navigation bar icons + content are 'dark' or not.</div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h2 class="">Sources</h2>
+              <div class="table" data-togglable="Sources"><a data-name="598858956%2FSource%2F154115520" anchor-label="https://github.com/google/accompanist/blob/main/systemuicontroller/src/main/java/com/google/accompanist/systemuicontroller/SystemUiController.kt#L36" id="598858956%2FSource%2F154115520" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/main"></a>
+                <div class="table-row" data-filterable-current=":systemuicontroller:dokkaHtmlPartial/main" data-filterable-set=":systemuicontroller:dokkaHtmlPartial/main">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="https://github.com/google/accompanist/blob/main/systemuicontroller/src/main/java/com/google/accompanist/systemuicontroller/SystemUiController.kt#L36">androidJvm source</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="598858956%2FSource%2F154115520"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="footer"><span class="go-to-top-icon"><a href="#content"></a></span><span>© 2021 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+      </div>
+    </div>
+  
+</body></html>
+
+
