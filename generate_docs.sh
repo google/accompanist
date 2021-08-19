@@ -27,9 +27,6 @@ mkdir $DOCS_ROOT
 # Build the docs with dokka
 ./gradlew dokkaHtmlMultiModule --stacktrace
 
-# Clean up the temp Coil package list
-rm package-list-coil-base
-
 # Create a copy of our docs at our $DOCS_ROOT
 cp -a docs/* $DOCS_ROOT
 
