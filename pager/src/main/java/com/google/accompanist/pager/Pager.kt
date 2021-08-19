@@ -23,10 +23,7 @@ import androidx.compose.animation.core.DecayAnimationSpec
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.gestures.FlingBehavior
-import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.ScrollScope
-import androidx.compose.foundation.gestures.scrollBy
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -37,32 +34,19 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.ParentDataModifier
-import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.semantics.ScrollAxisRange
-import androidx.compose.ui.semantics.horizontalScrollAxisRange
-import androidx.compose.ui.semantics.scrollBy
-import androidx.compose.ui.semantics.selectableGroup
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
-import io.github.aakira.napier.Napier
-import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
 
 /**
  * Library-wide switch to turn on debug logging.
@@ -110,12 +94,13 @@ object PagerDefaults {
         object : FlingBehavior {
             override suspend fun ScrollScope.performFling(
                 initialVelocity: Float
-            ): Float = state.fling(
-                initialVelocity = -initialVelocity,
-                decayAnimationSpec = decayAnimationSpec,
-                snapAnimationSpec = snapAnimationSpec,
-                scrollBy = { deltaPixels -> -scrollBy(-deltaPixels) },
-            )
+            ): Float = 0f
+//                state.fling(
+//                initialVelocity = -initialVelocity,
+//                decayAnimationSpec = decayAnimationSpec,
+//                snapAnimationSpec = snapAnimationSpec,
+//                scrollBy = { deltaPixels -> -scrollBy(-deltaPixels) },
+//            )
         }
     }
 
@@ -161,7 +146,7 @@ fun HorizontalPager(
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
-    PagerLazy(
+    Pager(
         state = state,
         modifier = modifier,
         isVertical = false,
@@ -205,7 +190,7 @@ fun VerticalPager(
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
-    PagerLazy(
+    Pager(
         state = state,
         modifier = modifier,
         isVertical = true,
@@ -222,7 +207,7 @@ fun VerticalPager(
 @ExperimentalPagerApi
 @Composable
 @Suppress("UNUSED_PARAMETER")
-internal fun PagerLazy(
+internal fun Pager(
     state: PagerState,
     modifier: Modifier,
     reverseLayout: Boolean,
@@ -234,19 +219,24 @@ internal fun PagerLazy(
     flingBehavior: FlingBehavior,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
-    val lazyListState = rememberLazyListState()
+    state.verticalAlignment = verticalAlignment
+    state.horizontalAlignment = horizontalAlignment
 
     BoxWithConstraints(
         modifier = modifier,
         propagateMinConstraints = true
     ) {
+        // TODO: handle infinite constraints
+        state.viewportHeight = constraints.maxHeight
+        state.viewportWidth = constraints.maxWidth
+
         if (isVertical) {
             // TODO
         } else {
             // TODO: add consuming touch handler if dragEnabled = false
 
             LazyRow(
-                state = lazyListState,
+                state = state.lazyListState,
                 verticalAlignment = verticalAlignment,
                 horizontalArrangement = Arrangement.spacedBy(itemSpacing, horizontalAlignment),
                 flingBehavior = flingBehavior,
@@ -270,160 +260,6 @@ internal fun PagerLazy(
                         scope.content(page)
                     }
                 }
-            }
-        }
-    }
-}
-
-@ExperimentalPagerApi
-@Composable
-internal fun Pager(
-    state: PagerState,
-    modifier: Modifier,
-    reverseLayout: Boolean,
-    itemSpacing: Dp,
-    isVertical: Boolean,
-    verticalAlignment: Alignment.Vertical,
-    horizontalAlignment: Alignment.Horizontal,
-    dragEnabled: Boolean,
-    flingBehavior: FlingBehavior,
-    content: @Composable PagerScope.(page: Int) -> Unit,
-) {
-    // True if the scroll direction is RTL, false for LTR
-    val reverseDirection = when {
-        // If we're vertical, just use reverseLayout as-is
-        isVertical -> reverseLayout
-        // If we're horizontal in RTL, flip reverseLayout
-        LocalLayoutDirection.current == LayoutDirection.Rtl -> !reverseLayout
-        // Else (horizontal in LTR), use reverseLayout as-is
-        else -> reverseLayout
-    }
-
-    val coroutineScope = rememberCoroutineScope()
-    val semanticsAxisRange = remember(state, reverseDirection) {
-        ScrollAxisRange(
-            value = { state.currentLayoutPage + state.currentLayoutPageOffset },
-            maxValue = { state.lastPageIndex.toFloat() },
-        )
-    }
-    val semantics = Modifier.semantics {
-        horizontalScrollAxisRange = semanticsAxisRange
-        // Hook up scroll actions to our state
-        scrollBy { x, y ->
-            coroutineScope.launch {
-                if (isVertical) {
-                    state.scrollBy(if (reverseDirection) y else -y)
-                } else {
-                    state.scrollBy(if (reverseDirection) x else -x)
-                }
-            }
-            true
-        }
-        // Treat this as a selectable group
-        selectableGroup()
-    }
-
-    val scrollable = Modifier.scrollable(
-        orientation = if (isVertical) Orientation.Vertical else Orientation.Horizontal,
-        flingBehavior = flingBehavior,
-        reverseDirection = reverseDirection,
-        state = state,
-        interactionSource = state.internalInteractionSource,
-        enabled = dragEnabled,
-    )
-
-    Layout(
-        modifier = modifier
-            .then(semantics)
-            .then(scrollable)
-            // Add a NestedScrollConnection which consumes all post fling/scrolls
-            .nestedScroll(connection = ConsumeFlingNestedScrollConnection)
-            .clipScrollableContainer(isVertical),
-        content = {
-            if (DebugLog) {
-                val firstPage = state.layoutPages.firstOrNull { it.page != null }
-                val lastPage = state.layoutPages.lastOrNull { it.page != null }
-                Napier.d(
-                    tag = LogTag,
-                    message = "Content: firstPage:${firstPage?.page ?: "none"}, " +
-                        "layoutPage:${state.currentLayoutPageInfo}, " +
-                        "currentPage:${state.currentPage}, " +
-                        "lastPage:${lastPage?.page ?: "none"}"
-                )
-            }
-
-            // FYI: We need to filter out null/empty pages *outside* of the loop. Compose uses the
-            // call stack as part of the key for state, so we need to ensure that the call stack
-            // for page content is consistent as the user scrolls, otherwise content will
-            // drop/recreate state.
-            val pages = state.layoutPages.mapNotNull { it.page }
-            for (_page in pages) {
-                val page = state.pageOf(_page)
-                key(page) {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = PageData(_page)
-                    ) {
-                        val scope = remember(this, state) {
-                            PagerScopeImpl(this, state)
-                        }
-                        scope.content(page)
-                    }
-                }
-            }
-        },
-    ) { measurables, constraints ->
-        if (measurables.isEmpty()) {
-            // If we have no measurables, no-op and return
-            return@Layout layout(constraints.minWidth, constraints.minHeight) {}
-        }
-
-        val childConstraints = constraints.copy(minWidth = 0, minHeight = 0)
-
-        val placeables = measurables.map { it.measure(childConstraints) }
-        // Our pager width/height is the maximum pager content width/height, and coerce
-        // each by our minimum constraints
-        val pagerWidth = placeables.maxOf { it.width }.coerceAtLeast(constraints.minWidth)
-        val pagerHeight = placeables.maxOf { it.height }.coerceAtLeast(constraints.minHeight)
-
-        layout(width = pagerWidth, height = pagerHeight) {
-            val layoutPage = state.currentLayoutPage
-            val offset = state.currentLayoutPageOffset
-            val itemSpacingPx = itemSpacing.roundToPx()
-
-            placeables.forEachIndexed { index, placeable ->
-                val page = measurables[index].page
-                val layoutInfo = state.layoutPages.firstOrNull { it.page == page }
-
-                val xCenterOffset = horizontalAlignment.align(
-                    size = placeable.width,
-                    space = pagerWidth,
-                    layoutDirection = layoutDirection,
-                )
-                val yCenterOffset = verticalAlignment.align(
-                    size = placeable.height,
-                    space = pagerHeight,
-                )
-
-                var yItemOffset = 0
-                var xItemOffset = 0
-                val offsetForPage = page - layoutPage - offset
-
-                if (isVertical) {
-                    layoutInfo?.layoutSize = placeable.height
-                    yItemOffset = (offsetForPage * (placeable.height + itemSpacingPx)).roundToInt()
-                } else {
-                    layoutInfo?.layoutSize = placeable.width
-                    xItemOffset = (offsetForPage * (placeable.width + itemSpacingPx)).roundToInt()
-                }
-
-                // We can't rely on placeRelative() since that only uses the LayoutDirection, and
-                // we need to cater for our reverseLayout param too. reverseDirection contains
-                // the resolved direction, so we use that to flip the offset direction...
-                placeable.place(
-                    x = xCenterOffset + if (reverseDirection) -xItemOffset else xItemOffset,
-                    y = yCenterOffset + if (reverseDirection) -yItemOffset else yItemOffset,
-                )
             }
         }
     }

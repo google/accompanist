@@ -100,6 +100,9 @@ private fun Sample() {
                 )
             }
 
+            Text(text = "Layout Page: ${pagerState.currentLayoutPage?.index}")
+            Text(text = "Layout Page Offset: ${pagerState.currentLayoutPageOffset}")
+
             ActionsRow(
                 pagerState = pagerState,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
