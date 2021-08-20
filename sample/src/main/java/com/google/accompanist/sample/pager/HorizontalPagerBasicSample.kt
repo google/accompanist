@@ -100,8 +100,8 @@ private fun Sample() {
                 )
             }
 
-            Text(text = "Layout Page: ${pagerState.currentLayoutPage}")
-            Text(text = "Layout Page Offset: ${pagerState.currentPageOffset}")
+            Text(text = "Current Page: ${pagerState.currentPage}")
+            Text(text = "Current Page Offset: ${pagerState.currentPageOffset}")
 
             ActionsRow(
                 pagerState = pagerState,

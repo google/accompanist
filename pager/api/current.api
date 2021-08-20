@@ -27,22 +27,22 @@ package com.google.accompanist.pager {
   }
 
   @androidx.compose.runtime.Stable @com.google.accompanist.pager.ExperimentalPagerApi public final class PagerState implements androidx.compose.foundation.gestures.ScrollableState {
-    ctor public PagerState(@IntRange(from=0) int pageCount, optional @IntRange(from=0) int currentPage, optional @FloatRange(from=0.0, to=1.0) float currentPageOffset, optional int offscreenLimit, optional boolean infiniteLoop, androidx.compose.foundation.lazy.LazyListState lazyListState);
+    ctor public PagerState(@IntRange(from=0) int pageCount, optional @IntRange(from=0) int currentPage, optional @FloatRange(from=0.0, to=1.0) float currentPageOffset, optional int offscreenLimit, optional boolean infiniteLoop);
     method public suspend Object? animateScrollToPage(@IntRange(from=0) int page, optional @FloatRange(from=0.0, to=1.0) float pageOffset, optional kotlin.coroutines.Continuation<? super kotlin.Unit> p);
-    method public int getCurrentLayoutPage();
+    method public float dispatchRawDelta(float delta);
     method @IntRange(from=0) public int getCurrentPage();
     method public float getCurrentPageOffset();
     method public androidx.compose.foundation.interaction.InteractionSource getInteractionSource();
-    method public androidx.compose.foundation.lazy.LazyListState getLazyListState();
     method @IntRange(from=0) public int getPageCount();
     method public int getTargetPage();
+    method public boolean isScrollInProgress();
+    method public suspend Object? scroll(androidx.compose.foundation.MutatePriority scrollPriority, kotlin.jvm.functions.Function2<? super androidx.compose.foundation.gestures.ScrollScope,? super kotlin.coroutines.Continuation<? super kotlin.Unit>,?> block, kotlin.coroutines.Continuation<? super kotlin.Unit> p);
     method public suspend Object? scrollToPage(@IntRange(from=0) int page, optional @FloatRange(from=0.0, to=1.0) float pageOffset, optional kotlin.coroutines.Continuation<? super kotlin.Unit> p);
     method public void setPageCount(@IntRange(from=0) int value);
-    property public final int currentLayoutPage;
     property @IntRange(from=0) public final int currentPage;
     property public final float currentPageOffset;
     property public final androidx.compose.foundation.interaction.InteractionSource interactionSource;
-    property public final androidx.compose.foundation.lazy.LazyListState lazyListState;
+    property public boolean isScrollInProgress;
     property @IntRange(from=0) public final int pageCount;
     property public final int targetPage;
     field public static final com.google.accompanist.pager.PagerState.Companion Companion;
@@ -54,7 +54,7 @@ package com.google.accompanist.pager {
   }
 
   public final class PagerStateKt {
-    method @androidx.compose.runtime.Composable @com.google.accompanist.pager.ExperimentalPagerApi public static com.google.accompanist.pager.PagerState rememberPagerState(@IntRange(from=0) int pageCount, optional @IntRange(from=0) int initialPage, optional @FloatRange(from=0.0, to=1.0) float initialPageOffset, optional @IntRange(from=1) int initialOffscreenLimit, optional boolean infiniteLoop, optional androidx.compose.foundation.lazy.LazyListState lazyListState);
+    method @androidx.compose.runtime.Composable @com.google.accompanist.pager.ExperimentalPagerApi public static com.google.accompanist.pager.PagerState rememberPagerState(@IntRange(from=0) int pageCount, optional @IntRange(from=0) int initialPage, optional @FloatRange(from=0.0, to=1.0) float initialPageOffset, optional @IntRange(from=1) int initialOffscreenLimit, optional boolean infiniteLoop);
   }
 
 }

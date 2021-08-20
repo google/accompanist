@@ -20,10 +20,20 @@ package com.google.accompanist.pager
 
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.AnimationState
+import androidx.compose.animation.core.DecayAnimationSpec
+import androidx.compose.animation.core.animate
+import androidx.compose.animation.core.animateDecay
+import androidx.compose.animation.core.calculateTargetValue
+import androidx.compose.animation.core.exponentialDecay
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.MutatePriority
+import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.interaction.InteractionSource
+import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
@@ -35,6 +45,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
+import kotlin.math.abs
+import kotlin.math.absoluteValue
+import kotlin.math.roundToInt
 
 /**
  * Creates a [PagerState] that is remembered across compositions.
@@ -56,7 +69,6 @@ fun rememberPagerState(
     @FloatRange(from = 0.0, to = 1.0) initialPageOffset: Float = 0f,
     @IntRange(from = 1) initialOffscreenLimit: Int = 1,
     infiniteLoop: Boolean = false,
-    lazyListState: LazyListState = rememberLazyListState(),
 ): PagerState = rememberSaveable(saver = PagerState.Saver) {
     PagerState(
         pageCount = pageCount,
@@ -64,7 +76,6 @@ fun rememberPagerState(
         currentPageOffset = initialPageOffset,
         offscreenLimit = initialOffscreenLimit,
         infiniteLoop = infiniteLoop,
-        lazyListState = lazyListState,
     )
 }.apply {
     this.pageCount = pageCount
@@ -95,8 +106,9 @@ class PagerState(
     @FloatRange(from = 0.0, to = 1.0) currentPageOffset: Float = 0f,
     private val offscreenLimit: Int = 1,
     private val infiniteLoop: Boolean = false,
-    val lazyListState: LazyListState,
-) : ScrollableState by lazyListState {
+) : ScrollableState {
+    internal val lazyListState = LazyListState(firstVisibleItemIndex = currentPage)
+
     private var _pageCount by mutableStateOf(pageCount)
     private var _currentPage by mutableStateOf(currentPage)
 
@@ -104,23 +116,19 @@ class PagerState(
     internal var viewportWidth by mutableStateOf(0)
     internal var leadSpacing: Int by mutableStateOf(0)
 
-    val currentLayoutPage: Int by derivedStateOf {
+    private val currentLayoutPageInfo: LazyListItemInfo? by derivedStateOf {
         val layoutInfo = lazyListState.layoutInfo
         val start = leadSpacing + layoutInfo.viewportStartOffset
 
         layoutInfo.visibleItemsInfo.asSequence()
             .filter { it.offset <= start }
-            .lastOrNull()?.index ?: 0
+            .lastOrNull()
     }
 
-    private val currentLayoutPageOffset: Float by derivedStateOf {
-        val currentPageIndex = currentLayoutPage
-        // Find the current layoutItemInfo
-        val current = lazyListState.layoutInfo.visibleItemsInfo.firstOrNull {
-            it.index == currentPageIndex
-        }
+    private val currentLayoutPage: Int by derivedStateOf { currentLayoutPageInfo?.index ?: 0 }
 
-        if (current != null) {
+    private val currentLayoutPageOffset: Float by derivedStateOf {
+        currentLayoutPageInfo?.let { current ->
             val start = leadSpacing + lazyListState.layoutInfo.viewportStartOffset
             // Since the first item might be wider to compensate for the alignment, we need
             // to compute the actual size and offset
@@ -129,7 +137,7 @@ class PagerState(
             // We coerce we itemSpacing can make the offset > 1f. We don't want to count
             // spacing in the offset so cap it to 1f
             (-offset / size.toFloat()).coerceIn(0f, 1f)
-        } else 0f
+        } ?: 0f
     }
 
     /**
@@ -266,19 +274,171 @@ class PagerState(
         // FIXME: use pageOffset
     }
 
-//    private fun determineSpringBackOffset(
-//        velocity: Float,
-//        offset: Float = currentLayoutPageOffset,
-//    ): Int = when {
-//        // If the velocity is greater than 1 page per second (velocity is px/s), spring
-//        // in the relevant direction
-//        velocity >= currentLayoutPageSize -> 1
-//        velocity <= -currentLayoutPageSize -> 0
-//        // If the offset exceeds the scroll threshold (in either direction), we want to
-//        // move to the next/previous item
-//        offset < 0.5f -> 0
-//        else -> 1
-//    }
+    private fun determineSpringBackOffset(
+        velocity: Float,
+        offset: Float = currentLayoutPageOffset,
+    ): Int {
+        val currentLayoutPageSize = currentLayoutPageInfo?.size ?: return 0
+        return when {
+            // If the velocity is greater than 1 page per second (velocity is px/s), spring
+            // in the relevant direction
+            velocity >= currentLayoutPageSize -> 1
+            velocity <= -currentLayoutPageSize -> 0
+            // If the offset exceeds the scroll threshold (in either direction), we want to
+            // move to the next/previous item
+            offset < 0.5f -> 0
+            else -> 1
+        }
+    }
+
+    /**
+     * Fling the pager with the given [initialVelocity]. [scrollBy] will called whenever a
+     * scroll change is required by the fling.
+     *
+     * @param initialVelocity velocity in pixels per second. Values > 0 signify flings
+     * towards the end of the pager, and values < 0 sign flings towards the start.
+     * @param decayAnimationSpec The decay animation spec to use for decayed flings.
+     * @param snapAnimationSpec The animation spec to use when snapping.
+     * @param scrollBy block which is called when a scroll is required. Positive values passed in
+     * signify scrolls towards the end of the pager, and values < 0 towards the start.
+     * @return any remaining velocity after the scroll has finished.
+     */
+    internal suspend fun fling(
+        initialVelocity: Float,
+        decayAnimationSpec: DecayAnimationSpec<Float> = exponentialDecay(),
+        snapAnimationSpec: AnimationSpec<Float> = spring(),
+        scrollBy: (Float) -> Float,
+    ): Float {
+        val currentLayoutPageSize = currentLayoutPageInfo?.size ?: return initialVelocity
+
+        // We calculate the target offset using pixels, rather than using the offset
+        val targetOffset = decayAnimationSpec.calculateTargetValue(
+            initialValue = currentLayoutPageOffset * currentLayoutPageSize,
+            initialVelocity = initialVelocity
+        ) / currentLayoutPageSize
+
+        if (DebugLog) {
+            Napier.d(
+                message = "fling. velocity:%.4f, page: %d, offset:%.4f, targetOffset:%.4f"
+                    .format(
+                        initialVelocity,
+                        currentLayoutPage,
+                        currentLayoutPageOffset,
+                        targetOffset
+                    )
+            )
+        }
+
+        var velocityLeft = initialVelocity
+
+        // If the decay animation will naturally end outside of current page bounds, we will
+        // animate with decay.
+        if (targetOffset.absoluteValue >= 1) {
+            // Animate with the decay animation spec using the fling velocity
+
+            val target = when {
+                targetOffset > 0 -> (currentLayoutPage + 1).coerceAtMost(pageCount - 1)
+                else -> currentLayoutPage
+            }
+            // Update the external state too
+            _animationTargetPage = target
+
+            var lastValue = 0f
+
+            AnimationState(
+                initialValue = currentLayoutPageOffset * currentLayoutPageSize,
+                initialVelocity = initialVelocity
+            ).animateDecay(decayAnimationSpec) {
+                if (DebugLog) {
+                    Napier.d(
+                        message = "fling. decay. value:%.4f, page: %d, offset:%.4f"
+                            .format(value, currentPage, currentPageOffset)
+                    )
+                }
+
+                val delta = value - lastValue
+                val consumed = scrollBy(delta)
+                lastValue = value
+                velocityLeft = this.velocity
+
+                // If we've scroll our target page (or beyond it), cancel the animation
+                if ((initialVelocity < 0 && absolutePosition <= target) ||
+                    (initialVelocity > 0 && absolutePosition >= target) ||
+                    abs(delta - consumed) > 0.5f
+                ) {
+                    // If we reach the bounds of the allowed offset, cancel the animation
+                    cancelAnimation()
+                }
+            }
+            // Snap back to item
+            snapToPage(targetPage)
+        } else {
+            // Otherwise we animate to the next item, or spring-back depending on the offset
+            val targetPage = currentLayoutPage + determineSpringBackOffset(
+                velocity = initialVelocity,
+                offset = targetOffset
+            )
+            // Update the external state too
+            _animationTargetPage = targetPage
+
+            animate(
+                initialValue = absolutePosition * currentLayoutPageSize,
+                targetValue = targetPage.toFloat() * currentLayoutPageSize,
+                initialVelocity = initialVelocity,
+                animationSpec = snapAnimationSpec,
+            ) { value, velocity ->
+                scrollBy(value - (absolutePosition * currentLayoutPageSize))
+                // Keep track of velocity
+                velocityLeft = velocity
+            }
+            snapToNearestPage()
+        }
+
+        return velocityLeft
+    }
+
+    /**
+     * Snap the layout the given [page] and [offset].
+     */
+    private suspend fun snapToPage(page: Int) {
+        if (DebugLog) {
+            Napier.d(
+                message = "snapToPage. page:$currentLayoutPage, offset:$currentLayoutPageOffset"
+            )
+        }
+
+        try {
+            // FIXME: update offset for alignment
+            lazyListState.scrollToItem(page)
+        } finally {
+            // Then update the current page to our layout page
+            currentPage = page
+            // Clear the target page
+            _animationTargetPage = null
+        }
+    }
+
+    private suspend fun snapToNearestPage() {
+        snapToPage(currentLayoutPage + currentLayoutPageOffset.roundToInt())
+    }
+
+    override suspend fun scroll(
+        scrollPriority: MutatePriority,
+        block: suspend ScrollScope.() -> Unit
+    ) {
+        try {
+            lazyListState.scroll(scrollPriority, block)
+        } finally {
+            snapToNearestPage()
+        }
+    }
+
+    override fun dispatchRawDelta(delta: Float): Float {
+        return lazyListState.dispatchRawDelta(delta)
+    }
+
+    override val isScrollInProgress: Boolean
+        get() = lazyListState.isScrollInProgress
 
     override fun toString(): String = "PagerState(" +
         "pageCount=$pageCount, " +
@@ -329,7 +489,6 @@ class PagerState(
                 PagerState(
                     pageCount = it[0] as Int,
                     currentPage = it[1] as Int,
-                    lazyListState = LazyListState(), // FIXME
                 )
             }
         )

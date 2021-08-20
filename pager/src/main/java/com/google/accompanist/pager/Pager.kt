@@ -93,13 +93,12 @@ object PagerDefaults {
         object : FlingBehavior {
             override suspend fun ScrollScope.performFling(
                 initialVelocity: Float
-            ): Float = 0f
-//                state.fling(
-//                initialVelocity = -initialVelocity,
-//                decayAnimationSpec = decayAnimationSpec,
-//                snapAnimationSpec = snapAnimationSpec,
-//                scrollBy = { deltaPixels -> -scrollBy(-deltaPixels) },
-//            )
+            ): Float = state.fling(
+                initialVelocity = initialVelocity,
+                decayAnimationSpec = decayAnimationSpec,
+                snapAnimationSpec = snapAnimationSpec,
+                scrollBy = ::scrollBy,
+            )
         }
     }
 
