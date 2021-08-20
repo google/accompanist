@@ -22,7 +22,6 @@ import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.interaction.InteractionSource
-import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
@@ -34,7 +33,6 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
 
@@ -102,43 +100,36 @@ class PagerState(
     private var _pageCount by mutableStateOf(pageCount)
     private var _currentPage by mutableStateOf(currentPage)
 
-    internal var isVertical by mutableStateOf(false)
     internal var viewportHeight by mutableStateOf(0)
     internal var viewportWidth by mutableStateOf(0)
-    internal var verticalAlignment: Alignment.Vertical by mutableStateOf(Alignment.CenterVertically)
-    internal var horizontalAlignment: Alignment.Horizontal by mutableStateOf(Alignment.CenterHorizontally)
+    internal var leadSpacing: Int by mutableStateOf(0)
 
-    val currentLayoutPage: LazyListItemInfo? by derivedStateOf {
+    val currentLayoutPage: Int by derivedStateOf {
         val layoutInfo = lazyListState.layoutInfo
+        val start = leadSpacing + layoutInfo.viewportStartOffset
 
-        if (isVertical) {
-            null
-        } else {
-            when (horizontalAlignment) {
-                Alignment.Start -> {
-                    layoutInfo.visibleItemsInfo.firstOrNull {
-                        it.offset < layoutInfo.viewportStartOffset &&
-                            (it.offset + it.size) <= layoutInfo.viewportEndOffset
-                    }
-                }
-                Alignment.End -> {
-                    layoutInfo.visibleItemsInfo.firstOrNull {
-                        it.offset < layoutInfo.viewportStartOffset &&
-                            (it.offset + it.size) <= layoutInfo.viewportEndOffset
-                    }
-                }
-                else -> { // CenterHorizontally
-                    val center = if (isVertical) viewportHeight / 2 else viewportWidth / 2
-                    layoutInfo.visibleItemsInfo.firstOrNull {
-                        it.offset < center && (it.offset + it.size) <= center
-                    }
-                }
-            }
-        }
+        layoutInfo.visibleItemsInfo.asSequence()
+            .filter { it.offset <= start }
+            .lastOrNull()?.index ?: 0
     }
 
-    val currentLayoutPageOffset: Float by derivedStateOf {
-        0f
+    private val currentLayoutPageOffset: Float by derivedStateOf {
+        val currentPageIndex = currentLayoutPage
+        // Find the current layoutItemInfo
+        val current = lazyListState.layoutInfo.visibleItemsInfo.firstOrNull {
+            it.index == currentPageIndex
+        }
+
+        if (current != null) {
+            val start = leadSpacing + lazyListState.layoutInfo.viewportStartOffset
+            // Since the first item might be wider to compensate for the alignment, we need
+            // to compute the actual size and offset
+            val size = if (current.index == 0) current.size - start else current.size
+            val offset = if (current.index == 0) current.offset else current.offset - start
+            // We coerce we itemSpacing can make the offset > 1f. We don't want to count
+            // spacing in the offset so cap it to 1f
+            (-offset / size.toFloat()).coerceIn(0f, 1f)
+        } else 0f
     }
 
     /**
@@ -150,7 +141,7 @@ class PagerState(
      * The current scroll position, as a float value between `firstPageIndex until lastPageIndex`
      */
     private inline val absolutePosition: Float
-        get() = 0f // FIXME _currentLayoutPage + _currentLayoutPageOffset
+        get() = currentLayoutPage + currentLayoutPageOffset
 
     /**
      * [InteractionSource] that will be used to dispatch drag events when this

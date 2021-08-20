@@ -218,9 +218,6 @@ internal fun Pager(
     flingBehavior: FlingBehavior,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
-    state.verticalAlignment = verticalAlignment
-    state.horizontalAlignment = horizontalAlignment
-
     BoxWithConstraints(
         modifier = modifier,
         propagateMinConstraints = true
@@ -250,6 +247,7 @@ internal fun Pager(
                     PagerItem(
                         page = page,
                         itemCount = state.pageCount,
+                        pagerState = state,
                         isVertical = true,
                         horizontalAlignment = horizontalAlignment,
                         verticalAlignment = verticalAlignment,
@@ -275,6 +273,7 @@ internal fun Pager(
                     PagerItem(
                         page = page,
                         itemCount = state.pageCount,
+                        pagerState = state,
                         isVertical = false,
                         horizontalAlignment = horizontalAlignment,
                         verticalAlignment = verticalAlignment,
@@ -292,6 +291,7 @@ internal fun Pager(
 private fun PagerItem(
     page: Int,
     itemCount: Int,
+    pagerState: PagerState,
     isVertical: Boolean,
     verticalAlignment: Alignment.Vertical,
     horizontalAlignment: Alignment.Horizontal,
@@ -334,6 +334,10 @@ private fun PagerItem(
                 else /* Center */ -> (constraints.maxHeight - placeable.height) / 2
             }
         } else 0
+
+        if (page == 0) {
+            pagerState.leadSpacing = if (isVertical) topSpacing else startSpacing
+        }
 
         layout(
             width = placeable.width + startSpacing + endSpacing,

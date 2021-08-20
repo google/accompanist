@@ -29,8 +29,7 @@ package com.google.accompanist.pager {
   @androidx.compose.runtime.Stable @com.google.accompanist.pager.ExperimentalPagerApi public final class PagerState implements androidx.compose.foundation.gestures.ScrollableState {
     ctor public PagerState(@IntRange(from=0) int pageCount, optional @IntRange(from=0) int currentPage, optional @FloatRange(from=0.0, to=1.0) float currentPageOffset, optional int offscreenLimit, optional boolean infiniteLoop, androidx.compose.foundation.lazy.LazyListState lazyListState);
     method public suspend Object? animateScrollToPage(@IntRange(from=0) int page, optional @FloatRange(from=0.0, to=1.0) float pageOffset, optional kotlin.coroutines.Continuation<? super kotlin.Unit> p);
-    method public androidx.compose.foundation.lazy.LazyListItemInfo? getCurrentLayoutPage();
-    method public float getCurrentLayoutPageOffset();
+    method public int getCurrentLayoutPage();
     method @IntRange(from=0) public int getCurrentPage();
     method public float getCurrentPageOffset();
     method public androidx.compose.foundation.interaction.InteractionSource getInteractionSource();
@@ -39,8 +38,7 @@ package com.google.accompanist.pager {
     method public int getTargetPage();
     method public suspend Object? scrollToPage(@IntRange(from=0) int page, optional @FloatRange(from=0.0, to=1.0) float pageOffset, optional kotlin.coroutines.Continuation<? super kotlin.Unit> p);
     method public void setPageCount(@IntRange(from=0) int value);
-    property public final androidx.compose.foundation.lazy.LazyListItemInfo? currentLayoutPage;
-    property public final float currentLayoutPageOffset;
+    property public final int currentLayoutPage;
     property @IntRange(from=0) public final int currentPage;
     property public final float currentPageOffset;
     property public final androidx.compose.foundation.interaction.InteractionSource interactionSource;
