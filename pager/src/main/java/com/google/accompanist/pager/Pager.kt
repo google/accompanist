@@ -19,7 +19,10 @@
 package com.google.accompanist.pager
 
 import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.AnimationState
 import androidx.compose.animation.core.DecayAnimationSpec
+import androidx.compose.animation.core.animateDecay
+import androidx.compose.animation.core.calculateTargetValue
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.gestures.FlingBehavior
@@ -28,6 +31,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListItemInfo
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -46,6 +51,8 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
+import kotlin.math.abs
+import kotlin.math.absoluteValue
 
 /**
  * Library-wide switch to turn on debug logging.
@@ -89,17 +96,13 @@ object PagerDefaults {
         state: PagerState,
         decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
         snapAnimationSpec: AnimationSpec<Float> = spring(stiffness = SnapSpringStiffness),
-    ): FlingBehavior = remember(state, decayAnimationSpec, snapAnimationSpec) {
-        object : FlingBehavior {
-            override suspend fun ScrollScope.performFling(
-                initialVelocity: Float
-            ): Float = state.fling(
-                initialVelocity = initialVelocity,
-                decayAnimationSpec = decayAnimationSpec,
-                snapAnimationSpec = snapAnimationSpec,
-                scrollBy = ::scrollBy,
-            )
-        }
+    ): FlingBehavior = remember(state, state.leadSpacing, decayAnimationSpec, snapAnimationSpec) {
+        LazySnappingFlingBehavior(
+            lazyListState = state.lazyListState,
+            decayAnimationSpec = decayAnimationSpec,
+            snapAnimationSpec = snapAnimationSpec,
+            additionalLeadingSpacing = state.leadSpacing,
+        )
     }
 
     @Deprecated(
@@ -283,6 +286,100 @@ internal fun Pager(
             }
         }
     }
+}
+
+@Suppress("unused")
+class LazySnappingFlingBehavior(
+    private val lazyListState: LazyListState,
+    private val decayAnimationSpec: DecayAnimationSpec<Float>,
+    private val snapAnimationSpec: AnimationSpec<Float>,
+    private val additionalLeadingSpacing: Int = 0,
+) : FlingBehavior {
+
+    private val leading: Int
+        get() = lazyListState.layoutInfo.viewportStartOffset + additionalLeadingSpacing
+
+    override suspend fun ScrollScope.performFling(
+        initialVelocity: Float
+    ): Float {
+        if (initialVelocity.absoluteValue < 0.5f) {
+            // TODO: snap
+            return initialVelocity
+        } else {
+            val startPage = currentLayoutPageInfo ?: return initialVelocity
+            val decayDistance = decayAnimationSpec.calculateTargetValue(0f, initialVelocity)
+
+            // If the decay fling will scroll more than
+            if (decayDistance.absoluteValue >= startPage.size) {
+                return performFlingDecay(initialVelocity, startPage)
+            } else {
+                // TODO
+                return 0f
+            }
+        }
+    }
+
+    private suspend fun ScrollScope.performFlingDecay(
+        initialVelocity: Float,
+        startPage: LazyListItemInfo,
+    ): Float {
+        val targetIndex = when {
+            initialVelocity > 0 -> startPage.index + 1
+            else -> startPage.index
+        }
+
+        var velocityLeft = initialVelocity
+        var lastValue = 0f
+        AnimationState(
+            initialValue = 0f,
+            initialVelocity = initialVelocity,
+        ).animateDecay(decayAnimationSpec) {
+            val delta = value - lastValue
+            val consumed = scrollBy(delta)
+            lastValue = value
+            velocityLeft = this.velocity
+
+            val current = currentLayoutPageInfo!!
+            if (initialVelocity < 0 &&
+                (
+                    current.index < targetIndex ||
+                        current.index == targetIndex && current.offset >= leading
+                    )
+            ) {
+                // 'snap back' to the item as we may have scrolled past it
+                scrollBy(lazyListState.calculateScrollDistanceToItem(targetIndex).toFloat())
+                cancelAnimation()
+            } else if (
+                initialVelocity > 0 && (
+                    current.index > targetIndex ||
+                        current.index == targetIndex && current.offset <= leading
+                    )
+            ) {
+                // 'snap back' to the item as we may have scrolled past it
+                scrollBy(lazyListState.calculateScrollDistanceToItem(targetIndex).toFloat())
+                cancelAnimation()
+            } else if (abs(delta - consumed) > 0.5f) {
+                // avoid rounding errors and stop if anything is unconsumed
+                cancelAnimation()
+            }
+        }
+        return velocityLeft
+    }
+
+    private fun LazyListState.calculateScrollDistanceToItem(index: Int): Int {
+        val itemInfo = layoutInfo.visibleItemsInfo
+            .firstOrNull { it.index == index } ?: return 0
+
+        return itemInfo.offset - (layoutInfo.viewportStartOffset + additionalLeadingSpacing)
+    }
+
+    private val currentLayoutPageInfo: LazyListItemInfo?
+        get() {
+            val layoutInfo = lazyListState.layoutInfo
+            return layoutInfo.visibleItemsInfo.asSequence()
+                .filter { it.offset <= leading }
+                .lastOrNull()
+        }
 }
 
 @ExperimentalPagerApi
