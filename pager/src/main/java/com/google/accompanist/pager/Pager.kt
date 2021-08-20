@@ -25,12 +25,10 @@ import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
@@ -41,6 +39,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.ParentDataModifier
 import androidx.compose.ui.unit.Density
@@ -230,11 +229,36 @@ internal fun Pager(
         state.viewportHeight = constraints.maxHeight
         state.viewportWidth = constraints.maxWidth
 
-        if (isVertical) {
-            // TODO
-        } else {
-            // TODO: add consuming touch handler if dragEnabled = false
+        val scope = remember(state) { PagerScopeImpl(state) }
 
+        // TODO: add consuming touch handler if dragEnabled = false
+
+        if (isVertical) {
+            LazyColumn(
+                state = state.lazyListState,
+                verticalArrangement = Arrangement.spacedBy(itemSpacing, verticalAlignment),
+                horizontalAlignment = horizontalAlignment,
+                flingBehavior = flingBehavior,
+                reverseLayout = reverseLayout,
+                modifier = modifier
+                    .nestedScroll(connection = ConsumeFlingNestedScrollConnection),
+            ) {
+                items(
+                    count = state.pageCount,
+                    // TODO: expose key
+                ) { page ->
+                    PagerItem(
+                        page = page,
+                        itemCount = state.pageCount,
+                        isVertical = true,
+                        horizontalAlignment = horizontalAlignment,
+                        verticalAlignment = verticalAlignment,
+                        modifier = Modifier.sizeIn(maxWidth = maxWidth, maxHeight = maxHeight),
+                        content = { scope.content(page) },
+                    )
+                }
+            }
+        } else {
             LazyRow(
                 state = state.lazyListState,
                 verticalAlignment = verticalAlignment,
@@ -248,19 +272,74 @@ internal fun Pager(
                     count = state.pageCount,
                     // TODO: expose key
                 ) { page ->
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .sizeIn(maxWidth = maxWidth, maxHeight = maxHeight)
-                            .then(PageData(page)) // TODO: Need this?
-                    ) {
-                        val scope = remember(this, state) {
-                            PagerScopeImpl(this, state)
-                        }
-                        scope.content(page)
-                    }
+                    PagerItem(
+                        page = page,
+                        itemCount = state.pageCount,
+                        isVertical = false,
+                        horizontalAlignment = horizontalAlignment,
+                        verticalAlignment = verticalAlignment,
+                        modifier = Modifier.sizeIn(maxWidth = maxWidth, maxHeight = maxHeight),
+                        content = { scope.content(page) },
+                    )
                 }
             }
+        }
+    }
+}
+
+@ExperimentalPagerApi
+@Composable
+private fun PagerItem(
+    page: Int,
+    itemCount: Int,
+    isVertical: Boolean,
+    verticalAlignment: Alignment.Vertical,
+    horizontalAlignment: Alignment.Horizontal,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
+) {
+    Layout(
+        content = content,
+        modifier = modifier.then(PageData(page)), // TODO: Need this?
+    ) { measurables, constraints ->
+        require(measurables.size == 1) { "PagerItem should have only one measurable" }
+
+        val placeable = measurables[0].measure(constraints)
+
+        val startSpacing = if (page == 0 && !isVertical) {
+            when (horizontalAlignment) {
+                Alignment.Start -> 0
+                Alignment.End -> constraints.maxWidth - placeable.width
+                else /* Center */ -> (constraints.maxWidth - placeable.width) / 2
+            }
+        } else 0
+        val topSpacing = if (page == 0 && isVertical) {
+            when (verticalAlignment) {
+                Alignment.Top -> 0
+                Alignment.Bottom -> constraints.maxHeight - placeable.height
+                else /* Center */ -> (constraints.maxHeight - placeable.height) / 2
+            }
+        } else 0
+        val endSpacing = if (page == itemCount - 1 && !isVertical) {
+            when (horizontalAlignment) {
+                Alignment.Start -> constraints.maxWidth - placeable.width
+                Alignment.End -> 0
+                else /* Center */ -> (constraints.maxWidth - placeable.width) / 2
+            }
+        } else 0
+        val bottomSpacing = if (page == itemCount - 1 && isVertical) {
+            when (verticalAlignment) {
+                Alignment.Top -> constraints.maxHeight - placeable.height
+                Alignment.Bottom -> 0
+                else /* Center */ -> (constraints.maxHeight - placeable.height) / 2
+            }
+        } else 0
+
+        layout(
+            width = placeable.width + startSpacing + endSpacing,
+            height = placeable.height + topSpacing + bottomSpacing
+        ) {
+            placeable.placeRelative(startSpacing, topSpacing)
         }
     }
 }
@@ -288,7 +367,7 @@ private object ConsumeFlingNestedScrollConnection : NestedScrollConnection {
  */
 @ExperimentalPagerApi
 @Stable
-interface PagerScope : BoxScope {
+interface PagerScope {
     /**
      * Returns the current selected page
      */
@@ -302,9 +381,8 @@ interface PagerScope : BoxScope {
 
 @ExperimentalPagerApi
 private class PagerScopeImpl(
-    private val boxScope: BoxScope,
     private val state: PagerState,
-) : PagerScope, BoxScope by boxScope {
+) : PagerScope {
     override val currentPage: Int get() = state.currentPage
     override val currentPageOffset: Float get() = state.currentPageOffset
 }
