@@ -2,6 +2,8 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-navigation-material)](https://search.maven.org/search?q=g:com.google.accompanist)
 
+For more information, visit the documentation: https://google.github.io/accompanist/navigation-material
+
 ## Download
 
 ```groovy
