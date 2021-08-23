@@ -29,7 +29,6 @@ import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -39,9 +38,6 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.layout.Measurable
-import androidx.compose.ui.layout.ParentDataModifier
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
@@ -62,14 +58,6 @@ private const val SnapSpringStiffness = 2750f
 @RequiresOptIn(message = "Accompanist Pager is experimental. The API may be changed in the future.")
 @Retention(AnnotationRetention.BINARY)
 annotation class ExperimentalPagerApi
-
-@Immutable
-private data class PageData(val page: Int) : ParentDataModifier {
-    override fun Density.modifyParentData(parentData: Any?): Any = this@PageData
-}
-
-private val Measurable.page: Int
-    get() = (parentData as? PageData)?.page ?: error("No PageData for measurable $this")
 
 /**
  * Contains the default values used by [HorizontalPager] and [VerticalPager].
@@ -92,7 +80,7 @@ object PagerDefaults {
         lazyListState = state.lazyListState,
         decayAnimationSpec = decayAnimationSpec,
         snapAnimationSpec = snapAnimationSpec,
-        snapOffset = { viewportStartOffset + state.leadSpacing },
+        snapOffset = { viewportStartOffset.toFloat() + state.leadSpacing },
     )
 
     @Deprecated(
@@ -292,7 +280,7 @@ private fun PagerItem(
 ) {
     Layout(
         content = content,
-        modifier = modifier.then(PageData(page)), // TODO: Need this?
+        modifier = modifier,
     ) { measurables, constraints ->
         require(measurables.size == 1) { "PagerItem should have only one measurable" }
 
