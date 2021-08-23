@@ -32,6 +32,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListItemInfo
+import androidx.compose.foundation.lazy.LazyListLayoutInfo
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
@@ -101,7 +102,7 @@ object PagerDefaults {
             lazyListState = state.lazyListState,
             decayAnimationSpec = decayAnimationSpec,
             snapAnimationSpec = snapAnimationSpec,
-            additionalLeadingSpacing = state.leadSpacing,
+            snapOffset = { viewportStartOffset + state.leadSpacing },
         )
     }
 
@@ -293,12 +294,8 @@ class LazySnappingFlingBehavior(
     private val lazyListState: LazyListState,
     private val decayAnimationSpec: DecayAnimationSpec<Float>,
     private val snapAnimationSpec: AnimationSpec<Float>,
-    private val additionalLeadingSpacing: Int = 0,
+    private val snapOffset: LazyListLayoutInfo.(index: Int) -> Int = { viewportStartOffset },
 ) : FlingBehavior {
-
-    private val leading: Int
-        get() = lazyListState.layoutInfo.viewportStartOffset + additionalLeadingSpacing
-
     override suspend fun ScrollScope.performFling(
         initialVelocity: Float
     ): Float {
@@ -327,6 +324,7 @@ class LazySnappingFlingBehavior(
             initialVelocity > 0 -> startPage.index + 1
             else -> startPage.index
         }
+        val targetSnapOffset = snapOffset(lazyListState.layoutInfo, targetIndex)
 
         var velocityLeft = initialVelocity
         var lastValue = 0f
@@ -341,10 +339,7 @@ class LazySnappingFlingBehavior(
 
             val current = currentLayoutPageInfo!!
             if (initialVelocity < 0 &&
-                (
-                    current.index < targetIndex ||
-                        current.index == targetIndex && current.offset >= leading
-                    )
+                (current.index < targetIndex || current.index == targetIndex && current.offset >= targetSnapOffset)
             ) {
                 // 'snap back' to the item as we may have scrolled past it
                 scrollBy(lazyListState.calculateScrollDistanceToItem(targetIndex).toFloat())
@@ -352,7 +347,7 @@ class LazySnappingFlingBehavior(
             } else if (
                 initialVelocity > 0 && (
                     current.index > targetIndex ||
-                        current.index == targetIndex && current.offset <= leading
+                        current.index == targetIndex && current.offset <= targetSnapOffset
                     )
             ) {
                 // 'snap back' to the item as we may have scrolled past it
@@ -370,14 +365,14 @@ class LazySnappingFlingBehavior(
         val itemInfo = layoutInfo.visibleItemsInfo
             .firstOrNull { it.index == index } ?: return 0
 
-        return itemInfo.offset - (layoutInfo.viewportStartOffset + additionalLeadingSpacing)
+        return itemInfo.offset - snapOffset(layoutInfo, itemInfo.index)
     }
 
     private val currentLayoutPageInfo: LazyListItemInfo?
         get() {
             val layoutInfo = lazyListState.layoutInfo
             return layoutInfo.visibleItemsInfo.asSequence()
-                .filter { it.offset <= leading }
+                .filter { it.offset <= snapOffset(layoutInfo, it.index) }
                 .lastOrNull()
         }
 }
