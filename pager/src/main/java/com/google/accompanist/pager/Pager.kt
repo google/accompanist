@@ -20,13 +20,13 @@ package com.google.accompanist.pager
 
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.DecayAnimationSpec
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListLayoutInfo
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
@@ -47,14 +47,6 @@ import androidx.compose.ui.unit.dp
  */
 internal const val DebugLog = false
 
-private const val LogTag = "Pager"
-
-/**
- * This attempts to mimic ViewPager's custom scroll interpolator. It's not a perfect match
- * (and we may not want it to be), but this seem to match in terms of scroll duration and 'feel'
- */
-private const val SnapSpringStiffness = 2750f
-
 @RequiresOptIn(message = "Accompanist Pager is experimental. The API may be changed in the future.")
 @Retention(AnnotationRetention.BINARY)
 annotation class ExperimentalPagerApi
@@ -64,6 +56,12 @@ annotation class ExperimentalPagerApi
  */
 @ExperimentalPagerApi
 object PagerDefaults {
+
+    @Suppress("unused_parameter")
+    fun snapOffset(index: Int, layoutInfo: LazyListLayoutInfo, leadSpacing: Int): Float {
+        return layoutInfo.viewportStartOffset.toFloat() + leadSpacing
+    }
+
     /**
      * Create and remember the default [FlingBehavior] that represents the scroll curve.
      *
@@ -75,24 +73,17 @@ object PagerDefaults {
     fun rememberPagerFlingConfig(
         state: PagerState,
         decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
-        snapAnimationSpec: AnimationSpec<Float> = spring(stiffness = SnapSpringStiffness),
+        snapAnimationSpec: AnimationSpec<Float> = SnappingFlingBehaviorDefaults.snapAnimationSpec,
+        snapOffset: (index: Int, layoutInfo: LazyListLayoutInfo, leadSpacing: Int) -> Float = ::snapOffset,
     ): FlingBehavior = rememberSnappingFlingBehavior(
         lazyListState = state.lazyListState,
         decayAnimationSpec = decayAnimationSpec,
         snapAnimationSpec = snapAnimationSpec,
-        snapOffset = { viewportStartOffset.toFloat() + state.leadSpacing },
-    )
-
-    @Deprecated(
-        "Replaced with PagerDefaults.rememberPagerFlingConfig()",
-        ReplaceWith("PagerDefaults.rememberPagerFlingConfig(state, decayAnimationSpec, snapAnimationSpec)")
-    )
-    @Composable
-    fun defaultPagerFlingConfig(
-        state: PagerState,
-        decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
-        snapAnimationSpec: AnimationSpec<Float> = spring(stiffness = SnapSpringStiffness),
-    ): FlingBehavior = rememberPagerFlingConfig(state, decayAnimationSpec, snapAnimationSpec)
+        snapOffset = { snapOffset(it, state.lazyListState.layoutInfo, state.leadSpacing) },
+    ).also {
+        // FIXME: I don't like this
+        state.snapOffsetForPage = snapOffset
+    }
 }
 
 /**

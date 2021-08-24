@@ -25,6 +25,7 @@ import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.lazy.LazyListItemInfo
+import androidx.compose.foundation.lazy.LazyListLayoutInfo
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
@@ -106,12 +107,14 @@ class PagerState(
     internal var viewportWidth by mutableStateOf(0)
     internal var leadSpacing: Int by mutableStateOf(0)
 
+    internal var snapOffsetForPage: (index: Int, layoutInfo: LazyListLayoutInfo, leadSpacing: Int) -> Float by mutableStateOf(
+        PagerDefaults::snapOffset
+    )
+
     private val currentLayoutPageInfo: LazyListItemInfo? by derivedStateOf {
         val layoutInfo = lazyListState.layoutInfo
-        val start = leadSpacing + layoutInfo.viewportStartOffset
-
         layoutInfo.visibleItemsInfo.asSequence()
-            .filter { it.offset <= start }
+            .filter { it.offset <= snapOffsetForPage(it.index, layoutInfo, leadSpacing) }
             .lastOrNull()
     }
 
@@ -375,15 +378,5 @@ class PagerState(
                 else -> this - this.floorDiv(other) * other
             }
         }
-    }
-}
-
-@Stable
-internal class PageLayoutInfo {
-    var page: Int? by mutableStateOf(null)
-    var layoutSize: Int by mutableStateOf(0)
-
-    override fun toString(): String {
-        return "PageLayoutInfo(page = $page, layoutSize=$layoutSize)"
     }
 }
