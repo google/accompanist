@@ -31,7 +31,6 @@ class InstrumentedHorizontalPagerTest(
     itemWidthFraction: Float,
     horizontalAlignment: Alignment.Horizontal,
     itemSpacingDp: Int,
-    offscreenLimit: Int,
     layoutDirection: LayoutDirection,
     reverseLayout: Boolean,
     infiniteLoop: Boolean,
@@ -39,15 +38,11 @@ class InstrumentedHorizontalPagerTest(
     itemWidthFraction,
     horizontalAlignment,
     itemSpacingDp,
-    offscreenLimit,
     layoutDirection,
     reverseLayout,
     infiniteLoop,
 ) {
     companion object {
-        /**
-         * On device we only test a subset of the combined parameters.
-         */
         @JvmStatic
         @Parameterized.Parameters
         fun data() = parameterizedParams()
@@ -57,8 +52,6 @@ class InstrumentedHorizontalPagerTest(
             .combineWithParameters(Alignment.CenterHorizontally, Alignment.Start, Alignment.End)
             // itemSpacing
             .combineWithParameters(0, 4)
-            // offscreenLimit
-            .combineWithParameters(1)
             // layoutDirection
             .combineWithParameters(LayoutDirection.Ltr, LayoutDirection.Rtl)
             // reverseLayout

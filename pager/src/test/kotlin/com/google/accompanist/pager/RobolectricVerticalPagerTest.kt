@@ -28,16 +28,14 @@ import org.robolectric.annotation.Config
  */
 @Config(qualifiers = "w360dp-h640dp-xhdpi")
 @RunWith(ParameterizedRobolectricTestRunner::class)
-class RobolectricVerticalPagerTest(
+private class RobolectricVerticalPagerTest(
     verticalAlignment: Alignment.Vertical,
     itemSpacingDp: Int,
-    offscreenLimit: Int,
     reverseLayout: Boolean,
     infiniteLoop: Boolean
 ) : BaseVerticalPagerTest(
     verticalAlignment,
     itemSpacingDp,
-    offscreenLimit,
     reverseLayout,
     infiniteLoop
 ) {

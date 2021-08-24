@@ -20,7 +20,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -49,7 +48,6 @@ abstract class BaseVerticalPagerTest(
     private val verticalAlignment: Alignment.Vertical,
     // We don't use the Dp type due to https://youtrack.jetbrains.com/issue/KT-35523
     private val itemSpacingDp: Int,
-    override val offscreenLimit: Int,
     private val reverseLayout: Boolean,
     override val infiniteLoop: Boolean,
 ) : PagerTest() {
@@ -106,7 +104,6 @@ abstract class BaseVerticalPagerTest(
     ): PagerState {
         val pagerState = PagerState(
             pageCount = pageCount,
-            offscreenLimit = offscreenLimit,
             infiniteLoop = infiniteLoop,
         ).apply { testing = true }
         // Stick to LTR for vertical tests
@@ -127,7 +124,7 @@ abstract class BaseVerticalPagerTest(
                 ) { page ->
                     Box(
                         modifier = Modifier
-                            .fillMaxWidth()
+                            .fillParentMaxWidth()
                             .aspectRatio(1f)
                             .background(randomColor())
                             .testTag(page.toString())

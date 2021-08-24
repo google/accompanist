@@ -16,10 +16,13 @@
 
 package com.google.accompanist.pager
 
+import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performScrollTo
+import com.google.accompanist.internal.test.exists
+import com.google.accompanist.internal.test.isLaidOut
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -38,7 +41,6 @@ private const val SlowVelocity = 300f
 
 @OptIn(ExperimentalPagerApi::class) // Pager is currently experimental
 abstract class PagerTest {
-    protected abstract val offscreenLimit: Int
     protected abstract val infiniteLoop: Boolean
 
     @get:Rule
@@ -53,6 +55,7 @@ abstract class PagerTest {
     @Test
     fun layout() {
         val pagerState = setPagerContent(pageCount = 10)
+        composeTestRule.waitForIdle()
         assertPagerLayout(0, pagerState.pageCount)
     }
 
@@ -60,7 +63,8 @@ abstract class PagerTest {
     fun layout_initialEmpty() {
         // Initially lay out with a count of 0
         val pagerState = setPagerContent(pageCount = 0)
-        assertPagerLayout(0, pagerState.pageCount)
+        composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithTag("0").assertDoesNotExist()
 
         // Now update to have a count of 10 and assert the layout.
         // This models a count which is driven by dynamic data
@@ -375,27 +379,18 @@ abstract class PagerTest {
     // TODO: add test for state restoration?
 
     private fun assertPagerLayout(currentPage: Int, pageCount: Int) {
-        // The pages which are expected to be laid out, using the given current page,
-        // offscreenLimit and page limit
-        val pageRange = (currentPage - offscreenLimit)..(currentPage + offscreenLimit)
-        val expectedLaidOutPages = if (infiniteLoop) {
-            pageRange.toList()
-        } else {
-            pageRange.filter { it in 0 until pageCount }.toList()
-        }
+        // Assert that the 'current page' exists and is laid out in the correct position
+        composeTestRule.onNodeWithTag(currentPage.toString())
+            .assertExists()
+            .assertLaidOutItemPosition(currentPage, currentPage)
 
-        // Go through all of the pages, and assert the expected layout state
-        (0 until pageCount).forEach { _page ->
-            val page = expectedLaidOutPages.find { it == _page }
-            if (page != null) {
-                // If this page is expected to be laid out, assert that it exists and is
-                // laid out in the correct position
-                composeTestRule.onNodeWithTag(page.toString())
-                    .assertExists()
-                    .assertLaidOutItemPosition(page, currentPage)
-            } else {
-                // If this page is not expected to be laid out, assert that it doesn't exist
-                composeTestRule.onNodeWithTag(_page.toString()).assertDoesNotExist()
+        // Go through all of the pages, and assert the expected layout state (if it exists)
+        (0 until pageCount).forEach { page ->
+            // If this exists assert that it is laid out in the correct position
+            composeTestRule.onNodeWithTag(page.toString()).apply {
+                if (exists && isLaidOut) {
+                    assertLaidOutItemPosition(page, currentPage)
+                }
             }
         }
     }

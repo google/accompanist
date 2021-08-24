@@ -33,7 +33,6 @@ class RobolectricHorizontalPagerTest(
     itemWidthFraction: Float,
     horizontalAlignment: Alignment.Horizontal,
     itemSpacingDp: Int,
-    offscreenLimit: Int,
     layoutDirection: LayoutDirection,
     reverseLayout: Boolean,
     infiniteLoop: Boolean
@@ -41,7 +40,6 @@ class RobolectricHorizontalPagerTest(
     itemWidthFraction,
     horizontalAlignment,
     itemSpacingDp,
-    offscreenLimit,
     layoutDirection,
     reverseLayout,
     infiniteLoop
@@ -53,16 +51,14 @@ class RobolectricHorizontalPagerTest(
             // itemWidthFraction
             .combineWithParameters(1f, 0.8f)
             // horizontalAlignment
-            .combineWithParameters(Alignment.CenterHorizontally, Alignment.Start, Alignment.End)
+            .combineWithParameters(Alignment.CenterHorizontally)
             // itemSpacing
-            .combineWithParameters(0, 4)
-            // offscreenLimit
-            .combineWithParameters(1, 2)
+            .combineWithParameters(0)
             // layoutDirection
-            .combineWithParameters(LayoutDirection.Ltr, LayoutDirection.Rtl)
+            .combineWithParameters(LayoutDirection.Ltr)
             // reverseLayout
-            .combineWithParameters(true, false)
+            .combineWithParameters(false)
             // looping
-            .combineWithParameters(true, false)
+            .combineWithParameters(false)
     }
 }
