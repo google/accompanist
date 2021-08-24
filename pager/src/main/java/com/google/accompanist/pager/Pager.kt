@@ -26,11 +26,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListLayoutInfo
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -197,8 +197,6 @@ internal fun Pager(
         state.viewportHeight = constraints.maxHeight
         state.viewportWidth = constraints.maxWidth
 
-        val scope = remember(state) { PagerScopeImpl(state) }
-
         // TODO: add consuming touch handler if dragEnabled = false
 
         if (isVertical) {
@@ -208,13 +206,15 @@ internal fun Pager(
                 horizontalAlignment = horizontalAlignment,
                 flingBehavior = flingBehavior,
                 reverseLayout = reverseLayout,
-                modifier = modifier
+                modifier = Modifier
                     .nestedScroll(connection = ConsumeFlingNestedScrollConnection),
             ) {
                 items(
                     count = state.pageCount,
                     // TODO: expose key
                 ) { page ->
+                    val scope = PagerScopeImpl(state, this)
+
                     PagerItem(
                         page = page,
                         itemCount = state.pageCount,
@@ -241,6 +241,8 @@ internal fun Pager(
                     count = state.pageCount,
                     // TODO: expose key
                 ) { page ->
+                    val scope = PagerScopeImpl(state, this)
+
                     PagerItem(
                         page = page,
                         itemCount = state.pageCount,
@@ -342,7 +344,7 @@ private object ConsumeFlingNestedScrollConnection : NestedScrollConnection {
  */
 @ExperimentalPagerApi
 @Stable
-interface PagerScope {
+interface PagerScope : LazyItemScope {
     /**
      * Returns the current selected page
      */
@@ -357,7 +359,8 @@ interface PagerScope {
 @ExperimentalPagerApi
 private class PagerScopeImpl(
     private val state: PagerState,
-) : PagerScope {
+    private val lazyItemScope: LazyItemScope,
+) : PagerScope, LazyItemScope by lazyItemScope {
     override val currentPage: Int get() = state.currentPage
     override val currentPageOffset: Float get() = state.currentPageOffset
 }
