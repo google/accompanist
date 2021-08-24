@@ -50,7 +50,6 @@ abstract class BaseHorizontalPagerTest(
     private val itemSpacingDp: Int,
     private val layoutDirection: LayoutDirection,
     private val reverseLayout: Boolean,
-    override val infiniteLoop: Boolean,
 ) : PagerTest() {
 
     /**
@@ -113,8 +112,7 @@ abstract class BaseHorizontalPagerTest(
     ): PagerState {
         val pagerState = PagerState(
             pageCount = pageCount,
-            infiniteLoop = infiniteLoop,
-        ).apply { testing = true }
+        )
         composeTestRule.setContent(layoutDirection) {
             applierScope = rememberCoroutineScope()
 

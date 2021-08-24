@@ -32,26 +32,24 @@ class RobolectricVerticalPagerTest(
     verticalAlignment: Alignment.Vertical,
     itemSpacingDp: Int,
     reverseLayout: Boolean,
-    infiniteLoop: Boolean
 ) : BaseVerticalPagerTest(
     verticalAlignment,
     itemSpacingDp,
     reverseLayout,
-    infiniteLoop
 ) {
     companion object {
         @JvmStatic
-        @ParameterizedRobolectricTestRunner.Parameters
+        @ParameterizedRobolectricTestRunner.Parameters(
+            name = "verticalAlignment={0}," +
+                "itemSpacing={1}," +
+                "reverseLayout={2}"
+        )
         fun data() = parameterizedParams()
             // verticalAlignment
             .combineWithParameters(Alignment.CenterVertically, Alignment.Top, Alignment.Bottom)
             // itemSpacingDp
             .combineWithParameters(0, 4)
-            // offscreenLimit
-            .combineWithParameters(1, 2)
             // reverseLayout
-            .combineWithParameters(true, false)
-            // looping
             .combineWithParameters(true, false)
     }
 }

@@ -47,19 +47,16 @@ import io.github.aakira.napier.Napier
  *
  * @param pageCount the value for [PagerState.pageCount]
  * @param initialPage the initial value for [PagerState.currentPage]
- * @param infiniteLoop Whether to support infinite looping effect.
  */
 @ExperimentalPagerApi
 @Composable
 fun rememberPagerState(
     @IntRange(from = 0) pageCount: Int,
     @IntRange(from = 0) initialPage: Int = 0,
-    infiniteLoop: Boolean = false,
 ): PagerState = rememberSaveable(saver = PagerState.Saver) {
     PagerState(
         pageCount = pageCount,
         currentPage = initialPage,
-        infiniteLoop = infiniteLoop,
     )
 }.apply {
     this.pageCount = pageCount
@@ -70,24 +67,14 @@ fun rememberPagerState(
  *
  * In most cases, this will be created via [rememberPagerState].
  *
- * The `offscreenLimit` param defines the number of pages that
- * should be retained on either side of the current page. Pages beyond this limit will be
- * recreated as needed. This value defaults to `1`, but can be increased to enable pre-loading
- * of more content.
- *
  * @param pageCount the initial value for [PagerState.pageCount]
  * @param currentPage the initial value for [PagerState.currentPage]
- * @param currentPageOffset the initial value for [PagerState.currentPageOffset]
- * @param offscreenLimit the number of pages that should be retained on either side of the
- * current page. This value is required to be `1` or greater.
- * @param infiniteLoop Whether to support infinite looping effect.
  */
 @ExperimentalPagerApi
 @Stable
 class PagerState(
     @IntRange(from = 0) pageCount: Int,
     @IntRange(from = 0) currentPage: Int = 0,
-    private val infiniteLoop: Boolean = false,
 ) : ScrollableState {
     internal val lazyListState = LazyListState(firstVisibleItemIndex = currentPage)
 
@@ -121,11 +108,6 @@ class PagerState(
             (-offset / current.size.toFloat()).coerceIn(0f, 1f)
         } ?: 0f
     }
-
-    /**
-     * When set to true, `page` of [Pager] content can be different in [infiniteLoop] mode.
-     */
-    internal var testing = false
 
     /**
      * [InteractionSource] that will be used to dispatch drag events when this
@@ -279,24 +261,6 @@ class PagerState(
                 "$name[$value] must be >= firstPageIndex[0] and < lastPageIndex[pageCount]"
             }
         }
-    }
-
-    private fun requireCurrentPageOffset(value: Float, name: String) {
-        if (pageCount == 0) {
-            require(value == 0f) { "$name must be 0f when pageCount is 0" }
-        } else {
-            require(value in 0f..1f) { "$name must be >= 0 and <= 1" }
-        }
-    }
-
-    /**
-     * Considering infinite loop, returns page between 0 until [pageCount].
-     */
-    internal fun pageOf(rawPage: Int): Int {
-        if (testing) {
-            return rawPage
-        }
-        return rawPage.floorMod(pageCount)
     }
 
     companion object {

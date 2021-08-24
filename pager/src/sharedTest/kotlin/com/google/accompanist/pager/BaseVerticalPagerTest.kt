@@ -49,7 +49,6 @@ abstract class BaseVerticalPagerTest(
     // We don't use the Dp type due to https://youtrack.jetbrains.com/issue/KT-35523
     private val itemSpacingDp: Int,
     private val reverseLayout: Boolean,
-    override val infiniteLoop: Boolean,
 ) : PagerTest() {
 
     override fun SemanticsNodeInteraction.swipeAcrossCenter(
@@ -104,8 +103,7 @@ abstract class BaseVerticalPagerTest(
     ): PagerState {
         val pagerState = PagerState(
             pageCount = pageCount,
-            infiniteLoop = infiniteLoop,
-        ).apply { testing = true }
+        )
         // Stick to LTR for vertical tests
         composeTestRule.setContent(LayoutDirection.Ltr) {
             applierScope = rememberCoroutineScope()

@@ -30,12 +30,10 @@ class InstrumentedVerticalPagerTest(
     verticalAlignment: Alignment.Vertical,
     itemSpacingDp: Int,
     reverseLayout: Boolean,
-    infiniteLoop: Boolean
 ) : BaseVerticalPagerTest(
     verticalAlignment,
     itemSpacingDp,
     reverseLayout,
-    infiniteLoop
 ) {
     companion object {
         /**
@@ -49,8 +47,6 @@ class InstrumentedVerticalPagerTest(
             // itemSpacingDp
             .combineWithParameters(0, 4)
             // reverseLayout
-            .combineWithParameters(false)
-            // looping
             .combineWithParameters(false)
     }
 }

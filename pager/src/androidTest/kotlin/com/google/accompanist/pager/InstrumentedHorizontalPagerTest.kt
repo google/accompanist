@@ -33,14 +33,12 @@ class InstrumentedHorizontalPagerTest(
     itemSpacingDp: Int,
     layoutDirection: LayoutDirection,
     reverseLayout: Boolean,
-    infiniteLoop: Boolean,
 ) : BaseHorizontalPagerTest(
     itemWidthFraction,
     horizontalAlignment,
     itemSpacingDp,
     layoutDirection,
     reverseLayout,
-    infiniteLoop,
 ) {
     companion object {
         @JvmStatic
@@ -55,8 +53,6 @@ class InstrumentedHorizontalPagerTest(
             // layoutDirection
             .combineWithParameters(LayoutDirection.Ltr, LayoutDirection.Rtl)
             // reverseLayout
-            .combineWithParameters(false)
-            // looping
             .combineWithParameters(false)
     }
 }
