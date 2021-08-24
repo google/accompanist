@@ -153,7 +153,7 @@ class PagerState(
                 if (DebugLog) {
                     Napier.d(message = "Page count changed: $value")
                 }
-                currentPage = currentPage.coerceIn(0, pageCount)
+                currentPage = currentPage.coerceIn(0, pageCount - 1)
             }
         }
 
@@ -188,23 +188,27 @@ class PagerState(
     /**
      * The target page for any on-going animations.
      */
-    private var _animationTargetPage: Int? by mutableStateOf(null)
+    internal var animationTargetPage: Int? by mutableStateOf(null)
+
+    internal var flingAnimationTarget: (() -> Int?)? by mutableStateOf(null)
 
     /**
      * The target page for any on-going animations or scrolls by the user.
      * Returns the current page if a scroll or animation is not currently in progress.
      */
     val targetPage: Int
-        get() = _animationTargetPage ?: when {
-            // If a scroll isn't in progress, return the current page
-            !isScrollInProgress -> currentPage
-            // If the offset is 0f (or very close), return the current page
-            currentPageOffset < 0.001f -> currentPage
-            // If we're offset towards the start, guess the previous page
-            currentPageOffset < 0 -> (currentPage - 1).coerceAtLeast(0)
-            // If we're offset towards the end, guess the next page
-            else -> (currentPage + 1).coerceAtMost(pageCount)
-        }
+        get() = animationTargetPage
+            ?: flingAnimationTarget?.invoke()
+            ?: when {
+                // If a scroll isn't in progress, return the current page
+                !isScrollInProgress -> currentPage
+                // If we're offset towards the start, guess the previous page
+                currentPageOffset < -0.5f -> (currentPage - 1).coerceAtLeast(0)
+                // If we're offset towards the end, guess the next page
+                currentPageOffset > 0.5f -> (currentPage + 1).coerceAtMost(pageCount - 1)
+                // Else we guess the current page
+                else -> currentPage
+            }
 
     /**
      * Animate (smooth scroll) to the given page to the middle of the viewport.
@@ -217,6 +221,7 @@ class PagerState(
     suspend fun animateScrollToPage(@IntRange(from = 0) page: Int) {
         requireCurrentPage(page, "page")
         try {
+            animationTargetPage = page
             lazyListState.animateScrollToItem(index = page)
         } finally {
             onScrollFinished()
@@ -234,6 +239,7 @@ class PagerState(
     suspend fun scrollToPage(@IntRange(from = 0) page: Int) {
         requireCurrentPage(page, "page")
         try {
+            animationTargetPage = page
             lazyListState.scrollToItem(index = page)
         } finally {
             onScrollFinished()
@@ -243,8 +249,8 @@ class PagerState(
     internal fun onScrollFinished() {
         // Then update the current page to our layout page
         currentPage = currentLayoutPageInfo?.index ?: 0
-        // Clear the target page
-        _animationTargetPage = null
+        // Clear the animation target page
+        animationTargetPage = null
     }
 
     override suspend fun scroll(

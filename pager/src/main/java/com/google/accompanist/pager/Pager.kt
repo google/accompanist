@@ -197,6 +197,13 @@ internal fun Pager(
         state.viewportHeight = constraints.maxHeight
         state.viewportWidth = constraints.maxWidth
 
+        // Provide our PagerState with access to the SnappingFlingBehavior animation target
+        // TODO: can this be done in a better way?
+        state.flingAnimationTarget = {
+            (flingBehavior as? SnappingFlingBehavior)?.animationTarget
+        }
+
+        // Once a fling (scroll) has finished, notify the state
         LaunchedEffect(state) {
             // When a 'scroll' has finished, snap to the nearest page
             snapshotFlow { state.isScrollInProgress }
@@ -256,7 +263,7 @@ internal fun Pager(
                 flingBehavior = flingBehavior,
                 reverseLayout = reverseLayout,
                 contentPadding = contentPadding,
-                modifier = modifier
+                modifier = Modifier
                     .nestedScroll(connection = ConsumeFlingNestedScrollConnection),
             ) {
                 items(

@@ -32,7 +32,10 @@ import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.LazyListLayoutInfo
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import kotlin.math.abs
 import kotlin.math.absoluteValue
 
@@ -67,7 +70,7 @@ fun rememberSnappingFlingBehavior(
     decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
     snapAnimationSpec: AnimationSpec<Float> = SnappingFlingBehaviorDefaults.snapAnimationSpec,
     snapOffset: LazyListLayoutInfo.(index: Int) -> Int = SnappingFlingBehaviorDefaults.snapOffset,
-): FlingBehavior = remember(lazyListState, decayAnimationSpec, snapAnimationSpec) {
+): SnappingFlingBehavior = remember(lazyListState, decayAnimationSpec, snapAnimationSpec) {
     SnappingFlingBehavior(
         lazyListState = lazyListState,
         decayAnimationSpec = decayAnimationSpec,
@@ -82,32 +85,42 @@ class SnappingFlingBehavior(
     private val snapAnimationSpec: AnimationSpec<Float>,
     private val snapOffset: LazyListLayoutInfo.(index: Int) -> Int,
 ) : FlingBehavior {
+    /**
+     * The target page for any on-going animations.
+     */
+    var animationTarget: Int? by mutableStateOf(null)
+        private set
+
     override suspend fun ScrollScope.performFling(
         initialVelocity: Float
     ): Float {
-        val startPage = currentLayoutPageInfo ?: return initialVelocity
-        val decayDistance = decayAnimationSpec.calculateTargetValue(0f, initialVelocity)
+        val pageInfo = currentLayoutPageInfo ?: return initialVelocity
+        val decayDistance = decayAnimationSpec.calculateTargetValue(
+            initialValue = 0f,
+            initialVelocity = initialVelocity
+        )
 
         // If the decay fling will scroll more than the width of the page, fling with
         // using a decaying scroll
-        if (decayDistance.absoluteValue >= startPage.size) {
-            return performDecayFling(initialVelocity, startPage)
+        if (decayDistance.absoluteValue >= pageInfo.size) {
+            return performDecayFling(initialVelocity, pageInfo)
         } else {
             // Otherwise we 'spring' to current/next page
             val targetPage = when {
-                initialVelocity.absoluteValue < 0.5f -> {
-                    val snapForCurrent = snapOffset(lazyListState.layoutInfo, startPage.index)
-                    if ((startPage.offset - snapForCurrent) < -startPage.size / 2) {
-                        startPage.index + 1
+                // If the velocity is greater than 1 page per second (velocity is px/s), spring
+                // in the relevant direction
+                initialVelocity > pageInfo.size -> pageInfo.index + 1
+                initialVelocity < -pageInfo.size -> pageInfo.index
+                else -> {
+                    // If the offset exceeds the scroll threshold (in either direction), we want to
+                    // move to the next/previous item
+                    val snapForCurrent = snapOffset(lazyListState.layoutInfo, pageInfo.index)
+                    if ((pageInfo.offset - snapForCurrent) < -pageInfo.size / 2) {
+                        pageInfo.index + 1
                     } else {
-                        startPage.index
+                        pageInfo.index
                     }
                 }
-                initialVelocity > 0 -> {
-                    (startPage.index + 1)
-                        .coerceIn(0, lazyListState.layoutInfo.totalItemsCount - 1)
-                }
-                else -> startPage.index
             }
 
             return performSpringFling(
@@ -126,11 +139,15 @@ class SnappingFlingBehavior(
             initialVelocity > 0 -> startPage.index + 1
             else -> startPage.index
         }
+
         // If we don't have a current layout, we can't snap
-        val currentLayout = currentLayoutPageInfo ?: return initialVelocity
-        val forward = index > currentLayout.index
+        val pageInfo = currentLayoutPageInfo ?: return initialVelocity
+        val forward = index > pageInfo.index
 
         val targetSnapOffset = snapOffset(lazyListState.layoutInfo, index)
+
+        // Update the animationTargetPage
+        animationTarget = index
 
         var velocityLeft = initialVelocity
         var lastValue = 0f
@@ -168,6 +185,7 @@ class SnappingFlingBehavior(
                 cancelAnimation()
             }
         }
+        animationTarget = null
         return velocityLeft
     }
 
@@ -182,6 +200,9 @@ class SnappingFlingBehavior(
         val forward = index > currentLayout.index
         // We add 20% on to the size of the current item, to compensate for any item spacing, etc
         val target = (if (forward) currentLayout.size else -currentLayout.size) * 1.2f
+
+        // Update the animationTargetPage
+        animationTarget = index
 
         var velocityLeft = initialVelocity
         var lastValue = 0f
@@ -228,6 +249,7 @@ class SnappingFlingBehavior(
                 cancelAnimation()
             }
         }
+        animationTarget = null
         return velocityLeft
     }
 
