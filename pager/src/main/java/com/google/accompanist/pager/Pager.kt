@@ -234,6 +234,7 @@ internal fun Pager(
                         itemCount = state.pageCount,
                         pagerState = state,
                         isVertical = true,
+                        reverseLayout = reverseLayout,
                         horizontalAlignment = horizontalAlignment,
                         verticalAlignment = verticalAlignment,
                         modifier = Modifier.sizeIn(maxWidth = maxWidth, maxHeight = maxHeight),
@@ -269,6 +270,7 @@ internal fun Pager(
                         itemCount = state.pageCount,
                         pagerState = state,
                         isVertical = false,
+                        reverseLayout = reverseLayout,
                         horizontalAlignment = horizontalAlignment,
                         verticalAlignment = verticalAlignment,
                         modifier = Modifier.sizeIn(maxWidth = maxWidth, maxHeight = maxHeight),
@@ -287,6 +289,7 @@ private fun PagerItem(
     itemCount: Int,
     pagerState: PagerState,
     isVertical: Boolean,
+    reverseLayout: Boolean,
     verticalAlignment: Alignment.Vertical,
     horizontalAlignment: Alignment.Horizontal,
     modifier: Modifier = Modifier,
@@ -300,7 +303,7 @@ private fun PagerItem(
 
         val placeable = measurables[0].measure(constraints)
 
-        if (page == 0) {
+        if ((page == 0 && !reverseLayout) || (page == itemCount - 1 && reverseLayout)) {
             pagerState.layoutStartSpacing = if (isVertical) {
                 when (verticalAlignment) {
                     Alignment.Top -> 0
@@ -314,7 +317,7 @@ private fun PagerItem(
                     else /* Center */ -> (constraints.maxWidth - placeable.width) / 2
                 }
             }
-        } else if (page == itemCount - 1) {
+        } else if ((page == 0 && reverseLayout) || (page == itemCount - 1 && !reverseLayout)) {
             pagerState.layoutEndSpacing = if (isVertical) {
                 when (verticalAlignment) {
                     Alignment.Top -> constraints.maxHeight - placeable.height
