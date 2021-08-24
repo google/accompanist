@@ -107,7 +107,7 @@ class PagerState(
     internal var viewportWidth by mutableStateOf(0)
     internal var leadSpacing: Int by mutableStateOf(0)
 
-    internal var snapOffsetForPage: (index: Int, layoutInfo: LazyListLayoutInfo, leadSpacing: Int) -> Float by mutableStateOf(
+    internal var snapOffsetForPage: (index: Int, layoutInfo: LazyListLayoutInfo, leadSpacing: Int) -> Int by mutableStateOf(
         PagerDefaults::snapOffset
     )
 
@@ -241,8 +241,10 @@ class PagerState(
         requireCurrentPage(page, "page")
         requireCurrentPageOffset(pageOffset, "pageOffset")
 
-        lazyListState.animateScrollToItem(index = page)
-        // FIXME: use pageOffset
+        lazyListState.animateScrollToItem(
+            index = page,
+            //scrollOffset = snapOffsetForPage(page, lazyListState.layoutInfo, leadSpacing)
+        )
     }
 
     /**
@@ -263,12 +265,14 @@ class PagerState(
         requireCurrentPage(page, "page")
         requireCurrentPageOffset(pageOffset, "pageOffset")
 
-        lazyListState.scrollToItem(index = page)
-        // FIXME: use pageOffset
+        lazyListState.scrollToItem(
+            index = page,
+            //scrollOffset = snapOffsetForPage(page, lazyListState.layoutInfo, leadSpacing)
+        )
     }
 
     /**
-     * Snap the layout the given [page] and [offset].
+     * Snap the layout the given [page].
      */
     private suspend fun snapToPage(page: Int) {
         if (DebugLog) {
@@ -276,13 +280,11 @@ class PagerState(
                 message = "snapToPage. page:$currentLayoutPage, offset:$currentLayoutPageOffset"
             )
         }
-
         try {
-            // FIXME: update offset for alignment
             lazyListState.scrollToItem(page)
         } finally {
             // Then update the current page to our layout page
-            currentPage = page
+            currentPage = currentLayoutPage
             // Clear the target page
             _animationTargetPage = null
         }
@@ -292,16 +294,16 @@ class PagerState(
         snapToPage(currentLayoutPage + currentLayoutPageOffset.roundToInt())
     }
 
+    internal suspend fun onScrollFinished() {
+        snapToNearestPage()
+        // Clear the target page
+        _animationTargetPage = null
+    }
+
     override suspend fun scroll(
         scrollPriority: MutatePriority,
         block: suspend ScrollScope.() -> Unit
-    ) {
-        try {
-            lazyListState.scroll(scrollPriority, block)
-        } finally {
-            snapToNearestPage()
-        }
-    }
+    ) = lazyListState.scroll(scrollPriority, block)
 
     override fun dispatchRawDelta(delta: Float): Float {
         return lazyListState.dispatchRawDelta(delta)

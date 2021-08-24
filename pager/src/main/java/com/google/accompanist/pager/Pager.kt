@@ -30,7 +30,9 @@ import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListLayoutInfo
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -41,6 +43,8 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filter
 
 /**
  * Library-wide switch to turn on debug logging.
@@ -58,8 +62,8 @@ annotation class ExperimentalPagerApi
 object PagerDefaults {
 
     @Suppress("unused_parameter")
-    fun snapOffset(index: Int, layoutInfo: LazyListLayoutInfo, leadSpacing: Int): Float {
-        return layoutInfo.viewportStartOffset.toFloat() + leadSpacing
+    fun snapOffset(index: Int, layoutInfo: LazyListLayoutInfo, leadSpacing: Int): Int {
+        return layoutInfo.viewportStartOffset + leadSpacing
     }
 
     /**
@@ -74,7 +78,7 @@ object PagerDefaults {
         state: PagerState,
         decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
         snapAnimationSpec: AnimationSpec<Float> = SnappingFlingBehaviorDefaults.snapAnimationSpec,
-        snapOffset: (index: Int, layoutInfo: LazyListLayoutInfo, leadSpacing: Int) -> Float = ::snapOffset,
+        snapOffset: (index: Int, layoutInfo: LazyListLayoutInfo, leadSpacing: Int) -> Int = ::snapOffset,
     ): FlingBehavior = rememberSnappingFlingBehavior(
         lazyListState = state.lazyListState,
         decayAnimationSpec = decayAnimationSpec,
@@ -196,6 +200,13 @@ internal fun Pager(
         // TODO: handle infinite constraints
         state.viewportHeight = constraints.maxHeight
         state.viewportWidth = constraints.maxWidth
+
+        LaunchedEffect(state) {
+            // When a 'scroll' has finished, snap to the nearest page
+            snapshotFlow { state.isScrollInProgress }
+                .filter { !it }
+                .collect { state.onScrollFinished() }
+        }
 
         // TODO: add consuming touch handler if dragEnabled = false
 
