@@ -28,7 +28,7 @@ import org.robolectric.annotation.Config
  */
 @Config(qualifiers = "w360dp-h640dp-xhdpi")
 @RunWith(ParameterizedRobolectricTestRunner::class)
-private class RobolectricVerticalPagerTest(
+class RobolectricVerticalPagerTest(
     verticalAlignment: Alignment.Vertical,
     itemSpacingDp: Int,
     reverseLayout: Boolean,

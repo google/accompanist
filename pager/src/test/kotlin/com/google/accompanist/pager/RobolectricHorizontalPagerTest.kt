@@ -51,14 +51,14 @@ class RobolectricHorizontalPagerTest(
             // itemWidthFraction
             .combineWithParameters(1f, 0.8f)
             // horizontalAlignment
-            .combineWithParameters(Alignment.CenterHorizontally)
+            .combineWithParameters(Alignment.CenterHorizontally, Alignment.Start, Alignment.End)
             // itemSpacing
-            .combineWithParameters(0)
+            .combineWithParameters(0, 4)
             // layoutDirection
-            .combineWithParameters(LayoutDirection.Ltr)
+            .combineWithParameters(LayoutDirection.Ltr, LayoutDirection.Rtl)
             // reverseLayout
-            .combineWithParameters(false)
+            .combineWithParameters(true, false)
             // looping
-            .combineWithParameters(false)
+            .combineWithParameters(true, false)
     }
 }
