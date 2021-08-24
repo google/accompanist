@@ -24,6 +24,7 @@ import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
@@ -40,6 +41,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
@@ -49,7 +51,7 @@ import kotlinx.coroutines.flow.filter
 /**
  * Library-wide switch to turn on debug logging.
  */
-internal const val DebugLog = false
+internal const val DebugLog = true
 
 @RequiresOptIn(message = "Accompanist Pager is experimental. The API may be changed in the future.")
 @Retention(AnnotationRetention.BINARY)
@@ -60,12 +62,6 @@ annotation class ExperimentalPagerApi
  */
 @ExperimentalPagerApi
 object PagerDefaults {
-
-    @Suppress("unused_parameter")
-    fun snapOffset(index: Int, layoutInfo: LazyListLayoutInfo, leadSpacing: Int): Int {
-        return layoutInfo.viewportStartOffset + leadSpacing
-    }
-
     /**
      * Create and remember the default [FlingBehavior] that represents the scroll curve.
      *
@@ -78,12 +74,12 @@ object PagerDefaults {
         state: PagerState,
         decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
         snapAnimationSpec: AnimationSpec<Float> = SnappingFlingBehaviorDefaults.snapAnimationSpec,
-        snapOffset: (index: Int, layoutInfo: LazyListLayoutInfo, leadSpacing: Int) -> Int = ::snapOffset,
+        snapOffset: LazyListLayoutInfo.(index: Int) -> Int = SnappingFlingBehaviorDefaults.snapOffset
     ): FlingBehavior = rememberSnappingFlingBehavior(
         lazyListState = state.lazyListState,
         decayAnimationSpec = decayAnimationSpec,
         snapAnimationSpec = snapAnimationSpec,
-        snapOffset = { snapOffset(it, state.lazyListState.layoutInfo, state.leadSpacing) },
+        snapOffset = snapOffset,
     ).also {
         // FIXME: I don't like this
         state.snapOffsetForPage = snapOffset
@@ -211,12 +207,19 @@ internal fun Pager(
         // TODO: add consuming touch handler if dragEnabled = false
 
         if (isVertical) {
+            val density = LocalDensity.current
+            val contentPadding = PaddingValues(
+                top = with(density) { state.layoutStartSpacing.toDp() },
+                bottom = with(density) { state.layoutEndSpacing.toDp() },
+            )
+
             LazyColumn(
                 state = state.lazyListState,
                 verticalArrangement = Arrangement.spacedBy(itemSpacing, verticalAlignment),
                 horizontalAlignment = horizontalAlignment,
                 flingBehavior = flingBehavior,
                 reverseLayout = reverseLayout,
+                contentPadding = contentPadding,
                 modifier = Modifier
                     .nestedScroll(connection = ConsumeFlingNestedScrollConnection),
             ) {
@@ -239,12 +242,19 @@ internal fun Pager(
                 }
             }
         } else {
+            val density = LocalDensity.current
+            val contentPadding = PaddingValues(
+                start = with(density) { state.layoutStartSpacing.toDp() },
+                end = with(density) { state.layoutEndSpacing.toDp() },
+            )
+
             LazyRow(
                 state = state.lazyListState,
                 verticalAlignment = verticalAlignment,
                 horizontalArrangement = Arrangement.spacedBy(itemSpacing, horizontalAlignment),
                 flingBehavior = flingBehavior,
                 reverseLayout = reverseLayout,
+                contentPadding = contentPadding,
                 modifier = modifier
                     .nestedScroll(connection = ConsumeFlingNestedScrollConnection),
             ) {
@@ -286,48 +296,42 @@ private fun PagerItem(
         content = content,
         modifier = modifier,
     ) { measurables, constraints ->
-        require(measurables.size == 1) { "PagerItem should have only one measurable" }
+        require(measurables.size == 1) { "PagerItem should have exactly one measurable" }
 
         val placeable = measurables[0].measure(constraints)
 
-        val startSpacing = if (page == 0 && !isVertical) {
-            when (horizontalAlignment) {
-                Alignment.Start -> 0
-                Alignment.End -> constraints.maxWidth - placeable.width
-                else /* Center */ -> (constraints.maxWidth - placeable.width) / 2
-            }
-        } else 0
-        val topSpacing = if (page == 0 && isVertical) {
-            when (verticalAlignment) {
-                Alignment.Top -> 0
-                Alignment.Bottom -> constraints.maxHeight - placeable.height
-                else /* Center */ -> (constraints.maxHeight - placeable.height) / 2
-            }
-        } else 0
-        val endSpacing = if (page == itemCount - 1 && !isVertical) {
-            when (horizontalAlignment) {
-                Alignment.Start -> constraints.maxWidth - placeable.width
-                Alignment.End -> 0
-                else /* Center */ -> (constraints.maxWidth - placeable.width) / 2
-            }
-        } else 0
-        val bottomSpacing = if (page == itemCount - 1 && isVertical) {
-            when (verticalAlignment) {
-                Alignment.Top -> constraints.maxHeight - placeable.height
-                Alignment.Bottom -> 0
-                else /* Center */ -> (constraints.maxHeight - placeable.height) / 2
-            }
-        } else 0
-
         if (page == 0) {
-            pagerState.leadSpacing = if (isVertical) topSpacing else startSpacing
+            pagerState.layoutStartSpacing = if (isVertical) {
+                when (verticalAlignment) {
+                    Alignment.Top -> 0
+                    Alignment.Bottom -> constraints.maxHeight - placeable.height
+                    else /* Center */ -> (constraints.maxHeight - placeable.height) / 2
+                }
+            } else {
+                when (horizontalAlignment) {
+                    Alignment.Start -> 0
+                    Alignment.End -> constraints.maxWidth - placeable.width
+                    else /* Center */ -> (constraints.maxWidth - placeable.width) / 2
+                }
+            }
+        } else if (page == itemCount - 1) {
+            pagerState.layoutEndSpacing = if (isVertical) {
+                when (verticalAlignment) {
+                    Alignment.Top -> constraints.maxHeight - placeable.height
+                    Alignment.Bottom -> 0
+                    else /* Center */ -> (constraints.maxHeight - placeable.height) / 2
+                }
+            } else {
+                when (horizontalAlignment) {
+                    Alignment.Start -> constraints.maxWidth - placeable.width
+                    Alignment.End -> 0
+                    else /* Center */ -> (constraints.maxWidth - placeable.width) / 2
+                }
+            }
         }
 
-        layout(
-            width = placeable.width + startSpacing + endSpacing,
-            height = placeable.height + topSpacing + bottomSpacing
-        ) {
-            placeable.placeRelative(startSpacing, topSpacing)
+        layout(width = placeable.width, height = placeable.height) {
+            placeable.placeRelative(0, 0)
         }
     }
 }

@@ -49,7 +49,7 @@ object SnappingFlingBehaviorDefaults {
      */
     const val SnapSpringStiffness = 600f
 
-    val snapOffset: LazyListLayoutInfo.(index: Int) -> Int = { viewportStartOffset }
+    val snapOffset: LazyListLayoutInfo.(index: Int) -> Int = { 0 }
 
     val snapAnimationSpec: AnimationSpec<Float> = spring(stiffness = SnapSpringStiffness)
 }

@@ -23,7 +23,6 @@ import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertHeightIsAtLeast
 import androidx.compose.ui.test.assertWidthIsAtLeast
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.google.common.truth.Truth.assertThat
 
 /**

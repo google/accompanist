@@ -18,7 +18,6 @@
 
 package com.google.accompanist.pager
 
-import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.gestures.ScrollScope
@@ -38,18 +37,16 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
-import kotlin.math.roundToInt
 
 /**
  * Creates a [PagerState] that is remembered across compositions.
  *
- * Changes to the provided values for [initialPage], [initialPageOffset]
- * will **not** result in the state being recreated or changed in any way if it has already
+ * Changes to the provided values for [initialPage] will **not** result in the state being
+ * recreated or changed in any way if it has already
  * been created. Changes to [pageCount] will result in the [PagerState] being updated.
  *
  * @param pageCount the value for [PagerState.pageCount]
  * @param initialPage the initial value for [PagerState.currentPage]
- * @param initialPageOffset the initial value for [PagerState.currentPageOffset]
  * @param infiniteLoop Whether to support infinite looping effect.
  */
 @ExperimentalPagerApi
@@ -57,15 +54,11 @@ import kotlin.math.roundToInt
 fun rememberPagerState(
     @IntRange(from = 0) pageCount: Int,
     @IntRange(from = 0) initialPage: Int = 0,
-    @FloatRange(from = 0.0, to = 1.0) initialPageOffset: Float = 0f,
-    @IntRange(from = 1) initialOffscreenLimit: Int = 1,
     infiniteLoop: Boolean = false,
 ): PagerState = rememberSaveable(saver = PagerState.Saver) {
     PagerState(
         pageCount = pageCount,
         currentPage = initialPage,
-        currentPageOffset = initialPageOffset,
-        offscreenLimit = initialOffscreenLimit,
         infiniteLoop = infiniteLoop,
     )
 }.apply {
@@ -94,8 +87,6 @@ fun rememberPagerState(
 class PagerState(
     @IntRange(from = 0) pageCount: Int,
     @IntRange(from = 0) currentPage: Int = 0,
-    @FloatRange(from = 0.0, to = 1.0) currentPageOffset: Float = 0f,
-    private val offscreenLimit: Int = 1,
     private val infiniteLoop: Boolean = false,
 ) : ScrollableState {
     internal val lazyListState = LazyListState(firstVisibleItemIndex = currentPage)
@@ -105,31 +96,29 @@ class PagerState(
 
     internal var viewportHeight by mutableStateOf(0)
     internal var viewportWidth by mutableStateOf(0)
-    internal var leadSpacing: Int by mutableStateOf(0)
+    internal var layoutStartSpacing: Int by mutableStateOf(0)
+    internal var layoutEndSpacing: Int by mutableStateOf(0)
 
-    internal var snapOffsetForPage: (index: Int, layoutInfo: LazyListLayoutInfo, leadSpacing: Int) -> Int by mutableStateOf(
-        PagerDefaults::snapOffset
+    internal var snapOffsetForPage: LazyListLayoutInfo.(index: Int) -> Int by mutableStateOf(
+        SnappingFlingBehaviorDefaults.snapOffset
     )
 
     private val currentLayoutPageInfo: LazyListItemInfo? by derivedStateOf {
         val layoutInfo = lazyListState.layoutInfo
         layoutInfo.visibleItemsInfo.asSequence()
-            .filter { it.offset <= snapOffsetForPage(it.index, layoutInfo, leadSpacing) }
-            .lastOrNull()
+            .filter {
+                val snapOffset = layoutInfo.snapOffsetForPage(it.index)
+                it.offset <= snapOffset && it.offset + it.size > snapOffset
+            }
+            .firstOrNull()
     }
-
-    private val currentLayoutPage: Int by derivedStateOf { currentLayoutPageInfo?.index ?: 0 }
 
     private val currentLayoutPageOffset: Float by derivedStateOf {
         currentLayoutPageInfo?.let { current ->
-            val start = leadSpacing + lazyListState.layoutInfo.viewportStartOffset
-            // Since the first item might be wider to compensate for the alignment, we need
-            // to compute the actual size and offset
-            val size = if (current.index == 0) current.size - start else current.size
-            val offset = if (current.index == 0) current.offset else current.offset - start
+            val offset = current.offset - lazyListState.layoutInfo.snapOffsetForPage(current.index)
             // We coerce we itemSpacing can make the offset > 1f. We don't want to count
             // spacing in the offset so cap it to 1f
-            (-offset / size.toFloat()).coerceIn(0f, 1f)
+            (-offset / current.size.toFloat()).coerceIn(0f, 1f)
         } ?: 0f
     }
 
@@ -137,12 +126,6 @@ class PagerState(
      * When set to true, `page` of [Pager] content can be different in [infiniteLoop] mode.
      */
     internal var testing = false
-
-    /**
-     * The current scroll position, as a float value between `firstPageIndex until lastPageIndex`
-     */
-    private inline val absolutePosition: Float
-        get() = currentLayoutPage + currentLayoutPageOffset
 
     /**
      * [InteractionSource] that will be used to dispatch drag events when this
@@ -155,7 +138,6 @@ class PagerState(
     init {
         require(pageCount >= 0) { "pageCount must be >= 0" }
         requireCurrentPage(currentPage, "currentPage")
-        requireCurrentPageOffset(currentPageOffset, "currentPageOffset")
     }
 
     /**
@@ -199,8 +181,9 @@ class PagerState(
      *
      * To update the scroll position, use [scrollToPage] or [animateScrollToPage].
      */
-    val currentPageOffset: Float
-        get() = absolutePosition - currentPage
+    val currentPageOffset: Float by derivedStateOf {
+        currentLayoutPageInfo?.let { it.index + currentLayoutPageOffset - currentPage } ?: 0f
+    }
 
     /**
      * The target page for any on-going animations.
@@ -224,78 +207,42 @@ class PagerState(
         }
 
     /**
-     * Animate (smooth scroll) to the given page to the middle of the viewport, offset
-     * by [pageOffset] percentage of page width.
+     * Animate (smooth scroll) to the given page to the middle of the viewport.
      *
      * Cancels the currently running scroll, if any, and suspends until the cancellation is
      * complete.
      *
      * @param page the page to animate to. Must be between 0 and [pageCount] (inclusive).
-     * @param pageOffset the percentage of the page width to offset, from the start of [page].
-     * Must be in the range 0f..1f.
      */
-    suspend fun animateScrollToPage(
-        @IntRange(from = 0) page: Int,
-        @FloatRange(from = 0.0, to = 1.0) pageOffset: Float = 0f,
-    ) {
+    suspend fun animateScrollToPage(@IntRange(from = 0) page: Int) {
         requireCurrentPage(page, "page")
-        requireCurrentPageOffset(pageOffset, "pageOffset")
-
-        lazyListState.animateScrollToItem(
-            index = page,
-            //scrollOffset = snapOffsetForPage(page, lazyListState.layoutInfo, leadSpacing)
-        )
+        try {
+            lazyListState.animateScrollToItem(index = page)
+        } finally {
+            onScrollFinished()
+        }
     }
 
     /**
-     * Instantly brings the item at [page] to the middle of the viewport, offset by [pageOffset]
-     * percentage of page width.
+     * Instantly brings the item at [page] to the middle of the viewport.
      *
      * Cancels the currently running scroll, if any, and suspends until the cancellation is
      * complete.
      *
      * @param page the page to snap to. Must be between 0 and [pageCount] (inclusive).
-     * @param pageOffset the percentage of the page width to offset, from the start of [page].
-     * Must be in the range 0f..1f.
      */
-    suspend fun scrollToPage(
-        @IntRange(from = 0) page: Int,
-        @FloatRange(from = 0.0, to = 1.0) pageOffset: Float = 0f,
-    ) {
+    suspend fun scrollToPage(@IntRange(from = 0) page: Int) {
         requireCurrentPage(page, "page")
-        requireCurrentPageOffset(pageOffset, "pageOffset")
-
-        lazyListState.scrollToItem(
-            index = page,
-            //scrollOffset = snapOffsetForPage(page, lazyListState.layoutInfo, leadSpacing)
-        )
-    }
-
-    /**
-     * Snap the layout the given [page].
-     */
-    private suspend fun snapToPage(page: Int) {
-        if (DebugLog) {
-            Napier.d(
-                message = "snapToPage. page:$currentLayoutPage, offset:$currentLayoutPageOffset"
-            )
-        }
         try {
-            lazyListState.scrollToItem(page)
+            lazyListState.scrollToItem(index = page)
         } finally {
-            // Then update the current page to our layout page
-            currentPage = currentLayoutPage
-            // Clear the target page
-            _animationTargetPage = null
+            onScrollFinished()
         }
     }
 
-    private suspend fun snapToNearestPage() {
-        snapToPage(currentLayoutPage + currentLayoutPageOffset.roundToInt())
-    }
-
-    internal suspend fun onScrollFinished() {
-        snapToNearestPage()
+    internal fun onScrollFinished() {
+        // Then update the current page to our layout page
+        currentPage = currentLayoutPageInfo?.index ?: 0
         // Clear the target page
         _animationTargetPage = null
     }

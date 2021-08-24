@@ -86,11 +86,7 @@ private fun Sample() {
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun HorizontalPagerWithOffsetTransition() {
-    val pagerState = rememberPagerState(
-        pageCount = 10,
-        // We increase the offscreen limit, to allow pre-loading of images
-        initialOffscreenLimit = 2,
-    )
+    val pagerState = rememberPagerState(pageCount = 10)
 
     HorizontalPager(
         state = pagerState,

@@ -42,21 +42,14 @@ class PagerStateUnitTest {
     @Test
     fun rememberPagerState_pageCount_0() {
         composeTestRule.setContent {
-            rememberPagerState(pageCount = 0, initialPage = 0, initialPageOffset = 0f)
+            rememberPagerState(pageCount = 0, initialPage = 0)
         }
     }
 
     @Test(expected = IllegalArgumentException::class) // using initialPage > 0
     fun rememberPagerState_pageCount_0_initialPage() {
         composeTestRule.setContent {
-            rememberPagerState(pageCount = 0, initialPage = 2, initialPageOffset = 0f)
-        }
-    }
-
-    @Test(expected = IllegalArgumentException::class) // using initialPageOffset > 0f
-    fun rememberPagerState_pageCount_0_initialPageOffset() {
-        composeTestRule.setContent {
-            rememberPagerState(pageCount = 0, initialPage = 0, initialPageOffset = 0.5f)
+            rememberPagerState(pageCount = 0, initialPage = 2)
         }
     }
 
