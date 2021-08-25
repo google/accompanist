@@ -120,8 +120,6 @@ object PagerDefaults {
  * composed from the end to the start and [PagerState.currentPage] == 0 will mean
  * the first item is located at the end.
  * @param itemSpacing horizontal spacing to add between items.
- * @param dragEnabled toggle manual scrolling, when `false` the user can not drag the view to a
- * different page.
  * @param flingBehavior logic describing fling behavior.
  * @param content a block which describes the content. Inside this block you can reference
  * [PagerScope.currentPage] and other properties in [PagerScope].
@@ -133,7 +131,6 @@ fun HorizontalPager(
     modifier: Modifier = Modifier,
     reverseLayout: Boolean = false,
     itemSpacing: Dp = 0.dp,
-    dragEnabled: Boolean = true,
     flingBehavior: FlingBehavior = PagerDefaults.rememberPagerFlingConfig(state),
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
@@ -147,7 +144,6 @@ fun HorizontalPager(
         itemSpacing = itemSpacing,
         verticalAlignment = verticalAlignment,
         horizontalAlignment = horizontalAlignment,
-        dragEnabled = dragEnabled,
         flingBehavior = flingBehavior,
         content = content
     )
@@ -164,8 +160,6 @@ fun HorizontalPager(
  * composed from the bottom to the top and [PagerState.currentPage] == 0 will mean
  * the first item is located at the bottom.
  * @param itemSpacing vertical spacing to add between items.
- * @param dragEnabled toggle manual scrolling, when `false` the user can not drag the view to a
- * different page.
  * @param flingBehavior logic describing fling behavior.
  * @param content a block which describes the content. Inside this block you can reference
  * [PagerScope.currentPage] and other properties in [PagerScope].
@@ -177,7 +171,6 @@ fun VerticalPager(
     modifier: Modifier = Modifier,
     reverseLayout: Boolean = false,
     itemSpacing: Dp = 0.dp,
-    dragEnabled: Boolean = true,
     flingBehavior: FlingBehavior = PagerDefaults.rememberPagerFlingConfig(state),
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
@@ -191,7 +184,6 @@ fun VerticalPager(
         itemSpacing = itemSpacing,
         verticalAlignment = verticalAlignment,
         horizontalAlignment = horizontalAlignment,
-        dragEnabled = dragEnabled,
         flingBehavior = flingBehavior,
         content = content
     )
@@ -199,7 +191,6 @@ fun VerticalPager(
 
 @ExperimentalPagerApi
 @Composable
-@Suppress("UNUSED_PARAMETER")
 internal fun Pager(
     state: PagerState,
     modifier: Modifier,
@@ -208,7 +199,6 @@ internal fun Pager(
     isVertical: Boolean,
     verticalAlignment: Alignment.Vertical,
     horizontalAlignment: Alignment.Horizontal,
-    dragEnabled: Boolean,
     flingBehavior: FlingBehavior,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
