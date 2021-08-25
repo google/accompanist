@@ -83,7 +83,7 @@ private fun Sample() {
             ) { page ->
                 Row(
                     Modifier
-                        .fillMaxWidth(0.8f)
+                        .fillParentMaxWidth(0.8f)
                         .aspectRatio(1f)
                         .horizontalScroll(rememberScrollState())
                 ) {

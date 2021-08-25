@@ -20,7 +20,6 @@ package com.google.accompanist.sample.pager
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
@@ -50,7 +49,7 @@ fun HorizontalPagerSample() {
         // Our page content
         Text(
             text = "Page: $page",
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillParentMaxWidth()
         )
     }
 }
@@ -65,7 +64,7 @@ fun VerticalPagerSample() {
         // Our page content
         Text(
             text = "Page: $page",
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillParentMaxWidth()
         )
     }
 }
@@ -80,7 +79,7 @@ fun HorizontalPagerIndicatorSample() {
             // Our page content
             Text(
                 text = "Page: $page",
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillParentMaxWidth()
             )
         }
 
@@ -101,7 +100,7 @@ fun VerticalPagerIndicatorSample() {
             // Our page content
             Text(
                 text = "Page: $page",
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillParentMaxWidth()
             )
         }
 

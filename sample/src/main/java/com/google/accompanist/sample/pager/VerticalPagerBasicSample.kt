@@ -79,7 +79,7 @@ private fun Sample() {
                 PagerSampleItem(
                     page = page,
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillParentMaxWidth()
                         .aspectRatio(1f),
                 )
             }

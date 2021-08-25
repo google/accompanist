@@ -24,7 +24,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -117,7 +116,7 @@ fun HorizontalPagerWithOffsetTransition() {
                         fraction = 1f - pageOffset.coerceIn(0f, 1f)
                     )
                 }
-                .fillMaxWidth(0.8f)
+                .fillParentMaxWidth(0.8f)
                 .aspectRatio(1f)
         ) {
             Box {
