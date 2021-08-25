@@ -18,7 +18,6 @@
 
 package com.google.accompanist.pager
 
-import android.util.Log
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.DecayAnimationSpec
 import androidx.compose.animation.rememberSplineBasedDecay
@@ -70,11 +69,12 @@ object PagerDefaults {
      * @return
      */
     fun snapOffset(
-        @Suppress("unused_parameter") index: Int,
+        index: Int,
         layoutInfo: LazyListLayoutInfo,
         leadSpacing: Int
-    ): Int {
-        return layoutInfo.viewportStartOffset + leadSpacing
+    ): Int = when (index) {
+        0 -> layoutInfo.viewportStartOffset
+        else -> layoutInfo.viewportStartOffset + leadSpacing
     }
 
     /**
@@ -94,11 +94,16 @@ object PagerDefaults {
         lazyListState = state.lazyListState,
         decayAnimationSpec = decayAnimationSpec,
         snapAnimationSpec = snapAnimationSpec,
-        snapOffset = { index ->
-            Log.d("SnapPoint", "Index:$index, start:${state.layoutStartSpacing}")
-            snapOffset(index, this, state.layoutStartSpacing)
-        },
-    ).also {
+        snapOffset = { index -> snapOffset(index, this, state.layoutStartSpacing) },
+    ).apply {
+        itemSize = {
+            when (it.index) {
+                0 -> it.size - state.layoutStartSpacing
+                state.pageCount - 1 -> it.size - state.layoutEndSpacing
+                else -> it.size
+            }
+        }
+    }.also {
         // FIXME: I don't like this
         state.snapOffsetForPage = snapOffset
     }

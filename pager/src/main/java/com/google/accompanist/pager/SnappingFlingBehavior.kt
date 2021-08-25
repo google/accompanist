@@ -91,10 +91,16 @@ class SnappingFlingBehavior(
     var animationTarget: Int? by mutableStateOf(null)
         private set
 
+    /**
+     * TODO
+     */
+    var itemSize: (LazyListItemInfo) -> Int = LazyListItemInfo::size
+
     override suspend fun ScrollScope.performFling(
         initialVelocity: Float
     ): Float {
         val pageInfo = currentLayoutPageInfo ?: return initialVelocity
+        val pageSize = itemSize(pageInfo)
         val decayDistance = decayAnimationSpec.calculateTargetValue(
             initialValue = 0f,
             initialVelocity = initialVelocity
@@ -102,27 +108,28 @@ class SnappingFlingBehavior(
 
         // If the decay fling will scroll more than the width of the page, fling with
         // using a decaying scroll
-        if (decayDistance.absoluteValue >= pageInfo.size) {
+        if (decayDistance.absoluteValue >= pageSize) {
             return performDecayFling(initialVelocity, pageInfo)
         } else {
             // Otherwise we 'spring' to current/next page
             val targetPage = when {
                 // If the velocity is greater than 1 page per second (velocity is px/s), spring
                 // in the relevant direction
-                initialVelocity > pageInfo.size -> pageInfo.index + 1
-                initialVelocity < -pageInfo.size -> pageInfo.index
+                initialVelocity > pageSize -> {
+                    (pageInfo.index + 1).coerceAtMost(lazyListState.layoutInfo.totalItemsCount - 1)
+                }
+                initialVelocity < -pageSize -> pageInfo.index
                 else -> {
                     // If the offset exceeds the scroll threshold (in either direction), we want to
                     // move to the next/previous item
                     val snapForCurrent = snapOffset(lazyListState.layoutInfo, pageInfo.index)
-                    if ((pageInfo.offset - snapForCurrent) < -pageInfo.size / 2) {
+                    if (pageInfo.offset - snapForCurrent < -pageSize / 2) {
                         pageInfo.index + 1
                     } else {
                         pageInfo.index
                     }
                 }
             }
-
             return performSpringFling(
                 index = targetPage,
                 scrollOffset = snapOffset(lazyListState.layoutInfo, targetPage),
