@@ -95,7 +95,7 @@ class PagerState(
                 val snapOffset = snapOffsetForPage(it.index, layoutInfo, layoutStartSpacing)
                 it.offset <= snapOffset && it.offset + it.size > snapOffset
             }
-            .firstOrNull()
+            .lastOrNull()
     }
 
     private val currentLayoutPageOffset: Float by derivedStateOf {
@@ -166,7 +166,7 @@ class PagerState(
      * To update the scroll position, use [scrollToPage] or [animateScrollToPage].
      */
     val currentPageOffset: Float by derivedStateOf {
-        currentLayoutPageInfo?.let { it.index + currentLayoutPageOffset - currentPage } ?: 0f
+        currentLayoutPageInfo?.let { it.index + currentLayoutPageOffset - _currentPage } ?: 0f
     }
 
     /**
@@ -287,16 +287,6 @@ class PagerState(
         init {
             if (DebugLog) {
                 Napier.base(DebugAntilog(defaultTag = "Pager"))
-            }
-        }
-
-        /**
-         * Calculates the floor modulus in the range of -abs([other]) < r < +abs([other]).
-         */
-        private fun Int.floorMod(other: Int): Int {
-            return when (other) {
-                0 -> this
-                else -> this - this.floorDiv(other) * other
             }
         }
     }
