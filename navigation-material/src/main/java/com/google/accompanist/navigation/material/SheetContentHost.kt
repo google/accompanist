@@ -37,15 +37,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.LocalOwnersProvider
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.currentCoroutineContext
-import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
-import kotlin.coroutines.EmptyCoroutineContext
 
 /**
  * Hosts a [BottomSheetNavigator.Destination]'s [NavBackStackEntry] and its
@@ -102,7 +98,8 @@ internal fun SheetContentHost(
                     // If the target state is a visible state, it's fairly safe to assume that
                     // Swipeable will end up settling in that state
                     if (sheetState.targetValue == ModalBottomSheetValue.Expanded ||
-                        sheetState.targetValue == ModalBottomSheetValue.HalfExpanded) {
+                        sheetState.targetValue == ModalBottomSheetValue.HalfExpanded
+                    ) {
                         currentOnSheetShown(backStackEntry)
                     }
                 }
