@@ -84,6 +84,8 @@ private fun Sample() {
                 state = pagerState,
                 // Add some horizontal spacing between items
                 itemSpacing = 4.dp,
+                horizontalAlignment = Alignment.Start,
+                reverseLayout = true,
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()

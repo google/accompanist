@@ -81,20 +81,18 @@ class PagerState(
     private var _pageCount by mutableStateOf(pageCount)
     private var _currentPage by mutableStateOf(currentPage)
 
-    internal var viewportHeight by mutableStateOf(0)
-    internal var viewportWidth by mutableStateOf(0)
     internal var layoutStartSpacing: Int by mutableStateOf(0)
     internal var layoutEndSpacing: Int by mutableStateOf(0)
 
-    internal var snapOffsetForPage: LazyListLayoutInfo.(index: Int) -> Int by mutableStateOf(
-        SnappingFlingBehaviorDefaults.snapOffset
+    internal var snapOffsetForPage: (index: Int, layoutInfo: LazyListLayoutInfo, leadSpacing: Int) -> Int by mutableStateOf(
+        PagerDefaults::snapOffset
     )
 
     private val currentLayoutPageInfo: LazyListItemInfo? by derivedStateOf {
         val layoutInfo = lazyListState.layoutInfo
         layoutInfo.visibleItemsInfo.asSequence()
             .filter {
-                val snapOffset = layoutInfo.snapOffsetForPage(it.index)
+                val snapOffset = snapOffsetForPage(it.index, layoutInfo, layoutStartSpacing)
                 it.offset <= snapOffset && it.offset + it.size > snapOffset
             }
             .firstOrNull()
@@ -102,10 +100,14 @@ class PagerState(
 
     private val currentLayoutPageOffset: Float by derivedStateOf {
         currentLayoutPageInfo?.let { current ->
-            val offset = current.offset - lazyListState.layoutInfo.snapOffsetForPage(current.index)
+            val start = layoutStartSpacing + lazyListState.layoutInfo.viewportStartOffset
+            // Since the first item might be wider to compensate for the alignment, we need
+            // to compute the actual size and offset
+            val size = if (current.index == 0) current.size - start else current.size
+            val offset = if (current.index == 0) current.offset else current.offset - start
             // We coerce we itemSpacing can make the offset > 1f. We don't want to count
             // spacing in the offset so cap it to 1f
-            (-offset / current.size.toFloat()).coerceIn(0f, 1f)
+            (-offset / size.toFloat()).coerceIn(0f, 1f)
         } ?: 0f
     }
 

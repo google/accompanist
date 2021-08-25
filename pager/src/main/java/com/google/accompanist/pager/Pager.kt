@@ -18,13 +18,13 @@
 
 package com.google.accompanist.pager
 
+import android.util.Log
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.DecayAnimationSpec
 import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
@@ -41,7 +41,6 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
@@ -63,6 +62,22 @@ annotation class ExperimentalPagerApi
 @ExperimentalPagerApi
 object PagerDefaults {
     /**
+     * TODO
+     *
+     * @param index
+     * @param layoutInfo
+     * @param leadSpacing
+     * @return
+     */
+    fun snapOffset(
+        @Suppress("unused_parameter") index: Int,
+        layoutInfo: LazyListLayoutInfo,
+        leadSpacing: Int
+    ): Int {
+        return layoutInfo.viewportStartOffset + leadSpacing
+    }
+
+    /**
      * Create and remember the default [FlingBehavior] that represents the scroll curve.
      *
      * @param state The [PagerState] to update.
@@ -74,12 +89,15 @@ object PagerDefaults {
         state: PagerState,
         decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
         snapAnimationSpec: AnimationSpec<Float> = SnappingFlingBehaviorDefaults.snapAnimationSpec,
-        snapOffset: LazyListLayoutInfo.(index: Int) -> Int = SnappingFlingBehaviorDefaults.snapOffset
+        snapOffset: (index: Int, layoutInfo: LazyListLayoutInfo, leadSpacing: Int) -> Int = PagerDefaults::snapOffset
     ): FlingBehavior = rememberSnappingFlingBehavior(
         lazyListState = state.lazyListState,
         decayAnimationSpec = decayAnimationSpec,
         snapAnimationSpec = snapAnimationSpec,
-        snapOffset = snapOffset,
+        snapOffset = { index ->
+            Log.d("SnapPoint", "Index:$index, start:${state.layoutStartSpacing}")
+            snapOffset(index, this, state.layoutStartSpacing)
+        },
     ).also {
         // FIXME: I don't like this
         state.snapOffsetForPage = snapOffset
@@ -193,10 +211,6 @@ internal fun Pager(
         modifier = modifier,
         propagateMinConstraints = true
     ) {
-        // TODO: handle infinite constraints
-        state.viewportHeight = constraints.maxHeight
-        state.viewportWidth = constraints.maxWidth
-
         // Provide our PagerState with access to the SnappingFlingBehavior animation target
         // TODO: can this be done in a better way?
         state.flingAnimationTarget = {
@@ -214,19 +228,12 @@ internal fun Pager(
         // TODO: add consuming touch handler if dragEnabled = false
 
         if (isVertical) {
-            val density = LocalDensity.current
-            val contentPadding = PaddingValues(
-                top = with(density) { state.layoutStartSpacing.toDp() },
-                bottom = with(density) { state.layoutEndSpacing.toDp() },
-            )
-
             LazyColumn(
                 state = state.lazyListState,
                 verticalArrangement = Arrangement.spacedBy(itemSpacing, verticalAlignment),
                 horizontalAlignment = horizontalAlignment,
                 flingBehavior = flingBehavior,
                 reverseLayout = reverseLayout,
-                contentPadding = contentPadding,
                 modifier = Modifier
                     .nestedScroll(connection = ConsumeFlingNestedScrollConnection),
             ) {
@@ -250,19 +257,12 @@ internal fun Pager(
                 }
             }
         } else {
-            val density = LocalDensity.current
-            val contentPadding = PaddingValues(
-                start = with(density) { state.layoutStartSpacing.toDp() },
-                end = with(density) { state.layoutEndSpacing.toDp() },
-            )
-
             LazyRow(
                 state = state.lazyListState,
                 verticalAlignment = verticalAlignment,
                 horizontalArrangement = Arrangement.spacedBy(itemSpacing, horizontalAlignment),
                 flingBehavior = flingBehavior,
                 reverseLayout = reverseLayout,
-                contentPadding = contentPadding,
                 modifier = Modifier
                     .nestedScroll(connection = ConsumeFlingNestedScrollConnection),
             ) {
@@ -310,38 +310,63 @@ private fun PagerItem(
 
         val placeable = measurables[0].measure(constraints)
 
-        if ((page == 0 && !reverseLayout) || (page == itemCount - 1 && reverseLayout)) {
-            pagerState.layoutStartSpacing = if (isVertical) {
-                when (verticalAlignment) {
-                    Alignment.Top -> 0
-                    Alignment.Bottom -> constraints.maxHeight - placeable.height
-                    else /* Center */ -> (constraints.maxHeight - placeable.height) / 2
-                }
-            } else {
-                when (horizontalAlignment) {
+        var startSpacing = 0
+        var topSpacing = 0
+        var endSpacing = 0
+        var bottomSpacing = 0
+
+        if (!isVertical) {
+            if ((page == 0 && !reverseLayout) || (page == itemCount - 1 && reverseLayout)) {
+                startSpacing = when (horizontalAlignment) {
                     Alignment.Start -> 0
                     Alignment.End -> constraints.maxWidth - placeable.width
                     else /* Center */ -> (constraints.maxWidth - placeable.width) / 2
                 }
             }
-        } else if ((page == 0 && reverseLayout) || (page == itemCount - 1 && !reverseLayout)) {
-            pagerState.layoutEndSpacing = if (isVertical) {
-                when (verticalAlignment) {
-                    Alignment.Top -> constraints.maxHeight - placeable.height
-                    Alignment.Bottom -> 0
-                    else /* Center */ -> (constraints.maxHeight - placeable.height) / 2
-                }
-            } else {
-                when (horizontalAlignment) {
+            if ((page == itemCount - 1 && !reverseLayout) || (page == 0 && reverseLayout)) {
+                endSpacing = when (horizontalAlignment) {
                     Alignment.Start -> constraints.maxWidth - placeable.width
                     Alignment.End -> 0
                     else /* Center */ -> (constraints.maxWidth - placeable.width) / 2
                 }
             }
+        } else {
+            if ((page == 0 && !reverseLayout) || (page == itemCount - 1 && reverseLayout)) {
+                topSpacing = when (verticalAlignment) {
+                    Alignment.Top -> 0
+                    Alignment.Bottom -> constraints.maxHeight - placeable.height
+                    else /* Center */ -> (constraints.maxHeight - placeable.height) / 2
+                }
+            }
+            if ((page == itemCount - 1 && !reverseLayout) || (page == 0 && reverseLayout)) {
+                bottomSpacing = when (verticalAlignment) {
+                    Alignment.Top -> constraints.maxHeight - placeable.height
+                    Alignment.Bottom -> 0
+                    else /* Center */ -> (constraints.maxHeight - placeable.height) / 2
+                }
+            }
         }
 
-        layout(width = placeable.width, height = placeable.height) {
-            placeable.placeRelative(0, 0)
+        // Report the start/end sizes back to the PagerState
+        if (page == 0) {
+            pagerState.layoutStartSpacing = if (isVertical) {
+                if (reverseLayout) bottomSpacing else topSpacing
+            } else {
+                if (reverseLayout) endSpacing else startSpacing
+            }
+        } else if (page == itemCount - 1) {
+            pagerState.layoutEndSpacing = if (isVertical) {
+                if (reverseLayout) topSpacing else bottomSpacing
+            } else {
+                if (reverseLayout) startSpacing else endSpacing
+            }
+        }
+
+        layout(
+            width = placeable.width + startSpacing + endSpacing,
+            height = placeable.height + topSpacing + bottomSpacing,
+        ) {
+            placeable.placeRelative(startSpacing, topSpacing)
         }
     }
 }
