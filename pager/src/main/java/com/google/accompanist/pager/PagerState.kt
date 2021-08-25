@@ -206,6 +206,7 @@ class PagerState(
         requireCurrentPage(page, "page")
         try {
             animationTargetPage = page
+            // FIXME: need to offset
             lazyListState.animateScrollToItem(index = page)
         } finally {
             onScrollFinished()
@@ -224,7 +225,26 @@ class PagerState(
         requireCurrentPage(page, "page")
         try {
             animationTargetPage = page
-            lazyListState.scrollToItem(index = page)
+
+            if (layoutStartSpacing > 0 && page > 0) {
+                // If we have a 'start' spacing, we need to actually scroll to the previous item.
+                // We can then look at the laid out page sizes
+                lazyListState.scrollToItem(index = page - 1)
+
+                val visibleItems = lazyListState.layoutInfo.visibleItemsInfo
+                val prevItem = visibleItems.first { it.index == page - 1 }
+                val current = visibleItems.firstOrNull { it.index == page }
+
+                lazyListState.scrollToItem(
+                    index = page - 1,
+                    // We generate the scroll offset using the current page offset (if available),
+                    // or the previous item size. The current page offset is better as it contains
+                    // any item spacing.
+                    scrollOffset = (current?.offset ?: prevItem.size) - layoutStartSpacing
+                )
+            } else {
+                lazyListState.scrollToItem(index = page)
+            }
         } finally {
             onScrollFinished()
         }

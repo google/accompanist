@@ -244,7 +244,6 @@ abstract class PagerTest {
     }
 
     @Test
-    @Ignore("Currently broken after Lazy migration") // FIXME
     fun scrollToPage() = suspendTest {
         val pagerState = setPagerContent(pageCount = 10)
 
