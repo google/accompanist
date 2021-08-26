@@ -229,8 +229,6 @@ internal fun Pager(
                 horizontalAlignment = horizontalAlignment,
                 flingBehavior = flingBehavior,
                 reverseLayout = reverseLayout,
-                modifier = Modifier
-                    .nestedScroll(connection = ConsumeFlingNestedScrollConnection),
             ) {
                 items(
                     count = state.pageCount,
@@ -246,7 +244,9 @@ internal fun Pager(
                         reverseLayout = reverseLayout,
                         horizontalAlignment = horizontalAlignment,
                         verticalAlignment = verticalAlignment,
-                        modifier = Modifier.sizeIn(maxWidth = maxWidth, maxHeight = maxHeight),
+                        modifier = Modifier
+                            .nestedScroll(connection = ConsumeFlingNestedScrollConnection)
+                            .sizeIn(maxWidth = maxWidth, maxHeight = maxHeight),
                         content = { scope.content(page) },
                     )
                 }
@@ -258,8 +258,6 @@ internal fun Pager(
                 horizontalArrangement = Arrangement.spacedBy(itemSpacing, horizontalAlignment),
                 flingBehavior = flingBehavior,
                 reverseLayout = reverseLayout,
-                modifier = Modifier
-                    .nestedScroll(connection = ConsumeFlingNestedScrollConnection),
             ) {
                 items(
                     count = state.pageCount,
@@ -275,7 +273,9 @@ internal fun Pager(
                         reverseLayout = reverseLayout,
                         horizontalAlignment = horizontalAlignment,
                         verticalAlignment = verticalAlignment,
-                        modifier = Modifier.sizeIn(maxWidth = maxWidth, maxHeight = maxHeight),
+                        modifier = Modifier
+                            .nestedScroll(connection = ConsumeFlingNestedScrollConnection)
+                            .sizeIn(maxWidth = maxWidth, maxHeight = maxHeight),
                         content = { scope.content(page) },
                     )
                 }
