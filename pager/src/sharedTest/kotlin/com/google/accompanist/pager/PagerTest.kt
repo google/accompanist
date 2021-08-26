@@ -16,6 +16,7 @@
 
 package com.google.accompanist.pager
 
+import androidx.compose.runtime.MonotonicFrameClock
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -24,10 +25,11 @@ import com.google.accompanist.internal.test.exists
 import com.google.accompanist.internal.test.isLaidOut
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.runBlocking
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
+import java.util.concurrent.atomic.AtomicLong
 
 private const val LongSwipeDistance = 0.95f
 private const val MediumSwipeDistance = 0.8f
@@ -244,34 +246,56 @@ abstract class PagerTest {
     }
 
     @Test
-    fun scrollToPage() = suspendTest {
+    fun scrollToPage() {
         val pagerState = setPagerContent(pageCount = 10)
 
-        pagerState.scrollToPage(3)
-        assertThat(pagerState.currentPage).isEqualTo(3)
+        // Scroll to page 3 and assert
+        composeTestRule.runOnIdle {
+            runBlocking {
+                pagerState.scrollToPage(3)
+            }
+        }
+        composeTestRule.runOnIdle {
+            assertThat(pagerState.currentPage).isEqualTo(3)
+        }
         assertPagerLayout(3, pagerState.pageCount)
 
-        pagerState.scrollToPage(0)
-        assertThat(pagerState.currentPage).isEqualTo(0)
+        // Now scroll to page 0 and assert
+        composeTestRule.runOnIdle {
+            runBlocking {
+                pagerState.scrollToPage(0)
+            }
+        }
+        composeTestRule.runOnIdle {
+            assertThat(pagerState.currentPage).isEqualTo(0)
+        }
         assertPagerLayout(0, pagerState.pageCount)
     }
 
     @Test
-    fun animateScrollToPage() = suspendTest {
+    fun animateScrollToPage() {
         val pagerState = setPagerContent(pageCount = 10)
 
-        withContext(applierScope.coroutineContext) {
-            pagerState.animateScrollToPage(3)
+        // Scroll to page 3 and assert
+        composeTestRule.runOnIdle {
+            runBlocking(AutoTestFrameClock()) {
+                pagerState.animateScrollToPage(3)
+            }
         }
-        composeTestRule.awaitIdle()
-        assertThat(pagerState.currentPage).isEqualTo(3)
+        composeTestRule.runOnIdle {
+            assertThat(pagerState.currentPage).isEqualTo(3)
+        }
         assertPagerLayout(3, pagerState.pageCount)
 
-        withContext(applierScope.coroutineContext) {
-            pagerState.animateScrollToPage(0)
+        // Now scroll to page 0 and assert
+        composeTestRule.runOnIdle {
+            runBlocking(AutoTestFrameClock()) {
+                pagerState.animateScrollToPage(0)
+            }
         }
-        composeTestRule.awaitIdle()
-        assertThat(pagerState.currentPage).isEqualTo(0)
+        composeTestRule.runOnIdle {
+            assertThat(pagerState.currentPage).isEqualTo(0)
+        }
         assertPagerLayout(0, pagerState.pageCount)
     }
 
@@ -345,4 +369,12 @@ abstract class PagerTest {
         pageCount: Int,
         observeStateInContent: Boolean = false,
     ): PagerState
+}
+
+private class AutoTestFrameClock : MonotonicFrameClock {
+    private val time = AtomicLong(0)
+
+    override suspend fun <R> withFrameNanos(onFrame: (frameTimeNanos: Long) -> R): R {
+        return onFrame(time.getAndAdd(16_000_000))
+    }
 }

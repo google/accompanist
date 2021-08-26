@@ -269,6 +269,7 @@ class PagerState(
         try {
             animationTargetPage = page
 
+            // First scroll to the given page. It will now be laid out at offset 0
             lazyListState.scrollToItem(index = page)
 
             // If we have a start spacing, we need to offset (scroll) by that too
