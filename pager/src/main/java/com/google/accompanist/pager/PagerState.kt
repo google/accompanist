@@ -77,6 +77,7 @@ class PagerState(
     @IntRange(from = 0) pageCount: Int,
     @IntRange(from = 0) currentPage: Int = 0,
 ) : ScrollableState {
+    // Should this be public?
     internal val lazyListState = LazyListState(firstVisibleItemIndex = currentPage)
 
     private var _pageCount by mutableStateOf(pageCount)
@@ -173,7 +174,7 @@ class PagerState(
     /**
      * The target page for any on-going animations.
      */
-    internal var animationTargetPage: Int? by mutableStateOf(null)
+    private var animationTargetPage: Int? by mutableStateOf(null)
 
     internal var flingAnimationTarget: (() -> Int?)? by mutableStateOf(null)
 
@@ -205,8 +206,6 @@ class PagerState(
      */
     suspend fun animateScrollToPage(
         @IntRange(from = 0) page: Int,
-//        @FloatRange(from = 0.0, to = 1.0) pageOffset: Float = 0f,
-//        skipPages: Boolean = true,
     ) {
         requireCurrentPage(page, "page")
         try {

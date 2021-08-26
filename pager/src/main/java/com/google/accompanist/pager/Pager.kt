@@ -34,6 +34,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,7 +52,7 @@ import kotlinx.coroutines.flow.filter
 /**
  * Library-wide switch to turn on debug logging.
  */
-internal const val DebugLog = true
+internal const val DebugLog = false
 
 @RequiresOptIn(message = "Accompanist Pager is experimental. The API may be changed in the future.")
 @Retention(AnnotationRetention.BINARY)
@@ -63,12 +64,7 @@ annotation class ExperimentalPagerApi
 @ExperimentalPagerApi
 object PagerDefaults {
     /**
-     * TODO
-     *
-     * @param index
-     * @param layoutInfo
-     * @param leadSpacing
-     * @return
+     * Default function implementation for the `snapOffset` parameter of [rememberPagerFlingConfig].
      */
     fun snapOffset(
         index: Int,
@@ -108,7 +104,7 @@ object PagerDefaults {
             }
         }
     }.also {
-        // FIXME: I don't like this
+        // Better way to handle this?
         state.snapOffsetForPage = snapOffset
     }
 }
@@ -224,7 +220,7 @@ internal fun Pager(
 ) {
     BoxWithConstraints(
         modifier = modifier,
-        propagateMinConstraints = true
+        propagateMinConstraints = true,
     ) {
         // Provide our PagerState with access to the SnappingFlingBehavior animation target
         // TODO: can this be done in a better way?
@@ -255,7 +251,7 @@ internal fun Pager(
                     count = state.pageCount,
                     key = key,
                 ) { page ->
-                    val scope = PagerScopeImpl(state, this)
+                    val scope = remember(state, this) { PagerScopeImpl(state, this) }
 
                     PagerItem(
                         page = page,
@@ -285,7 +281,7 @@ internal fun Pager(
                     count = state.pageCount,
                     key = key,
                 ) { page ->
-                    val scope = PagerScopeImpl(state, this)
+                    val scope = remember(state, this) { PagerScopeImpl(state, this) }
 
                     PagerItem(
                         page = page,
@@ -306,6 +302,11 @@ internal fun Pager(
     }
 }
 
+/**
+ * We wrap each page in a [PagerItem] which implements the alignment feature of [HorizontalPager]
+ * and [VerticalPager]. It does that automatically add 'spacing' to the first and last page
+ * to suit.
+ */
 @ExperimentalPagerApi
 @Composable
 private fun PagerItem(
