@@ -29,6 +29,7 @@ import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
@@ -50,6 +51,7 @@ import androidx.compose.ui.semantics.horizontalScrollAxisRange
 import androidx.compose.ui.semantics.scrollBy
 import androidx.compose.ui.semantics.selectableGroup
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
@@ -154,6 +156,7 @@ fun HorizontalPager(
     flingBehavior: FlingBehavior = PagerDefaults.rememberPagerFlingConfig(state),
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
     Pager(
@@ -166,6 +169,7 @@ fun HorizontalPager(
         horizontalAlignment = horizontalAlignment,
         dragEnabled = dragEnabled,
         flingBehavior = flingBehavior,
+        contentPadding = contentPadding,
         content = content
     )
 }
@@ -198,6 +202,7 @@ fun VerticalPager(
     flingBehavior: FlingBehavior = PagerDefaults.rememberPagerFlingConfig(state),
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
     Pager(
@@ -210,6 +215,7 @@ fun VerticalPager(
         horizontalAlignment = horizontalAlignment,
         dragEnabled = dragEnabled,
         flingBehavior = flingBehavior,
+        contentPadding = contentPadding,
         content = content
     )
 }
@@ -226,6 +232,7 @@ internal fun Pager(
     horizontalAlignment: Alignment.Horizontal,
     dragEnabled: Boolean,
     flingBehavior: FlingBehavior,
+    contentPadding: PaddingValues,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
     // True if the scroll direction is RTL, false for LTR
@@ -317,7 +324,27 @@ internal fun Pager(
             return@Layout layout(constraints.minWidth, constraints.minHeight) {}
         }
 
-        val childConstraints = constraints.copy(minWidth = 0, minHeight = 0)
+        val horizContentPadding = (
+            contentPadding.calculateLeftPadding(layoutDirection) +
+                contentPadding.calculateRightPadding(layoutDirection)
+            ).roundToPx()
+        val vertContentPadding = (
+            contentPadding.calculateTopPadding() +
+                contentPadding.calculateBottomPadding()
+            ).roundToPx()
+
+        val childConstraints = Constraints(
+            minWidth = 0,
+            maxWidth = when {
+                constraints.hasBoundedWidth -> constraints.maxWidth - horizContentPadding
+                else -> constraints.maxWidth
+            },
+            minHeight = 0,
+            maxHeight = when {
+                constraints.hasBoundedHeight -> constraints.maxHeight - vertContentPadding
+                else -> constraints.maxHeight
+            },
+        )
 
         val placeables = measurables.map { it.measure(childConstraints) }
         // Our pager width/height is the maximum pager content width/height, and coerce
@@ -336,13 +363,13 @@ internal fun Pager(
 
                 val xCenterOffset = horizontalAlignment.align(
                     size = placeable.width,
-                    space = pagerWidth,
+                    space = pagerWidth - horizContentPadding,
                     layoutDirection = layoutDirection,
-                )
+                ) + contentPadding.calculateLeftPadding(layoutDirection).roundToPx()
                 val yCenterOffset = verticalAlignment.align(
                     size = placeable.height,
-                    space = pagerHeight,
-                )
+                    space = pagerHeight - vertContentPadding,
+                ) + contentPadding.calculateTopPadding().roundToPx()
 
                 var yItemOffset = 0
                 var xItemOffset = 0
