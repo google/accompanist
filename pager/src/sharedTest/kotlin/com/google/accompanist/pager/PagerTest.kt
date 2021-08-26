@@ -249,54 +249,50 @@ abstract class PagerTest {
     fun scrollToPage() {
         val pagerState = setPagerContent(pageCount = 10)
 
-        // Scroll to page 3 and assert
-        composeTestRule.runOnIdle {
-            runBlocking {
-                pagerState.scrollToPage(3)
+        fun testScroll(targetPage: Int, offset: Float = 0f) {
+            composeTestRule.runOnIdle {
+                runBlocking {
+                    pagerState.scrollToPage(targetPage, offset)
+                }
             }
+            composeTestRule.runOnIdle {
+                assertThat(pagerState.currentPage).isEqualTo(targetPage)
+                assertThat(pagerState.currentPageOffset).isWithin(0.001f).of(offset)
+            }
+            assertPagerLayout(targetPage, pagerState.pageCount, offset)
         }
-        composeTestRule.runOnIdle {
-            assertThat(pagerState.currentPage).isEqualTo(3)
-        }
-        assertPagerLayout(3, pagerState.pageCount)
 
+        // Scroll to page 3 and assert
+        testScroll(3)
         // Now scroll to page 0 and assert
-        composeTestRule.runOnIdle {
-            runBlocking {
-                pagerState.scrollToPage(0)
-            }
-        }
-        composeTestRule.runOnIdle {
-            assertThat(pagerState.currentPage).isEqualTo(0)
-        }
-        assertPagerLayout(0, pagerState.pageCount)
+        testScroll(0)
+        // Now scroll to page 1 with an offset of 0.5 and assert
+        testScroll(1, 0.5f)
+        // Now scroll to page 2 with an offset of 0.25 and assert
+        testScroll(2, 0.25f)
     }
 
     @Test
     fun animateScrollToPage() {
         val pagerState = setPagerContent(pageCount = 10)
 
-        // Scroll to page 3 and assert
-        composeTestRule.runOnIdle {
-            runBlocking(AutoTestFrameClock()) {
-                pagerState.animateScrollToPage(3)
+        fun testScroll(targetPage: Int, offset: Float = 0f) {
+            composeTestRule.runOnIdle {
+                runBlocking(AutoTestFrameClock()) {
+                    pagerState.animateScrollToPage(targetPage)
+                }
             }
+            composeTestRule.runOnIdle {
+                assertThat(pagerState.currentPage).isEqualTo(targetPage)
+                assertThat(pagerState.currentPageOffset).isWithin(0.001f).of(offset)
+            }
+            assertPagerLayout(targetPage, pagerState.pageCount, offset)
         }
-        composeTestRule.runOnIdle {
-            assertThat(pagerState.currentPage).isEqualTo(3)
-        }
-        assertPagerLayout(3, pagerState.pageCount)
 
+        // Scroll to page 3 and assert
+        testScroll(3)
         // Now scroll to page 0 and assert
-        composeTestRule.runOnIdle {
-            runBlocking(AutoTestFrameClock()) {
-                pagerState.animateScrollToPage(0)
-            }
-        }
-        composeTestRule.runOnIdle {
-            assertThat(pagerState.currentPage).isEqualTo(0)
-        }
-        assertPagerLayout(0, pagerState.pageCount)
+        testScroll(0)
     }
 
     @Test
@@ -343,18 +339,18 @@ abstract class PagerTest {
 
     // TODO: add test for state restoration?
 
-    private fun assertPagerLayout(currentPage: Int, pageCount: Int) {
+    private fun assertPagerLayout(currentPage: Int, pageCount: Int, offset: Float = 0f) {
         // Assert that the 'current page' exists and is laid out in the correct position
         composeTestRule.onNodeWithTag(currentPage.toString())
             .assertExists()
-            .assertLaidOutItemPosition(currentPage, currentPage)
+            .assertLaidOutItemPosition(currentPage, currentPage, offset)
 
         // Go through all of the pages, and assert the expected layout state (if it exists)
         (0 until pageCount).forEach { page ->
             // If this exists assert that it is laid out in the correct position
             composeTestRule.onNodeWithTag(page.toString()).apply {
                 if (exists && isLaidOut) {
-                    assertLaidOutItemPosition(page, currentPage)
+                    assertLaidOutItemPosition(page, currentPage, offset)
                 }
             }
         }
@@ -363,6 +359,7 @@ abstract class PagerTest {
     protected abstract fun SemanticsNodeInteraction.assertLaidOutItemPosition(
         page: Int,
         currentPage: Int,
+        offset: Float,
     ): SemanticsNodeInteraction
 
     protected abstract fun setPagerContent(

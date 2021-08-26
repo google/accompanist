@@ -61,7 +61,8 @@ abstract class BaseVerticalPagerTest(
 
     override fun SemanticsNodeInteraction.assertLaidOutItemPosition(
         page: Int,
-        currentPage: Int
+        currentPage: Int,
+        offset: Float,
     ): SemanticsNodeInteraction {
         val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
         val expectedItemSize = rootBounds.width
@@ -74,6 +75,9 @@ abstract class BaseVerticalPagerTest(
             Alignment.Top -> 0.dp
             Alignment.Bottom -> rootBounds.height - expectedItemSize
             else /* Alignment.CenterVertically */ -> (rootBounds.height - expectedItemSize) / 2
+        } + when (reverseLayout) {
+            true -> expectedItemSize * offset
+            false -> -expectedItemSize * offset
         }
 
         return assertWidthIsEqualTo(expectedItemSize)

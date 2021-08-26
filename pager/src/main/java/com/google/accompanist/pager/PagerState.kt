@@ -18,6 +18,7 @@
 
 package com.google.accompanist.pager
 
+import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.gestures.ScrollScope
@@ -202,7 +203,11 @@ class PagerState(
      *
      * @param page the page to animate to. Must be between 0 and [pageCount] (inclusive).
      */
-    suspend fun animateScrollToPage(@IntRange(from = 0) page: Int) {
+    suspend fun animateScrollToPage(
+        @IntRange(from = 0) page: Int,
+//        @FloatRange(from = 0.0, to = 1.0) pageOffset: Float = 0f,
+//        skipPages: Boolean = true,
+    ) {
         requireCurrentPage(page, "page")
         try {
             val firstVisibleItemIndex = lazyListState.firstVisibleItemIndex
@@ -264,7 +269,10 @@ class PagerState(
      *
      * @param page the page to snap to. Must be between 0 and [pageCount] (inclusive).
      */
-    suspend fun scrollToPage(@IntRange(from = 0) page: Int) {
+    suspend fun scrollToPage(
+        @IntRange(from = 0) page: Int,
+        @FloatRange(from = 0.0, to = 1.0) pageOffset: Float = 0f,
+    ) {
         requireCurrentPage(page, "page")
         try {
             animationTargetPage = page
@@ -273,8 +281,17 @@ class PagerState(
             lazyListState.scrollToItem(index = page)
 
             // If we have a start spacing, we need to offset (scroll) by that too
-            if (layoutStartSpacing > 0) {
-                scroll { scrollBy(-layoutStartSpacing.toFloat()) }
+            if (layoutStartSpacing > 0 || pageOffset > 0.0001f) {
+                scroll {
+                    if (layoutStartSpacing > 0) {
+                        scrollBy(-layoutStartSpacing.toFloat())
+                    }
+                    if (pageOffset > 0.0001f) {
+                        currentLayoutPageInfo?.let {
+                            scrollBy(it.size * pageOffset)
+                        }
+                    }
+                }
             }
         } finally {
             onScrollFinished()
