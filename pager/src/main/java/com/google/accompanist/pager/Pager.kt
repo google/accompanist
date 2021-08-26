@@ -24,6 +24,7 @@ import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
@@ -138,6 +139,7 @@ fun HorizontalPager(
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     key: ((index: Int) -> Any)? = null,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
     Pager(
@@ -150,6 +152,7 @@ fun HorizontalPager(
         horizontalAlignment = horizontalAlignment,
         flingBehavior = flingBehavior,
         key = key,
+        contentPadding = contentPadding,
         content = content
     )
 }
@@ -183,6 +186,7 @@ fun VerticalPager(
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     key: ((index: Int) -> Any)? = null,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
     Pager(
@@ -195,6 +199,7 @@ fun VerticalPager(
         horizontalAlignment = horizontalAlignment,
         flingBehavior = flingBehavior,
         key = key,
+        contentPadding = contentPadding,
         content = content
     )
 }
@@ -211,6 +216,7 @@ internal fun Pager(
     horizontalAlignment: Alignment.Horizontal,
     flingBehavior: FlingBehavior,
     key: ((index: Int) -> Any)?,
+    contentPadding: PaddingValues,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
     BoxWithConstraints(
@@ -240,6 +246,7 @@ internal fun Pager(
                 horizontalAlignment = horizontalAlignment,
                 flingBehavior = flingBehavior,
                 reverseLayout = reverseLayout,
+                contentPadding = contentPadding,
             ) {
                 items(
                     count = state.pageCount,
@@ -269,6 +276,7 @@ internal fun Pager(
                 horizontalArrangement = Arrangement.spacedBy(itemSpacing, horizontalAlignment),
                 flingBehavior = flingBehavior,
                 reverseLayout = reverseLayout,
+                contentPadding = contentPadding,
             ) {
                 items(
                     count = state.pageCount,
