@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
+import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.LazyListLayoutInfo
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
@@ -84,6 +85,8 @@ object PagerDefaults {
      * @param state The [PagerState] to update.
      * @param decayAnimationSpec The decay animation spec to use for decayed flings.
      * @param snapAnimationSpec The animation spec to use when snapping.
+     * @param snapOffset Block which defines the snap offset for the given index. The returned
+     * offset should be in the same dimension and range as [LazyListItemInfo.offset].
      */
     @Composable
     fun rememberPagerFlingConfig(

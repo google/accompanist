@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused")
-
 package com.google.accompanist.pager
 
 import androidx.compose.animation.core.AnimationSpec
@@ -40,29 +38,28 @@ import kotlin.math.abs
 import kotlin.math.absoluteValue
 
 /**
- * This attempts to mimic ViewPager's custom scroll interpolator. It's not a perfect match
- * (and we may not want it to be), but this seem to match in terms of scroll duration and 'feel'
+ * Default values used for [SnappingFlingBehavior] & [rememberSnappingFlingBehavior].
  */
-
-@Suppress("MemberVisibilityCanBePrivate")
 object SnappingFlingBehaviorDefaults {
+    /**
+     * TODO
+     */
+    val snapOffset: LazyListLayoutInfo.(index: Int) -> Int = { viewportStartOffset }
 
     /**
      * TODO
      */
-    const val SnapSpringStiffness = 600f
-
-    val snapOffset: LazyListLayoutInfo.(index: Int) -> Int = { viewportStartOffset }
-
-    val snapAnimationSpec: AnimationSpec<Float> = spring(stiffness = SnapSpringStiffness)
+    val snapAnimationSpec: AnimationSpec<Float> = spring(stiffness = 600f)
 }
 
 /**
- * Create and remember the default [FlingBehavior] that represents the scroll curve.
+ * Create and remember a snapping [FlingBehavior] to be used with [LazyListState].
  *
- * @param state The [PagerState] to update.
+ * @param lazyListState The [LazyListState] to update.
  * @param decayAnimationSpec The decay animation spec to use for decayed flings.
  * @param snapAnimationSpec The animation spec to use when snapping.
+ * @param snapOffset Block which defines the snap offset for the given index. The returned offset
+ * should be in the same dimension and range as [LazyListItemInfo.offset].
  */
 @Composable
 fun rememberSnappingFlingBehavior(
@@ -79,6 +76,16 @@ fun rememberSnappingFlingBehavior(
     )
 }
 
+/**
+ * A snapping [FlingBehavior] for [LazyListState]. Typically this would be created
+ * via [rememberSnappingFlingBehavior].
+ *
+ * @param lazyListState The [LazyListState] to update.
+ * @param decayAnimationSpec The decay animation spec to use for decayed flings.
+ * @param snapAnimationSpec The animation spec to use when snapping.
+ * @param snapOffset Block which defines the snap offset for the given index. The returned offset
+ * should be in the same dimension and range as [LazyListItemInfo.offset].
+ */
 class SnappingFlingBehavior(
     private val lazyListState: LazyListState,
     private val decayAnimationSpec: DecayAnimationSpec<Float>,

@@ -73,7 +73,6 @@ package com.google.accompanist.pager {
     property public final androidx.compose.animation.core.AnimationSpec<java.lang.Float> snapAnimationSpec;
     property public final kotlin.jvm.functions.Function2<androidx.compose.foundation.lazy.LazyListLayoutInfo,java.lang.Integer,java.lang.Integer> snapOffset;
     field public static final com.google.accompanist.pager.SnappingFlingBehaviorDefaults INSTANCE;
-    field public static final float SnapSpringStiffness = 600.0f;
   }
 
   public final class SnappingFlingBehaviorKt {
