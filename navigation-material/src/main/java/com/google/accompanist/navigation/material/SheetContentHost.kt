@@ -37,9 +37,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.LocalOwnersProvider
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.currentCoroutineContext
-import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
@@ -93,8 +90,19 @@ internal fun SheetContentHost(
         // want to show the sheet, and hide it when this composable leaves the composition
         DisposableEffect(backStackEntry) {
             scope.launch {
-                sheetState.internalShow()
-                currentOnSheetShown(backStackEntry)
+                // Our show call can get cancelled in which case Swipeable will move to the closest
+                // anchor
+                try {
+                    sheetState.show()
+                } finally {
+                    // If the target state is a visible state, it's fairly safe to assume that
+                    // Swipeable will end up settling in that state
+                    if (sheetState.targetValue == ModalBottomSheetValue.Expanded ||
+                        sheetState.targetValue == ModalBottomSheetValue.HalfExpanded
+                    ) {
+                        currentOnSheetShown(backStackEntry)
+                    }
+                }
             }
             onDispose {
                 scope.launch {
@@ -125,20 +133,6 @@ private fun EmptySheet() {
     // If there are no destinations on the back stack, we need to add something to work
     // around this
     Box(Modifier.height(1.dp))
-}
-
-// There is a race condition in ModalBottomSheetLayout that happens when the sheet content
-// changes due to the anchors being re-calculated. This causes an animation to run for a
-// short time. Re-running the animation when it is cancelled works around this.
-// b/181593642
-@OptIn(ExperimentalMaterialApi::class)
-private suspend fun ModalBottomSheetState.internalShow() {
-    try {
-        show()
-    } catch (animationCancelled: CancellationException) {
-        currentCoroutineContext().ensureActive()
-        internalShow()
-    }
 }
 
 // We have the same issue when we are hiding the sheet, but snapTo works better
