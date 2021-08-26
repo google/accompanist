@@ -121,6 +121,9 @@ object PagerDefaults {
  * the first item is located at the end.
  * @param itemSpacing horizontal spacing to add between items.
  * @param flingBehavior logic describing fling behavior.
+ * @param key the scroll position will be maintained based on the key, which means if you
+ * add/remove items before the current visible item the item with the given key will be kept as the
+ * first visible one.
  * @param content a block which describes the content. Inside this block you can reference
  * [PagerScope.currentPage] and other properties in [PagerScope].
  */
@@ -134,6 +137,7 @@ fun HorizontalPager(
     flingBehavior: FlingBehavior = PagerDefaults.rememberPagerFlingConfig(state),
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
+    key: ((index: Int) -> Any)? = null,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
     Pager(
@@ -145,6 +149,7 @@ fun HorizontalPager(
         verticalAlignment = verticalAlignment,
         horizontalAlignment = horizontalAlignment,
         flingBehavior = flingBehavior,
+        key = key,
         content = content
     )
 }
@@ -161,6 +166,9 @@ fun HorizontalPager(
  * the first item is located at the bottom.
  * @param itemSpacing vertical spacing to add between items.
  * @param flingBehavior logic describing fling behavior.
+ * @param key the scroll position will be maintained based on the key, which means if you
+ * add/remove items before the current visible item the item with the given key will be kept as the
+ * first visible one.
  * @param content a block which describes the content. Inside this block you can reference
  * [PagerScope.currentPage] and other properties in [PagerScope].
  */
@@ -174,6 +182,7 @@ fun VerticalPager(
     flingBehavior: FlingBehavior = PagerDefaults.rememberPagerFlingConfig(state),
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
+    key: ((index: Int) -> Any)? = null,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
     Pager(
@@ -185,6 +194,7 @@ fun VerticalPager(
         verticalAlignment = verticalAlignment,
         horizontalAlignment = horizontalAlignment,
         flingBehavior = flingBehavior,
+        key = key,
         content = content
     )
 }
@@ -200,6 +210,7 @@ internal fun Pager(
     verticalAlignment: Alignment.Vertical,
     horizontalAlignment: Alignment.Horizontal,
     flingBehavior: FlingBehavior,
+    key: ((index: Int) -> Any)?,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
     BoxWithConstraints(
@@ -232,7 +243,7 @@ internal fun Pager(
             ) {
                 items(
                     count = state.pageCount,
-                    // TODO: expose key
+                    key = key,
                 ) { page ->
                     val scope = PagerScopeImpl(state, this)
 
@@ -261,7 +272,7 @@ internal fun Pager(
             ) {
                 items(
                     count = state.pageCount,
-                    // TODO: expose key
+                    key = key,
                 ) { page ->
                     val scope = PagerScopeImpl(state, this)
 
