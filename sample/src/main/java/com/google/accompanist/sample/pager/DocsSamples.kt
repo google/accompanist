@@ -44,9 +44,7 @@ import kotlinx.coroutines.flow.collect
 @Composable
 fun HorizontalPagerSample() {
     // Display 10 items
-    val pagerState = rememberPagerState(pageCount = 10)
-
-    HorizontalPager(state = pagerState) { page ->
+    HorizontalPager(count = 10) { page ->
         // Our page content
         Text(
             text = "Page: $page",
@@ -59,9 +57,7 @@ fun HorizontalPagerSample() {
 @Composable
 fun VerticalPagerSample() {
     // Display 10 items
-    val pagerState = rememberPagerState(pageCount = 10)
-
-    VerticalPager(state = pagerState) { page ->
+    VerticalPager(count = 10) { page ->
         // Our page content
         Text(
             text = "Page: $page",
@@ -73,10 +69,10 @@ fun VerticalPagerSample() {
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun HorizontalPagerIndicatorSample() {
-    // Display 10 items
-    val pagerState = rememberPagerState(pageCount = 10)
+    val pagerState = rememberPagerState()
     Column {
-        HorizontalPager(state = pagerState) { page ->
+        // Display 10 items
+        HorizontalPager(count = 10) { page ->
             // Our page content
             Text(
                 text = "Page: $page",
@@ -94,10 +90,13 @@ fun HorizontalPagerIndicatorSample() {
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun VerticalPagerIndicatorSample() {
-    // Display 10 items
-    val pagerState = rememberPagerState(pageCount = 10)
+    val pagerState = rememberPagerState()
     Row {
-        VerticalPager(state = pagerState) { page ->
+        // Display 10 items
+        VerticalPager(
+            count = 10,
+            state = pagerState,
+        ) { page ->
             // Our page content
             Text(
                 text = "Page: $page",
@@ -120,7 +119,7 @@ object AnalyticsService {
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun PageChangesSample() {
-    val pagerState = rememberPagerState(pageCount = 10)
+    val pagerState = rememberPagerState()
 
     LaunchedEffect(pagerState) {
         // Collect from the a snapshotFlow reading the currentPage
@@ -129,7 +128,10 @@ fun PageChangesSample() {
         }
     }
 
-    VerticalPager(state = pagerState) { page ->
+    VerticalPager(
+        count = 10,
+        state = pagerState,
+    ) { page ->
         Text(text = "Page: $page")
     }
 }
@@ -137,7 +139,7 @@ fun PageChangesSample() {
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun PagerWithTabs(pages: List<String>) {
-    val pagerState = rememberPagerState(pageCount = pages.size)
+    val pagerState = rememberPagerState()
 
     TabRow(
         // Our selected tab is our current page
@@ -159,7 +161,10 @@ fun PagerWithTabs(pages: List<String>) {
         }
     }
 
-    HorizontalPager(state = pagerState) { page ->
+    HorizontalPager(
+        count = pages.size,
+        state = pagerState,
+    ) { page ->
         // TODO: page content
     }
 }

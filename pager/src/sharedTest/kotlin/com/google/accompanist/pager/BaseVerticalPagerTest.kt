@@ -49,9 +49,7 @@ abstract class BaseVerticalPagerTest(
     private val verticalAlignment: Alignment.Vertical,
     // We don't use the Dp type due to https://youtrack.jetbrains.com/issue/KT-35523
     private val itemSpacingDp: Int,
-    override val offscreenLimit: Int,
     private val reverseLayout: Boolean,
-    override val infiniteLoop: Boolean,
 ) : PagerTest() {
 
     override fun SemanticsNodeInteraction.swipeAcrossCenter(
@@ -64,7 +62,8 @@ abstract class BaseVerticalPagerTest(
 
     override fun SemanticsNodeInteraction.assertLaidOutItemPosition(
         page: Int,
-        currentPage: Int
+        currentPage: Int,
+        offset: Float,
     ): SemanticsNodeInteraction {
         val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
         val expectedItemSize = rootBounds.width
@@ -77,6 +76,9 @@ abstract class BaseVerticalPagerTest(
             Alignment.Top -> 0.dp
             Alignment.Bottom -> rootBounds.height - expectedItemSize
             else /* Alignment.CenterVertically */ -> (rootBounds.height - expectedItemSize) / 2
+        } + when (reverseLayout) {
+            true -> expectedItemSize * offset
+            false -> -expectedItemSize * offset
         }
 
         return assertWidthIsEqualTo(expectedItemSize)
@@ -101,14 +103,10 @@ abstract class BaseVerticalPagerTest(
     }
 
     override fun setPagerContent(
-        pageCount: Int,
+        count: () -> Int,
         observeStateInContent: Boolean,
     ): PagerState {
-        val pagerState = PagerState(
-            pageCount = pageCount,
-            offscreenLimit = offscreenLimit,
-            infiniteLoop = infiniteLoop,
-        ).apply { testing = true }
+        val pagerState = PagerState()
         // Stick to LTR for vertical tests
         composeTestRule.setContent(LayoutDirection.Ltr) {
             applierScope = rememberCoroutineScope()
@@ -119,6 +117,7 @@ abstract class BaseVerticalPagerTest(
                 }
 
                 VerticalPager(
+                    count = count(),
                     state = pagerState,
                     itemSpacing = itemSpacingDp.dp,
                     reverseLayout = reverseLayout,

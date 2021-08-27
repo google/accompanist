@@ -33,22 +33,24 @@ class RobolectricHorizontalPagerTest(
     itemWidthFraction: Float,
     horizontalAlignment: Alignment.Horizontal,
     itemSpacingDp: Int,
-    offscreenLimit: Int,
     layoutDirection: LayoutDirection,
     reverseLayout: Boolean,
-    infiniteLoop: Boolean
 ) : BaseHorizontalPagerTest(
     itemWidthFraction,
     horizontalAlignment,
     itemSpacingDp,
-    offscreenLimit,
     layoutDirection,
     reverseLayout,
-    infiniteLoop
 ) {
     companion object {
         @JvmStatic
-        @ParameterizedRobolectricTestRunner.Parameters
+        @ParameterizedRobolectricTestRunner.Parameters(
+            name = "itemWidthFraction={0}," +
+                "horizontalAlignment={1}," +
+                "itemSpacing={2}," +
+                "layoutDirection={3}," +
+                "reverseLayout={4}"
+        )
         fun data() = parameterizedParams()
             // itemWidthFraction
             .combineWithParameters(1f, 0.8f)
@@ -56,13 +58,9 @@ class RobolectricHorizontalPagerTest(
             .combineWithParameters(Alignment.CenterHorizontally, Alignment.Start, Alignment.End)
             // itemSpacing
             .combineWithParameters(0, 4)
-            // offscreenLimit
-            .combineWithParameters(1, 2)
             // layoutDirection
             .combineWithParameters(LayoutDirection.Ltr, LayoutDirection.Rtl)
             // reverseLayout
-            .combineWithParameters(true, false)
-            // looping
             .combineWithParameters(true, false)
     }
 }

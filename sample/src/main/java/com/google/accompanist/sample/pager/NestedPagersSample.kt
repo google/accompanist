@@ -33,7 +33,6 @@ import androidx.compose.ui.res.stringResource
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.VerticalPager
-import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 
@@ -64,11 +63,11 @@ private fun Sample() {
         modifier = Modifier.fillMaxSize()
     ) {
         VerticalPager(
-            state = rememberPagerState(pageCount = 10),
+            count = 10,
             modifier = Modifier.fillMaxSize(),
         ) {
             HorizontalPager(
-                state = rememberPagerState(pageCount = 5),
+                count = 5,
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(1f)

@@ -47,12 +47,11 @@ class HorizontalPagerScrollingContentTest {
 
     @Test
     fun horizontalPagerScrollingContentTest() {
-        lateinit var pagerState: PagerState
+        val pagerState = PagerState()
 
         rule.setContent {
-            pagerState = rememberPagerState(pageCount = 2)
-
             HorizontalPager(
+                count = 2,
                 state = pagerState,
                 modifier = Modifier.fillMaxSize().testTag(TestTag)
             ) { page ->

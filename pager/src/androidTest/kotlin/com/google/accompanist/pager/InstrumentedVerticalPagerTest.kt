@@ -29,15 +29,11 @@ import org.junit.runners.Parameterized
 class InstrumentedVerticalPagerTest(
     verticalAlignment: Alignment.Vertical,
     itemSpacingDp: Int,
-    offscreenLimit: Int,
     reverseLayout: Boolean,
-    infiniteLoop: Boolean
 ) : BaseVerticalPagerTest(
     verticalAlignment,
     itemSpacingDp,
-    offscreenLimit,
     reverseLayout,
-    infiniteLoop
 ) {
     companion object {
         /**
@@ -50,11 +46,7 @@ class InstrumentedVerticalPagerTest(
             .combineWithParameters(Alignment.CenterVertically, Alignment.Top, Alignment.Bottom)
             // itemSpacingDp
             .combineWithParameters(0, 4)
-            // offscreenLimit
-            .combineWithParameters(1)
             // reverseLayout
-            .combineWithParameters(false)
-            // looping
             .combineWithParameters(false)
     }
 }

@@ -49,10 +49,8 @@ abstract class BaseHorizontalPagerTest(
     private val horizontalAlignment: Alignment.Horizontal,
     // We don't use the Dp type due to https://youtrack.jetbrains.com/issue/KT-35523
     private val itemSpacingDp: Int,
-    override val offscreenLimit: Int,
     private val layoutDirection: LayoutDirection,
     private val reverseLayout: Boolean,
-    override val infiniteLoop: Boolean,
 ) : PagerTest() {
 
     /**
@@ -72,6 +70,7 @@ abstract class BaseHorizontalPagerTest(
     override fun SemanticsNodeInteraction.assertLaidOutItemPosition(
         page: Int,
         currentPage: Int,
+        offset: Float,
     ): SemanticsNodeInteraction {
         val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
         val expectedItemSize = rootBounds.width * itemWidthFraction
@@ -94,6 +93,9 @@ abstract class BaseHorizontalPagerTest(
                 }
             }
             else /* Alignment.CenterVertically */ -> (rootBounds.width - expectedItemSize) / 2
+        } + when (reverseDirection) {
+            true -> expectedItemSize * offset
+            false -> -expectedItemSize * offset
         }
 
         return assertWidthIsEqualTo(expectedItemSize)
@@ -110,14 +112,10 @@ abstract class BaseHorizontalPagerTest(
     }
 
     override fun setPagerContent(
-        pageCount: Int,
+        count: () -> Int,
         observeStateInContent: Boolean,
     ): PagerState {
-        val pagerState = PagerState(
-            pageCount = pageCount,
-            offscreenLimit = offscreenLimit,
-            infiniteLoop = infiniteLoop,
-        ).apply { testing = true }
+        val pagerState = PagerState()
         composeTestRule.setContent(layoutDirection) {
             applierScope = rememberCoroutineScope()
 
@@ -127,6 +125,7 @@ abstract class BaseHorizontalPagerTest(
                 }
 
                 HorizontalPager(
+                    count = count(),
                     state = pagerState,
                     itemSpacing = itemSpacingDp.dp,
                     reverseLayout = reverseLayout,

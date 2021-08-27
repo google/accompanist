@@ -81,8 +81,8 @@ private fun Sample() {
         Column(Modifier.fillMaxSize()) {
             val coroutineScope = rememberCoroutineScope()
 
-            // Remember a PagerState with our tab count
-            val pagerState = rememberPagerState(pageCount = pages.size)
+            // Remember a PagerState
+            val pagerState = rememberPagerState()
 
             ScrollableTabRow(
                 // Our selected tab is our current page
@@ -109,13 +109,14 @@ private fun Sample() {
             }
 
             HorizontalPager(
+                count = 10,
                 state = pagerState,
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()
             ) { page ->
                 // Our content for each page
-                Box(modifier = Modifier.fillMaxSize()) {
+                Box(modifier = Modifier.fillMaxWidth()) {
                     Card(Modifier.padding(16.dp)) {
                         Box(Modifier.fillMaxSize()) {
                             Text(

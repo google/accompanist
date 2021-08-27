@@ -20,6 +20,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.toPixelMap
 import androidx.compose.ui.test.SemanticsNodeInteraction
+import androidx.compose.ui.test.assertHeightIsAtLeast
+import androidx.compose.ui.test.assertWidthIsAtLeast
+import androidx.compose.ui.unit.Dp
 import com.google.common.truth.Truth.assertThat
 
 /**
@@ -56,3 +59,19 @@ fun SemanticsNodeInteraction.assertWithTimeout(
     // Run block one last time...
     return block()
 }
+
+val SemanticsNodeInteraction.exists: Boolean
+    get() = try {
+        assertExists()
+        true
+    } catch (t: Throwable) {
+        false
+    }
+
+val SemanticsNodeInteraction.isLaidOut: Boolean
+    get() = try {
+        assertWidthIsAtLeast(Dp.Hairline).assertHeightIsAtLeast(Dp.Hairline)
+        true
+    } catch (t: Throwable) {
+        false
+    }
