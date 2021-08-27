@@ -16,7 +16,9 @@
 
 package com.google.accompanist.pager
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.unit.dp
 import com.google.accompanist.internal.test.combineWithParameters
 import com.google.accompanist.internal.test.parameterizedParams
 import org.junit.runner.RunWith
@@ -27,11 +29,11 @@ import org.junit.runners.Parameterized
  */
 @RunWith(Parameterized::class)
 class InstrumentedVerticalPagerTest(
-    verticalAlignment: Alignment.Vertical,
+    contentPadding: PaddingValues,
     itemSpacingDp: Int,
     reverseLayout: Boolean,
 ) : BaseVerticalPagerTest(
-    verticalAlignment,
+    contentPadding,
     itemSpacingDp,
     reverseLayout,
 ) {
@@ -40,10 +42,18 @@ class InstrumentedVerticalPagerTest(
          * On device we only test a subset of the combined parameters.
          */
         @JvmStatic
-        @Parameterized.Parameters
+        @Parameterized.Parameters(
+            name = "contentPadding={0}," +
+                "itemSpacing={1}," +
+                "reverseLayout={2}"
+        )
         fun data() = parameterizedParams()
-            // verticalAlignment
-            .combineWithParameters(Alignment.CenterVertically, Alignment.Top, Alignment.Bottom)
+            // contentPadding
+            .combineWithParameters(
+                PaddingValues(bottom = 32.dp), // Alignment.Top
+                PaddingValues(vertical = 32.dp), // Alignment.Center
+                PaddingValues(top = 32.dp), // Alignment.Bottom
+            )
             // itemSpacingDp
             .combineWithParameters(0, 4)
             // reverseLayout

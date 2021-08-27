@@ -16,8 +16,10 @@
 
 package com.google.accompanist.pager
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
 import com.google.accompanist.internal.test.combineWithParameters
 import com.google.accompanist.internal.test.parameterizedParams
 import org.junit.runner.RunWith
@@ -31,13 +33,13 @@ import org.robolectric.annotation.Config
 @RunWith(ParameterizedRobolectricTestRunner::class)
 class RobolectricHorizontalPagerTest(
     itemWidthFraction: Float,
-    horizontalAlignment: Alignment.Horizontal,
+    contentPadding: PaddingValues,
     itemSpacingDp: Int,
     layoutDirection: LayoutDirection,
     reverseLayout: Boolean,
 ) : BaseHorizontalPagerTest(
     itemWidthFraction,
-    horizontalAlignment,
+    contentPadding,
     itemSpacingDp,
     layoutDirection,
     reverseLayout,
@@ -46,16 +48,20 @@ class RobolectricHorizontalPagerTest(
         @JvmStatic
         @ParameterizedRobolectricTestRunner.Parameters(
             name = "itemWidthFraction={0}," +
-                "horizontalAlignment={1}," +
+                "contentPadding={1}," +
                 "itemSpacing={2}," +
                 "layoutDirection={3}," +
                 "reverseLayout={4}"
         )
         fun data() = parameterizedParams()
             // itemWidthFraction
-            .combineWithParameters(1f, 0.8f)
-            // horizontalAlignment
-            .combineWithParameters(Alignment.CenterHorizontally, Alignment.Start, Alignment.End)
+            .combineWithParameters(1f)
+            // contentPadding
+            .combineWithParameters(
+                PaddingValues(end = 32.dp), // Alignment.Start
+                PaddingValues(horizontal = 32.dp), // Alignment.Center
+                PaddingValues(start = 32.dp), // Alignment.End
+            )
             // itemSpacing
             .combineWithParameters(0, 4)
             // layoutDirection

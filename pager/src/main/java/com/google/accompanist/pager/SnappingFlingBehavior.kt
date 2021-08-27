@@ -44,11 +44,6 @@ object SnappingFlingBehaviorDefaults {
     /**
      * TODO
      */
-    val snapOffset: LazyListLayoutInfo.(index: Int) -> Int = { viewportStartOffset }
-
-    /**
-     * TODO
-     */
     val snapAnimationSpec: AnimationSpec<Float> = spring(stiffness = 600f)
 }
 
@@ -58,21 +53,17 @@ object SnappingFlingBehaviorDefaults {
  * @param lazyListState The [LazyListState] to update.
  * @param decayAnimationSpec The decay animation spec to use for decayed flings.
  * @param snapAnimationSpec The animation spec to use when snapping.
- * @param snapOffset Block which defines the snap offset for the given index. The returned offset
- * should be in the same dimension and range as [LazyListItemInfo.offset].
  */
 @Composable
 fun rememberSnappingFlingBehavior(
     lazyListState: LazyListState,
     decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
     snapAnimationSpec: AnimationSpec<Float> = SnappingFlingBehaviorDefaults.snapAnimationSpec,
-    snapOffset: LazyListLayoutInfo.(index: Int) -> Int = SnappingFlingBehaviorDefaults.snapOffset,
 ): SnappingFlingBehavior = remember(lazyListState, decayAnimationSpec, snapAnimationSpec) {
     SnappingFlingBehavior(
         lazyListState = lazyListState,
         decayAnimationSpec = decayAnimationSpec,
         snapAnimationSpec = snapAnimationSpec,
-        snapOffset = snapOffset,
     )
 }
 
@@ -83,31 +74,26 @@ fun rememberSnappingFlingBehavior(
  * @param lazyListState The [LazyListState] to update.
  * @param decayAnimationSpec The decay animation spec to use for decayed flings.
  * @param snapAnimationSpec The animation spec to use when snapping.
- * @param snapOffset Block which defines the snap offset for the given index. The returned offset
- * should be in the same dimension and range as [LazyListItemInfo.offset].
  */
 class SnappingFlingBehavior(
     private val lazyListState: LazyListState,
     private val decayAnimationSpec: DecayAnimationSpec<Float>,
     private val snapAnimationSpec: AnimationSpec<Float>,
-    private val snapOffset: LazyListLayoutInfo.(index: Int) -> Int,
 ) : FlingBehavior {
+    // TODO: Think about exposing this as public API
+    private val snapOffset: LazyListLayoutInfo.(index: Int) -> Int = { viewportStartOffset }
+
     /**
      * The target page for any on-going animations.
      */
     var animationTarget: Int? by mutableStateOf(null)
         private set
 
-    /**
-     * TODO
-     */
-    var itemSize: (LazyListItemInfo) -> Int = LazyListItemInfo::size
-
     override suspend fun ScrollScope.performFling(
         initialVelocity: Float
     ): Float {
         val pageInfo = currentLayoutPageInfo ?: return initialVelocity
-        val pageSize = itemSize(pageInfo)
+        val pageSize = pageInfo.size
         val decayDistance = decayAnimationSpec.calculateTargetValue(
             initialValue = 0f,
             initialVelocity = initialVelocity

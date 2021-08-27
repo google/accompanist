@@ -16,7 +16,9 @@
 
 package com.google.accompanist.pager
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.unit.dp
 import com.google.accompanist.internal.test.combineWithParameters
 import com.google.accompanist.internal.test.parameterizedParams
 import org.junit.runner.RunWith
@@ -29,24 +31,28 @@ import org.robolectric.annotation.Config
 @Config(qualifiers = "w360dp-h640dp-xhdpi")
 @RunWith(ParameterizedRobolectricTestRunner::class)
 class RobolectricVerticalPagerTest(
-    verticalAlignment: Alignment.Vertical,
+    contentPadding: PaddingValues,
     itemSpacingDp: Int,
     reverseLayout: Boolean,
 ) : BaseVerticalPagerTest(
-    verticalAlignment,
+    contentPadding,
     itemSpacingDp,
     reverseLayout,
 ) {
     companion object {
         @JvmStatic
         @ParameterizedRobolectricTestRunner.Parameters(
-            name = "verticalAlignment={0}," +
+            name = "contentPadding={0}," +
                 "itemSpacing={1}," +
                 "reverseLayout={2}"
         )
         fun data() = parameterizedParams()
-            // verticalAlignment
-            .combineWithParameters(Alignment.CenterVertically, Alignment.Top, Alignment.Bottom)
+            // contentPadding
+            .combineWithParameters(
+                PaddingValues(bottom = 32.dp), // Alignment.Top
+                PaddingValues(vertical = 32.dp), // Alignment.Center
+                PaddingValues(top = 32.dp), // Alignment.Bottom
+            )
             // itemSpacingDp
             .combineWithParameters(0, 4)
             // reverseLayout

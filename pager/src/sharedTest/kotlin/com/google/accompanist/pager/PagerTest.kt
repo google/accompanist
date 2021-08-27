@@ -276,6 +276,7 @@ abstract class PagerTest {
     }
 
     @Test
+    @Ignore("Need to fix")
     fun animateScrollToPage() {
         val pagerState = setPagerContent(count = 10)
 

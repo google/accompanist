@@ -75,18 +75,14 @@ class PagerState(
 
     private var _currentPage by mutableStateOf(currentPage)
 
-    internal var layoutStartSpacing: Int by mutableStateOf(0)
-    internal var layoutEndSpacing: Int by mutableStateOf(0)
-
-    internal var snapOffsetForPage: (index: Int, layoutInfo: LazyListLayoutInfo, leadSpacing: Int) -> Int by mutableStateOf(
-        PagerDefaults::snapOffset
-    )
+    // TODO: Think about exposing this as public API. Same for SnappingFlingBehavior
+    private val snapOffsetForPage: LazyListLayoutInfo.(page: Int) -> Int = { viewportStartOffset }
 
     private val currentLayoutPageInfo: LazyListItemInfo? by derivedStateOf {
         val layoutInfo = lazyListState.layoutInfo
         layoutInfo.visibleItemsInfo.asSequence()
             .filter {
-                val snapOffset = snapOffsetForPage(it.index, layoutInfo, layoutStartSpacing)
+                val snapOffset = snapOffsetForPage(layoutInfo, it.index)
                 it.offset <= snapOffset && it.offset + it.size > snapOffset
             }
             .lastOrNull()
@@ -94,7 +90,7 @@ class PagerState(
 
     private val currentLayoutPageOffset: Float by derivedStateOf {
         currentLayoutPageInfo?.let { current ->
-            val start = layoutStartSpacing + lazyListState.layoutInfo.viewportStartOffset
+            val start = lazyListState.layoutInfo.viewportStartOffset
             // Since the first item might be wider to compensate for the alignment, we need
             // to compute the actual size and offset
             val size = if (current.index == 0) current.size - start else current.size
@@ -191,7 +187,7 @@ class PagerState(
 
         animationTargetPage = page
 
-        if (layoutStartSpacing > 0 && page > 0) {
+        if (page > 0) {
             // If we have a 'start' spacing, we need to actually scroll to the previous item.
             // We can then look at the laid out page sizes
 
@@ -214,9 +210,9 @@ class PagerState(
             // any item spacing.
             val targetScrollOffset = if (current != null && prev != null) {
                 // If we have both, we can detect the gap between the items
-                current.offset - prev.offset - layoutStartSpacing
+                current.offset - prev.offset
             } else {
-                prev!!.size - layoutStartSpacing
+                prev!!.size
             }
 
             if (hadToSnap) {
@@ -254,15 +250,10 @@ class PagerState(
         lazyListState.scrollToItem(index = page)
 
         // If we have a start spacing, we need to offset (scroll) by that too
-        if (layoutStartSpacing > 0 || pageOffset > 0.0001f) {
+        if (pageOffset > 0.0001f) {
             scroll {
-                if (layoutStartSpacing > 0) {
-                    scrollBy(-layoutStartSpacing.toFloat())
-                }
-                if (pageOffset > 0.0001f) {
-                    currentLayoutPageInfo?.let {
-                        scrollBy(it.size * pageOffset)
-                    }
+                currentLayoutPageInfo?.let {
+                    scrollBy(it.size * pageOffset)
                 }
             }
         }

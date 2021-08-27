@@ -18,6 +18,7 @@ package com.google.accompanist.pager
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -46,7 +47,7 @@ import androidx.compose.ui.unit.width
 @OptIn(ExperimentalPagerApi::class) // Pager is currently experimental
 abstract class BaseHorizontalPagerTest(
     private val itemWidthFraction: Float,
-    private val horizontalAlignment: Alignment.Horizontal,
+    private val contentPadding: PaddingValues,
     // We don't use the Dp type due to https://youtrack.jetbrains.com/issue/KT-35523
     private val itemSpacingDp: Int,
     private val layoutDirection: LayoutDirection,
@@ -56,14 +57,14 @@ abstract class BaseHorizontalPagerTest(
     /**
      * Returns the expected resolved layout direction for pages
      */
-    private val reverseDirection: Boolean
+    private val laidOutRtl: Boolean
         get() = if (layoutDirection == LayoutDirection.Rtl) !reverseLayout else reverseLayout
 
     override fun SemanticsNodeInteraction.swipeAcrossCenter(
         distancePercentage: Float,
         velocity: Float,
     ): SemanticsNodeInteraction = swipeAcrossCenterWithVelocity(
-        distancePercentageX = if (reverseDirection) -distancePercentage else distancePercentage,
+        distancePercentageX = if (laidOutRtl) -distancePercentage else distancePercentage,
         velocity = velocity,
     )
 
@@ -79,23 +80,13 @@ abstract class BaseHorizontalPagerTest(
         // use Alignment.CenterVertically by default, and that we're using items
         // with an aspect ratio of 1:1
         val expectedTop = (rootBounds.height - expectedItemSize) / 2
-        val expectedFirstItemLeft = when (horizontalAlignment) {
-            Alignment.Start -> {
-                when (layoutDirection) {
-                    LayoutDirection.Ltr -> 0.dp
-                    else -> rootBounds.width - expectedItemSize
-                }
-            }
-            Alignment.End -> {
-                when (layoutDirection) {
-                    LayoutDirection.Ltr -> rootBounds.width - expectedItemSize
-                    else -> 0.dp
-                }
-            }
-            else /* Alignment.CenterVertically */ -> (rootBounds.width - expectedItemSize) / 2
-        } + when (reverseDirection) {
-            true -> expectedItemSize * offset
-            false -> -expectedItemSize * offset
+        val expectedFirstItemLeft = if (laidOutRtl) {
+            (rootBounds.width -
+                expectedItemSize -
+                contentPadding.calculateRightPadding(layoutDirection)) +
+                (expectedItemSize * offset)
+        } else {
+            contentPadding.calculateLeftPadding(layoutDirection) - (expectedItemSize * offset)
         }
 
         return assertWidthIsEqualTo(expectedItemSize)
@@ -103,7 +94,7 @@ abstract class BaseHorizontalPagerTest(
             .assertTopPositionInRootIsEqualTo(expectedTop)
             .run {
                 val pageDelta = ((expectedItemSize + itemSpacingDp.dp) * (page - currentPage))
-                if (reverseDirection) {
+                if (laidOutRtl) {
                     assertLeftPositionInRootIsEqualTo(expectedFirstItemLeft - pageDelta)
                 } else {
                     assertLeftPositionInRootIsEqualTo(expectedFirstItemLeft + pageDelta)
@@ -129,7 +120,7 @@ abstract class BaseHorizontalPagerTest(
                     state = pagerState,
                     itemSpacing = itemSpacingDp.dp,
                     reverseLayout = reverseLayout,
-                    horizontalAlignment = horizontalAlignment,
+                    contentPadding = contentPadding,
                     modifier = Modifier.fillMaxSize()
                 ) { page ->
                     Box(

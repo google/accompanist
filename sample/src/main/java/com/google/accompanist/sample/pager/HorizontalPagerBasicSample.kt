@@ -20,6 +20,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -83,6 +84,8 @@ private fun Sample() {
             HorizontalPager(
                 count = 10,
                 state = pagerState,
+                reverseLayout = true,
+                contentPadding = PaddingValues(end = 32.dp),
                 // Add some horizontal spacing between items
                 itemSpacing = 4.dp,
                 modifier = Modifier
@@ -92,7 +95,7 @@ private fun Sample() {
                 PagerSampleItem(
                     page = page,
                     modifier = Modifier
-                        .fillMaxWidth(0.8f)
+                        .fillMaxWidth()
                         .aspectRatio(1f)
                 )
             }

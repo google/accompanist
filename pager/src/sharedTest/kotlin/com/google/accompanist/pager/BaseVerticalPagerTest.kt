@@ -18,6 +18,7 @@ package com.google.accompanist.pager
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,7 +36,6 @@ import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.height
 import androidx.compose.ui.unit.width
 import com.google.common.truth.Truth.assertThat
 
@@ -46,7 +46,7 @@ import com.google.common.truth.Truth.assertThat
  */
 @OptIn(ExperimentalPagerApi::class) // Pager is currently experimental
 abstract class BaseVerticalPagerTest(
-    private val verticalAlignment: Alignment.Vertical,
+    private val contentPadding: PaddingValues,
     // We don't use the Dp type due to https://youtrack.jetbrains.com/issue/KT-35523
     private val itemSpacingDp: Int,
     private val reverseLayout: Boolean,
@@ -72,13 +72,9 @@ abstract class BaseVerticalPagerTest(
         // use Alignment.CenterVertically by default, and that we're using items
         // with an aspect ratio of 1:1
         val expectedLeft = (rootBounds.width - expectedItemSize) / 2
-        val expectedFirstItemTop = when (verticalAlignment) {
-            Alignment.Top -> 0.dp
-            Alignment.Bottom -> rootBounds.height - expectedItemSize
-            else /* Alignment.CenterVertically */ -> (rootBounds.height - expectedItemSize) / 2
-        } + when (reverseLayout) {
-            true -> expectedItemSize * offset
-            false -> -expectedItemSize * offset
+        val expectedFirstItemTop = when (reverseLayout) {
+            true -> contentPadding.calculateBottomPadding() + (expectedItemSize * offset)
+            false -> contentPadding.calculateTopPadding() - (expectedItemSize * offset)
         }
 
         return assertWidthIsEqualTo(expectedItemSize)
@@ -121,7 +117,7 @@ abstract class BaseVerticalPagerTest(
                     state = pagerState,
                     itemSpacing = itemSpacingDp.dp,
                     reverseLayout = reverseLayout,
-                    verticalAlignment = verticalAlignment,
+                    contentPadding = contentPadding,
                     modifier = Modifier.fillMaxSize()
                 ) { page ->
                     Box(
