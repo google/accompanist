@@ -261,7 +261,11 @@ internal fun Pager(
                         horizontalAlignment = horizontalAlignment,
                         verticalAlignment = verticalAlignment,
                         modifier = Modifier
+                            // We don't any nested flings to continue in the pager, so we add a
+                            // connection which consumes them.
+                            // See: https://github.com/google/accompanist/issues/347
                             .nestedScroll(connection = ConsumeFlingNestedScrollConnection)
+                            // Constraint the content to be less than the size of the pager.
                             .sizeIn(maxWidth = maxWidth, maxHeight = maxHeight),
                         content = { scope.content(page) },
                     )
