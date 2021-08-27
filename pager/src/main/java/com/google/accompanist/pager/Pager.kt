@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.LazyListLayoutInfo
 import androidx.compose.foundation.lazy.LazyRow
@@ -137,7 +136,7 @@ fun HorizontalPager(
     flingBehavior: FlingBehavior = PagerDefaults.rememberPagerFlingConfig(state),
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
-    key: ((index: Int) -> Any)? = null,
+    key: ((page: Int) -> Any)? = null,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
@@ -184,7 +183,7 @@ fun VerticalPager(
     flingBehavior: FlingBehavior = PagerDefaults.rememberPagerFlingConfig(state),
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
-    key: ((index: Int) -> Any)? = null,
+    key: ((page: Int) -> Any)? = null,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
@@ -214,7 +213,7 @@ internal fun Pager(
     verticalAlignment: Alignment.Vertical,
     horizontalAlignment: Alignment.Horizontal,
     flingBehavior: FlingBehavior,
-    key: ((index: Int) -> Any)?,
+    key: ((page: Int) -> Any)?,
     contentPadding: PaddingValues,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
@@ -238,6 +237,8 @@ internal fun Pager(
 
         // TODO: add consuming touch handler if dragEnabled = false
 
+        val scope = remember(state) { PagerScopeImpl(state) }
+
         if (isVertical) {
             LazyColumn(
                 state = state.lazyListState,
@@ -251,8 +252,6 @@ internal fun Pager(
                     count = state.pageCount,
                     key = key,
                 ) { page ->
-                    val scope = remember(state, this) { PagerScopeImpl(state, this) }
-
                     PagerItem(
                         page = page,
                         itemCount = state.pageCount,
@@ -281,8 +280,6 @@ internal fun Pager(
                     count = state.pageCount,
                     key = key,
                 ) { page ->
-                    val scope = remember(state, this) { PagerScopeImpl(state, this) }
-
                     PagerItem(
                         page = page,
                         itemCount = state.pageCount,
@@ -412,7 +409,7 @@ private object ConsumeFlingNestedScrollConnection : NestedScrollConnection {
  */
 @ExperimentalPagerApi
 @Stable
-interface PagerScope : LazyItemScope {
+interface PagerScope {
     /**
      * Returns the current selected page
      */
@@ -427,8 +424,7 @@ interface PagerScope : LazyItemScope {
 @ExperimentalPagerApi
 private class PagerScopeImpl(
     private val state: PagerState,
-    private val lazyItemScope: LazyItemScope,
-) : PagerScope, LazyItemScope by lazyItemScope {
+) : PagerScope {
     override val currentPage: Int get() = state.currentPage
     override val currentPageOffset: Float get() = state.currentPageOffset
 }

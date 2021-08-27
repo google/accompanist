@@ -16,7 +16,7 @@ package com.google.accompanist.pager {
     field public static final com.google.accompanist.pager.PagerDefaults INSTANCE;
   }
 
-  @androidx.compose.runtime.Stable @com.google.accompanist.pager.ExperimentalPagerApi public interface PagerScope extends androidx.compose.foundation.lazy.LazyItemScope {
+  @androidx.compose.runtime.Stable @com.google.accompanist.pager.ExperimentalPagerApi public interface PagerScope {
     method public int getCurrentPage();
     method public float getCurrentPageOffset();
     property public abstract int currentPage;

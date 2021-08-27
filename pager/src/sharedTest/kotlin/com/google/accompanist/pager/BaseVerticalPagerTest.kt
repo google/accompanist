@@ -20,6 +20,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -126,7 +127,7 @@ abstract class BaseVerticalPagerTest(
                 ) { page ->
                     Box(
                         modifier = Modifier
-                            .fillParentMaxWidth()
+                            .fillMaxWidth()
                             .aspectRatio(1f)
                             .background(randomColor())
                             .testTag(page.toString())

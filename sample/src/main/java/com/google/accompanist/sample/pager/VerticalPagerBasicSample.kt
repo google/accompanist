@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -78,7 +79,7 @@ private fun Sample() {
                 PagerSampleItem(
                     page = page,
                     modifier = Modifier
-                        .fillParentMaxWidth()
+                        .fillMaxWidth()
                         .aspectRatio(1f),
                 )
             }

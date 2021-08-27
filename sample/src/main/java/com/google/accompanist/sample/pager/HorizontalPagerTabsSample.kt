@@ -115,7 +115,7 @@ private fun Sample() {
                     .fillMaxWidth()
             ) { page ->
                 // Our content for each page
-                Box(modifier = Modifier.fillParentMaxSize()) {
+                Box(modifier = Modifier.fillMaxWidth()) {
                     Card(Modifier.padding(16.dp)) {
                         Box(Modifier.fillMaxSize()) {
                             Text(
