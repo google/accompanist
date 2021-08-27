@@ -131,9 +131,8 @@ class PagerState(
     var currentPage: Int
         get() = _currentPage
         private set(value) {
-            val moddedValue = value.coerceAtMost(pageCount - 1)
             if (value != _currentPage) {
-                _currentPage = moddedValue
+                _currentPage = value
                 if (DebugLog) {
                     Napier.d(message = "Current page changed: $_currentPage")
                 }

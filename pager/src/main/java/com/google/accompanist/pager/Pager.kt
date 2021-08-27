@@ -294,12 +294,12 @@ internal fun Pager(
                 contentPadding = contentPadding,
             ) {
                 items(
-                    count = state.pageCount,
+                    count = count,
                     key = key,
                 ) { page ->
                     PagerItem(
                         page = page,
-                        itemCount = state.pageCount,
+                        itemCount = count,
                         pagerState = state,
                         isVertical = false,
                         reverseLayout = reverseLayout,
