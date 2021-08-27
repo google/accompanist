@@ -44,23 +44,18 @@ import io.github.aakira.napier.Napier
  *
  * Changes to the provided values for [initialPage] will **not** result in the state being
  * recreated or changed in any way if it has already
- * been created. Changes to [pageCount] will result in the [PagerState] being updated.
+ * been created.
  *
- * @param pageCount the value for [PagerState.pageCount]
  * @param initialPage the initial value for [PagerState.currentPage]
  */
 @ExperimentalPagerApi
 @Composable
 fun rememberPagerState(
-    @IntRange(from = 0) pageCount: Int,
     @IntRange(from = 0) initialPage: Int = 0,
 ): PagerState = rememberSaveable(saver = PagerState.Saver) {
     PagerState(
-        pageCount = pageCount,
         currentPage = initialPage,
     )
-}.apply {
-    this.pageCount = pageCount
 }
 
 /**
@@ -68,19 +63,16 @@ fun rememberPagerState(
  *
  * In most cases, this will be created via [rememberPagerState].
  *
- * @param pageCount the initial value for [PagerState.pageCount]
  * @param currentPage the initial value for [PagerState.currentPage]
  */
 @ExperimentalPagerApi
 @Stable
 class PagerState(
-    @IntRange(from = 0) pageCount: Int,
     @IntRange(from = 0) currentPage: Int = 0,
 ) : ScrollableState {
     // Should this be public?
     internal val lazyListState = LazyListState(firstVisibleItemIndex = currentPage)
 
-    private var _pageCount by mutableStateOf(pageCount)
     private var _currentPage by mutableStateOf(currentPage)
 
     internal var layoutStartSpacing: Int by mutableStateOf(0)
@@ -121,27 +113,13 @@ class PagerState(
     val interactionSource: InteractionSource
         get() = lazyListState.interactionSource
 
-    init {
-        require(pageCount >= 0) { "pageCount must be >= 0" }
-        requireCurrentPage(currentPage, "currentPage")
-    }
-
     /**
      * The number of pages to display.
      */
     @get:IntRange(from = 0)
-    var pageCount: Int
-        get() = _pageCount
-        set(@IntRange(from = 0) value) {
-            require(value >= 0) { "pageCount must be >= 0" }
-            if (value != _pageCount) {
-                _pageCount = value
-                if (DebugLog) {
-                    Napier.d(message = "Page count changed: $value")
-                }
-                currentPage = currentPage.coerceIn(0, pageCount - 1)
-            }
-        }
+    val pageCount: Int by derivedStateOf {
+        lazyListState.layoutInfo.totalItemsCount
+    }
 
     /**
      * The index of the currently selected page. This may not be the page which is
@@ -333,14 +311,12 @@ class PagerState(
         val Saver: Saver<PagerState, *> = listSaver(
             save = {
                 listOf<Any>(
-                    it.pageCount,
                     it.currentPage,
                 )
             },
             restore = {
                 PagerState(
-                    pageCount = it[0] as Int,
-                    currentPage = it[1] as Int,
+                    currentPage = it[0] as Int,
                 )
             }
         )

@@ -113,8 +113,9 @@ object PagerDefaults {
  *
  * @sample com.google.accompanist.sample.pager.HorizontalPagerSample
  *
- * @param state the state object to be used to control or observe the pager's state.
+ * @param count the number of pages to display.
  * @param modifier the modifier to apply to this layout.
+ * @param state the state object to be used to control or observe the pager's state.
  * @param reverseLayout reverse the direction of scrolling and layout, when `true` items will be
  * composed from the end to the start and [PagerState.currentPage] == 0 will mean
  * the first item is located at the end.
@@ -129,8 +130,9 @@ object PagerDefaults {
 @ExperimentalPagerApi
 @Composable
 fun HorizontalPager(
-    state: PagerState,
+    count: Int,
     modifier: Modifier = Modifier,
+    state: PagerState = rememberPagerState(),
     reverseLayout: Boolean = false,
     itemSpacing: Dp = 0.dp,
     flingBehavior: FlingBehavior = PagerDefaults.rememberPagerFlingConfig(state),
@@ -141,6 +143,7 @@ fun HorizontalPager(
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
     Pager(
+        count = count,
         state = state,
         modifier = modifier,
         isVertical = false,
@@ -160,8 +163,9 @@ fun HorizontalPager(
  *
  * @sample com.google.accompanist.sample.pager.VerticalPagerSample
  *
- * @param state the state object to be used to control or observe the pager's state.
+ * @param count the number of pages to display.
  * @param modifier the modifier to apply to this layout.
+ * @param state the state object to be used to control or observe the pager's state.
  * @param reverseLayout reverse the direction of scrolling and layout, when `true` items will be
  * composed from the bottom to the top and [PagerState.currentPage] == 0 will mean
  * the first item is located at the bottom.
@@ -176,8 +180,9 @@ fun HorizontalPager(
 @ExperimentalPagerApi
 @Composable
 fun VerticalPager(
-    state: PagerState,
+    count: Int,
     modifier: Modifier = Modifier,
+    state: PagerState = rememberPagerState(),
     reverseLayout: Boolean = false,
     itemSpacing: Dp = 0.dp,
     flingBehavior: FlingBehavior = PagerDefaults.rememberPagerFlingConfig(state),
@@ -188,6 +193,7 @@ fun VerticalPager(
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
     Pager(
+        count = count,
         state = state,
         modifier = modifier,
         isVertical = true,
@@ -205,8 +211,9 @@ fun VerticalPager(
 @ExperimentalPagerApi
 @Composable
 internal fun Pager(
-    state: PagerState,
+    count: Int,
     modifier: Modifier,
+    state: PagerState,
     reverseLayout: Boolean,
     itemSpacing: Dp,
     isVertical: Boolean,
@@ -217,6 +224,8 @@ internal fun Pager(
     contentPadding: PaddingValues,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
+    require(count >= 0) { "pageCount must be >= 0" }
+
     // To be able to implement the main-axis alignment, we need to know the constraints of the
     // layout, to be able to compute the necessary start/end padding for the first/last item.
     // This is implement by the sizeIn() modifier on each page content.
@@ -259,12 +268,12 @@ internal fun Pager(
                 contentPadding = contentPadding,
             ) {
                 items(
-                    count = state.pageCount,
+                    count = count,
                     key = key,
                 ) { page ->
                     PagerItem(
                         page = page,
-                        itemCount = state.pageCount,
+                        itemCount = count,
                         pagerState = state,
                         isVertical = true,
                         reverseLayout = reverseLayout,

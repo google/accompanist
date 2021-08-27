@@ -77,10 +77,11 @@ private fun Sample() {
         modifier = Modifier.fillMaxSize()
     ) {
         Column(Modifier.fillMaxSize()) {
-            // Display 10 items
-            val pagerState = rememberPagerState(pageCount = 10)
+            val pagerState = rememberPagerState()
 
+            // Display 10 items
             HorizontalPager(
+                count = 10,
                 state = pagerState,
                 // Add some horizontal spacing between items
                 itemSpacing = 4.dp,
@@ -95,9 +96,6 @@ private fun Sample() {
                         .aspectRatio(1f)
                 )
             }
-
-            Text(text = "Current Page: ${pagerState.currentPage}")
-            Text(text = "Current Page Offset: ${pagerState.currentPageOffset}")
 
             ActionsRow(
                 pagerState = pagerState,

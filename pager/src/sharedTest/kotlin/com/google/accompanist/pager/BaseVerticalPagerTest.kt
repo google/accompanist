@@ -103,12 +103,10 @@ abstract class BaseVerticalPagerTest(
     }
 
     override fun setPagerContent(
-        pageCount: Int,
+        count: () -> Int,
         observeStateInContent: Boolean,
     ): PagerState {
-        val pagerState = PagerState(
-            pageCount = pageCount,
-        )
+        val pagerState = PagerState()
         // Stick to LTR for vertical tests
         composeTestRule.setContent(LayoutDirection.Ltr) {
             applierScope = rememberCoroutineScope()
@@ -119,6 +117,7 @@ abstract class BaseVerticalPagerTest(
                 }
 
                 VerticalPager(
+                    count = count(),
                     state = pagerState,
                     itemSpacing = itemSpacingDp.dp,
                     reverseLayout = reverseLayout,

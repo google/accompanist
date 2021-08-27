@@ -47,7 +47,6 @@ import coil.compose.rememberImagePainter
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
-import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.rememberRandomSampleImageUrl
@@ -86,10 +85,8 @@ private fun Sample() {
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun HorizontalPagerWithOffsetTransition() {
-    val pagerState = rememberPagerState(pageCount = 10)
-
     HorizontalPager(
-        state = pagerState,
+        count = 10,
         modifier = Modifier.fillMaxSize()
     ) { page ->
         Card(

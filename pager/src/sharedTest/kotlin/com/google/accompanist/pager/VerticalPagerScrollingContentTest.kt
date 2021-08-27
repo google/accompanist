@@ -46,12 +46,11 @@ class VerticalPagerScrollingContentTest {
 
     @Test
     fun verticalPagerScrollingContentTest() {
-        lateinit var pagerState: PagerState
+        val pagerState = PagerState()
 
         rule.setContent {
-            pagerState = rememberPagerState(pageCount = 2)
-
             VerticalPager(
+                count = 2,
                 state = pagerState,
                 modifier = Modifier.fillMaxSize().testTag(TestTag)
             ) { page ->

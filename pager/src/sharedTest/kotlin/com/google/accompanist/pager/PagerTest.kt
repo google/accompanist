@@ -17,6 +17,7 @@
 package com.google.accompanist.pager
 
 import androidx.compose.runtime.MonotonicFrameClock
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -52,7 +53,7 @@ abstract class PagerTest {
 
     @Test
     fun layout() {
-        val pagerState = setPagerContent(pageCount = 10)
+        val pagerState = setPagerContent(count = 10)
         composeTestRule.waitForIdle()
         assertPagerLayout(0, pagerState.pageCount)
     }
@@ -60,20 +61,22 @@ abstract class PagerTest {
     @Test
     fun layout_initialEmpty() {
         // Initially lay out with a count of 0
-        val pagerState = setPagerContent(pageCount = 0)
+        val count = mutableStateOf(0)
+
+        val pagerState = setPagerContent(count = { count.value })
         composeTestRule.waitForIdle()
         composeTestRule.onNodeWithTag("0").assertDoesNotExist()
 
         // Now update to have a count of 10 and assert the layout.
         // This models a count which is driven by dynamic data
-        pagerState.pageCount = 10
+        count.value = 10
         composeTestRule.waitForIdle()
         assertPagerLayout(0, pagerState.pageCount)
     }
 
     @Test
     fun swipe() {
-        val pagerState = setPagerContent(pageCount = 10)
+        val pagerState = setPagerContent(count = 10)
 
         // First test swiping towards end, from 0 to -1, which should no-op
         composeTestRule.onNodeWithTag("0")
@@ -90,7 +93,7 @@ abstract class PagerTest {
 
     @Test
     fun swipeToEndAndBack() {
-        val pagerState = setPagerContent(pageCount = 4)
+        val pagerState = setPagerContent(count = 4)
 
         // Now swipe towards start, from page 0 to page 1 and assert the layout
         composeTestRule.onNodeWithTag("0").swipeAcrossCenter(-MediumSwipeDistance)
@@ -145,7 +148,7 @@ abstract class PagerTest {
     fun mediumDistance_fastSwipe_toFling() {
         composeTestRule.mainClock.autoAdvance = false
 
-        val pagerState = setPagerContent(pageCount = 10)
+        val pagerState = setPagerContent(count = 10)
 
         assertThat(pagerState.isScrollInProgress).isFalse()
         assertThat(pagerState.targetPage).isEqualTo(0)
@@ -171,7 +174,7 @@ abstract class PagerTest {
     fun mediumDistance_slowSwipe_toSnapForward() {
         composeTestRule.mainClock.autoAdvance = false
 
-        val pagerState = setPagerContent(pageCount = 10)
+        val pagerState = setPagerContent(count = 10)
 
         assertThat(pagerState.isScrollInProgress).isFalse()
         assertThat(pagerState.targetPage).isEqualTo(0)
@@ -197,7 +200,7 @@ abstract class PagerTest {
     fun shortDistance_fastSwipe_toFling() {
         composeTestRule.mainClock.autoAdvance = false
 
-        val pagerState = setPagerContent(pageCount = 10)
+        val pagerState = setPagerContent(count = 10)
 
         assertThat(pagerState.isScrollInProgress).isFalse()
         assertThat(pagerState.targetPage).isEqualTo(0)
@@ -223,7 +226,7 @@ abstract class PagerTest {
     fun shortDistance_slowSwipe_toSnapBack() {
         composeTestRule.mainClock.autoAdvance = false
 
-        val pagerState = setPagerContent(pageCount = 10)
+        val pagerState = setPagerContent(count = 10)
 
         assertThat(pagerState.isScrollInProgress).isFalse()
         assertThat(pagerState.targetPage).isEqualTo(0)
@@ -247,7 +250,7 @@ abstract class PagerTest {
 
     @Test
     fun scrollToPage() {
-        val pagerState = setPagerContent(pageCount = 10)
+        val pagerState = setPagerContent(count = 10)
 
         fun testScroll(targetPage: Int, offset: Float = 0f) {
             composeTestRule.runOnIdle {
@@ -274,7 +277,7 @@ abstract class PagerTest {
 
     @Test
     fun animateScrollToPage() {
-        val pagerState = setPagerContent(pageCount = 10)
+        val pagerState = setPagerContent(count = 10)
 
         fun testScroll(targetPage: Int, offset: Float = 0f) {
             composeTestRule.runOnIdle {
@@ -298,7 +301,7 @@ abstract class PagerTest {
     @Test
     @Ignore("Currently broken") // TODO: Will fix this once we move to Modifier.scrollable()
     fun a11yScroll() {
-        val pagerState = setPagerContent(pageCount = 10)
+        val pagerState = setPagerContent(count = 10)
 
         // Perform a scroll to item 1
         composeTestRule.onNodeWithTag("1").performScrollTo()
@@ -309,7 +312,7 @@ abstract class PagerTest {
 
     @Test
     fun scrollWhenStateObserved() {
-        val pagerState = setPagerContent(pageCount = 4, observeStateInContent = true)
+        val pagerState = setPagerContent(count = 4, observeStateInContent = true)
 
         // Now swipe towards start, from page 0 to page 1
         composeTestRule.onNodeWithTag("0")
@@ -362,8 +365,16 @@ abstract class PagerTest {
         offset: Float,
     ): SemanticsNodeInteraction
 
+    private fun setPagerContent(
+        count: Int,
+        observeStateInContent: Boolean = false,
+    ): PagerState = setPagerContent(
+        count = { count },
+        observeStateInContent = observeStateInContent,
+    )
+
     protected abstract fun setPagerContent(
-        pageCount: Int,
+        count: () -> Int,
         observeStateInContent: Boolean = false,
     ): PagerState
 }

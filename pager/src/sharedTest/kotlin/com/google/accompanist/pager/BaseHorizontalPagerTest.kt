@@ -112,12 +112,10 @@ abstract class BaseHorizontalPagerTest(
     }
 
     override fun setPagerContent(
-        pageCount: Int,
+        count: () -> Int,
         observeStateInContent: Boolean,
     ): PagerState {
-        val pagerState = PagerState(
-            pageCount = pageCount,
-        )
+        val pagerState = PagerState()
         composeTestRule.setContent(layoutDirection) {
             applierScope = rememberCoroutineScope()
 
@@ -127,6 +125,7 @@ abstract class BaseHorizontalPagerTest(
                 }
 
                 HorizontalPager(
+                    count = count(),
                     state = pagerState,
                     itemSpacing = itemSpacingDp.dp,
                     reverseLayout = reverseLayout,

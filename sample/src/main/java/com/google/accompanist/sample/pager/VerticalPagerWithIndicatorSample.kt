@@ -70,14 +70,15 @@ private fun Sample() {
         modifier = Modifier.fillMaxSize()
     ) {
         Column(Modifier.fillMaxSize()) {
-            // Display 10 items
-            val pagerState = rememberPagerState(pageCount = 10)
+            val pagerState = rememberPagerState()
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.weight(1f),
             ) {
+                // Display 10 items
                 VerticalPager(
+                    count = 10,
                     state = pagerState,
                     modifier = Modifier
                         .weight(1f)

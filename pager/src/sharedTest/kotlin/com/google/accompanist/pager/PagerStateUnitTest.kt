@@ -34,27 +34,6 @@ class PagerStateUnitTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    @Test(expected = IllegalArgumentException::class)
-    fun rememberPagerState_pageCount_negative() {
-        composeTestRule.setContent {
-            rememberPagerState(pageCount = -1)
-        }
-    }
-
-    @Test
-    fun rememberPagerState_pageCount_0() {
-        composeTestRule.setContent {
-            rememberPagerState(pageCount = 0, initialPage = 0)
-        }
-    }
-
-    @Test(expected = IllegalArgumentException::class) // using initialPage > 0
-    fun rememberPagerState_pageCount_0_initialPage() {
-        composeTestRule.setContent {
-            rememberPagerState(pageCount = 0, initialPage = 2)
-        }
-    }
-
     @OptIn(ExperimentalCoroutinesApi::class)
     @Ignore // Not currently working after migration to Lazy
     @Test
@@ -63,8 +42,8 @@ class PagerStateUnitTest {
         lateinit var state: PagerState
 
         stateRestoration.setContent {
-            state = rememberPagerState(pageCount = 10)
-            HorizontalPager(state = state) { page ->
+            state = rememberPagerState()
+            HorizontalPager(count = 10, state = state) { page ->
                 BasicText(text = "Page:$page")
             }
         }

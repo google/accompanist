@@ -70,10 +70,11 @@ private fun Sample() {
         modifier = Modifier.fillMaxSize()
     ) {
         Column(Modifier.fillMaxSize()) {
-            // Display 10 items
-            val pagerState = rememberPagerState(pageCount = 10)
+            val pagerState = rememberPagerState()
 
+            // Display 10 items
             HorizontalPager(
+                count = 10,
                 state = pagerState,
                 modifier = Modifier
                     .weight(1f)
