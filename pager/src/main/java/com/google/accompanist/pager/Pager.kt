@@ -217,6 +217,10 @@ internal fun Pager(
     contentPadding: PaddingValues,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
+    // To be able to implement the main-axis alignment, we need to know the constraints of the
+    // layout, to be able to compute the necessary start/end padding for the first/last item.
+    // This is implement by the sizeIn() modifier on each page content.
+
     BoxWithConstraints(
         modifier = modifier,
         propagateMinConstraints = true,
@@ -235,9 +239,15 @@ internal fun Pager(
                 .collect { state.onScrollFinished() }
         }
 
-        // TODO: add consuming touch handler if dragEnabled = false
+        val pagerScope = remember(state) { PagerScopeImpl(state) }
 
-        val scope = remember(state) { PagerScopeImpl(state) }
+        val itemModifier = Modifier
+            // We don't any nested flings to continue in the pager, so we add a
+            // connection which consumes them.
+            // See: https://github.com/google/accompanist/issues/347
+            .nestedScroll(connection = ConsumeFlingNestedScrollConnection)
+            // Constraint the content to be less than the size of the pager.
+            .sizeIn(maxWidth = maxWidth, maxHeight = maxHeight)
 
         if (isVertical) {
             LazyColumn(
@@ -260,14 +270,8 @@ internal fun Pager(
                         reverseLayout = reverseLayout,
                         horizontalAlignment = horizontalAlignment,
                         verticalAlignment = verticalAlignment,
-                        modifier = Modifier
-                            // We don't any nested flings to continue in the pager, so we add a
-                            // connection which consumes them.
-                            // See: https://github.com/google/accompanist/issues/347
-                            .nestedScroll(connection = ConsumeFlingNestedScrollConnection)
-                            // Constraint the content to be less than the size of the pager.
-                            .sizeIn(maxWidth = maxWidth, maxHeight = maxHeight),
-                        content = { scope.content(page) },
+                        modifier = itemModifier,
+                        content = { pagerScope.content(page) },
                     )
                 }
             }
@@ -292,10 +296,8 @@ internal fun Pager(
                         reverseLayout = reverseLayout,
                         horizontalAlignment = horizontalAlignment,
                         verticalAlignment = verticalAlignment,
-                        modifier = Modifier
-                            .nestedScroll(connection = ConsumeFlingNestedScrollConnection)
-                            .sizeIn(maxWidth = maxWidth, maxHeight = maxHeight),
-                        content = { scope.content(page) },
+                        modifier = itemModifier,
+                        content = { pagerScope.content(page) },
                     )
                 }
             }
