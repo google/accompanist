@@ -229,7 +229,7 @@ internal fun Pager(
 
         // Once a fling (scroll) has finished, notify the state
         LaunchedEffect(state) {
-            // When a 'scroll' has finished, snap to the nearest page
+            // When a 'scroll' has finished, notify the state
             snapshotFlow { state.isScrollInProgress }
                 .filter { !it }
                 .collect { state.onScrollFinished() }
