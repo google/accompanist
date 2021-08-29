@@ -19,9 +19,7 @@ package com.google.accompanist.pager
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -36,6 +34,7 @@ import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.height
 import androidx.compose.ui.unit.width
 import com.google.common.truth.Truth.assertThat
 
@@ -66,22 +65,22 @@ abstract class BaseVerticalPagerTest(
         offset: Float,
     ): SemanticsNodeInteraction {
         val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
-        val expectedItemSize = rootBounds.width
+        val expectedItemHeight = rootBounds.height -
+            contentPadding.calculateTopPadding() -
+            contentPadding.calculateBottomPadding()
+        val expectedItemWidth = rootBounds.width
 
-        // The expected coordinates. This uses the implicit fact that VerticalPager by
-        // use Alignment.CenterVertically by default, and that we're using items
-        // with an aspect ratio of 1:1
-        val expectedLeft = (rootBounds.width - expectedItemSize) / 2
+        val expectedLeft = (rootBounds.width - expectedItemWidth) / 2
         val expectedFirstItemTop = when (reverseLayout) {
-            true -> contentPadding.calculateBottomPadding() + (expectedItemSize * offset)
-            false -> contentPadding.calculateTopPadding() - (expectedItemSize * offset)
+            true -> (rootBounds.height - contentPadding.calculateBottomPadding() - expectedItemHeight) + (expectedItemHeight * offset)
+            false -> contentPadding.calculateTopPadding() - (expectedItemHeight * offset)
         }
 
-        return assertWidthIsEqualTo(expectedItemSize)
-            .assertHeightIsAtLeast(expectedItemSize)
+        return assertWidthIsEqualTo(expectedItemWidth)
+            .assertHeightIsAtLeast(expectedItemHeight)
             .assertLeftPositionInRootIsEqualTo(expectedLeft)
             .run {
-                val pageDelta = ((expectedItemSize + itemSpacingDp.dp) * (page - currentPage))
+                val pageDelta = ((expectedItemHeight + itemSpacingDp.dp) * (page - currentPage))
                 // Not sure why, but there's a rounding error somewhere.
                 // TODO: reduce this tolerance and work out where the issue is
                 if (reverseLayout) {
@@ -122,8 +121,7 @@ abstract class BaseVerticalPagerTest(
                 ) { page ->
                     Box(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(1f)
+                            .fillMaxSize()
                             .background(randomColor())
                             .testTag(page.toString())
                     ) {
