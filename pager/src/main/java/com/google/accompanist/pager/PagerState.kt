@@ -243,19 +243,24 @@ class PagerState(
         @FloatRange(from = 0.0, to = 1.0) pageOffset: Float = 0f,
     ) {
         requireCurrentPage(page, "page")
+        try {
+            animationTargetPage = page
 
-        animationTargetPage = page
+            // First scroll to the given page. It will now be laid out at offset 0
+            lazyListState.scrollToItem(index = page)
 
-        // First scroll to the given page. It will now be laid out at offset 0
-        lazyListState.scrollToItem(index = page)
-
-        // If we have a start spacing, we need to offset (scroll) by that too
-        if (pageOffset > 0.0001f) {
-            scroll {
-                currentLayoutPageInfo?.let {
-                    scrollBy(it.size * pageOffset)
+            // If we have a start spacing, we need to offset (scroll) by that too
+            if (pageOffset > 0.0001f) {
+                scroll {
+                    currentLayoutPageInfo?.let {
+                        scrollBy(it.size * pageOffset)
+                    }
                 }
             }
+        } finally {
+            // We need to manually call this, as the `scroll` call above will happen in 1 frame,
+            // which is usually too fast for the LaunchedEffect in Pager to detect the change
+            onScrollFinished()
         }
     }
 
