@@ -21,9 +21,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -109,22 +109,22 @@ private fun Sample() {
             }
 
             HorizontalPager(
-                count = 10,
+                count = pages.size,
                 state = pagerState,
+                // Add 16.dp padding to 'center' the pages
+                contentPadding = PaddingValues(16.dp),
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()
             ) { page ->
                 // Our content for each page
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    Card(Modifier.padding(16.dp)) {
-                        Box(Modifier.fillMaxSize()) {
-                            Text(
-                                text = "Page: ${pages[page]}",
-                                style = MaterialTheme.typography.h4,
-                                modifier = Modifier.align(Alignment.Center)
-                            )
-                        }
+                Card {
+                    Box(Modifier.fillMaxSize()) {
+                        Text(
+                            text = "Page: ${pages[page]}",
+                            style = MaterialTheme.typography.h4,
+                            modifier = Modifier.align(Alignment.Center)
+                        )
                     }
                 }
             }

@@ -22,6 +22,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -87,6 +88,8 @@ private fun Sample() {
 fun HorizontalPagerWithOffsetTransition() {
     HorizontalPager(
         count = 10,
+        // Add 32.dp horizontal padding to 'center' the pages
+        contentPadding = PaddingValues(horizontal = 32.dp),
         modifier = Modifier.fillMaxSize()
     ) { page ->
         Card(
@@ -114,7 +117,7 @@ fun HorizontalPagerWithOffsetTransition() {
                         fraction = 1f - pageOffset.coerceIn(0f, 1f)
                     )
                 }
-                .fillMaxWidth(0.8f)
+                .fillMaxWidth()
                 .aspectRatio(1f)
         ) {
             Box {

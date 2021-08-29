@@ -20,6 +20,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -73,9 +74,13 @@ private fun Sample() {
             VerticalPager(
                 count = 10,
                 state = pagerState,
+                // Add 32.dp vertical padding to 'center' the pages
+                contentPadding = PaddingValues(vertical = 32.dp),
                 // Add some vertical spacing between items
                 itemSpacing = 8.dp,
-                modifier = Modifier.weight(1f).fillMaxHeight(),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight(),
             ) { page ->
                 PagerSampleItem(
                     page = page,
