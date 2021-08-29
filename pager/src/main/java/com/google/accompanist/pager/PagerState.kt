@@ -90,7 +90,7 @@ class PagerState(
 
     private val currentLayoutPageOffset: Float by derivedStateOf {
         currentLayoutPageInfo?.let { current ->
-            val start = lazyListState.layoutInfo.viewportStartOffset
+            val start = snapOffsetForPage(lazyListState.layoutInfo, current.index)
             // Since the first item might be wider to compensate for the alignment, we need
             // to compute the actual size and offset
             val size = if (current.index == 0) current.size - start else current.size
