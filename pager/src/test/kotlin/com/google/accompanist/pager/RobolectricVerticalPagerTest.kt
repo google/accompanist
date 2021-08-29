@@ -17,7 +17,6 @@
 package com.google.accompanist.pager
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.internal.test.combineWithParameters
 import com.google.accompanist.internal.test.parameterizedParams

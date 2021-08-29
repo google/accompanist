@@ -74,18 +74,22 @@ abstract class BaseHorizontalPagerTest(
         offset: Float,
     ): SemanticsNodeInteraction {
         val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
-        val expectedItemSize = (rootBounds.width -
-            contentPadding.calculateLeftPadding(layoutDirection) -
-            contentPadding.calculateRightPadding(layoutDirection)) * itemWidthFraction
+        val expectedItemSize = (
+            rootBounds.width -
+                contentPadding.calculateLeftPadding(layoutDirection) -
+                contentPadding.calculateRightPadding(layoutDirection)
+            ) * itemWidthFraction
 
         // The expected coordinates. This uses the implicit fact that VerticalPager by
         // use Alignment.CenterVertically by default, and that we're using items
         // with an aspect ratio of 1:1
         val expectedTop = (rootBounds.height - expectedItemSize) / 2
         val expectedFirstItemLeft = if (laidOutRtl) {
-            (rootBounds.width -
-                expectedItemSize -
-                contentPadding.calculateRightPadding(layoutDirection)) +
+            (
+                rootBounds.width -
+                    expectedItemSize -
+                    contentPadding.calculateRightPadding(layoutDirection)
+                ) +
                 (expectedItemSize * offset)
         } else {
             contentPadding.calculateLeftPadding(layoutDirection) - (expectedItemSize * offset)
