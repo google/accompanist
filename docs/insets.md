@@ -225,13 +225,13 @@ The features below are experimental, and require developers to [opt-in](https://
 === "Usage"
 
     ``` kotlin
-    // Here we're using ScrollableColumn, but it also works with LazyColumn, etc.
-    ScrollableColumn(
+    // Here we're using a scrollable Column, but it also works with LazyColumn, etc.
+    Column(
         // We use the nestedScroll modifier, passing in the 
         // the connection from rememberImeNestedScrollConnection()
-        modifier = Modifier.nestedScroll(
-            connection = rememberImeNestedScrollConnection()
-        )
+        modifier = Modifier
+            .nestedScroll(connection = rememberImeNestedScrollConnection())
+            .verticalScroll(state = rememberScrollState())
     ) {
         // list content
     }
