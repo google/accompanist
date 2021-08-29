@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.LazyColumn
@@ -269,7 +270,7 @@ internal fun Pager(
 }
 
 private fun PaddingValues.calculateHorizontalPadding(): Dp {
-    return calculateStartPadding(LayoutDirection.Ltr) + calculateRightPadding(LayoutDirection.Ltr)
+    return calculateStartPadding(LayoutDirection.Ltr) + calculateEndPadding(LayoutDirection.Ltr)
 }
 
 private fun PaddingValues.calculateVerticalPadding(): Dp {
