@@ -76,7 +76,7 @@ class PagerState(
     private var _currentPage by mutableStateOf(currentPage)
 
     // TODO: Think about exposing this as public API. Same for SnappingFlingBehavior
-    private val snapOffsetForPage: LazyListLayoutInfo.(page: Int) -> Int = { viewportStartOffset }
+    private val snapOffsetForPage: LazyListLayoutInfo.(page: Int) -> Int = { 0 }
 
     private val currentLayoutPageInfo: LazyListItemInfo? by derivedStateOf {
         val layoutInfo = lazyListState.layoutInfo

@@ -81,7 +81,7 @@ class SnappingFlingBehavior(
     private val snapAnimationSpec: AnimationSpec<Float>,
 ) : FlingBehavior {
     // TODO: Think about exposing this as public API
-    private val snapOffset: LazyListLayoutInfo.(index: Int) -> Int = { viewportStartOffset }
+    private val snapOffset: LazyListLayoutInfo.(index: Int) -> Int = { 0 }
 
     /**
      * The target page for any on-going animations.
@@ -262,7 +262,10 @@ class SnappingFlingBehavior(
         get() {
             val layoutInfo = lazyListState.layoutInfo
             return layoutInfo.visibleItemsInfo.asSequence()
-                .filter { it.offset <= snapOffset(layoutInfo, it.index) }
+                .filter {
+                    val snapOffset = snapOffset(layoutInfo, it.index)
+                    it.offset <= snapOffset && it.offset + it.size > snapOffset
+                }
                 .lastOrNull()
         }
 }
