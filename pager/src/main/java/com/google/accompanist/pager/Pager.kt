@@ -24,11 +24,8 @@ import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
@@ -43,7 +40,6 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.collect
@@ -196,85 +192,79 @@ internal fun Pager(
 ) {
     require(count >= 0) { "pageCount must be >= 0" }
 
-    // BoxWithConstraints enables us to to constraint each item within the size of the Pager.
-    // This is implemented by the sizeIn() modifier on each page content.
-    BoxWithConstraints(
-        modifier = modifier,
-        propagateMinConstraints = true,
-    ) {
-        // Provide our PagerState with access to the SnappingFlingBehavior animation target
-        // TODO: can this be done in a better way?
-        state.flingAnimationTarget = {
-            (flingBehavior as? SnappingFlingBehavior)?.animationTarget
-        }
+    // Provide our PagerState with access to the SnappingFlingBehavior animation target
+    // TODO: can this be done in a better way?
+    state.flingAnimationTarget = {
+        (flingBehavior as? SnappingFlingBehavior)?.animationTarget
+    }
 
-        // Once a fling (scroll) has finished, notify the state
-        LaunchedEffect(state) {
-            // When a 'scroll' has finished, notify the state
-            snapshotFlow { state.isScrollInProgress }
-                .filter { !it }
-                .collect { state.onScrollFinished() }
-        }
+    // Once a fling (scroll) has finished, notify the state
+    LaunchedEffect(state) {
+        // When a 'scroll' has finished, notify the state
+        snapshotFlow { state.isScrollInProgress }
+            .filter { !it }
+            .collect { state.onScrollFinished() }
+    }
 
-        val pagerScope = remember(state) { PagerScopeImpl(state) }
+    val pagerScope = remember(state) { PagerScopeImpl(state) }
 
-        val itemModifier = Modifier
-            // We don't any nested flings to continue in the pager, so we add a
-            // connection which consumes them.
-            // See: https://github.com/google/accompanist/issues/347
-            .nestedScroll(connection = ConsumeFlingNestedScrollConnection)
-            // Constraint the content to be <= than the size of the pager.
-            .sizeIn(
-                maxWidth = maxWidth - contentPadding.calculateHorizontalPadding(),
-                maxHeight = maxHeight - contentPadding.calculateVerticalPadding(),
-            )
-
-        if (isVertical) {
-            LazyColumn(
-                state = state.lazyListState,
-                verticalArrangement = Arrangement.spacedBy(itemSpacing, verticalAlignment),
-                horizontalAlignment = horizontalAlignment,
-                flingBehavior = flingBehavior,
-                reverseLayout = reverseLayout,
-                contentPadding = contentPadding,
-            ) {
-                items(
-                    count = count,
-                    key = key,
-                ) { page ->
-                    Box(itemModifier) {
-                        pagerScope.content(page)
-                    }
+    if (isVertical) {
+        LazyColumn(
+            state = state.lazyListState,
+            verticalArrangement = Arrangement.spacedBy(itemSpacing, verticalAlignment),
+            horizontalAlignment = horizontalAlignment,
+            flingBehavior = flingBehavior,
+            reverseLayout = reverseLayout,
+            contentPadding = contentPadding,
+            modifier = modifier,
+        ) {
+            items(
+                count = count,
+                key = key,
+            ) { page ->
+                Box(
+                    Modifier
+                        // We don't any nested flings to continue in the pager, so we add a
+                        // connection which consumes them.
+                        // See: https://github.com/google/accompanist/issues/347
+                        .nestedScroll(connection = ConsumeFlingNestedScrollConnection)
+                        // Constraint the content to be <= than the size of the pager.
+                        .fillParentMaxSize()
+                        .wrapContentSize()
+                ) {
+                    pagerScope.content(page)
                 }
             }
-        } else {
-            LazyRow(
-                state = state.lazyListState,
-                verticalAlignment = verticalAlignment,
-                horizontalArrangement = Arrangement.spacedBy(itemSpacing, horizontalAlignment),
-                flingBehavior = flingBehavior,
-                reverseLayout = reverseLayout,
-                contentPadding = contentPadding,
-            ) {
-                items(
-                    count = count,
-                    key = key,
-                ) { page ->
-                    Box(itemModifier) {
-                        pagerScope.content(page)
-                    }
+        }
+    } else {
+        LazyRow(
+            state = state.lazyListState,
+            verticalAlignment = verticalAlignment,
+            horizontalArrangement = Arrangement.spacedBy(itemSpacing, horizontalAlignment),
+            flingBehavior = flingBehavior,
+            reverseLayout = reverseLayout,
+            contentPadding = contentPadding,
+            modifier = modifier,
+        ) {
+            items(
+                count = count,
+                key = key,
+            ) { page ->
+                Box(
+                    Modifier
+                        // We don't any nested flings to continue in the pager, so we add a
+                        // connection which consumes them.
+                        // See: https://github.com/google/accompanist/issues/347
+                        .nestedScroll(connection = ConsumeFlingNestedScrollConnection)
+                        // Constraint the content to be <= than the size of the pager.
+                        .fillParentMaxSize()
+                        .wrapContentSize()
+                ) {
+                    pagerScope.content(page)
                 }
             }
         }
     }
-}
-
-private fun PaddingValues.calculateHorizontalPadding(): Dp {
-    return calculateStartPadding(LayoutDirection.Ltr) + calculateEndPadding(LayoutDirection.Ltr)
-}
-
-private fun PaddingValues.calculateVerticalPadding(): Dp {
-    return calculateTopPadding() + calculateBottomPadding()
 }
 
 private object ConsumeFlingNestedScrollConnection : NestedScrollConnection {
