@@ -22,14 +22,11 @@ import androidx.annotation.FloatRange
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsAnimationCompat
 import androidx.core.view.WindowInsetsCompat
 
@@ -39,13 +36,6 @@ import androidx.core.view.WindowInsetsCompat
  */
 @Stable
 interface WindowInsets {
-
-    /**
-     * The underlying [WindowInsetsCompat] that produced the insets.
-     *
-     * Prefer using one of the predefined types instead of this.
-     */
-    val rawInsets: WindowInsetsCompat
 
     /**
      * Inset values which match [WindowInsetsCompat.Type.navigationBars]
@@ -81,14 +71,12 @@ interface WindowInsets {
      * Returns a copy of this instance with the given values.
      */
     fun copy(
-        rawInsets: WindowInsetsCompat = this.rawInsets,
         navigationBars: Type = this.navigationBars,
         statusBars: Type = this.statusBars,
         systemGestures: Type = this.systemGestures,
         ime: Type = this.ime,
         displayCutout: Type = this.displayCutout,
     ): WindowInsets = ImmutableWindowInsets(
-        rawInsets = rawInsets,
         systemGestures = systemGestures,
         navigationBars = navigationBars,
         statusBars = statusBars,
@@ -262,7 +250,6 @@ class ViewWindowInsetObserver(private val view: View) {
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(view) { _, wic ->
-            windowInsets.rawInsetsState.value = wic
             // Go through each inset type and update its layoutInsets from the
             // WindowInsetsCompat values
             windowInsets.statusBars.run {
@@ -470,10 +457,6 @@ private class InnerWindowInsetsAnimationCallback(
  * Holder of our root inset values.
  */
 internal class RootWindowInsets : WindowInsets {
-    internal val rawInsetsState = mutableStateOf(WindowInsetsCompat.CONSUMED)
-
-    override val rawInsets: WindowInsetsCompat get() = rawInsetsState.value
-
     /**
      * Inset values which match [WindowInsetsCompat.Type.systemGestures]
      */
@@ -509,7 +492,6 @@ internal class RootWindowInsets : WindowInsets {
  * Shallow-immutable implementation of [WindowInsets].
  */
 internal class ImmutableWindowInsets(
-    override val rawInsets: WindowInsetsCompat = WindowInsetsCompat.CONSUMED,
     override val systemGestures: WindowInsets.Type = WindowInsets.Type.Empty,
     override val navigationBars: WindowInsets.Type = WindowInsets.Type.Empty,
     override val statusBars: WindowInsets.Type = WindowInsets.Type.Empty,
