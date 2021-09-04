@@ -80,12 +80,14 @@ package com.google.accompanist.insets {
   }
 
   @androidx.compose.runtime.Stable public interface WindowInsets {
-    method public default com.google.accompanist.insets.WindowInsets copy(optional com.google.accompanist.insets.WindowInsets.Type navigationBars, optional com.google.accompanist.insets.WindowInsets.Type statusBars, optional com.google.accompanist.insets.WindowInsets.Type systemGestures, optional com.google.accompanist.insets.WindowInsets.Type ime);
+    method public default com.google.accompanist.insets.WindowInsets copy(optional com.google.accompanist.insets.WindowInsets.Type navigationBars, optional com.google.accompanist.insets.WindowInsets.Type statusBars, optional com.google.accompanist.insets.WindowInsets.Type systemGestures, optional com.google.accompanist.insets.WindowInsets.Type ime, optional com.google.accompanist.insets.WindowInsets.Type displayCutout);
+    method public com.google.accompanist.insets.WindowInsets.Type getDisplayCutout();
     method public com.google.accompanist.insets.WindowInsets.Type getIme();
     method public com.google.accompanist.insets.WindowInsets.Type getNavigationBars();
     method public com.google.accompanist.insets.WindowInsets.Type getStatusBars();
     method public com.google.accompanist.insets.WindowInsets.Type getSystemBars();
     method public com.google.accompanist.insets.WindowInsets.Type getSystemGestures();
+    property public abstract com.google.accompanist.insets.WindowInsets.Type displayCutout;
     property public abstract com.google.accompanist.insets.WindowInsets.Type ime;
     property public abstract com.google.accompanist.insets.WindowInsets.Type navigationBars;
     property public abstract com.google.accompanist.insets.WindowInsets.Type statusBars;
