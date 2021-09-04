@@ -358,6 +358,15 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".placeholder.PlaceholderSeparateShimmerSample"
+            android:label="@string/placeholder_title_separate_shimmer"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

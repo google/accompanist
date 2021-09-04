@@ -57,5 +57,5 @@
     <string name="placeholder_title_basics">Placeholder: Basic</string>
     <string name="placeholder_title_fade">Placeholder: Fade</string>
     <string name="placeholder_title_shimmer">Placeholder: Shimmer</string>
-
+    <string name="placeholder_title_separate_shimmer">Placeholder: Separate Shimmer</string>
 </resources>
