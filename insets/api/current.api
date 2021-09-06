@@ -46,6 +46,7 @@ package com.google.accompanist.insets {
   }
 
   public final class PaddingKt {
+    method public static inline androidx.compose.ui.Modifier cutoutPadding(androidx.compose.ui.Modifier, optional boolean start, optional boolean top, optional boolean end, optional boolean bottom);
     method public static inline androidx.compose.ui.Modifier imePadding(androidx.compose.ui.Modifier);
     method public static inline androidx.compose.ui.Modifier navigationBarsPadding(androidx.compose.ui.Modifier, optional boolean bottom, optional boolean start, optional boolean end);
     method public static inline androidx.compose.ui.Modifier navigationBarsWithImePadding(androidx.compose.ui.Modifier);
