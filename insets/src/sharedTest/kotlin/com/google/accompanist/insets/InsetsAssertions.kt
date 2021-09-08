@@ -37,6 +37,8 @@ internal fun WindowInsets.assertEqualTo(insets: WindowInsetsCompat) {
 
     // It's difficult to create an expected value for isVisible as it depends on the system ui
     // of the device.
+
+    displayCutout.assertEqualTo(insets.getInsets(WindowInsetsCompat.Type.displayCutout()))
 }
 
 internal fun WindowInsets.Type.assertEqualTo(insets: androidx.core.graphics.Insets) {
