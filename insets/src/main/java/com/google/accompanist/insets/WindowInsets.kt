@@ -63,6 +63,11 @@ interface WindowInsets {
     val systemBars: Type
 
     /**
+     * Inset values which match [WindowInsetsCompat.Type.displayCutout]
+     */
+    val displayCutout: Type
+
+    /**
      * Returns a copy of this instance with the given values.
      */
     fun copy(
@@ -70,11 +75,13 @@ interface WindowInsets {
         statusBars: Type = this.statusBars,
         systemGestures: Type = this.systemGestures,
         ime: Type = this.ime,
+        displayCutout: Type = this.displayCutout,
     ): WindowInsets = ImmutableWindowInsets(
         systemGestures = systemGestures,
         navigationBars = navigationBars,
         statusBars = statusBars,
         ime = ime,
+        displayCutout = displayCutout
     )
 
     companion object {
@@ -261,6 +268,10 @@ class ViewWindowInsetObserver(private val view: View) {
                 layoutInsets.updateFrom(wic.getInsets(WindowInsetsCompat.Type.ime()))
                 isVisible = wic.isVisible(WindowInsetsCompat.Type.ime())
             }
+            windowInsets.displayCutout.run {
+                layoutInsets.updateFrom(wic.getInsets(WindowInsetsCompat.Type.displayCutout()))
+                isVisible = wic.isVisible(WindowInsetsCompat.Type.displayCutout())
+            }
 
             if (consumeWindowInsets) WindowInsetsCompat.CONSUMED else wic
         }
@@ -369,6 +380,9 @@ private class InnerWindowInsetsAnimationCallback(
         if (animation.typeMask and WindowInsetsCompat.Type.systemGestures() != 0) {
             windowInsets.systemGestures.onAnimationStart()
         }
+        if (animation.typeMask and WindowInsetsCompat.Type.displayCutout() != 0) {
+            windowInsets.displayCutout.onAnimationStart()
+        }
     }
 
     override fun onProgress(
@@ -395,6 +409,11 @@ private class InnerWindowInsetsAnimationCallback(
             platformInsets = platformInsets,
             runningAnimations = runningAnimations,
             type = WindowInsetsCompat.Type.systemGestures()
+        )
+        windowInsets.displayCutout.updateAnimation(
+            platformInsets = platformInsets,
+            runningAnimations = runningAnimations,
+            type = WindowInsetsCompat.Type.displayCutout()
         )
         return platformInsets
     }
@@ -428,6 +447,9 @@ private class InnerWindowInsetsAnimationCallback(
         if (animation.typeMask and WindowInsetsCompat.Type.systemGestures() != 0) {
             windowInsets.systemGestures.onAnimationEnd()
         }
+        if (animation.typeMask and WindowInsetsCompat.Type.displayCutout() != 0) {
+            windowInsets.displayCutout.onAnimationEnd()
+        }
     }
 }
 
@@ -456,6 +478,11 @@ internal class RootWindowInsets : WindowInsets {
     override val ime: MutableWindowInsetsType = MutableWindowInsetsType()
 
     /**
+     * Inset values which match [WindowInsetsCompat.Type.displayCutout]
+     */
+    override val displayCutout: MutableWindowInsetsType = MutableWindowInsetsType()
+
+    /**
      * Inset values which match [WindowInsetsCompat.Type.systemBars]
      */
     override val systemBars: WindowInsets.Type = derivedWindowInsetsTypeOf(statusBars, navigationBars)
@@ -469,6 +496,7 @@ internal class ImmutableWindowInsets(
     override val navigationBars: WindowInsets.Type = WindowInsets.Type.Empty,
     override val statusBars: WindowInsets.Type = WindowInsets.Type.Empty,
     override val ime: WindowInsets.Type = WindowInsets.Type.Empty,
+    override val displayCutout: WindowInsets.Type = WindowInsets.Type.Empty,
 ) : WindowInsets {
     override val systemBars: WindowInsets.Type = derivedWindowInsetsTypeOf(statusBars, navigationBars)
 }
