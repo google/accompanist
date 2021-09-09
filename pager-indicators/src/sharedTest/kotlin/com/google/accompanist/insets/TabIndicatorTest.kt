@@ -41,7 +41,7 @@ class TabIndicatorTest {
     fun emptyPager() {
         rule.setContent {
             MaterialTheme {
-                val pagerState = rememberPagerState(pageCount = 0)
+                val pagerState = rememberPagerState()
                 ScrollableTabRow(
                     selectedTabIndex = pagerState.currentPage,
                     indicator = { tabPositions ->
