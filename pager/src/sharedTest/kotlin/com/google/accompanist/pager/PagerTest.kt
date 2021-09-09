@@ -304,11 +304,10 @@ abstract class PagerTest {
     }
 
     @Test
-    @Ignore("Need to fix")
     fun animateScrollToPage() {
         val pagerState = setPagerContent(count = 10)
 
-        fun testScroll(targetPage: Int, offset: Float = 0f) {
+        fun testScroll(targetPage: Int) {
             composeTestRule.runOnIdle {
                 runBlocking(AutoTestFrameClock()) {
                     pagerState.animateScrollToPage(targetPage)
@@ -316,15 +315,19 @@ abstract class PagerTest {
             }
             composeTestRule.runOnIdle {
                 assertThat(pagerState.currentPage).isEqualTo(targetPage)
-                assertThat(pagerState.currentPageOffset).isWithin(0.001f).of(offset)
+                assertThat(pagerState.currentPageOffset).isWithin(0.001f).of(0f)
             }
-            assertPagerLayout(targetPage, pagerState.pageCount, offset)
+            assertPagerLayout(targetPage, pagerState.pageCount)
         }
 
         // Scroll to page 3 and assert
         testScroll(3)
-        // Now scroll to page 0 and assert
+        // Scroll to page 0 and assert
         testScroll(0)
+        // Scroll to page 1 and assert
+        testScroll(1)
+        // Scroll to page 2 and assert
+        testScroll(2)
     }
 
     @Test

@@ -183,52 +183,14 @@ class PagerState(
         @IntRange(from = 0) page: Int,
     ) {
         requireCurrentPage(page, "page")
-
-        val firstVisibleItemIndex = lazyListState.firstVisibleItemIndex
-        val firstVisibleItemScrollOffset = lazyListState.firstVisibleItemScrollOffset
-
-        animationTargetPage = page
-
-        if (page > 0) {
-            // If we have a 'start' spacing, we need to actually scroll to the previous item.
-            // We can then look at the laid out page sizes
-
-            var prev = lazyListState.layoutInfo.visibleItemsInfo
-                .firstOrNull { it.index == page - 1 }
-
-            var hadToSnap = false
-            if (prev == null) {
-                lazyListState.scrollToItem(index = page - 1)
-                hadToSnap = true
-            }
-
-            prev = lazyListState.layoutInfo.visibleItemsInfo
-                .firstOrNull { it.index == page - 1 }
-            val current = lazyListState.layoutInfo.visibleItemsInfo
-                .firstOrNull { it.index == page }
-
-            // We generate the scroll offset using the current page offset (if available),
-            // or the previous item size. Using the current page offset is better as it contains
-            // any item spacing.
-            val targetScrollOffset = if (current != null && prev != null) {
-                // If we have both, we can detect the gap between the items
-                current.offset - prev.offset
-            } else {
-                prev!!.size
-            }
-
-            if (hadToSnap) {
-                // Now snap back to the original scroll position
-                lazyListState.scrollToItem(firstVisibleItemIndex, firstVisibleItemScrollOffset)
-            }
-
-            // And animate to our chosen page
-            lazyListState.animateScrollToItem(
-                index = page - 1,
-                scrollOffset = targetScrollOffset,
-            )
-        } else {
+        try {
+            animationTargetPage = page
             lazyListState.animateScrollToItem(index = page)
+        } finally {
+            // We need to manually call this, as the `animateScrollToItem` call above will happen
+            // in 1 frame, which is usually too fast for the LaunchedEffect in Pager to detect
+            // the change. This is especially true when running unit tests.
+            onScrollFinished()
         }
     }
 
@@ -261,7 +223,8 @@ class PagerState(
             }
         } finally {
             // We need to manually call this, as the `scroll` call above will happen in 1 frame,
-            // which is usually too fast for the LaunchedEffect in Pager to detect the change
+            // which is usually too fast for the LaunchedEffect in Pager to detect the change.
+            // This is especially true when running unit tests.
             onScrollFinished()
         }
     }

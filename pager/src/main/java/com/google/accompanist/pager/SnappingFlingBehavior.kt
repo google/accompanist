@@ -240,8 +240,7 @@ class SnappingFlingBehavior(
     }
 
     private fun LazyListState.calculateScrollDistanceToItem(index: Int): Int {
-        return layoutInfo.visibleItemsInfo.firstOrNull { it.index == index }
-            ?.let { it.offset } ?: 0
+        return layoutInfo.visibleItemsInfo.firstOrNull { it.index == index }?.offset ?: 0
     }
 
     private val currentLayoutPageInfo: LazyListItemInfo?
