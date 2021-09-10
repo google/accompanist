@@ -109,8 +109,8 @@ class SnappingFlingBehavior(
                         (pageInfo.index + 1).coerceAtMost(lazyListState.layoutInfo.totalItemsCount - 1)
                     }
                     initialVelocity < -pageSize -> pageInfo.index
-                    // If the offset exceeds the scroll threshold (in either direction), we want to
-                    // move to the next/previous item
+                    // If the velocity is 0 (or less than the size of a page), spring to whatever
+                    // page is closest to the snap point
                     pageInfo.offset < -pageSize / 2 -> pageInfo.index + 1
                     else -> pageInfo.index
                 },

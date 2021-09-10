@@ -11,7 +11,7 @@ package com.google.accompanist.pager {
   }
 
   @com.google.accompanist.pager.ExperimentalPagerApi public final class PagerDefaults {
-    method @androidx.compose.runtime.Composable public androidx.compose.foundation.gestures.FlingBehavior rememberPagerFlingBehavior(com.google.accompanist.pager.PagerState state, optional androidx.compose.animation.core.DecayAnimationSpec<java.lang.Float> decayAnimationSpec, optional androidx.compose.animation.core.AnimationSpec<java.lang.Float> snapAnimationSpec);
+    method @androidx.compose.runtime.Composable public androidx.compose.foundation.gestures.FlingBehavior flingBehavior(com.google.accompanist.pager.PagerState state, optional androidx.compose.animation.core.DecayAnimationSpec<java.lang.Float> decayAnimationSpec, optional androidx.compose.animation.core.AnimationSpec<java.lang.Float> snapAnimationSpec);
     field public static final com.google.accompanist.pager.PagerDefaults INSTANCE;
   }
 

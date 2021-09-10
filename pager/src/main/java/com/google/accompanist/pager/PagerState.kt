@@ -143,7 +143,13 @@ class PagerState(
      * To update the scroll position, use [scrollToPage] or [animateScrollToPage].
      */
     val currentPageOffset: Float by derivedStateOf {
-        currentLayoutPageInfo?.let { it.index + currentLayoutPageOffset - _currentPage } ?: 0f
+        currentLayoutPageInfo?.let {
+            // The current page offset is the current layout page delta from `currentPage`
+            // (which is only updated after a scroll/animation).
+            // We calculate this by looking at the current layout page + it's offset,
+            // then subtracting the 'current page'.
+            it.index + currentLayoutPageOffset - _currentPage
+        } ?: 0f
     }
 
     /**

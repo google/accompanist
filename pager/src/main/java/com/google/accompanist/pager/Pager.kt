@@ -60,14 +60,14 @@ annotation class ExperimentalPagerApi
 @ExperimentalPagerApi
 object PagerDefaults {
     /**
-     * Create and remember the default [FlingBehavior] that represents the scroll curve.
+     * Remember the default [FlingBehavior] that represents the scroll curve.
      *
      * @param state The [PagerState] to update.
      * @param decayAnimationSpec The decay animation spec to use for decayed flings.
      * @param snapAnimationSpec The animation spec to use when snapping.
      */
     @Composable
-    fun rememberPagerFlingBehavior(
+    fun flingBehavior(
         state: PagerState,
         decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
         snapAnimationSpec: AnimationSpec<Float> = SnappingFlingBehaviorDefaults.snapAnimationSpec,
@@ -105,7 +105,7 @@ fun HorizontalPager(
     state: PagerState = rememberPagerState(),
     reverseLayout: Boolean = false,
     itemSpacing: Dp = 0.dp,
-    flingBehavior: FlingBehavior = PagerDefaults.rememberPagerFlingBehavior(state),
+    flingBehavior: FlingBehavior = PagerDefaults.flingBehavior(state),
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
     key: ((page: Int) -> Any)? = null,
     contentPadding: PaddingValues = PaddingValues(0.dp),
@@ -153,7 +153,7 @@ fun VerticalPager(
     state: PagerState = rememberPagerState(),
     reverseLayout: Boolean = false,
     itemSpacing: Dp = 0.dp,
-    flingBehavior: FlingBehavior = PagerDefaults.rememberPagerFlingBehavior(state),
+    flingBehavior: FlingBehavior = PagerDefaults.flingBehavior(state),
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     key: ((page: Int) -> Any)? = null,
     contentPadding: PaddingValues = PaddingValues(0.dp),
