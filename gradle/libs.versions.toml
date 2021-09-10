@@ -3,8 +3,8 @@ compose = "1.0.2"
 composesnapshot = "-" # a single character = no snapshot
 
 # gradlePlugin and lint need to be updated together
-gradlePlugin = "7.0.0"
-lint = "30.0.0"
+gradlePlugin = "7.0.2"
+lint = "30.0.2"
 
 ktlint = "0.41.0"
 kotlin = "1.5.21"
