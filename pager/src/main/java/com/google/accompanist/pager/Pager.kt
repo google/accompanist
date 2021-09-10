@@ -76,6 +76,17 @@ object PagerDefaults {
         decayAnimationSpec = decayAnimationSpec,
         snapAnimationSpec = snapAnimationSpec,
     )
+
+    @Deprecated(
+        "Replaced with PagerDefaults.flingBehavior()",
+        ReplaceWith("PagerDefaults.flingBehavior(state, decayAnimationSpec, snapAnimationSpec)")
+    )
+    @Composable
+    fun rememberPagerFlingConfig(
+        state: PagerState,
+        decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
+        snapAnimationSpec: AnimationSpec<Float> = SnappingFlingBehaviorDefaults.snapAnimationSpec,
+    ): FlingBehavior = flingBehavior(state, decayAnimationSpec, snapAnimationSpec)
 }
 
 /**
