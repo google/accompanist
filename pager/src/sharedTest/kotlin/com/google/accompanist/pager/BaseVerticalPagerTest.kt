@@ -32,6 +32,7 @@ import androidx.compose.ui.test.assertTopPositionInRootIsEqualTo
 import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.height
@@ -52,10 +53,10 @@ abstract class BaseVerticalPagerTest(
 
     override fun SemanticsNodeInteraction.swipeAcrossCenter(
         distancePercentage: Float,
-        velocity: Float,
+        velocityPerSec: Dp,
     ): SemanticsNodeInteraction = swipeAcrossCenterWithVelocity(
         distancePercentageY = if (reverseLayout) -distancePercentage else distancePercentage,
-        velocity = velocity,
+        velocityPerSec = velocityPerSec,
     )
 
     override fun SemanticsNodeInteraction.assertLaidOutItemPosition(

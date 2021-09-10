@@ -22,6 +22,8 @@ import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.google.accompanist.internal.test.exists
 import com.google.accompanist.internal.test.isLaidOut
 import com.google.common.truth.Truth.assertThat
@@ -36,9 +38,9 @@ private const val LongSwipeDistance = 0.9f
 private const val MediumSwipeDistance = 0.75f
 private const val ShortSwipeDistance = 0.4f
 
-private const val FastVelocity = 6000f
-private const val MediumVelocity = 1500f
-private const val SlowVelocity = 300f
+private val FastVelocity = 2000.dp
+private val MediumVelocity = 700.dp
+private val SlowVelocity = 100.dp
 
 @OptIn(ExperimentalPagerApi::class) // Pager is currently experimental
 abstract class PagerTest {
@@ -167,7 +169,7 @@ abstract class PagerTest {
         // This should trigger a fling
         composeTestRule.onNodeWithTag("0").swipeAcrossCenter(
             distancePercentage = -MediumSwipeDistance,
-            velocity = FastVelocity,
+            velocityPerSec = FastVelocity,
         )
 
         assertThat(pagerState.isScrollInProgress).isTrue()
@@ -198,7 +200,7 @@ abstract class PagerTest {
         // This should trigger a spring to position 1
         composeTestRule.onNodeWithTag("0").swipeAcrossCenter(
             distancePercentage = -MediumSwipeDistance,
-            velocity = SlowVelocity,
+            velocityPerSec = SlowVelocity,
         )
 
         assertThat(pagerState.isScrollInProgress).isTrue()
@@ -229,7 +231,7 @@ abstract class PagerTest {
         // This should trigger a fling to page 1
         composeTestRule.onNodeWithTag("0").swipeAcrossCenter(
             distancePercentage = -ShortSwipeDistance,
-            velocity = FastVelocity,
+            velocityPerSec = FastVelocity,
         )
 
         assertThat(pagerState.isScrollInProgress).isTrue()
@@ -260,7 +262,7 @@ abstract class PagerTest {
         // This should trigger a spring back to the original position
         composeTestRule.onNodeWithTag("0").swipeAcrossCenter(
             distancePercentage = -ShortSwipeDistance,
-            velocity = SlowVelocity,
+            velocityPerSec = SlowVelocity,
         )
 
         assertThat(pagerState.isScrollInProgress).isTrue()
@@ -362,13 +364,13 @@ abstract class PagerTest {
      * Swipe across the center of the node. The major axis of the swipe is defined by the
      * overriding test.
      *
-     * @param velocity Target end velocity for the swipe.
      * @param distancePercentage The swipe distance in percentage of the node's size.
      * Negative numbers mean swipe towards the start, positive towards the end.
+     * @param velocityPerSec Target end velocity for the swipe in Dps per second
      */
     abstract fun SemanticsNodeInteraction.swipeAcrossCenter(
         distancePercentage: Float,
-        velocity: Float = MediumVelocity
+        velocityPerSec: Dp = MediumVelocity
     ): SemanticsNodeInteraction
 
     // TODO: add test for state restoration?

@@ -32,6 +32,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import org.junit.Rule
@@ -79,7 +80,7 @@ class VerticalPagerScrollingContentTest {
         // Perform a very quick, high velocity scroll which will scroll the inner content to it's
         // opposite/end edge
         rule.onNodeWithTag(TestTag)
-            .swipeAcrossCenterWithVelocity(velocity = 15_000f, distancePercentageY = -0.5f)
+            .swipeAcrossCenterWithVelocity(velocityPerSec = 5_000.dp, distancePercentageY = -0.5f)
 
         // Wait for the flings to end
         rule.waitForIdle()
