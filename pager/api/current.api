@@ -52,21 +52,7 @@ package com.google.accompanist.pager {
     method @androidx.compose.runtime.Composable @com.google.accompanist.pager.ExperimentalPagerApi public static com.google.accompanist.pager.PagerState rememberPagerState(optional @IntRange(from=0) int initialPage);
   }
 
-  public final class SnappingFlingBehavior implements androidx.compose.foundation.gestures.FlingBehavior {
-    ctor public SnappingFlingBehavior(androidx.compose.foundation.lazy.LazyListState lazyListState, androidx.compose.animation.core.DecayAnimationSpec<java.lang.Float> decayAnimationSpec, androidx.compose.animation.core.AnimationSpec<java.lang.Float> snapAnimationSpec);
-    method public Integer? getAnimationTarget();
-    method public suspend Object? performFling(androidx.compose.foundation.gestures.ScrollScope, float initialVelocity, kotlin.coroutines.Continuation<? super java.lang.Float> p);
-    property public final Integer? animationTarget;
-  }
-
-  public final class SnappingFlingBehaviorDefaults {
-    method public androidx.compose.animation.core.AnimationSpec<java.lang.Float> getSnapAnimationSpec();
-    property public final androidx.compose.animation.core.AnimationSpec<java.lang.Float> snapAnimationSpec;
-    field public static final com.google.accompanist.pager.SnappingFlingBehaviorDefaults INSTANCE;
-  }
-
   public final class SnappingFlingBehaviorKt {
-    method @androidx.compose.runtime.Composable public static com.google.accompanist.pager.SnappingFlingBehavior rememberSnappingFlingBehavior(androidx.compose.foundation.lazy.LazyListState lazyListState, optional androidx.compose.animation.core.DecayAnimationSpec<java.lang.Float> decayAnimationSpec, optional androidx.compose.animation.core.AnimationSpec<java.lang.Float> snapAnimationSpec);
   }
 
 }

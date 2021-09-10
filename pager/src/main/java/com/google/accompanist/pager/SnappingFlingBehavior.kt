@@ -39,7 +39,7 @@ import kotlin.math.absoluteValue
 /**
  * Default values used for [SnappingFlingBehavior] & [rememberSnappingFlingBehavior].
  */
-object SnappingFlingBehaviorDefaults {
+internal object SnappingFlingBehaviorDefaults {
     /**
      * TODO
      */
@@ -49,12 +49,14 @@ object SnappingFlingBehaviorDefaults {
 /**
  * Create and remember a snapping [FlingBehavior] to be used with [LazyListState].
  *
+ * TODO: move this to a new module and make it public
+ *
  * @param lazyListState The [LazyListState] to update.
  * @param decayAnimationSpec The decay animation spec to use for decayed flings.
  * @param snapAnimationSpec The animation spec to use when snapping.
  */
 @Composable
-fun rememberSnappingFlingBehavior(
+internal fun rememberSnappingFlingBehavior(
     lazyListState: LazyListState,
     decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
     snapAnimationSpec: AnimationSpec<Float> = SnappingFlingBehaviorDefaults.snapAnimationSpec,
@@ -74,7 +76,7 @@ fun rememberSnappingFlingBehavior(
  * @param decayAnimationSpec The decay animation spec to use for decayed flings.
  * @param snapAnimationSpec The animation spec to use when snapping.
  */
-class SnappingFlingBehavior(
+internal class SnappingFlingBehavior(
     private val lazyListState: LazyListState,
     private val decayAnimationSpec: DecayAnimationSpec<Float>,
     private val snapAnimationSpec: AnimationSpec<Float>,
