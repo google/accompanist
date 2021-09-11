@@ -269,12 +269,12 @@ HorizontalPager(
 
 ## Changes in v0.19.0
 
-In v0.19.0, both `HorizontalPager` and `VerticalPager` were re-written to be based on `LazyRow` and `LazyColumn` respectively. As part of this change, a number of feature and API changes were made:
+In v0.19.0 both `HorizontalPager` and `VerticalPager` were re-written to be based on `LazyRow` and `LazyColumn` respectively. As part of this change, a number of feature and API changes were made:
 
 ### PagerState
 
 - The `pageCount` parameter on `rememberPagerState()` has been removed, replaced with the `count` parameter on `HorizontalPager()` and `VerticalPager()`.
-- The animation spec + `pagerOffset` parameters on `animateScrollToPage()` have been removed. 
+- The `animationSpec`, `initialVelocity` and `skipPages` parameters on `animateScrollToPage()` have been removed. The lazy components handle this automatically.
 
 ### HorizontalPager & VerticalPager
 

@@ -39,6 +39,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
+import kotlin.math.roundToInt
 
 @Deprecated(
     "Replaced with rememberPagerState(initialPage) and count parameter on Pager composables",
@@ -181,8 +182,8 @@ class PagerState(
             }
 
     @Deprecated(
-        "Replaced with animateScrollToPage(page)",
-        ReplaceWith("animateScrollToPage(page = page)")
+        "Replaced with animateScrollToPage(page, pageOffset)",
+        ReplaceWith("animateScrollToPage(page = page, pageOffset = pageOffset)")
     )
     @Suppress("UNUSED_PARAMETER")
     suspend fun animateScrollToPage(
@@ -192,7 +193,7 @@ class PagerState(
         initialVelocity: Float = 0f,
         skipPages: Boolean = true,
     ) {
-        animateScrollToPage(page)
+        animateScrollToPage(page = page, pageOffset = pageOffset)
     }
 
     /**
@@ -202,14 +203,56 @@ class PagerState(
      * complete.
      *
      * @param page the page to animate to. Must be between 0 and [pageCount] (inclusive).
+     * @param pageOffset the percentage of the page width to offset, from the start of [page].
+     * Must be in the range 0f..1f.
      */
     suspend fun animateScrollToPage(
         @IntRange(from = 0) page: Int,
+        @FloatRange(from = 0.0, to = 1.0) pageOffset: Float = 0f,
     ) {
         requireCurrentPage(page, "page")
+        requireCurrentPageOffset(pageOffset, "pageOffset")
         try {
             animationTargetPage = page
-            lazyListState.animateScrollToItem(index = page)
+
+            if (pageOffset <= 0.005f) {
+                // If the offset is (close to) zero, just call animateScrollToItem and we're done
+                lazyListState.animateScrollToItem(index = page)
+            } else {
+                // Else we need to figure out what the offset is in pixels...
+
+                var target = lazyListState.layoutInfo.visibleItemsInfo
+                    .firstOrNull { it.index == page }
+
+                if (target != null) {
+                    // If we have access to the target page layout, we can calculate the pixel
+                    // offset from the size
+                    lazyListState.animateScrollToItem(
+                        index = page,
+                        scrollOffset = (target.size * pageOffset).roundToInt()
+                    )
+                } else {
+                    // If we don't, we use the current page size as a guide
+                    val currentSize = currentLayoutPageInfo!!.size
+                    lazyListState.animateScrollToItem(
+                        index = page,
+                        scrollOffset = (currentSize * pageOffset).roundToInt()
+                    )
+
+                    // The target should be visible now
+                    target = lazyListState.layoutInfo.visibleItemsInfo.first { it.index == page }
+
+                    if (target.size != currentSize) {
+                        // If the size we used for calculating the offset differs from the actual
+                        // target page size, we need to scroll again. This doesn't look great,
+                        // but there's not much else we can do.
+                        lazyListState.animateScrollToItem(
+                            index = page,
+                            scrollOffset = (target.size * pageOffset).roundToInt()
+                        )
+                    }
+                }
+            }
         } finally {
             // We need to manually call this, as the `animateScrollToItem` call above will happen
             // in 1 frame, which is usually too fast for the LaunchedEffect in Pager to detect
@@ -231,6 +274,7 @@ class PagerState(
         @FloatRange(from = 0.0, to = 1.0) pageOffset: Float = 0f,
     ) {
         requireCurrentPage(page, "page")
+        requireCurrentPageOffset(pageOffset, "pageOffset")
         try {
             animationTargetPage = page
 
@@ -285,6 +329,14 @@ class PagerState(
             require(value in 0 until pageCount) {
                 "$name[$value] must be >= firstPageIndex[0] and < lastPageIndex[pageCount]"
             }
+        }
+    }
+
+    private fun requireCurrentPageOffset(value: Float, name: String) {
+        if (pageCount == 0) {
+            require(value == 0f) { "$name must be 0f when pageCount is 0" }
+        } else {
+            require(value in 0f..1f) { "$name must be >= 0 and <= 1" }
         }
     }
 
