@@ -41,7 +41,7 @@ A library that provides a layout implementing the swipe-to-refresh UX pattern, s
 
 ## Updates
 
-[Jetpack Compose][compose] is a fast-moving project and we aim to keep these these libraries up-to-date with the
+[Jetpack Compose][compose] is a fast-moving project and we aim to keep these libraries up-to-date with the
 latest tagged release on Compose as quickly as possible. Each [release](https://github.com/google/accompanist/releases)  outlines what version of the Compose libraries it depends on.
 
 ## Future?
