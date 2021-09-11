@@ -18,6 +18,7 @@
 
 package com.google.accompanist.pager
 
+import androidx.annotation.FloatRange
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.DecayAnimationSpec
 import androidx.compose.animation.rememberSplineBasedDecay
@@ -94,7 +95,7 @@ object PagerDefaults {
  *
  * @sample com.google.accompanist.sample.pager.HorizontalPagerSample
  *
- * @param count the number of pages to display.
+ * @param count the number of pages.
  * @param modifier the modifier to apply to this layout.
  * @param state the state object to be used to control or observe the pager's state.
  * @param reverseLayout reverse the direction of scrolling and layout, when `true` items will be
@@ -142,7 +143,7 @@ fun HorizontalPager(
  *
  * @sample com.google.accompanist.sample.pager.VerticalPagerSample
  *
- * @param count the number of pages to display.
+ * @param count the number of pages.
  * @param modifier the modifier to apply to this layout.
  * @param state the state object to be used to control or observe the pager's state.
  * @param reverseLayout reverse the direction of scrolling and layout, when `true` items will be
@@ -308,8 +309,9 @@ interface PagerScope {
     val currentPage: Int
 
     /**
-     * Returns the current selected page offset
+     * The current offset from the start of [currentPage], as a ratio of the page width.
      */
+    @get:FloatRange(from = 0.0, to = 1.0)
     val currentPageOffset: Float
 }
 

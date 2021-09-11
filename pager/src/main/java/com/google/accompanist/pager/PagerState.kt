@@ -138,7 +138,7 @@ class PagerState(
         }
 
     /**
-     * The current offset from the start of [currentPage], as a fraction of the page width.
+     * The current offset from the start of [currentPage], as a ratio of the page width.
      *
      * To update the scroll position, use [scrollToPage] or [animateScrollToPage].
      */
