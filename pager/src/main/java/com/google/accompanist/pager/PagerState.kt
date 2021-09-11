@@ -20,6 +20,8 @@ package com.google.accompanist.pager
 
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.gestures.ScrollableState
@@ -37,6 +39,24 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
+
+@Deprecated(
+    "Replaced with rememberPagerState(initialPage) and count parameter on Pager composables",
+    ReplaceWith("rememberPagerState(initialPage)"),
+    level = DeprecationLevel.ERROR,
+)
+@Suppress("UNUSED_PARAMETER", "NOTHING_TO_INLINE")
+@ExperimentalPagerApi
+@Composable
+inline fun rememberPagerState(
+    @IntRange(from = 0) pageCount: Int,
+    @IntRange(from = 0) initialPage: Int = 0,
+    @FloatRange(from = 0.0, to = 1.0) initialPageOffset: Float = 0f,
+    @IntRange(from = 1) initialOffscreenLimit: Int = 1,
+    infiniteLoop: Boolean = false
+): PagerState {
+    return rememberPagerState(initialPage = initialPage)
+}
 
 /**
  * Creates a [PagerState] that is remembered across compositions.
@@ -159,6 +179,21 @@ class PagerState(
                 // Else we guess the current page
                 else -> currentPage
             }
+
+    @Deprecated(
+        "Replaced with animateScrollToPage(page)",
+        ReplaceWith("animateScrollToPage(page = page)")
+    )
+    @Suppress("UNUSED_PARAMETER")
+    suspend fun animateScrollToPage(
+        @IntRange(from = 0) page: Int,
+        @FloatRange(from = 0.0, to = 1.0) pageOffset: Float = 0f,
+        animationSpec: AnimationSpec<Float> = spring(),
+        initialVelocity: Float = 0f,
+        skipPages: Boolean = true,
+    ) {
+        animateScrollToPage(page)
+    }
 
     /**
      * Animate (smooth scroll) to the given page to the middle of the viewport.

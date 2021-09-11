@@ -18,7 +18,6 @@
 
 package com.google.accompanist.pager
 
-import androidx.annotation.FloatRange
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.DecayAnimationSpec
 import androidx.compose.animation.rememberSplineBasedDecay
@@ -311,7 +310,6 @@ interface PagerScope {
     /**
      * The current offset from the start of [currentPage], as a ratio of the page width.
      */
-    @get:FloatRange(from = 0.0, to = 1.0)
     val currentPageOffset: Float
 }
 
