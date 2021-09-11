@@ -25,7 +25,6 @@ import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.lazy.LazyListItemInfo
-import androidx.compose.foundation.lazy.LazyListLayoutInfo
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
@@ -75,33 +74,17 @@ class PagerState(
 
     private var _currentPage by mutableStateOf(currentPage)
 
-    // TODO: Think about exposing this as public API. Same for SnappingFlingBehavior
-    private val snapOffsetForPage: LazyListLayoutInfo.(page: Int) -> Int = { 0 }
-
     private val currentLayoutPageInfo: LazyListItemInfo?
-        get() {
-            val layoutInfo = lazyListState.layoutInfo
-            return layoutInfo.visibleItemsInfo.asSequence()
-                .filter {
-                    val snapOffset = snapOffsetForPage(layoutInfo, it.index)
-                    it.offset <= snapOffset && it.offset + it.size > snapOffset
-                }
-                .lastOrNull()
-        }
+        get() = lazyListState.layoutInfo.visibleItemsInfo.asSequence()
+            .filter { it.offset <= 0 && it.offset + it.size > 0 }
+            .lastOrNull()
 
     private val currentLayoutPageOffset: Float
-        get() {
-            return currentLayoutPageInfo?.let { current ->
-                val start = snapOffsetForPage(lazyListState.layoutInfo, current.index)
-                // Since the first item might be wider to compensate for the alignment, we need
-                // to compute the actual size and offset
-                val size = if (current.index == 0) current.size - start else current.size
-                val offset = if (current.index == 0) current.offset else current.offset - start
-                // We coerce we itemSpacing can make the offset > 1f. We don't want to count
-                // spacing in the offset so cap it to 1f
-                (-offset / size.toFloat()).coerceIn(0f, 1f)
-            } ?: 0f
-        }
+        get() = currentLayoutPageInfo?.let { current ->
+            // We coerce since itemSpacing can make the offset > 1f.
+            // We don't want to count spacing in the offset so cap it to 1f
+            (-current.offset / current.size.toFloat()).coerceIn(0f, 1f)
+        } ?: 0f
 
     /**
      * [InteractionSource] that will be used to dispatch drag events when this

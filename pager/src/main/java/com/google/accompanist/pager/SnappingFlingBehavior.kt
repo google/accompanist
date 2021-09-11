@@ -159,14 +159,14 @@ internal class SnappingFlingBehavior(
                 (page.index < index || page.index == index && page.offset >= 0)
             ) {
                 // 'snap back' to the item as we may have scrolled past it
-                scrollBy(lazyListState.calculateScrollDistanceToItem(index).toFloat())
+                scrollBy(lazyListState.calculateScrollOffsetToItem(index).toFloat())
                 cancelAnimation()
             } else if (
                 forward &&
                 (page.index > index || page.index == index && page.offset <= 0)
             ) {
                 // 'snap back' to the item as we may have scrolled past it
-                scrollBy(lazyListState.calculateScrollDistanceToItem(index).toFloat())
+                scrollBy(lazyListState.calculateScrollOffsetToItem(index).toFloat())
                 cancelAnimation()
             } else if (abs(delta - consumed) > 0.5f) {
                 // avoid rounding errors and stop if anything is unconsumed
@@ -223,14 +223,14 @@ internal class SnappingFlingBehavior(
                 (page.index < index || (page.index == index && page.offset >= scrollOffset))
             ) {
                 // 'snap back' to the item as we may have scrolled past it
-                scrollBy(lazyListState.calculateScrollDistanceToItem(index).toFloat())
+                scrollBy(lazyListState.calculateScrollOffsetToItem(index).toFloat())
                 cancelAnimation()
             } else if (
                 forward &&
                 (page.index > index || (page.index == index && page.offset <= scrollOffset))
             ) {
                 // 'snap back' to the item as we may have scrolled past it
-                scrollBy(lazyListState.calculateScrollDistanceToItem(index).toFloat())
+                scrollBy(lazyListState.calculateScrollOffsetToItem(index).toFloat())
                 cancelAnimation()
             } else if (abs(delta - consumed) > 0.5f) {
                 // avoid rounding errors and stop if anything is unconsumed
@@ -241,15 +241,12 @@ internal class SnappingFlingBehavior(
         return velocityLeft
     }
 
-    private fun LazyListState.calculateScrollDistanceToItem(index: Int): Int {
+    private fun LazyListState.calculateScrollOffsetToItem(index: Int): Int {
         return layoutInfo.visibleItemsInfo.firstOrNull { it.index == index }?.offset ?: 0
     }
 
     private val currentLayoutPageInfo: LazyListItemInfo?
-        get() {
-            val layoutInfo = lazyListState.layoutInfo
-            return layoutInfo.visibleItemsInfo.asSequence()
-                .filter { it.offset <= 0 && it.offset + it.size > 0 }
-                .lastOrNull()
-        }
+        get() = lazyListState.layoutInfo.visibleItemsInfo.asSequence()
+            .filter { it.offset <= 0 && it.offset + it.size > 0 }
+            .lastOrNull()
 }
