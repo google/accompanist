@@ -327,7 +327,7 @@ class PagerState(
             require(value == 0) { "$name must be 0 when pageCount is 0" }
         } else {
             require(value in 0 until pageCount) {
-                "$name[$value] must be >= firstPageIndex[0] and < lastPageIndex[pageCount]"
+                "$name[$value] must be >= 0 and < pageCount"
             }
         }
     }
