@@ -281,8 +281,10 @@ In v0.19.0 both `HorizontalPager` and `VerticalPager` were re-written to be base
 - Ability to set `contentPadding` (see [above](#content-padding)).
 - Ability to specify a `key` for each page.
 - The `horizontalAlignment` parameter on `HorizontalPager`, and the `verticalAlignment` parameter on `VerticalPager` have been removed. A similar effect can be implemented with an appropriate content padding (see [above](#content-padding)).
-- The `infiniteLooping` parameter and feature have been removed. A sample demonstrating how to achieve this can be found [here][looping-sample].
-- The `offscreenLimit` parameter. We unfortnately no longer have any control of what items are laid out 'off screen'.
+- The `infiniteLooping` parameter and feature have been removed. A sample demonstrating how to achieve this effect can be found [here][looping-sample].
+- The `offscreenLimit` parameter has been removed. We no longer have control of what items are laid out 'off screen'.
+- The `dragEnabled` parameter has removed.
+- `PagerScope` (the page item scope) no longer implements `BoxScope`. 
 
 ---
 
