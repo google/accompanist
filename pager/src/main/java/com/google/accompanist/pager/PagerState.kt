@@ -265,7 +265,7 @@ class PagerState(
             // If a scroll isn't in progress, return the current page
             !isScrollInProgress -> currentPage
             // If the offset is 0f (or very close), return the current page
-            currentPageOffset < 0.001f -> currentPage
+            currentPageOffset in 0f .. 0.001f -> currentPage
             // If we're offset towards the start, guess the previous page
             currentPageOffset < 0 -> (currentPage - 1).coerceAtLeast(0)
             // If we're offset towards the end, guess the next page
