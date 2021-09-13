@@ -57,4 +57,7 @@
     <string name="placeholder_title_fade">Placeholder: Fade</string>
     <string name="placeholder_title_shimmer">Placeholder: Shimmer</string>
 
+    <string name="lazysnap_title_column_basics">Lazy Snap: Column Basic</string>
+    <string name="lazysnap_title_row_basics">Lazy Snap: Row Basic</string>
+
 </resources>

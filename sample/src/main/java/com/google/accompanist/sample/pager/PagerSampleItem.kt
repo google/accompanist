@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -41,27 +42,29 @@ internal fun PagerSampleItem(
     page: Int,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier) {
-        // Our page content, displaying a random image
-        Image(
-            painter = rememberImagePainter(
-                data = rememberRandomSampleImageUrl(width = 600),
-            ),
-            contentScale = ContentScale.Crop,
-            contentDescription = null,
-            modifier = Modifier.matchParentSize()
-        )
+    Card(modifier) {
+        Box {
+            // Our page content, displaying a random image
+            Image(
+                painter = rememberImagePainter(
+                    data = rememberRandomSampleImageUrl(width = 600),
+                ),
+                contentScale = ContentScale.Crop,
+                contentDescription = null,
+                modifier = Modifier.matchParentSize()
+            )
 
-        // Displays the page index
-        Text(
-            text = page.toString(),
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp)
-                .background(MaterialTheme.colors.surface, RoundedCornerShape(4.dp))
-                .sizeIn(minWidth = 40.dp, minHeight = 40.dp)
-                .padding(8.dp)
-                .wrapContentSize(Alignment.Center)
-        )
+            // Displays the page index
+            Text(
+                text = page.toString(),
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(16.dp)
+                    .background(MaterialTheme.colors.surface, RoundedCornerShape(4.dp))
+                    .sizeIn(minWidth = 40.dp, minHeight = 40.dp)
+                    .padding(8.dp)
+                    .wrapContentSize(Alignment.Center)
+            )
+        }
     }
 }

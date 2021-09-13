@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package com.google.accompanist.pager
+package com.google.accompanist.lazysnap
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.test.SemanticsNodeInteraction
-import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.percentOffset
 import androidx.compose.ui.test.performGesture
 import androidx.compose.ui.test.swipe
@@ -33,16 +32,15 @@ import kotlin.math.hypot
 import kotlin.math.roundToLong
 import kotlin.random.Random
 
-fun ComposeContentTestRule.setContent(
-    layoutDirection: LayoutDirection? = null,
-    composable: @Composable () -> Unit,
+@Composable
+fun ProvideLayoutDirection(
+    layoutDirection: LayoutDirection,
+    content: @Composable () -> Unit,
 ) {
-    setContent {
-        CompositionLocalProvider(
-            LocalLayoutDirection provides (layoutDirection ?: LocalLayoutDirection.current),
-            content = composable
-        )
-    }
+    CompositionLocalProvider(
+        LocalLayoutDirection provides (layoutDirection),
+        content = content
+    )
 }
 
 internal fun SemanticsNodeInteraction.swipeAcrossCenterWithVelocity(

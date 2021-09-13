@@ -11,8 +11,8 @@ package com.google.accompanist.pager {
   }
 
   @com.google.accompanist.pager.ExperimentalPagerApi public final class PagerDefaults {
-    method @androidx.compose.runtime.Composable public androidx.compose.foundation.gestures.FlingBehavior flingBehavior(com.google.accompanist.pager.PagerState state, optional androidx.compose.animation.core.DecayAnimationSpec<java.lang.Float> decayAnimationSpec, optional androidx.compose.animation.core.AnimationSpec<java.lang.Float> snapAnimationSpec);
-    method @Deprecated @androidx.compose.runtime.Composable public androidx.compose.foundation.gestures.FlingBehavior rememberPagerFlingConfig(com.google.accompanist.pager.PagerState state, optional androidx.compose.animation.core.DecayAnimationSpec<java.lang.Float> decayAnimationSpec, optional androidx.compose.animation.core.AnimationSpec<java.lang.Float> snapAnimationSpec);
+    method @androidx.compose.runtime.Composable @com.google.accompanist.lazysnap.ExperimentalLazySnapApi public androidx.compose.foundation.gestures.FlingBehavior flingBehavior(com.google.accompanist.pager.PagerState state, optional androidx.compose.animation.core.DecayAnimationSpec<java.lang.Float> decayAnimationSpec, optional androidx.compose.animation.core.AnimationSpec<java.lang.Float> snapAnimationSpec, optional kotlin.jvm.functions.Function1<? super androidx.compose.foundation.lazy.LazyListLayoutInfo,java.lang.Integer> maximumFlingDistance);
+    method @Deprecated @androidx.compose.runtime.Composable @com.google.accompanist.lazysnap.ExperimentalLazySnapApi public androidx.compose.foundation.gestures.FlingBehavior rememberPagerFlingConfig(com.google.accompanist.pager.PagerState state, optional androidx.compose.animation.core.DecayAnimationSpec<java.lang.Float> decayAnimationSpec, optional androidx.compose.animation.core.AnimationSpec<java.lang.Float> snapAnimationSpec);
     field public static final com.google.accompanist.pager.PagerDefaults INSTANCE;
   }
 
@@ -53,9 +53,6 @@ package com.google.accompanist.pager {
   public final class PagerStateKt {
     method @Deprecated @androidx.compose.runtime.Composable @com.google.accompanist.pager.ExperimentalPagerApi public static inline com.google.accompanist.pager.PagerState rememberPagerState(@IntRange(from=0) int pageCount, optional @IntRange(from=0) int initialPage, optional @FloatRange(from=0.0, to=1.0) float initialPageOffset, optional @IntRange(from=1) int initialOffscreenLimit, optional boolean infiniteLoop);
     method @androidx.compose.runtime.Composable @com.google.accompanist.pager.ExperimentalPagerApi public static com.google.accompanist.pager.PagerState rememberPagerState(optional @IntRange(from=0) int initialPage);
-  }
-
-  public final class SnappingFlingBehaviorKt {
   }
 
 }

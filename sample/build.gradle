@@ -50,6 +50,7 @@ dependencies {
     implementation project(':drawablepainter')
     implementation project(':insets')
     implementation project(':insets-ui')
+    implementation project(':lazysnap')
     implementation project(':navigation-animation')
     implementation project(':navigation-material')
     implementation project(':pager')

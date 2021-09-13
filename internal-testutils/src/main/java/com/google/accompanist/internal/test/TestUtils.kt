@@ -18,6 +18,9 @@
 
 package com.google.accompanist.internal.test
 
+import androidx.compose.ui.graphics.Color
+import kotlin.random.Random
+
 inline fun parameterizedParams(): List<Array<Any>> = emptyList()
 
 inline fun <reified T> List<Array<T>>.combineWithParameters(
@@ -38,3 +41,10 @@ inline fun <reified T> List<Array<T>>.combineWithParameters(
         result.toList()
     }
 }
+
+fun randomColor() = Color(
+    alpha = 1f,
+    red = Random.nextFloat(),
+    green = Random.nextFloat(),
+    blue = Random.nextFloat(),
+)

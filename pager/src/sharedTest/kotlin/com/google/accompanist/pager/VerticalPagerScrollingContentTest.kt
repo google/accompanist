@@ -34,6 +34,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.accompanist.internal.test.swipeAcrossCenterWithVelocity
 import com.google.common.truth.Truth.assertThat
 import org.junit.Rule
 import org.junit.Test

@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListLayoutInfo
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -42,6 +43,10 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.lazysnap.ExperimentalLazySnapApi
+import com.google.accompanist.lazysnap.SnappingFlingBehavior
+import com.google.accompanist.lazysnap.SnappingFlingBehaviorDefaults
+import com.google.accompanist.lazysnap.rememberSnappingFlingBehavior
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 
@@ -67,20 +72,24 @@ object PagerDefaults {
      * @param snapAnimationSpec The animation spec to use when snapping.
      */
     @Composable
+    @ExperimentalLazySnapApi
     fun flingBehavior(
         state: PagerState,
         decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
         snapAnimationSpec: AnimationSpec<Float> = SnappingFlingBehaviorDefaults.snapAnimationSpec,
+        maximumFlingDistance: LazyListLayoutInfo.() -> Int = { viewportEndOffset + viewportStartOffset },
     ): FlingBehavior = rememberSnappingFlingBehavior(
         lazyListState = state.lazyListState,
         decayAnimationSpec = decayAnimationSpec,
         snapAnimationSpec = snapAnimationSpec,
+        maximumFlingDistance = maximumFlingDistance,
     )
 
     @Deprecated(
         "Replaced with PagerDefaults.flingBehavior()",
         ReplaceWith("PagerDefaults.flingBehavior(state, decayAnimationSpec, snapAnimationSpec)")
     )
+    @ExperimentalLazySnapApi
     @Composable
     fun rememberPagerFlingConfig(
         state: PagerState,
@@ -108,6 +117,7 @@ object PagerDefaults {
  * @param content a block which describes the content. Inside this block you can reference
  * [PagerScope.currentPage] and other properties in [PagerScope].
  */
+@OptIn(ExperimentalLazySnapApi::class)
 @ExperimentalPagerApi
 @Composable
 fun HorizontalPager(
@@ -156,6 +166,7 @@ fun HorizontalPager(
  * @param content a block which describes the content. Inside this block you can reference
  * [PagerScope.currentPage] and other properties in [PagerScope].
  */
+@OptIn(ExperimentalLazySnapApi::class)
 @ExperimentalPagerApi
 @Composable
 fun VerticalPager(
@@ -185,6 +196,7 @@ fun VerticalPager(
     )
 }
 
+@OptIn(ExperimentalLazySnapApi::class)
 @ExperimentalPagerApi
 @Composable
 internal fun Pager(

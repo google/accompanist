@@ -97,6 +97,16 @@
         </activity>
 
         <activity
+            android:name=".lazysnap.LazyRowSnapBasicSample"
+            android:label="@string/lazysnap_title_row_basics"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".pager.HorizontalPagerBasicSample"
             android:label="@string/horiz_pager_title_basics"
             android:exported="false">
