@@ -23,9 +23,11 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertHeightIsAtLeast
@@ -114,33 +116,35 @@ abstract class BaseHorizontalPagerTest(
         observeStateInContent: Boolean,
     ): PagerState {
         val pagerState = PagerState()
-        composeTestRule.setContent(layoutDirection) {
-            applierScope = rememberCoroutineScope()
+        composeTestRule.setContent {
+            CompositionLocalProvider(LocalLayoutDirection provides layoutDirection) {
+                applierScope = rememberCoroutineScope()
 
-            Box {
-                if (observeStateInContent) {
-                    BasicText(text = "${pagerState.isScrollInProgress}")
-                }
+                Box {
+                    if (observeStateInContent) {
+                        BasicText(text = "${pagerState.isScrollInProgress}")
+                    }
 
-                HorizontalPager(
-                    count = count(),
-                    state = pagerState,
-                    itemSpacing = itemSpacingDp.dp,
-                    reverseLayout = reverseLayout,
-                    contentPadding = contentPadding,
-                    modifier = Modifier.fillMaxSize()
-                ) { page ->
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth(itemWidthFraction)
-                            .aspectRatio(1f)
-                            .background(randomColor())
-                            .testTag(page.toString())
-                    ) {
-                        BasicText(
-                            text = page.toString(),
-                            modifier = Modifier.align(Alignment.Center)
-                        )
+                    HorizontalPager(
+                        count = count(),
+                        state = pagerState,
+                        itemSpacing = itemSpacingDp.dp,
+                        reverseLayout = reverseLayout,
+                        contentPadding = contentPadding,
+                        modifier = Modifier.fillMaxSize()
+                    ) { page ->
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth(itemWidthFraction)
+                                .aspectRatio(1f)
+                                .background(randomColor())
+                                .testTag(page.toString())
+                        ) {
+                            BasicText(
+                                text = page.toString(),
+                                modifier = Modifier.align(Alignment.Center)
+                            )
+                        }
                     }
                 }
             }

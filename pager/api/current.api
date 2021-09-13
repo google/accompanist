@@ -5,14 +5,15 @@ package com.google.accompanist.pager {
   }
 
   public final class Pager {
-    method @androidx.compose.runtime.Composable @com.google.accompanist.pager.ExperimentalPagerApi public static void HorizontalPager(int count, optional androidx.compose.ui.Modifier modifier, optional com.google.accompanist.pager.PagerState state, optional boolean reverseLayout, optional float itemSpacing, optional androidx.compose.foundation.gestures.FlingBehavior flingBehavior, optional androidx.compose.ui.Alignment.Vertical verticalAlignment, optional kotlin.jvm.functions.Function1<? super java.lang.Integer,?>? key, optional androidx.compose.foundation.layout.PaddingValues contentPadding, kotlin.jvm.functions.Function2<? super com.google.accompanist.pager.PagerScope,? super java.lang.Integer,kotlin.Unit> content);
-    method @androidx.compose.runtime.Composable @com.google.accompanist.pager.ExperimentalPagerApi public static void VerticalPager(int count, optional androidx.compose.ui.Modifier modifier, optional com.google.accompanist.pager.PagerState state, optional boolean reverseLayout, optional float itemSpacing, optional androidx.compose.foundation.gestures.FlingBehavior flingBehavior, optional androidx.compose.ui.Alignment.Horizontal horizontalAlignment, optional kotlin.jvm.functions.Function1<? super java.lang.Integer,?>? key, optional androidx.compose.foundation.layout.PaddingValues contentPadding, kotlin.jvm.functions.Function2<? super com.google.accompanist.pager.PagerScope,? super java.lang.Integer,kotlin.Unit> content);
+    method @androidx.compose.runtime.Composable @com.google.accompanist.pager.ExperimentalPagerApi public static void HorizontalPager(int count, optional androidx.compose.ui.Modifier modifier, optional com.google.accompanist.pager.PagerState state, optional boolean reverseLayout, optional float itemSpacing, optional androidx.compose.foundation.layout.PaddingValues contentPadding, optional androidx.compose.ui.Alignment.Vertical verticalAlignment, optional androidx.compose.foundation.gestures.FlingBehavior flingBehavior, optional kotlin.jvm.functions.Function1<? super java.lang.Integer,?>? key, kotlin.jvm.functions.Function2<? super com.google.accompanist.pager.PagerScope,? super java.lang.Integer,kotlin.Unit> content);
+    method @androidx.compose.runtime.Composable @com.google.accompanist.pager.ExperimentalPagerApi public static void VerticalPager(int count, optional androidx.compose.ui.Modifier modifier, optional com.google.accompanist.pager.PagerState state, optional boolean reverseLayout, optional float itemSpacing, optional androidx.compose.foundation.layout.PaddingValues contentPadding, optional androidx.compose.ui.Alignment.Horizontal horizontalAlignment, optional androidx.compose.foundation.gestures.FlingBehavior flingBehavior, optional kotlin.jvm.functions.Function1<? super java.lang.Integer,?>? key, kotlin.jvm.functions.Function2<? super com.google.accompanist.pager.PagerScope,? super java.lang.Integer,kotlin.Unit> content);
     method @com.google.accompanist.pager.ExperimentalPagerApi public static float calculateCurrentOffsetForPage(com.google.accompanist.pager.PagerScope, int page);
   }
 
   @com.google.accompanist.pager.ExperimentalPagerApi public final class PagerDefaults {
-    method @androidx.compose.runtime.Composable public androidx.compose.foundation.gestures.FlingBehavior flingBehavior(com.google.accompanist.pager.PagerState state, optional androidx.compose.animation.core.DecayAnimationSpec<java.lang.Float> decayAnimationSpec, optional androidx.compose.animation.core.AnimationSpec<java.lang.Float> snapAnimationSpec);
-    method @Deprecated @androidx.compose.runtime.Composable public androidx.compose.foundation.gestures.FlingBehavior rememberPagerFlingConfig(com.google.accompanist.pager.PagerState state, optional androidx.compose.animation.core.DecayAnimationSpec<java.lang.Float> decayAnimationSpec, optional androidx.compose.animation.core.AnimationSpec<java.lang.Float> snapAnimationSpec);
+    method @androidx.compose.runtime.Composable @dev.chrisbanes.snapper.ExperimentalSnapperApi public androidx.compose.foundation.gestures.FlingBehavior flingBehavior(com.google.accompanist.pager.PagerState state, optional androidx.compose.animation.core.DecayAnimationSpec<java.lang.Float> decayAnimationSpec, optional androidx.compose.animation.core.AnimationSpec<java.lang.Float> snapAnimationSpec, optional kotlin.jvm.functions.Function1<? super dev.chrisbanes.snapper.SnapperLayoutInfo,java.lang.Float> maximumFlingDistance, optional float endContentPadding);
+    method public kotlin.jvm.functions.Function1<dev.chrisbanes.snapper.SnapperLayoutInfo,java.lang.Float> getSinglePageFlingDistance();
+    property public final kotlin.jvm.functions.Function1<dev.chrisbanes.snapper.SnapperLayoutInfo,java.lang.Float> singlePageFlingDistance;
     field public static final com.google.accompanist.pager.PagerDefaults INSTANCE;
   }
 
@@ -53,9 +54,6 @@ package com.google.accompanist.pager {
   public final class PagerStateKt {
     method @Deprecated @androidx.compose.runtime.Composable @com.google.accompanist.pager.ExperimentalPagerApi public static inline com.google.accompanist.pager.PagerState rememberPagerState(@IntRange(from=0) int pageCount, optional @IntRange(from=0) int initialPage, optional @FloatRange(from=0.0, to=1.0) float initialPageOffset, optional @IntRange(from=1) int initialOffscreenLimit, optional boolean infiniteLoop);
     method @androidx.compose.runtime.Composable @com.google.accompanist.pager.ExperimentalPagerApi public static com.google.accompanist.pager.PagerState rememberPagerState(optional @IntRange(from=0) int initialPage);
-  }
-
-  public final class SnappingFlingBehaviorKt {
   }
 
 }
