@@ -39,6 +39,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
+import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 
 @Deprecated(
@@ -173,12 +174,12 @@ class PagerState(
             ?: when {
                 // If a scroll isn't in progress, return the current page
                 !isScrollInProgress -> currentPage
+                // If the offset is 0f (or very close), return the current page
+                currentPageOffset.absoluteValue < 0.001f -> currentPage
                 // If we're offset towards the start, guess the previous page
                 currentPageOffset < -0.5f -> (currentPage - 1).coerceAtLeast(0)
                 // If we're offset towards the end, guess the next page
-                currentPageOffset > 0.5f -> (currentPage + 1).coerceAtMost(pageCount - 1)
-                // Else we guess the current page
-                else -> currentPage
+                else -> (currentPage + 1).coerceAtMost(pageCount - 1)
             }
 
     @Deprecated(
