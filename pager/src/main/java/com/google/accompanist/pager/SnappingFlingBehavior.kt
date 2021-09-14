@@ -34,7 +34,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import kotlin.math.abs
-import kotlin.math.absoluteValue
 
 /**
  * Default values used for [SnappingFlingBehavior] & [rememberSnappingFlingBehavior].
@@ -82,7 +81,7 @@ internal class SnappingFlingBehavior(
     private val snapAnimationSpec: AnimationSpec<Float>,
 ) : FlingBehavior {
     /**
-     * The target page for any on-going animations.
+     * The target item index for any on-going animations.
      */
     var animationTarget: Int? by mutableStateOf(null)
         private set
@@ -90,31 +89,25 @@ internal class SnappingFlingBehavior(
     override suspend fun ScrollScope.performFling(
         initialVelocity: Float
     ): Float {
-        val pageInfo = currentLayoutPageInfo ?: return initialVelocity
-        val pageSize = pageInfo.size
-        val decayTargetOffset = decayAnimationSpec.calculateTargetValue(
-            initialValue = pageInfo.offset.toFloat(),
-            initialVelocity = initialVelocity
-        )
+        val itemInfo = currentItemInfo ?: return initialVelocity
 
-        // If the decay fling will scroll more than the width of the page, fling with
-        // using a decaying scroll
-        return if (decayTargetOffset.absoluteValue >= pageSize) {
-            performDecayFling(initialVelocity, pageInfo)
+        // If the decay fling can scroll past the current item, fling with decay
+        return if (decayAnimationSpec.canFlingPastCurrentItem(itemInfo, initialVelocity)) {
+            performDecayFling(initialVelocity, itemInfo)
         } else {
-            // Otherwise we 'spring' to current/next page
+            // Otherwise we 'spring' to current/next item
             performSpringFling(
                 index = when {
-                    // If the velocity is greater than 1 page per second (velocity is px/s), spring
+                    // If the velocity is greater than 1 item per second (velocity is px/s), spring
                     // in the relevant direction
-                    initialVelocity > pageSize -> {
-                        (pageInfo.index + 1).coerceAtMost(lazyListState.layoutInfo.totalItemsCount - 1)
+                    initialVelocity > itemInfo.size -> {
+                        (itemInfo.index + 1).coerceAtMost(lazyListState.layoutInfo.totalItemsCount - 1)
                     }
-                    initialVelocity < -pageSize -> pageInfo.index
-                    // If the velocity is 0 (or less than the size of a page), spring to whatever
-                    // page is closest to the snap point
-                    pageInfo.offset < -pageSize / 2 -> pageInfo.index + 1
-                    else -> pageInfo.index
+                    initialVelocity < -itemInfo.size -> itemInfo.index
+                    // If the velocity is 0 (or less than the size of the item), spring to
+                    // whichever item is closest to the snap point
+                    itemInfo.offset < -itemInfo.size / 2 -> itemInfo.index + 1
+                    else -> itemInfo.index
                 },
                 initialVelocity = initialVelocity,
             )
@@ -123,18 +116,15 @@ internal class SnappingFlingBehavior(
 
     private suspend fun ScrollScope.performDecayFling(
         initialVelocity: Float,
-        startPage: LazyListItemInfo,
+        startItem: LazyListItemInfo,
     ): Float {
         val index = when {
-            initialVelocity > 0 -> startPage.index + 1
-            else -> startPage.index
+            initialVelocity > 0 -> startItem.index + 1
+            else -> startItem.index
         }
+        val forward = index > (currentItemInfo?.index ?: return initialVelocity)
 
-        // If we don't have a current layout, we can't snap
-        val pageInfo = currentLayoutPageInfo ?: return initialVelocity
-        val forward = index > pageInfo.index
-
-        // Update the animationTargetPage
+        // Update the animationTarget
         animationTarget = index
 
         var velocityLeft = initialVelocity
@@ -148,22 +138,22 @@ internal class SnappingFlingBehavior(
             lastValue = value
             velocityLeft = this.velocity
 
-            val page = currentLayoutPageInfo
-            if (page == null) {
+            val current = currentItemInfo
+            if (current == null) {
                 cancelAnimation()
                 return@animateDecay
             }
 
             if (
                 !forward &&
-                (page.index < index || page.index == index && page.offset >= 0)
+                (current.index < index || current.index == index && current.offset >= 0)
             ) {
                 // 'snap back' to the item as we may have scrolled past it
                 scrollBy(lazyListState.calculateScrollOffsetToItem(index).toFloat())
                 cancelAnimation()
             } else if (
                 forward &&
-                (page.index > index || page.index == index && page.offset <= 0)
+                (current.index > index || current.index == index && current.offset <= 0)
             ) {
                 // 'snap back' to the item as we may have scrolled past it
                 scrollBy(lazyListState.calculateScrollOffsetToItem(index).toFloat())
@@ -183,13 +173,13 @@ internal class SnappingFlingBehavior(
         initialVelocity: Float = 0f,
     ): Float {
         // If we don't have a current layout, we can't snap
-        val currentLayout = currentLayoutPageInfo ?: return initialVelocity
+        val initialItem = currentItemInfo ?: return initialVelocity
 
-        val forward = index > currentLayout.index
-        // We add 20% on to the size of the current item, to compensate for any item spacing, etc
-        val target = (if (forward) currentLayout.size else -currentLayout.size) * 1.2f
+        val forward = index > initialItem.index
+        // We add 10% on to the size of the current item, to compensate for any item spacing, etc
+        val target = (if (forward) initialItem.size else -initialItem.size) * 1.1f
 
-        // Update the animationTargetPage
+        // Update the animationTarget
         animationTarget = index
 
         var velocityLeft = initialVelocity
@@ -212,23 +202,14 @@ internal class SnappingFlingBehavior(
             lastValue = coercedValue
             velocityLeft = this.velocity
 
-            val page = currentLayoutPageInfo
-            if (page == null) {
+            val current = currentItemInfo
+            if (current == null) {
                 cancelAnimation()
                 return@animateTo
             }
 
-            if (
-                !forward &&
-                (page.index < index || (page.index == index && page.offset >= scrollOffset))
-            ) {
-                // 'snap back' to the item as we may have scrolled past it
-                scrollBy(lazyListState.calculateScrollOffsetToItem(index).toFloat())
-                cancelAnimation()
-            } else if (
-                forward &&
-                (page.index > index || (page.index == index && page.offset <= scrollOffset))
-            ) {
+            if (scrolledPastItem(initialVelocity, current, index, scrollOffset)) {
+                // If we've scrolled to/past the item, stop the animation. We may also need to
                 // 'snap back' to the item as we may have scrolled past it
                 scrollBy(lazyListState.calculateScrollOffsetToItem(index).toFloat())
                 cancelAnimation()
@@ -245,8 +226,41 @@ internal class SnappingFlingBehavior(
         return layoutInfo.visibleItemsInfo.firstOrNull { it.index == index }?.offset ?: 0
     }
 
-    private val currentLayoutPageInfo: LazyListItemInfo?
+    private val currentItemInfo: LazyListItemInfo?
         get() = lazyListState.layoutInfo.visibleItemsInfo.asSequence()
             .filter { it.offset <= 0 && it.offset + it.size > 0 }
             .lastOrNull()
+}
+
+private fun scrolledPastItem(
+    initialVelocity: Float,
+    currentItem: LazyListItemInfo,
+    targetIndex: Int,
+    targetScrollOffset: Int = 0,
+): Boolean {
+    return if (initialVelocity > 0) {
+        // forward
+        currentItem.index > targetIndex ||
+            (currentItem.index == targetIndex && currentItem.offset <= targetScrollOffset)
+    } else {
+        // backwards
+        currentItem.index < targetIndex ||
+            (currentItem.index == targetIndex && currentItem.offset >= targetScrollOffset)
+    }
+}
+
+private fun DecayAnimationSpec<Float>.canFlingPastCurrentItem(
+    currentItem: LazyListItemInfo,
+    initialVelocity: Float,
+): Boolean {
+    val targetValue = calculateTargetValue(
+        initialValue = currentItem.offset.toFloat(),
+        initialVelocity = initialVelocity,
+    )
+    return when {
+        // forward. We add 10% onto the size to cater for any item spacing
+        initialVelocity > 0 -> targetValue <= -(currentItem.size * 1.1f)
+        // backwards. We add 10% onto the size to cater for any item spacing
+        else -> targetValue >= (currentItem.size * 0.1f)
+    }
 }
