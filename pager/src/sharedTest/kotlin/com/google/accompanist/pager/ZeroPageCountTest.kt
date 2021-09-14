@@ -37,7 +37,7 @@ class ZeroPageCountTest {
     @Test
     fun horizontalPager() {
         rule.setContent {
-            HorizontalPager(rememberPagerState(pageCount = 0), Modifier.fillMaxSize()) {
+            HorizontalPager(count = 0, Modifier.fillMaxSize()) {
                 Box(Modifier.fillMaxSize().testTag(TestTag))
             }
         }
@@ -49,7 +49,7 @@ class ZeroPageCountTest {
     @Test
     fun verticalPager() {
         rule.setContent {
-            VerticalPager(rememberPagerState(pageCount = 0), Modifier.fillMaxSize()) {
+            VerticalPager(count = 0, Modifier.fillMaxSize()) {
                 Box(Modifier.fillMaxSize().testTag(TestTag))
             }
         }

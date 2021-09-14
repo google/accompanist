@@ -24,9 +24,7 @@ The simplest usage looks like the following:
 
 ``` kotlin
 // Display 10 items
-val pagerState = rememberPagerState(pageCount = 10)
-
-HorizontalPager(state = pagerState) { page ->
+HorizontalPager(count = 10) { page ->
     // Our page content
     Text(
         text = "Page: $page",
@@ -36,6 +34,19 @@ HorizontalPager(state = pagerState) { page ->
 ```
 
 If you want to jump to a specific page, you either call call `pagerState.scrollToPage(index)` or  `pagerState.animateScrollToPage(index)` method in a `CoroutineScope`.
+
+``` kotlin
+val pagerState = rememberPagerState()
+
+HorizontalPager(count = 10, state = pagerState) { page ->
+    // ...page content
+}
+
+// Later, scroll to page 2
+scope.launch {
+    pagerState.scrollToPage(2)
+}
+```
 
 ## VerticalPager
 
@@ -51,9 +62,7 @@ If you want to jump to a specific page, you either call call `pagerState.scrollT
 
 ``` kotlin
 // Display 10 items
-val pagerState = rememberPagerState(pageCount = 10)
-
-VerticalPager(state = pagerState) { page ->
+VerticalPager(count = 10) { page ->
     // Our page content
     Text(
         text = "Page: $page",
@@ -66,20 +75,62 @@ VerticalPager(state = pagerState) { page ->
 
 Pages in both [`HorizontalPager`][api-horizpager] and [`VerticalPager`][api-vertpager] are lazily composed and laid-out as required by the layout. As the user scrolls through pages, any pages which are no longer required are removed from the content.
 
-### Offscreen Limit
+Under the covers, `HorizontalPager` use [`LazyRow`](https://developer.android.com/jetpack/compose/lists#lazy), and `VerticalPager` uses [`LazyColumn`](https://developer.android.com/jetpack/compose/lists#lazy).
 
-The [PagerState][pagerstate-api] API allows the setting of the `initialOffscreenLimit`, which defines the number of pages that should be retained on either side of the current page. Pages beyond this limit will be removed, and then recreated as needed. This value defaults to `1`, but can be increased to enable pre-loading of more content:
 
-```kotlin
-val pagerState = rememberPagerState(
-    pageCount = 10,
-    initialOffscreenLimit = 2,
-)
+## Content Padding
 
-HorizontalPager(state = pagerState) { page ->
-    // ...
-}
-```
+`HorizontalPager` and `VerticalPager` both support the setting of content padding, which allows you to influence the maximum size and alignment of pages.
+
+You can see how different content padding values affect a `HorizontalPager` below:
+
+=== "start = 64.dp"
+
+    Setting the start padding has the effect of aligning the pages towards the end.
+
+    ![](contentpadding-start.png){: loading=lazy width=70% align=center }
+
+    ``` kotlin
+    HorizontalPager(
+        count = 4,
+        contentPadding = PaddingValues(start = 64.dp),
+    ) { page ->
+        // page content
+    }
+    ```
+
+=== "horizontal = 32.dp"
+
+    Setting both the start and end padding to the same value has the effect of centering the item horizontally.
+
+    ![](contentpadding-horizontal.png){: loading=lazy width=70% align=center }
+
+    ``` kotlin
+    HorizontalPager(
+        count = 4,
+        contentPadding = PaddingValues(horizontal = 32.dp),
+    ) { page ->
+        // page content
+    }
+    ```
+
+=== "end = 64.dp"
+
+    Setting the end padding has the effect of aligning the pages towards the start.
+
+    ![](contentpadding-end.png){: loading=lazy width=70% align=center }
+
+    ``` kotlin
+    HorizontalPager(
+        count = 4,
+        contentPadding = PaddingValues(end = 64.dp),
+    ) { page ->
+        // page content
+    }
+    ```
+
+Similar effects for `VerticalPager` can be achieved by setting the `top` and `bottom` values. The value `32.dp` is only used
+here as an example, you can set each of the padding dimensions to whatever value you wish.
 
 ## Item scroll effects
 
@@ -101,7 +152,7 @@ The scope provided to your pager content allows apps to easily reference the [`c
 ``` kotlin
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
 
-HorizontalPager(state = pagerState) { page ->
+HorizontalPager(count = 4) { page ->
     Card(
         Modifier
             .graphicsLayer {
@@ -138,10 +189,20 @@ HorizontalPager(state = pagerState) { page ->
 The [`PagerState.currentPage`][currentpage-api] property is updated whenever the selected page changes. You can use the `snapshowFlow` function to observe changes in a flow:
 
 ``` kotlin
+val pagerState = rememberPagerState()
+
 LaunchedEffect(pagerState) {
+    // Collect from the a snapshotFlow reading the currentPage
     snapshotFlow { pagerState.currentPage }.collect { page ->
-        // Selected page has changed...
+        AnalyticsService.sendPageSelectedEvent(page)
     }
+}
+
+VerticalPager(
+    count = 10,
+    state = pagerState,
+) { page ->
+    Text(text = "Page: $page")
 }
 ```
 
@@ -176,7 +237,7 @@ A common use-case for [`HorizontalPager`][api-horizpager] is to be used in conju
 Provided in the `pager-indicators` library is a modifier which can be used on a tab indicator like so:
 
 ``` kotlin
-val pagerState = rememberPagerState(pageCount = pages.size)
+val pagerState = rememberPagerState()
 
 TabRow(
     // Our selected tab is our current page
@@ -198,10 +259,32 @@ TabRow(
     }
 }
 
-HorizontalPager(state = pagerState) { page ->
+HorizontalPager(
+    count = pages.size,
+    state = pagerState,
+) { page ->
     // TODO: page content
 }
 ```
+
+## Changes in v0.19.0
+
+In v0.19.0 both `HorizontalPager` and `VerticalPager` were re-written to be based on `LazyRow` and `LazyColumn` respectively. As part of this change, a number of feature and API changes were made:
+
+### PagerState
+
+- The `pageCount` parameter on `rememberPagerState()` has been removed, replaced with the `count` parameter on `HorizontalPager()` and `VerticalPager()`.
+- The `animationSpec`, `initialVelocity` and `skipPages` parameters on `animateScrollToPage()` have been removed. The lazy components handle this automatically.
+
+### HorizontalPager & VerticalPager
+
+- Ability to set `contentPadding` (see [above](#content-padding)).
+- Ability to specify a `key` for each page.
+- The `horizontalAlignment` parameter on `HorizontalPager`, and the `verticalAlignment` parameter on `VerticalPager` have been removed. A similar effect can be implemented with an appropriate content padding (see [above](#content-padding)).
+- The `infiniteLooping` parameter and feature have been removed. A sample demonstrating how to achieve this effect can be found [here][looping-sample].
+- The `offscreenLimit` parameter has been removed. We no longer have control of what items are laid out 'off screen'.
+- The `dragEnabled` parameter has removed.
+- `PagerScope` (the page item scope) no longer implements `BoxScope`. 
 
 ---
 
@@ -255,3 +338,4 @@ limitations under the License.
   [currentpageoffset-api]: ../api/pager/pager/com.google.accompanist.pager/-pager-state/current-page-offset.html
   [calcoffsetpage]: ../api/pager/pager/com.google.accompanist.pager/calculate-current-offset-for-page.html
   [pagerstate-api]: ../api/pager/pager/com.google.accompanist.pager/remember-pager-state.html
+  [looping-sample]: https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/pager/HorizontalPagerLoopingSample.kt

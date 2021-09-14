@@ -18,9 +18,8 @@ package com.google.accompanist.pager
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -29,6 +28,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertHeightIsAtLeast
 import androidx.compose.ui.test.assertLeftPositionInRootIsEqualTo
+import androidx.compose.ui.test.assertTopPositionInRootIsEqualTo
 import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.onRoot
@@ -37,7 +37,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.height
 import androidx.compose.ui.unit.width
-import com.google.common.truth.Truth.assertThat
 
 /**
  * Contains the [VerticalPager] tests. This class is extended
@@ -46,69 +45,55 @@ import com.google.common.truth.Truth.assertThat
  */
 @OptIn(ExperimentalPagerApi::class) // Pager is currently experimental
 abstract class BaseVerticalPagerTest(
-    private val verticalAlignment: Alignment.Vertical,
+    private val contentPadding: PaddingValues,
     // We don't use the Dp type due to https://youtrack.jetbrains.com/issue/KT-35523
     private val itemSpacingDp: Int,
-    override val offscreenLimit: Int,
     private val reverseLayout: Boolean,
-    override val infiniteLoop: Boolean,
 ) : PagerTest() {
 
     override fun SemanticsNodeInteraction.swipeAcrossCenter(
         distancePercentage: Float,
-        velocity: Float,
+        velocityPerSec: Dp,
     ): SemanticsNodeInteraction = swipeAcrossCenterWithVelocity(
         distancePercentageY = if (reverseLayout) -distancePercentage else distancePercentage,
-        velocity = velocity,
+        velocityPerSec = velocityPerSec,
     )
 
     override fun SemanticsNodeInteraction.assertLaidOutItemPosition(
         page: Int,
-        currentPage: Int
+        currentPage: Int,
+        offset: Float,
     ): SemanticsNodeInteraction {
         val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
-        val expectedItemSize = rootBounds.width
+        val expectedItemHeight = rootBounds.height -
+            contentPadding.calculateTopPadding() -
+            contentPadding.calculateBottomPadding()
+        val expectedItemWidth = rootBounds.width
 
-        // The expected coordinates. This uses the implicit fact that VerticalPager by
-        // use Alignment.CenterVertically by default, and that we're using items
-        // with an aspect ratio of 1:1
-        val expectedLeft = (rootBounds.width - expectedItemSize) / 2
-        val expectedFirstItemTop = when (verticalAlignment) {
-            Alignment.Top -> 0.dp
-            Alignment.Bottom -> rootBounds.height - expectedItemSize
-            else /* Alignment.CenterVertically */ -> (rootBounds.height - expectedItemSize) / 2
+        val expectedLeft = (rootBounds.width - expectedItemWidth) / 2
+        val expectedFirstItemTop = when (reverseLayout) {
+            true -> (rootBounds.height - contentPadding.calculateBottomPadding() - expectedItemHeight) + (expectedItemHeight * offset)
+            false -> contentPadding.calculateTopPadding() - (expectedItemHeight * offset)
         }
 
-        return assertWidthIsEqualTo(expectedItemSize)
-            .assertHeightIsAtLeast(expectedItemSize)
+        return assertWidthIsEqualTo(expectedItemWidth)
+            .assertHeightIsAtLeast(expectedItemHeight)
             .assertLeftPositionInRootIsEqualTo(expectedLeft)
             .run {
-                val pageDelta = ((expectedItemSize + itemSpacingDp.dp) * (page - currentPage))
-                // Not sure why, but there's a rounding error somewhere.
-                // TODO: reduce this tolerance and work out where the issue is
+                val pageDelta = ((expectedItemHeight + itemSpacingDp.dp) * (page - currentPage))
                 if (reverseLayout) {
-                    assertTopPositionInRootIsEqualTo(
-                        expectedTop = expectedFirstItemTop - pageDelta,
-                        tolerance = 1.dp
-                    )
+                    assertTopPositionInRootIsEqualTo(expectedFirstItemTop - pageDelta)
                 } else {
-                    assertTopPositionInRootIsEqualTo(
-                        expectedTop = expectedFirstItemTop + pageDelta,
-                        tolerance = 1.dp
-                    )
+                    assertTopPositionInRootIsEqualTo(expectedFirstItemTop + pageDelta)
                 }
             }
     }
 
     override fun setPagerContent(
-        pageCount: Int,
+        count: () -> Int,
         observeStateInContent: Boolean,
     ): PagerState {
-        val pagerState = PagerState(
-            pageCount = pageCount,
-            offscreenLimit = offscreenLimit,
-            infiniteLoop = infiniteLoop,
-        ).apply { testing = true }
+        val pagerState = PagerState()
         // Stick to LTR for vertical tests
         composeTestRule.setContent(LayoutDirection.Ltr) {
             applierScope = rememberCoroutineScope()
@@ -119,16 +104,16 @@ abstract class BaseVerticalPagerTest(
                 }
 
                 VerticalPager(
+                    count = count(),
                     state = pagerState,
                     itemSpacing = itemSpacingDp.dp,
                     reverseLayout = reverseLayout,
-                    verticalAlignment = verticalAlignment,
+                    contentPadding = contentPadding,
                     modifier = Modifier.fillMaxSize()
                 ) { page ->
                     Box(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(1f)
+                            .fillMaxSize()
                             .background(randomColor())
                             .testTag(page.toString())
                     ) {
@@ -142,17 +127,4 @@ abstract class BaseVerticalPagerTest(
         }
         return pagerState
     }
-}
-
-/**
- * A version of `assertTopPositionInRootIsEqualTo` which allows setting of the tolerance.
- */
-private fun SemanticsNodeInteraction.assertTopPositionInRootIsEqualTo(
-    expectedTop: Dp,
-    tolerance: Dp = 0.5.dp
-): SemanticsNodeInteraction {
-    assertThat(getUnclippedBoundsInRoot().top.value)
-        .isWithin(tolerance.value)
-        .of(expectedTop.value)
-    return this
 }

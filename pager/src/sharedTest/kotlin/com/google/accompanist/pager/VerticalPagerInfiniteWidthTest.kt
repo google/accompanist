@@ -50,7 +50,7 @@ class VerticalPagerInfiniteWidthTest {
         rule.setContent {
             Row(Modifier.horizontalScroll(rememberScrollState())) {
                 VerticalPager(
-                    state = rememberPagerState(pageCount = 10),
+                    count = 10,
                     modifier = Modifier
                         .fillMaxHeight()
                         // fillMaxWidth() with horizontalScroll() parents means that pager will

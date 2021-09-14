@@ -26,10 +26,8 @@ import androidx.compose.ui.test.percentOffset
 import androidx.compose.ui.test.performGesture
 import androidx.compose.ui.test.swipe
 import androidx.compose.ui.test.swipeWithVelocity
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.TestCoroutineScope
 import kotlin.math.absoluteValue
 import kotlin.math.hypot
 import kotlin.math.roundToLong
@@ -48,7 +46,7 @@ fun ComposeContentTestRule.setContent(
 }
 
 internal fun SemanticsNodeInteraction.swipeAcrossCenterWithVelocity(
-    velocity: Float,
+    velocityPerSec: Dp,
     distancePercentageX: Float = 0f,
     distancePercentageY: Float = 0f,
 ): SemanticsNodeInteraction = performGesture {
@@ -60,11 +58,16 @@ internal fun SemanticsNodeInteraction.swipeAcrossCenterWithVelocity(
         x = 0.5f + distancePercentageX / 2,
         y = 0.5f + distancePercentageY / 2
     )
+
+    val node = fetchSemanticsNode("Failed to retrieve bounds of the node.")
+    val density = node.root!!.density
+    val velocityPxPerSec = with(density) { velocityPerSec.toPx() }
+
     try {
         swipeWithVelocity(
             start = startOffset,
             end = endOffset,
-            endVelocity = velocity,
+            endVelocity = velocityPxPerSec,
         )
     } catch (e: IllegalArgumentException) {
         // swipeWithVelocity throws an exception if the given distance + velocity isn't feasible:
@@ -75,15 +78,10 @@ internal fun SemanticsNodeInteraction.swipeAcrossCenterWithVelocity(
         swipe(
             start = startOffset,
             end = endOffset,
-            durationMillis = ((distance.absoluteValue / velocity) * 1000).roundToLong(),
+            durationMillis = ((distance.absoluteValue / velocityPxPerSec) * 1000).roundToLong(),
         )
     }
 }
-
-fun SemanticsNodeInteraction.assertWhen(
-    condition: Boolean,
-    block: SemanticsNodeInteraction.() -> SemanticsNodeInteraction
-): SemanticsNodeInteraction = if (condition) block(this) else this
 
 fun randomColor() = Color(
     alpha = 1f,
@@ -91,15 +89,3 @@ fun randomColor() = Color(
     green = Random.nextFloat(),
     blue = Random.nextFloat(),
 )
-
-/**
- * Copied from Turbine:
- * https://github.com/cashapp/turbine/blob/trunk/src/jvmTest/kotlin/app/cash/turbine/jvmTestUtil.kt
- */
-@OptIn(ExperimentalCoroutinesApi::class)
-fun suspendTest(body: suspend TestCoroutineScope.() -> Unit) {
-    // We don't use runBlockingTest because it always advances time unconditionally.
-    val scope = TestCoroutineScope()
-    scope.launch { scope.body() }
-    scope.cleanupTestCoroutines()
-}

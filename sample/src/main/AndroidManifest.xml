@@ -127,8 +127,8 @@
         </activity>
 
         <activity
-            android:name=".pager.HorizontalPagerTabsSample"
-            android:label="@string/horiz_pager_title_tabs"
+            android:name=".pager.HorizontalPagerLoopingSample"
+            android:label="@string/horiz_pager_title_looping"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -136,9 +136,10 @@
             </intent-filter>
         </activity>
 
+
         <activity
-            android:name=".pager.HorizontalPagerLoopSample"
-            android:label="@string/horiz_pager_title_loop"
+            android:name=".pager.HorizontalPagerTabsSample"
+            android:label="@string/horiz_pager_title_tabs"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -169,16 +170,6 @@
         <activity
             android:name=".pager.VerticalPagerWithIndicatorSample"
             android:label="@string/vertical_pager_with_indicator_title"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".pager.VerticalPagerLoopSample"
-            android:label="@string/vertical_pager_title_loop"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

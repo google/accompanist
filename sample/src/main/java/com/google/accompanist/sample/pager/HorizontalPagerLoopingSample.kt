@@ -20,12 +20,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -37,13 +35,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.VerticalPager
-import com.google.accompanist.pager.VerticalPagerIndicator
+import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 
-class VerticalPagerLoopSample : ComponentActivity() {
+class HorizontalPagerLoopingSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -63,7 +60,7 @@ private fun Sample() {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.vertical_pager_title_loop)) },
+                title = { Text(stringResource(R.string.horiz_pager_title_looping)) },
                 backgroundColor = MaterialTheme.colors.surface,
             )
         },
@@ -71,35 +68,31 @@ private fun Sample() {
     ) {
         Column(Modifier.fillMaxSize()) {
             // Display 10 items
-            val pagerState = rememberPagerState(
-                pageCount = 10,
-                // We increase the offscreen limit, to allow pre-loading of images
-                initialOffscreenLimit = 2,
-                // Allows infinite loop
-                infiniteLoop = true
-            )
+            val pageCount = 10
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.weight(1f),
-            ) {
-                VerticalPager(
-                    state = pagerState,
+            // We start the pager in the middle of the raw number of pages
+            val startIndex = Int.MAX_VALUE / 2
+            val pagerState = rememberPagerState(initialPage = startIndex)
+
+            HorizontalPager(
+                // Set the raw page count to a really large number
+                count = Int.MAX_VALUE,
+                state = pagerState,
+                // Add 32.dp horizontal padding to 'center' the pages
+                contentPadding = PaddingValues(horizontal = 32.dp),
+                // Add some horizontal spacing between items
+                itemSpacing = 4.dp,
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+            ) { index ->
+                // We calculate the page from the given index
+                val page = (index - startIndex).floorMod(pageCount)
+                PagerSampleItem(
+                    page = page,
                     modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight()
-                ) { page ->
-                    PagerSampleItem(
-                        page = page,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(1f),
-                    )
-                }
-
-                VerticalPagerIndicator(
-                    pagerState = pagerState,
-                    modifier = Modifier.padding(16.dp)
+                        .fillMaxWidth()
+                        .aspectRatio(1f)
                 )
             }
 
@@ -109,4 +102,9 @@ private fun Sample() {
             )
         }
     }
+}
+
+private fun Int.floorMod(other: Int): Int = when (other) {
+    0 -> this
+    else -> this - floorDiv(other) * other
 }

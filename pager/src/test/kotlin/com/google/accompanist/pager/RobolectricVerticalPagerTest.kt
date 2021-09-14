@@ -16,7 +16,8 @@
 
 package com.google.accompanist.pager
 
-import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.ui.unit.dp
 import com.google.accompanist.internal.test.combineWithParameters
 import com.google.accompanist.internal.test.parameterizedParams
 import org.junit.runner.RunWith
@@ -29,31 +30,31 @@ import org.robolectric.annotation.Config
 @Config(qualifiers = "w360dp-h640dp-xhdpi")
 @RunWith(ParameterizedRobolectricTestRunner::class)
 class RobolectricVerticalPagerTest(
-    verticalAlignment: Alignment.Vertical,
+    contentPadding: PaddingValues,
     itemSpacingDp: Int,
-    offscreenLimit: Int,
     reverseLayout: Boolean,
-    infiniteLoop: Boolean
 ) : BaseVerticalPagerTest(
-    verticalAlignment,
+    contentPadding,
     itemSpacingDp,
-    offscreenLimit,
     reverseLayout,
-    infiniteLoop
 ) {
     companion object {
         @JvmStatic
-        @ParameterizedRobolectricTestRunner.Parameters
+        @ParameterizedRobolectricTestRunner.Parameters(
+            name = "contentPadding={0}," +
+                "itemSpacing={1}," +
+                "reverseLayout={2}"
+        )
         fun data() = parameterizedParams()
-            // verticalAlignment
-            .combineWithParameters(Alignment.CenterVertically, Alignment.Top, Alignment.Bottom)
+            // contentPadding
+            .combineWithParameters(
+                PaddingValues(bottom = 32.dp), // Alignment.Top
+                PaddingValues(vertical = 32.dp), // Alignment.Center
+                PaddingValues(top = 32.dp), // Alignment.Bottom
+            )
             // itemSpacingDp
             .combineWithParameters(0, 4)
-            // offscreenLimit
-            .combineWithParameters(1, 2)
             // reverseLayout
-            .combineWithParameters(true, false)
-            // looping
             .combineWithParameters(true, false)
     }
 }

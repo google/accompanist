@@ -49,7 +49,7 @@ class HorizontalPagerInfiniteHeightTest {
         rule.setContent {
             Column(Modifier.verticalScroll(rememberScrollState())) {
                 HorizontalPager(
-                    state = rememberPagerState(pageCount = 10),
+                    count = 10,
                     modifier = Modifier
                         // fillMaxHeight() with verticalScroll() parents means that pager will
                         // receive infinite max height constraints which doesn't make much sense

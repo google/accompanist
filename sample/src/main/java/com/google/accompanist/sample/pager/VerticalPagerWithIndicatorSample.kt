@@ -20,11 +20,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -70,28 +69,25 @@ private fun Sample() {
         modifier = Modifier.fillMaxSize()
     ) {
         Column(Modifier.fillMaxSize()) {
-            // Display 10 items
-            val pagerState = rememberPagerState(
-                pageCount = 10,
-                // We increase the offscreen limit, to allow pre-loading of images
-                initialOffscreenLimit = 2,
-            )
+            val pagerState = rememberPagerState()
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.weight(1f),
             ) {
+                // Display 10 items
                 VerticalPager(
+                    count = 10,
                     state = pagerState,
+                    // Add 32.dp vertical padding to 'center' the pages
+                    contentPadding = PaddingValues(vertical = 32.dp),
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight()
                 ) { page ->
                     PagerSampleItem(
                         page = page,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(1f),
+                        modifier = Modifier.fillMaxSize()
                     )
                 }
 
