@@ -25,9 +25,9 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.net.toUri
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.navArgument
 import androidx.navigation.contains
 import androidx.navigation.navDeepLink
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import androidx.navigation.plusAssign
 import androidx.navigation.testing.TestNavHostController
