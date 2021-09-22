@@ -18,8 +18,10 @@
 
 package com.google.accompanist.lazysnap
 
+import androidx.compose.animation.core.AnimationScope
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.AnimationState
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.DecayAnimationSpec
 import androidx.compose.animation.core.animateDecay
 import androidx.compose.animation.core.animateTo
@@ -179,64 +181,40 @@ class SnappingFlingBehavior(
             }
         )
 
-        // Update the animationTarget
-        animationTarget = targetIndex
-
         var velocityLeft = initialVelocity
         var lastValue = 0f
-        var targetScrollOffset: Int? = null
 
-        AnimationState(
-            initialValue = 0f,
-            initialVelocity = initialVelocity,
-        ).animateDecay(decayAnimationSpec) {
-            val delta = value - lastValue
-            val consumed = scrollBy(delta)
-            lastValue = value
-            velocityLeft = this.velocity
+        try {
+            // Update the animationTarget
+            animationTarget = targetIndex
 
-            val current = currentItemInfo
-            if (current == null) {
-                cancelAnimation()
-                return@animateDecay
-            }
+            AnimationState(
+                initialValue = 0f,
+                initialVelocity = initialVelocity,
+            ).animateDecay(decayAnimationSpec) {
+                val delta = value - lastValue
+                val consumed = scrollBy(delta)
+                lastValue = value
+                velocityLeft = velocity
 
-            Napier.d(
-                message = { "decay tick. vel:$velocityLeft, current item: ${current.log()}" }
-            )
-
-            if (targetScrollOffset == null) {
-                // If we don't have the target scroll offset yet, try and calculate it
-                targetScrollOffset = lazyListState.layoutInfo.visibleItemsInfo
-                    .firstOrNull { it.index == targetIndex }
-                    ?.let { snapOffsetForItem(lazyListState.layoutInfo, it) }
-            }
-
-            val scrollOffset = targetScrollOffset ?: 0
-
-            if (scrolledPastItem(initialVelocity, current, targetIndex, scrollOffset)) {
                 Napier.d(
                     message = {
-                        "Scrolled past item. " +
-                            "vel:$initialVelocity, " +
-                            "current item: ${current.log()}, " +
-                            "target:$targetIndex, " +
-                            "offset:$scrollOffset"
+                        "spring tick. vel:$velocityLeft, current item: ${currentItemInfo?.log()}"
                     }
                 )
 
-                // If we've scrolled to/past the item, stop the animation. We may also need to
-                // 'snap back' to the item as we may have scrolled past it
-                scrollBy(
-                    lazyListState.calculateScrollOffsetToItem(targetIndex, scrollOffset).toFloat()
-                )
-                cancelAnimation()
-            } else if (abs(delta - consumed) > 0.5f) {
-                // avoid rounding errors and stop if anything is unconsumed
-                cancelAnimation()
+                onScroll(initialVelocity, targetIndex, ::scrollBy)
+
+                if (isRunning && abs(delta - consumed) > 0.5f) {
+                    // If we're still running but some of the scroll was not consumed,
+                    // cancel the animation now
+                    cancelAnimation()
+                }
             }
+        } finally {
+            animationTarget = null
         }
-        animationTarget = null
+
         return velocityLeft
     }
 
@@ -244,7 +222,7 @@ class SnappingFlingBehavior(
         initialVelocity: Float,
         currentItem: LazyListItemInfo,
     ): Int {
-        val distancePerChild = computeDistancePerChild()
+        val distancePerChild = lazyListState.layoutInfo.computeDistancePerChild()
         if (distancePerChild < 0) {
             // If we don't have a valid distance, return the current item
             return currentItem.index
@@ -266,32 +244,6 @@ class SnappingFlingBehavior(
             // If we're going backwards though, any backwards drag immediately goes back one item,
             // so we need to cater for that by adding 1 to the result
             (indexDelta + 1).coerceAtMost(lazyListState.layoutInfo.totalItemsCount - 1)
-        }
-    }
-
-    /**
-     * Computes an average pixel value to pass a single child.
-     *
-     * Returns a negative value if it cannot be calculated.
-     *
-     * @return A float value that is the average number of pixels needed to scroll by one view in
-     * the relevant direction.
-     */
-    private fun computeDistancePerChild(): Float {
-        if (lazyListState.layoutInfo.visibleItemsInfo.isEmpty()) return -1f
-
-        val minPosView = lazyListState.layoutInfo.visibleItemsInfo
-            .minByOrNull { it.offset } ?: return -1f
-        val maxPosView = lazyListState.layoutInfo.visibleItemsInfo
-            .maxByOrNull { it.offset + it.size } ?: return -1f
-
-        val start: Int = min(minPosView.offset, maxPosView.offset)
-        val end: Int = max(minPosView.offset + minPosView.size, maxPosView.offset + maxPosView.size)
-        val distance = end - start
-
-        return when {
-            distance != 0 -> distance.toFloat() / lazyListState.layoutInfo.visibleItemsInfo.size
-            else -> -1f
         }
     }
 
@@ -327,82 +279,82 @@ class SnappingFlingBehavior(
             }
         )
 
-        val forward = targetIndex > initialItem.index
-        // We add 10% on to the size of the current item, to compensate for any item spacing, etc
-        val target = (if (forward) initialItem.size else -initialItem.size) * 1.1f
-
-        // Update the animationTarget
-        animationTarget = targetIndex
-
-        var targetScrollOffset = lazyListState.layoutInfo.visibleItemsInfo
-            .firstOrNull { it.index == targetIndex }
-            ?.let { snapOffsetForItem(lazyListState.layoutInfo, it) }
-
         var velocityLeft = initialVelocity
         var lastValue = 0f
-        AnimationState(
-            initialValue = 0f,
-            initialVelocity = initialVelocity,
-        ).animateTo(
-            targetValue = target,
-            animationSpec = snapAnimationSpec,
-        ) {
-            val delta = value - lastValue
-            val consumed = scrollBy(delta)
-            lastValue = value
-            velocityLeft = this.velocity
 
-            val current = currentItemInfo
-            if (current == null) {
-                cancelAnimation()
-                return@animateTo
-            }
+        try {
+            // Update the animationTarget
+            animationTarget = targetIndex
 
-            Napier.d(
-                message = { "spring tick. vel:$velocityLeft, current item: ${current.log()}" }
-            )
+            AnimationState(
+                initialValue = 0f,
+                initialVelocity = initialVelocity,
+            ).animateTo(
+                // We add 10% on to the size of the current item, to compensate for item spacing
+                targetValue = when {
+                    targetIndex > initialItem.index -> initialItem.size
+                    else -> -initialItem.size
+                } * 1.1f,
+                animationSpec = snapAnimationSpec,
+            ) {
+                val delta = value - lastValue
+                val consumed = scrollBy(delta)
+                lastValue = value
+                velocityLeft = velocity
 
-            if (targetScrollOffset == null) {
-                // If we don't have the target scroll offset yet, try and calculate it
-                targetScrollOffset = lazyListState.layoutInfo.visibleItemsInfo
-                    .firstOrNull { it.index == targetIndex }
-                    ?.let { snapOffsetForItem(lazyListState.layoutInfo, it) }
-            }
-
-            val scrollOffset = targetScrollOffset ?: 0
-
-            if (scrolledPastItem(initialVelocity, current, targetIndex, scrollOffset)) {
                 Napier.d(
                     message = {
-                        "Scrolled past item. " +
-                            "vel:$initialVelocity, " +
-                            "current item: ${current.log()}, " +
-                            "target:$targetIndex, " +
-                            "offset:$scrollOffset"
+                        "spring tick. vel:$velocityLeft, current item: ${currentItemInfo?.log()}"
                     }
                 )
 
-                // If we've scrolled to/past the item, stop the animation. We may also need to
-                // 'snap back' to the item as we may have scrolled past it
-                scrollBy(
-                    lazyListState.calculateScrollOffsetToItem(targetIndex, scrollOffset).toFloat()
-                )
-                cancelAnimation()
-            } else if (abs(delta - consumed) > 0.5f) {
-                // avoid rounding errors and stop if anything is unconsumed
-                cancelAnimation()
+                onScroll(initialVelocity, targetIndex, ::scrollBy)
+
+                if (isRunning && abs(delta - consumed) > 0.5f) {
+                    // If we're still running but some of the scroll was not consumed,
+                    // cancel the animation now
+                    cancelAnimation()
+                }
             }
+        } finally {
+            animationTarget = null
         }
-        animationTarget = null
+
         return velocityLeft
     }
 
-    private fun LazyListState.calculateScrollOffsetToItem(
-        index: Int,
-        scrollOffset: Int,
-    ): Int {
-        val item = layoutInfo.visibleItemsInfo.firstOrNull { it.index == index }
-        return if (item != null) item.offset - scrollOffset else 0
+    private fun AnimationScope<Float, AnimationVector1D>.onScroll(
+        initialVelocity: Float,
+        targetIndex: Int,
+        scrollBy: (pixels: Float) -> Float,
+    ) {
+        val current = currentItemInfo
+        if (current == null) {
+            cancelAnimation()
+            return
+        }
+
+        Napier.d(
+            message = { "scroll tick. vel:$velocity, current item: ${current.log()}" }
+        )
+
+        // Calculate the 'snap back'. If the returned value is 0, we don't need to do anything.
+        val snapBackAmount = calculateSnapBack(initialVelocity, current, targetIndex)
+
+        if (snapBackAmount != 0) {
+            // If we've scrolled to/past the item, stop the animation. We may also need to
+            // 'snap back' to the item as we may have scrolled past it
+            Napier.d(
+                message = {
+                    "Scrolled past item. " +
+                        "vel:$initialVelocity, " +
+                        "current item: ${current.log()}, " +
+                        "target:$targetIndex"
+                }
+            )
+            scrollBy(snapBackAmount.toFloat())
+            cancelAnimation()
+        }
     }
 
     private val currentItemInfo: LazyListItemInfo?
@@ -433,6 +385,46 @@ class SnappingFlingBehavior(
         }
     }
 
+    private fun calculateSnapBack(
+        initialVelocity: Float,
+        currentItem: LazyListItemInfo,
+        targetIndex: Int,
+    ): Int = when {
+        // forwards
+        initialVelocity > 0 && currentItem.index >= targetIndex -> {
+            val target = lazyListState.layoutInfo.visibleItemsInfo.first { it.index == targetIndex }
+            val targetScrollOffset = snapOffsetForItem(lazyListState.layoutInfo, target)
+            when {
+                // We've scrolled past the target index
+                currentItem.index > targetIndex -> {
+                    target.offset - targetScrollOffset
+                }
+                // The current item is the target, and we've scrolled past it
+                currentItem.index == targetIndex && currentItem.offset <= targetScrollOffset -> {
+                    target.offset - targetScrollOffset
+                }
+                else -> 0
+            }
+        }
+        initialVelocity <= 0 && currentItem.index <= targetIndex -> {
+            // backwards
+            val target = lazyListState.layoutInfo.visibleItemsInfo.first { it.index == targetIndex }
+            val targetScrollOffset = snapOffsetForItem(lazyListState.layoutInfo, target)
+            when {
+                // We've scrolled past the target index
+                currentItem.index < targetIndex -> {
+                    target.offset - targetScrollOffset
+                }
+                // The current item is the target, and we've scrolled past it
+                currentItem.index == targetIndex && currentItem.offset >= targetScrollOffset -> {
+                    target.offset - targetScrollOffset
+                }
+                else -> 0
+            }
+        }
+        else -> 0
+    }
+
     private companion object {
         init {
             if (DebugLog) {
@@ -444,19 +436,26 @@ class SnappingFlingBehavior(
 
 private inline fun LazyListItemInfo.log(): String = "[i:$index,o:$offset,s:$size]"
 
-private fun scrolledPastItem(
-    initialVelocity: Float,
-    currentItem: LazyListItemInfo,
-    targetIndex: Int,
-    targetScrollOffset: Int = 0,
-): Boolean {
-    return if (initialVelocity > 0) {
-        // forward
-        currentItem.index > targetIndex ||
-            (currentItem.index == targetIndex && currentItem.offset <= targetScrollOffset)
-    } else {
-        // backwards
-        currentItem.index < targetIndex ||
-            (currentItem.index == targetIndex && currentItem.offset >= targetScrollOffset)
+/**
+ * Computes an average pixel value to pass a single child.
+ *
+ * Returns a negative value if it cannot be calculated.
+ *
+ * @return A float value that is the average number of pixels needed to scroll by one view in
+ * the relevant direction.
+ */
+private fun LazyListLayoutInfo.computeDistancePerChild(): Float {
+    if (visibleItemsInfo.isEmpty()) return -1f
+
+    val minPosView = visibleItemsInfo.minByOrNull { it.offset } ?: return -1f
+    val maxPosView = visibleItemsInfo.maxByOrNull { it.offset + it.size } ?: return -1f
+
+    val start: Int = min(minPosView.offset, maxPosView.offset)
+    val end: Int = max(minPosView.offset + minPosView.size, maxPosView.offset + maxPosView.size)
+    val distance = end - start
+
+    return when {
+        distance != 0 -> distance.toFloat() / visibleItemsInfo.size
+        else -> -1f
     }
 }
