@@ -199,7 +199,7 @@ class SnappingFlingBehavior(
 
                 Napier.d(
                     message = {
-                        "spring tick. vel:$velocityLeft, current item: ${currentItemInfo?.log()}"
+                        "decay tick. vel:$velocityLeft, current item: ${currentItemInfo?.log()}"
                     }
                 )
 
