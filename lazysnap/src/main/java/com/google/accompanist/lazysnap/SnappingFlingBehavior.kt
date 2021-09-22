@@ -75,7 +75,7 @@ object SnappingFlingBehaviorDefaults {
 @Composable
 fun rememberSnappingFlingBehavior(
     lazyListState: LazyListState,
-    snapOffsetForItem: LazyListLayoutInfo.(LazyListItemInfo) -> Int = SnapOffsets.Center,
+    snapOffsetForItem: (LazyListLayoutInfo, LazyListItemInfo) -> Int = SnapOffsets.Center,
     maximumFlingDistance: LazyListLayoutInfo.() -> Int = SnappingFlingBehaviorDefaults.maximumFlingDistance,
     decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
     snapAnimationSpec: AnimationSpec<Float> = SnappingFlingBehaviorDefaults.snapAnimationSpec,
@@ -103,19 +103,21 @@ object SnapOffsets {
     /**
      * TODO
      */
-    val Start: LazyListLayoutInfo.(LazyListItemInfo) -> Int = { 0 }
+    val Start: (LazyListLayoutInfo, LazyListItemInfo) -> Int = { _, _ -> 0 }
 
     /**
      * TODO
      */
-    val Center: LazyListLayoutInfo.(LazyListItemInfo) -> Int = {
-        ((viewportEndOffset + viewportStartOffset) / 2) - (it.size / 2)
+    val Center: (LazyListLayoutInfo, LazyListItemInfo) -> Int = { layoutInfo, itemInfo ->
+        (layoutInfo.viewportEndOffset + layoutInfo.viewportStartOffset - itemInfo.size) / 2
     }
 
     /**
      * TODO
      */
-    val End: LazyListLayoutInfo.(LazyListItemInfo) -> Int = { viewportEndOffset - it.size }
+    val End: (LazyListLayoutInfo, LazyListItemInfo) -> Int = { layoutInfo, itemInfo ->
+        layoutInfo.viewportEndOffset - itemInfo.size
+    }
 }
 
 /**
@@ -133,7 +135,7 @@ object SnapOffsets {
 @ExperimentalLazySnapApi
 class SnappingFlingBehavior(
     private val lazyListState: LazyListState,
-    private val snapOffsetForItem: LazyListLayoutInfo.(LazyListItemInfo) -> Int = SnapOffsets.Center,
+    private val snapOffsetForItem: (LazyListLayoutInfo, LazyListItemInfo) -> Int = SnapOffsets.Center,
     private val maximumFlingDistance: LazyListLayoutInfo.() -> Int = SnappingFlingBehaviorDefaults.maximumFlingDistance,
     private val decayAnimationSpec: DecayAnimationSpec<Float> = exponentialDecay(),
     private val snapAnimationSpec: AnimationSpec<Float> = SnappingFlingBehaviorDefaults.snapAnimationSpec,
