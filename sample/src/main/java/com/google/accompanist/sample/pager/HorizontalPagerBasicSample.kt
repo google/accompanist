@@ -85,7 +85,7 @@ private fun Sample() {
                 count = 10,
                 state = pagerState,
                 // Add 32.dp horizontal padding to 'center' the pages
-                contentPadding = PaddingValues(horizontal = 32.dp),
+                contentPadding = PaddingValues(end = 32.dp),
                 // Add some horizontal spacing between items
                 itemSpacing = 4.dp,
                 modifier = Modifier

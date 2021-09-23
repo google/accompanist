@@ -77,7 +77,10 @@ object PagerDefaults {
         state: PagerState,
         decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
         snapAnimationSpec: AnimationSpec<Float> = SnappingFlingBehaviorDefaults.snapAnimationSpec,
-        maximumFlingDistance: LazyListLayoutInfo.() -> Int = { viewportEndOffset + viewportStartOffset },
+        maximumFlingDistance: (LazyListLayoutInfo) -> Int = { layoutInfo ->
+            // We can scroll up to the scrollable size of the lazy layout
+            layoutInfo.layoutSize
+        },
     ): FlingBehavior = rememberSnappingFlingBehavior(
         lazyListState = state.lazyListState,
         decayAnimationSpec = decayAnimationSpec,
@@ -97,6 +100,18 @@ object PagerDefaults {
         snapAnimationSpec: AnimationSpec<Float> = SnappingFlingBehaviorDefaults.snapAnimationSpec,
     ): FlingBehavior = flingBehavior(state, decayAnimationSpec, snapAnimationSpec)
 }
+
+/**
+ * Ideally this would exist on [LazyListLayoutInfo] but it doesn't right now.
+ * Raised https://issuetracker.google.com/issues/200920410 to track.
+ */
+private val LazyListLayoutInfo.layoutSize: Int
+    get() {
+        // Instead we look at the first item with a non-zero size
+        return visibleItemsInfo.firstOrNull { it.size > 0 }?.size
+            // Or the viewport (but the viewport contains the content padding)
+            ?: viewportEndOffset + viewportStartOffset
+    }
 
 /**
  * A horizontally scrolling layout that allows users to flip between items to the left and right.
