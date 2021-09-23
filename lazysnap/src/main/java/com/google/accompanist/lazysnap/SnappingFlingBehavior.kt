@@ -233,17 +233,17 @@ class SnappingFlingBehavior(
             initialVelocity = initialVelocity,
         ).coerceIn(-maximumFlingDistance, maximumFlingDistance)
 
-        val indexDelta = (flingDistance / distancePerChild).roundToInt()
-
-        return currentItem.index + if (initialVelocity > 0) {
+        val delta = if (initialVelocity > 0) {
             // If we're flinging forward, the current item is likely the same item as
             // which the user started dragging
-            indexDelta
+            (flingDistance / distancePerChild).roundToInt()
         } else {
             // If we're going backwards though, any backwards drag immediately goes back one item,
             // so we need to cater for that by adding 1 to the result
-            (indexDelta + 1).coerceAtMost(lazyListState.layoutInfo.lastIndex)
+            (flingDistance / distancePerChild).roundToInt() + 1
         }
+
+        return (currentItem.index + delta).coerceIn(0, lazyListState.layoutInfo.lastIndex)
     }
 
     @Suppress("unused_parameter")

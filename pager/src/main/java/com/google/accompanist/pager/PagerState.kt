@@ -98,7 +98,7 @@ class PagerState(
 
     private val currentLayoutPageInfo: LazyListItemInfo?
         get() = lazyListState.layoutInfo.visibleItemsInfo.asSequence()
-            .filter { it.offset <= 0 && it.offset + it.size > 0 }
+            .filter { it.offset <= 0 }
             .lastOrNull()
 
     private val currentLayoutPageOffset: Float
