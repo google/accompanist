@@ -196,12 +196,6 @@ class SnappingFlingBehavior(
                 lastValue = value
                 velocityLeft = velocity
 
-                Napier.d(
-                    message = {
-                        "decay tick. vel:$velocityLeft, current item: ${currentItemInfo?.log()}"
-                    }
-                )
-
                 if (checkSnapBack(initialVelocity, targetIndex, ::scrollBy)) {
                     cancelAnimation()
                 } else if (abs(delta - consumed) > 0.5f) {
@@ -313,12 +307,6 @@ class SnappingFlingBehavior(
                 val consumed = scrollBy(delta)
                 lastValue = value
                 velocityLeft = velocity
-
-                Napier.d(
-                    message = {
-                        "spring tick. vel:$velocityLeft, current item: ${currentItemInfo?.log()}"
-                    }
-                )
 
                 if (checkSnapBack(initialVelocity, targetIndex, ::scrollBy)) {
                     cancelAnimation()
