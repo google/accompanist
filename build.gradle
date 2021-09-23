@@ -132,6 +132,11 @@ subprojects {
         }
     }
 
+    tasks.withType(Test) {
+        // Enable logging from Robolectric tests
+        systemProperty "robolectric.logging", "stdout"
+    }
+
     // Read in the signing.properties file if it is exists
     def signingPropsFile = rootProject.file('release/signing.properties')
     if (signingPropsFile.exists()) {
