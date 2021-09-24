@@ -365,13 +365,9 @@ class SnappingFlingBehavior(
     }
 
     private val currentItemInfo: LazyListItemInfo?
-        get() {
-            val layoutInfo = lazyListState.layoutInfo
-            return layoutInfo.visibleItemsInfo.asSequence()
-                .filter {
-                    val snapOffset = snapOffsetForItem(layoutInfo, it)
-                    it.offset <= snapOffset && it.offset + it.size > snapOffset
-                }
+        get() = lazyListState.layoutInfo.let { layoutInfo ->
+            layoutInfo.visibleItemsInfo.asSequence()
+                .filter { it.offset <= snapOffsetForItem(layoutInfo, it) }
                 .lastOrNull()
         }
 
@@ -454,7 +450,7 @@ private val LazyListLayoutInfo.layoutSize: Int
     get() {
         // Instead we look at the first item with a non-zero size
         return visibleItemsInfo.firstOrNull { it.size > 0 }?.size
-            // Or the viewport (but the viewport contains the content padding)
+        // Or the viewport (but the viewport contains the content padding)
             ?: viewportEndOffset + viewportStartOffset
     }
 
