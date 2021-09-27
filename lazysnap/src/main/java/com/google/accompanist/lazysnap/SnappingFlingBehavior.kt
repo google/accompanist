@@ -43,10 +43,9 @@ import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
 import kotlin.math.abs
 import kotlin.math.absoluteValue
-import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
-import kotlin.math.roundToInt
+import kotlin.math.truncate
 
 private const val DebugLog = true
 
@@ -223,6 +222,14 @@ class SnappingFlingBehavior(
             animationTarget = null
         }
 
+        if (DebugLog) {
+            Napier.d(
+                message = {
+                    "Decay fling finished. Distance: $lastValue. Final vel: $velocityLeft"
+                }
+            )
+        }
+
         return velocityLeft
     }
 
@@ -237,34 +244,25 @@ class SnappingFlingBehavior(
         }
 
         val maximumFlingDistance = maximumFlingDistance(lazyListState.layoutInfo).toFloat()
-        val flingDistance = decayAnimationSpec.calculateTargetValue(
-            initialValue = -currentItem.offset.toFloat(),
-            initialVelocity = initialVelocity,
-        ).coerceIn(-maximumFlingDistance, maximumFlingDistance)
+        val flingDistance = decayAnimationSpec.calculateTargetValue(0f, initialVelocity)
+            .coerceIn(-maximumFlingDistance, maximumFlingDistance)
 
-        val delta = if (initialVelocity > 0) {
-            // If we're flinging forward, the current item is likely the same item as
-            // which the user started dragging
-            floor(flingDistance / distancePerChild).roundToInt()
-        } else {
-            // If we're going backwards though, any backwards drag immediately goes back one item,
-            // so we need to cater for that by adding 1 to the result
-            floor(flingDistance / distancePerChild).roundToInt() + 1
-        }
+        val indexDelta = truncate((flingDistance - currentItem.offset) / distancePerChild).toInt()
 
         if (DebugLog) {
             Napier.d(
                 message = {
                     "determineTargetIndexForDecay. " +
+                        "currentItem: ${currentItem.log()}, " +
                         "distancePerChild: $distancePerChild, " +
                         "maximumFlingDistance: $maximumFlingDistance, " +
                         "flingDistance: $flingDistance, " +
-                        "delta: $delta"
+                        "indexDelta: $indexDelta"
                 }
             )
         }
 
-        return (currentItem.index + delta).coerceIn(0, lazyListState.layoutInfo.lastIndex)
+        return (currentItem.index + indexDelta).coerceIn(0, lazyListState.layoutInfo.lastIndex)
     }
 
     @Suppress("unused_parameter")
@@ -347,6 +345,14 @@ class SnappingFlingBehavior(
             animationTarget = null
         }
 
+        if (DebugLog) {
+            Napier.d(
+                message = {
+                    "Spring fling finished. Distance: $lastValue. Final vel: $velocityLeft"
+                }
+            )
+        }
+
         return velocityLeft
     }
 
@@ -426,9 +432,9 @@ class SnappingFlingBehavior(
         }
 
         return when {
-            // forwards. We add 10% onto the size to cater for any item spacing
+            // forwards
             initialVelocity < 0 -> targetValue <= snapOffset - (currentItem.size + itemSpacing)
-            // backwards. We add 10% onto the size to cater for any item spacing
+            // backwards
             else -> targetValue >= snapOffset + itemSpacing
         }
     }

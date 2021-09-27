@@ -52,9 +52,9 @@ class RobolectricSnappingLazyColumnTest(
             // maxScrollDistanceDp
             .combineWithParameters(
                 // We add 4dp on to cater for itemSpacing
-                ItemSize.value + 4,
-                (ItemSize.value * 2) + 4,
-                (ItemSize.value * 4) + 4,
+                1 * (ItemSize.value + 4),
+                2 * (ItemSize.value + 4),
+                4 * (ItemSize.value + 4),
             )
             // contentPadding
             .combineWithParameters(
