@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.text.BasicText
@@ -40,13 +41,13 @@ import androidx.compose.ui.unit.dp
  */
 @OptIn(ExperimentalLazySnapApi::class) // Pager is currently experimental
 abstract class BaseSnappingLazyRowTest(
-    private val itemWidthFraction: Float,
+    private val maxScrollDistanceDp: Float,
     private val contentPadding: PaddingValues,
     // We don't use the Dp type due to https://youtrack.jetbrains.com/issue/KT-35523
     private val itemSpacingDp: Int,
     private val layoutDirection: LayoutDirection,
     private val reverseLayout: Boolean,
-) : PagerTest() {
+) : SnappingFlingBehaviorTest(maxScrollDistanceDp) {
 
     /**
      * Returns the expected resolved layout direction for pages
@@ -84,8 +85,7 @@ abstract class BaseSnappingLazyRowTest(
                         items(itemCount) { index ->
                             Box(
                                 modifier = Modifier
-                                    .fillParentMaxHeight()
-                                    .fillParentMaxWidth(itemWidthFraction)
+                                    .size(ItemSize)
                                     .background(randomColor())
                                     .testTag(index.toString())
                             ) {

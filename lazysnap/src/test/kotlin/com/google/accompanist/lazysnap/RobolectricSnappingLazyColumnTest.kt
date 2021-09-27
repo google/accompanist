@@ -30,10 +30,12 @@ import org.robolectric.annotation.Config
 @Config(qualifiers = "w360dp-h640dp-xhdpi")
 @RunWith(ParameterizedRobolectricTestRunner::class)
 class RobolectricSnappingLazyColumnTest(
+    maxScrollDistanceDp: Float,
     contentPadding: PaddingValues,
     itemSpacingDp: Int,
     reverseLayout: Boolean,
 ) : BaseSnappingLazyColumnTest(
+    maxScrollDistanceDp,
     contentPadding,
     itemSpacingDp,
     reverseLayout,
@@ -41,11 +43,18 @@ class RobolectricSnappingLazyColumnTest(
     companion object {
         @JvmStatic
         @ParameterizedRobolectricTestRunner.Parameters(
-            name = "contentPadding={0}," +
-                "itemSpacing={1}," +
-                "reverseLayout={2}"
+            name = "maxScrollDistanceDp={0}," +
+                "contentPadding={1}," +
+                "itemSpacing={2}," +
+                "reverseLayout={3}"
         )
         fun data() = parameterizedParams()
+            // maxScrollDistanceDp
+            .combineWithParameters(
+                ItemSize.value,
+                ItemSize.value * 2,
+                ItemSize.value * 4,
+            )
             // contentPadding
             .combineWithParameters(
                 PaddingValues(bottom = 32.dp), // Alignment.Top

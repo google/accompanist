@@ -35,8 +35,12 @@ private val FastVelocity = 2000.dp
 private val MediumVelocity = 700.dp
 private val SlowVelocity = 100.dp
 
+internal val ItemSize = 200.dp
+
 @OptIn(ExperimentalLazySnapApi::class) // Pager is currently experimental
-abstract class PagerTest {
+abstract class SnappingFlingBehaviorTest(
+    private val maxScrollDistanceDp: Float,
+) {
     @get:Rule
     val rule = createComposeRule()
 
@@ -49,7 +53,7 @@ abstract class PagerTest {
     @Test
     fun swipe() {
         val lazyListState = LazyListState()
-        val snappingFlingBehavior = SnappingFlingBehavior(lazyListState)
+        val snappingFlingBehavior = createSnappingFlingBehavior(lazyListState)
         setTestContent(
             flingBehavior = snappingFlingBehavior,
             lazyListState = lazyListState,
@@ -62,17 +66,19 @@ abstract class PagerTest {
         // ...and assert that nothing happened
         lazyListState.assertCurrentItem(index = 0, offset = 0)
 
-        // Now swipe towards start, from page 0 to page 1
+        // Now swipe towards start, from page 0
         rule.onNodeWithTag("0").swipeAcrossCenter(-MediumSwipeDistance)
         rule.waitForIdle()
         // ...and assert that we now laid out from page 1
-        lazyListState.assertCurrentItem(index = 1, offset = 0)
+        if (!lazyListState.isScrolledToEnd()) {
+            lazyListState.assertCurrentItem(minIndex = 1, offset = 0)
+        }
     }
 
     @Test
     fun swipeToEndAndBack() {
         val lazyListState = LazyListState()
-        val snappingFlingBehavior = SnappingFlingBehavior(lazyListState)
+        val snappingFlingBehavior = createSnappingFlingBehavior(lazyListState)
         setTestContent(
             flingBehavior = snappingFlingBehavior,
             lazyListState = lazyListState,
@@ -125,7 +131,7 @@ abstract class PagerTest {
         rule.mainClock.autoAdvance = false
 
         val lazyListState = LazyListState()
-        val snappingFlingBehavior = SnappingFlingBehavior(lazyListState)
+        val snappingFlingBehavior = createSnappingFlingBehavior(lazyListState)
         setTestContent(
             flingBehavior = snappingFlingBehavior,
             lazyListState = lazyListState,
@@ -159,7 +165,7 @@ abstract class PagerTest {
         rule.mainClock.autoAdvance = false
 
         val lazyListState = LazyListState()
-        val snappingFlingBehavior = SnappingFlingBehavior(lazyListState)
+        val snappingFlingBehavior = createSnappingFlingBehavior(lazyListState)
         setTestContent(
             flingBehavior = snappingFlingBehavior,
             lazyListState = lazyListState,
@@ -193,7 +199,7 @@ abstract class PagerTest {
         rule.mainClock.autoAdvance = false
 
         val lazyListState = LazyListState()
-        val snappingFlingBehavior = SnappingFlingBehavior(lazyListState)
+        val snappingFlingBehavior = createSnappingFlingBehavior(lazyListState)
         setTestContent(
             flingBehavior = snappingFlingBehavior,
             lazyListState = lazyListState,
@@ -227,7 +233,7 @@ abstract class PagerTest {
         rule.mainClock.autoAdvance = false
 
         val lazyListState = LazyListState()
-        val snappingFlingBehavior = SnappingFlingBehavior(lazyListState)
+        val snappingFlingBehavior = createSnappingFlingBehavior(lazyListState)
         setTestContent(
             flingBehavior = snappingFlingBehavior,
             lazyListState = lazyListState,
@@ -270,9 +276,9 @@ abstract class PagerTest {
     ): SemanticsNodeInteraction
 
     private fun setTestContent(
-        flingBehavior: SnappingFlingBehavior,
         count: Int,
         lazyListState: LazyListState = LazyListState(),
+        flingBehavior: SnappingFlingBehavior = createSnappingFlingBehavior(lazyListState),
     ) {
         setTestContent(
             flingBehavior = flingBehavior,
@@ -286,16 +292,53 @@ abstract class PagerTest {
         count: () -> Int,
         lazyListState: LazyListState = LazyListState(),
     )
+
+    private fun createSnappingFlingBehavior(
+        lazyListState: LazyListState
+    ): SnappingFlingBehavior {
+        return SnappingFlingBehavior(
+            lazyListState = lazyListState,
+            maximumFlingDistance = {
+                with(rule.density) { maxScrollDistanceDp.dp.roundToPx() }
+            }
+        )
+    }
 }
 
-private fun LazyListState.assertCurrentItem(index: Int, offset: Int = 0) {
+/**
+ * This doesn't handle the scroll range < lazy size, but that won't happen in these tests
+ */
+private fun LazyListState.isScrolledToEnd(): Boolean {
+    val lastVisibleItem = layoutInfo.visibleItemsInfo.last()
+    if (lastVisibleItem.index == layoutInfo.totalItemsCount - 1) {
+        // This isn't perfect, as it doesn't properly handle content padding, so good enough
+        return (lastVisibleItem.offset + lastVisibleItem.size) <= layoutInfo.viewportEndOffset
+    }
+    return false
+}
+
+private fun LazyListState.assertCurrentItem(
+    index: Int,
+    offset: Int = 0
+) {
     currentItem.let {
         assertThat(it.index).isEqualTo(index)
         assertThat(it.offset).isEqualTo(offset)
     }
 }
 
+private fun LazyListState.assertCurrentItem(
+    minIndex: Int = 0,
+    maxIndex: Int = Int.MAX_VALUE,
+    offset: Int = 0
+) {
+    currentItem.let {
+        assertThat(it.index).isIn(minIndex..maxIndex)
+        assertThat(it.offset).isEqualTo(offset)
+    }
+}
+
 private val LazyListState.currentItem: LazyListItemInfo
     get() = layoutInfo.visibleItemsInfo.asSequence()
-        .filter { it.offset <= 0 && it.offset + it.size > 0 }
+        .filter { it.offset <= 0 }
         .last()

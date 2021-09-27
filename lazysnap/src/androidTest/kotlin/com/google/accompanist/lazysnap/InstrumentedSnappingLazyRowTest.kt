@@ -29,13 +29,13 @@ import org.junit.runners.Parameterized
  */
 @RunWith(Parameterized::class)
 class InstrumentedSnappingLazyRowTest(
-    itemWidthFraction: Float,
+    maxScrollDistanceDp: Float,
     contentPadding: PaddingValues,
     itemSpacingDp: Int,
     layoutDirection: LayoutDirection,
     reverseLayout: Boolean,
 ) : BaseSnappingLazyRowTest(
-    itemWidthFraction,
+    maxScrollDistanceDp,
     contentPadding,
     itemSpacingDp,
     layoutDirection,
@@ -44,13 +44,18 @@ class InstrumentedSnappingLazyRowTest(
     companion object {
         @JvmStatic
         @Parameterized.Parameters(
-            name = "itemWidthFraction={0}," +
+            name = "maxScrollDistanceDp={0}," +
                 "contentPadding={1}," +
                 "itemSpacing={2}," +
                 "layoutDirection={3}," +
                 "reverseLayout={4}"
         )
         fun data() = parameterizedParams()
+            // maxScrollDistanceDp
+            .combineWithParameters(
+                ItemSize.value,
+                ItemSize.value * 4,
+            )
             // itemWidthFraction
             .combineWithParameters(1f)
             // contentPadding
