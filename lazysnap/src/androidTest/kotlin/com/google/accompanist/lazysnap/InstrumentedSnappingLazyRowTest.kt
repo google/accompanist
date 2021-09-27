@@ -53,8 +53,9 @@ class InstrumentedSnappingLazyRowTest(
         fun data() = parameterizedParams()
             // maxScrollDistanceDp
             .combineWithParameters(
-                ItemSize.value,
-                ItemSize.value * 4,
+                // We add 4dp on to cater for itemSpacing
+                ItemSize.value + 4,
+                (ItemSize.value * 4) + 4,
             )
             // itemWidthFraction
             .combineWithParameters(1f)

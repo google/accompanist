@@ -79,7 +79,7 @@ object PagerDefaults {
         snapAnimationSpec: AnimationSpec<Float> = SnappingFlingBehaviorDefaults.snapAnimationSpec,
         maximumFlingDistance: (LazyListLayoutInfo) -> Int = { layoutInfo ->
             // We can scroll up to the scrollable size of the lazy layout
-            layoutInfo.layoutSize
+            layoutInfo.layoutSize + layoutInfo.itemSpacing
         },
     ): FlingBehavior = rememberSnappingFlingBehavior(
         lazyListState = state.lazyListState,
@@ -112,6 +112,17 @@ private val LazyListLayoutInfo.layoutSize: Int
             // Or the viewport (but the viewport contains the content padding)
             ?: viewportEndOffset + viewportStartOffset
     }
+
+/**
+ * This attempts to calculate the item spacing for the layout, by looking at the distance
+ * between the visible items. If there's only 1 visible item available, it returns 0.
+ */
+private val LazyListLayoutInfo.itemSpacing: Int
+    get() = if (visibleItemsInfo.size >= 2) {
+        val first = visibleItemsInfo[0]
+        val second = visibleItemsInfo[1]
+        second.offset - (first.size + first.offset)
+    } else 0
 
 /**
  * A horizontally scrolling layout that allows users to flip between items to the left and right.
