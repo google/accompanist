@@ -69,6 +69,9 @@ object SnappingFlingBehaviorDefaults {
  * Create and remember a snapping [FlingBehavior] to be used with [LazyListState].
  *
  * @param lazyListState The [LazyListState] to update.
+ * @param snapOffsetForItem Block which returns which offset the given item should 'snap' to.
+ * See [SnapOffsets] for provided values.
+ * @param maximumFlingDistance Block which returns the maximum fling distance in pixels.
  * @param decayAnimationSpec The decay animation spec to use for decayed flings.
  * @param snapAnimationSpec The animation spec to use when snapping.
  */
@@ -76,7 +79,7 @@ object SnappingFlingBehaviorDefaults {
 @Composable
 fun rememberSnappingFlingBehavior(
     lazyListState: LazyListState,
-    snapOffsetForItem: (LazyListLayoutInfo, LazyListItemInfo) -> Int = SnapOffsets.Center,
+    snapOffsetForItem: (layoutInfo: LazyListLayoutInfo, itemInfo: LazyListItemInfo) -> Int = SnapOffsets.Center,
     maximumFlingDistance: (LazyListLayoutInfo) -> Int = SnappingFlingBehaviorDefaults.maximumFlingDistance,
     decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
     snapAnimationSpec: AnimationSpec<Float> = SnappingFlingBehaviorDefaults.snapAnimationSpec,
@@ -97,24 +100,28 @@ fun rememberSnappingFlingBehavior(
 }
 
 /**
- * TODO
+ * Contains a number of values which can be used for the `snapOffsetForItem` parameter on
+ * [rememberSnappingFlingBehavior] and [SnappingFlingBehavior].
  */
 @Suppress("unused")
 object SnapOffsets {
     /**
-     * TODO
+     * Snap offset which results in the start edge of the item, snapping to the start scrolling
+     * edge of the lazy list.
      */
     val Start: (LazyListLayoutInfo, LazyListItemInfo) -> Int = { _, _ -> 0 }
 
     /**
-     * TODO
+     * Snap offset which results in the item snapping in the center of the scrolling viewport
+     * of the lazy list.
      */
     val Center: (LazyListLayoutInfo, LazyListItemInfo) -> Int = { layoutInfo, itemInfo ->
         (layoutInfo.layoutSize - itemInfo.size) / 2
     }
 
     /**
-     * TODO
+     * Snap offset which results in the end edge of the item, snapping to the end scrolling
+     * edge of the lazy list.
      */
     val End: (LazyListLayoutInfo, LazyListItemInfo) -> Int = { layoutInfo, itemInfo ->
         layoutInfo.layoutSize - itemInfo.size
@@ -129,10 +136,12 @@ object SnapOffsets {
  * [rememberSnappingFlingBehavior], due to not being able to access composable functions.
  *
  * @param lazyListState The [LazyListState] to update.
+ * @param snapOffsetForItem Block which returns which offset the given item should 'snap' to.
+ * See [SnapOffsets] for provided values.
+ * @param maximumFlingDistance Block which returns the maximum fling distance in pixels.
  * @param decayAnimationSpec The decay animation spec to use for decayed flings.
  * @param snapAnimationSpec The animation spec to use when snapping.
  */
-
 @ExperimentalLazySnapApi
 class SnappingFlingBehavior(
     private val lazyListState: LazyListState,
@@ -450,7 +459,7 @@ private val LazyListLayoutInfo.layoutSize: Int
     get() {
         // Instead we look at the first item with a non-zero size
         return visibleItemsInfo.firstOrNull { it.size > 0 }?.size
-        // Or the viewport (but the viewport contains the content padding)
+            // Or the viewport (but the viewport contains the content padding)
             ?: viewportEndOffset + viewportStartOffset
     }
 
