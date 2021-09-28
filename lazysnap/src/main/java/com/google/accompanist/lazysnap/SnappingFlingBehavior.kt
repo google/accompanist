@@ -81,6 +81,7 @@ object SnappingFlingBehaviorDefaults {
  * @param snapOffsetForItem Block which returns which offset the given item should 'snap' to.
  * See [SnapOffsets] for provided values.
  * @param maximumFlingDistance Block which returns the maximum fling distance in pixels.
+ * The returned value should be >= 0.
  * @param decayAnimationSpec The decay animation spec to use for decayed flings.
  * @param snapAnimationSpec The animation spec to use when snapping.
  * @param endContentPadding The amount of content padding on the end edge of the lazy list
@@ -168,6 +169,7 @@ object SnapOffsets {
  * @param snapOffsetForItem Block which returns which offset the given item should 'snap' to.
  * See [SnapOffsets] for provided values.
  * @param maximumFlingDistance Block which returns the maximum fling distance in pixels.
+ * The returned value should be >= 0.
  * @param decayAnimationSpec The decay animation spec to use for decayed flings.
  * @param snapAnimationSpec The animation spec to use when snapping.
  * @param endContentPadding The amount of content padding on the end edge of the lazy list
@@ -221,10 +223,25 @@ class SnappingFlingBehavior(
         }
     }
 
+    /**
+     * Performs a decaying fling.
+     *
+     * If [flingThenSpring] is set to true, then a fling-then-spring animation might be used.
+     * If used, a decay fling will be run until we've scrolled to the preceding item of
+     * [targetIndex]. Once that happens, the decay animation is stopped and a spring animation
+     * is started, to scroll the remainder of the distance. Visually this results in a much
+     * smoother finish to the animation, as it will slowly come to a stop at [targetIndex].
+     * Even if [flingThenSpring] is set to true, fling-then-spring animations are only available
+     * when scrolling 2 items or more.
+     *
+     * When [flingThenSpring] is not used, the decay animation will be stopped immediately upon
+     * scrolling past [targetIndex], which can result in an abrupt stop.
+     */
     private suspend fun ScrollScope.performDecayFling(
         initialItem: LazyListItemInfo,
         targetIndex: Int,
         initialVelocity: Float,
+        flingThenSpring: Boolean = true,
     ): Float {
         // If we're already at the target + snap offset, skip
         if (initialItem.index == targetIndex &&
@@ -253,6 +270,10 @@ class SnappingFlingBehavior(
         var velocityLeft = initialVelocity
         var lastValue = 0f
 
+        // We can only fling-then-spring if we're flinging >= 2 items...
+        val canSpringThenFling = flingThenSpring && abs(targetIndex - initialItem.index) >= 2
+        var needSpringAfter = false
+
         try {
             // Update the animationTarget
             animationTarget = targetIndex
@@ -266,11 +287,29 @@ class SnappingFlingBehavior(
                 lastValue = value
                 velocityLeft = velocity
 
-                if (checkSnapBack(initialVelocity, targetIndex, ::scrollBy)) {
+                if (abs(delta - consumed) > 0.5f) {
+                    // If some of the scroll was not consumed, cancel the animation now as we're
+                    // likely at the end of the scroll range
                     cancelAnimation()
-                } else if (abs(delta - consumed) > 0.5f) {
-                    // If we're still running but some of the scroll was not consumed,
-                    // cancel the animation now
+                }
+
+                val currentItem = currentItemInfo
+                if (isRunning && canSpringThenFling && currentItem != null) {
+                    // If we're still running and fling-then-spring is enabled, check to see
+                    // if we're at the 1 item width away (in the relevant direction). If we are,
+                    // set the spring-after flag and cancel the current decay
+                    if (initialVelocity > 0 && currentItem.index == targetIndex - 1) {
+                        needSpringAfter = true
+                        cancelAnimation()
+                    } else if (initialVelocity < 0 && currentItem.index == targetIndex) {
+                        needSpringAfter = true
+                        cancelAnimation()
+                    }
+                }
+
+                if (isRunning && checkSnapBack(initialVelocity, targetIndex, ::scrollBy)) {
+                    // If we're still running, check to see if we need to snap-back
+                    // (if we've scrolled past the target)
                     cancelAnimation()
                 }
             }
@@ -283,6 +322,13 @@ class SnappingFlingBehavior(
                 "Decay fling finished. Distance: $lastValue. Final vel: $velocityLeft"
             }
         )
+
+        val currentItem = currentItemInfo
+        if (currentItem != null && needSpringAfter) {
+            // The needSpringAfter flag is enabled, so start a spring to the target using the
+            // remaining velocity
+            return performSpringFling(currentItem, targetIndex, velocityLeft)
+        }
 
         return velocityLeft
     }
@@ -297,9 +343,12 @@ class SnappingFlingBehavior(
             return currentItem.index
         }
 
-        val maximumFlingDistance = maximumFlingDistance(lazyListState.layoutInfo).toFloat()
+        val maximumFlingDistance = maximumFlingDistance(lazyListState.layoutInfo)
+        require(maximumFlingDistance >= 0) {
+            "Values returned from maximumFlingDistance should be >= 0"
+        }
         val flingDistance = decayAnimationSpec.calculateTargetValue(0f, initialVelocity)
-            .coerceIn(-maximumFlingDistance, maximumFlingDistance)
+            .coerceIn(-maximumFlingDistance.toFloat(), maximumFlingDistance.toFloat())
         val itemSpacing = lazyListState.layoutInfo.itemSpacing
         val snapOffset = snapOffsetForItem(layoutInfo, currentItem)
 
