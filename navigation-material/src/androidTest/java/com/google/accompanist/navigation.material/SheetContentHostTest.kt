@@ -137,16 +137,19 @@ internal class SheetContentHostTest {
     @Test
     fun testOnSheetShownCalled_onBackStackEntryEnter() = runBlockingTest(testClock) {
         val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
-        val backStackEntry = createBackStackEntry(sheetState)
+        val backStackEntryState = mutableStateOf<NavBackStackEntry?>(null)
 
         val shownBackStackEntries = mutableListOf<NavBackStackEntry>()
 
         composeTestRule.setBottomSheetContent(
-            backStackEntry = mutableStateOf(backStackEntry),
+            backStackEntry = backStackEntryState,
             sheetState = sheetState,
             onSheetShown = { entry -> shownBackStackEntries.add(entry) },
             onSheetDismissed = { }
         )
+
+        val backStackEntry = createBackStackEntry(sheetState)
+        backStackEntryState.value = backStackEntry
 
         composeTestRule.runOnIdle {
             assertWithMessage("Sheet is visible")
