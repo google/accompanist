@@ -57,8 +57,6 @@ class InstrumentedSnappingLazyRowTest(
                 1 * (ItemSize.value + 4),
                 4 * (ItemSize.value + 4),
             )
-            // itemWidthFraction
-            .combineWithParameters(1f)
             // contentPadding
             .combineWithParameters(
                 PaddingValues(end = 32.dp), // Alignment.Start

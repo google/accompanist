@@ -156,6 +156,8 @@ abstract class SnappingFlingBehaviorTest(
         rule.mainClock.autoAdvance = true
         rule.waitForIdle()
 
+        lazyListState.logVisibleItems()
+
         // ...and assert that we now laid out from page 1
         lazyListState.assertCurrentItem(minIndex = 1, offset = 0)
     }
