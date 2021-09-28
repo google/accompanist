@@ -18,6 +18,7 @@
 
 package com.google.accompanist.pager
 
+import androidx.annotation.Px
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.DecayAnimationSpec
 import androidx.compose.animation.rememberSplineBasedDecay
@@ -25,6 +26,7 @@ import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListLayoutInfo
@@ -40,10 +42,13 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.lazysnap.ExperimentalLazySnapApi
+import com.google.accompanist.lazysnap.SnapOffsets
 import com.google.accompanist.lazysnap.SnappingFlingBehavior
 import com.google.accompanist.lazysnap.SnappingFlingBehaviorDefaults
 import com.google.accompanist.lazysnap.rememberSnappingFlingBehavior
@@ -65,11 +70,33 @@ annotation class ExperimentalPagerApi
 @ExperimentalPagerApi
 object PagerDefaults {
     /**
+     * The default implementation for the `maximumFlingDistance` parameter of
+     * [flingBehavior] which does limits the fling distance to 1 page.
+     *
+     * If you wish to expand the fling distance to be a multiple of the page size, you can use
+     * something like this:
+     *
+     * @sample com.google.accompanist.sample.lazysnap.MultipleFlingBehavior
+     */
+    @Suppress("MemberVisibilityCanBePrivate")
+    val singlePageFlingDistance: (LazyListLayoutInfo) -> Int = { layoutInfo ->
+        // We can scroll up to the scrollable size of the lazy layout
+        layoutInfo.layoutSize + layoutInfo.itemSpacing
+    }
+
+    /**
      * Remember the default [FlingBehavior] that represents the scroll curve.
+     *
+     * Please remember to provide the correct [endContentPadding] if supplying your own
+     * [FlingBehavior] to [VerticalPager] or [HorizontalPager]. See those functions for how they
+     * calculate the value.
      *
      * @param state The [PagerState] to update.
      * @param decayAnimationSpec The decay animation spec to use for decayed flings.
      * @param snapAnimationSpec The animation spec to use when snapping.
+     * @param maximumFlingDistance Block which returns the maximum fling distance in pixels.
+     * @param endContentPadding The amount of content padding on the end edge of the lazy list
+     * in pixels (end/bottom depending on the scrolling direction).
      */
     @Composable
     @ExperimentalLazySnapApi
@@ -77,15 +104,15 @@ object PagerDefaults {
         state: PagerState,
         decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
         snapAnimationSpec: AnimationSpec<Float> = SnappingFlingBehaviorDefaults.snapAnimationSpec,
-        maximumFlingDistance: (LazyListLayoutInfo) -> Int = { layoutInfo ->
-            // We can scroll up to the scrollable size of the lazy layout
-            layoutInfo.layoutSize + layoutInfo.itemSpacing
-        },
+        maximumFlingDistance: (LazyListLayoutInfo) -> Int = singlePageFlingDistance,
+        @Px endContentPadding: Int = 0,
     ): FlingBehavior = rememberSnappingFlingBehavior(
         lazyListState = state.lazyListState,
+        snapOffsetForItem = SnapOffsets.Start, // pages are full width, so we use the simplest
         decayAnimationSpec = decayAnimationSpec,
         snapAnimationSpec = snapAnimationSpec,
         maximumFlingDistance = maximumFlingDistance,
+        endContentPadding = endContentPadding,
     )
 
     @Deprecated(
@@ -109,8 +136,8 @@ private val LazyListLayoutInfo.layoutSize: Int
     get() {
         // Instead we look at the first item with a non-zero size
         return visibleItemsInfo.firstOrNull { it.size > 0 }?.size
-            // Or the viewport (but the viewport contains the content padding)
-            ?: viewportEndOffset + viewportStartOffset
+            // Or the viewport end offset (but this value contains the end content padding)
+            ?: viewportEndOffset
     }
 
 /**
@@ -152,10 +179,15 @@ fun HorizontalPager(
     state: PagerState = rememberPagerState(),
     reverseLayout: Boolean = false,
     itemSpacing: Dp = 0.dp,
-    flingBehavior: FlingBehavior = PagerDefaults.flingBehavior(state),
-    verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
-    key: ((page: Int) -> Any)? = null,
     contentPadding: PaddingValues = PaddingValues(0.dp),
+    verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
+    flingBehavior: FlingBehavior = with(LocalDensity.current) {
+        PagerDefaults.flingBehavior(
+            state = state,
+            endContentPadding = contentPadding.calculateEndPadding(LayoutDirection.Ltr).roundToPx(),
+        )
+    },
+    key: ((page: Int) -> Any)? = null,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
     Pager(
@@ -201,10 +233,15 @@ fun VerticalPager(
     state: PagerState = rememberPagerState(),
     reverseLayout: Boolean = false,
     itemSpacing: Dp = 0.dp,
-    flingBehavior: FlingBehavior = PagerDefaults.flingBehavior(state),
-    horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
-    key: ((page: Int) -> Any)? = null,
     contentPadding: PaddingValues = PaddingValues(0.dp),
+    horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
+    flingBehavior: FlingBehavior = with(LocalDensity.current) {
+        PagerDefaults.flingBehavior(
+            state = state,
+            endContentPadding = contentPadding.calculateBottomPadding().roundToPx(),
+        )
+    },
+    key: ((page: Int) -> Any)? = null,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
     Pager(
