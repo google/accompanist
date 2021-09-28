@@ -108,7 +108,7 @@ internal fun SheetContentHost(
                 scope.launch {
                     hideCalled = true
                     try {
-                        sheetState.internalHide()
+                        sheetState.hide()
                     } finally {
                         hideCalled = false
                     }
@@ -133,10 +133,4 @@ private fun EmptySheet() {
     // If there are no destinations on the back stack, we need to add something to work
     // around this
     Box(Modifier.height(1.dp))
-}
-
-// We have the same issue when we are hiding the sheet, but snapTo works better
-@OptIn(ExperimentalMaterialApi::class)
-private suspend fun ModalBottomSheetState.internalHide() {
-    snapTo(ModalBottomSheetValue.Hidden)
 }
