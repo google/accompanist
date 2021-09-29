@@ -18,10 +18,13 @@ package com.google.accompanist.navigation.animation
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.runtime.remember
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.navigation.NavHostController
+import androidx.navigation.NoOpNavigator
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.get
+import androidx.navigation.testing.TestNavigatorState
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.google.common.truth.Truth.assertThat
@@ -61,6 +64,36 @@ class NavHostControllerTest {
 
         composeTestRule.runOnIdle {
             assertThat(navController.navigatorProvider[AnimatedComposeNavigator::class])
+                .isEqualTo(navigator)
+        }
+    }
+
+    @Test
+    fun testRememberAnimatedNavControllerAddsCustomNavigator() {
+        lateinit var navController: NavHostController
+
+        composeTestRule.setContent {
+            val customNavigator = remember { NoOpNavigator() }
+            navController = rememberAnimatedNavController(customNavigator)
+            // get state to trigger recompose on navigate
+            navController.currentBackStackEntryAsState().value
+            AnimatedNavHost(navController, startDestination = first) {
+                composable(first) { BasicText(first) }
+                composable(second) { BasicText(second) }
+            }
+        }
+
+        val navigator = composeTestRule.runOnIdle {
+            navController.navigatorProvider[NoOpNavigator::class]
+        }
+
+        // trigger recompose
+        composeTestRule.runOnIdle {
+            navController.navigate(second)
+        }
+
+        composeTestRule.runOnIdle {
+            assertThat(navController.navigatorProvider[NoOpNavigator::class])
                 .isEqualTo(navigator)
         }
     }
