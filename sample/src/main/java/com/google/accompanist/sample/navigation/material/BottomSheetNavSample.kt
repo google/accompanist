@@ -58,9 +58,8 @@ private object Destinations {
 @OptIn(ExperimentalMaterialNavigationApi::class)
 @Composable
 fun BottomSheetNavDemo() {
-    val navController = rememberNavController()
     val bottomSheetNavigator = rememberBottomSheetNavigator()
-    navController.navigatorProvider += bottomSheetNavigator
+    val navController = rememberNavController(bottomSheetNavigator)
 
     ModalBottomSheetLayout(bottomSheetNavigator) {
         NavHost(navController, Destinations.Home) {

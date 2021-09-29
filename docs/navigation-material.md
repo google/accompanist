@@ -18,9 +18,8 @@ This features composable bottom sheet destinations.
     ```kotlin
     @Composable
     fun MyApp() {
-        val navController = rememberNavController()
         val bottomSheetNavigator = rememberBottomSheetNavigator()
-        navController.navigatorProvider += bottomSheetNavigator
+        val navController = rememberNavController(bottomSheetNavigator)
     }
     ```
 
@@ -29,9 +28,8 @@ This features composable bottom sheet destinations.
     ```kotlin
     @Composable
     fun MyApp() {
-        val navController = rememberNavController()
         val bottomSheetNavigator = rememberBottomSheetNavigator()
-        navController.navigatorProvider += bottomSheetNavigator
+        val navController = rememberNavController(bottomSheetNavigator)
         ModalBottomSheetLayout(bottomSheetNavigator) {
             NavHost(navController, Destinations.Home) {
                // We'll define our graph here in a bit!
@@ -45,9 +43,8 @@ This features composable bottom sheet destinations.
     ```kotlin
     @Composable
     fun MyApp() {
-        val navController = rememberNavController()
         val bottomSheetNavigator = rememberBottomSheetNavigator()
-        navController.navigatorProvider += bottomSheetNavigator
+        val navController = rememberNavController(bottomSheetNavigator)
         ModalBottomSheetLayout(bottomSheetNavigator) {
             NavHost(navController, Destinations.Home) {
                composable(route = "home") {
