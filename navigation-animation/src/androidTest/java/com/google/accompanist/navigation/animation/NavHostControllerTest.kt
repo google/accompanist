@@ -24,7 +24,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NoOpNavigator
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.get
-import androidx.navigation.testing.TestNavigatorState
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.google.common.truth.Truth.assertThat
