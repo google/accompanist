@@ -25,12 +25,18 @@ package com.google.accompanist.navigation.material {
   @com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi public final class BottomSheetNavigatorSheetState {
     ctor public BottomSheetNavigatorSheetState(androidx.compose.material.ModalBottomSheetState sheetState);
     method public androidx.compose.material.ModalBottomSheetValue getCurrentValue();
+    method public float getDirection();
     method public androidx.compose.runtime.State<java.lang.Float> getOffset();
+    method public androidx.compose.runtime.State<java.lang.Float> getOverflow();
+    method public androidx.compose.material.SwipeProgress<androidx.compose.material.ModalBottomSheetValue> getProgress();
     method public androidx.compose.material.ModalBottomSheetValue getTargetValue();
     method public boolean isVisible();
     property public final androidx.compose.material.ModalBottomSheetValue currentValue;
+    property public final float direction;
     property public final boolean isVisible;
     property public final androidx.compose.runtime.State<java.lang.Float> offset;
+    property public final androidx.compose.runtime.State<java.lang.Float> overflow;
+    property public final androidx.compose.material.SwipeProgress<androidx.compose.material.ModalBottomSheetValue> progress;
     property public final androidx.compose.material.ModalBottomSheetValue targetValue;
   }
 
