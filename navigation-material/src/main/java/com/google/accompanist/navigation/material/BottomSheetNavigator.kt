@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.SwipeProgress
 import androidx.compose.material.SwipeableDefaults
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -74,6 +75,24 @@ public class BottomSheetNavigatorSheetState(private val sheetState: ModalBottomS
      */
     public val offset: State<Float>
         get() = sheetState.offset
+
+    /**
+     * @see ModalBottomSheetState.overflow
+     */
+    public val overflow: State<Float>
+        get() = sheetState.overflow
+
+    /**
+     * @see ModalBottomSheetState.direction
+     */
+    public val direction: Float
+        get() = sheetState.direction
+
+    /**
+     * @see ModalBottomSheetState.progress
+     */
+    public val progress: SwipeProgress<ModalBottomSheetValue>
+        get() = sheetState.progress
 }
 
 /**

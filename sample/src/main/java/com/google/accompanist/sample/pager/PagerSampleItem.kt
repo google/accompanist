@@ -31,12 +31,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.google.accompanist.sample.rememberRandomSampleImageUrl
 
 /**
  * Simple pager item which displays an image
  */
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 internal fun PagerSampleItem(
     page: Int,

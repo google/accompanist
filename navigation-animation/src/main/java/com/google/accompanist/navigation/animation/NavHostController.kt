@@ -19,9 +19,10 @@ package com.google.accompanist.navigation.animation
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.Navigator
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.plusAssign
 
 /**
  * Creates a NavHostController that handles the adding of the [ComposeNavigator], [DialogNavigator]
@@ -32,8 +33,9 @@ import androidx.navigation.plusAssign
  */
 @ExperimentalAnimationApi
 @Composable
-public fun rememberAnimatedNavController(): NavHostController {
-    return rememberNavController().apply {
-        navigatorProvider += remember(this) { AnimatedComposeNavigator() }
-    }
+fun rememberAnimatedNavController(
+    vararg navigators: Navigator<out NavDestination>
+): NavHostController {
+    val animatedNavigator = remember { AnimatedComposeNavigator() }
+    return rememberNavController(animatedNavigator, *navigators)
 }

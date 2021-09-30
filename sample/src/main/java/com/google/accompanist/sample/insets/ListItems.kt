@@ -30,11 +30,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 
 /**
  * Simple list item row which displays an image and text.
  */
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun ListItem(
     imageUrl: String,

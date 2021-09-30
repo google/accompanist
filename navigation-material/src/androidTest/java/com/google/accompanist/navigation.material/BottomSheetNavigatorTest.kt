@@ -198,10 +198,9 @@ internal class BottomSheetNavigatorTest {
         val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
 
         composeTestRule.setContent {
-            navController = rememberNavController()
+            navigator = remember { BottomSheetNavigator(sheetState) }
+            navController = rememberNavController(navigator)
             if (savedState != null) navController.restoreState(savedState)
-            navigator = remember(navController) { BottomSheetNavigator(sheetState) }
-            navController.navigatorProvider += navigator
             if (compositionState == 0) {
                 ModalBottomSheetLayout(
                     bottomSheetNavigator = navigator
