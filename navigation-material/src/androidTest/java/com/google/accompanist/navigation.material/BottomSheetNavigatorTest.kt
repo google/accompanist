@@ -201,7 +201,6 @@ internal class BottomSheetNavigatorTest {
             navigator = remember { BottomSheetNavigator(sheetState) }
             navController = rememberNavController(navigator)
             if (savedState != null) navController.restoreState(savedState)
-            navController.navigatorProvider += navigator
             if (compositionState == 0) {
                 ModalBottomSheetLayout(
                     bottomSheetNavigator = navigator
