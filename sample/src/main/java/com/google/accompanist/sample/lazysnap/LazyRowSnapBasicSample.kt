@@ -37,8 +37,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.lazysnap.ExperimentalLazySnapApi
-import com.google.accompanist.lazysnap.rememberSnappingFlingBehavior
+import com.google.accompanist.lazysnap.ExperimentalSnapFlingApi
+import com.google.accompanist.lazysnap.rememberSnapFlingBehavior
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.pager.PagerSampleItem
@@ -57,7 +57,7 @@ class LazyRowSnapBasicSample : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalLazySnapApi::class)
+@OptIn(ExperimentalSnapFlingApi::class)
 @Composable
 private fun Sample() {
     Scaffold(
@@ -74,7 +74,7 @@ private fun Sample() {
         Column(Modifier.fillMaxSize()) {
             LazyRow(
                 state = lazyListState,
-                flingBehavior = rememberSnappingFlingBehavior(lazyListState = lazyListState),
+                flingBehavior = rememberSnapFlingBehavior(lazyListState = lazyListState),
                 contentPadding = PaddingValues(horizontal = 24.dp, vertical = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 modifier = Modifier.heightIn(max = 200.dp),

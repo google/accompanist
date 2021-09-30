@@ -21,28 +21,29 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.internal.test.combineWithParameters
 import com.google.accompanist.internal.test.parameterizedParams
 import org.junit.runner.RunWith
-import org.robolectric.ParameterizedRobolectricTestRunner
-import org.robolectric.annotation.Config
+import org.junit.runners.Parameterized
 
 /**
- * Version of [BaseSnappingLazyColumnTest] which is designed to be run on Robolectric.
+ * Version of [BaseSnapFlingLazyColumnTest] which is designed to be run on device/emulators.
  */
-@Config(qualifiers = "w360dp-h640dp-xhdpi")
-@RunWith(ParameterizedRobolectricTestRunner::class)
-class RobolectricSnappingLazyColumnTest(
+@RunWith(Parameterized::class)
+class InstrumentedSnapFlingLazyColumnTest(
     maxScrollDistanceDp: Float,
     contentPadding: PaddingValues,
     itemSpacingDp: Int,
     reverseLayout: Boolean,
-) : BaseSnappingLazyColumnTest(
+) : BaseSnapFlingLazyColumnTest(
     maxScrollDistanceDp,
     contentPadding,
     itemSpacingDp,
     reverseLayout,
 ) {
     companion object {
+        /**
+         * On device we only test a subset of the combined parameters.
+         */
         @JvmStatic
-        @ParameterizedRobolectricTestRunner.Parameters(
+        @Parameterized.Parameters(
             name = "maxScrollDistanceDp={0}," +
                 "contentPadding={1}," +
                 "itemSpacing={2}," +
@@ -53,7 +54,6 @@ class RobolectricSnappingLazyColumnTest(
             .combineWithParameters(
                 // We add 4dp on to cater for itemSpacing
                 1 * (ItemSize.value + 4),
-                2 * (ItemSize.value + 4),
                 4 * (ItemSize.value + 4),
             )
             // contentPadding
@@ -65,6 +65,6 @@ class RobolectricSnappingLazyColumnTest(
             // itemSpacingDp
             .combineWithParameters(0, 4)
             // reverseLayout
-            .combineWithParameters(true, false)
+            .combineWithParameters(false)
     }
 }

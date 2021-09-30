@@ -25,16 +25,16 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
 /**
- * Version of [BaseSnappingLazyRowTest] which is designed to be run on device/emulators.
+ * Version of [BaseSnapFlingLazyRowTest] which is designed to be run on device/emulators.
  */
 @RunWith(Parameterized::class)
-class InstrumentedSnappingLazyRowTest(
+class InstrumentedSnapFlingLazyRowTest(
     maxScrollDistanceDp: Float,
     contentPadding: PaddingValues,
     itemSpacingDp: Int,
     layoutDirection: LayoutDirection,
     reverseLayout: Boolean,
-) : BaseSnappingLazyRowTest(
+) : BaseSnapFlingLazyRowTest(
     maxScrollDistanceDp,
     contentPadding,
     itemSpacingDp,

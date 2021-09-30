@@ -16,6 +16,7 @@
 
 package com.google.accompanist.lazysnap
 
+import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.ui.test.SemanticsNodeInteraction
@@ -38,8 +39,8 @@ private val SlowVelocity = 100.dp
 
 internal val ItemSize = 200.dp
 
-@OptIn(ExperimentalLazySnapApi::class) // Pager is currently experimental
-abstract class SnappingFlingBehaviorTest(
+@OptIn(ExperimentalSnapFlingApi::class) // Pager is currently experimental
+abstract class SnapFlingBehaviorTest(
     private val maxScrollDistanceDp: Float,
 ) {
     @get:Rule
@@ -54,7 +55,7 @@ abstract class SnappingFlingBehaviorTest(
     @Test
     fun swipe() {
         val lazyListState = LazyListState()
-        val snappingFlingBehavior = createSnappingFlingBehavior(lazyListState)
+        val snappingFlingBehavior = createSnapFlingBehavior(lazyListState)
         setTestContent(
             flingBehavior = snappingFlingBehavior,
             lazyListState = lazyListState,
@@ -78,7 +79,7 @@ abstract class SnappingFlingBehaviorTest(
     @Test
     fun swipeToEndAndBack() {
         val lazyListState = LazyListState()
-        val snappingFlingBehavior = createSnappingFlingBehavior(lazyListState)
+        val snappingFlingBehavior = createSnapFlingBehavior(lazyListState)
         setTestContent(
             flingBehavior = snappingFlingBehavior,
             lazyListState = lazyListState,
@@ -131,7 +132,7 @@ abstract class SnappingFlingBehaviorTest(
         rule.mainClock.autoAdvance = false
 
         val lazyListState = LazyListState()
-        val snappingFlingBehavior = createSnappingFlingBehavior(lazyListState)
+        val snappingFlingBehavior = createSnapFlingBehavior(lazyListState)
         setTestContent(
             flingBehavior = snappingFlingBehavior,
             lazyListState = lazyListState,
@@ -167,7 +168,7 @@ abstract class SnappingFlingBehaviorTest(
         rule.mainClock.autoAdvance = false
 
         val lazyListState = LazyListState()
-        val snappingFlingBehavior = createSnappingFlingBehavior(lazyListState)
+        val snappingFlingBehavior = createSnapFlingBehavior(lazyListState)
         setTestContent(
             flingBehavior = snappingFlingBehavior,
             lazyListState = lazyListState,
@@ -201,7 +202,7 @@ abstract class SnappingFlingBehaviorTest(
         rule.mainClock.autoAdvance = false
 
         val lazyListState = LazyListState()
-        val snappingFlingBehavior = createSnappingFlingBehavior(lazyListState)
+        val snappingFlingBehavior = createSnapFlingBehavior(lazyListState)
         setTestContent(
             flingBehavior = snappingFlingBehavior,
             lazyListState = lazyListState,
@@ -235,7 +236,7 @@ abstract class SnappingFlingBehaviorTest(
         rule.mainClock.autoAdvance = false
 
         val lazyListState = LazyListState()
-        val snappingFlingBehavior = createSnappingFlingBehavior(lazyListState)
+        val snappingFlingBehavior = createSnapFlingBehavior(lazyListState)
         setTestContent(
             flingBehavior = snappingFlingBehavior,
             lazyListState = lazyListState,
@@ -280,7 +281,7 @@ abstract class SnappingFlingBehaviorTest(
     private fun setTestContent(
         count: Int,
         lazyListState: LazyListState = LazyListState(),
-        flingBehavior: SnappingFlingBehavior = createSnappingFlingBehavior(lazyListState),
+        flingBehavior: SnapFlingBehavior = createSnapFlingBehavior(lazyListState),
     ) {
         setTestContent(
             flingBehavior = flingBehavior,
@@ -290,22 +291,21 @@ abstract class SnappingFlingBehaviorTest(
     }
 
     protected abstract fun setTestContent(
-        flingBehavior: SnappingFlingBehavior,
+        flingBehavior: SnapFlingBehavior,
         count: () -> Int,
         lazyListState: LazyListState = LazyListState(),
     )
 
-    private fun createSnappingFlingBehavior(
+    private fun createSnapFlingBehavior(
         lazyListState: LazyListState
-    ): SnappingFlingBehavior {
-        return SnappingFlingBehavior(
-            lazyListState = lazyListState,
-            snapOffsetForItem = SnapOffsets.Start,
-            maximumFlingDistance = {
-                with(rule.density) { maxScrollDistanceDp.dp.roundToPx() }
-            }
-        )
-    }
+    ): SnapFlingBehavior = SnapFlingBehavior(
+        lazyListState = lazyListState,
+        decayAnimationSpec = exponentialDecay(),
+        snapOffsetForItem = SnapOffsets.Start,
+        maximumFlingDistance = {
+            with(rule.density) { maxScrollDistanceDp.dp.roundToPx() }
+        }
+    )
 }
 
 /**

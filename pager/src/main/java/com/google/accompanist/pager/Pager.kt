@@ -47,11 +47,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.lazysnap.ExperimentalLazySnapApi
+import com.google.accompanist.lazysnap.ExperimentalSnapFlingApi
+import com.google.accompanist.lazysnap.SnapFlingBehavior
+import com.google.accompanist.lazysnap.SnapFlingBehaviorDefaults
 import com.google.accompanist.lazysnap.SnapOffsets
-import com.google.accompanist.lazysnap.SnappingFlingBehavior
-import com.google.accompanist.lazysnap.SnappingFlingBehaviorDefaults
-import com.google.accompanist.lazysnap.rememberSnappingFlingBehavior
+import com.google.accompanist.lazysnap.rememberSnapFlingBehavior
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 
@@ -99,18 +99,18 @@ object PagerDefaults {
      * in pixels (end/bottom depending on the scrolling direction).
      */
     @Composable
-    @ExperimentalLazySnapApi
+    @ExperimentalSnapFlingApi
     fun flingBehavior(
         state: PagerState,
         decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
-        snapAnimationSpec: AnimationSpec<Float> = SnappingFlingBehaviorDefaults.SnapAnimationSpec,
+        snapAnimationSpec: AnimationSpec<Float> = SnapFlingBehaviorDefaults.SpringAnimationSpec,
         maximumFlingDistance: (LazyListLayoutInfo) -> Int = singlePageFlingDistance,
         @Px endContentPadding: Int = 0,
-    ): FlingBehavior = rememberSnappingFlingBehavior(
+    ): FlingBehavior = rememberSnapFlingBehavior(
         lazyListState = state.lazyListState,
         snapOffsetForItem = SnapOffsets.Start, // pages are full width, so we use the simplest
         decayAnimationSpec = decayAnimationSpec,
-        snapAnimationSpec = snapAnimationSpec,
+        springAnimationSpec = snapAnimationSpec,
         maximumFlingDistance = maximumFlingDistance,
         endContentPadding = endContentPadding,
     )
@@ -119,12 +119,12 @@ object PagerDefaults {
         "Replaced with PagerDefaults.flingBehavior()",
         ReplaceWith("PagerDefaults.flingBehavior(state, decayAnimationSpec, snapAnimationSpec)")
     )
-    @ExperimentalLazySnapApi
+    @ExperimentalSnapFlingApi
     @Composable
     fun rememberPagerFlingConfig(
         state: PagerState,
         decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
-        snapAnimationSpec: AnimationSpec<Float> = SnappingFlingBehaviorDefaults.SnapAnimationSpec,
+        snapAnimationSpec: AnimationSpec<Float> = SnapFlingBehaviorDefaults.SpringAnimationSpec,
     ): FlingBehavior = flingBehavior(state, decayAnimationSpec, snapAnimationSpec)
 }
 
@@ -170,7 +170,7 @@ private val LazyListLayoutInfo.itemSpacing: Int
  * @param content a block which describes the content. Inside this block you can reference
  * [PagerScope.currentPage] and other properties in [PagerScope].
  */
-@OptIn(ExperimentalLazySnapApi::class)
+@OptIn(ExperimentalSnapFlingApi::class)
 @ExperimentalPagerApi
 @Composable
 fun HorizontalPager(
@@ -224,7 +224,7 @@ fun HorizontalPager(
  * @param content a block which describes the content. Inside this block you can reference
  * [PagerScope.currentPage] and other properties in [PagerScope].
  */
-@OptIn(ExperimentalLazySnapApi::class)
+@OptIn(ExperimentalSnapFlingApi::class)
 @ExperimentalPagerApi
 @Composable
 fun VerticalPager(
@@ -259,7 +259,7 @@ fun VerticalPager(
     )
 }
 
-@OptIn(ExperimentalLazySnapApi::class)
+@OptIn(ExperimentalSnapFlingApi::class)
 @ExperimentalPagerApi
 @Composable
 internal fun Pager(
@@ -281,7 +281,7 @@ internal fun Pager(
     // Provide our PagerState with access to the SnappingFlingBehavior animation target
     // TODO: can this be done in a better way?
     state.flingAnimationTarget = {
-        (flingBehavior as? SnappingFlingBehavior)?.animationTarget
+        (flingBehavior as? SnapFlingBehavior)?.animationTarget
     }
 
     // Once a fling (scroll) has finished, notify the state

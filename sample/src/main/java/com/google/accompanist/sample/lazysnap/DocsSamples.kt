@@ -17,13 +17,13 @@
 package com.google.accompanist.sample.lazysnap
 
 import androidx.compose.runtime.Composable
-import com.google.accompanist.lazysnap.ExperimentalLazySnapApi
+import com.google.accompanist.lazysnap.ExperimentalSnapFlingApi
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerDefaults
 import com.google.accompanist.pager.rememberPagerState
 
-@OptIn(ExperimentalPagerApi::class, ExperimentalLazySnapApi::class)
+@OptIn(ExperimentalPagerApi::class, ExperimentalSnapFlingApi::class)
 @Composable
 fun MultipleFlingBehavior() {
     val pagerState = rememberPagerState()

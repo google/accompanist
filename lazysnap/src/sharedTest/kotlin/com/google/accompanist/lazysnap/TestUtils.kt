@@ -20,16 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.test.SemanticsNodeInteraction
-import androidx.compose.ui.test.percentOffset
-import androidx.compose.ui.test.performGesture
-import androidx.compose.ui.test.swipe
-import androidx.compose.ui.test.swipeWithVelocity
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
-import kotlin.math.absoluteValue
-import kotlin.math.hypot
-import kotlin.math.roundToLong
 import kotlin.random.Random
 
 @Composable
@@ -41,44 +32,6 @@ fun ProvideLayoutDirection(
         LocalLayoutDirection provides (layoutDirection),
         content = content
     )
-}
-
-internal fun SemanticsNodeInteraction.swipeAcrossCenterWithVelocity(
-    velocityPerSec: Dp,
-    distancePercentageX: Float = 0f,
-    distancePercentageY: Float = 0f,
-): SemanticsNodeInteraction = performGesture {
-    val startOffset = percentOffset(
-        x = 0.5f - distancePercentageX / 2,
-        y = 0.5f - distancePercentageY / 2
-    )
-    val endOffset = percentOffset(
-        x = 0.5f + distancePercentageX / 2,
-        y = 0.5f + distancePercentageY / 2
-    )
-
-    val node = fetchSemanticsNode("Failed to retrieve bounds of the node.")
-    val density = node.root!!.density
-    val velocityPxPerSec = with(density) { velocityPerSec.toPx() }
-
-    try {
-        swipeWithVelocity(
-            start = startOffset,
-            end = endOffset,
-            endVelocity = velocityPxPerSec,
-        )
-    } catch (e: IllegalArgumentException) {
-        // swipeWithVelocity throws an exception if the given distance + velocity isn't feasible:
-        // https://issuetracker.google.com/182477143. To work around this, we catch the exception
-        // and instead run a swipe() with a computed duration instead. This is not perfect,
-        // but good enough.
-        val distance = hypot(endOffset.x - startOffset.x, endOffset.y - startOffset.y)
-        swipe(
-            start = startOffset,
-            end = endOffset,
-            durationMillis = ((distance.absoluteValue / velocityPxPerSec) * 1000).roundToLong(),
-        )
-    }
 }
 
 fun randomColor() = Color(
