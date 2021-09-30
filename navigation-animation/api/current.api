@@ -21,7 +21,7 @@ package com.google.accompanist.navigation.animation {
   }
 
   public final class NavHostControllerKt {
-    method @androidx.compose.animation.ExperimentalAnimationApi @androidx.compose.runtime.Composable public static androidx.navigation.NavHostController rememberAnimatedNavController();
+    method @androidx.compose.animation.ExperimentalAnimationApi @androidx.compose.runtime.Composable public static androidx.navigation.NavHostController rememberAnimatedNavController(androidx.navigation.Navigator<? extends androidx.navigation.NavDestination>... navigators);
   }
 
 }
