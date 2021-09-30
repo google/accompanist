@@ -17,12 +17,15 @@
 package com.google.accompanist.navigation.material
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
@@ -33,6 +36,7 @@ import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.testing.TestNavigatorState
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -41,6 +45,7 @@ import com.google.common.truth.Truth.assertThat
 import com.google.common.truth.Truth.assertWithMessage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Rule
@@ -49,7 +54,11 @@ import org.junit.runner.RunWith
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
-@OptIn(ExperimentalCoroutinesApi::class, ExperimentalMaterialApi::class, ExperimentalMaterialNavigationApi::class)
+@OptIn(
+    ExperimentalCoroutinesApi::class,
+    ExperimentalMaterialApi::class,
+    ExperimentalMaterialNavigationApi::class
+)
 internal class SheetContentHostTest {
 
     private val testDispatcher = TestCoroutineDispatcher()
@@ -137,20 +146,80 @@ internal class SheetContentHostTest {
     @Test
     fun testOnSheetShownCalled_onBackStackEntryEnter() = runBlockingTest(testClock) {
         val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
-        val backStackEntry = createBackStackEntry(sheetState)
-
+        val backStackEntryState = mutableStateOf<NavBackStackEntry?>(null)
         val shownBackStackEntries = mutableListOf<NavBackStackEntry>()
 
         composeTestRule.setBottomSheetContent(
-            backStackEntry = mutableStateOf(backStackEntry),
+            backStackEntry = backStackEntryState,
             sheetState = sheetState,
             onSheetShown = { entry -> shownBackStackEntries.add(entry) },
             onSheetDismissed = { }
         )
 
+        val backStackEntry = createBackStackEntry(sheetState) {
+            Box(Modifier.height(50.dp))
+        }
+        backStackEntryState.value = backStackEntry
+
         composeTestRule.runOnIdle {
             assertWithMessage("Sheet is visible")
                 .that(sheetState.isVisible).isTrue()
+            assertWithMessage("Back stack entry should be in the shown entries list")
+                .that(shownBackStackEntries)
+                .containsExactly(backStackEntry)
+        }
+    }
+
+    @Test
+    fun testSheetHalfExpanded_onBackStackEntryEnter_shortSheet(): Unit = runBlocking {
+        val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
+        val backStackEntryState = mutableStateOf<NavBackStackEntry?>(null)
+        val shownBackStackEntries = mutableListOf<NavBackStackEntry>()
+
+        composeTestRule.setBottomSheetContent(
+            backStackEntry = backStackEntryState,
+            sheetState = sheetState,
+            onSheetShown = { entry -> shownBackStackEntries.add(entry) },
+            onSheetDismissed = { }
+        )
+
+        val backStackEntry = createBackStackEntry(sheetState) {
+            Box(Modifier.height(100.dp))
+        }
+        backStackEntryState.value = backStackEntry
+
+        composeTestRule.runOnIdle {
+            assertWithMessage("Sheet is fully expanded")
+                .that(sheetState.currentValue)
+                .isEqualTo(ModalBottomSheetValue.Expanded)
+            assertWithMessage("Back stack entry should be in the shown entries list")
+                .that(shownBackStackEntries)
+                .containsExactly(backStackEntry)
+        }
+    }
+
+    @Test
+    fun testSheetHalfExpanded_onBackStackEntryEnter_tallSheet(): Unit = runBlocking {
+        val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
+        val backStackEntryState = mutableStateOf<NavBackStackEntry?>(null)
+        val shownBackStackEntries = mutableListOf<NavBackStackEntry>()
+
+        composeTestRule.setBottomSheetContent(
+            backStackEntry = backStackEntryState,
+            sheetState = sheetState,
+            onSheetShown = { entry -> shownBackStackEntries.add(entry) },
+            onSheetDismissed = { }
+        )
+
+        val backStackEntry = createBackStackEntry(sheetState) {
+            Box(Modifier.fillMaxSize())
+        }
+        backStackEntryState.value = backStackEntry
+
+        composeTestRule.runOnIdle {
+            assertWithMessage("Tall sheet is half-expanded")
+                .that(sheetState.currentValue)
+                .isEqualTo(ModalBottomSheetValue.HalfExpanded)
             assertWithMessage("Back stack entry should be in the shown entries list")
                 .that(shownBackStackEntries)
                 .containsExactly(backStackEntry)
@@ -177,19 +246,26 @@ internal class SheetContentHostTest {
                     )
                 },
                 sheetState = sheetState,
-                content = { Box(Modifier.fillMaxSize().testTag(bodyContentTag)) }
+                content = {
+                    Box(
+                        Modifier
+                            .fillMaxSize()
+                            .testTag(bodyContentTag)
+                    )
+                }
             )
         }
     }
 
-    private fun createBackStackEntry(sheetState: ModalBottomSheetState): NavBackStackEntry {
+    private fun createBackStackEntry(
+        sheetState: ModalBottomSheetState,
+        sheetContent: @Composable ColumnScope.(NavBackStackEntry) -> Unit = { Text("Fake Sheet Content") }
+    ): NavBackStackEntry {
         val navigatorState = TestNavigatorState()
         val navigator = BottomSheetNavigator(sheetState)
         navigator.onAttach(navigatorState)
 
-        val destination = BottomSheetNavigator.Destination(navigator) {
-            Text("Fake Sheet Content")
-        }
+        val destination = BottomSheetNavigator.Destination(navigator, sheetContent)
         val backStackEntry = navigatorState.createBackStackEntry(destination, null)
         navigator.navigate(listOf(backStackEntry), null, null)
         return backStackEntry
