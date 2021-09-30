@@ -24,8 +24,8 @@ package com.google.accompanist.lazysnap {
   @com.google.accompanist.lazysnap.ExperimentalLazySnapApi public final class SnappingFlingBehaviorDefaults {
     method public kotlin.jvm.functions.Function1<androidx.compose.foundation.lazy.LazyListLayoutInfo,java.lang.Integer> getMaximumFlingDistance();
     method public androidx.compose.animation.core.AnimationSpec<java.lang.Float> getSnapAnimationSpec();
-    property public final kotlin.jvm.functions.Function1<androidx.compose.foundation.lazy.LazyListLayoutInfo,java.lang.Integer> maximumFlingDistance;
-    property public final androidx.compose.animation.core.AnimationSpec<java.lang.Float> snapAnimationSpec;
+    property public final kotlin.jvm.functions.Function1<androidx.compose.foundation.lazy.LazyListLayoutInfo,java.lang.Integer> MaximumFlingDistance;
+    property public final androidx.compose.animation.core.AnimationSpec<java.lang.Float> SnapAnimationSpec;
     field public static final com.google.accompanist.lazysnap.SnappingFlingBehaviorDefaults INSTANCE;
   }
 

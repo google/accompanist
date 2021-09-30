@@ -64,14 +64,14 @@ object SnappingFlingBehaviorDefaults {
      * [AnimationSpec] used as the default value for the `snapAnimationSpec` parameter on
      * [rememberSnappingFlingBehavior] and [SnappingFlingBehavior].
      */
-    val snapAnimationSpec: AnimationSpec<Float> = spring(stiffness = 400f)
+    val SnapAnimationSpec: AnimationSpec<Float> = spring(stiffness = 400f)
 
     /**
      * The default implementation for the `maximumFlingDistance` parameter of
      * [rememberSnappingFlingBehavior] and [SnappingFlingBehavior], which does not limit
      * the fling distance.
      */
-    val maximumFlingDistance: (LazyListLayoutInfo) -> Int = { Int.MAX_VALUE }
+    val MaximumFlingDistance: (LazyListLayoutInfo) -> Int = { Int.MAX_VALUE }
 }
 
 /**
@@ -92,9 +92,9 @@ object SnappingFlingBehaviorDefaults {
 fun rememberSnappingFlingBehavior(
     lazyListState: LazyListState,
     snapOffsetForItem: (layoutInfo: LazyListLayoutInfo, itemInfo: LazyListItemInfo) -> Int = SnapOffsets.Center,
-    maximumFlingDistance: (LazyListLayoutInfo) -> Int = SnappingFlingBehaviorDefaults.maximumFlingDistance,
+    maximumFlingDistance: (LazyListLayoutInfo) -> Int = SnappingFlingBehaviorDefaults.MaximumFlingDistance,
     decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
-    snapAnimationSpec: AnimationSpec<Float> = SnappingFlingBehaviorDefaults.snapAnimationSpec,
+    snapAnimationSpec: AnimationSpec<Float> = SnappingFlingBehaviorDefaults.SnapAnimationSpec,
     @Px endContentPadding: Int = 0,
 ): SnappingFlingBehavior = remember(
     lazyListState,
@@ -118,7 +118,7 @@ fun rememberSnappingFlingBehavior(
  * Contains a number of values which can be used for the `snapOffsetForItem` parameter on
  * [rememberSnappingFlingBehavior] and [SnappingFlingBehavior].
  */
-@Suppress("unused")
+@Suppress("unused") // public vals which aren't used in the project
 object SnapOffsets {
     /**
      * Snap offset which results in the start edge of the item, snapping to the start scrolling
@@ -179,9 +179,9 @@ object SnapOffsets {
 class SnappingFlingBehavior(
     private val lazyListState: LazyListState,
     private val snapOffsetForItem: (LazyListLayoutInfo, LazyListItemInfo) -> Int = SnapOffsets.Center,
-    private val maximumFlingDistance: LazyListLayoutInfo.() -> Int = SnappingFlingBehaviorDefaults.maximumFlingDistance,
+    private val maximumFlingDistance: LazyListLayoutInfo.() -> Int = SnappingFlingBehaviorDefaults.MaximumFlingDistance,
     private val decayAnimationSpec: DecayAnimationSpec<Float> = exponentialDecay(),
-    private val snapAnimationSpec: AnimationSpec<Float> = SnappingFlingBehaviorDefaults.snapAnimationSpec,
+    private val snapAnimationSpec: AnimationSpec<Float> = SnappingFlingBehaviorDefaults.SnapAnimationSpec,
     @Px endContentPadding: Int = 0,
 ) : FlingBehavior {
     /**
@@ -229,7 +229,7 @@ class SnappingFlingBehavior(
      * If [flingThenSpring] is set to true, then a fling-then-spring animation might be used.
      * If used, a decay fling will be run until we've scrolled to the preceding item of
      * [targetIndex]. Once that happens, the decay animation is stopped and a spring animation
-     * is started, to scroll the remainder of the distance. Visually this results in a much
+     * is started to scroll the remainder of the distance. Visually this results in a much
      * smoother finish to the animation, as it will slowly come to a stop at [targetIndex].
      * Even if [flingThenSpring] is set to true, fling-then-spring animations are only available
      * when scrolling 2 items or more.
@@ -307,7 +307,7 @@ class SnappingFlingBehavior(
                     }
                 }
 
-                if (isRunning && checkSnapBack(initialVelocity, targetIndex, ::scrollBy)) {
+                if (isRunning && isSnapBackNeeded(initialVelocity, targetIndex, ::scrollBy)) {
                     // If we're still running, check to see if we need to snap-back
                     // (if we've scrolled past the target)
                     cancelAnimation()
@@ -477,7 +477,7 @@ class SnappingFlingBehavior(
                 lastValue = value
                 velocityLeft = velocity
 
-                if (checkSnapBack(initialVelocity, targetIndex, ::scrollBy)) {
+                if (isSnapBackNeeded(initialVelocity, targetIndex, ::scrollBy)) {
                     cancelAnimation()
                 } else if (abs(delta - consumed) > 0.5f) {
                     // If we're still running but some of the scroll was not consumed,
@@ -501,7 +501,7 @@ class SnappingFlingBehavior(
     /**
      * Returns true if we needed to perform a snap back, and the animation should be cancelled.
      */
-    private inline fun AnimationScope<Float, AnimationVector1D>.checkSnapBack(
+    private fun AnimationScope<Float, AnimationVector1D>.isSnapBackNeeded(
         initialVelocity: Float,
         targetIndex: Int,
         scrollBy: (pixels: Float) -> Float,
@@ -541,9 +541,9 @@ class SnappingFlingBehavior(
 
     private val currentItemInfo: LazyListItemInfo?
         get() = lazyListState.layoutInfo.let { layoutInfo ->
-            layoutInfo.visibleItemsInfo.asSequence()
-                .filter { it.offset <= snapOffsetForItem(layoutInfo, it) }
-                .lastOrNull()
+            layoutInfo.visibleItemsInfo.lastOrNull { itemInfo ->
+                itemInfo.offset <= snapOffsetForItem(layoutInfo, itemInfo)
+            }
         }
 
     private fun DecayAnimationSpec<Float>.canDecayBeyondCurrentItem(

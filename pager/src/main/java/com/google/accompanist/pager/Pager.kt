@@ -103,7 +103,7 @@ object PagerDefaults {
     fun flingBehavior(
         state: PagerState,
         decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
-        snapAnimationSpec: AnimationSpec<Float> = SnappingFlingBehaviorDefaults.snapAnimationSpec,
+        snapAnimationSpec: AnimationSpec<Float> = SnappingFlingBehaviorDefaults.SnapAnimationSpec,
         maximumFlingDistance: (LazyListLayoutInfo) -> Int = singlePageFlingDistance,
         @Px endContentPadding: Int = 0,
     ): FlingBehavior = rememberSnappingFlingBehavior(
@@ -124,7 +124,7 @@ object PagerDefaults {
     fun rememberPagerFlingConfig(
         state: PagerState,
         decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
-        snapAnimationSpec: AnimationSpec<Float> = SnappingFlingBehaviorDefaults.snapAnimationSpec,
+        snapAnimationSpec: AnimationSpec<Float> = SnappingFlingBehaviorDefaults.SnapAnimationSpec,
     ): FlingBehavior = flingBehavior(state, decayAnimationSpec, snapAnimationSpec)
 }
 
