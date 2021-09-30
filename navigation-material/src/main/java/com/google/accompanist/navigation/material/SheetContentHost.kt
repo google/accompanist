@@ -35,10 +35,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.LocalOwnersProvider
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -90,11 +92,26 @@ internal fun SheetContentHost(
                 .collect { if (!hideCalled) currentOnSheetDismissed(backStackEntry) }
         }
 
+        // We use this signal to know when its (almost) safe to `show` the bottom sheet
+        // It will be set after the sheet's content has been `onGloballyPositioned`
+        val contentPositionedSignal = remember(backStackEntry) {
+            CompletableDeferred<Unit?>()
+        }
+
         // Whenever the composable associated with the backStackEntry enters the composition, we
         // want to show the sheet, and hide it when this composable leaves the composition
         DisposableEffect(backStackEntry) {
             scope.launch {
+                contentPositionedSignal.await()
                 try {
+                    // If we don't wait for a few frames before calling `show`, we will be too early
+                    // and the sheet content won't have been laid out yet (even with our content
+                    // positioned signal). If a sheet is tall enough to have a HALF_EXPANDED state,
+                    // we might be here before the SwipeableState's anchors have been properly
+                    // calculated, resulting in the sheet animating to the EXPANDED state when
+                    // calling `show`. As a workaround, we wait for a magic number of frames.
+                    // https://issuetracker.google.com/issues/200980998
+                    repeat(AWAIT_FRAMES_BEFORE_SHOW) { awaitFrame() }
                     sheetState.show()
                 } catch (sheetShowCancelled: CancellationException) {
                     // There is a race condition in ModalBottomSheetLayout that happens when the
@@ -103,8 +120,8 @@ internal fun SheetContentHost(
                     // such as the one triggered by our `show` call.
                     // The sheet will still snap to the EXPANDED or HALF_EXPANDED state.
                     // In that case we want to wait until the sheet is visible. For safety, we only
-                    // wait for 800 seconds - if the sheet is not visible until then, something has
-                    // gone horribly wrong.
+                    // wait for 800 milliseconds - if the sheet is not visible until then, something
+                    // has gone horribly wrong.
                     // https://issuetracker.google.com/issues/200980998
                     withTimeout(800) {
                         while (!sheetState.isVisible) {
@@ -135,7 +152,9 @@ internal fun SheetContentHost(
 
         val content = (backStackEntry.destination as BottomSheetNavigator.Destination).content
         backStackEntry.LocalOwnersProvider(saveableStateHolder) {
-            columnHost.content(backStackEntry)
+            Box(Modifier.onGloballyPositioned { contentPositionedSignal.complete(Unit) }) {
+                columnHost.content(backStackEntry)
+            }
         }
     } else {
         EmptySheet()
@@ -153,6 +172,15 @@ private fun EmptySheet() {
 }
 
 private suspend fun awaitFrame() = withFrameNanos(onFrame = {})
+
+/**
+ * This magic number has been chosen through painful experiments.
+ * - Waiting for 1 frame still results in the sheet fully expanding, which we don't want
+ * - Waiting for 2 frames results in the `show` call getting cancelled
+ * - Waiting for 3+ frames results in the sheet expanding to the correct state. Success!
+ * We wait for a few frames more just to be sure.
+ */
+private const val AWAIT_FRAMES_BEFORE_SHOW = 3
 
 // We have the same issue when we are hiding the sheet, but snapTo works better
 @OptIn(ExperimentalMaterialApi::class)
