@@ -16,7 +16,7 @@
         <link rel="canonical" href="https://google.github.io/accompanist/pager/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.4">
+      <meta name="generator" content="mkdocs-1.2.1, mkdocs-material-7.1.8">
     
     
       
@@ -24,10 +24,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.bde7dde4.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.ca7ac06f.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.ef6f36e2.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.f1a3b89f.min.css">
         
           
           
@@ -48,6 +48,8 @@
     
     
       
+
+
     
     
   </head>
@@ -456,18 +458,12 @@
     Lazy creation
   </a>
   
-    <nav class="md-nav" aria-label="Lazy creation">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#offscreen-limit" class="md-nav__link">
-    Offscreen Limit
-  </a>
-  
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#content-padding" class="md-nav__link">
+    Content Padding
+  </a>
   
 </li>
       
@@ -496,6 +492,33 @@
           <li class="md-nav__item">
   <a href="#integration-with-tabs" class="md-nav__link">
     Integration with Tabs
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#changes-in-v0190" class="md-nav__link">
+    Changes in v0.19.0
+  </a>
+  
+    <nav class="md-nav" aria-label="Changes in v0.19.0">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pagerstate" class="md-nav__link">
+    PagerState
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#horizontalpager-verticalpager" class="md-nav__link">
+    HorizontalPager &amp; VerticalPager
   </a>
   
 </li>
@@ -1071,18 +1094,12 @@
     Lazy creation
   </a>
   
-    <nav class="md-nav" aria-label="Lazy creation">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#offscreen-limit" class="md-nav__link">
-    Offscreen Limit
-  </a>
-  
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#content-padding" class="md-nav__link">
+    Content Padding
+  </a>
   
 </li>
       
@@ -1111,6 +1128,33 @@
           <li class="md-nav__item">
   <a href="#integration-with-tabs" class="md-nav__link">
     Integration with Tabs
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#changes-in-v0190" class="md-nav__link">
+    Changes in v0.19.0
+  </a>
+  
+    <nav class="md-nav" aria-label="Changes in v0.19.0">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pagerstate" class="md-nav__link">
+    PagerState
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#horizontalpager-verticalpager" class="md-nav__link">
+    HorizontalPager &amp; VerticalPager
   </a>
   
 </li>
@@ -1191,9 +1235,7 @@ All of the APIs are marked with the <code>@ExperimentalPagerApi</code> annotatio
 
 <p>The simplest usage looks like the following:</p>
 <div class="highlight"><pre><span></span><code><span class="c1">// Display 10 items</span>
-<span class="k">val</span> <span class="py">pagerState</span> <span class="p">=</span> <span class="n">rememberPagerState</span><span class="p">(</span><span class="n">pageCount</span> <span class="p">=</span> <span class="m">10</span><span class="p">)</span>
-
-<span class="n">HorizontalPager</span><span class="p">(</span><span class="n">state</span> <span class="p">=</span> <span class="n">pagerState</span><span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="p">-&gt;</span>
+<span class="n">HorizontalPager</span><span class="p">(</span><span class="n">count</span> <span class="p">=</span> <span class="m">10</span><span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="p">-&gt;</span>
     <span class="c1">// Our page content</span>
     <span class="n">Text</span><span class="p">(</span>
         <span class="n">text</span> <span class="p">=</span> <span class="s">&quot;Page: $page&quot;</span><span class="p">,</span>
@@ -1202,6 +1244,17 @@ All of the APIs are marked with the <code>@ExperimentalPagerApi</code> annotatio
 <span class="p">}</span>
 </code></pre></div>
 <p>If you want to jump to a specific page, you either call call <code>pagerState.scrollToPage(index)</code> or  <code>pagerState.animateScrollToPage(index)</code> method in a <code>CoroutineScope</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="py">pagerState</span> <span class="p">=</span> <span class="n">rememberPagerState</span><span class="p">()</span>
+
+<span class="n">HorizontalPager</span><span class="p">(</span><span class="n">count</span> <span class="p">=</span> <span class="m">10</span><span class="p">,</span> <span class="n">state</span> <span class="p">=</span> <span class="n">pagerState</span><span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="p">-&gt;</span>
+    <span class="c1">// ...page content</span>
+<span class="p">}</span>
+
+<span class="c1">// Later, scroll to page 2</span>
+<span class="n">scope</span><span class="p">.</span><span class="n">launch</span> <span class="p">{</span>
+    <span class="n">pagerState</span><span class="p">.</span><span class="n">scrollToPage</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
 <h2 id="verticalpager">VerticalPager<a class="headerlink" href="#verticalpager" title="Permanent link">&para;</a></h2>
 <p><a href="../api/pager/pager/com.google.accompanist.pager/-vertical-pager.html"><code>VerticalPager</code></a> is very similar to <a href="../api/pager/pager/com.google.accompanist.pager/-horizontal-pager.html"><code>HorizontalPager</code></a> but items are laid out vertically, and react to vertical swipes:</p>
 <figure>
@@ -1213,9 +1266,7 @@ All of the APIs are marked with the <code>@ExperimentalPagerApi</code> annotatio
 </figure>
 
 <div class="highlight"><pre><span></span><code><span class="c1">// Display 10 items</span>
-<span class="k">val</span> <span class="py">pagerState</span> <span class="p">=</span> <span class="n">rememberPagerState</span><span class="p">(</span><span class="n">pageCount</span> <span class="p">=</span> <span class="m">10</span><span class="p">)</span>
-
-<span class="n">VerticalPager</span><span class="p">(</span><span class="n">state</span> <span class="p">=</span> <span class="n">pagerState</span><span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="p">-&gt;</span>
+<span class="n">VerticalPager</span><span class="p">(</span><span class="n">count</span> <span class="p">=</span> <span class="m">10</span><span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="p">-&gt;</span>
     <span class="c1">// Our page content</span>
     <span class="n">Text</span><span class="p">(</span>
         <span class="n">text</span> <span class="p">=</span> <span class="s">&quot;Page: $page&quot;</span><span class="p">,</span>
@@ -1225,17 +1276,46 @@ All of the APIs are marked with the <code>@ExperimentalPagerApi</code> annotatio
 </code></pre></div>
 <h2 id="lazy-creation">Lazy creation<a class="headerlink" href="#lazy-creation" title="Permanent link">&para;</a></h2>
 <p>Pages in both <a href="../api/pager/pager/com.google.accompanist.pager/-horizontal-pager.html"><code>HorizontalPager</code></a> and <a href="../api/pager/pager/com.google.accompanist.pager/-vertical-pager.html"><code>VerticalPager</code></a> are lazily composed and laid-out as required by the layout. As the user scrolls through pages, any pages which are no longer required are removed from the content.</p>
-<h3 id="offscreen-limit">Offscreen Limit<a class="headerlink" href="#offscreen-limit" title="Permanent link">&para;</a></h3>
-<p>The <a href="../api/pager/pager/com.google.accompanist.pager/remember-pager-state.html">PagerState</a> API allows the setting of the <code>initialOffscreenLimit</code>, which defines the number of pages that should be retained on either side of the current page. Pages beyond this limit will be removed, and then recreated as needed. This value defaults to <code>1</code>, but can be increased to enable pre-loading of more content:</p>
-<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="py">pagerState</span> <span class="p">=</span> <span class="n">rememberPagerState</span><span class="p">(</span>
-    <span class="n">pageCount</span> <span class="p">=</span> <span class="m">10</span><span class="p">,</span>
-    <span class="n">initialOffscreenLimit</span> <span class="p">=</span> <span class="m">2</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="n">HorizontalPager</span><span class="p">(</span><span class="n">state</span> <span class="p">=</span> <span class="n">pagerState</span><span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="p">-&gt;</span>
-    <span class="c1">// ...</span>
+<p>Under the covers, <code>HorizontalPager</code> use <a href="https://developer.android.com/jetpack/compose/lists#lazy"><code>LazyRow</code></a>, and <code>VerticalPager</code> uses <a href="https://developer.android.com/jetpack/compose/lists#lazy"><code>LazyColumn</code></a>.</p>
+<h2 id="content-padding">Content Padding<a class="headerlink" href="#content-padding" title="Permanent link">&para;</a></h2>
+<p><code>HorizontalPager</code> and <code>VerticalPager</code> both support the setting of content padding, which allows you to influence the maximum size and alignment of pages.</p>
+<p>You can see how different content padding values affect a <code>HorizontalPager</code> below:</p>
+<div class="tabbed-set" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">start = 64.dp</label><div class="tabbed-content">
+<p>Setting the start padding has the effect of aligning the pages towards the end.</p>
+<p><img align="center" alt="" loading="lazy" src="contentpadding-start.png" width="70%" /></p>
+<div class="highlight"><pre><span></span><code><span class="n">HorizontalPager</span><span class="p">(</span>
+    <span class="n">count</span> <span class="p">=</span> <span class="m">4</span><span class="p">,</span>
+    <span class="n">contentPadding</span> <span class="p">=</span> <span class="n">PaddingValues</span><span class="p">(</span><span class="n">start</span> <span class="p">=</span> <span class="m">64.</span><span class="n">dp</span><span class="p">),</span>
+<span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="p">-&gt;</span>
+    <span class="c1">// page content</span>
 <span class="p">}</span>
 </code></pre></div>
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">horizontal = 32.dp</label><div class="tabbed-content">
+<p>Setting both the start and end padding to the same value has the effect of centering the item horizontally.</p>
+<p><img align="center" alt="" loading="lazy" src="contentpadding-horizontal.png" width="70%" /></p>
+<div class="highlight"><pre><span></span><code><span class="n">HorizontalPager</span><span class="p">(</span>
+    <span class="n">count</span> <span class="p">=</span> <span class="m">4</span><span class="p">,</span>
+    <span class="n">contentPadding</span> <span class="p">=</span> <span class="n">PaddingValues</span><span class="p">(</span><span class="n">horizontal</span> <span class="p">=</span> <span class="m">32.</span><span class="n">dp</span><span class="p">),</span>
+<span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="p">-&gt;</span>
+    <span class="c1">// page content</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><label for="__tabbed_1_3">end = 64.dp</label><div class="tabbed-content">
+<p>Setting the end padding has the effect of aligning the pages towards the start.</p>
+<p><img align="center" alt="" loading="lazy" src="contentpadding-end.png" width="70%" /></p>
+<div class="highlight"><pre><span></span><code><span class="n">HorizontalPager</span><span class="p">(</span>
+    <span class="n">count</span> <span class="p">=</span> <span class="m">4</span><span class="p">,</span>
+    <span class="n">contentPadding</span> <span class="p">=</span> <span class="n">PaddingValues</span><span class="p">(</span><span class="n">end</span> <span class="p">=</span> <span class="m">64.</span><span class="n">dp</span><span class="p">),</span>
+<span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="p">-&gt;</span>
+    <span class="c1">// page content</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+</div>
+<p>Similar effects for <code>VerticalPager</code> can be achieved by setting the <code>top</code> and <code>bottom</code> values. The value <code>32.dp</code> is only used
+here as an example, you can set each of the padding dimensions to whatever value you wish.</p>
 <h2 id="item-scroll-effects">Item scroll effects<a class="headerlink" href="#item-scroll-effects" title="Permanent link">&para;</a></h2>
 <p>A common use-case is to apply effects to your pager items, using the scroll position to drive those effects.</p>
 <p>The <a href="https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/pager/HorizontalPagerTransitionSample.kt">HorizontalPagerTransitionSample</a> demonstrates how this can be done:</p>
@@ -1250,7 +1330,7 @@ All of the APIs are marked with the <code>@ExperimentalPagerApi</code> annotatio
 <p>The scope provided to your pager content allows apps to easily reference the <a href="../api/pager/pager/com.google.accompanist.pager/-pager-state/current-page.html"><code>currentPage</code></a> and <a href="../api/pager/pager/com.google.accompanist.pager/-pager-state/current-page-offset.html"><code>currentPageOffset</code></a>. The effects can then be calculated using those values. We provide the <a href="../api/pager/pager/com.google.accompanist.pager/calculate-current-offset-for-page.html"><code>calculateCurrentOffsetForPage()</code></a> extension functions to support calculation of the 'offset' for a given page:</p>
 <div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">com.google.accompanist.pager.calculateCurrentOffsetForPage</span>
 
-<span class="n">HorizontalPager</span><span class="p">(</span><span class="n">state</span> <span class="p">=</span> <span class="n">pagerState</span><span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="p">-&gt;</span>
+<span class="n">HorizontalPager</span><span class="p">(</span><span class="n">count</span> <span class="p">=</span> <span class="m">4</span><span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="p">-&gt;</span>
     <span class="n">Card</span><span class="p">(</span>
         <span class="n">Modifier</span>
             <span class="p">.</span><span class="n">graphicsLayer</span> <span class="p">{</span>
@@ -1283,10 +1363,20 @@ All of the APIs are marked with the <code>@ExperimentalPagerApi</code> annotatio
 </code></pre></div>
 <h2 id="reacting-to-page-changes">Reacting to page changes<a class="headerlink" href="#reacting-to-page-changes" title="Permanent link">&para;</a></h2>
 <p>The <a href="../api/pager/pager/com.google.accompanist.pager/-pager-state/current-page.html"><code>PagerState.currentPage</code></a> property is updated whenever the selected page changes. You can use the <code>snapshowFlow</code> function to observe changes in a flow:</p>
-<div class="highlight"><pre><span></span><code><span class="n">LaunchedEffect</span><span class="p">(</span><span class="n">pagerState</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="py">pagerState</span> <span class="p">=</span> <span class="n">rememberPagerState</span><span class="p">()</span>
+
+<span class="n">LaunchedEffect</span><span class="p">(</span><span class="n">pagerState</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Collect from the a snapshotFlow reading the currentPage</span>
     <span class="n">snapshotFlow</span> <span class="p">{</span> <span class="n">pagerState</span><span class="p">.</span><span class="n">currentPage</span> <span class="p">}.</span><span class="n">collect</span> <span class="p">{</span> <span class="n">page</span> <span class="p">-&gt;</span>
-        <span class="c1">// Selected page has changed...</span>
+        <span class="n">AnalyticsService</span><span class="p">.</span><span class="n">sendPageSelectedEvent</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
     <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">VerticalPager</span><span class="p">(</span>
+    <span class="n">count</span> <span class="p">=</span> <span class="m">10</span><span class="p">,</span>
+    <span class="n">state</span> <span class="p">=</span> <span class="n">pagerState</span><span class="p">,</span>
+<span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="p">-&gt;</span>
+    <span class="n">Text</span><span class="p">(</span><span class="n">text</span> <span class="p">=</span> <span class="s">&quot;Page: $page&quot;</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
 <h2 id="indicators">Indicators<a class="headerlink" href="#indicators" title="Permanent link">&para;</a></h2>
@@ -1311,7 +1401,7 @@ All of the APIs are marked with the <code>@ExperimentalPagerApi</code> annotatio
 </figure>
 
 <p>Provided in the <code>pager-indicators</code> library is a modifier which can be used on a tab indicator like so:</p>
-<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="py">pagerState</span> <span class="p">=</span> <span class="n">rememberPagerState</span><span class="p">(</span><span class="n">pageCount</span> <span class="p">=</span> <span class="n">pages</span><span class="p">.</span><span class="n">size</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="py">pagerState</span> <span class="p">=</span> <span class="n">rememberPagerState</span><span class="p">()</span>
 
 <span class="n">TabRow</span><span class="p">(</span>
     <span class="c1">// Our selected tab is our current page</span>
@@ -1333,10 +1423,30 @@ All of the APIs are marked with the <code>@ExperimentalPagerApi</code> annotatio
     <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="n">HorizontalPager</span><span class="p">(</span><span class="n">state</span> <span class="p">=</span> <span class="n">pagerState</span><span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="p">-&gt;</span>
+<span class="n">HorizontalPager</span><span class="p">(</span>
+    <span class="n">count</span> <span class="p">=</span> <span class="n">pages</span><span class="p">.</span><span class="n">size</span><span class="p">,</span>
+    <span class="n">state</span> <span class="p">=</span> <span class="n">pagerState</span><span class="p">,</span>
+<span class="p">)</span> <span class="p">{</span> <span class="n">page</span> <span class="p">-&gt;</span>
     <span class="c1">// TODO: page content</span>
 <span class="p">}</span>
 </code></pre></div>
+<h2 id="changes-in-v0190">Changes in v0.19.0<a class="headerlink" href="#changes-in-v0190" title="Permanent link">&para;</a></h2>
+<p>In v0.19.0 both <code>HorizontalPager</code> and <code>VerticalPager</code> were re-written to be based on <code>LazyRow</code> and <code>LazyColumn</code> respectively. As part of this change, a number of feature and API changes were made:</p>
+<h3 id="pagerstate">PagerState<a class="headerlink" href="#pagerstate" title="Permanent link">&para;</a></h3>
+<ul>
+<li>The <code>pageCount</code> parameter on <code>rememberPagerState()</code> has been removed, replaced with the <code>count</code> parameter on <code>HorizontalPager()</code> and <code>VerticalPager()</code>.</li>
+<li>The <code>animationSpec</code>, <code>initialVelocity</code> and <code>skipPages</code> parameters on <code>animateScrollToPage()</code> have been removed. The lazy components handle this automatically.</li>
+</ul>
+<h3 id="horizontalpager-verticalpager">HorizontalPager &amp; VerticalPager<a class="headerlink" href="#horizontalpager-verticalpager" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Ability to set <code>contentPadding</code> (see <a href="#content-padding">above</a>).</li>
+<li>Ability to specify a <code>key</code> for each page.</li>
+<li>The <code>horizontalAlignment</code> parameter on <code>HorizontalPager</code>, and the <code>verticalAlignment</code> parameter on <code>VerticalPager</code> have been removed. A similar effect can be implemented with an appropriate content padding (see <a href="#content-padding">above</a>).</li>
+<li>The <code>infiniteLooping</code> parameter and feature have been removed. A sample demonstrating how to achieve this effect can be found <a href="https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/pager/HorizontalPagerLoopingSample.kt">here</a>.</li>
+<li>The <code>offscreenLimit</code> parameter has been removed. We no longer have control of what items are laid out 'off screen'.</li>
+<li>The <code>dragEnabled</code> parameter has removed.</li>
+<li><code>PagerScope</code> (the page item scope) no longer implements <code>BoxScope</code>. </li>
+</ul>
 <hr />
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="n">repositories</span> <span class="o">{</span>
@@ -1389,7 +1499,8 @@ limitations under the License.
   
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
-        <a href="../appcompat-theme/" class="md-footer__link md-footer__link--prev" rel="prev">
+        
+        <a href="../appcompat-theme/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Guide" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -1404,7 +1515,8 @@ limitations under the License.
         </a>
       
       
-        <a href="../swiperefresh/" class="md-footer__link md-footer__link--next" rel="next">
+        
+        <a href="../swiperefresh/" class="md-footer__link md-footer__link--next" aria-label="Next: Guide" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
@@ -1439,10 +1551,10 @@ limitations under the License.
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../assets/javascripts/workers/search.4fa0e4ee.min.js", "version": null}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.b0710199.min.js", "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.1d3bfcf1.min.js"></script>
+      <script src="../assets/javascripts/bundle.76f349be.min.js"></script>
       
     
   </body>

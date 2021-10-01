@@ -52,7 +52,7 @@ import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.flow.collect
 fun main() { 
    //sampleStart 
-   val pagerState = rememberPagerState(pageCount = pages.size)
+   val pagerState = rememberPagerState()
 
 TabRow(
     // Our selected tab is our current page
@@ -74,7 +74,10 @@ TabRow(
     }
 }
 
-HorizontalPager(state = pagerState) { page -&gt;
+HorizontalPager(
+    count = pages.size,
+    state = pagerState,
+) { page -&gt;
     // TODO: page content
 } 
    //sampleEnd

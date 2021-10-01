@@ -52,10 +52,13 @@ import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.flow.collect
 fun main() { 
    //sampleStart 
-   // Display 10 items
-val pagerState = rememberPagerState(pageCount = 10)
+   val pagerState = rememberPagerState()
 Row {
-    VerticalPager(state = pagerState) { page -&gt;
+    // Display 10 items
+    VerticalPager(
+        count = 10,
+        state = pagerState,
+    ) { page -&gt;
         // Our page content
         Text(
             text = "Page: $page",
