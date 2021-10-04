@@ -67,13 +67,18 @@ inline fun rememberPagerState(
  * recreated or changed in any way if it has already
  * been created.
  *
+ * @param inputs A set of inputs such that, when any of them have changed, will cause the state to reset and init to be rerun
  * @param initialPage the initial value for [PagerState.currentPage]
  */
 @ExperimentalPagerApi
 @Composable
 fun rememberPagerState(
+    vararg inputs: Any?,
     @IntRange(from = 0) initialPage: Int = 0,
-): PagerState = rememberSaveable(saver = PagerState.Saver) {
+): PagerState = rememberSaveable(
+    inputs = inputs,
+    saver = PagerState.Saver
+) {
     PagerState(
         currentPage = initialPage,
     )

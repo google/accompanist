@@ -17,11 +17,14 @@
 package com.google.accompanist.pager
 
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Ignore
 import org.junit.Rule
@@ -58,5 +61,40 @@ class PagerStateUnitTest {
         // And assert that everything was restored
         assertThat(state.currentPage).isEqualTo(4)
         assertThat(state.pageCount).isEqualTo(10)
+    }
+
+    @ExperimentalCoroutinesApi
+    @Test
+    fun reset_state() = runBlockingTest {
+        lateinit var state: PagerState
+        val stateFlow = MutableStateFlow(10)
+
+        composeTestRule.setContent {
+            val count by stateFlow.collectAsState()
+
+            state = rememberPagerState(
+                inputs = arrayOf(count)
+            )
+
+            HorizontalPager(count = count, state = state) { page ->
+                BasicText(text = "Page:$page")
+            }
+        }
+
+        // Wait for the flings to end
+        composeTestRule.waitForIdle()
+
+        // Now scroll to page 4
+        state.scrollToPage(4)
+
+        // And assert that everything was restored
+        assertThat(state.currentPage).isEqualTo(4)
+
+        stateFlow.emit(3)
+
+        composeTestRule.waitForIdle()
+
+        // And assert that everything was restored
+        assertThat(state.currentPage).isEqualTo(0)
     }
 }
