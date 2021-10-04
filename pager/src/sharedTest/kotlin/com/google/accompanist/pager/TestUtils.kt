@@ -22,8 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
-import androidx.compose.ui.test.percentOffset
-import androidx.compose.ui.test.performGesture
+import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipe
 import androidx.compose.ui.test.swipeWithVelocity
 import androidx.compose.ui.unit.Dp
@@ -49,7 +48,7 @@ internal fun SemanticsNodeInteraction.swipeAcrossCenterWithVelocity(
     velocityPerSec: Dp,
     distancePercentageX: Float = 0f,
     distancePercentageY: Float = 0f,
-): SemanticsNodeInteraction = performGesture {
+): SemanticsNodeInteraction = performTouchInput {
     val startOffset = percentOffset(
         x = 0.5f - distancePercentageX / 2,
         y = 0.5f - distancePercentageY / 2
