@@ -22,7 +22,7 @@ SideEffect {
         darkIcons = useDarkIcons
     )
 
-    // setStatusBarsColor() and setNavigationBarsColor() also exist
+    // setStatusBarsColor() and setNavigationBarColor() also exist
 }
 ```
 
