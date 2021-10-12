@@ -44,11 +44,12 @@ We provide two types of modifiers for easy handling of insets: padding and size.
 #### Padding modifiers
 The padding modifiers allow you to apply padding to a composable which matches a specific type of inset. Currently we provide:
 
-- [`Modifier.statusBarsPadding()`](../api/insets/insets/com.google.accompanist.insets/status-bars-padding.html)
-- [`Modifier.navigationBarsPadding()`](../api/insets/insets/com.google.accompanist.insets/navigation-bars-padding.html)
-- [`Modifier.systemBarsPadding()`](../api/insets/insets/com.google.accompanist.insets/system-bars-padding.html)
-- [`Modifier.imePadding()`](../api/insets/insets/com.google.accompanist.insets/ime-padding.html)
-- [`Modifier.navigationBarsWithImePadding()`](../api/insets/insets/com.google.accompanist.insets/navigation-bars-with-ime-padding.html)
+- [`Modifier.statusBarsPadding()`](../api/insets/com.google.accompanist.insets/status-bars-padding.html)
+- [`Modifier.navigationBarsPadding()`](../api/insets/com.google.accompanist.insets/navigation-bars-padding.html)
+- [`Modifier.systemBarsPadding()`](../api/insets/com.google.accompanist.insets/system-bars-padding.html)
+- [`Modifier.imePadding()`](../api/insets/com.google.accompanist.insets/ime-padding.html)
+- [`Modifier.navigationBarsWithImePadding()`](../api/insets/com.google.accompanist.insets/navigation-bars-with-ime-padding.html)
+- [`Modifier.cutoutPadding()`](../api/insets/com.google.accompanist.insets/cutout-padding.html)
 
 These are commonly used to move composables out from under the system bars. The common example would be a [`FloatingActionButton`][fab]:
 
@@ -67,9 +68,9 @@ FloatingActionButton(
 #### Size modifiers
 The size modifiers allow you to match the size of a composable to a specific type of inset. Currently we provide:
 
-- [`Modifier.statusBarsHeight()`](../api/insets/insets/com.google.accompanist.insets/status-bars-height.html)
-- [`Modifier.navigationBarsHeight()`](../api/insets/insets/com.google.accompanist.insets/navigation-bars-height.html)
-- [`Modifier.navigationBarsWidth()`](../api/insets/insets/com.google.accompanist.insets/navigation-bars-width.html)
+- [`Modifier.statusBarsHeight()`](../api/insets/com.google.accompanist.insets/status-bars-height.html)
+- [`Modifier.navigationBarsHeight()`](../api/insets/com.google.accompanist.insets/navigation-bars-height.html)
+- [`Modifier.navigationBarsWidth()`](../api/insets/com.google.accompanist.insets/navigation-bars-width.html)
 
 These are commonly used to allow composables behind the system bars, to provide background protection, or similar:
 
@@ -85,7 +86,7 @@ Spacer(
 ### PaddingValues
 Compose also provides the concept of [`PaddingValues`][paddingvalues], a data class which contains the padding values to be applied on all dimensions (similar to a rect). This is commonly used with container composables, such as [`LazyColumn`][lazycolumn], to set the content padding.
 
-You may want to use inset values for content padding, so this library provides the [`rememberInsetsPaddingValues()`](..//api/insets/insets/com.google.accompanist.insets/remember-insets-padding-values.html) extension function to convert between `Insets` and [`PaddingValues`][paddingvalues]. Here's an example of using the system bars insets:
+You may want to use inset values for content padding, so this library provides the [`rememberInsetsPaddingValues()`](..//api/insets/com.google.accompanist.insets/remember-insets-padding-values.html) extension function to convert between `Insets` and [`PaddingValues`][paddingvalues]. Here's an example of using the system bars insets:
 
 ``` kotlin
 LazyColumn(
@@ -117,7 +118,7 @@ TopAppBar(
 )
 ```
 
-To workaround this, we provide the `insets-ui` companion library which contains versions of commonly used layouts, with the addition of a `contentPadding` parameter. The example below is using our [`TopAppBar`](../api/insets-ui/insets-ui/com.google.accompanist.insets.ui/-top-app-bar.html) layout, providing the status bar insets to use as content padding:
+To workaround this, we provide the `insets-ui` companion library which contains versions of commonly used layouts, with the addition of a `contentPadding` parameter. The example below is using our [`TopAppBar`](../api/insets-ui/com.google.accompanist.insets.ui/-top-app-bar.html) layout, providing the status bar insets to use as content padding:
 
 ``` kotlin
 import com.google.accompanist.insets.ui.TopAppBar
@@ -163,7 +164,7 @@ Scaffold(
 }
 ```
 
-See the [API docs](../api/insets-ui/insets-ui/com.google.accompanist.insets.ui/) for a list of the other layouts provided in the library.
+See the [API docs](../api/insets-ui/com.google.accompanist.insets.ui/) for a list of the other layouts provided in the library.
 
 ### Animated Insets support
 
@@ -218,7 +219,7 @@ The features below are experimental, and require developers to [opt-in](https://
 
     ![](images/ime-scroll.gif){: loading=lazy align=right }
 
-    This library also has support for controlling the IME from scroll gestures, allowing your scrollable components to pull/push the IME on/off screen. This is achieved through the built-in [`NestedScrollConnection`](https://developer.android.com/reference/kotlin/androidx/compose/ui/gesture/nestedscroll/NestedScrollConnection) implementation returned by [`rememberImeNestedScrollConnection()`](../api/insets/insets/com.google.accompanist.insets/remember-ime-nested-scroll-connection.html).
+    This library also has support for controlling the IME from scroll gestures, allowing your scrollable components to pull/push the IME on/off screen. This is achieved through the built-in [`NestedScrollConnection`](https://developer.android.com/reference/kotlin/androidx/compose/ui/gesture/nestedscroll/NestedScrollConnection) implementation returned by [`rememberImeNestedScrollConnection()`](../api/insets/com.google.accompanist.insets/remember-ime-nested-scroll-connection.html).
 
     This functionality only works when running on devices with API 30+.
 
@@ -277,4 +278,4 @@ If you find that something isn't working correctly, here's a checklist to try:
 [paddingvalues]: https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/PaddingValues
 [lazycolumn]: https://developer.android.com/reference/kotlin/androidx/compose/foundation/lazy/package-summary#lazycolumn
 [fab]: https://developer.android.com/reference/kotlin/androidx/compose/material/package-summary#floatingactionbutton
-[api-type]: ../api/insets/insets/com.google.accompanist.insets/-window-insets/-type/
+[api-type]: ../api/insets/com.google.accompanist.insets/-window-insets/-type/
