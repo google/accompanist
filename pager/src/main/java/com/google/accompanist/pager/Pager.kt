@@ -210,7 +210,7 @@ internal fun Pager(
     }
 
     LaunchedEffect(count) {
-        state.currentPage = minOf(count-1, state.currentPage)
+        state.currentPage = minOf(count-1, state.currentPage).coerceAtLeast(0)
     }
 
     // Once a fling (scroll) has finished, notify the state
