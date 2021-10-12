@@ -24,8 +24,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -36,11 +34,8 @@ import androidx.compose.material.TabRowDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -67,9 +62,6 @@ class HorizontalPagerTabsSample : ComponentActivity() {
     }
 }
 
-val largeList = listOf("Home", "Shows", "Movies", "Books", "Really long movies", "Short audiobooks")
-val smallList = listOf("Home", "Shows", "Movies")
-
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun Sample() {
@@ -82,8 +74,8 @@ private fun Sample() {
         },
         modifier = Modifier.fillMaxSize()
     ) {
-        var pages by remember {
-            mutableStateOf(largeList)
+        val pages = remember {
+            listOf("Home", "Shows", "Movies", "Books", "Really long movies", "Short audiobooks")
         }
 
         Column(Modifier.fillMaxSize()) {
@@ -91,19 +83,6 @@ private fun Sample() {
 
             // Remember a PagerState
             val pagerState = rememberPagerState()
-
-            Button(
-                modifier = Modifier.padding(bottom = 10.dp),
-                onClick = {
-                    if(pages == largeList) {
-                        pages = smallList
-                    } else {
-                        pages = largeList
-                    }
-                }
-            ) {
-                Text("Change data count")
-            }
 
             ScrollableTabRow(
                 // Our selected tab is our current page
