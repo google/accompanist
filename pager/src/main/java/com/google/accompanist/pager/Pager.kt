@@ -209,6 +209,10 @@ internal fun Pager(
         (flingBehavior as? SnappingFlingBehavior)?.animationTarget
     }
 
+    LaunchedEffect(count) {
+        state.currentPage = minOf(count - 1, state.currentPage).coerceAtLeast(0)
+    }
+
     // Once a fling (scroll) has finished, notify the state
     LaunchedEffect(state) {
         // When a 'scroll' has finished, notify the state
