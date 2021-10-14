@@ -1,5 +1,5 @@
 [versions]
-compose = "1.0.3"
+compose = "1.0.4"
 composesnapshot = "-" # a single character = no snapshot
 
 # gradlePlugin and lint need to be updated together
@@ -7,7 +7,7 @@ gradlePlugin = "7.0.2"
 lint = "30.0.2"
 
 ktlint = "0.42.1"
-kotlin = "1.5.30"
+kotlin = "1.5.31"
 coroutines = "1.5.2"
 okhttp = "3.12.13"
 coil = "1.3.2"
