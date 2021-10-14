@@ -49,7 +49,7 @@ fun Modifier.pagerTabIndicatorOffset(
     val targetIndicatorOffset: Dp
     val indicatorWidth: Dp
 
-    val currentTab = tabPositions[pagerState.currentPage]
+    val currentTab = tabPositions[minOf(tabPositions.lastIndex, pagerState.currentPage)]
     val targetPage = pagerState.targetPage
     val targetTab = tabPositions.getOrNull(targetPage)
 

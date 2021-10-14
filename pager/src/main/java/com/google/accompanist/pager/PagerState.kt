@@ -133,7 +133,7 @@ class PagerState(
     @get:IntRange(from = 0)
     var currentPage: Int
         get() = _currentPage
-        private set(value) {
+        internal set(value) {
             if (value != _currentPage) {
                 _currentPage = value
                 if (DebugLog) {

@@ -209,6 +209,10 @@ internal fun Pager(
         (flingBehavior as? SnappingFlingBehavior)?.animationTarget
     }
 
+    LaunchedEffect(count) {
+        state.currentPage = minOf(count - 1, state.currentPage).coerceAtLeast(0)
+    }
+
     // Once a fling (scroll) has finished, notify the state
     LaunchedEffect(state) {
         // When a 'scroll' has finished, notify the state
@@ -218,6 +222,13 @@ internal fun Pager(
     }
 
     val pagerScope = remember(state) { PagerScopeImpl(state) }
+
+    // We only consume nested flings in the main-axis, allowing cross-axis flings to propagate
+    // as normal
+    val consumeFlingNestedScrollConnection = ConsumeFlingNestedScrollConnection(
+        consumeHorizontal = !isVertical,
+        consumeVertical = isVertical,
+    )
 
     if (isVertical) {
         LazyColumn(
@@ -238,7 +249,7 @@ internal fun Pager(
                         // We don't any nested flings to continue in the pager, so we add a
                         // connection which consumes them.
                         // See: https://github.com/google/accompanist/issues/347
-                        .nestedScroll(connection = ConsumeFlingNestedScrollConnection)
+                        .nestedScroll(connection = consumeFlingNestedScrollConnection)
                         // Constraint the content to be <= than the size of the pager.
                         .fillParentMaxSize()
                         .wrapContentSize()
@@ -266,7 +277,7 @@ internal fun Pager(
                         // We don't any nested flings to continue in the pager, so we add a
                         // connection which consumes them.
                         // See: https://github.com/google/accompanist/issues/347
-                        .nestedScroll(connection = ConsumeFlingNestedScrollConnection)
+                        .nestedScroll(connection = consumeFlingNestedScrollConnection)
                         // Constraint the content to be <= than the size of the pager.
                         .fillParentMaxSize()
                         .wrapContentSize()
@@ -278,7 +289,10 @@ internal fun Pager(
     }
 }
 
-private object ConsumeFlingNestedScrollConnection : NestedScrollConnection {
+private class ConsumeFlingNestedScrollConnection(
+    private val consumeHorizontal: Boolean,
+    private val consumeVertical: Boolean,
+) : NestedScrollConnection {
     override fun onPostScroll(
         consumed: Offset,
         available: Offset,
@@ -286,15 +300,32 @@ private object ConsumeFlingNestedScrollConnection : NestedScrollConnection {
     ): Offset = when (source) {
         // We can consume all resting fling scrolls so that they don't propagate up to the
         // Pager
-        NestedScrollSource.Fling -> available
+        NestedScrollSource.Fling -> available.consume(consumeHorizontal, consumeVertical)
         else -> Offset.Zero
     }
 
     override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
-        // We can consume all post fling velocity so that it doesn't propagate up to the Pager
-        return available
+        // We can consume all post fling velocity on the main-axis
+        // so that it doesn't propagate up to the Pager
+        return available.consume(consumeHorizontal, consumeVertical)
     }
 }
+
+private fun Offset.consume(
+    consumeHorizontal: Boolean,
+    consumeVertical: Boolean,
+): Offset = Offset(
+    x = if (consumeHorizontal) this.x else 0f,
+    y = if (consumeVertical) this.y else 0f,
+)
+
+private fun Velocity.consume(
+    consumeHorizontal: Boolean,
+    consumeVertical: Boolean,
+): Velocity = Velocity(
+    x = if (consumeHorizontal) this.x else 0f,
+    y = if (consumeVertical) this.y else 0f,
+)
 
 /**
  * Scope for [HorizontalPager] content.

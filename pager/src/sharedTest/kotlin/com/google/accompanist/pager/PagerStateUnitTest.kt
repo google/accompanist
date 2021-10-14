@@ -17,11 +17,15 @@
 package com.google.accompanist.pager
 
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Ignore
 import org.junit.Rule
@@ -58,5 +62,46 @@ class PagerStateUnitTest {
         // And assert that everything was restored
         assertThat(state.currentPage).isEqualTo(4)
         assertThat(state.pageCount).isEqualTo(10)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun change_pager_count() {
+        val pagerState = PagerState()
+        var count by mutableStateOf(10)
+
+        composeTestRule.setContent {
+            HorizontalPager(count = count, state = pagerState) { page ->
+                BasicText(text = "Page:$page")
+            }
+        }
+        composeTestRule.waitForIdle()
+
+        // Now scroll to page 8
+        composeTestRule.runOnIdle {
+            runBlocking {
+                pagerState.scrollToPage(8)
+            }
+        }
+
+        // And assert that currentPage and pageCount are correct
+        assertThat(pagerState.currentPage).isEqualTo(8)
+        assertThat(pagerState.pageCount).isEqualTo(10)
+
+        // Change page count to 4
+        count = 4
+        composeTestRule.waitForIdle()
+
+        // And assert that currentPage and pageCount are correct
+        assertThat(pagerState.currentPage).isEqualTo(3)
+        assertThat(pagerState.pageCount).isEqualTo(4)
+
+        // Change page count to 0
+        count = 0
+        composeTestRule.waitForIdle()
+
+        // And assert that currentPage and pageCount are correct
+        assertThat(pagerState.currentPage).isEqualTo(0)
+        assertThat(pagerState.pageCount).isEqualTo(0)
     }
 }
