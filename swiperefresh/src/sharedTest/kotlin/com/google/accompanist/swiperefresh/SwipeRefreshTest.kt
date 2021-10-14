@@ -32,7 +32,7 @@ import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.performGesture
 import androidx.compose.ui.test.swipeDown
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
@@ -60,7 +60,7 @@ class SwipeRefreshTest {
         }
 
         // Swipe down on the swipe refresh
-        swipeRefreshNode.performTouchInput { swipeDown() }
+        swipeRefreshNode.performGesture { swipeDown() }
 
         // Assert that the onRefresh lambda was called once, and that we're refreshing
         assertThat(refreshCallCount).isEqualTo(1)
@@ -116,7 +116,7 @@ class SwipeRefreshTest {
         val restingBounds = indicatorNode.getUnclippedBoundsInRoot()
 
         // Now swipe down. The indicator should react visually
-        swipeRefreshNode.performTouchInput { swipeDown() }
+        swipeRefreshNode.performGesture { swipeDown() }
 
         // Assert that the indicator returns back to it's 'resting' position
         assertThat(indicatorNode.getUnclippedBoundsInRoot()).isEqualTo(restingBounds)
