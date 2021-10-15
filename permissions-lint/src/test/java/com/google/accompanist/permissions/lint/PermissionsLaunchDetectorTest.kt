@@ -40,6 +40,7 @@ internal class PermissionsLaunchDetectorTest {
                 ComposableStub,
                 TestFiles.kt(fileToAdd)
             )
+            .allowMissingSdk()
             .issues(PermissionsLaunchDetector.PermissionLaunchedDuringComposition)
             .run()
     }
