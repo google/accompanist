@@ -66,7 +66,7 @@ class VerticalPagerInfiniteWidthTest {
         val rootBounds = rule.onRoot().getUnclippedBoundsInRoot()
 
         // Assert that VerticalPager handled the infinite max width constraint
-        // by wrapping it's content instead.
+        // by wrapping its content instead.
         rule.onNodeWithTag(TestTag)
             // Since the pager's content uses 200.dp width
             .assertWidthIsEqualTo(200.dp)

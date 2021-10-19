@@ -66,7 +66,7 @@ class HorizontalPagerInfiniteHeightTest {
         val rootBounds = rule.onRoot().getUnclippedBoundsInRoot()
 
         // Assert that HorizontalPager handled the infinite max height constraint
-        // by wrapping it's content instead.
+        // by wrapping its content instead.
         rule.onNodeWithTag(TestTag)
             .assertWidthIsEqualTo(rootBounds.width)
             // Since the pager's content uses 200.dp height
