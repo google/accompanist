@@ -78,7 +78,7 @@ class HorizontalPagerScrollingContentTest {
             }
         }
 
-        // Perform a very quick, high velocity scroll which will scroll the inner content to it's
+        // Perform a very quick, high velocity scroll which will scroll the inner content to its
         // opposite/end edge
         rule.onNodeWithTag(TestTag)
             .swipeAcrossCenterWithVelocity(velocityPerSec = 2_000.dp, distancePercentageX = -0.5f)

@@ -1,6 +1,6 @@
 [versions]
-compose = "1.0.4"
-composesnapshot = "-" # a single character = no snapshot
+compose = "1.1.0-SNAPSHOT"
+composesnapshot = "7824910" # a single character = no snapshot
 
 # gradlePlugin and lint need to be updated together
 gradlePlugin = "7.0.3"
