@@ -52,7 +52,6 @@ package com.google.accompanist.pager {
   }
 
   public final class PagerStateKt {
-    method @Deprecated @androidx.compose.runtime.Composable @com.google.accompanist.pager.ExperimentalPagerApi public static inline com.google.accompanist.pager.PagerState rememberPagerState(@IntRange(from=0) int pageCount, optional @IntRange(from=0) int initialPage, optional @FloatRange(from=0.0, to=1.0) float initialPageOffset, optional @IntRange(from=1) int initialOffscreenLimit, optional boolean infiniteLoop);
     method @androidx.compose.runtime.Composable @com.google.accompanist.pager.ExperimentalPagerApi public static com.google.accompanist.pager.PagerState rememberPagerState(optional @IntRange(from=0) int initialPage);
   }
 
