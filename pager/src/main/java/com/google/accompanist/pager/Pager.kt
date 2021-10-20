@@ -69,10 +69,7 @@ annotation class ExperimentalPagerApi
 object PagerDefaults {
     /**
      * The default implementation for the `maximumFlingDistance` parameter of
-     * [flingBehavior] which does limits the fling distance to 1 page.
-     *
-     * If you wish to expand the fling distance to be a multiple of the page size, you can use
-     * something like this:
+     * [flingBehavior] which limits the fling distance to a single page.
      */
     @ExperimentalSnapperApi
     @Suppress("MemberVisibilityCanBePrivate")
@@ -217,7 +214,6 @@ fun VerticalPager(
     )
 }
 
-@OptIn(ExperimentalSnapperApi::class)
 @ExperimentalPagerApi
 @Composable
 internal fun Pager(
@@ -239,6 +235,7 @@ internal fun Pager(
     // Provide our PagerState with access to the SnappingFlingBehavior animation target
     // TODO: can this be done in a better way?
     state.flingAnimationTarget = {
+        @OptIn(ExperimentalSnapperApi::class)
         (flingBehavior as? SnapperFlingBehavior)?.animationTarget
     }
 
