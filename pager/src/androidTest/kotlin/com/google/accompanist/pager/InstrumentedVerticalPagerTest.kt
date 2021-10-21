@@ -49,6 +49,7 @@ class InstrumentedVerticalPagerTest(
         fun data() = parameterizedParams()
             // contentPadding
             .combineWithParameters(
+                PaddingValues(vertical = 0.dp), // Fill
                 PaddingValues(bottom = 32.dp), // Alignment.Top
                 PaddingValues(vertical = 32.dp), // Alignment.Center
                 PaddingValues(top = 32.dp), // Alignment.Bottom
