@@ -30,6 +30,11 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // This could normally be done with the Google Maps gradle plugin
+        // but handling manually to make sure sample build doesn't fail without
+        // a Google Maps key.
+        manifestPlaceholders["MAPS_API_KEY"] = "**ADD YOUR API KEY FOR GOOGLE MAPS**"
     }
 
     compileOptions {
@@ -60,6 +65,7 @@ dependencies {
     implementation project(':flowlayout')
     implementation project(':systemuicontroller')
     implementation project(':swiperefresh')
+    implementation project(':maps')
 
     implementation libs.androidx.appcompat
 

@@ -349,6 +349,19 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".maps.BasicMapSampleActivity"
+            android:label="@string/maps_title_basics"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
     </application>
 
 </manifest>
