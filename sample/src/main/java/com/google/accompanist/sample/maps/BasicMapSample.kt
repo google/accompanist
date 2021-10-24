@@ -17,38 +17,69 @@
 package com.google.accompanist.sample.maps
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
 import com.google.accompanist.maps.GoogleMaps
+import com.google.accompanist.maps.rememberMapState
 
 class BasicMapSampleActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            var lat by rememberSaveable { mutableStateOf(-32.0) }
-            var lng by rememberSaveable { mutableStateOf(151.0) }
-            var zoom by rememberSaveable { mutableStateOf(1f) }
-
-            GoogleMaps(
-                lat,
-                lng,
-                zoom,
-                onCameraMoved = { latitude, longitude, z ->
-                    lat = latitude
-                    lng = longitude
-                    zoom = z
-
-                    Log.d("Maps", "Camera moved")
-                },
-                modifier = Modifier.fillMaxSize()
+            val mapState = rememberMapState(
+                latitude = -32.0,
+                longitude = 151.0,
+                zoom = 5f
             )
+
+            Box(Modifier.fillMaxSize()) {
+                GoogleMaps(
+                    mapState = mapState,
+                    modifier = Modifier.matchParentSize()
+                )
+
+                ZoomControls(zoom = mapState.zoom) {
+                    mapState.zoom = it
+                }
+            }
         }
+    }
+}
+
+@Composable
+private fun ZoomControls(
+    zoom: Float,
+    onZoomChanged: (Float) -> Unit
+) {
+    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+        ZoomButton("-", onClick = { onZoomChanged(zoom * 0.8f) })
+        ZoomButton("+", onClick = { onZoomChanged(zoom * 1.2f) })
+    }
+}
+
+@Composable
+private fun ZoomButton(text: String, onClick: () -> Unit) {
+    Button(
+        modifier = Modifier.padding(8.dp),
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = MaterialTheme.colors.onPrimary,
+            contentColor = MaterialTheme.colors.primary
+        ),
+        onClick = onClick
+    ) {
+        Text(text = text, style = MaterialTheme.typography.h5)
     }
 }

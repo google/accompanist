@@ -20,8 +20,12 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
@@ -35,11 +39,54 @@ import com.google.maps.android.ktx.awaitMap
 import kotlinx.coroutines.launch
 
 @Composable
-fun GoogleMaps(
+fun rememberMapState(
+    latitude: Double = 0.0,
+    longitude: Double = 0.0,
+    zoom: Float = 2f
+): MapState {
+    return remember {
+        MapState(
+            latitude,
+            longitude,
+            zoom
+        )
+    }
+}
+
+@Stable
+class MapState(
     latitude: Double,
     longitude: Double,
-    zoom: Float,
-    onCameraMoved: (Double, Double, Float) -> Unit,
+    zoom: Float
+) {
+    var latitude: Double by mutableStateOf(latitude)
+    var longitude: Double by mutableStateOf(longitude)
+    var zoom: Float by mutableStateOf(zoom)
+
+    override fun hashCode(): Int {
+        var result = latitude.hashCode()
+        result = 31 * result + longitude.hashCode()
+        result = 31 * result + zoom.hashCode()
+        return result
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is MapState) return false
+
+        return latitude == other.latitude &&
+            longitude == other.longitude &&
+            zoom == other.zoom
+    }
+
+    override fun toString(): String {
+        return "Lat: $latitude Lng: $longitude Zoom: $zoom"
+    }
+}
+
+@Composable
+fun GoogleMaps(
+    mapState: MapState,
     modifier: Modifier = Modifier,
     onMapReady: (GoogleMap) -> Unit = {},
     onMapUpdated: (GoogleMap) -> Unit = {},
@@ -47,9 +94,7 @@ fun GoogleMaps(
     val mapContainer = rememberMapContainer()
     val scope = rememberCoroutineScope()
 
-    val cameraPosition = remember(latitude, longitude) {
-        LatLng(latitude, longitude)
-    }
+    val cameraPosition = CameraPosition.fromLatLngZoom(LatLng(mapState.latitude, mapState.longitude), mapState.zoom)
 
     LaunchedEffect(key1 = mapContainer, block = {
         val mapFragment = (mapContainer.context as FragmentActivity)
@@ -59,11 +104,9 @@ fun GoogleMaps(
 
         map.setOnCameraIdleListener {
             val newPosition = map.cameraPosition
-            onCameraMoved(
-                newPosition.target.latitude,
-                newPosition.target.longitude,
-                newPosition.zoom
-            )
+            mapState.latitude = newPosition.target.latitude
+            mapState.longitude = newPosition.target.longitude
+            mapState.zoom = newPosition.zoom
         }
     })
 
@@ -71,15 +114,9 @@ fun GoogleMaps(
     val mapFragment = (it.context as FragmentActivity)
         .supportFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment
 
-    val position = cameraPosition
-    val z = zoom
     scope.launch {
         val map = mapFragment.awaitMap()
-
-        val newCameraPosition = CameraPosition.fromLatLngZoom(position, z)
-        if (map.cameraPosition != newCameraPosition) {
-            map.moveCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition))
-        }
+        map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
 
         onMapUpdated(map)
     }

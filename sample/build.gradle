@@ -18,6 +18,12 @@ apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
 
+Properties properties = new Properties()
+if (rootProject.file("local.properties").exists()) {
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+}
+def MAPS_PROPERTY_KEY = "MAPS_API_KEY"
+
 android {
     compileSdkVersion 31
 
@@ -31,10 +37,15 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+        // Add your Google Maps API key to local.properties to use the maps samples.
         // This could normally be done with the Google Maps gradle plugin
         // but handling manually to make sure sample build doesn't fail without
         // a Google Maps key.
-        manifestPlaceholders["MAPS_API_KEY"] = "**ADD YOUR API KEY FOR GOOGLE MAPS**"
+        def maps_key = ""
+        if (properties.containsKey(MAPS_PROPERTY_KEY)) {
+            maps_key = properties.getProperty(MAPS_PROPERTY_KEY)
+        }
+        manifestPlaceholders[MAPS_PROPERTY_KEY] = maps_key
     }
 
     compileOptions {
