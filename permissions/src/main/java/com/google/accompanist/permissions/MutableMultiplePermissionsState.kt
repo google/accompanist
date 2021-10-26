@@ -37,11 +37,14 @@ import androidx.compose.ui.platform.LocalContext
  * [documentation](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions).
  *
  * @param permissions the permissions to control and observe.
+ * @param onResult an action to run with the results of the permission request after calling
+ *      [MultiplePermissionsState.launchMultiplePermissionRequest].
  */
 @ExperimentalPermissionsApi
 @Composable
 internal fun rememberMutableMultiplePermissionsState(
-    permissions: List<String>
+    permissions: List<String>,
+    onResult: (Map<String, Boolean>) -> Unit = {}
 ): MultiplePermissionsState {
     // Create mutable permissions that can be requested individually
     val mutablePermissions = rememberMutablePermissionsState(permissions)
@@ -58,6 +61,7 @@ internal fun rememberMutableMultiplePermissionsState(
     ) { permissionsResult ->
         multiplePermissionsState.updatePermissionsStatus(permissionsResult)
         multiplePermissionsState.permissionRequested = true
+        onResult(permissionsResult)
     }
     DisposableEffect(multiplePermissionsState, launcher) {
         multiplePermissionsState.launcher = launcher

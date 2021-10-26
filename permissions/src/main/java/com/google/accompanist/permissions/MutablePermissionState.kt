@@ -37,11 +37,14 @@ import androidx.compose.ui.platform.LocalContext
  * [documentation](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions).
  *
  * @param permission the permission to control and observe.
+ * @param onResult an action to run with the result of the permission request after calling
+ *      [PermissionState.launchPermissionRequest].
  */
 @ExperimentalPermissionsApi
 @Composable
 internal fun rememberMutablePermissionState(
-    permission: String
+    permission: String,
+    onResult: (Boolean) -> Unit = {}
 ): MutablePermissionState {
     val context = LocalContext.current
     val permissionState = remember(permission) {
@@ -55,6 +58,7 @@ internal fun rememberMutablePermissionState(
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
         permissionState.hasPermission = it
         permissionState.permissionRequested = true
+        onResult(it)
     }
     DisposableEffect(permissionState, launcher) {
         permissionState.launcher = launcher

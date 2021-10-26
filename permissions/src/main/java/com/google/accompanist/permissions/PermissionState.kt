@@ -26,13 +26,16 @@ import androidx.compose.runtime.Stable
  * [documentation](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions).
  *
  * @param permission the permission to control and observe.
+ * @param onResult an action to run with the result of the permission request after calling
+ *      [PermissionState.launchPermissionRequest].
  */
 @ExperimentalPermissionsApi
 @Composable
 fun rememberPermissionState(
-    permission: String
+    permission: String,
+    onResult: (Boolean) -> Unit = {}
 ): PermissionState {
-    return rememberMutablePermissionState(permission)
+    return rememberMutablePermissionState(permission, onResult)
 }
 
 /**
