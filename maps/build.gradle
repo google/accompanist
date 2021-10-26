@@ -42,6 +42,7 @@ android {
     buildFeatures {
         buildConfig false
         compose true
+        viewBinding true
     }
 
     composeOptions {
@@ -91,6 +92,7 @@ dependencies {
     implementation libs.compose.foundation.foundation
     implementation libs.androidx.appcompat
 
+    implementation 'androidx.compose.ui:ui-viewbinding:1.0.4'
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
     implementation 'com.google.maps.android:maps-ktx:2.3.0'
 

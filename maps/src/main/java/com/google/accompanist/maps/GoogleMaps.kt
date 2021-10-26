@@ -16,8 +16,6 @@
 
 package com.google.accompanist.maps
 
-import android.view.LayoutInflater
-import android.view.View
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
@@ -28,8 +26,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.fragment.app.FragmentActivity
+import com.google.accompanist.maps.databinding.LayoutMapBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
@@ -91,13 +90,13 @@ fun GoogleMaps(
     onMapReady: (GoogleMap) -> Unit = {},
     onMapUpdated: (GoogleMap) -> Unit = {},
 ) {
-    val mapContainer = rememberMapContainer()
+    val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
     val cameraPosition = CameraPosition.fromLatLngZoom(LatLng(mapState.latitude, mapState.longitude), mapState.zoom)
 
-    LaunchedEffect(key1 = mapContainer, block = {
-        val mapFragment = (mapContainer.context as FragmentActivity)
+    LaunchedEffect(key1 = context, block = {
+        val mapFragment = (context as FragmentActivity)
             .supportFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment
         val map = mapFragment.awaitMap()
         onMapReady(map)
@@ -110,26 +109,15 @@ fun GoogleMaps(
         }
     })
 
-    AndroidView(factory = { mapContainer }, modifier = modifier) {
-    val mapFragment = (it.context as FragmentActivity)
-        .supportFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment
+    AndroidViewBinding(LayoutMapBinding::inflate, modifier = modifier) {
+        val mapFragment = (this.mapView.context as FragmentActivity)
+            .supportFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment
 
-    scope.launch {
-        val map = mapFragment.awaitMap()
-        map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+        scope.launch {
+            val map = mapFragment.awaitMap()
+            map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
 
-        onMapUpdated(map)
+            onMapUpdated(map)
+        }
     }
-}
-}
-
-@Composable
-private fun rememberMapContainer(): View {
-    val context = LocalContext.current
-    val mapContainer = remember {
-        LayoutInflater.from(context)
-            .inflate(R.layout.layout_map, null, false)
-    }
-
-    return mapContainer
 }
