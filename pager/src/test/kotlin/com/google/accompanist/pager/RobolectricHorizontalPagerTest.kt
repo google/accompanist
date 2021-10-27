@@ -57,6 +57,7 @@ class RobolectricHorizontalPagerTest(
             .combineWithParameters(1f)
             // contentPadding
             .combineWithParameters(
+                PaddingValues(horizontal = 0.dp), // Fill
                 PaddingValues(end = 32.dp), // Alignment.Start
                 PaddingValues(horizontal = 32.dp), // Alignment.Center
                 PaddingValues(start = 32.dp), // Alignment.End

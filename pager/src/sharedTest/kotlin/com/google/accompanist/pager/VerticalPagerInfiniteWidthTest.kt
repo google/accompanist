@@ -33,7 +33,6 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.height
-import androidx.compose.ui.unit.width
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Rule
 import org.junit.Test
@@ -67,7 +66,7 @@ class VerticalPagerInfiniteWidthTest {
         val rootBounds = rule.onRoot().getUnclippedBoundsInRoot()
 
         // Assert that VerticalPager handled the infinite max width constraint
-        // by wrapping it's content instead.
+        // by wrapping its content instead.
         rule.onNodeWithTag(TestTag)
             // Since the pager's content uses 200.dp width
             .assertWidthIsEqualTo(200.dp)
