@@ -62,22 +62,6 @@ class MapState(
     var longitude: Double by mutableStateOf(longitude)
     var zoom: Float by mutableStateOf(zoom)
 
-    override fun hashCode(): Int {
-        var result = latitude.hashCode()
-        result = 31 * result + longitude.hashCode()
-        result = 31 * result + zoom.hashCode()
-        return result
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is MapState) return false
-
-        return latitude == other.latitude &&
-            longitude == other.longitude &&
-            zoom == other.zoom
-    }
-
     override fun toString(): String {
         return "Lat: $latitude Lng: $longitude Zoom: $zoom"
     }
@@ -110,8 +94,7 @@ fun GoogleMaps(
     })
 
     AndroidViewBinding(LayoutMapBinding::inflate, modifier = modifier) {
-        val mapFragment = (this.mapView.context as FragmentActivity)
-            .supportFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment
+        val mapFragment = this.mapView.getFragment() as SupportMapFragment
 
         scope.launch {
             val map = mapFragment.awaitMap()
