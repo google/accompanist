@@ -162,7 +162,7 @@ public fun AnimatedNavHost(
     ) as? AnimatedComposeNavigator ?: return
     val backStack by composeNavigator.backStack.collectAsState()
     val transitionsInProgress by composeNavigator.transitionsInProgress.collectAsState()
-    val visibleTransitionsInProgress = rememberVisibleList(transitionsInProgress)
+    val visibleTransitionsInProgress = rememberVisibleList(transitionsInProgress.toList())
     val visibleBackStack = rememberVisibleList(backStack)
     visibleTransitionsInProgress.PopulateVisibleList(transitionsInProgress)
     visibleBackStack.PopulateVisibleList(backStack)
@@ -315,7 +315,7 @@ private fun MutableList<NavBackStackEntry>.PopulateVisibleList(
 }
 
 @Composable
-private fun rememberVisibleList(transitionsInProgress: Collection<NavBackStackEntry>) =
+private fun rememberVisibleList(transitionsInProgress: List<NavBackStackEntry>) =
     remember(transitionsInProgress) {
         mutableStateListOf<NavBackStackEntry>().also {
             it.addAll(
