@@ -65,49 +65,50 @@ class HorizontalPagerTabsSample : ComponentActivity() {
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun Sample() {
+    // Remember a PagerState
+    val pagerState = rememberPagerState()
+    val pages = remember {
+        listOf("Home", "Shows", "Movies", "Books", "Really long movies", "Short audiobooks")
+    }
+
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(stringResource(R.string.horiz_pager_title_tabs)) },
-                backgroundColor = MaterialTheme.colors.surface,
-            )
+            Column(content = {
+                val coroutineScope = rememberCoroutineScope()
+                TopAppBar(
+                    title = { Text(stringResource(R.string.horiz_pager_title_tabs)) },
+                    backgroundColor = MaterialTheme.colors.surface,
+                )
+                ScrollableTabRow(
+                    // Our selected tab is our current page
+                    selectedTabIndex = pagerState.currentPage,
+                    indicator = { tabPositions ->
+                        TabRowDefaults.Indicator(
+                            Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
+                        )
+                    }
+                ) {
+                    // Add tabs for all of our pages
+                    pages.forEachIndexed { index, title ->
+                        Tab(
+                            text = { Text(title) },
+                            selected = pagerState.currentPage == index,
+                            onClick = {
+                                // Animate to the selected page when clicked
+                                coroutineScope.launch {
+                                    pagerState.animateScrollToPage(index)
+                                }
+                            }
+                        )
+                    }
+                }
+            })
+
         },
         modifier = Modifier.fillMaxSize()
     ) {
-        val pages = remember {
-            listOf("Home", "Shows", "Movies", "Books", "Really long movies", "Short audiobooks")
-        }
 
         Column(Modifier.fillMaxSize()) {
-            val coroutineScope = rememberCoroutineScope()
-
-            // Remember a PagerState
-            val pagerState = rememberPagerState()
-
-            ScrollableTabRow(
-                // Our selected tab is our current page
-                selectedTabIndex = pagerState.currentPage,
-                indicator = { tabPositions ->
-                    TabRowDefaults.Indicator(
-                        Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
-                    )
-                }
-            ) {
-                // Add tabs for all of our pages
-                pages.forEachIndexed { index, title ->
-                    Tab(
-                        text = { Text(title) },
-                        selected = pagerState.currentPage == index,
-                        onClick = {
-                            // Animate to the selected page when clicked
-                            coroutineScope.launch {
-                                pagerState.animateScrollToPage(index)
-                            }
-                        }
-                    )
-                }
-            }
-
             HorizontalPager(
                 count = pages.size,
                 state = pagerState,
