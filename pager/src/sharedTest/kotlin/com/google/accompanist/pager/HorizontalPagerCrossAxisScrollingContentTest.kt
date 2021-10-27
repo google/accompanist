@@ -109,7 +109,7 @@ class HorizontalPagerCrossAxisScrollingContentTest {
 
         // Perform a vertical scroll which should scroll the inner scrollable column
         rule.onNodeWithTag(TestTag)
-            .swipeAcrossCenterWithVelocity(velocityPerSec = 5_000.dp, distancePercentageY = -0.5f)
+            .swipeAcrossCenterWithVelocity(velocityPerSec = 2_000.dp, distancePercentageY = -0.5f)
         // Wait for any flings to end
         rule.waitForIdle()
 
