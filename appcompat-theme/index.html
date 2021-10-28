@@ -16,7 +16,7 @@
         <link rel="canonical" href="https://google.github.io/accompanist/appcompat-theme/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.5">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.4">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.cdeb8541.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.db9e7362.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.3f5d1f46.min.css">
@@ -402,8 +402,6 @@
       </a>
       
         
-
-
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
@@ -1128,8 +1126,6 @@
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
-
-
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
@@ -1247,9 +1243,9 @@
 <p>A library that enables reuse of <a href="https://developer.android.com/jetpack/androidx/releases/appcompat">AppCompat</a> XML themes for theming in <a href="https://developer.android.com/jetpack/compose">Jetpack Compose</a>.</p>
 <p>The basis of theming in <a href="https://developer.android.com/jetpack/compose">Jetpack Compose</a> is the <a href="https://developer.android.com/reference/kotlin/androidx/compose/material/MaterialTheme"><code>MaterialTheme</code></a> composable, where you provide <a href="https://developer.android.com/reference/kotlin/androidx/compose/material/Colors"><code>Colors</code></a>, <a href="https://developer.android.com/reference/kotlin/androidx/compose/material/Shapes"><code>Shapes</code></a> and <a href="https://developer.android.com/reference/kotlin/androidx/compose/material/Typography"><code>Typography</code></a> instances containing your styling parameters:</p>
 <div class="highlight"><pre><span></span><code><span class="n">MaterialTheme</span><span class="p">(</span>
-    <span class="n">typography</span> <span class="o">=</span> <span class="n">type</span><span class="p">,</span>
-    <span class="n">colors</span> <span class="o">=</span> <span class="n">colors</span><span class="p">,</span>
-    <span class="n">shapes</span> <span class="o">=</span> <span class="n">shapes</span>
+    <span class="n">typography</span> <span class="p">=</span> <span class="n">type</span><span class="p">,</span>
+    <span class="n">colors</span> <span class="p">=</span> <span class="n">colors</span><span class="p">,</span>
+    <span class="n">shapes</span> <span class="p">=</span> <span class="n">shapes</span>
 <span class="p">)</span> <span class="p">{</span>
     <span class="c1">// Surface, Scaffold, etc</span>
 <span class="p">}</span>
@@ -1275,15 +1271,15 @@ instead, as it allows much finer-grained reading of your theme.</p>
 </div>
 <h3 id="customizing-the-theme">Customizing the theme<a class="headerlink" href="#customizing-the-theme" title="Permanent link">&para;</a></h3>
 <p>The <a href="../api/appcompat-theme/appcompat-theme/com.google.accompanist.appcompattheme/-app-compat-theme.html"><code>AppCompatTheme()</code></a> function will automatically read the host context's AppCompat theme and pass them to <a href="https://developer.android.com/reference/kotlin/androidx/compose/material/MaterialTheme"><code>MaterialTheme</code></a> on your behalf, but if you want to customize the generated values, you can do so via the <a href="../api/appcompat-theme/appcompat-theme/com.google.accompanist.appcompattheme/create-app-compat-theme.html"><code>createAppCompatTheme()</code></a> function:</p>
-<div class="highlight"><pre><span></span><code><span class="kd">val</span> <span class="nv">context</span> <span class="o">=</span> <span class="n">LocalContext</span><span class="p">.</span><span class="na">current</span>
-<span class="kd">var</span> <span class="p">(</span><span class="nv">colors</span><span class="p">,</span> <span class="nv">type</span><span class="p">)</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="na">createAppCompatTheme</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="py">context</span> <span class="p">=</span> <span class="n">LocalContext</span><span class="p">.</span><span class="n">current</span>
+<span class="k">var</span> <span class="p">(</span><span class="py">colors</span><span class="p">,</span> <span class="py">type</span><span class="p">)</span> <span class="p">=</span> <span class="n">context</span><span class="p">.</span><span class="n">createAppCompatTheme</span><span class="p">()</span>
 
 <span class="c1">// Modify colors or type as required. Then pass them</span>
 <span class="c1">// through to MaterialTheme...</span>
 
 <span class="n">MaterialTheme</span><span class="p">(</span>
-    <span class="n">colors</span> <span class="o">=</span> <span class="n">colors</span><span class="p">,</span>
-    <span class="n">typography</span> <span class="o">=</span> <span class="n">type</span>
+    <span class="n">colors</span> <span class="p">=</span> <span class="n">colors</span><span class="p">,</span>
+    <span class="n">typography</span> <span class="p">=</span> <span class="n">type</span>
 <span class="p">)</span> <span class="p">{</span>
     <span class="c1">// rest of layout</span>
 <span class="p">}</span>

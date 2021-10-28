@@ -16,7 +16,7 @@
         <link rel="canonical" href="https://google.github.io/accompanist/navigation-animation/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.5">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.4">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.cdeb8541.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.db9e7362.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.3f5d1f46.min.css">
@@ -850,8 +850,6 @@
       </a>
       
         
-
-
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
@@ -1067,8 +1065,6 @@
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
-
-
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
@@ -1131,69 +1127,69 @@ All of the APIs are marked with the <code>@ExperimentalAnimationApi</code> annot
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
 <p>The <code>AnimatedNavHost</code> composable offers a way to add custom transitions to composables in
 Navigation Compose.</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@Composable</span>
-<span class="kd">private</span> <span class="kd">fun</span> <span class="nf">ExperimentalAnimationNav</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">val</span> <span class="nv">navController</span> <span class="o">=</span> <span class="n">rememberAnimatedNavController</span><span class="p">()</span>
-    <span class="n">AnimatedNavHost</span><span class="p">(</span><span class="n">navController</span><span class="p">,</span> <span class="n">startDestination</span> <span class="o">=</span> <span class="s">&quot;Blue&quot;</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="n">@Composable</span>
+<span class="k">private</span> <span class="k">fun</span> <span class="nf">ExperimentalAnimationNav</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">val</span> <span class="py">navController</span> <span class="p">=</span> <span class="n">rememberAnimatedNavController</span><span class="p">()</span>
+    <span class="n">AnimatedNavHost</span><span class="p">(</span><span class="n">navController</span><span class="p">,</span> <span class="n">startDestination</span> <span class="p">=</span> <span class="s">&quot;Blue&quot;</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">composable</span><span class="p">(</span>
             <span class="s">&quot;Blue&quot;</span><span class="p">,</span>
-            <span class="n">enterTransition</span> <span class="o">=</span> <span class="p">{</span> <span class="n">initial</span><span class="p">,</span> <span class="n">_</span> <span class="o">-&gt;</span>
-                <span class="k">when</span> <span class="p">(</span><span class="n">initial</span><span class="p">.</span><span class="na">destination</span><span class="p">.</span><span class="na">route</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="s">&quot;Red&quot;</span> <span class="o">-&gt;</span>
-                        <span class="n">slideInHorizontally</span><span class="p">(</span><span class="n">initialOffsetX</span> <span class="o">=</span> <span class="p">{</span> <span class="m">1000</span> <span class="p">},</span> <span class="n">animationSpec</span> <span class="o">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
-                    <span class="k">else</span> <span class="o">-&gt;</span> <span class="kc">null</span>
+            <span class="n">enterTransition</span> <span class="p">=</span> <span class="p">{</span> <span class="n">initial</span><span class="p">,</span> <span class="n">_</span> <span class="p">-&gt;</span>
+                <span class="k">when</span> <span class="p">(</span><span class="n">initial</span><span class="p">.</span><span class="n">destination</span><span class="p">.</span><span class="n">route</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="s">&quot;Red&quot;</span> <span class="p">-&gt;</span>
+                        <span class="n">slideInHorizontally</span><span class="p">(</span><span class="n">initialOffsetX</span> <span class="p">=</span> <span class="p">{</span> <span class="m">1000</span> <span class="p">},</span> <span class="n">animationSpec</span> <span class="p">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
+                    <span class="k">else</span> <span class="p">-&gt;</span> <span class="k">null</span>
                 <span class="p">}</span>
             <span class="p">},</span>
-            <span class="n">exitTransition</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span><span class="p">,</span> <span class="n">target</span> <span class="o">-&gt;</span>
-                <span class="k">when</span> <span class="p">(</span><span class="n">target</span><span class="p">.</span><span class="na">destination</span><span class="p">.</span><span class="na">route</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="s">&quot;Red&quot;</span> <span class="o">-&gt;</span>
-                        <span class="n">slideOutHorizontally</span><span class="p">(</span><span class="n">targetOffsetX</span> <span class="o">=</span> <span class="p">{</span> <span class="o">-</span><span class="m">1000</span> <span class="p">},</span> <span class="n">animationSpec</span> <span class="o">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
-                     <span class="k">else</span> <span class="o">-&gt;</span> <span class="kc">null</span>
+            <span class="n">exitTransition</span> <span class="p">=</span> <span class="p">{</span> <span class="n">_</span><span class="p">,</span> <span class="n">target</span> <span class="p">-&gt;</span>
+                <span class="k">when</span> <span class="p">(</span><span class="n">target</span><span class="p">.</span><span class="n">destination</span><span class="p">.</span><span class="n">route</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="s">&quot;Red&quot;</span> <span class="p">-&gt;</span>
+                        <span class="n">slideOutHorizontally</span><span class="p">(</span><span class="n">targetOffsetX</span> <span class="p">=</span> <span class="p">{</span> <span class="p">-</span><span class="m">1000</span> <span class="p">},</span> <span class="n">animationSpec</span> <span class="p">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
+                     <span class="k">else</span> <span class="p">-&gt;</span> <span class="k">null</span>
                 <span class="p">}</span>
             <span class="p">},</span>
-            <span class="n">popEnterTransition</span> <span class="o">=</span> <span class="p">{</span> <span class="n">initial</span><span class="p">,</span> <span class="n">_</span> <span class="o">-&gt;</span>
-                            <span class="k">when</span> <span class="p">(</span><span class="n">initial</span><span class="p">.</span><span class="na">destination</span><span class="p">.</span><span class="na">route</span><span class="p">)</span> <span class="p">{</span>
-                                <span class="s">&quot;Red&quot;</span> <span class="o">-&gt;</span>
-                                    <span class="n">slideInHorizontally</span><span class="p">(</span><span class="n">initialOffsetX</span> <span class="o">=</span> <span class="p">{</span> <span class="o">-</span><span class="m">1000</span> <span class="p">},</span> <span class="n">animationSpec</span> <span class="o">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
-                                <span class="k">else</span> <span class="o">-&gt;</span> <span class="kc">null</span>
+            <span class="n">popEnterTransition</span> <span class="p">=</span> <span class="p">{</span> <span class="n">initial</span><span class="p">,</span> <span class="n">_</span> <span class="p">-&gt;</span>
+                            <span class="k">when</span> <span class="p">(</span><span class="n">initial</span><span class="p">.</span><span class="n">destination</span><span class="p">.</span><span class="n">route</span><span class="p">)</span> <span class="p">{</span>
+                                <span class="s">&quot;Red&quot;</span> <span class="p">-&gt;</span>
+                                    <span class="n">slideInHorizontally</span><span class="p">(</span><span class="n">initialOffsetX</span> <span class="p">=</span> <span class="p">{</span> <span class="p">-</span><span class="m">1000</span> <span class="p">},</span> <span class="n">animationSpec</span> <span class="p">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
+                                <span class="k">else</span> <span class="p">-&gt;</span> <span class="k">null</span>
                             <span class="p">}</span>
                         <span class="p">},</span>
-            <span class="n">popExitTransition</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span><span class="p">,</span> <span class="n">target</span> <span class="o">-&gt;</span>
-                <span class="k">when</span> <span class="p">(</span><span class="n">target</span><span class="p">.</span><span class="na">destination</span><span class="p">.</span><span class="na">route</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="s">&quot;Red&quot;</span> <span class="o">-&gt;</span>
-                        <span class="n">slideOutHorizontally</span><span class="p">(</span><span class="n">targetOffsetX</span> <span class="o">=</span> <span class="p">{</span> <span class="m">1000</span> <span class="p">},</span> <span class="n">animationSpec</span> <span class="o">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
-                    <span class="k">else</span> <span class="o">-&gt;</span> <span class="kc">null</span>
+            <span class="n">popExitTransition</span> <span class="p">=</span> <span class="p">{</span> <span class="n">_</span><span class="p">,</span> <span class="n">target</span> <span class="p">-&gt;</span>
+                <span class="k">when</span> <span class="p">(</span><span class="n">target</span><span class="p">.</span><span class="n">destination</span><span class="p">.</span><span class="n">route</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="s">&quot;Red&quot;</span> <span class="p">-&gt;</span>
+                        <span class="n">slideOutHorizontally</span><span class="p">(</span><span class="n">targetOffsetX</span> <span class="p">=</span> <span class="p">{</span> <span class="m">1000</span> <span class="p">},</span> <span class="n">animationSpec</span> <span class="p">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
+                    <span class="k">else</span> <span class="p">-&gt;</span> <span class="k">null</span>
                 <span class="p">}</span>
             <span class="p">}</span>
         <span class="p">)</span> <span class="p">{</span> <span class="n">BlueScreen</span><span class="p">(</span><span class="n">navController</span><span class="p">)</span> <span class="p">}</span>
         <span class="n">composable</span><span class="p">(</span>
             <span class="s">&quot;Red&quot;</span><span class="p">,</span>
-            <span class="n">enterTransition</span> <span class="o">=</span> <span class="p">{</span> <span class="n">initial</span><span class="p">,</span> <span class="n">_</span> <span class="o">-&gt;</span>
-                <span class="k">when</span> <span class="p">(</span><span class="n">initial</span><span class="p">.</span><span class="na">destination</span><span class="p">.</span><span class="na">route</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="s">&quot;Blue&quot;</span> <span class="o">-&gt;</span>
-                        <span class="n">slideInHorizontally</span><span class="p">(</span><span class="n">initialOffsetX</span> <span class="o">=</span> <span class="p">{</span> <span class="m">1000</span> <span class="p">},</span> <span class="n">animationSpec</span> <span class="o">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
-                    <span class="k">else</span> <span class="o">-&gt;</span> <span class="kc">null</span>
+            <span class="n">enterTransition</span> <span class="p">=</span> <span class="p">{</span> <span class="n">initial</span><span class="p">,</span> <span class="n">_</span> <span class="p">-&gt;</span>
+                <span class="k">when</span> <span class="p">(</span><span class="n">initial</span><span class="p">.</span><span class="n">destination</span><span class="p">.</span><span class="n">route</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="s">&quot;Blue&quot;</span> <span class="p">-&gt;</span>
+                        <span class="n">slideInHorizontally</span><span class="p">(</span><span class="n">initialOffsetX</span> <span class="p">=</span> <span class="p">{</span> <span class="m">1000</span> <span class="p">},</span> <span class="n">animationSpec</span> <span class="p">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
+                    <span class="k">else</span> <span class="p">-&gt;</span> <span class="k">null</span>
                 <span class="p">}</span>
             <span class="p">},</span>
-            <span class="n">exitTransition</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span><span class="p">,</span> <span class="n">target</span> <span class="o">-&gt;</span>
-                <span class="k">when</span> <span class="p">(</span><span class="n">target</span><span class="p">.</span><span class="na">destination</span><span class="p">.</span><span class="na">route</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="s">&quot;Blue&quot;</span> <span class="o">-&gt;</span>
-                        <span class="n">slideOutHorizontally</span><span class="p">(</span><span class="n">targetOffsetX</span> <span class="o">=</span> <span class="p">{</span> <span class="o">-</span><span class="m">1000</span> <span class="p">},</span> <span class="n">animationSpec</span> <span class="o">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
-                    <span class="k">else</span> <span class="o">-&gt;</span> <span class="kc">null</span>
+            <span class="n">exitTransition</span> <span class="p">=</span> <span class="p">{</span> <span class="n">_</span><span class="p">,</span> <span class="n">target</span> <span class="p">-&gt;</span>
+                <span class="k">when</span> <span class="p">(</span><span class="n">target</span><span class="p">.</span><span class="n">destination</span><span class="p">.</span><span class="n">route</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="s">&quot;Blue&quot;</span> <span class="p">-&gt;</span>
+                        <span class="n">slideOutHorizontally</span><span class="p">(</span><span class="n">targetOffsetX</span> <span class="p">=</span> <span class="p">{</span> <span class="p">-</span><span class="m">1000</span> <span class="p">},</span> <span class="n">animationSpec</span> <span class="p">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
+                    <span class="k">else</span> <span class="p">-&gt;</span> <span class="k">null</span>
                 <span class="p">}</span>
             <span class="p">},</span>
-            <span class="n">popEnterTransition</span> <span class="o">=</span> <span class="p">{</span> <span class="n">initial</span><span class="p">,</span> <span class="n">_</span> <span class="o">-&gt;</span>
-                <span class="k">when</span> <span class="p">(</span><span class="n">initial</span><span class="p">.</span><span class="na">destination</span><span class="p">.</span><span class="na">route</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="s">&quot;Blue&quot;</span> <span class="o">-&gt;</span>
-                        <span class="n">slideInHorizontally</span><span class="p">(</span><span class="n">initialOffsetX</span> <span class="o">=</span> <span class="p">{</span> <span class="o">-</span><span class="m">1000</span> <span class="p">},</span> <span class="n">animationSpec</span> <span class="o">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
-                    <span class="k">else</span> <span class="o">-&gt;</span> <span class="kc">null</span>
+            <span class="n">popEnterTransition</span> <span class="p">=</span> <span class="p">{</span> <span class="n">initial</span><span class="p">,</span> <span class="n">_</span> <span class="p">-&gt;</span>
+                <span class="k">when</span> <span class="p">(</span><span class="n">initial</span><span class="p">.</span><span class="n">destination</span><span class="p">.</span><span class="n">route</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="s">&quot;Blue&quot;</span> <span class="p">-&gt;</span>
+                        <span class="n">slideInHorizontally</span><span class="p">(</span><span class="n">initialOffsetX</span> <span class="p">=</span> <span class="p">{</span> <span class="p">-</span><span class="m">1000</span> <span class="p">},</span> <span class="n">animationSpec</span> <span class="p">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
+                    <span class="k">else</span> <span class="p">-&gt;</span> <span class="k">null</span>
                 <span class="p">}</span>
             <span class="p">},</span>
-            <span class="n">popExitTransition</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span><span class="p">,</span> <span class="n">target</span> <span class="o">-&gt;</span>
-                <span class="k">when</span> <span class="p">(</span><span class="n">target</span><span class="p">.</span><span class="na">destination</span><span class="p">.</span><span class="na">route</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="s">&quot;Blue&quot;</span> <span class="o">-&gt;</span>
-                        <span class="n">slideOutHorizontally</span><span class="p">(</span><span class="n">targetOffsetX</span> <span class="o">=</span> <span class="p">{</span> <span class="m">1000</span> <span class="p">},</span> <span class="n">animationSpec</span> <span class="o">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
-                    <span class="k">else</span> <span class="o">-&gt;</span> <span class="kc">null</span>
+            <span class="n">popExitTransition</span> <span class="p">=</span> <span class="p">{</span> <span class="n">_</span><span class="p">,</span> <span class="n">target</span> <span class="p">-&gt;</span>
+                <span class="k">when</span> <span class="p">(</span><span class="n">target</span><span class="p">.</span><span class="n">destination</span><span class="p">.</span><span class="n">route</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="s">&quot;Blue&quot;</span> <span class="p">-&gt;</span>
+                        <span class="n">slideOutHorizontally</span><span class="p">(</span><span class="n">targetOffsetX</span> <span class="p">=</span> <span class="p">{</span> <span class="m">1000</span> <span class="p">},</span> <span class="n">animationSpec</span> <span class="p">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
+                    <span class="k">else</span> <span class="p">-&gt;</span> <span class="k">null</span>
                 <span class="p">}</span>
             <span class="p">}</span>
         <span class="p">)</span> <span class="p">{</span> <span class="n">RedScreen</span><span class="p">(</span><span class="n">navController</span><span class="p">)</span> <span class="p">}</span>

@@ -16,7 +16,7 @@
         <link rel="canonical" href="https://google.github.io/accompanist/placeholder/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.5">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.4">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.cdeb8541.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.db9e7362.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.3f5d1f46.min.css">
@@ -588,8 +588,6 @@
       </a>
       
         
-
-
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
@@ -1114,8 +1112,6 @@
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
-
-
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
@@ -1234,10 +1230,10 @@
 <div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">com.google.accompanist.placeholder.material.placeholder</span>
 
 <span class="n">Text</span><span class="p">(</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="s">&quot;Content to display after content has loaded&quot;</span><span class="p">,</span>
-    <span class="n">modifier</span> <span class="o">=</span> <span class="n">Modifier</span>
-        <span class="p">.</span><span class="na">padding</span><span class="p">(</span><span class="m">16.</span><span class="n">dp</span><span class="p">)</span>
-        <span class="p">.</span><span class="na">placeholder</span><span class="p">(</span><span class="n">visible</span> <span class="o">=</span> <span class="kc">true</span><span class="p">)</span>
+    <span class="n">text</span> <span class="p">=</span> <span class="s">&quot;Content to display after content has loaded&quot;</span><span class="p">,</span>
+    <span class="n">modifier</span> <span class="p">=</span> <span class="n">Modifier</span>
+        <span class="p">.</span><span class="n">padding</span><span class="p">(</span><span class="m">16.</span><span class="n">dp</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">visible</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span>
 <span class="p">)</span>
 </code></pre></div>
 </div>
@@ -1245,14 +1241,14 @@
 <div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">com.google.accompanist.placeholder.placeholder</span>
 
 <span class="n">Text</span><span class="p">(</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="s">&quot;Content to display after content has loaded&quot;</span><span class="p">,</span>
-    <span class="n">modifier</span> <span class="o">=</span> <span class="n">Modifier</span>
-        <span class="p">.</span><span class="na">padding</span><span class="p">(</span><span class="m">16.</span><span class="n">dp</span><span class="p">)</span>
-        <span class="p">.</span><span class="na">placeholder</span><span class="p">(</span>
-            <span class="n">visible</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
-            <span class="n">color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">.</span><span class="na">Gray</span><span class="p">,</span>
+    <span class="n">text</span> <span class="p">=</span> <span class="s">&quot;Content to display after content has loaded&quot;</span><span class="p">,</span>
+    <span class="n">modifier</span> <span class="p">=</span> <span class="n">Modifier</span>
+        <span class="p">.</span><span class="n">padding</span><span class="p">(</span><span class="m">16.</span><span class="n">dp</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">placeholder</span><span class="p">(</span>
+            <span class="n">visible</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
+            <span class="n">color</span> <span class="p">=</span> <span class="n">Color</span><span class="p">.</span><span class="n">Gray</span><span class="p">,</span>
             <span class="c1">// optional, defaults to RectangleShape</span>
-            <span class="n">shape</span> <span class="o">=</span> <span class="n">RoundedCornerShape</span><span class="p">(</span><span class="m">4.</span><span class="n">dp</span><span class="p">),</span>
+            <span class="n">shape</span> <span class="p">=</span> <span class="n">RoundedCornerShape</span><span class="p">(</span><span class="m">4.</span><span class="n">dp</span><span class="p">),</span>
         <span class="p">)</span>
 <span class="p">)</span>
 </code></pre></div>
@@ -1276,12 +1272,12 @@
 <span class="k">import</span> <span class="nn">com.google.accompanist.placeholder.material.fade</span>
 
 <span class="n">Text</span><span class="p">(</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="s">&quot;Content to display after content has loaded&quot;</span><span class="p">,</span>
-    <span class="n">modifier</span> <span class="o">=</span> <span class="n">Modifier</span>
-        <span class="p">.</span><span class="na">padding</span><span class="p">(</span><span class="m">16.</span><span class="n">dp</span><span class="p">)</span>
-        <span class="p">.</span><span class="na">placeholder</span><span class="p">(</span>
-            <span class="n">visible</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
-            <span class="n">highlight</span> <span class="o">=</span> <span class="n">PlaceholderHighlight</span><span class="p">.</span><span class="na">fade</span><span class="p">(),</span>
+    <span class="n">text</span> <span class="p">=</span> <span class="s">&quot;Content to display after content has loaded&quot;</span><span class="p">,</span>
+    <span class="n">modifier</span> <span class="p">=</span> <span class="n">Modifier</span>
+        <span class="p">.</span><span class="n">padding</span><span class="p">(</span><span class="m">16.</span><span class="n">dp</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">placeholder</span><span class="p">(</span>
+            <span class="n">visible</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
+            <span class="n">highlight</span> <span class="p">=</span> <span class="n">PlaceholderHighlight</span><span class="p">.</span><span class="n">fade</span><span class="p">(),</span>
         <span class="p">)</span>
 <span class="p">)</span>
 </code></pre></div>
@@ -1292,16 +1288,16 @@
 <span class="k">import</span> <span class="nn">com.google.accompanist.placeholder.fade</span>
 
 <span class="n">Text</span><span class="p">(</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="s">&quot;Content to display after content has loaded&quot;</span><span class="p">,</span>
-    <span class="n">modifier</span> <span class="o">=</span> <span class="n">Modifier</span>
-        <span class="p">.</span><span class="na">padding</span><span class="p">(</span><span class="m">16.</span><span class="n">dp</span><span class="p">)</span>
-        <span class="p">.</span><span class="na">placeholder</span><span class="p">(</span>
-            <span class="n">visible</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
-            <span class="n">color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">.</span><span class="na">Gray</span><span class="p">,</span>
+    <span class="n">text</span> <span class="p">=</span> <span class="s">&quot;Content to display after content has loaded&quot;</span><span class="p">,</span>
+    <span class="n">modifier</span> <span class="p">=</span> <span class="n">Modifier</span>
+        <span class="p">.</span><span class="n">padding</span><span class="p">(</span><span class="m">16.</span><span class="n">dp</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">placeholder</span><span class="p">(</span>
+            <span class="n">visible</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
+            <span class="n">color</span> <span class="p">=</span> <span class="n">Color</span><span class="p">.</span><span class="n">Gray</span><span class="p">,</span>
             <span class="c1">// optional, defaults to RectangleShape</span>
-            <span class="n">shape</span> <span class="o">=</span> <span class="n">RoundedCornerShape</span><span class="p">(</span><span class="m">4.</span><span class="n">dp</span><span class="p">),</span>
-            <span class="n">highlight</span> <span class="o">=</span> <span class="n">PlaceholderHighlight</span><span class="p">.</span><span class="na">fade</span><span class="p">(</span>
-                <span class="n">highlightColor</span> <span class="o">=</span> <span class="n">Color</span><span class="p">.</span><span class="na">White</span><span class="p">,</span>
+            <span class="n">shape</span> <span class="p">=</span> <span class="n">RoundedCornerShape</span><span class="p">(</span><span class="m">4.</span><span class="n">dp</span><span class="p">),</span>
+            <span class="n">highlight</span> <span class="p">=</span> <span class="n">PlaceholderHighlight</span><span class="p">.</span><span class="n">fade</span><span class="p">(</span>
+                <span class="n">highlightColor</span> <span class="p">=</span> <span class="n">Color</span><span class="p">.</span><span class="n">White</span><span class="p">,</span>
             <span class="p">),</span>
         <span class="p">)</span>
 <span class="p">)</span>
@@ -1324,12 +1320,12 @@
 <span class="k">import</span> <span class="nn">com.google.accompanist.placeholder.material.shimmer</span>
 
 <span class="n">Text</span><span class="p">(</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="s">&quot;Content to display after content has loaded&quot;</span><span class="p">,</span>
-    <span class="n">modifier</span> <span class="o">=</span> <span class="n">Modifier</span>
-        <span class="p">.</span><span class="na">padding</span><span class="p">(</span><span class="m">16.</span><span class="n">dp</span><span class="p">)</span>
-        <span class="p">.</span><span class="na">placeholder</span><span class="p">(</span>
-            <span class="n">visible</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
-            <span class="n">highlight</span> <span class="o">=</span> <span class="n">PlaceholderHighlight</span><span class="p">.</span><span class="na">shimmer</span><span class="p">(),</span>
+    <span class="n">text</span> <span class="p">=</span> <span class="s">&quot;Content to display after content has loaded&quot;</span><span class="p">,</span>
+    <span class="n">modifier</span> <span class="p">=</span> <span class="n">Modifier</span>
+        <span class="p">.</span><span class="n">padding</span><span class="p">(</span><span class="m">16.</span><span class="n">dp</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">placeholder</span><span class="p">(</span>
+            <span class="n">visible</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
+            <span class="n">highlight</span> <span class="p">=</span> <span class="n">PlaceholderHighlight</span><span class="p">.</span><span class="n">shimmer</span><span class="p">(),</span>
         <span class="p">)</span>
 <span class="p">)</span>
 </code></pre></div>
@@ -1340,16 +1336,16 @@
 <span class="k">import</span> <span class="nn">com.google.accompanist.placeholder.shimmer</span>
 
 <span class="n">Text</span><span class="p">(</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="s">&quot;Content to display after content has loaded&quot;</span><span class="p">,</span>
-    <span class="n">modifier</span> <span class="o">=</span> <span class="n">Modifier</span>
-        <span class="p">.</span><span class="na">padding</span><span class="p">(</span><span class="m">16.</span><span class="n">dp</span><span class="p">)</span>
-        <span class="p">.</span><span class="na">placeholder</span><span class="p">(</span>
-            <span class="n">visible</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
-            <span class="n">color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">.</span><span class="na">Gray</span><span class="p">,</span>
+    <span class="n">text</span> <span class="p">=</span> <span class="s">&quot;Content to display after content has loaded&quot;</span><span class="p">,</span>
+    <span class="n">modifier</span> <span class="p">=</span> <span class="n">Modifier</span>
+        <span class="p">.</span><span class="n">padding</span><span class="p">(</span><span class="m">16.</span><span class="n">dp</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">placeholder</span><span class="p">(</span>
+            <span class="n">visible</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
+            <span class="n">color</span> <span class="p">=</span> <span class="n">Color</span><span class="p">.</span><span class="n">Gray</span><span class="p">,</span>
             <span class="c1">// optional, defaults to RectangleShape</span>
-            <span class="n">shape</span> <span class="o">=</span> <span class="n">RoundedCornerShape</span><span class="p">(</span><span class="m">4.</span><span class="n">dp</span><span class="p">),</span>
-            <span class="n">highlight</span> <span class="o">=</span> <span class="n">PlaceholderHighlight</span><span class="p">.</span><span class="na">shimmer</span><span class="p">(</span>
-                <span class="n">highlightColor</span> <span class="o">=</span> <span class="n">Color</span><span class="p">.</span><span class="na">White</span><span class="p">,</span>
+            <span class="n">shape</span> <span class="p">=</span> <span class="n">RoundedCornerShape</span><span class="p">(</span><span class="m">4.</span><span class="n">dp</span><span class="p">),</span>
+            <span class="n">highlight</span> <span class="p">=</span> <span class="n">PlaceholderHighlight</span><span class="p">.</span><span class="n">shimmer</span><span class="p">(</span>
+                <span class="n">highlightColor</span> <span class="p">=</span> <span class="n">Color</span><span class="p">.</span><span class="n">White</span><span class="p">,</span>
             <span class="p">),</span>
         <span class="p">)</span>
 <span class="p">)</span>
