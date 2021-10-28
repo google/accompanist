@@ -16,7 +16,7 @@
         <link rel="canonical" href="https://google.github.io/accompanist/drawablepainter/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.4">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.5">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.db9e7362.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.cdeb8541.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.3f5d1f46.min.css">
@@ -664,6 +664,8 @@
       </a>
       
         
+
+
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
@@ -1058,6 +1060,8 @@
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
+
+
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
@@ -1107,13 +1111,13 @@
 <p>A library which provides a way to use Android <a href="https://developer.android.com/guide/topics/resources/drawable-resource">drawables</a> as Jetpack Compose <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/painter/Painter">Painters</a>.</p>
 <p>This library attempts to support most Drawable configuration, as well as <a href="https://developer.android.com/reference/android/graphics/drawable/Animatable">Animatable</a> drawables, such as <a href="https://developer.android.com/reference/android/graphics/drawable/AnimatedVectorDrawable">AnimatedVectorDrawable</a>.</p>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="n">@Composable</span>
-<span class="k">fun</span> <span class="nf">DrawDrawable</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">val</span> <span class="py">drawable</span> <span class="p">=</span> <span class="n">AppCompatResources</span><span class="p">.</span><span class="n">getDrawable</span><span class="p">(</span><span class="n">LocalContext</span><span class="p">.</span><span class="n">current</span><span class="p">,</span> <span class="n">R</span><span class="p">.</span><span class="n">drawable</span><span class="p">.</span><span class="n">rectangle</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nd">@Composable</span>
+<span class="kd">fun</span> <span class="nf">DrawDrawable</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">val</span> <span class="nv">drawable</span> <span class="o">=</span> <span class="n">AppCompatResources</span><span class="p">.</span><span class="na">getDrawable</span><span class="p">(</span><span class="n">LocalContext</span><span class="p">.</span><span class="na">current</span><span class="p">,</span> <span class="n">R</span><span class="p">.</span><span class="na">drawable</span><span class="p">.</span><span class="na">rectangle</span><span class="p">)</span>
 
     <span class="n">Image</span><span class="p">(</span>
-        <span class="n">painter</span> <span class="p">=</span> <span class="n">rememberDrawablePainter</span><span class="p">(</span><span class="n">drawable</span> <span class="p">=</span> <span class="n">drawable</span><span class="p">),</span>
-        <span class="n">contentDescription</span> <span class="p">=</span> <span class="s">&quot;content description&quot;</span><span class="p">,</span>
+        <span class="n">painter</span> <span class="o">=</span> <span class="n">rememberDrawablePainter</span><span class="p">(</span><span class="n">drawable</span> <span class="o">=</span> <span class="n">drawable</span><span class="p">),</span>
+        <span class="n">contentDescription</span> <span class="o">=</span> <span class="s">&quot;content description&quot;</span><span class="p">,</span>
     <span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>

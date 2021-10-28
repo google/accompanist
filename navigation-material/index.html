@@ -16,7 +16,7 @@
         <link rel="canonical" href="https://google.github.io/accompanist/navigation-material/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.4">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.5">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.db9e7362.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.cdeb8541.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.3f5d1f46.min.css">
@@ -912,6 +912,8 @@
       </a>
       
         
+
+
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
@@ -1071,6 +1073,8 @@
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
+
+
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
@@ -1142,21 +1146,21 @@ All of the APIs are marked with the <code>@ExperimentalMaterialNavigationApi</co
 <ol>
 <li>
 <p>Create a <code>BottomSheetNavigator</code> and add it to the <code>NavController</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="n">@Composable</span>
-<span class="k">fun</span> <span class="nf">MyApp</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">val</span> <span class="py">bottomSheetNavigator</span> <span class="p">=</span> <span class="n">rememberBottomSheetNavigator</span><span class="p">()</span>
-    <span class="k">val</span> <span class="py">navController</span> <span class="p">=</span> <span class="n">rememberNavController</span><span class="p">(</span><span class="n">bottomSheetNavigator</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nd">@Composable</span>
+<span class="kd">fun</span> <span class="nf">MyApp</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">val</span> <span class="nv">bottomSheetNavigator</span> <span class="o">=</span> <span class="n">rememberBottomSheetNavigator</span><span class="p">()</span>
+    <span class="kd">val</span> <span class="nv">navController</span> <span class="o">=</span> <span class="n">rememberNavController</span><span class="p">(</span><span class="n">bottomSheetNavigator</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
 </li>
 <li>
 <p>Wrap your <code>NavHost</code> in the <code>ModalBottomSheetLayout</code> composable that accepts a <code>BottomSheetNavigator</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="n">@Composable</span>
-<span class="k">fun</span> <span class="nf">MyApp</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">val</span> <span class="py">bottomSheetNavigator</span> <span class="p">=</span> <span class="n">rememberBottomSheetNavigator</span><span class="p">()</span>
-    <span class="k">val</span> <span class="py">navController</span> <span class="p">=</span> <span class="n">rememberNavController</span><span class="p">(</span><span class="n">bottomSheetNavigator</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nd">@Composable</span>
+<span class="kd">fun</span> <span class="nf">MyApp</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">val</span> <span class="nv">bottomSheetNavigator</span> <span class="o">=</span> <span class="n">rememberBottomSheetNavigator</span><span class="p">()</span>
+    <span class="kd">val</span> <span class="nv">navController</span> <span class="o">=</span> <span class="n">rememberNavController</span><span class="p">(</span><span class="n">bottomSheetNavigator</span><span class="p">)</span>
     <span class="n">ModalBottomSheetLayout</span><span class="p">(</span><span class="n">bottomSheetNavigator</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">NavHost</span><span class="p">(</span><span class="n">navController</span><span class="p">,</span> <span class="n">Destinations</span><span class="p">.</span><span class="n">Home</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">NavHost</span><span class="p">(</span><span class="n">navController</span><span class="p">,</span> <span class="n">Destinations</span><span class="p">.</span><span class="na">Home</span><span class="p">)</span> <span class="p">{</span>
            <span class="c1">// We&#39;ll define our graph here in a bit!</span>
         <span class="p">}</span>
     <span class="p">}</span>
@@ -1165,16 +1169,16 @@ All of the APIs are marked with the <code>@ExperimentalMaterialNavigationApi</co
 </li>
 <li>
 <p>Register a bottom sheet destination</p>
-<div class="highlight"><pre><span></span><code><span class="n">@Composable</span>
-<span class="k">fun</span> <span class="nf">MyApp</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">val</span> <span class="py">bottomSheetNavigator</span> <span class="p">=</span> <span class="n">rememberBottomSheetNavigator</span><span class="p">()</span>
-    <span class="k">val</span> <span class="py">navController</span> <span class="p">=</span> <span class="n">rememberNavController</span><span class="p">(</span><span class="n">bottomSheetNavigator</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nd">@Composable</span>
+<span class="kd">fun</span> <span class="nf">MyApp</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">val</span> <span class="nv">bottomSheetNavigator</span> <span class="o">=</span> <span class="n">rememberBottomSheetNavigator</span><span class="p">()</span>
+    <span class="kd">val</span> <span class="nv">navController</span> <span class="o">=</span> <span class="n">rememberNavController</span><span class="p">(</span><span class="n">bottomSheetNavigator</span><span class="p">)</span>
     <span class="n">ModalBottomSheetLayout</span><span class="p">(</span><span class="n">bottomSheetNavigator</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">NavHost</span><span class="p">(</span><span class="n">navController</span><span class="p">,</span> <span class="n">Destinations</span><span class="p">.</span><span class="n">Home</span><span class="p">)</span> <span class="p">{</span>
-           <span class="n">composable</span><span class="p">(</span><span class="n">route</span> <span class="p">=</span> <span class="s">&quot;home&quot;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">NavHost</span><span class="p">(</span><span class="n">navController</span><span class="p">,</span> <span class="n">Destinations</span><span class="p">.</span><span class="na">Home</span><span class="p">)</span> <span class="p">{</span>
+           <span class="n">composable</span><span class="p">(</span><span class="n">route</span> <span class="o">=</span> <span class="s">&quot;home&quot;</span><span class="p">)</span> <span class="p">{</span>
                <span class="p">...</span>
            <span class="p">}</span>
-           <span class="n">bottomSheet</span><span class="p">(</span><span class="n">route</span> <span class="p">=</span> <span class="s">&quot;sheet&quot;</span><span class="p">)</span> <span class="p">{</span>
+           <span class="n">bottomSheet</span><span class="p">(</span><span class="n">route</span> <span class="o">=</span> <span class="s">&quot;sheet&quot;</span><span class="p">)</span> <span class="p">{</span>
                <span class="n">Text</span><span class="p">(</span><span class="s">&quot;This is a cool bottom sheet!&quot;</span><span class="p">)</span>
            <span class="p">}</span>
         <span class="p">}</span>
