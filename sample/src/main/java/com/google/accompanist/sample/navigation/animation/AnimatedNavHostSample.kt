@@ -73,29 +73,29 @@ fun ExperimentalAnimationNav() {
     AnimatedNavHost(navController, startDestination = "Blue") {
         composable(
             "Blue",
-            enterTransition = { initial, _ ->
-                when (initial.destination.route) {
+            enterTransition = {
+                when (initialState.destination.route) {
                     "Red" ->
                         slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
                     else -> null
                 }
             },
-            exitTransition = { _, target ->
-                when (target.destination.route) {
+            exitTransition = {
+                when (targetState.destination.route) {
                     "Red" ->
                         slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
                     else -> null
                 }
             },
-            popEnterTransition = { initial, _ ->
-                when (initial.destination.route) {
+            popEnterTransition = {
+                when (initialState.destination.route) {
                     "Red" ->
                         slideIntoContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
                     else -> null
                 }
             },
-            popExitTransition = { _, target ->
-                when (target.destination.route) {
+            popExitTransition = {
+                when (targetState.destination.route) {
                     "Red" ->
                         slideOutOfContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
                     else -> null
@@ -104,8 +104,8 @@ fun ExperimentalAnimationNav() {
         ) { BlueScreen(navController) }
         composable(
             "Red",
-            enterTransition = { initial, _ ->
-                when (initial.destination.route) {
+            enterTransition = {
+                when (initialState.destination.route) {
                     "Blue" ->
                         slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
                     "Green" ->
@@ -113,8 +113,8 @@ fun ExperimentalAnimationNav() {
                     else -> null
                 }
             },
-            exitTransition = { _, target ->
-                when (target.destination.route) {
+            exitTransition = {
+                when (targetState.destination.route) {
                     "Blue" ->
                         slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
                     "Green" ->
@@ -122,8 +122,8 @@ fun ExperimentalAnimationNav() {
                     else -> null
                 }
             },
-            popEnterTransition = { initial, _ ->
-                when (initial.destination.route) {
+            popEnterTransition = {
+                when (initialState.destination.route) {
                     "Blue" ->
                         slideIntoContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
                     "Green" ->
@@ -131,8 +131,8 @@ fun ExperimentalAnimationNav() {
                     else -> null
                 }
             },
-            popExitTransition = { _, target ->
-                when (target.destination.route) {
+            popExitTransition = {
+                when (targetState.destination.route) {
                     "Blue" ->
                         slideOutOfContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
                     "Green" ->
@@ -144,13 +144,13 @@ fun ExperimentalAnimationNav() {
         navigation(
             startDestination = "Green",
             route = "Inner",
-            enterTransition = { _, _ -> expandIn(animationSpec = tween(700)) },
-            exitTransition = { _, _ -> shrinkOut(animationSpec = tween(700)) }
+            enterTransition = { expandIn(animationSpec = tween(700)) },
+            exitTransition = { shrinkOut(animationSpec = tween(700)) }
         ) {
             composable(
                 "Green",
-                enterTransition = { initial, _ ->
-                    when (initial.destination.route) {
+                enterTransition = {
+                    when (initialState.destination.route) {
                         "Red" ->
                             slideIntoContainer(
                                 AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700)
@@ -158,8 +158,8 @@ fun ExperimentalAnimationNav() {
                         else -> null
                     }
                 },
-                exitTransition = { _, target ->
-                    when (target.destination.route) {
+                exitTransition = {
+                    when (targetState.destination.route) {
                         "Red" ->
                             slideOutOfContainer(
                                 AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700)
@@ -167,8 +167,8 @@ fun ExperimentalAnimationNav() {
                         else -> null
                     }
                 },
-                popEnterTransition = { initial, _ ->
-                    when (initial.destination.route) {
+                popEnterTransition = {
+                    when (initialState.destination.route) {
                         "Red" ->
                             slideIntoContainer(
                                 AnimatedContentScope.SlideDirection.Down, animationSpec = tween(700)
@@ -176,8 +176,8 @@ fun ExperimentalAnimationNav() {
                         else -> null
                     }
                 },
-                popExitTransition = { _, target ->
-                    when (target.destination.route) {
+                popExitTransition = {
+                    when (targetState.destination.route) {
                         "Red" ->
                             slideOutOfContainer(
                                 AnimatedContentScope.SlideDirection.Down, animationSpec = tween(700)
