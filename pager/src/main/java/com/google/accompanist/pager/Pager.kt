@@ -280,8 +280,8 @@ internal fun Pager(
                         // connection which consumes them.
                         // See: https://github.com/google/accompanist/issues/347
                         .nestedScroll(connection = consumeFlingNestedScrollConnection)
-                        // Constraint the content to be <= than the size of the pager.
-                        .fillParentMaxSize()
+                        // Constraint the content height to be <= than the height of the pager.
+                        .fillParentMaxHeight()
                         .wrapContentSize()
                 ) {
                     pagerScope.content(page)
@@ -308,8 +308,8 @@ internal fun Pager(
                         // connection which consumes them.
                         // See: https://github.com/google/accompanist/issues/347
                         .nestedScroll(connection = consumeFlingNestedScrollConnection)
-                        // Constraint the content to be <= than the size of the pager.
-                        .fillParentMaxSize()
+                        // Constraint the content width to be <= than the width of the pager.
+                        .fillParentMaxWidth()
                         .wrapContentSize()
                 ) {
                     pagerScope.content(page)
