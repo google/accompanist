@@ -70,6 +70,7 @@ class MapState(
 @Composable
 fun GoogleMaps(
     mapState: MapState,
+    onCameraMoved: (lat: Double, lng: Double, zoom: Float) -> Unit,
     modifier: Modifier = Modifier,
     onMapReady: (GoogleMap) -> Unit = {},
     onMapUpdated: (GoogleMap) -> Unit = {},
@@ -87,9 +88,11 @@ fun GoogleMaps(
 
         map.setOnCameraIdleListener {
             val newPosition = map.cameraPosition
-            mapState.latitude = newPosition.target.latitude
-            mapState.longitude = newPosition.target.longitude
-            mapState.zoom = newPosition.zoom
+            onCameraMoved(
+                newPosition.target.latitude,
+                newPosition.target.longitude,
+                newPosition.zoom
+            )
         }
     })
 

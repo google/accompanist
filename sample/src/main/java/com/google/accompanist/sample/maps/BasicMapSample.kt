@@ -48,6 +48,11 @@ class BasicMapSampleActivity : FragmentActivity() {
             Box(Modifier.fillMaxSize()) {
                 GoogleMaps(
                     mapState = mapState,
+                    onCameraMoved = { lat, lng, zoom ->
+                        mapState.latitude = lat
+                        mapState.longitude = lng
+                        mapState.zoom = zoom
+                    },
                     modifier = Modifier.matchParentSize()
                 )
 
