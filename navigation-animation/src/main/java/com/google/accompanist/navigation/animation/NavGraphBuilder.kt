@@ -47,17 +47,13 @@ public fun NavGraphBuilder.composable(
     route: String,
     arguments: List<NamedNavArgument> = emptyList(),
     deepLinks: List<NavDeepLink> = emptyList(),
-    enterTransition: (
-        AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition?
-    )? = null,
-    exitTransition: (
-        AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition?
-    )? = null,
+    enterTransition: (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition?)? = null,
+    exitTransition: (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition?)? = null,
     popEnterTransition: (
-        AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition?
+        AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition?
     )? = enterTransition,
     popExitTransition: (
-        AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition?
+        AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition?
     )? = exitTransition,
     content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
 ) {
@@ -99,17 +95,13 @@ public fun NavGraphBuilder.composable(
 public fun NavGraphBuilder.navigation(
     startDestination: String,
     route: String,
-    enterTransition: (
-        AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition
-    )? = null,
-    exitTransition: (
-        AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition
-    )? = null,
+    enterTransition: (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition)? = null,
+    exitTransition: (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition)? = null,
     popEnterTransition: (
-        AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition
+        AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition
     )? = enterTransition,
     popExitTransition: (
-        AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition
+        AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition
     )? = exitTransition,
     builder: NavGraphBuilder.() -> Unit
 ) {
