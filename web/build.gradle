@@ -109,6 +109,9 @@ dependencies {
     testImplementation libs.androidx.test.runner
 
     testImplementation libs.robolectric
+
+    testImplementation libs.androidx.test.espressoWeb
+    androidTestImplementation libs.androidx.test.espressoWeb
 }
 
 apply plugin: "com.vanniktech.maven.publish"

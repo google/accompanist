@@ -69,6 +69,7 @@ androidx-test-runner = { module = "androidx.test:runner", version.ref = "android
 androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidxtest" }
 androidx-test-orchestrator = { module = "androidx.test:orchestrator", version.ref = "androidxtest" }
 androidx-test-uiAutomator = "androidx.test.uiautomator:uiautomator:2.2.0"
+androidx-test-espressoWeb = "androidx.test.espresso:espresso-web:3.4.0"
 
 junit = "junit:junit:4.13"
 truth = "com.google.truth:truth:1.1.2"

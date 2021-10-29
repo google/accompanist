@@ -48,7 +48,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 @Composable
 fun WebView(
     state: WebViewState,
-    onUriChanged: (Uri) -> Unit,
+    onContentChanged: (WebContent) -> Unit,
     modifier: Modifier = Modifier,
     captureBackPresses: Boolean = true,
     onCreated: (WebView) -> Unit = {}
@@ -72,7 +72,7 @@ fun WebView(
                     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                         super.onPageStarted(view, url, favicon)
                         state.isLoading = true
-                        onUriChanged(Uri.parse(url))
+                        onContentChanged(WebContent.Url(Uri.parse(url)))
                     }
 
                     override fun onPageFinished(view: WebView?, url: String?) {
@@ -86,7 +86,10 @@ fun WebView(
                     ): Boolean {
                         // Override all url loads to make the single source of truth
                         // of the URL the state holder Url
-                        request?.let { onUriChanged(it.url) }
+                        request?.let {
+                            val content = WebContent.Url(it.url)
+                            onContentChanged(content)
+                        }
                         return true
                     }
                 }
@@ -94,26 +97,37 @@ fun WebView(
         },
         modifier = modifier
     ) { webView ->
-        val url = state.uri.toString()
+        when (val l = state.content) {
+            is WebContent.Url -> {
+                val url = l.uri.toString()
 
-        if (url.isNotEmpty() && url != webView.url) {
-            webView.loadUrl(state.uri.toString())
+                if (url.isNotEmpty() && url != webView.url) {
+                    webView.loadUrl(url)
+                }
+            }
+            is WebContent.Data -> {
+                webView.loadDataWithBaseURL(l.baseUrl, l.data, null, null, null)
+            }
         }
 
         state.canGoBack = webView.canGoBack()
     }
 }
 
+sealed class WebContent {
+    data class Url(val uri: Uri) : WebContent()
+    data class Data(val data: String, val baseUrl: String? = null) : WebContent()
+}
+
 /**
  * A state holder to hold the state for the WebView. In most cases this will be remembered
  * using the rememberWebViewState(uri) function.
  */
-class WebViewState(uri: Uri?) {
-
+class WebViewState(webContent: WebContent) {
     /**
-     *  The uri being loaded by the WebView
+     *  The content being loaded by the WebView
      */
-    var uri by mutableStateOf<Uri?>(uri)
+    var content by mutableStateOf<WebContent>(webContent)
 
     /**
      * Whether the WebView is currently loading data in it's main frame
@@ -134,5 +148,14 @@ class WebViewState(uri: Uri?) {
  * @param uri The uri to load in the WebView
  */
 @Composable
-fun rememberWebViewState(uri: Uri?) =
-    remember { WebViewState(uri) }
+fun rememberWebViewState(uri: Uri) =
+    remember { WebViewState(WebContent.Url(uri)) }
+
+/**
+ * Creates a WebView state that is remembered across Compositions.
+ *
+ * @param data The uri to load in the WebView
+ */
+@Composable
+fun rememberWebViewState(data: String) =
+    remember { WebViewState(WebContent.Data(data)) }

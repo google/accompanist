@@ -35,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.google.accompanist.sample.AccompanistSampleTheme
+import com.google.accompanist.web.WebContent
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewState
 
@@ -55,7 +56,7 @@ class BasicWebViewSample : ComponentActivity() {
                             modifier = Modifier.weight(1f)
                         )
                         Button(
-                            onClick = { state.uri = Uri.parse(textFieldValue) },
+                            onClick = { state.content = WebContent.Url(Uri.parse(textFieldValue)) },
                             modifier = Modifier.align(Alignment.CenterVertically)
                         ) {
                             Text("Go")
@@ -68,9 +69,9 @@ class BasicWebViewSample : ComponentActivity() {
 
                     WebView(
                         state,
-                        onUriChanged = { uri ->
-                            state.uri = uri
-                            textFieldValue = uri.toString()
+                        onContentChanged = { content ->
+                            state.content = content
+                            textFieldValue = (content as? WebContent.Url)?.uri.toString()
                         },
                         modifier = Modifier.weight(1f),
                         onCreated = { webView ->
