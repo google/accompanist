@@ -1,0 +1,44 @@
+// Signature format: 4.0
+package com.google.accompanist.web {
+
+  public abstract sealed class WebContent {
+  }
+
+  public static final class WebContent.Data extends com.google.accompanist.web.WebContent {
+    ctor public WebContent.Data(String data, optional String? baseUrl);
+    method public String component1();
+    method public String? component2();
+    method public com.google.accompanist.web.WebContent.Data copy(String data, String? baseUrl);
+    method public String? getBaseUrl();
+    method public String getData();
+    property public final String? baseUrl;
+    property public final String data;
+  }
+
+  public static final class WebContent.Url extends com.google.accompanist.web.WebContent {
+    ctor public WebContent.Url(android.net.Uri uri);
+    method public android.net.Uri component1();
+    method public com.google.accompanist.web.WebContent.Url copy(android.net.Uri uri);
+    method public android.net.Uri getUri();
+    property public final android.net.Uri uri;
+  }
+
+  public final class WebViewKt {
+    method @androidx.compose.runtime.Composable public static void WebView(com.google.accompanist.web.WebViewState state, kotlin.jvm.functions.Function1<? super com.google.accompanist.web.WebContent,kotlin.Unit> onContentChanged, optional androidx.compose.ui.Modifier modifier, optional boolean captureBackPresses, optional kotlin.jvm.functions.Function1<? super android.webkit.WebView,kotlin.Unit> onCreated);
+    method @androidx.compose.runtime.Composable public static com.google.accompanist.web.WebViewState rememberWebViewState(android.net.Uri uri);
+    method @androidx.compose.runtime.Composable public static com.google.accompanist.web.WebViewState rememberWebViewState(String data);
+  }
+
+  public final class WebViewState {
+    ctor public WebViewState(com.google.accompanist.web.WebContent webContent);
+    method public boolean getCanGoBack();
+    method public com.google.accompanist.web.WebContent getContent();
+    method public boolean isLoading();
+    method public void setContent(com.google.accompanist.web.WebContent content);
+    property public final boolean canGoBack;
+    property public final com.google.accompanist.web.WebContent content;
+    property public final boolean isLoading;
+  }
+
+}
+
