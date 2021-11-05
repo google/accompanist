@@ -16,7 +16,7 @@
         <link rel="canonical" href="https://google.github.io/accompanist/permissions/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.4">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.6">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.db9e7362.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.a57b2b03.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.3f5d1f46.min.css">
@@ -788,6 +788,8 @@
       </a>
       
         
+
+
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
@@ -1078,6 +1080,8 @@
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
+
+
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
@@ -1155,43 +1159,43 @@ All of the APIs are marked with the <code>@ExperimentalPermissionsApi</code> ann
 <p>The <code>PermissionRequired</code> and <code>PermissionsRequired</code> composables offer an opinionated way of handling
 the permissions status workflow as described in the
 <a href="https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions">documentation</a>.</p>
-<div class="highlight"><pre><span></span><code><span class="n">@Composable</span>
-<span class="k">private</span> <span class="k">fun</span> <span class="nf">FeatureThatRequiresCameraPermission</span><span class="p">(</span>
-    <span class="n">navigateToSettingsScreen</span><span class="p">:</span> <span class="p">()</span> <span class="p">-&gt;</span> <span class="n">Unit</span>
+<div class="highlight"><pre><span></span><code><span class="nd">@Composable</span>
+<span class="kd">private</span> <span class="kd">fun</span> <span class="nf">FeatureThatRequiresCameraPermission</span><span class="p">(</span>
+    <span class="n">navigateToSettingsScreen</span><span class="p">:</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Unit</span>
 <span class="p">)</span> <span class="p">{</span>
     <span class="c1">// Track if the user doesn&#39;t want to see the rationale any more.</span>
-    <span class="k">var</span> <span class="py">doNotShowRationale</span> <span class="k">by</span> <span class="n">rememberSaveable</span> <span class="p">{</span> <span class="n">mutableStateOf</span><span class="p">(</span><span class="k">false</span><span class="p">)</span> <span class="p">}</span>
+    <span class="kd">var</span> <span class="nv">doNotShowRationale</span> <span class="k">by</span> <span class="n">rememberSaveable</span> <span class="p">{</span> <span class="n">mutableStateOf</span><span class="p">(</span><span class="kc">false</span><span class="p">)</span> <span class="p">}</span>
 
-    <span class="k">val</span> <span class="py">cameraPermissionState</span> <span class="p">=</span> <span class="n">rememberPermissionState</span><span class="p">(</span><span class="n">android</span><span class="p">.</span><span class="n">Manifest</span><span class="p">.</span><span class="n">permission</span><span class="p">.</span><span class="n">CAMERA</span><span class="p">)</span>
+    <span class="kd">val</span> <span class="nv">cameraPermissionState</span> <span class="o">=</span> <span class="n">rememberPermissionState</span><span class="p">(</span><span class="n">android</span><span class="p">.</span><span class="na">Manifest</span><span class="p">.</span><span class="na">permission</span><span class="p">.</span><span class="na">CAMERA</span><span class="p">)</span>
     <span class="n">PermissionRequired</span><span class="p">(</span>
-        <span class="n">permissionState</span> <span class="p">=</span> <span class="n">cameraPermissionState</span><span class="p">,</span>
-        <span class="n">permissionNotGrantedContent</span> <span class="p">=</span> <span class="p">{</span>
+        <span class="n">permissionState</span> <span class="o">=</span> <span class="n">cameraPermissionState</span><span class="p">,</span>
+        <span class="n">permissionNotGrantedContent</span> <span class="o">=</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">doNotShowRationale</span><span class="p">)</span> <span class="p">{</span>
                 <span class="n">Text</span><span class="p">(</span><span class="s">&quot;Feature not available&quot;</span><span class="p">)</span>
             <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
                 <span class="n">Column</span> <span class="p">{</span>
                     <span class="n">Text</span><span class="p">(</span><span class="s">&quot;The camera is important for this app. Please grant the permission.&quot;</span><span class="p">)</span>
-                    <span class="n">Spacer</span><span class="p">(</span><span class="n">modifier</span> <span class="p">=</span> <span class="n">Modifier</span><span class="p">.</span><span class="n">height</span><span class="p">(</span><span class="m">8.</span><span class="n">dp</span><span class="p">))</span>
+                    <span class="n">Spacer</span><span class="p">(</span><span class="n">modifier</span> <span class="o">=</span> <span class="n">Modifier</span><span class="p">.</span><span class="na">height</span><span class="p">(</span><span class="m">8.</span><span class="n">dp</span><span class="p">))</span>
                     <span class="n">Row</span> <span class="p">{</span>
-                        <span class="n">Button</span><span class="p">(</span><span class="n">onClick</span> <span class="p">=</span> <span class="p">{</span> <span class="n">cameraPermissionState</span><span class="p">.</span><span class="n">launchPermissionRequest</span><span class="p">()</span> <span class="p">})</span> <span class="p">{</span>
+                        <span class="n">Button</span><span class="p">(</span><span class="n">onClick</span> <span class="o">=</span> <span class="p">{</span> <span class="n">cameraPermissionState</span><span class="p">.</span><span class="na">launchPermissionRequest</span><span class="p">()</span> <span class="p">})</span> <span class="p">{</span>
                             <span class="n">Text</span><span class="p">(</span><span class="s">&quot;Ok!&quot;</span><span class="p">)</span>
                         <span class="p">}</span>
-                        <span class="n">Spacer</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="n">width</span><span class="p">(</span><span class="m">8.</span><span class="n">dp</span><span class="p">))</span>
-                        <span class="n">Button</span><span class="p">(</span><span class="n">onClick</span> <span class="p">=</span> <span class="p">{</span> <span class="n">doNotShowRationale</span> <span class="p">=</span> <span class="k">true</span> <span class="p">})</span> <span class="p">{</span>
+                        <span class="n">Spacer</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="na">width</span><span class="p">(</span><span class="m">8.</span><span class="n">dp</span><span class="p">))</span>
+                        <span class="n">Button</span><span class="p">(</span><span class="n">onClick</span> <span class="o">=</span> <span class="p">{</span> <span class="n">doNotShowRationale</span> <span class="o">=</span> <span class="kc">true</span> <span class="p">})</span> <span class="p">{</span>
                             <span class="n">Text</span><span class="p">(</span><span class="s">&quot;Nope&quot;</span><span class="p">)</span>
                         <span class="p">}</span>
                     <span class="p">}</span>
                 <span class="p">}</span>
             <span class="p">}</span>
         <span class="p">},</span>
-        <span class="n">permissionNotAvailableContent</span> <span class="p">=</span> <span class="p">{</span>
+        <span class="n">permissionNotAvailableContent</span> <span class="o">=</span> <span class="p">{</span>
             <span class="n">Column</span> <span class="p">{</span>
                 <span class="n">Text</span><span class="p">(</span>
-                    <span class="s">&quot;Camera permission denied. See this FAQ with information about why we &quot;</span> <span class="p">+</span>
+                    <span class="s">&quot;Camera permission denied. See this FAQ with information about why we &quot;</span> <span class="o">+</span>
                         <span class="s">&quot;need this permission. Please, grant us access on the Settings screen.&quot;</span>
                 <span class="p">)</span>
-                <span class="n">Spacer</span><span class="p">(</span><span class="n">modifier</span> <span class="p">=</span> <span class="n">Modifier</span><span class="p">.</span><span class="n">height</span><span class="p">(</span><span class="m">8.</span><span class="n">dp</span><span class="p">))</span>
-                <span class="n">Button</span><span class="p">(</span><span class="n">onClick</span> <span class="p">=</span> <span class="n">navigateToSettingsScreen</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">Spacer</span><span class="p">(</span><span class="n">modifier</span> <span class="o">=</span> <span class="n">Modifier</span><span class="p">.</span><span class="na">height</span><span class="p">(</span><span class="m">8.</span><span class="n">dp</span><span class="p">))</span>
+                <span class="n">Button</span><span class="p">(</span><span class="n">onClick</span> <span class="o">=</span> <span class="n">navigateToSettingsScreen</span><span class="p">)</span> <span class="p">{</span>
                     <span class="n">Text</span><span class="p">(</span><span class="s">&quot;Open Settings&quot;</span><span class="p">)</span>
                 <span class="p">}</span>
             <span class="p">}</span>
@@ -1216,40 +1220,40 @@ non-composable callback such as a <code>Button</code>'s <code>onClick</code> lam
 </div>
 <p>The following code exercises the <a href="https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions">permission request workflow</a>
 and is nice with the user by letting them decide if they don't want to see the rationale again.</p>
-<div class="highlight"><pre><span></span><code><span class="n">@Composable</span>
-<span class="k">private</span> <span class="k">fun</span> <span class="nf">FeatureThatRequiresCameraPermission</span><span class="p">(</span>
-    <span class="n">navigateToSettingsScreen</span><span class="p">:</span> <span class="p">()</span> <span class="p">-&gt;</span> <span class="n">Unit</span>
+<div class="highlight"><pre><span></span><code><span class="nd">@Composable</span>
+<span class="kd">private</span> <span class="kd">fun</span> <span class="nf">FeatureThatRequiresCameraPermission</span><span class="p">(</span>
+    <span class="n">navigateToSettingsScreen</span><span class="p">:</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Unit</span>
 <span class="p">)</span> <span class="p">{</span>
     <span class="c1">// Track if the user doesn&#39;t want to see the rationale any more.</span>
-    <span class="k">var</span> <span class="py">doNotShowRationale</span> <span class="k">by</span> <span class="n">rememberSaveable</span> <span class="p">{</span> <span class="n">mutableStateOf</span><span class="p">(</span><span class="k">false</span><span class="p">)</span> <span class="p">}</span>
+    <span class="kd">var</span> <span class="nv">doNotShowRationale</span> <span class="k">by</span> <span class="n">rememberSaveable</span> <span class="p">{</span> <span class="n">mutableStateOf</span><span class="p">(</span><span class="kc">false</span><span class="p">)</span> <span class="p">}</span>
 
     <span class="c1">// Camera permission state</span>
-    <span class="k">val</span> <span class="py">cameraPermissionState</span> <span class="p">=</span> <span class="n">rememberPermissionState</span><span class="p">(</span>
-        <span class="n">android</span><span class="p">.</span><span class="n">Manifest</span><span class="p">.</span><span class="n">permission</span><span class="p">.</span><span class="n">CAMERA</span>
+    <span class="kd">val</span> <span class="nv">cameraPermissionState</span> <span class="o">=</span> <span class="n">rememberPermissionState</span><span class="p">(</span>
+        <span class="n">android</span><span class="p">.</span><span class="na">Manifest</span><span class="p">.</span><span class="na">permission</span><span class="p">.</span><span class="na">CAMERA</span>
     <span class="p">)</span>
 
     <span class="k">when</span> <span class="p">{</span>
         <span class="c1">// If the camera permission is granted, then show screen with the feature enabled</span>
-        <span class="n">cameraPermissionState</span><span class="p">.</span><span class="n">hasPermission</span> <span class="p">-&gt;</span> <span class="p">{</span>
+        <span class="n">cameraPermissionState</span><span class="p">.</span><span class="na">hasPermission</span> <span class="o">-&gt;</span> <span class="p">{</span>
             <span class="n">Text</span><span class="p">(</span><span class="s">&quot;Camera permission Granted&quot;</span><span class="p">)</span>
         <span class="p">}</span>
         <span class="c1">// If the user denied the permission but a rationale should be shown, or the user sees</span>
         <span class="c1">// the permission for the first time, explain why the feature is needed by the app and allow</span>
         <span class="c1">// the user to be presented with the permission again or to not see the rationale any more.</span>
-        <span class="n">cameraPermissionState</span><span class="p">.</span><span class="n">shouldShowRationale</span> <span class="p">||</span>
-            <span class="p">!</span><span class="n">cameraPermissionState</span><span class="p">.</span><span class="n">permissionRequested</span> <span class="p">-&gt;</span> <span class="p">{</span>
+        <span class="n">cameraPermissionState</span><span class="p">.</span><span class="na">shouldShowRationale</span> <span class="o">||</span>
+            <span class="o">!</span><span class="n">cameraPermissionState</span><span class="p">.</span><span class="na">permissionRequested</span> <span class="o">-&gt;</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">doNotShowRationale</span><span class="p">)</span> <span class="p">{</span>
                 <span class="n">Text</span><span class="p">(</span><span class="s">&quot;Feature not available&quot;</span><span class="p">)</span>
             <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
                 <span class="n">Column</span> <span class="p">{</span>
                     <span class="n">Text</span><span class="p">(</span><span class="s">&quot;The camera is important for this app. Please grant the permission.&quot;</span><span class="p">)</span>
-                    <span class="n">Spacer</span><span class="p">(</span><span class="n">modifier</span> <span class="p">=</span> <span class="n">Modifier</span><span class="p">.</span><span class="n">height</span><span class="p">(</span><span class="m">8.</span><span class="n">dp</span><span class="p">))</span>
+                    <span class="n">Spacer</span><span class="p">(</span><span class="n">modifier</span> <span class="o">=</span> <span class="n">Modifier</span><span class="p">.</span><span class="na">height</span><span class="p">(</span><span class="m">8.</span><span class="n">dp</span><span class="p">))</span>
                     <span class="n">Row</span> <span class="p">{</span>
-                        <span class="n">Button</span><span class="p">(</span><span class="n">onClick</span> <span class="p">=</span> <span class="p">{</span> <span class="n">cameraPermissionState</span><span class="p">.</span><span class="n">launchPermissionRequest</span><span class="p">()</span> <span class="p">})</span> <span class="p">{</span>
+                        <span class="n">Button</span><span class="p">(</span><span class="n">onClick</span> <span class="o">=</span> <span class="p">{</span> <span class="n">cameraPermissionState</span><span class="p">.</span><span class="na">launchPermissionRequest</span><span class="p">()</span> <span class="p">})</span> <span class="p">{</span>
                             <span class="n">Text</span><span class="p">(</span><span class="s">&quot;Request permission&quot;</span><span class="p">)</span>
                         <span class="p">}</span>
-                        <span class="n">Spacer</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="n">width</span><span class="p">(</span><span class="m">8.</span><span class="n">dp</span><span class="p">))</span>
-                        <span class="n">Button</span><span class="p">(</span><span class="n">onClick</span> <span class="p">=</span> <span class="p">{</span> <span class="n">doNotShowRationale</span> <span class="p">=</span> <span class="k">true</span> <span class="p">})</span> <span class="p">{</span>
+                        <span class="n">Spacer</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="na">width</span><span class="p">(</span><span class="m">8.</span><span class="n">dp</span><span class="p">))</span>
+                        <span class="n">Button</span><span class="p">(</span><span class="n">onClick</span> <span class="o">=</span> <span class="p">{</span> <span class="n">doNotShowRationale</span> <span class="o">=</span> <span class="kc">true</span> <span class="p">})</span> <span class="p">{</span>
                             <span class="n">Text</span><span class="p">(</span><span class="s">&quot;Don&#39;t show rationale again&quot;</span><span class="p">)</span>
                         <span class="p">}</span>
                     <span class="p">}</span>
@@ -1259,14 +1263,14 @@ and is nice with the user by letting them decide if they don't want to see the r
         <span class="c1">// If the criteria above hasn&#39;t been met, the user denied the permission. Let&#39;s present</span>
         <span class="c1">// the user with a FAQ in case they want to know more and send them to the Settings screen</span>
         <span class="c1">// to enable it the future there if they want to.</span>
-        <span class="k">else</span> <span class="p">-&gt;</span> <span class="p">{</span>
+        <span class="k">else</span> <span class="o">-&gt;</span> <span class="p">{</span>
             <span class="n">Column</span> <span class="p">{</span>
                 <span class="n">Text</span><span class="p">(</span>
-                    <span class="s">&quot;Camera permission denied. See this FAQ with information about why we &quot;</span> <span class="p">+</span>
+                    <span class="s">&quot;Camera permission denied. See this FAQ with information about why we &quot;</span> <span class="o">+</span>
                         <span class="s">&quot;need this permission. Please, grant us access on the Settings screen.&quot;</span>
                 <span class="p">)</span>
-                <span class="n">Spacer</span><span class="p">(</span><span class="n">modifier</span> <span class="p">=</span> <span class="n">Modifier</span><span class="p">.</span><span class="n">height</span><span class="p">(</span><span class="m">8.</span><span class="n">dp</span><span class="p">))</span>
-                <span class="n">Button</span><span class="p">(</span><span class="n">onClick</span> <span class="p">=</span> <span class="n">navigateToSettingsScreen</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">Spacer</span><span class="p">(</span><span class="n">modifier</span> <span class="o">=</span> <span class="n">Modifier</span><span class="p">.</span><span class="na">height</span><span class="p">(</span><span class="m">8.</span><span class="n">dp</span><span class="p">))</span>
+                <span class="n">Button</span><span class="p">(</span><span class="n">onClick</span> <span class="o">=</span> <span class="n">navigateToSettingsScreen</span><span class="p">)</span> <span class="p">{</span>
                     <span class="n">Text</span><span class="p">(</span><span class="s">&quot;Open Settings&quot;</span><span class="p">)</span>
                 <span class="p">}</span>
             <span class="p">}</span>
@@ -1358,10 +1362,10 @@ and is nice with the user by letting them decide if they don't want to see the r
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.8397ff9e.min.js", "version": null}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.fcfe8b6d.min.js", "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.1e84347e.min.js"></script>
+      <script src="../assets/javascripts/bundle.b1047164.min.js"></script>
       
     
   </body>
