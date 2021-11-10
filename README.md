@@ -39,10 +39,18 @@ A library that provides a layout implementing the swipe-to-refresh UX pattern, s
 
 ---
 
-## Updates
+## Compose versions
 
-[Jetpack Compose][compose] is a fast-moving project and we aim to keep these libraries up-to-date with the
-latest tagged release on Compose as quickly as possible. Each [release](https://github.com/google/accompanist/releases)  outlines what version of the Compose libraries it depends on.
+Each [release](https://github.com/google/accompanist/releases) outlines what version of the Compose libraries it depends on. Currently, there's a dual release process, depending on what version of Compose you want to target:
+
+<table>
+ <tr>
+  <td>Compose stable (1.0.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-insets?versionPrefix=0.20"></td>
+ </tr>
+ <tr>
+  <td>Compose 1.1.x</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-insets"></td>
+ </tr>
+</table>
 
 ## Future?
 
