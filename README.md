@@ -41,7 +41,7 @@ A library that provides a layout implementing the swipe-to-refresh UX pattern, s
 
 ## Compose versions
 
-Each [release](https://github.com/google/accompanist/releases) outlines what version of the Compose libraries it depends on. Currently, there's a dual release process, depending on what version of Compose you want to target:
+Each [release](https://github.com/google/accompanist/releases) outlines what version of the Compose libraries it depends on. We are currently releasing multiple versions of Accompanist for the different versions of Compose:
 
 <table>
  <tr>
