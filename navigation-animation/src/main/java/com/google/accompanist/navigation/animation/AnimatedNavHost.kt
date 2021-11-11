@@ -80,12 +80,12 @@ public fun AnimatedNavHost(
     modifier: Modifier = Modifier,
     contentAlignment: Alignment = Alignment.Center,
     route: String? = null,
-    enterTransition: (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition)? =
+    enterTransition: (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition) =
         { fadeIn(animationSpec = tween(700)) },
-    exitTransition: (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition)? =
+    exitTransition: (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition) =
         { fadeOut(animationSpec = tween(700)) },
-    popEnterTransition: (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition)? = enterTransition,
-    popExitTransition: (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition)? = exitTransition,
+    popEnterTransition: (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition) = enterTransition,
+    popExitTransition: (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition) = exitTransition,
     builder: NavGraphBuilder.() -> Unit
 ) {
     AnimatedNavHost(
@@ -123,12 +123,12 @@ public fun AnimatedNavHost(
     graph: NavGraph,
     modifier: Modifier = Modifier,
     contentAlignment: Alignment = Alignment.Center,
-    enterTransition: (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition)? =
+    enterTransition: (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition) =
         { fadeIn(animationSpec = tween(700)) },
-    exitTransition: (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition)? =
+    exitTransition: (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition) =
         { fadeOut(animationSpec = tween(700)) },
-    popEnterTransition: (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition)? = enterTransition,
-    popExitTransition: (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition)? = exitTransition,
+    popEnterTransition: (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition) = enterTransition,
+    popExitTransition: (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition) = exitTransition,
 ) {
 
     enterTransitions[graph.route] = enterTransition
@@ -251,19 +251,19 @@ public fun AnimatedNavHost(
 @ExperimentalAnimationApi
 internal val enterTransitions =
     mutableMapOf<String?,
-        (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition)?>()
+        (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition)>()
 
 @ExperimentalAnimationApi
 internal val exitTransitions =
-    mutableMapOf<String?, (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition)?>()
+    mutableMapOf<String?, (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition)>()
 
 @ExperimentalAnimationApi
 internal val popEnterTransitions =
-    mutableMapOf<String?, (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition)?>()
+    mutableMapOf<String?, (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition)>()
 
 @ExperimentalAnimationApi
 internal val popExitTransitions =
-    mutableMapOf<String?, (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition)?>()
+    mutableMapOf<String?, (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition)>()
 
 @Composable
 private fun MutableList<NavBackStackEntry>.PopulateVisibleList(
