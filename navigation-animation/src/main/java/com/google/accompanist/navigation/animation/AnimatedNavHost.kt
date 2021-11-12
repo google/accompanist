@@ -131,11 +131,6 @@ public fun AnimatedNavHost(
     popExitTransition: (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition) = exitTransition,
 ) {
 
-    enterTransitions[graph.route] = enterTransition
-    exitTransitions[graph.route] = exitTransition
-    popEnterTransitions[graph.route] = popEnterTransition
-    popExitTransitions[graph.route] = popExitTransition
-
     val lifecycleOwner = LocalLifecycleOwner.current
     val viewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current) {
         "NavHost requires a ViewModelStoreOwner to be provided via LocalViewModelStoreOwner"
@@ -174,21 +169,13 @@ public fun AnimatedNavHost(
             val targetDestination = targetState.destination as AnimatedComposeNavigator.Destination
 
             if (composeNavigator.isPop.value) {
-                targetDestination.popEnterTransition?.invoke(this)
-                    ?: popEnterTransitions[
-                        (
-                            targetDestination.hierarchy.first {
-                                popEnterTransitions.containsKey(it.route)
-                            }
-                            ).route
-                    ]?.invoke(this) as EnterTransition
+                targetDestination.hierarchy.mapNotNull { destination ->
+                    popEnterTransitions[destination.route]?.invoke(this)
+                }.firstOrNull() ?: popEnterTransition.invoke(this)
             } else {
-                targetDestination.enterTransition?.invoke(this)
-                    ?: enterTransitions[
-                        (
-                            targetDestination.hierarchy.first { enterTransitions.containsKey(it.route) }
-                            ).route
-                    ]?.invoke(this) as EnterTransition
+                targetDestination.hierarchy.mapNotNull { destination ->
+                    enterTransitions[destination.route]?.invoke(this)
+                }.firstOrNull() ?: enterTransition.invoke(this)
             }
         }
 
@@ -196,21 +183,13 @@ public fun AnimatedNavHost(
             val initialDestination = initialState.destination as AnimatedComposeNavigator.Destination
 
             if (composeNavigator.isPop.value) {
-                initialDestination.popExitTransition?.invoke(this) ?: popExitTransitions[
-                    (
-                        initialDestination.hierarchy.first {
-                            popExitTransitions.containsKey(it.route)
-                        }
-                        ).route
-                ]?.invoke(this) as ExitTransition
+                initialDestination.hierarchy.mapNotNull { destination ->
+                    popExitTransitions[destination.route]?.invoke(this)
+                }.firstOrNull() ?: popExitTransition.invoke(this)
             } else {
-                initialDestination.exitTransition?.invoke(this) ?: exitTransitions[
-                    (
-                        initialDestination.hierarchy.first {
-                            exitTransitions.containsKey(it.route)
-                        }
-                        ).route
-                ]?.invoke(this) as ExitTransition
+                initialDestination.hierarchy.mapNotNull { destination ->
+                    exitTransitions[destination.route]?.invoke(this)
+                }.firstOrNull() ?: exitTransition.invoke(this)
             }
         }
 
@@ -251,19 +230,19 @@ public fun AnimatedNavHost(
 @ExperimentalAnimationApi
 internal val enterTransitions =
     mutableMapOf<String?,
-        (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition)>()
+        (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition?)?>()
 
 @ExperimentalAnimationApi
 internal val exitTransitions =
-    mutableMapOf<String?, (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition)>()
+    mutableMapOf<String?, (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition?)?>()
 
 @ExperimentalAnimationApi
 internal val popEnterTransitions =
-    mutableMapOf<String?, (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition)>()
+    mutableMapOf<String?, (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition?)?>()
 
 @ExperimentalAnimationApi
 internal val popExitTransitions =
-    mutableMapOf<String?, (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition)>()
+    mutableMapOf<String?, (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition?)?>()
 
 @Composable
 private fun MutableList<NavBackStackEntry>.PopulateVisibleList(

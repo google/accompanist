@@ -95,13 +95,13 @@ public fun NavGraphBuilder.composable(
 public fun NavGraphBuilder.navigation(
     startDestination: String,
     route: String,
-    enterTransition: (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition)? = null,
-    exitTransition: (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition)? = null,
+    enterTransition: (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition?)? = null,
+    exitTransition: (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition?)? = null,
     popEnterTransition: (
-        AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition
+        AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition?
     )? = enterTransition,
     popExitTransition: (
-        AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition
+        AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition?
     )? = exitTransition,
     builder: NavGraphBuilder.() -> Unit
 ) {
