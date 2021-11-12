@@ -31,6 +31,7 @@ import androidx.test.espresso.web.webdriver.DriverAtoms.getText
 import androidx.test.espresso.web.webdriver.DriverAtoms.webClick
 import androidx.test.espresso.web.webdriver.Locator
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.SdkSuppress
 import com.google.common.truth.Truth.assertThat
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.Rule
@@ -38,12 +39,14 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
+// Emulator image doesn't have a WebView until API 26
+@SdkSuppress(minSdkVersion = 26)
 class WebTest {
     @get:Rule
     val rule = createComposeRule()
 
     @Test
-    fun testLinksCaptured() {
+    fun testDataLoaded() {
         lateinit var state: WebViewState
 
         rule.setContent {
@@ -54,8 +57,48 @@ class WebTest {
         }
 
         onWebView()
-            .withElement(findElement(Locator.LINK_TEXT, LINK_TEXT))
+            .withElement(findElement(Locator.TAG_NAME, "a"))
+            .check(webMatches(getText(), containsString(LINK_TEXT)))
+    }
+
+    @Test
+    fun testUrlLoaded() {
+        lateinit var state: WebViewState
+
+        rule.setContent {
+            state = rememberWebViewState(uri = Uri.parse(LINK_URL))
+            WebTestContent(
+                state
+            ) { state.content = it }
+        }
+
+        rule.waitForIdle()
+
+        onWebView()
+            .withElement(findElement(Locator.ID, "content"))
+            .check(webMatches(getText(), containsString("Test content")))
+    }
+
+    @Test
+    fun testLinksCaptured() {
+        lateinit var state: WebViewState
+
+        rule.setContent {
+            state = rememberWebViewState(data = TEST_DATA)
+            WebTestContent(
+                state
+            ) {
+                state.content = it
+            }
+        }
+
+        rule.waitForIdle()
+
+        onWebView()
+            .withElement(findElement(Locator.ID, "link"))
             .perform(webClick())
+
+        rule.waitForIdle()
 
         assertThat((state.content as? WebContent.Url)?.uri)
             .isEqualTo(Uri.parse(LINK_URL))
@@ -87,9 +130,10 @@ class WebTest {
         get() = rule.onNodeWithTag(WebViewTag)
 }
 
+private const val LINK_ID = "link"
 private const val LINK_TEXT = "Click me"
-private const val LINK_URL = "https://test.com/"
-private const val TEST_DATA = "<html><body><a href=\"$LINK_URL\">$LINK_TEXT</a></body></html>"
+private const val LINK_URL = "file:///android_asset/test.html"
+private const val TEST_DATA = "<html><body><a id=$LINK_ID href=\"$LINK_URL\">$LINK_TEXT</a></body></html>"
 private const val WebViewTag = "webview_tag"
 
 @Composable

@@ -55,6 +55,7 @@ fun WebView(
 ) {
     val context = LocalContext.current
     val view = remember(context) { WebView(context) }
+    var webViewLoaded by remember(view) { mutableStateOf<Boolean>(false) }
 
     BackHandler(captureBackPresses && state.canGoBack) {
         view.goBack()
@@ -66,13 +67,17 @@ fun WebView(
                 onCreated(this)
 
                 webViewClient = object : WebViewClient() {
-                    override fun onLoadResource(view: WebView?, url: String?) {
-                        super.onLoadResource(view, url)
-                    }
                     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                         super.onPageStarted(view, url, favicon)
                         state.isLoading = true
-                        onContentChanged(WebContent.Url(Uri.parse(url)))
+
+                        // When a WebView is first created it sends a page started event
+                        // with about:blank. We don't want to forward this on.
+                        // It's important we still support a link to about:blank though.
+                        if (webViewLoaded || url != "about:blank") {
+                            onContentChanged(WebContent.Url(Uri.parse(url)))
+                            webViewLoaded = true
+                        }
                     }
 
                     override fun onPageFinished(view: WebView?, url: String?) {

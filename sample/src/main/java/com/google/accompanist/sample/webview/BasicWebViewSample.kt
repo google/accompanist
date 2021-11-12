@@ -68,7 +68,7 @@ class BasicWebViewSample : ComponentActivity() {
                     }
 
                     WebView(
-                        state,
+                        state = state,
                         onContentChanged = { content ->
                             state.content = content
                             textFieldValue = (content as? WebContent.Url)?.uri.toString()
