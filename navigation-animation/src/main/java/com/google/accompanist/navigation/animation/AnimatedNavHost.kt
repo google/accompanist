@@ -169,13 +169,13 @@ public fun AnimatedNavHost(
             val targetDestination = targetState.destination as AnimatedComposeNavigator.Destination
 
             if (composeNavigator.isPop.value) {
-                targetDestination.hierarchy.mapNotNull { destination ->
+                targetDestination.hierarchy.firstNotNullOfOrNull { destination ->
                     popEnterTransitions[destination.route]?.invoke(this)
-                }.firstOrNull() ?: popEnterTransition.invoke(this)
+                } ?: popEnterTransition.invoke(this)
             } else {
-                targetDestination.hierarchy.mapNotNull { destination ->
+                targetDestination.hierarchy.firstNotNullOfOrNull { destination ->
                     enterTransitions[destination.route]?.invoke(this)
-                }.firstOrNull() ?: enterTransition.invoke(this)
+                } ?: enterTransition.invoke(this)
             }
         }
 
@@ -183,13 +183,13 @@ public fun AnimatedNavHost(
             val initialDestination = initialState.destination as AnimatedComposeNavigator.Destination
 
             if (composeNavigator.isPop.value) {
-                initialDestination.hierarchy.mapNotNull { destination ->
+                initialDestination.hierarchy.firstNotNullOfOrNull { destination ->
                     popExitTransitions[destination.route]?.invoke(this)
-                }.firstOrNull() ?: popExitTransition.invoke(this)
+                } ?: popExitTransition.invoke(this)
             } else {
-                initialDestination.hierarchy.mapNotNull { destination ->
+                initialDestination.hierarchy.firstNotNullOfOrNull { destination ->
                     exitTransitions[destination.route]?.invoke(this)
-                }.firstOrNull() ?: exitTransition.invoke(this)
+                } ?: exitTransition.invoke(this)
             }
         }
 
