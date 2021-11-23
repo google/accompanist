@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 
 /**
  * A class which provides easy-to-use utilities for updating the System UI bar
@@ -173,8 +174,10 @@ fun rememberSystemUiController(): SystemUiController {
 internal class AndroidSystemUiController(
     private val view: View
 ) : SystemUiController {
-    private val window = view.context.findWindow()
-    private val windowInsetsController = ViewCompat.getWindowInsetsController(view)!!
+    private val window = requireNotNull(view.context.findWindow()) {
+        "The Compose View must be hosted in an Activity with a Window!"
+    }
+    private val windowInsetsController = WindowInsetsControllerCompat(window, view)
 
     override fun setStatusBarColor(
         color: Color,
@@ -183,7 +186,7 @@ internal class AndroidSystemUiController(
     ) {
         statusBarDarkContentEnabled = darkIcons
 
-        window?.statusBarColor = when {
+        window.statusBarColor = when {
             darkIcons && !windowInsetsController.isAppearanceLightStatusBars -> {
                 // If we're set to use dark icons, but our windowInsetsController call didn't
                 // succeed (usually due to API level), we instead transform the color to maintain
@@ -203,7 +206,7 @@ internal class AndroidSystemUiController(
         navigationBarDarkContentEnabled = darkIcons
         isNavigationBarContrastEnforced = navigationBarContrastEnforced
 
-        window?.navigationBarColor = when {
+        window.navigationBarColor = when {
             darkIcons && !windowInsetsController.isAppearanceLightNavigationBars -> {
                 // If we're set to use dark icons, but our windowInsetsController call didn't
                 // succeed (usually due to API level), we instead transform the color to maintain
@@ -253,10 +256,10 @@ internal class AndroidSystemUiController(
         }
 
     override var isNavigationBarContrastEnforced: Boolean
-        get() = Build.VERSION.SDK_INT >= 29 && window?.isNavigationBarContrastEnforced == true
+        get() = Build.VERSION.SDK_INT >= 29 && window.isNavigationBarContrastEnforced
         set(value) {
             if (Build.VERSION.SDK_INT >= 29) {
-                window?.isNavigationBarContrastEnforced = value
+                window.isNavigationBarContrastEnforced = value
             }
         }
 
