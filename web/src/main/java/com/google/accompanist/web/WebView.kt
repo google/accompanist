@@ -28,7 +28,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 
 /**
@@ -53,17 +52,16 @@ fun WebView(
     captureBackPresses: Boolean = true,
     onCreated: (WebView) -> Unit = {}
 ) {
-    val context = LocalContext.current
-    val view = remember(context) { WebView(context) }
-    var webViewLoaded by remember(view) { mutableStateOf<Boolean>(false) }
+    var view by remember { mutableStateOf<WebView?>(null) }
+    var webViewLoaded by remember(view) { mutableStateOf(false) }
 
     BackHandler(captureBackPresses && state.canGoBack) {
-        view.goBack()
+        view?.goBack()
     }
 
     AndroidView(
         factory = {
-            view.apply {
+            WebView(it).apply {
                 onCreated(this)
 
                 webViewClient = object : WebViewClient() {
@@ -98,7 +96,7 @@ fun WebView(
                         return true
                     }
                 }
-            }
+            }.also { view = it }
         },
         modifier = modifier
     ) { webView ->
