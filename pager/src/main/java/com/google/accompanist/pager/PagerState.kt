@@ -157,7 +157,7 @@ class PagerState(
                 // If the offset is 0f (or very close), return the current page
                 currentPageOffset.absoluteValue < 0.001f -> currentPage
                 // If we're offset towards the start, guess the previous page
-                currentPageOffset < -0.5f -> (currentPage - 1).coerceAtLeast(0)
+                currentPageOffset < 0f -> (currentPage - 1).coerceAtLeast(0)
                 // If we're offset towards the end, guess the next page
                 else -> (currentPage + 1).coerceAtMost(pageCount - 1)
             }
