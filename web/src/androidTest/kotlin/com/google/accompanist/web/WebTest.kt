@@ -80,31 +80,6 @@ class WebTest {
     }
 
     @Test
-    fun testLinksCaptured() {
-        lateinit var state: WebViewState
-
-        rule.setContent {
-            state = rememberWebViewState(data = TEST_DATA)
-            WebTestContent(
-                state
-            ) {
-                state.content = it
-            }
-        }
-
-        rule.waitForIdle()
-
-        onWebView()
-            .withElement(findElement(Locator.ID, "link"))
-            .perform(webClick())
-
-        rule.waitForIdle()
-
-        assertThat((state.content as? WebContent.Url)?.uri)
-            .isEqualTo(Uri.parse(LINK_URL))
-    }
-
-    @Test
     fun testStateUpdated() {
         lateinit var state: WebViewState
 
@@ -124,6 +99,31 @@ class WebTest {
         onWebView()
             .withElement(findElement(Locator.ID, newId))
             .check(webMatches(getText(), containsString(newContent)))
+    }
+
+    @Test
+    fun testCanNavigateToBlank() {
+        lateinit var state: WebViewState
+
+        rule.setContent {
+            state = rememberWebViewState(uri = Uri.parse(LINK_URL))
+            WebTestContent(
+                state
+            ) {
+                state.content = it
+            }
+        }
+
+        rule.waitForIdle()
+
+        onWebView()
+            .withElement(findElement(Locator.ID, "blankurl"))
+            .perform(webClick())
+
+        rule.waitForIdle()
+
+        assertThat((state.content as? WebContent.Url)?.uri)
+            .isEqualTo(Uri.parse("about:blank"))
     }
 
     private val webNode: SemanticsNodeInteraction
