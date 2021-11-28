@@ -52,16 +52,16 @@ fun WebView(
     onCreated: (WebView) -> Unit = {},
     onError: (request: WebResourceRequest?, error: WebResourceError?) -> Unit = { _, _ -> }
 ) {
-    var view by remember { mutableStateOf<WebView?>(null) }
+    var webView by remember { mutableStateOf<WebView?>(null) }
     var canGoBack: Boolean by remember { mutableStateOf(false) }
 
     BackHandler(captureBackPresses && canGoBack) {
-        view?.goBack()
+        webView?.goBack()
     }
 
     AndroidView(
-        factory = {
-            WebView(it).apply {
+        factory = { context ->
+            WebView(context).apply {
                 onCreated(this)
 
                 webViewClient = object : WebViewClient() {
@@ -113,24 +113,24 @@ fun WebView(
                         return true
                     }
                 }
-            }.also { view = it }
+            }.also { webView = it }
         },
         modifier = modifier
-    ) { webView ->
+    ) { view ->
         when (val l = state.content) {
             is WebContent.Url -> {
                 val url = l.url
 
-                if (url.isNotEmpty() && url != webView.url) {
-                    webView.loadUrl(url)
+                if (url.isNotEmpty() && url != view.url) {
+                    view.loadUrl(url)
                 }
             }
             is WebContent.Data -> {
-                webView.loadDataWithBaseURL(l.baseUrl, l.data, null, null, null)
+                view.loadDataWithBaseURL(l.baseUrl, l.data, null, null, null)
             }
         }
 
-        canGoBack = webView.canGoBack()
+        canGoBack = view.canGoBack()
     }
 }
 
@@ -175,5 +175,5 @@ fun rememberWebViewState(url: String) =
  * @param data The uri to load in the WebView
  */
 @Composable
-fun rememberWebViewStateWithHTMLData(data: String) =
-    remember(data) { WebViewState(WebContent.Data(data)) }
+fun rememberWebViewStateWithHTMLData(data: String, baseUrl: String? = null) =
+    remember(data) { WebViewState(WebContent.Data(data, baseUrl)) }
