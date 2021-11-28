@@ -72,6 +72,7 @@ class WebTest {
             ) { state.content = it }
         }
 
+        // Waiting for the webview to load content
         rule.waitForIdle()
 
         onWebView()
@@ -94,6 +95,7 @@ class WebTest {
         val newContent = "Updated"
         state.content = WebContent.Data("<html><body><p id=$newId>$newContent</p></body></html>")
 
+        // Waiting for the webview to load content
         rule.waitForIdle()
 
         onWebView()
@@ -114,16 +116,42 @@ class WebTest {
             }
         }
 
+        // Waiting for the webview to load content
         rule.waitForIdle()
 
         onWebView()
             .withElement(findElement(Locator.ID, "blankurl"))
             .perform(webClick())
 
+        // Wait for the webview to call back to Compose state
         rule.waitForIdle()
 
         assertThat((state.content as? WebContent.Url)?.uri)
             .isEqualTo(Uri.parse("about:blank"))
+    }
+
+    @Test
+    fun testLinksCaptured() {
+        lateinit var state: WebViewState
+
+        rule.setContent {
+            state = rememberWebViewState(data = TEST_DATA)
+            WebTestContent(
+                state
+            ) {
+                state.content = it
+            }
+        }
+
+        onWebView()
+            .withElement(findElement(Locator.ID, "link"))
+            .perform(webClick())
+
+        // Wait for the webview to call back to Compose state
+        rule.waitForIdle()
+
+        assertThat((state.content as? WebContent.Url)?.uri)
+            .isEqualTo(Uri.parse(LINK_URL))
     }
 
     private val webNode: SemanticsNodeInteraction
