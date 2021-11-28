@@ -47,7 +47,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 @Composable
 fun WebView(
     state: WebViewState,
-    onContentChanged: (WebContent) -> Unit,
     modifier: Modifier = Modifier,
     captureBackPresses: Boolean = true,
     onCreated: (WebView) -> Unit = {},
@@ -88,7 +87,7 @@ fun WebView(
                         // This happens in situations like redirects and navigating through
                         // history. We capture this change and update our state holder url.
                         if (state.content.getCurrentUrl() != url && url != null) {
-                            onContentChanged(WebContent.Url(url))
+                            state.content = WebContent.Url(url)
                         }
                     }
 
@@ -109,7 +108,7 @@ fun WebView(
                         // of the URL the state holder Url
                         request?.let {
                             val content = WebContent.Url(it.url.toString())
-                            onContentChanged(content)
+                            state.content = content
                         }
                         return true
                     }

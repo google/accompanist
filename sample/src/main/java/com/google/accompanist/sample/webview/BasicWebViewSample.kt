@@ -45,14 +45,16 @@ class BasicWebViewSample : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AccompanistSampleTheme {
-                var textFieldValue by remember { mutableStateOf("") }
                 val state = rememberWebViewState("https://google.com")
+                val (textFieldValue, setTextFieldValue) = remember(state.content) {
+                    mutableStateOf(state.content.getCurrentUrl() ?: "")
+                }
 
                 Column {
                     Row {
                         OutlinedTextField(
                             value = textFieldValue,
-                            onValueChange = { textFieldValue = it },
+                            onValueChange = setTextFieldValue,
                             modifier = Modifier.weight(1f)
                         )
                         Button(
@@ -69,10 +71,6 @@ class BasicWebViewSample : ComponentActivity() {
 
                     WebView(
                         state = state,
-                        onContentChanged = { content ->
-                            state.content = content
-                            textFieldValue = (content as? WebContent.Url)?.url.toString()
-                        },
                         modifier = Modifier.weight(1f),
                         onCreated = { webView ->
                             webView.settings.javaScriptEnabled = true

@@ -16,7 +16,6 @@
 
 package com.google.accompanist.web
 
-import android.net.Uri
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -53,7 +52,7 @@ class WebTest {
             state = rememberWebViewStateWithHTMLData(data = TEST_DATA)
             WebTestContent(
                 state
-            ) { state.content = it }
+            )
         }
 
         onWebView()
@@ -69,7 +68,7 @@ class WebTest {
             state = rememberWebViewState(url = LINK_URL)
             WebTestContent(
                 state
-            ) { state.content = it }
+            )
         }
 
         // Waiting for the webview to load content
@@ -88,7 +87,7 @@ class WebTest {
             state = rememberWebViewStateWithHTMLData(data = TEST_DATA)
             WebTestContent(
                 state
-            ) { state.content = it }
+            )
         }
 
         val newId = "id"
@@ -111,9 +110,7 @@ class WebTest {
             state = rememberWebViewState(url = LINK_URL)
             WebTestContent(
                 state
-            ) {
-                state.content = it
-            }
+            )
         }
 
         // Waiting for the webview to load content
@@ -138,9 +135,7 @@ class WebTest {
             state = rememberWebViewStateWithHTMLData(data = TEST_DATA)
             WebTestContent(
                 state
-            ) {
-                state.content = it
-            }
+            )
         }
 
         onWebView()
@@ -166,13 +161,11 @@ private const val WebViewTag = "webview_tag"
 
 @Composable
 private fun WebTestContent(
-    webViewState: WebViewState,
-    onContentChanged: (WebContent) -> Unit
+    webViewState: WebViewState
 ) {
     MaterialTheme {
         WebView(
             state = webViewState,
-            onContentChanged = onContentChanged,
             modifier = Modifier.testTag(WebViewTag),
             onCreated = { it.settings.javaScriptEnabled = true }
         )
