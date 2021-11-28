@@ -50,7 +50,7 @@ class WebTest {
         lateinit var state: WebViewState
 
         rule.setContent {
-            state = rememberWebViewState(data = TEST_DATA)
+            state = rememberWebViewStateWithHTMLData(data = TEST_DATA)
             WebTestContent(
                 state
             ) { state.content = it }
@@ -66,7 +66,7 @@ class WebTest {
         lateinit var state: WebViewState
 
         rule.setContent {
-            state = rememberWebViewState(uri = Uri.parse(LINK_URL))
+            state = rememberWebViewState(url = LINK_URL)
             WebTestContent(
                 state
             ) { state.content = it }
@@ -85,7 +85,7 @@ class WebTest {
         lateinit var state: WebViewState
 
         rule.setContent {
-            state = rememberWebViewState(data = TEST_DATA)
+            state = rememberWebViewStateWithHTMLData(data = TEST_DATA)
             WebTestContent(
                 state
             ) { state.content = it }
@@ -108,7 +108,7 @@ class WebTest {
         lateinit var state: WebViewState
 
         rule.setContent {
-            state = rememberWebViewState(uri = Uri.parse(LINK_URL))
+            state = rememberWebViewState(url = LINK_URL)
             WebTestContent(
                 state
             ) {
@@ -126,8 +126,8 @@ class WebTest {
         // Wait for the webview to call back to Compose state
         rule.waitForIdle()
 
-        assertThat((state.content as? WebContent.Url)?.uri)
-            .isEqualTo(Uri.parse("about:blank"))
+        assertThat(state.content.getCurrentUrl())
+            .isEqualTo("about:blank")
     }
 
     @Test
@@ -135,7 +135,7 @@ class WebTest {
         lateinit var state: WebViewState
 
         rule.setContent {
-            state = rememberWebViewState(data = TEST_DATA)
+            state = rememberWebViewStateWithHTMLData(data = TEST_DATA)
             WebTestContent(
                 state
             ) {
@@ -150,8 +150,8 @@ class WebTest {
         // Wait for the webview to call back to Compose state
         rule.waitForIdle()
 
-        assertThat((state.content as? WebContent.Url)?.uri)
-            .isEqualTo(Uri.parse(LINK_URL))
+        assertThat(state.content.getCurrentUrl())
+            .isEqualTo(LINK_URL)
     }
 
     private val webNode: SemanticsNodeInteraction

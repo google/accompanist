@@ -17,7 +17,6 @@
 package com.google.accompanist.web
 
 import android.graphics.Bitmap
-import android.net.Uri
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -87,8 +86,8 @@ fun WebView(
                         // WebView will often update the current url itself.
                         // This happens in situations like redirects and navigating through
                         // history. We capture this change and update our state holder url.
-                        if (state.content.getCurrentUrl() != url) {
-                            onContentChanged(WebContent.Url(Uri.parse(url)))
+                        if (state.content.getCurrentUrl() != url && url != null) {
+                            onContentChanged(WebContent.Url(url))
                         }
                     }
 
@@ -108,7 +107,7 @@ fun WebView(
                         // Override all url loads to make the single source of truth
                         // of the URL the state holder Url
                         request?.let {
-                            val content = WebContent.Url(it.url)
+                            val content = WebContent.Url(it.url.toString())
                             onContentChanged(content)
                         }
                         return true
@@ -120,7 +119,7 @@ fun WebView(
     ) { webView ->
         when (val l = state.content) {
             is WebContent.Url -> {
-                val url = l.uri.toString()
+                val url = l.url
 
                 if (url.isNotEmpty() && url != webView.url) {
                     webView.loadUrl(url)
@@ -136,11 +135,11 @@ fun WebView(
 }
 
 sealed class WebContent {
-    data class Url(val uri: Uri) : WebContent()
+    data class Url(val url: String) : WebContent()
     data class Data(val data: String, val baseUrl: String? = null) : WebContent()
 
     fun getCurrentUrl(): String? {
-        return (this as? Url)?.uri?.toString()
+        return (this as? Url)?.url
     }
 }
 
@@ -170,11 +169,11 @@ class WebViewState(webContent: WebContent) {
 /**
  * Creates a WebView state that is remembered across Compositions.
  *
- * @param uri The uri to load in the WebView
+ * @param url The url to load in the WebView
  */
 @Composable
-fun rememberWebViewState(uri: Uri) =
-    remember(uri) { WebViewState(WebContent.Url(uri)) }
+fun rememberWebViewState(url: String) =
+    remember(url) { WebViewState(WebContent.Url(url)) }
 
 /**
  * Creates a WebView state that is remembered across Compositions.
@@ -182,5 +181,5 @@ fun rememberWebViewState(uri: Uri) =
  * @param data The uri to load in the WebView
  */
 @Composable
-fun rememberWebViewState(data: String) =
+fun rememberWebViewStateWithHTMLData(data: String) =
     remember(data) { WebViewState(WebContent.Data(data)) }

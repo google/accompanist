@@ -46,7 +46,7 @@ class BasicWebViewSample : ComponentActivity() {
         setContent {
             AccompanistSampleTheme {
                 var textFieldValue by remember { mutableStateOf("") }
-                val state = rememberWebViewState(Uri.parse("https://google.com"))
+                val state = rememberWebViewState("https://google.com")
 
                 Column {
                     Row {
@@ -56,7 +56,7 @@ class BasicWebViewSample : ComponentActivity() {
                             modifier = Modifier.weight(1f)
                         )
                         Button(
-                            onClick = { state.content = WebContent.Url(Uri.parse(textFieldValue)) },
+                            onClick = { state.content = WebContent.Url(textFieldValue) },
                             modifier = Modifier.align(Alignment.CenterVertically)
                         ) {
                             Text("Go")
@@ -71,7 +71,7 @@ class BasicWebViewSample : ComponentActivity() {
                         state = state,
                         onContentChanged = { content ->
                             state.content = content
-                            textFieldValue = (content as? WebContent.Url)?.uri.toString()
+                            textFieldValue = (content as? WebContent.Url)?.url.toString()
                         },
                         modifier = Modifier.weight(1f),
                         onCreated = { webView ->
