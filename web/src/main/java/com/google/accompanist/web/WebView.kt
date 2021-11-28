@@ -54,8 +54,9 @@ fun WebView(
     onError: (request: WebResourceRequest?, error: WebResourceError?) -> Unit = { _, _ -> }
 ) {
     var view by remember { mutableStateOf<WebView?>(null) }
+    var canGoBack: Boolean by remember { mutableStateOf(false) }
 
-    BackHandler(captureBackPresses && state.canGoBack) {
+    BackHandler(captureBackPresses && canGoBack) {
         view?.goBack()
     }
 
@@ -73,7 +74,7 @@ fun WebView(
                     override fun onPageFinished(view: WebView?, url: String?) {
                         super.onPageFinished(view, url)
                         state.isLoading = false
-                        state.canGoBack = view?.canGoBack() ?: false
+                        canGoBack = view?.canGoBack() ?: false
                     }
 
                     override fun doUpdateVisitedHistory(
@@ -130,7 +131,7 @@ fun WebView(
             }
         }
 
-        state.canGoBack = webView.canGoBack()
+        canGoBack = webView.canGoBack()
     }
 }
 
@@ -157,12 +158,6 @@ class WebViewState(webContent: WebContent) {
      * Whether the WebView is currently loading data in it's main frame
      */
     var isLoading: Boolean by mutableStateOf(false)
-        internal set
-
-    /**
-     * Whether the WebView can navigate back
-     */
-    var canGoBack: Boolean by mutableStateOf(false)
         internal set
 }
 
