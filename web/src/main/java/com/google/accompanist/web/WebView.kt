@@ -18,6 +18,7 @@ package com.google.accompanist.web
 
 import android.graphics.Bitmap
 import android.net.Uri
+import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -50,10 +51,10 @@ fun WebView(
     onContentChanged: (WebContent) -> Unit,
     modifier: Modifier = Modifier,
     captureBackPresses: Boolean = true,
-    onCreated: (WebView) -> Unit = {}
+    onCreated: (WebView) -> Unit = {},
+    onError: (request: WebResourceRequest?, error: WebResourceError?) -> Unit = { _, _ -> }
 ) {
     var view by remember { mutableStateOf<WebView?>(null) }
-    var webViewLoaded by remember(view) { mutableStateOf(false) }
 
     BackHandler(captureBackPresses && state.canGoBack) {
         view?.goBack()
@@ -68,19 +69,36 @@ fun WebView(
                     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                         super.onPageStarted(view, url, favicon)
                         state.isLoading = true
-
-                        // When a WebView is first created it sends a page started event
-                        // with about:blank. We don't want to forward this on.
-                        // It's important we still support a link to about:blank though.
-                        if (webViewLoaded || url != "about:blank") {
-                            onContentChanged(WebContent.Url(Uri.parse(url)))
-                            webViewLoaded = true
-                        }
                     }
 
                     override fun onPageFinished(view: WebView?, url: String?) {
                         super.onPageFinished(view, url)
                         state.isLoading = false
+                        state.canGoBack = view?.canGoBack() ?: false
+                    }
+
+                    override fun doUpdateVisitedHistory(
+                        view: WebView?,
+                        url: String?,
+                        isReload: Boolean
+                    ) {
+                        super.doUpdateVisitedHistory(view, url, isReload)
+
+                        // WebView will often update the current url itself.
+                        // This happens in situations like redirects and navigating through
+                        // history. We capture this change and update our state holder url.
+                        if (state.content.getCurrentUrl() != url) {
+                            onContentChanged(WebContent.Url(Uri.parse(url)))
+                        }
+                    }
+
+                    override fun onReceivedError(
+                        view: WebView?,
+                        request: WebResourceRequest?,
+                        error: WebResourceError?
+                    ) {
+                        super.onReceivedError(view, request, error)
+                        onError(request, error)
                     }
 
                     override fun shouldOverrideUrlLoading(
@@ -120,6 +138,10 @@ fun WebView(
 sealed class WebContent {
     data class Url(val uri: Uri) : WebContent()
     data class Data(val data: String, val baseUrl: String? = null) : WebContent()
+
+    fun getCurrentUrl(): String? {
+        return (this as? Url)?.uri?.toString()
+    }
 }
 
 /**
@@ -152,7 +174,7 @@ class WebViewState(webContent: WebContent) {
  */
 @Composable
 fun rememberWebViewState(uri: Uri) =
-    remember { WebViewState(WebContent.Url(uri)) }
+    remember(uri) { WebViewState(WebContent.Url(uri)) }
 
 /**
  * Creates a WebView state that is remembered across Compositions.
@@ -161,4 +183,4 @@ fun rememberWebViewState(uri: Uri) =
  */
 @Composable
 fun rememberWebViewState(data: String) =
-    remember { WebViewState(WebContent.Data(data)) }
+    remember(data) { WebViewState(WebContent.Data(data)) }
