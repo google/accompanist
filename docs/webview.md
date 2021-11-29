@@ -6,16 +6,16 @@ A library which provides a Jetpack Compose wrapper around Android's WebView.
 
 ## Usage
 
-To implement this wrapper there are two key APIs which are needed: [`WebView`][api_webview], which is provides the layout, and [`rememberWebViewState(uri)`][api_rememberstate] which provides some remembered state including the URL to display.
+To implement this wrapper there are two key APIs which are needed: [`WebView`][api_webview], which is provides the layout, and [`rememberWebViewState(url)`][api_rememberstate] which provides some remembered state including the URL to display.
 
 The basic usage is as follows:
 
 ```kotlin
-val state by rememberWebViewState(Uri.parse("https://example.com"))
+val state by rememberWebViewState("https://example.com")
 
 WebView(
     state
-) { state.content = it }
+)
 ```
 
 This will display a WebView in your Compose layout that shows the URL provided.
@@ -29,7 +29,6 @@ By default, javascript is disabled in the WebView. To enable it or any other set
 ```kotlin
 WebView(
     state = webViewState,
-    onContentChanged = onContentChanged,
     onCreated = { it.settings.javaScriptEnabled = true }
 )
 ```

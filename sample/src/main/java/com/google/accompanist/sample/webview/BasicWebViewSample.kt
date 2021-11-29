@@ -17,7 +17,6 @@
 package com.google.accompanist.sample.webview
 
 import android.annotation.SuppressLint
-import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
