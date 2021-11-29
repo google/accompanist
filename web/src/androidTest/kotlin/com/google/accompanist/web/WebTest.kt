@@ -16,7 +16,6 @@
 
 package com.google.accompanist.web
 
-import android.util.Log
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -186,12 +185,10 @@ private fun WebTestContent(
             state = webViewState,
             modifier = Modifier.testTag(WebViewTag),
             onCreated = { it.settings.javaScriptEnabled = true },
-            onPageStarted = { url, _ ->
-                Log.d("WebViewTest", "Page start: $url")
+            onPageStarted = { _, _ ->
                 idlingResource.increment()
             },
-            onPageFinished = { url ->
-                Log.d("WebViewTest", "Page end: $url")
+            onPageFinished = { _ ->
                 idlingResource.decrement()
             }
         )
