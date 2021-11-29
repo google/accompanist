@@ -16,6 +16,7 @@
 
 package com.google.accompanist.web
 
+import android.util.Log
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -108,13 +109,16 @@ class WebTest {
             )
         }
 
-        val newId = "id"
-        val newContent = "Updated"
-        state.content = WebContent.Data("<html><body><p id=$newId>$newContent</p></body></html>")
+        // Ensure the data is loaded first
+        onWebView()
+            .check(webMatches(getCurrentUrl(), containsString("about:blank")))
+
+        // Update the state, the webview should change url
+        state.content = WebContent.Url(LINK_URL)
+        rule.waitForIdle()
 
         onWebView()
-            .withElement(findElement(Locator.ID, newId))
-            .check(webMatches(getText(), containsString(newContent)))
+            .check(webMatches(getCurrentUrl(), containsString(LINK_URL)))
     }
 
     @Test
@@ -168,7 +172,8 @@ class WebTest {
 private const val LINK_ID = "link"
 private const val LINK_TEXT = "Click me"
 private const val LINK_URL = "file:///android_asset/test.html"
-private const val TEST_DATA = "<html><body><a id=$LINK_ID href=\"$LINK_URL\">$LINK_TEXT</a></body></html>"
+private const val TEST_DATA =
+    "<html><body><a id=$LINK_ID href=\"$LINK_URL\">$LINK_TEXT</a></body></html>"
 private const val WebViewTag = "webview_tag"
 
 @Composable
@@ -181,8 +186,14 @@ private fun WebTestContent(
             state = webViewState,
             modifier = Modifier.testTag(WebViewTag),
             onCreated = { it.settings.javaScriptEnabled = true },
-            onPageStarted = { _, _ -> idlingResource.increment() },
-            onPageFinished = { idlingResource.decrement() }
+            onPageStarted = { url, _ ->
+                Log.d("WebViewTest", "Page start: $url")
+                idlingResource.increment()
+            },
+            onPageFinished = { url ->
+                Log.d("WebViewTest", "Page end: $url")
+                idlingResource.decrement()
+            }
         )
     }
 }
