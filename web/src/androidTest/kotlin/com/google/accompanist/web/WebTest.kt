@@ -120,6 +120,11 @@ class WebTest {
             .check(webMatches(getCurrentUrl(), containsString(LINK_URL)))
     }
 
+    // SDKs less than 29 do not call onPageStarted when loading about:blank.
+    // This breaks the idling resource counter.
+    // This test was testing an edge case that no longer exists and could potentially
+    // just be removed.
+    @SdkSuppress(minSdkVersion = 29)
     @Test
     fun testCanNavigateToBlank() {
         lateinit var state: WebViewState
