@@ -23,7 +23,10 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.test.espresso.IdlingRegistry
+import androidx.test.espresso.idling.CountingIdlingResource
 import androidx.test.espresso.web.assertion.WebViewAssertions.webMatches
+import androidx.test.espresso.web.model.Atoms.getCurrentUrl
 import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
 import androidx.test.espresso.web.webdriver.DriverAtoms.getText
@@ -33,6 +36,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import com.google.common.truth.Truth.assertThat
 import org.hamcrest.CoreMatchers.containsString
+import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -44,6 +49,19 @@ class WebTest {
     @get:Rule
     val rule = createComposeRule()
 
+    lateinit var idleResource: CountingIdlingResource
+
+    @Before
+    fun setup() {
+        idleResource = CountingIdlingResource("webview")
+        IdlingRegistry.getInstance().register(idleResource)
+    }
+
+    @After
+    fun tearDown() {
+        IdlingRegistry.getInstance().unregister(idleResource)
+    }
+
     @Test
     fun testDataLoaded() {
         lateinit var state: WebViewState
@@ -51,7 +69,8 @@ class WebTest {
         rule.setContent {
             state = rememberWebViewStateWithHTMLData(data = TEST_DATA)
             WebTestContent(
-                state
+                state,
+                idleResource
             )
         }
 
@@ -67,12 +86,10 @@ class WebTest {
         rule.setContent {
             state = rememberWebViewState(url = LINK_URL)
             WebTestContent(
-                state
+                state,
+                idleResource
             )
         }
-
-        // Waiting for the webview to load content
-        rule.waitForIdle()
 
         onWebView()
             .withElement(findElement(Locator.ID, "content"))
@@ -86,16 +103,14 @@ class WebTest {
         rule.setContent {
             state = rememberWebViewStateWithHTMLData(data = TEST_DATA)
             WebTestContent(
-                state
+                state,
+                idleResource
             )
         }
 
         val newId = "id"
         val newContent = "Updated"
         state.content = WebContent.Data("<html><body><p id=$newId>$newContent</p></body></html>")
-
-        // Waiting for the webview to load content
-        rule.waitForIdle()
 
         onWebView()
             .withElement(findElement(Locator.ID, newId))
@@ -109,20 +124,17 @@ class WebTest {
         rule.setContent {
             state = rememberWebViewState(url = LINK_URL)
             WebTestContent(
-                state
+                state,
+                idleResource
             )
         }
-
-        // Waiting for the webview to load content
-        rule.waitForIdle()
 
         onWebView()
             .withElement(findElement(Locator.ID, "blankurl"))
             .perform(webClick())
 
-        // Wait for the webview to call back to Compose state
-        rule.waitForIdle()
-
+        // Perform the check on the webview first which will wait for the idling resource
+        onWebView().check(webMatches(getCurrentUrl(), containsString("about:blank")))
         assertThat(state.content.getCurrentUrl())
             .isEqualTo("about:blank")
     }
@@ -134,7 +146,8 @@ class WebTest {
         rule.setContent {
             state = rememberWebViewStateWithHTMLData(data = TEST_DATA)
             WebTestContent(
-                state
+                state,
+                idleResource
             )
         }
 
@@ -142,9 +155,8 @@ class WebTest {
             .withElement(findElement(Locator.ID, "link"))
             .perform(webClick())
 
-        // Wait for the webview to call back to Compose state
-        rule.waitForIdle()
-
+        // Perform the check on the webview first which will wait for the idling resource
+        onWebView().check(webMatches(getCurrentUrl(), containsString(LINK_URL)))
         assertThat(state.content.getCurrentUrl())
             .isEqualTo(LINK_URL)
     }
@@ -161,13 +173,16 @@ private const val WebViewTag = "webview_tag"
 
 @Composable
 private fun WebTestContent(
-    webViewState: WebViewState
+    webViewState: WebViewState,
+    idlingResource: CountingIdlingResource
 ) {
     MaterialTheme {
         WebView(
             state = webViewState,
             modifier = Modifier.testTag(WebViewTag),
-            onCreated = { it.settings.javaScriptEnabled = true }
+            onCreated = { it.settings.javaScriptEnabled = true },
+            onPageStarted = { _, _ -> idlingResource.increment() },
+            onPageFinished = { idlingResource.decrement() }
         )
     }
 }

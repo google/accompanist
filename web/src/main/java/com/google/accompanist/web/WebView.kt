@@ -41,7 +41,12 @@ import androidx.compose.ui.viewinterop.AndroidView
  * the WebView back.
  * @param onCreated Called when the WebView is first created, this can be used to set additional
  * settings on the WebView.
- *
+ * @param onPageStarted Called when the WebView starts loading a page. Forwarded event from the
+ * WebViewClient.
+ * @param onPageFinished Called when the WebView finishes loading a page. Forwarded event from the
+ * WebViewClient
+ * @param onError Called when the WebView encounters an error. Forwarded event from the
+ * WebViewClient
  * @sample com.google.accompanist.sample.webview.BasicWebViewSample
  */
 @Composable
@@ -50,6 +55,8 @@ fun WebView(
     modifier: Modifier = Modifier,
     captureBackPresses: Boolean = true,
     onCreated: (WebView) -> Unit = {},
+    onPageStarted: (url: String?, favicon: Bitmap?) -> Unit = { _, _ -> },
+    onPageFinished: (url: String?) -> Unit = {},
     onError: (request: WebResourceRequest?, error: WebResourceError?) -> Unit = { _, _ -> }
 ) {
     var webView by remember { mutableStateOf<WebView?>(null) }
@@ -67,11 +74,15 @@ fun WebView(
                 webViewClient = object : WebViewClient() {
                     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                         super.onPageStarted(view, url, favicon)
+                        onPageStarted(url, favicon)
+
                         state.isLoading = true
                     }
 
                     override fun onPageFinished(view: WebView?, url: String?) {
                         super.onPageFinished(view, url)
+                        onPageFinished(url)
+
                         state.isLoading = false
                         canGoBack = view?.canGoBack() ?: false
                     }
@@ -82,7 +93,6 @@ fun WebView(
                         isReload: Boolean
                     ) {
                         super.doUpdateVisitedHistory(view, url, isReload)
-
                         // WebView will often update the current url itself.
                         // This happens in situations like redirects and navigating through
                         // history. We capture this change and update our state holder url.
