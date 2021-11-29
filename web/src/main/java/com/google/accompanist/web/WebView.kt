@@ -96,7 +96,13 @@ fun WebView(
                         // WebView will often update the current url itself.
                         // This happens in situations like redirects and navigating through
                         // history. We capture this change and update our state holder url.
-                        if (state.content.getCurrentUrl() != url && url != null) {
+                        // On older APIs (28 and lower), this method is called when loading
+                        // html data. We don't want to update the state in this case as that will
+                        // overwrite the html being loaded.
+                        if (url != null &&
+                            !url.startsWith("data:text/html") &&
+                            state.content.getCurrentUrl() != url
+                        ) {
                             state.content = WebContent.Url(url)
                         }
                     }
@@ -136,7 +142,7 @@ fun WebView(
                 }
             }
             is WebContent.Data -> {
-                view.loadDataWithBaseURL(l.baseUrl, l.data, null, null, null)
+                view.loadDataWithBaseURL(l.baseUrl, l.data, null, "utf-8", null)
             }
         }
 
