@@ -25,7 +25,7 @@ package com.google.accompanist.web {
   }
 
   public final class WebViewKt {
-    method @androidx.compose.runtime.Composable public static void WebView(com.google.accompanist.web.WebViewState state, optional androidx.compose.ui.Modifier modifier, optional boolean captureBackPresses, optional kotlin.jvm.functions.Function1<? super android.webkit.WebView,kotlin.Unit> onCreated, optional kotlin.jvm.functions.Function2<? super java.lang.String,? super android.graphics.Bitmap,kotlin.Unit> onPageStarted, optional kotlin.jvm.functions.Function1<? super java.lang.String,kotlin.Unit> onPageFinished, optional kotlin.jvm.functions.Function2<? super android.webkit.WebResourceRequest,? super android.webkit.WebResourceError,kotlin.Unit> onError);
+    method @androidx.compose.runtime.Composable public static void WebView(com.google.accompanist.web.WebViewState state, optional androidx.compose.ui.Modifier modifier, optional boolean captureBackPresses, optional kotlin.jvm.functions.Function1<? super android.webkit.WebView,kotlin.Unit> onCreated, optional kotlin.jvm.functions.Function2<? super android.webkit.WebResourceRequest,? super android.webkit.WebResourceError,kotlin.Unit> onError);
     method @androidx.compose.runtime.Composable public static com.google.accompanist.web.WebViewState rememberWebViewState(String url);
     method @androidx.compose.runtime.Composable public static com.google.accompanist.web.WebViewState rememberWebViewStateWithHTMLData(String data, optional String? baseUrl);
   }

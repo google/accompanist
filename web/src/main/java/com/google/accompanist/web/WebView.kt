@@ -55,8 +55,6 @@ fun WebView(
     modifier: Modifier = Modifier,
     captureBackPresses: Boolean = true,
     onCreated: (WebView) -> Unit = {},
-    onPageStarted: (url: String?, favicon: Bitmap?) -> Unit = { _, _ -> },
-    onPageFinished: (url: String?) -> Unit = {},
     onError: (request: WebResourceRequest?, error: WebResourceError?) -> Unit = { _, _ -> }
 ) {
     var webView by remember { mutableStateOf<WebView?>(null) }
@@ -74,15 +72,11 @@ fun WebView(
                 webViewClient = object : WebViewClient() {
                     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                         super.onPageStarted(view, url, favicon)
-                        onPageStarted(url, favicon)
-
                         state.isLoading = true
                     }
 
                     override fun onPageFinished(view: WebView?, url: String?) {
                         super.onPageFinished(view, url)
-                        onPageFinished(url)
-
                         state.isLoading = false
                         canGoBack = view?.canGoBack() ?: false
                     }
@@ -170,7 +164,7 @@ class WebViewState(webContent: WebContent) {
     var content by mutableStateOf<WebContent>(webContent)
 
     /**
-     * Whether the WebView is currently loading data in it's main frame
+     * Whether the WebView is currently loading data in its main frame
      */
     var isLoading: Boolean by mutableStateOf(false)
         internal set

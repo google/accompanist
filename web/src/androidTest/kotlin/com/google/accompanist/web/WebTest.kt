@@ -139,11 +139,10 @@ class WebTest {
             .withElement(findElement(Locator.ID, "blankurl"))
             .perform(webClick())
 
-        // Perform the check on the webview first which will wait for the idling resource
-        onWebView().check(webMatches(getCurrentUrl(), containsString("about:blank")))
-
+        // Wait for the webview to load and then perform the check
         rule.waitForIdle()
 
+        onWebView().check(webMatches(getCurrentUrl(), containsString("about:blank")))
         assertThat(state.content.getCurrentUrl())
             .isEqualTo("about:blank")
     }
@@ -164,11 +163,9 @@ class WebTest {
             .withElement(findElement(Locator.ID, "link"))
             .perform(webClick())
 
-        // Perform the check on the webview first which will wait for the idling resource
-        onWebView().check(webMatches(getCurrentUrl(), containsString(LINK_URL)))
-
+        // Wait for the webview to load and then perform the check
         rule.waitForIdle()
-
+        onWebView().check(webMatches(getCurrentUrl(), containsString(LINK_URL)))
         assertThat(state.content.getCurrentUrl())
             .isEqualTo(LINK_URL)
     }
