@@ -20,11 +20,10 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.test.IdlingResource
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.test.espresso.IdlingRegistry
-import androidx.test.espresso.idling.CountingIdlingResource
 import androidx.test.espresso.web.assertion.WebViewAssertions.webMatches
 import androidx.test.espresso.web.model.Atoms.getCurrentUrl
 import androidx.test.espresso.web.sugar.Web.onWebView
@@ -49,17 +48,17 @@ class WebTest {
     @get:Rule
     val rule = createComposeRule()
 
-    lateinit var idleResource: CountingIdlingResource
+    private lateinit var idleResource: WebViewIdlingResource
 
     @Before
     fun setup() {
-        idleResource = CountingIdlingResource("webview")
-        IdlingRegistry.getInstance().register(idleResource)
+        idleResource = WebViewIdlingResource()
+        rule.registerIdlingResource(idleResource)
     }
 
     @After
     fun tearDown() {
-        IdlingRegistry.getInstance().unregister(idleResource)
+        rule.unregisterIdlingResource(idleResource)
     }
 
     @Test
@@ -114,7 +113,6 @@ class WebTest {
 
         // Update the state, the webview should change url
         state.content = WebContent.Url(LINK_URL)
-        rule.waitForIdle()
 
         onWebView()
             .check(webMatches(getCurrentUrl(), containsString(LINK_URL)))
@@ -143,6 +141,9 @@ class WebTest {
 
         // Perform the check on the webview first which will wait for the idling resource
         onWebView().check(webMatches(getCurrentUrl(), containsString("about:blank")))
+
+        rule.waitForIdle()
+
         assertThat(state.content.getCurrentUrl())
             .isEqualTo("about:blank")
     }
@@ -165,6 +166,9 @@ class WebTest {
 
         // Perform the check on the webview first which will wait for the idling resource
         onWebView().check(webMatches(getCurrentUrl(), containsString(LINK_URL)))
+
+        rule.waitForIdle()
+
         assertThat(state.content.getCurrentUrl())
             .isEqualTo(LINK_URL)
     }
@@ -183,19 +187,22 @@ private const val WebViewTag = "webview_tag"
 @Composable
 private fun WebTestContent(
     webViewState: WebViewState,
-    idlingResource: CountingIdlingResource
+    idlingResource: WebViewIdlingResource
 ) {
+    idlingResource.webviewLoading = webViewState.isLoading
+
     MaterialTheme {
         WebView(
             state = webViewState,
             modifier = Modifier.testTag(WebViewTag),
-            onCreated = { it.settings.javaScriptEnabled = true },
-            onPageStarted = { _, _ ->
-                idlingResource.increment()
-            },
-            onPageFinished = { _ ->
-                idlingResource.decrement()
-            }
+            onCreated = { it.settings.javaScriptEnabled = true }
         )
     }
+}
+
+private class WebViewIdlingResource : IdlingResource {
+    var webviewLoading: Boolean = false
+
+    override val isIdleNow: Boolean
+        get() = !webviewLoading
 }
