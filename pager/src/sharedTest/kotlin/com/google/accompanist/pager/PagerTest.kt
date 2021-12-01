@@ -372,7 +372,6 @@ abstract class PagerTest {
         }
     }
 
-
     @Test
     @Ignore("Currently broken") // TODO: Will fix this once we move to Modifier.scrollable()
     fun a11yScroll() {
