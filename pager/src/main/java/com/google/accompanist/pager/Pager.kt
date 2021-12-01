@@ -51,6 +51,7 @@ import dev.chrisbanes.snapper.SnapperFlingBehaviorDefaults
 import dev.chrisbanes.snapper.SnapperLayoutInfo
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
 
 /**
@@ -248,6 +249,7 @@ internal fun Pager(
         // When a 'scroll' has finished, notify the state
         snapshotFlow { state.isScrollInProgress }
             .filter { !it }
+            .drop(1)
             .collect { state.onScrollFinished() }
     }
 
