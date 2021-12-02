@@ -78,7 +78,7 @@ class PagerState(
 
     private var _currentPage by mutableStateOf(currentPage)
 
-    private val currentLayoutPageInfo: LazyListItemInfo?
+    internal val currentLayoutPageInfo: LazyListItemInfo?
         get() = lazyListState.layoutInfo.visibleItemsInfo.lastOrNull { it.offset <= 0 }
 
     private val currentLayoutPageOffset: Float
@@ -278,9 +278,13 @@ class PagerState(
         }
     }
 
-    internal fun onScrollFinished() {
+    internal fun updateCurrentPageBasedOnLazyListState() {
         // Then update the current page to our layout page
         currentPage = currentLayoutPageInfo?.index ?: 0
+    }
+
+    internal fun onScrollFinished() {
+        updateCurrentPageBasedOnLazyListState()
         // Clear the animation target page
         animationTargetPage = null
     }
