@@ -249,6 +249,8 @@ internal fun Pager(
         // When a 'scroll' has finished, notify the state
         snapshotFlow { state.isScrollInProgress }
             .filter { !it }
+            // initially isScrollInProgress is false as well and we want to start receiving
+            // the events only after the real scroll happens.
             .drop(1)
             .collect { state.onScrollFinished() }
     }
