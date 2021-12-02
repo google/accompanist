@@ -300,7 +300,12 @@ private fun MutableSet<NavBackStackEntry>.PopulateVisibleList(
             val observer = LifecycleEventObserver { _, event ->
                 // ON_START -> add to visibleBackStack, ON_STOP -> remove from visibleBackStack
                 if (event == Lifecycle.Event.ON_START) {
-                    add(entry)
+                    // We want to treat the visible lists as Sets but we want to keep
+                    // the functionality of mutableStateListOf() so that we recompose in response
+                    // to adds and removes.
+                    if (!contains(entry)) {
+                        add(entry)
+                    }
                 }
                 if (event == Lifecycle.Event.ON_STOP) {
                     remove(entry)
