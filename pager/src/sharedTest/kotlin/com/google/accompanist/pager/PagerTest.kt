@@ -16,9 +16,11 @@
 
 package com.google.accompanist.pager
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MonotonicFrameClock
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.SemanticsNodeInteraction
+import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performScrollTo
@@ -333,6 +335,44 @@ abstract class PagerTest {
     }
 
     @Test
+    fun provideInitialPage() {
+        val pagerState = setPagerContent(count = 10, initialPage = 4)
+
+        composeTestRule.runOnIdle {
+            assertThat(pagerState.currentPage).isEqualTo(4)
+        }
+
+        assertPagerLayout(4, 10)
+    }
+
+    @Test
+    fun pageStateRestoration() {
+        val tester = StateRestorationTester(composeTestRule)
+        var pagerState: PagerState? = null
+        tester.setContent {
+            PagerContent(
+                count = { 10 },
+                pagerState = rememberPagerState().also { pagerState = it },
+                observeStateInContent = false
+            )
+        }
+
+        composeTestRule.runOnIdle {
+            assertThat(pagerState!!.currentPage).isEqualTo(0)
+            runBlocking(AutoTestFrameClock()) {
+                pagerState!!.scrollToPage(4)
+            }
+            pagerState = null
+        }
+
+        tester.emulateSavedInstanceStateRestore()
+
+        composeTestRule.runOnIdle {
+            assertThat(pagerState!!.currentPage).isEqualTo(4)
+        }
+    }
+
+    @Test
     @Ignore("Currently broken") // TODO: Will fix this once we move to Modifier.scrollable()
     fun a11yScroll() {
         val pagerState = setPagerContent(count = 10)
@@ -401,15 +441,35 @@ abstract class PagerTest {
     private fun setPagerContent(
         count: Int,
         observeStateInContent: Boolean = false,
+        initialPage: Int = 0
     ): PagerState = setPagerContent(
         count = { count },
         observeStateInContent = observeStateInContent,
+        initialPage = initialPage,
     )
 
-    protected abstract fun setPagerContent(
+    private fun setPagerContent(
         count: () -> Int,
         observeStateInContent: Boolean = false,
-    ): PagerState
+        initialPage: Int = 0
+    ): PagerState {
+        val state = PagerState(initialPage)
+        composeTestRule.setContent {
+            PagerContent(
+                count = count,
+                pagerState = state,
+                observeStateInContent = observeStateInContent
+            )
+        }
+        return state
+    }
+
+    @Composable
+    protected abstract fun PagerContent(
+        count: () -> Int,
+        pagerState: PagerState,
+        observeStateInContent: Boolean,
+    )
 }
 
 private class AutoTestFrameClock : MonotonicFrameClock {
