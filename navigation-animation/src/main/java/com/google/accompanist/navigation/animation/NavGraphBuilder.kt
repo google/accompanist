@@ -60,11 +60,7 @@ public fun NavGraphBuilder.composable(
     addDestination(
         AnimatedComposeNavigator.Destination(
             provider[AnimatedComposeNavigator::class],
-            content,
-            enterTransition,
-            exitTransition,
-            popEnterTransition,
-            popExitTransition
+            content
         ).apply {
             this.route = route
             arguments.forEach { (argumentName, argument) ->
