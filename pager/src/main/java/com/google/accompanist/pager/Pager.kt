@@ -254,6 +254,13 @@ internal fun Pager(
             .drop(1)
             .collect { state.onScrollFinished() }
     }
+    LaunchedEffect(state) {
+        snapshotFlow { state.currentLayoutPageInfo }
+            // we want to react on the currentLayoutPageInfo changes happened not because of the
+            // scroll. for example the current page could change because the items were reordered.
+            .filter { !state.isScrollInProgress }
+            .collect { state.updateCurrentPageBasedOnLazyListState() }
+    }
 
     val pagerScope = remember(state) { PagerScopeImpl(state) }
 

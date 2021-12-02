@@ -93,10 +93,12 @@ abstract class BaseVerticalPagerTest(
     }
 
     @Composable
-    override fun PagerContent(
+    override fun AbstractPagerContent(
         count: () -> Int,
         pagerState: PagerState,
-        observeStateInContent: Boolean
+        observeStateInContent: Boolean,
+        pageToItem: (Int) -> String,
+        useKeys: Boolean,
     ) {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             applierScope = rememberCoroutineScope()
@@ -112,16 +114,22 @@ abstract class BaseVerticalPagerTest(
                     itemSpacing = itemSpacingDp.dp,
                     reverseLayout = reverseLayout,
                     contentPadding = contentPadding,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
+                    key = if (useKeys) {
+                        { pageToItem(it) }
+                    } else {
+                        null
+                    }
                 ) { page ->
+                    val item = pageToItem(page)
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
                             .background(randomColor())
-                            .testTag(page.toString())
+                            .testTag(item)
                     ) {
                         BasicText(
-                            text = page.toString(),
+                            text = item,
                             modifier = Modifier.align(Alignment.Center)
                         )
                     }
