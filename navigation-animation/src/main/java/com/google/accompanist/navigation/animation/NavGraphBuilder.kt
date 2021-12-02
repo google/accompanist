@@ -60,11 +60,7 @@ public fun NavGraphBuilder.composable(
     addDestination(
         AnimatedComposeNavigator.Destination(
             provider[AnimatedComposeNavigator::class],
-            content,
-            enterTransition,
-            exitTransition,
-            popEnterTransition,
-            popExitTransition
+            content
         ).apply {
             this.route = route
             arguments.forEach { (argumentName, argument) ->
@@ -73,6 +69,10 @@ public fun NavGraphBuilder.composable(
             deepLinks.forEach { deepLink ->
                 addDeepLink(deepLink)
             }
+            enterTransition?.let { enterTransitions[route] = enterTransition }
+            exitTransition?.let { exitTransitions[route] = exitTransition }
+            popEnterTransition?.let { popEnterTransitions[route] = popEnterTransition }
+            popExitTransition?.let { popExitTransitions[route] = popExitTransition }
         }
     )
 }
