@@ -292,7 +292,7 @@ internal val popExitTransitions =
         (AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition)?>()
 
 @Composable
-private fun MutableSet<NavBackStackEntry>.PopulateVisibleList(
+private fun MutableList<NavBackStackEntry>.PopulateVisibleList(
     transitionsInProgress: Collection<NavBackStackEntry>
 ) {
     transitionsInProgress.forEach { entry ->
@@ -328,5 +328,5 @@ private fun rememberVisibleList(transitionsInProgress: Collection<NavBackStackEn
                     entry.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
                 }
             )
-        }.toMutableSet()
+        }
     }
