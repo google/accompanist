@@ -142,7 +142,6 @@ abstract class BaseHorizontalPagerTest(
                     }
                 ) { page ->
                     val item = pageToItem(page)
-                    println("asdasd item=$item page=$page")
                     Box(
                         modifier = Modifier
                             .fillMaxWidth(itemWidthFraction)

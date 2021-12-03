@@ -418,11 +418,9 @@ abstract class PagerTest {
         composeTestRule.runOnIdle {
             assertThat(pagerState!!.currentPage).isEqualTo(0)
             list = listOf("1", "0", "2")
-            println("asdasd change list")
         }
 
         composeTestRule.runOnIdle {
-            println("asdasd assert page")
             assertThat(pagerState!!.currentPage).isEqualTo(1)
         }
     }
