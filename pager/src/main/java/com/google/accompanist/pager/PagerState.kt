@@ -78,7 +78,7 @@ class PagerState(
 
     private var _currentPage by mutableStateOf(currentPage)
 
-    private val currentLayoutPageInfo: LazyListItemInfo?
+    internal val currentLayoutPageInfo: LazyListItemInfo?
         get() = lazyListState.layoutInfo.visibleItemsInfo.lastOrNull { it.offset <= 0 }
 
     private val currentLayoutPageOffset: Float
@@ -157,7 +157,7 @@ class PagerState(
                 // If the offset is 0f (or very close), return the current page
                 currentPageOffset.absoluteValue < 0.001f -> currentPage
                 // If we're offset towards the start, guess the previous page
-                currentPageOffset < -0.5f -> (currentPage - 1).coerceAtLeast(0)
+                currentPageOffset < 0f -> (currentPage - 1).coerceAtLeast(0)
                 // If we're offset towards the end, guess the next page
                 else -> (currentPage + 1).coerceAtMost(pageCount - 1)
             }
@@ -278,9 +278,13 @@ class PagerState(
         }
     }
 
-    internal fun onScrollFinished() {
+    internal fun updateCurrentPageBasedOnLazyListState() {
         // Then update the current page to our layout page
         currentPage = currentLayoutPageInfo?.index ?: 0
+    }
+
+    internal fun onScrollFinished() {
+        updateCurrentPageBasedOnLazyListState()
         // Clear the animation target page
         animationTargetPage = null
     }

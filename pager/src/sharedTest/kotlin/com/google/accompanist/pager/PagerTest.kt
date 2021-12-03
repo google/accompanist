@@ -16,9 +16,13 @@
 
 package com.google.accompanist.pager
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MonotonicFrameClock
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.SemanticsNodeInteraction
+import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performScrollTo
@@ -333,6 +337,43 @@ abstract class PagerTest {
     }
 
     @Test
+    fun provideInitialPage() {
+        val pagerState = setPagerContent(count = 10, initialPage = 4)
+
+        composeTestRule.runOnIdle {
+            assertThat(pagerState.currentPage).isEqualTo(4)
+        }
+
+        assertPagerLayout(4, 10)
+    }
+
+    @Test
+    fun pageStateRestoration() {
+        val tester = StateRestorationTester(composeTestRule)
+        var pagerState: PagerState? = null
+        tester.setContent {
+            PagerContent(
+                count = { 10 },
+                pagerState = rememberPagerState().also { pagerState = it },
+            )
+        }
+
+        composeTestRule.runOnIdle {
+            assertThat(pagerState!!.currentPage).isEqualTo(0)
+            runBlocking(AutoTestFrameClock()) {
+                pagerState!!.scrollToPage(4)
+            }
+            pagerState = null
+        }
+
+        tester.emulateSavedInstanceStateRestore()
+
+        composeTestRule.runOnIdle {
+            assertThat(pagerState!!.currentPage).isEqualTo(4)
+        }
+    }
+
+    @Test
     @Ignore("Currently broken") // TODO: Will fix this once we move to Modifier.scrollable()
     fun a11yScroll() {
         val pagerState = setPagerContent(count = 10)
@@ -358,6 +399,30 @@ abstract class PagerTest {
             .swipeAcrossCenter(distancePercentage = MediumSwipeDistance)
         // ...and assert that we now laid out from page 0
         assertPagerLayout(0, pagerState.pageCount)
+    }
+
+    @Test
+    fun whenTheCurrentPageChangesInternallyOurStateIsUpdated() {
+        var list by mutableStateOf(listOf("0", "1", "2"))
+        var pagerState: PagerState? = null
+
+        composeTestRule.setContent {
+            PagerContent(
+                count = { list.size },
+                pagerState = rememberPagerState().also { pagerState = it },
+                pageToItem = { list[it] },
+                useKeys = true
+            )
+        }
+
+        composeTestRule.runOnIdle {
+            assertThat(pagerState!!.currentPage).isEqualTo(0)
+            list = listOf("1", "0", "2")
+        }
+
+        composeTestRule.runOnIdle {
+            assertThat(pagerState!!.currentPage).isEqualTo(1)
+        }
     }
 
     /**
@@ -401,15 +466,55 @@ abstract class PagerTest {
     private fun setPagerContent(
         count: Int,
         observeStateInContent: Boolean = false,
+        initialPage: Int = 0
     ): PagerState = setPagerContent(
         count = { count },
         observeStateInContent = observeStateInContent,
+        initialPage = initialPage,
     )
 
-    protected abstract fun setPagerContent(
+    private fun setPagerContent(
         count: () -> Int,
         observeStateInContent: Boolean = false,
-    ): PagerState
+        initialPage: Int = 0
+    ): PagerState {
+        val state = PagerState(initialPage)
+        composeTestRule.setContent {
+            PagerContent(
+                count = count,
+                pagerState = state,
+                observeStateInContent = observeStateInContent,
+            )
+        }
+        return state
+    }
+
+    // we can't have default values on an abstract composable function params
+    @Composable
+    private fun PagerContent(
+        count: () -> Int,
+        pagerState: PagerState,
+        observeStateInContent: Boolean = false,
+        pageToItem: (Int) -> String = { it.toString() },
+        useKeys: Boolean = false,
+    ) {
+        AbstractPagerContent(
+            count = count,
+            pagerState = pagerState,
+            observeStateInContent = observeStateInContent,
+            pageToItem = { pageToItem(it) },
+            useKeys = useKeys
+        )
+    }
+
+    @Composable
+    protected abstract fun AbstractPagerContent(
+        count: () -> Int,
+        pagerState: PagerState,
+        observeStateInContent: Boolean,
+        pageToItem: (Int) -> String,
+        useKeys: Boolean
+    )
 }
 
 private class AutoTestFrameClock : MonotonicFrameClock {

@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -91,44 +92,49 @@ abstract class BaseVerticalPagerTest(
             }
     }
 
-    override fun setPagerContent(
+    @Composable
+    override fun AbstractPagerContent(
         count: () -> Int,
+        pagerState: PagerState,
         observeStateInContent: Boolean,
-    ): PagerState {
-        val pagerState = PagerState()
-        // Stick to LTR for vertical tests
-        composeTestRule.setContent {
-            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                applierScope = rememberCoroutineScope()
+        pageToItem: (Int) -> String,
+        useKeys: Boolean,
+    ) {
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+            applierScope = rememberCoroutineScope()
 
-                Box {
-                    if (observeStateInContent) {
-                        BasicText(text = "${pagerState.isScrollInProgress}")
+            Box {
+                if (observeStateInContent) {
+                    BasicText(text = "${pagerState.isScrollInProgress}")
+                }
+
+                VerticalPager(
+                    count = count(),
+                    state = pagerState,
+                    itemSpacing = itemSpacingDp.dp,
+                    reverseLayout = reverseLayout,
+                    contentPadding = contentPadding,
+                    modifier = Modifier.fillMaxSize(),
+                    key = if (useKeys) {
+                        { pageToItem(it) }
+                    } else {
+                        null
                     }
-
-                    VerticalPager(
-                        count = count(),
-                        state = pagerState,
-                        itemSpacing = itemSpacingDp.dp,
-                        reverseLayout = reverseLayout,
-                        contentPadding = contentPadding,
-                        modifier = Modifier.fillMaxSize()
-                    ) { page ->
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(randomColor())
-                                .testTag(page.toString())
-                        ) {
-                            BasicText(
-                                text = page.toString(),
-                                modifier = Modifier.align(Alignment.Center)
-                            )
-                        }
+                ) { page ->
+                    val item = pageToItem(page)
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(randomColor())
+                            .testTag(item)
+                    ) {
+                        BasicText(
+                            text = item,
+                            modifier = Modifier.align(Alignment.Center)
+                        )
                     }
                 }
             }
         }
-        return pagerState
     }
 }

@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -111,44 +112,50 @@ abstract class BaseHorizontalPagerTest(
             }
     }
 
-    override fun setPagerContent(
+    @Composable
+    override fun AbstractPagerContent(
         count: () -> Int,
+        pagerState: PagerState,
         observeStateInContent: Boolean,
-    ): PagerState {
-        val pagerState = PagerState()
-        composeTestRule.setContent {
-            CompositionLocalProvider(LocalLayoutDirection provides layoutDirection) {
-                applierScope = rememberCoroutineScope()
+        pageToItem: (Int) -> String,
+        useKeys: Boolean,
+    ) {
+        CompositionLocalProvider(LocalLayoutDirection provides layoutDirection) {
+            applierScope = rememberCoroutineScope()
 
-                Box {
-                    if (observeStateInContent) {
-                        BasicText(text = "${pagerState.isScrollInProgress}")
+            Box {
+                if (observeStateInContent) {
+                    BasicText(text = "${pagerState.isScrollInProgress}")
+                }
+
+                HorizontalPager(
+                    count = count(),
+                    state = pagerState,
+                    itemSpacing = itemSpacingDp.dp,
+                    reverseLayout = reverseLayout,
+                    contentPadding = contentPadding,
+                    modifier = Modifier.fillMaxSize(),
+                    key = if (useKeys) {
+                        { pageToItem(it) }
+                    } else {
+                        null
                     }
-
-                    HorizontalPager(
-                        count = count(),
-                        state = pagerState,
-                        itemSpacing = itemSpacingDp.dp,
-                        reverseLayout = reverseLayout,
-                        contentPadding = contentPadding,
-                        modifier = Modifier.fillMaxSize()
-                    ) { page ->
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth(itemWidthFraction)
-                                .aspectRatio(1f)
-                                .background(randomColor())
-                                .testTag(page.toString())
-                        ) {
-                            BasicText(
-                                text = page.toString(),
-                                modifier = Modifier.align(Alignment.Center)
-                            )
-                        }
+                ) { page ->
+                    val item = pageToItem(page)
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(itemWidthFraction)
+                            .aspectRatio(1f)
+                            .background(randomColor())
+                            .testTag(item)
+                    ) {
+                        BasicText(
+                            text = item,
+                            modifier = Modifier.align(Alignment.Center)
+                        )
                     }
                 }
             }
         }
-        return pagerState
     }
 }

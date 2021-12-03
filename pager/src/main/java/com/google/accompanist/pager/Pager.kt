@@ -51,6 +51,7 @@ import dev.chrisbanes.snapper.SnapperFlingBehaviorDefaults
 import dev.chrisbanes.snapper.SnapperLayoutInfo
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
 
 /**
@@ -248,7 +249,17 @@ internal fun Pager(
         // When a 'scroll' has finished, notify the state
         snapshotFlow { state.isScrollInProgress }
             .filter { !it }
+            // initially isScrollInProgress is false as well and we want to start receiving
+            // the events only after the real scroll happens.
+            .drop(1)
             .collect { state.onScrollFinished() }
+    }
+    LaunchedEffect(state) {
+        snapshotFlow { state.currentLayoutPageInfo }
+            // we want to react on the currentLayoutPageInfo changes happened not because of the
+            // scroll. for example the current page could change because the items were reordered.
+            .filter { !state.isScrollInProgress }
+            .collect { state.updateCurrentPageBasedOnLazyListState() }
     }
 
     val pagerScope = remember(state) { PagerScopeImpl(state) }
@@ -280,8 +291,8 @@ internal fun Pager(
                         // connection which consumes them.
                         // See: https://github.com/google/accompanist/issues/347
                         .nestedScroll(connection = consumeFlingNestedScrollConnection)
-                        // Constraint the content to be <= than the size of the pager.
-                        .fillParentMaxSize()
+                        // Constraint the content height to be <= than the height of the pager.
+                        .fillParentMaxHeight()
                         .wrapContentSize()
                 ) {
                     pagerScope.content(page)
@@ -308,8 +319,8 @@ internal fun Pager(
                         // connection which consumes them.
                         // See: https://github.com/google/accompanist/issues/347
                         .nestedScroll(connection = consumeFlingNestedScrollConnection)
-                        // Constraint the content to be <= than the size of the pager.
-                        .fillParentMaxSize()
+                        // Constraint the content width to be <= than the width of the pager.
+                        .fillParentMaxWidth()
                         .wrapContentSize()
                 ) {
                     pagerScope.content(page)
