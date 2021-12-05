@@ -186,4 +186,4 @@ fun rememberWebViewState(url: String) =
  */
 @Composable
 fun rememberWebViewStateWithHTMLData(data: String, baseUrl: String? = null) =
-    remember(data) { WebViewState(WebContent.Data(data, baseUrl)) }
+    remember(data, baseUrl) { WebViewState(WebContent.Data(data, baseUrl)) }
