@@ -53,6 +53,20 @@ import com.google.accompanist.navigation.animation.navigation
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.sample.AccompanistSampleTheme
 
+/**
+ * This Enum class represents screens name and identifier for screens graph.
+ * @param label used on buttons or views.
+ * @param identifier used on navigation code to detect any screen need to use.
+ * @author Kareem Radwan
+ */
+enum class Screens(val label: String, val identifier: String) {
+
+    RED("Red", "red"),
+    BLUE("Blue", "blue"),
+    GREEN("Green" ,"green");
+
+}
+
 @ExperimentalAnimationApi
 class AnimatedNavHostSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,88 +84,88 @@ class AnimatedNavHostSample : ComponentActivity() {
 @Composable
 fun ExperimentalAnimationNav() {
     val navController = rememberAnimatedNavController()
-    AnimatedNavHost(navController, startDestination = "Blue") {
+    AnimatedNavHost(navController, startDestination = Screens.BLUE.identifier) {
         composable(
-            "Blue",
+            Screens.BLUE.identifier,
             enterTransition = {
                 when (initialState.destination.route) {
-                    "Red" ->
+                    Screens.RED.identifier ->
                         slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
                     else -> null
                 }
             },
             exitTransition = {
                 when (targetState.destination.route) {
-                    "Red" ->
+                    Screens.RED.identifier ->
                         slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
                     else -> null
                 }
             },
             popEnterTransition = {
                 when (initialState.destination.route) {
-                    "Red" ->
+                    Screens.RED.identifier ->
                         slideIntoContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
                     else -> null
                 }
             },
             popExitTransition = {
                 when (targetState.destination.route) {
-                    "Red" ->
+                    Screens.RED.identifier ->
                         slideOutOfContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
                     else -> null
                 }
             }
         ) { BlueScreen(navController) }
         composable(
-            "Red",
+            Screens.RED.identifier,
             enterTransition = {
                 when (initialState.destination.route) {
-                    "Blue" ->
+                    Screens.BLUE.identifier ->
                         slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
-                    "Green" ->
+                    Screens.GREEN.identifier ->
                         slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
                     else -> null
                 }
             },
             exitTransition = {
                 when (targetState.destination.route) {
-                    "Blue" ->
+                    Screens.BLUE.identifier ->
                         slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
-                    "Green" ->
+                    Screens.GREEN.identifier ->
                         slideOutOfContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
                     else -> null
                 }
             },
             popEnterTransition = {
                 when (initialState.destination.route) {
-                    "Blue" ->
+                    Screens.BLUE.identifier ->
                         slideIntoContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
-                    "Green" ->
+                    Screens.GREEN.identifier ->
                         slideIntoContainer(AnimatedContentScope.SlideDirection.Down, animationSpec = tween(700))
                     else -> null
                 }
             },
             popExitTransition = {
                 when (targetState.destination.route) {
-                    "Blue" ->
+                    Screens.BLUE.identifier ->
                         slideOutOfContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
-                    "Green" ->
+                    Screens.GREEN.identifier ->
                         slideOutOfContainer(AnimatedContentScope.SlideDirection.Down, animationSpec = tween(700))
                     else -> null
                 }
             }
         ) { RedScreen(navController) }
         navigation(
-            startDestination = "Green",
+            startDestination = Screens.GREEN.identifier,
             route = "Inner",
             enterTransition = { expandIn(animationSpec = tween(700)) },
             exitTransition = { shrinkOut(animationSpec = tween(700)) }
         ) {
             composable(
-                "Green",
+                Screens.GREEN.identifier,
                 enterTransition = {
                     when (initialState.destination.route) {
-                        "Red" ->
+                        Screens.RED.identifier ->
                             slideIntoContainer(
                                 AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700)
                             )
@@ -160,7 +174,7 @@ fun ExperimentalAnimationNav() {
                 },
                 exitTransition = {
                     when (targetState.destination.route) {
-                        "Red" ->
+                        Screens.RED.identifier ->
                             slideOutOfContainer(
                                 AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700)
                             )
@@ -169,7 +183,7 @@ fun ExperimentalAnimationNav() {
                 },
                 popEnterTransition = {
                     when (initialState.destination.route) {
-                        "Red" ->
+                        Screens.RED.identifier ->
                             slideIntoContainer(
                                 AnimatedContentScope.SlideDirection.Down, animationSpec = tween(700)
                             )
@@ -178,7 +192,7 @@ fun ExperimentalAnimationNav() {
                 },
                 popExitTransition = {
                     when (targetState.destination.route) {
-                        "Red" ->
+                        Screens.RED.identifier ->
                             slideOutOfContainer(
                                 AnimatedContentScope.SlideDirection.Down, animationSpec = tween(700)
                             )
@@ -204,7 +218,7 @@ fun AnimatedVisibilityScope.BlueScreen(navController: NavHostController) {
             Modifier
                 .wrapContentWidth()
                 .then(Modifier.align(Alignment.CenterHorizontally))
-        ) { navController.navigate("Red") }
+        ) { navController.navigate(Screens.RED.identifier) }
         Spacer(Modifier.height(Dp(25f)))
         NavigateButton(
             "Navigate Expand",
@@ -213,7 +227,7 @@ fun AnimatedVisibilityScope.BlueScreen(navController: NavHostController) {
                 .then(Modifier.align(Alignment.CenterHorizontally))
         ) { navController.navigate("Inner") }
         Text(
-            "Blue",
+            Screens.BLUE.label,
             modifier = Modifier.fillMaxWidth().weight(1f).animateEnterExit(
                 enter = fadeIn(animationSpec = tween(250, delayMillis = 450)),
                 exit = ExitTransition.None
@@ -238,16 +252,16 @@ fun AnimatedVisibilityScope.RedScreen(navController: NavHostController) {
             Modifier
                 .wrapContentWidth()
                 .then(Modifier.align(Alignment.CenterHorizontally))
-        ) { navController.navigate("Blue") }
+        ) { navController.navigate(Screens.BLUE.identifier) }
         Spacer(Modifier.height(Dp(25f)))
         NavigateButton(
             "Navigate Vertical",
             Modifier
                 .wrapContentWidth()
                 .then(Modifier.align(Alignment.CenterHorizontally))
-        ) { navController.navigate("Green") }
+        ) { navController.navigate(Screens.GREEN.identifier) }
         Text(
-            "Red",
+            Screens.RED.label,
             modifier = Modifier.fillMaxWidth().weight(1f).animateEnterExit(
                 enter = fadeIn(animationSpec = tween(250, delayMillis = 450)),
                 exit = ExitTransition.None
@@ -268,13 +282,13 @@ fun AnimatedVisibilityScope.GreenScreen(navController: NavHostController) {
     ) {
         Spacer(Modifier.height(Dp(25f)))
         NavigateButton(
-            "Navigate to Red",
+            "Navigate to ${Screens.RED.label}",
             Modifier
                 .wrapContentWidth()
                 .then(Modifier.align(Alignment.CenterHorizontally))
-        ) { navController.navigate("Red") }
+        ) { navController.navigate(Screens.RED.identifier) }
         Text(
-            "Green",
+            Screens.GREEN.label,
             modifier = Modifier.fillMaxWidth().weight(1f).animateEnterExit(
                 enter = fadeIn(animationSpec = tween(250, delayMillis = 450)),
                 exit = ExitTransition.None
