@@ -10,7 +10,7 @@ ktlint = "0.42.1"
 kotlin = "1.6.0"
 coroutines = "1.5.2"
 okhttp = "3.12.13"
-coil = "1.4.0"
+coil = "1.3.2"
 
 androidxtest = "1.4.0"
 androidxnavigation = "2.4.0-rc01"
