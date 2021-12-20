@@ -3,8 +3,7 @@ name: Build & test
 on:
   push:
     branches:
-      - main
-      - compose-1.0
+      - snapshot
     paths-ignore:
       - '**.md'
   pull_request:
