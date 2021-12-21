@@ -29,7 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.plusAssign
+import com.compose.type_safe_args.annotation.ComposeDestination
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.bottomSheet
@@ -49,10 +49,22 @@ class BottomSheetNavSample : ComponentActivity() {
     }
 }
 
-private object Destinations {
-    const val Home = "HOME"
-    const val Feed = "FEED"
-    const val Sheet = "SHEET"
+object Destinations {
+    @ComposeDestination
+    interface Home {
+        companion object
+    }
+
+    @ComposeDestination
+    interface Feed {
+        companion object
+    }
+
+    @ComposeDestination
+    interface Sheet {
+        val arg: String
+        companion object
+    }
 }
 
 @OptIn(ExperimentalMaterialNavigationApi::class)
@@ -62,22 +74,22 @@ fun BottomSheetNavDemo() {
     val navController = rememberNavController(bottomSheetNavigator)
 
     ModalBottomSheetLayout(bottomSheetNavigator) {
-        NavHost(navController, Destinations.Home) {
-            composable(Destinations.Home) {
+        NavHost(navController, Destinations.Home.route) {
+            composable(Destinations.Home.route) {
                 HomeScreen(
                     showSheet = {
-                        navController.navigate(Destinations.Sheet + "?arg=From Home Screen")
+                        navController.navigate(Destinations.Sheet.getDestination(arg = "From Home Screen"))
                     },
-                    showFeed = { navController.navigate(Destinations.Feed) }
+                    showFeed = { navController.navigate(Destinations.Feed.getDestination()) }
                 )
             }
-            composable(Destinations.Feed) { Text("Feed!") }
-            bottomSheet(Destinations.Sheet + "?arg={arg}") { backstackEntry ->
-                val arg = backstackEntry.arguments?.getString("arg") ?: "Missing argument :("
+            composable(Destinations.Feed.route) { Text("Feed!") }
+            bottomSheet(Destinations.Sheet.route) { backstackEntry ->
+                val (arg) = Destinations.Sheet.parseArguments(backstackEntry)
                 BottomSheet(
-                    showFeed = { navController.navigate(Destinations.Feed) },
+                    showFeed = { navController.navigate(Destinations.Feed.getDestination()) },
                     showAnotherSheet = {
-                        navController.navigate(Destinations.Sheet + "?arg=${UUID.randomUUID()}")
+                        navController.navigate(Destinations.Sheet.getDestination(arg = "${UUID.randomUUID()}"))
                     },
                     arg = arg
                 )
@@ -101,11 +113,13 @@ private fun HomeScreen(showSheet: () -> Unit, showFeed: () -> Unit) {
 
 @Composable
 private fun BottomSheet(showFeed: () -> Unit, showAnotherSheet: () -> Unit, arg: String) {
-    Text("Sheet with arg: $arg")
-    Button(onClick = showFeed) {
-        Text("Click me to navigate!")
-    }
-    Button(onClick = showAnotherSheet) {
-        Text("Click me to show another sheet!")
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text("Sheet with arg: $arg")
+        Button(onClick = showFeed) {
+            Text("Click me to navigate!")
+        }
+        Button(onClick = showAnotherSheet) {
+            Text("Click me to show another sheet!")
+        }
     }
 }

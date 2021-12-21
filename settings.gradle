@@ -46,3 +46,5 @@ include ':sample'
 // Enable Gradle's version catalog support
 // https://docs.gradle.org/current/userguide/platforms.html
 enableFeaturePreview("VERSION_CATALOGS")
+include ':type-safe-args:annotation'
+include ':type-safe-args:annotation-processor'

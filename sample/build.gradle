@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-apply plugin: 'com.android.application'
-
-apply plugin: 'kotlin-android'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id("com.google.devtools.ksp") version "1.6.0-1.0.2"
+}
 
 android {
     compileSdkVersion 31
@@ -60,8 +62,11 @@ dependencies {
     implementation project(':flowlayout')
     implementation project(':systemuicontroller')
     implementation project(':swiperefresh')
+    ksp(project(':type-safe-args:annotation-processor'))
+    implementation project(':type-safe-args:annotation')
 
     implementation libs.androidx.appcompat
+    implementation libs.gson
 
     implementation libs.coil.compose
     implementation libs.coil.gif
@@ -82,4 +87,16 @@ dependencies {
     implementation libs.kotlin.stdlib
 
     lintChecks(project(":permissions-lint"))
+}
+
+kotlin.sourceSets.main {
+    kotlin.srcDirs(
+        file("$buildDir/generated/ksp/"),
+    )
+}
+
+ksp {
+    // Passing an argument to the symbol processor.
+    // Change value to "true" in order to apply the argument.
+    arg("ignoreGenericArgs", "false")
 }
