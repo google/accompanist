@@ -77,15 +77,9 @@ class NavTypeVisitor(private val file: OutputStream, private val resolver: Resol
                     file addPhrase " "
                     addVariableType(file, propertyInfo)
                 }
-                ComposeArgumentType.INT -> {}
-                ComposeArgumentType.LONG -> {}
-                ComposeArgumentType.FLOAT -> {}
-                ComposeArgumentType.BOOLEAN -> {}
-                ComposeArgumentType.STRING -> {}
-                ComposeArgumentType.INT_ARRAY -> {}
-                ComposeArgumentType.LONG_ARRAY -> {}
-                ComposeArgumentType.FLOAT_ARRAY -> {}
-                ComposeArgumentType.BOOLEAN_ARRAY -> {}
+                else -> {
+                    // no special NavType required
+                }
             }
 
             tabs--
@@ -110,15 +104,9 @@ class NavTypeVisitor(private val file: OutputStream, private val resolver: Resol
                 ComposeArgumentType.PARCELABLE -> file addLine "bundle.putParcelable(key, value)"
                 ComposeArgumentType.PARCELABLE_ARRAY -> file addLine "bundle.putParcelableArrayList(key, value)"
                 ComposeArgumentType.SERIALIZABLE -> file addLine "bundle.putSerializable(key, value)"
-                ComposeArgumentType.INT -> {}
-                ComposeArgumentType.LONG -> {}
-                ComposeArgumentType.FLOAT -> {}
-                ComposeArgumentType.BOOLEAN -> {}
-                ComposeArgumentType.STRING -> {}
-                ComposeArgumentType.INT_ARRAY -> {}
-                ComposeArgumentType.LONG_ARRAY -> {}
-                ComposeArgumentType.FLOAT_ARRAY -> {}
-                ComposeArgumentType.BOOLEAN_ARRAY -> {}
+                else -> {
+                    // no special NavType required
+                }
             }
 
             tabs--

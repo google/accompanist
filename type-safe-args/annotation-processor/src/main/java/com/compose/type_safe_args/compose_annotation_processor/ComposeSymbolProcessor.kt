@@ -39,6 +39,7 @@ class ComposeSymbolProcessor(
                 packageName = packageName,
                 fileName = it.simpleName.asString()
             )
+            tabs = 0
 
             file addLine "package $packageName"
             file addLine "import androidx.navigation.*"
