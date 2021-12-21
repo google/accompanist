@@ -1,13 +1,14 @@
 [versions]
 compose = "1.1.0-rc01"
 composesnapshot = "-" # a single character = no snapshot
+composeCompiler = "1.1.0-rc02"
 
 # gradlePlugin and lint need to be updated together
 gradlePlugin = "7.0.4"
 lint = "30.0.3"
 
 ktlint = "0.42.1"
-kotlin = "1.6.0"
+kotlin = "1.6.10"
 coroutines = "1.5.2"
 okhttp = "3.12.13"
 coil = "1.3.2"
