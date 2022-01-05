@@ -35,7 +35,7 @@ class WindowInsetsTest {
      * Otherwise this module has no tests when running on API < 23.
      */
     @Test
-    fun dummyTest() = Unit
+    fun fakeTest() = Unit
 
     @Test
     @SdkSuppress(minSdkVersion = 23) // ViewCompat.getRootWindowInsets
