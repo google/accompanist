@@ -162,6 +162,27 @@ class PagerState(
                 else -> (currentPage + 1).coerceAtMost(pageCount - 1)
             }
 
+    /**
+     * The pending target page for any on-going animations or scrolls by the user.
+     * The difference between [pendingPage] and [targetPage] is that [targetPage] detect the
+     * page change when the offset is more than 50%, on the other hand [pendingPage] detect the
+     * page change when the offset is different than zero.
+     * Returns the current page if a scroll or animation is not currently in progress.
+     */
+    val pendingPage: Int
+        get() = animationTargetPage
+            ?: flingAnimationTarget?.invoke()
+            ?: when {
+                // If a scroll isn't in progress, return the current page
+                !isScrollInProgress -> currentPage
+                // If the offset is lower than zero, guess the previous page
+                currentPageOffset < 0f -> (currentPage - 1).coerceAtLeast(0)
+                // If the offset is higher than zero, guess the next page
+                currentPageOffset > 0f -> (currentPage + 1).coerceAtMost(pageCount - 1)
+                // If the offset is 0f (or very close), return the current page
+                else -> currentPage
+            }
+
     @Deprecated(
         "Replaced with animateScrollToPage(page, pageOffset)",
         ReplaceWith("animateScrollToPage(page = page, pageOffset = pageOffset)")
