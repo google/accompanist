@@ -58,6 +58,53 @@ This features composable bottom sheet destinations.
     }
     ```
 
+### Backdrop Destinations
+
+1. Create a `BackdropNavigator` and add it to the `NavController`:
+
+    ```kotlin
+    @Composable
+    fun MyApp() {
+        val backdropNavigator= rememberBackdropNavigator()
+        val navController = rememberNavController(backdropNavigator)
+    }
+    ```
+
+2. Wrap your `NavHost` in the `BackdropScaffold` composable that accepts a `BackdropScaffoldNavigator`.
+
+    ```kotlin
+    @Composable
+    fun MyApp() {
+        val backdropNavigator= rememberBackdropNavigator()
+        val navController = rememberNavController(backdropNavigator)
+        BackdropScaffold(bottomSheetNavigator) {
+            NavHost(navController, Destinations.Home) {
+               // We'll define our graph here in a bit!
+            }
+        }
+    }
+    ```
+
+3. Register a bottom sheet destination
+
+    ```kotlin
+    @Composable
+    fun MyApp() {
+        val bottomSheetNavigator = rememberBottomSheetNavigator()
+        val navController = rememberNavController(bottomSheetNavigator)
+        ModalBottomSheetLayout(bottomSheetNavigator) {
+            NavHost(navController, Destinations.Home) {
+               composable(route = "home") {
+                   ...
+               }
+               backdrop(route = "backdrop") {
+                   Text("This is a cool backdrop back layer!")
+               }
+            }
+        }
+    }
+    ```
+
 For more examples, refer to the [samples](https://github.com/google/accompanist/tree/main/sample/src/main/java/com/google/accompanist/sample/navigation/material).
 
 ## Download
