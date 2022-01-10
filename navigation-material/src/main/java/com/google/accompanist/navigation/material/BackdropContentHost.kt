@@ -17,12 +17,10 @@
 package com.google.accompanist.navigation.material
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.BackdropScaffoldState
 import androidx.compose.material.BackdropValue
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -51,18 +49,16 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 
 /**
- * Hosts a [BottomSheetNavigator.Destination]'s [NavBackStackEntry] and its
- * [BottomSheetNavigator.Destination.content] and provides a [onSheetDismissed] callback. It also
- * shows and hides the [ModalBottomSheetLayout] through the [sheetState] when the sheet content
- * enters or leaves the composition.
+ * Hosts a [BackdropNavigator.Destination]'s [NavBackStackEntry] and its
+ * [BackdropNavigator.Destination.content] and provides a [onBackLayerDismissed] callback. It also
+ * shows and hides the [ModalBottomSheetLayout] through the [backdropScaffoldState] when the back
+ * layer content enters or leaves the composition.
  *
- * @param columnHost The [ColumnScope] the sheet content is hosted in, typically the instance
- * that is provided by [ModalBottomSheetLayout]
- * @param backStackEntry The [NavBackStackEntry] holding the [BottomSheetNavigator.Destination],
- * or null if there is no [NavBackStackEntry]
- * @param sheetState The [ModalBottomSheetState] used to observe and control the sheet visibility
- * @param onSheetDismissed Callback when the sheet has been dismissed. Typically, you'll want to
- * pop the back stack here.
+ * @param backStackEntry The [NavBackStackEntry] holding the [BackdropNavigator.Destination], or null
+ * if there is no [NavBackStackEntry]
+ * @param backdropScaffoldState The [BackdropScaffoldState] used to observe and control the sheet visibility
+ * @param onBackLayerDismissed Callback when the backdrop has been dismissed. Typically, you'll want
+ * to pop the back stack here.
  */
 @ExperimentalMaterialNavigationApi
 @OptIn(ExperimentalMaterialApi::class, ExperimentalCoroutinesApi::class)
@@ -71,35 +67,35 @@ internal fun BackdropContentHost(
     backStackEntry: NavBackStackEntry?,
     backdropScaffoldState: BackdropScaffoldState,
     saveableStateHolder: SaveableStateHolder,
-    onSheetShown: (entry: NavBackStackEntry) -> Unit,
-    onSheetDismissed: (entry: NavBackStackEntry) -> Unit,
+    onBackLayerShown: (entry: NavBackStackEntry) -> Unit,
+    onBackLayerDismissed: (entry: NavBackStackEntry) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     if (backStackEntry != null) {
-        val currentOnSheetShown by rememberUpdatedState(onSheetShown)
-        val currentOnSheetDismissed by rememberUpdatedState(onSheetDismissed)
+        val currentOnBackLayerShown by rememberUpdatedState(onBackLayerShown)
+        val currentOnBackLayerDismissed by rememberUpdatedState(onBackLayerDismissed)
         var hideCalled by remember(backStackEntry) { mutableStateOf(false) }
         LaunchedEffect(backStackEntry, hideCalled) {
-            val sheetVisibility = snapshotFlow { backdropScaffoldState.isRevealed }
-            sheetVisibility
-                // We are only interested in changes in the sheet's visibility
+            val backLayerVisibility = snapshotFlow { backdropScaffoldState.isRevealed }
+            backLayerVisibility
+                // We are only interested in changes in the back layers's visibility
                 .distinctUntilChanged()
                 // distinctUntilChanged emits the initial value which we don't need
                 .drop(1)
                 // We want to know when the back layer was visible but is not anymore
                 .filter { isRevealed -> !isRevealed }
-                // Finally, pop the back stack when the sheet has been hidden
-                .collect { if (!hideCalled) currentOnSheetDismissed(backStackEntry) }
+                // Finally, pop the back stack when the back layers has been hidden
+                .collect { if (!hideCalled) currentOnBackLayerDismissed(backStackEntry) }
         }
 
-        // We use this signal to know when its (almost) safe to `show` the bottom sheet
+        // We use this signal to know when its (almost) safe to `show` the back layers
         // It will be set after the sheet's content has been `onGloballyPositioned`
         val contentPositionedSignal = remember(backStackEntry) {
             CompletableDeferred<Unit?>()
         }
 
         // Whenever the composable associated with the backStackEntry enters the composition, we
-        // want to show the sheet, and hide it when this composable leaves the composition
+        // want to show the back layers, and hide it when this composable leaves the composition
         DisposableEffect(backStackEntry) {
             scope.launch {
                 contentPositionedSignal.await()
@@ -130,11 +126,11 @@ internal fun BackdropContentHost(
                     }
                 } finally {
                     // If, for some reason, the sheet is in a state where the animation is still
-                    // running, there is a chance that it is already targeting the EXPANDED or
-                    // HALF_EXPANDED state and will snap to that. In that case we can be fairly
-                    // certain that the sheet will actually end up in that state.
+                    // running, there is a chance that it is already targeting the REVEALED state
+                    // and will snap to that. In that case we can be fairly certain that the sheet
+                    // will actually end up in that state.
                     if (backdropScaffoldState.isRevealed || backdropScaffoldState.willBeVisible) {
-                        currentOnSheetShown(backStackEntry)
+                        currentOnBackLayerShown(backStackEntry)
                     }
                 }
             }

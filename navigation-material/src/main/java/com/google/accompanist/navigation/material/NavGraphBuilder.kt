@@ -55,6 +55,15 @@ public fun NavGraphBuilder.bottomSheet(
     )
 }
 
+
+/**
+ * Add the [content] [Composable] as a Backdrop's back layer content to the [NavGraphBuilder]
+ *
+ * @param route route for the destination
+ * @param arguments list of arguments to associate with destination
+ * @param deepLinks list of deep links to associate with the destinations
+ * @param content the back layer content at the given destination
+ */
 @ExperimentalMaterialNavigationApi
 public fun NavGraphBuilder.backdrop(
     route: String,

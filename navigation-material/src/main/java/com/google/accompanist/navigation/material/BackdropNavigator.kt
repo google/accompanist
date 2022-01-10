@@ -20,7 +20,6 @@ import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.material.BackdropScaffoldState
 import androidx.compose.material.BackdropValue
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.SwipeProgress
 import androidx.compose.material.SwipeableDefaults
@@ -45,9 +44,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 /**
- * The state of a [ModalBottomSheetLayout] that the [BottomSheetNavigator] drives
+ * The state of a [BackdropScaffold] that the [BackdropNavigator] drives
  *
- * @param sheetState The sheet state that is driven by the [BottomSheetNavigator]
+ * @param backdropState The sheet state that is driven by the [BackdropNavigator]
  */
 @ExperimentalMaterialNavigationApi
 @OptIn(ExperimentalMaterialApi::class)
@@ -112,7 +111,11 @@ public class BackdropNavigatorState(private val backdropState: BackdropScaffoldS
 }
 
 /**
- * Create and remember a [BottomSheetNavigator]
+ * Create and remember a [BackdropNavigator]
+ *
+ * @param animationSpec The default animation that will be used to animate to a new state.
+ * @param confirmStateChange Optional callback invoked to confirm or veto a pending state change.
+ * @param snackbarHostState The [SnackbarHostState] used to show snackbars inside the scaffold.
  */
 @ExperimentalMaterialNavigationApi
 @OptIn(ExperimentalMaterialApi::class)
@@ -134,19 +137,17 @@ public fun rememberBackdropNavigator(
 }
 
 /**
- * Navigator that drives a [ModalBottomSheetState] for use of [ModalBottomSheetLayout]s
- * with the navigation library. Every destination using this Navigator must set a valid
- * [Composable] by setting it directly on an instantiated [Destination] or calling
- * [androidx.navigation.compose.material.bottomSheet].
+ * Navigator that drives a [BackdropScaffoldState] for use of [BackdropScaffold]s with the navigation
+ * library. Every destination using this Navigator must set a valid [Composable] by setting it
+ * directly on an instantiated [Destination] or calling [backdrop].
  *
- * <b>The [sheetContent] [Composable] will always host the latest entry of the back stack. When
- * navigating from a [BottomSheetNavigator.Destination] to another
- * [BottomSheetNavigator.Destination], the content of the sheet will be replaced instead of a
- * new bottom sheet being shown.</b>
+ * <b>The [backLayerContent] [Composable] will always host the latest entry of the back stack. When
+ * navigating from a [BackdropNavigator.Destination] to another [BackdropNavigator.Destination],
+ * the content of the back layer will be replaced.</b>
  *
- * When the sheet is dismissed by the user, the [state]'s [NavigatorState.backStack] will be popped.
+ * When the back layer is dismissed by the user, the [state]'s [NavigatorState.backStack] will be popped.
  *
- * @param backdropScaffoldState The [ModalBottomSheetState] that the [BottomSheetNavigator] will use to
+ * @param backdropScaffoldState The [BackdropScaffoldState] that the [BackdropNavigator] will use to
  * drive the sheet state
  */
 @ExperimentalMaterialNavigationApi
@@ -159,7 +160,7 @@ public class BackdropNavigator(
     private var attached by mutableStateOf(false)
 
     /**
-     * Get the back stack from the [state]. In some cases, the [sheetContent] might be composed
+     * Get the back stack from the [state]. In some cases, the [backLayerContent] might be composed
      * before the Navigator is attached, so we specifically return an empty flow if we aren't
      * attached yet.
      */
@@ -171,19 +172,19 @@ public class BackdropNavigator(
         }
 
     /**
-     * Access properties of the [ModalBottomSheetLayout]'s [ModalBottomSheetState]
+     * Access properties of the [BackdropScaffold]'s [BackdropScaffoldState]
      */
     public val navigatorState = BackdropNavigatorState(backdropScaffoldState)
 
     /**
-     * A [Composable] function that hosts the current sheet content. This should be set as
-     * sheetContent of your [ModalBottomSheetLayout].
+     * A [Composable] function that hosts the current back layer content. This should be set as
+     * backLayerContent of your [BackdropScaffold].
      */
     public val backLayerContent: @Composable () -> Unit = @Composable {
         val saveableStateHolder = rememberSaveableStateHolder()
         val backStackEntries by backStack.collectAsState()
 
-        // We always replace the sheet's content instead of overlaying and nesting floating
+        // We always replace the back layer's content instead of overlaying and nesting floating
         // window destinations. That means that only *one* concurrent destination is supported by
         // this navigator.
         val latestEntry = backStackEntries.lastOrNull { entry ->
@@ -206,11 +207,11 @@ public class BackdropNavigator(
             backStackEntry = latestEntry,
             backdropScaffoldState = backdropScaffoldState,
             saveableStateHolder = saveableStateHolder,
-            onSheetShown = { backStackEntry ->
+            onBackLayerShown = { backStackEntry ->
                 state.markTransitionComplete(backStackEntry)
             },
-            onSheetDismissed = { backStackEntry ->
-                // Sheet dismissal can be started through popBackStack in which case we have a
+            onBackLayerDismissed = { backStackEntry ->
+                // Back layer dismissal can be started through popBackStack in which case we have a
                 // transition that we'll want to complete
                 if (state.transitionsInProgress.value.contains(backStackEntry)) {
                     state.markTransitionComplete(backStackEntry)
@@ -243,7 +244,7 @@ public class BackdropNavigator(
     }
 
     /**
-     * [NavDestination] specific to [BottomSheetNavigator]
+     * [NavDestination] specific to [BackdropNavigator]
      */
     @NavDestination.ClassType(Composable::class)
     public class Destination(

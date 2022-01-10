@@ -16,6 +16,7 @@
 
 package com.google.accompanist.navigation.material
 
+import androidx.compose.material.BackdropScaffold
 import androidx.compose.material.BackdropScaffoldDefaults
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
@@ -29,10 +30,16 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 
 
-
+/**
+ * Helper function to create a [BackdropScaffold] from a [BackdropNavigator].
+ *
+ * @see [BackdropScaffold]
+ *
+ */
 @ExperimentalMaterialNavigationApi
 @OptIn(ExperimentalMaterialApi::class)
-@Composable public fun BackdropScaffold(
+@Composable
+public fun BackdropScaffold(
     backdropNavigator: BackdropNavigator,
     appBar: @Composable () -> Unit,
     modifier: Modifier = Modifier,
@@ -51,7 +58,7 @@ import androidx.compose.ui.unit.Dp
     snackbarHost: @Composable (SnackbarHostState) -> Unit = { SnackbarHost(it) },
     frontLayerContent: @Composable () -> Unit,
 ) {
-    androidx.compose.material.BackdropScaffold(
+    BackdropScaffold(
         appBar,
         backdropNavigator.backLayerContent,
         frontLayerContent,
