@@ -208,6 +208,16 @@
         </activity>
 
         <activity
+            android:name=".navigation.material.BackdropNavSample"
+            android:label="@string/navigation_title_backdrop"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".permissions.RequestPermissionSample"
             android:label="@string/permissions_title_one"
             android:exported="false">

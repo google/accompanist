@@ -54,3 +54,26 @@ public fun NavGraphBuilder.bottomSheet(
         }
     )
 }
+
+@ExperimentalMaterialNavigationApi
+public fun NavGraphBuilder.backdrop(
+    route: String,
+    arguments: List<NamedNavArgument> = emptyList(),
+    deepLinks: List<NavDeepLink> = emptyList(),
+    content: @Composable (backstackEntry: NavBackStackEntry) -> Unit
+) {
+    addDestination(
+        BackdropNavigator.Destination(
+            provider[BackdropNavigator::class],
+            content
+        ).apply {
+            this.route = route
+            arguments.forEach { (argumentName, argument) ->
+                addArgument(argumentName, argument)
+            }
+            deepLinks.forEach { deepLink ->
+                addDeepLink(deepLink)
+            }
+        }
+    )
+}

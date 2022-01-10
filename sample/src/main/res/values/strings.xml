@@ -37,6 +37,7 @@
 
     <string name="navigation_title_animated">Navigation: Transitions</string>
     <string name="navigation_title_bottom_sheet">Navigation: Bottom Sheets</string>
+    <string name="navigation_title_backdrop">Navigation: Backdrop</string>
 
     <string name="permissions_title_one">Permissions: Request permission</string>
     <string name="permissions_title_multiple">Permissions: Request multiple permissions</string>
