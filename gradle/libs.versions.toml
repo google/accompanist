@@ -1,7 +1,6 @@
 [versions]
-compose = "1.1.0-rc01"
+compose = "1.2.0-alpha01"
 composesnapshot = "-" # a single character = no snapshot
-composeCompiler = "1.1.0-rc02"
 
 # gradlePlugin and lint need to be updated together
 gradlePlugin = "7.0.4"
