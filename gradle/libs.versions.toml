@@ -3,7 +3,7 @@ compose = "1.2.0-alpha01"
 composesnapshot = "-" # a single character = no snapshot
 
 # gradlePlugin and lint need to be updated together
-gradlePlugin = "7.0.4"
+gradlePlugin = "7.1.0-rc01"
 lint = "30.0.3"
 
 ktlint = "0.42.1"
@@ -53,7 +53,7 @@ coil-coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-gif = { module = "io.coil-kt:coil-gif", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 
-androidx-appcompat = "androidx.appcompat:appcompat:1.4.0"
+androidx-appcompat = "androidx.appcompat:appcompat:1.4.1"
 androidx-core = "androidx.core:core-ktx:1.7.0"
 androidx-activity-compose = "androidx.activity:activity-compose:1.4.0"
 androidx-fragment = "androidx.fragment:fragment-ktx:1.4.0"
