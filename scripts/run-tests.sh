@@ -92,7 +92,7 @@ fi
 # If we don't have a task yet, use the defaults
 if [[ -z "$TASK" ]]; then
   if [ "$DEVICE" = true ]; then
-    TASK="connectedCheck"
+    TASK="connectedCheck uninstallAll"
   else
     TASK="testDebug"
   fi
@@ -107,3 +107,4 @@ if [ "$SHARD_COUNT" -gt "0" ]; then
 fi
 
 ./gradlew --scan --continue --no-configuration-cache --stacktrace $TASK $FILTER_OPTS $SHARD_OPTS
+
