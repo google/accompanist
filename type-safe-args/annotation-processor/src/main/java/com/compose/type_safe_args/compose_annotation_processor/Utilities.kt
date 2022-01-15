@@ -2,6 +2,7 @@ package com.compose.type_safe_args.compose_annotation_processor
 
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.processing.Resolver
+import com.google.devtools.ksp.symbol.ClassKind
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 import com.google.devtools.ksp.symbol.Nullability
@@ -32,6 +33,7 @@ fun getPropertyMap(
             resolvedType = resolvedType,
             resolvedClassDeclarationName = resolvedClassDeclarationName,
             resolvedClassQualifiedName = resolvedClassQualifiedName,
+            resolvedClassSimpleName = resolvedType.declaration.simpleName.asString(),
             typeArguments = typeArguments,
             isNullable = resolvedType.nullability == Nullability.NULLABLE,
             composeArgumentType = when (resolvedClassDeclarationName) {
@@ -59,16 +61,20 @@ fun getPropertyMap(
                                 isSerializable = true
                             }
                         }
-                        if (isParcelable) {
-                            ComposeArgumentType.PARCELABLE_ARRAY
-                        } else if (isSerializable) {
-                            ComposeArgumentType.SERIALIZABLE
-                        } else {
-                            logger.error(
-                                "invalid property type, cannot pass it in bundle",
-                                property
-                            )
-                            return null
+                        when {
+                            isParcelable -> {
+                                ComposeArgumentType.PARCELABLE_ARRAY
+                            }
+                            isSerializable -> {
+                                ComposeArgumentType.SERIALIZABLE
+                            }
+                            else -> {
+                                logger.error(
+                                    "invalid property type, cannot pass it in bundle",
+                                    property
+                                )
+                                return null
+                            }
                         }
                     }
                     (resolvedType.declaration as KSClassDeclaration).superTypes.map { it.toString() }
@@ -77,6 +83,9 @@ fun getPropertyMap(
                     }
                     (resolvedType.declaration as KSClassDeclaration).superTypes.map { it.toString() }
                         .contains("Serializable") -> {
+                        ComposeArgumentType.SERIALIZABLE
+                    }
+                    ((resolvedType.declaration as? KSClassDeclaration)?.classKind == ClassKind.ENUM_CLASS) -> {
                         ComposeArgumentType.SERIALIZABLE
                     }
                     else -> {
@@ -92,6 +101,16 @@ fun getPropertyMap(
         )
     }
     return propertyMap
+}
+
+fun addImports(file: OutputStream, properties: Collection<PropertyInfo>) {
+    val importSet = mutableSetOf<String>()
+    properties.forEach { propertyInfo ->
+        if (importSet.contains(propertyInfo.resolvedClassQualifiedName).not()) {
+            importSet.add(propertyInfo.resolvedClassQualifiedName)
+            file addLine "import ${propertyInfo.resolvedClassQualifiedName}"
+        }
+    }
 }
 
 var tabs = 0

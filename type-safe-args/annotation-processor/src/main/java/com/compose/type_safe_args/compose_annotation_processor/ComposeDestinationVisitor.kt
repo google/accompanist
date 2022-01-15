@@ -18,30 +18,20 @@ class ComposeDestinationVisitor(
     private val logger: KSPLogger,
     private val options: Map<String, String>,
     private val argumentProviderMap: MutableMap<KSClassDeclaration, KSClassDeclaration>,
+    private val propertyMap: Map<KSPropertyDeclaration, PropertyInfo>,
+    private val singletonClass: KSClassDeclaration?
 ) : KSVisitorVoid() {
 
     override fun visitClassDeclaration(classDeclaration: KSClassDeclaration, data: Unit) {
         val route = classDeclaration.simpleName.asString()
         val properties: Sequence<KSPropertyDeclaration> = classDeclaration.getAllProperties()
 
-        var singletonClass: KSClassDeclaration? = null
-        classDeclaration.declarations.forEach {
-            if (it is KSClassDeclaration && it.classKind == ClassKind.OBJECT) {
-                singletonClass = it
-            }
-        }
-
         fun getSingletonExtension(): String {
             return if (singletonClass != null) {
-                "${singletonClass?.qualifiedName?.asString().orEmpty()}."
+                "${singletonClass.simpleName.asString()}."
             } else {
                 ""
             }
-        }
-
-        val propertyMap = getPropertyMap(properties, logger, resolver) ?: run {
-            logger.error("invalid argument found")
-            return
         }
 
         val dataClassName = "${route}Args"
@@ -240,7 +230,7 @@ class ComposeDestinationVisitor(
             if (propertyMap.any { it.value.hasDefaultValue } &&
                 argumentProviderMap.containsKey(classDeclaration)
             ) {
-                argumentProviderMap[classDeclaration]?.qualifiedName?.asString()
+                argumentProviderMap[classDeclaration]?.simpleName?.asString()
             } else {
                 null
             }
@@ -342,7 +332,7 @@ class ComposeDestinationVisitor(
     }
 
     private fun addVariableType(file: OutputStream, propertyInfo: PropertyInfo) {
-        file addPhrase propertyInfo.resolvedClassQualifiedName
+        file addPhrase propertyInfo.resolvedClassSimpleName
         visitChildTypeArguments(propertyInfo.typeArguments)
         file addPhrase if (propertyInfo.isNullable) "?" else ""
     }
@@ -367,7 +357,7 @@ class ComposeDestinationVisitor(
             }
         }
         val resolvedType: KSType? = typeArgument.type?.resolve()
-        file addPhrase (resolvedType?.declaration?.qualifiedName?.asString() ?: run {
+        file addPhrase (resolvedType?.declaration?.simpleName?.asString() ?: run {
             logger.error("Invalid type argument", typeArgument)
             return
         })

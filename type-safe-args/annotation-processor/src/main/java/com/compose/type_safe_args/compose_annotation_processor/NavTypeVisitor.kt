@@ -11,18 +11,19 @@ import com.google.devtools.ksp.symbol.Nullability
 import com.google.devtools.ksp.symbol.Variance
 import java.io.OutputStream
 
-class NavTypeVisitor(private val file: OutputStream, private val resolver: Resolver, private val logger: KSPLogger, private val options: Map<String, String>, ) :
-    KSVisitorVoid() {
+class NavTypeVisitor(
+    private val file: OutputStream,
+    private val resolver: Resolver,
+    private val logger: KSPLogger,
+    private val options: Map<String, String>,
+    private val propertyMap: Map<KSPropertyDeclaration, PropertyInfo>
+) : KSVisitorVoid() {
 
     override fun visitClassDeclaration(classDeclaration: KSClassDeclaration, data: Unit) {
         val properties: Sequence<KSPropertyDeclaration> = classDeclaration.getAllProperties()
 
         val route = classDeclaration.simpleName.asString()
 
-        val propertyMap = getPropertyMap(properties, logger, resolver) ?: run {
-            logger.error("invalid argument found")
-            return
-        }
         properties.forEach { property ->
             val propertyInfo = propertyMap[property] ?: run {
                 logger.error("invalid argument found")
@@ -32,7 +33,7 @@ class NavTypeVisitor(private val file: OutputStream, private val resolver: Resol
                     propertyInfo.composeArgumentType == ComposeArgumentType.PARCELABLE_ARRAY ||
                     propertyInfo.composeArgumentType == ComposeArgumentType.SERIALIZABLE
 
-            )) {
+                    )) {
                 return@forEach
             }
 
@@ -118,7 +119,7 @@ class NavTypeVisitor(private val file: OutputStream, private val resolver: Resol
     }
 
     private fun addVariableType(file: OutputStream, propertyInfo: PropertyInfo) {
-        file addPhrase propertyInfo.resolvedClassQualifiedName
+        file addPhrase propertyInfo.resolvedClassSimpleName
         visitChildTypeArguments(propertyInfo.typeArguments)
         file addPhrase if (propertyInfo.isNullable) "?" else ""
     }
@@ -154,7 +155,7 @@ class NavTypeVisitor(private val file: OutputStream, private val resolver: Resol
             }
         }
         val resolvedType: KSType? = typeArgument.type?.resolve()
-        file addPhrase (resolvedType?.declaration?.qualifiedName?.asString() ?: run {
+        file addPhrase (resolvedType?.declaration?.simpleName?.asString() ?: run {
             logger.error("Invalid type argument", typeArgument)
             return
         })

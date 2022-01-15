@@ -17,15 +17,11 @@ class DefaultArgumentVisitor(
     private val resolver: Resolver,
     private val logger: KSPLogger,
     private val options: Map<String, String>,
+    private val propertyMap: Map<KSPropertyDeclaration, PropertyInfo>
 ) : KSVisitorVoid() {
     override fun visitClassDeclaration(classDeclaration: KSClassDeclaration, data: Unit) {
         val properties: Sequence<KSPropertyDeclaration> = classDeclaration.getAllProperties()
         val className = classDeclaration.simpleName.asString()
-
-        val propertyMap = getPropertyMap(properties, logger, resolver) ?: run {
-            logger.error("invalid argument found")
-            return
-        }
 
         val defaultProperties = mutableListOf<PropertyInfo>()
 
@@ -54,7 +50,7 @@ class DefaultArgumentVisitor(
     }
 
     private fun addVariableType(file: OutputStream, propertyInfo: PropertyInfo) {
-        file addPhrase propertyInfo.resolvedClassQualifiedName
+        file addPhrase propertyInfo.resolvedClassSimpleName
         visitChildTypeArguments(propertyInfo.typeArguments)
         file addPhrase if (propertyInfo.isNullable) "?" else ""
     }
@@ -90,7 +86,7 @@ class DefaultArgumentVisitor(
             }
         }
         val resolvedType: KSType? = typeArgument.type?.resolve()
-        file addPhrase (resolvedType?.declaration?.qualifiedName?.asString() ?: run {
+        file addPhrase (resolvedType?.declaration?.simpleName?.asString() ?: run {
             logger.error("Invalid type argument", typeArgument)
             return
         })
