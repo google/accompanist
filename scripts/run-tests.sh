@@ -92,9 +92,9 @@ fi
 # If we don't have a task yet, use the defaults
 if [[ -z "$TASK" ]]; then
   if [ "$DEVICE" = true ]; then
-    TASK="uninstallAll connectedCheck"
+    TASK="connectedCheck"
   else
-    TASK="uninstallAll testDebug"
+    TASK="testDebug"
   fi
 fi
 
@@ -106,4 +106,30 @@ if [ "$SHARD_COUNT" -gt "0" ]; then
   SHARD_OPTS="$SHARD_OPTS -Pandroid.testInstrumentationRunnerArguments.shardIndex=$SHARD_INDEX"
 fi
 
-./gradlew --scan --continue --no-configuration-cache --stacktrace $TASK $FILTER_OPTS $SHARD_OPTS
+# For every module in Accompanist, check if it can run $TASK and
+# uninstall the Accompanist apps when the $TASK is completed
+TASK_FOR_ALL_MODULES=""
+for ACCOMPANIST_MODULE in $(./gradlew :projects | grep 'Project ' | sed -E "s/.*Project ':(.+)'/\1/")
+do
+  # If $TASK can be found in the Accompanist module, then add it to the task to run
+  if [ -n "$(./gradlew $ACCOMPANIST_MODULE:tasks | grep $TASK)" ]; then
+	  TASK_FOR_ALL_MODULES="$TASK_FOR_ALL_MODULES :$ACCOMPANIST_MODULE:$TASK :$ACCOMPANIST_MODULE:uninstallAll"
+  fi
+done
+
+# Note: Instead of running multiple gradlew commands for each module, we comprise all of them in
+# one gradlew execution to not having to spend time configuring all the projects every time gradlew
+# is called. Because of that and to run the gradle commands serially, the --no-parallel option is used
+./gradlew --scan --continue --no-configuration-cache --stacktrace $TASK_FOR_ALL_MODULES $FILTER_OPTS $SHARD_OPTS --no-parallel
+
+# Example of $TASK_FOR_ALL_MODULES output:
+#
+# TASK_FOR_ALL_MODULES=' :appcompat-theme:connectedCheck :appcompat-theme:uninstallAll
+# :drawablepainter:connectedCheck :drawablepainter:uninstallAll :flowlayout:connectedCheck
+# :flowlayout:uninstallAll :insets:connectedCheck :insets:uninstallAll :insets-ui:connectedCheck
+# :insets-ui:uninstallAll :internal-testutils:connectedCheck :internal-testutils:uninstallAll
+# :navigation-animation:connectedCheck :navigation-animation:uninstallAll :navigation-material:connectedCheck
+# :navigation-material:uninstallAll :pager:connectedCheck :pager:uninstallAll :pager-indicators:connectedCheck
+# :pager-indicators:uninstallAll :permissions:connectedCheck :permissions:uninstallAll
+# :placeholder:connectedCheck :placeholder:uninstallAll :placeholder-material:connectedCheck
+# :placeholder-material:uninstallAll'
