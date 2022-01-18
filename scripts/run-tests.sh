@@ -111,8 +111,8 @@ fi
 TASK_FOR_ALL_MODULES=""
 for ACCOMPANIST_MODULE in $(./gradlew :projects | grep 'Project ' | sed -E "s/.*Project ':(.+)'/\1/")
 do
-  # If $TASK can be found in the Accompanist module, then add it to the task to run
-  if [ -n "$(./gradlew $ACCOMPANIST_MODULE:tasks | grep $TASK)" ]; then
+  # If the Accompanist module is an Android module, then add it to the task to run
+  if [ -n "$(./gradlew $ACCOMPANIST_MODULE:tasks | grep connectedCheck)" ]; then
 	  TASK_FOR_ALL_MODULES="$TASK_FOR_ALL_MODULES :$ACCOMPANIST_MODULE:$TASK :$ACCOMPANIST_MODULE:uninstallAll"
   fi
 done
