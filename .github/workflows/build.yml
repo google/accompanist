@@ -83,7 +83,7 @@ jobs:
       fail-fast: false
       matrix:
         api-level: [ 22, 26, 28, 29 ]
-        shard: [ 0, 1, 2, 3 ] # Need to update shard-count below if this changes
+        shard: [ 0, 1 ] # Need to update shard-count below if this changes
 
     env:
       TERM: dumb
@@ -124,7 +124,7 @@ jobs:
           API_LEVEL: ${{ matrix.api-level }}
         run: |
           TARGET="default"
-          if [ "$API_LEVEL" -ge "29" ]; then
+          if [ ("$API_LEVEL" -ge "29") || ("$API_LEVEL" -eq "22") ]; then
             TARGET="google_apis"
           fi
           echo "::set-output name=TARGET::$TARGET"
@@ -136,7 +136,7 @@ jobs:
           target: ${{ steps.determine-target.outputs.TARGET }}
           profile: Galaxy Nexus
           # We run all affected tests of the PR (or commit)
-          script: ./scripts/run-tests.sh --log-file=logcat.txt --run-affected --affected-base-ref=$BASE_REF --shard-index=${{ matrix.shard }} --shard-count=4
+          script: ./scripts/run-tests.sh --log-file=logcat.txt --run-affected --affected-base-ref=$BASE_REF --shard-index=${{ matrix.shard }} --shard-count=2
 
       - name: Clean secrets
         if: always()
