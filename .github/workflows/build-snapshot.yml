@@ -129,7 +129,7 @@ jobs:
           echo "::set-output name=TARGET::$TARGET"
 
       - name: Run tests
-        uses: reactivecircus/android-emulator-runner@v2
+        uses: reactivecircus/android-emulator-runner@v2.22.0
         with:
           api-level: ${{ matrix.api-level }}
           target: ${{ steps.determine-target.outputs.TARGET }}
