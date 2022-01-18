@@ -92,9 +92,9 @@ fi
 # If we don't have a task yet, use the defaults
 if [[ -z "$TASK" ]]; then
   if [ "$DEVICE" = true ]; then
-    TASK="connectedCheck"
+    TASK="uninstallAll connectedCheck"
   else
-    TASK="testDebug"
+    TASK="uninstallAll testDebug"
   fi
 fi
 

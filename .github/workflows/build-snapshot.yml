@@ -123,7 +123,7 @@ jobs:
           API_LEVEL: ${{ matrix.api-level }}
         run: |
           TARGET="default"
-          if [[ "$API_LEVEL" -ge "29" || "$API_LEVEL" -eq "22" ]]; then
+          if [ "$API_LEVEL" -ge "29" ]; then
             TARGET="google_apis"
           fi
           echo "::set-output name=TARGET::$TARGET"
