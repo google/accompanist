@@ -53,11 +53,7 @@ jobs:
               lintDebug
 
       - name: Unit Tests
-        run: |
-          ./scripts/run-tests.sh \
-              --unit-tests \
-              --run-affected \
-              --affected-base-ref=$BASE_REF
+        run: ./scripts/run-tests.sh --unit-tests
 
       - name: Upload test results
         if: always()
@@ -134,8 +130,7 @@ jobs:
           api-level: ${{ matrix.api-level }}
           target: ${{ steps.determine-target.outputs.TARGET }}
           profile: Galaxy Nexus
-          # We run all affected tests of the PR (or commit)
-          script: ./scripts/run-tests.sh --log-file=logcat.txt --run-affected --affected-base-ref=$BASE_REF --shard-index=${{ matrix.shard }} --shard-count=2
+          script: ./scripts/run-tests.sh --log-file=logcat.txt --shard-index=${{ matrix.shard }} --shard-count=2
 
       - name: Clean secrets
         if: always()
