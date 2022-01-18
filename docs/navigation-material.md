@@ -18,7 +18,7 @@ This features composable bottom sheet destinations.
     ```kotlin
     @Composable
     fun MyApp() {
-        val bottomSheetNavigator = rememberBottomSheetNaviginator()
+        val bottomSheetNavigator = rememberBottomSheetNavigator()
         val navController = rememberNavController(bottomSheetNavigator)
     }
     ```
