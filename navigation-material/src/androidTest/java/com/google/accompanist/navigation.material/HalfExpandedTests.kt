@@ -71,28 +71,19 @@ class HalfExpandedTests {
             lateinit var navController: NavHostController
             lateinit var bottomSheetNavigator: BottomSheetNavigator
             composeTestRule.setContent {
-                navController = rememberNavController()
                 bottomSheetNavigator = rememberBottomSheetNavigator(skipHalfExpanded = skipHalfExpanded)
+                navController = rememberNavController(bottomSheetNavigator)
 
-                navController.navigatorProvider += bottomSheetNavigator
-
-                NavHost(
-                    navController = navController,
-                    startDestination = "start"
-                ) {
-                    composable("start") {
-                        ModalBottomSheetLayout(
-                            bottomSheetNavigator = bottomSheetNavigator,
-                            content = { Box(Modifier.fillMaxSize()) }
-                        )
-                    }
-                    bottomSheet("bottomSheet") {
-                        Box(modifier = Modifier.fillMaxSize(screenPercent))
+                ModalBottomSheetLayout(bottomSheetNavigator = bottomSheetNavigator) {
+                    NavHost(
+                        navController = navController,
+                        startDestination = "bottomSheet"
+                    ) {
+                        bottomSheet("bottomSheet") {
+                            Box(modifier = Modifier.fillMaxSize(screenPercent))
+                        }
                     }
                 }
-            }
-            launch(Dispatchers.Main) {
-                navController.navigate("bottomSheet")
             }
             composeTestRule.awaitIdle()
             Truth.assertThat(bottomSheetNavigator.navigatorSheetState.currentValue)

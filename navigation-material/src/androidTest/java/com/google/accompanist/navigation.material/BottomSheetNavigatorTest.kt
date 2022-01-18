@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.plusAssign
 import androidx.navigation.testing.TestNavigatorState
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
@@ -126,10 +127,7 @@ internal class BottomSheetNavigatorTest {
                 secondDestinationCompositions++
                 onDispose { secondDestinationCompositions = 0 }
             }
-            Box(
-                Modifier
-                    .size(64.dp)
-                    .testTag(secondDestinationContentTag))
+            Box(Modifier.size(64.dp).testTag(secondDestinationContentTag))
         }
         val secondEntry = navigatorState.createBackStackEntry(secondDestination, null)
 
@@ -166,10 +164,7 @@ internal class BottomSheetNavigatorTest {
         composeTestRule.setContent {
             ModalBottomSheetLayout(
                 bottomSheetNavigator = navigator,
-                content = { Box(
-                    Modifier
-                        .fillMaxSize()
-                        .testTag(bodyContentTag)) }
+                content = { Box(Modifier.fillMaxSize().testTag(bodyContentTag)) }
             )
         }
 
