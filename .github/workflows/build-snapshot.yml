@@ -134,8 +134,6 @@ jobs:
           api-level: ${{ matrix.api-level }}
           target: ${{ steps.determine-target.outputs.TARGET }}
           profile: Galaxy Nexus
-          emulator-build: 7425822 # https://github.com/ReactiveCircus/android-emulator-runner/issues/160
-          # We run all affected tests of the PR (or commit)
           script: ./scripts/run-tests.sh --log-file=logcat.txt --run-affected --affected-base-ref=$BASE_REF --shard-index=${{ matrix.shard }} --shard-count=2
 
       - name: Clean secrets
