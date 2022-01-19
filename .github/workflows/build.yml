@@ -54,7 +54,11 @@ jobs:
               lintDebug
 
       - name: Unit Tests
-        run: ./scripts/run-tests.sh --unit-tests
+        run: |
+          ./scripts/run-tests.sh \
+              --unit-tests \
+              --run-affected \
+              --affected-base-ref=$BASE_REF
 
       - name: Upload test results
         if: always()
@@ -131,7 +135,7 @@ jobs:
           api-level: ${{ matrix.api-level }}
           target: ${{ steps.determine-target.outputs.TARGET }}
           profile: Galaxy Nexus
-          script: ./scripts/run-tests.sh --log-file=logcat.txt --shard-index=${{ matrix.shard }} --shard-count=2
+          script: ./scripts/run-tests.sh --log-file=logcat.txt --run-affected --affected-base-ref=$BASE_REF --shard-index=${{ matrix.shard }} --shard-count=2
 
       - name: Clean secrets
         if: always()
