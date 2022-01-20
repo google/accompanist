@@ -14,44 +14,45 @@
  * limitations under the License.
  */
 
-package com.google.accompanist.insets
+package com.google.accompanist.permissions
 
+import androidx.test.filters.SdkSuppress
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 
 /**
- * Dummy tests to help with sharding: https://github.com/android/android-test/issues/973
+ * Fake tests to avoid the "No tests found error" when running in Build.VERSION.SDK_INT < 23
  */
-@RunWith(JUnit4::class)
-class DummyTests {
+class FakeTests {
+
+    @SdkSuppress(maxSdkVersion = 22)
     @Test
-    fun dummy1() = Unit
+    fun fakeTestToAvoidNoTestsFoundErrorInAPI22AndBelow() = Unit
+
+    // More Fake tests to help with sharding: https://github.com/android/android-test/issues/973
+    @Test
+    fun fake1() = Unit
 
     @Test
-    fun dummy2() = Unit
+    fun fake2() = Unit
 
     @Test
-    fun dummy3() = Unit
+    fun fake3() = Unit
 
     @Test
-    fun dummy4() = Unit
+    fun fake4() = Unit
 
     @Test
-    fun dummy5() = Unit
+    fun fake5() = Unit
 
     @Test
-    fun dummy6() = Unit
+    fun fake6() = Unit
 
     @Test
-    fun dummy7() = Unit
+    fun fake7() = Unit
 
     @Test
-    fun dummy8() = Unit
+    fun fake8() = Unit
 
     @Test
-    fun dummy9() = Unit
-
-    @Test
-    fun dummy10() = Unit
+    fun fake9() = Unit
 }

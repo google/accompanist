@@ -25,6 +25,7 @@ import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -40,9 +41,17 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
+import dev.chrisbanes.snapper.ExperimentalSnapperApi
+import dev.chrisbanes.snapper.SnapOffsets
+import dev.chrisbanes.snapper.SnapperFlingBehavior
+import dev.chrisbanes.snapper.SnapperFlingBehaviorDefaults
+import dev.chrisbanes.snapper.SnapperLayoutInfo
+import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
 
 /**
@@ -60,33 +69,46 @@ annotation class ExperimentalPagerApi
 @ExperimentalPagerApi
 object PagerDefaults {
     /**
+     * The default implementation for the `maximumFlingDistance` parameter of
+     * [flingBehavior] which limits the fling distance to a single page.
+     */
+    @ExperimentalSnapperApi
+    @Suppress("MemberVisibilityCanBePrivate")
+    val singlePageFlingDistance: (SnapperLayoutInfo) -> Float = { layoutInfo ->
+        // We can scroll up to the scrollable size of the lazy layout
+        layoutInfo.endScrollOffset - layoutInfo.startScrollOffset.toFloat()
+    }
+
+    /**
      * Remember the default [FlingBehavior] that represents the scroll curve.
+     *
+     * Please remember to provide the correct [endContentPadding] if supplying your own
+     * [FlingBehavior] to [VerticalPager] or [HorizontalPager]. See those functions for how they
+     * calculate the value.
      *
      * @param state The [PagerState] to update.
      * @param decayAnimationSpec The decay animation spec to use for decayed flings.
      * @param snapAnimationSpec The animation spec to use when snapping.
+     * @param maximumFlingDistance Block which returns the maximum fling distance in pixels.
+     * @param endContentPadding The amount of content padding on the end edge of the lazy list
+     * in pixels (end/bottom depending on the scrolling direction).
      */
     @Composable
+    @ExperimentalSnapperApi
     fun flingBehavior(
         state: PagerState,
         decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
-        snapAnimationSpec: AnimationSpec<Float> = SnappingFlingBehaviorDefaults.snapAnimationSpec,
-    ): FlingBehavior = rememberSnappingFlingBehavior(
+        snapAnimationSpec: AnimationSpec<Float> = SnapperFlingBehaviorDefaults.SpringAnimationSpec,
+        maximumFlingDistance: (SnapperLayoutInfo) -> Float = singlePageFlingDistance,
+        endContentPadding: Dp = 0.dp,
+    ): FlingBehavior = rememberSnapperFlingBehavior(
         lazyListState = state.lazyListState,
+        snapOffsetForItem = SnapOffsets.Start, // pages are full width, so we use the simplest
         decayAnimationSpec = decayAnimationSpec,
-        snapAnimationSpec = snapAnimationSpec,
+        springAnimationSpec = snapAnimationSpec,
+        maximumFlingDistance = maximumFlingDistance,
+        endContentPadding = endContentPadding,
     )
-
-    @Deprecated(
-        "Replaced with PagerDefaults.flingBehavior()",
-        ReplaceWith("PagerDefaults.flingBehavior(state, decayAnimationSpec, snapAnimationSpec)")
-    )
-    @Composable
-    fun rememberPagerFlingConfig(
-        state: PagerState,
-        decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
-        snapAnimationSpec: AnimationSpec<Float> = SnappingFlingBehaviorDefaults.snapAnimationSpec,
-    ): FlingBehavior = flingBehavior(state, decayAnimationSpec, snapAnimationSpec)
 }
 
 /**
@@ -108,6 +130,7 @@ object PagerDefaults {
  * @param content a block which describes the content. Inside this block you can reference
  * [PagerScope.currentPage] and other properties in [PagerScope].
  */
+@OptIn(ExperimentalSnapperApi::class)
 @ExperimentalPagerApi
 @Composable
 fun HorizontalPager(
@@ -116,10 +139,13 @@ fun HorizontalPager(
     state: PagerState = rememberPagerState(),
     reverseLayout: Boolean = false,
     itemSpacing: Dp = 0.dp,
-    flingBehavior: FlingBehavior = PagerDefaults.flingBehavior(state),
-    verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
-    key: ((page: Int) -> Any)? = null,
     contentPadding: PaddingValues = PaddingValues(0.dp),
+    verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
+    flingBehavior: FlingBehavior = PagerDefaults.flingBehavior(
+        state = state,
+        endContentPadding = contentPadding.calculateEndPadding(LayoutDirection.Ltr),
+    ),
+    key: ((page: Int) -> Any)? = null,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
     Pager(
@@ -156,6 +182,7 @@ fun HorizontalPager(
  * @param content a block which describes the content. Inside this block you can reference
  * [PagerScope.currentPage] and other properties in [PagerScope].
  */
+@OptIn(ExperimentalSnapperApi::class)
 @ExperimentalPagerApi
 @Composable
 fun VerticalPager(
@@ -164,10 +191,13 @@ fun VerticalPager(
     state: PagerState = rememberPagerState(),
     reverseLayout: Boolean = false,
     itemSpacing: Dp = 0.dp,
-    flingBehavior: FlingBehavior = PagerDefaults.flingBehavior(state),
-    horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
-    key: ((page: Int) -> Any)? = null,
     contentPadding: PaddingValues = PaddingValues(0.dp),
+    horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
+    flingBehavior: FlingBehavior = PagerDefaults.flingBehavior(
+        state = state,
+        endContentPadding = contentPadding.calculateBottomPadding(),
+    ),
+    key: ((page: Int) -> Any)? = null,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
     Pager(
@@ -206,7 +236,8 @@ internal fun Pager(
     // Provide our PagerState with access to the SnappingFlingBehavior animation target
     // TODO: can this be done in a better way?
     state.flingAnimationTarget = {
-        (flingBehavior as? SnappingFlingBehavior)?.animationTarget
+        @OptIn(ExperimentalSnapperApi::class)
+        (flingBehavior as? SnapperFlingBehavior)?.animationTarget
     }
 
     LaunchedEffect(count) {
@@ -218,7 +249,17 @@ internal fun Pager(
         // When a 'scroll' has finished, notify the state
         snapshotFlow { state.isScrollInProgress }
             .filter { !it }
+            // initially isScrollInProgress is false as well and we want to start receiving
+            // the events only after the real scroll happens.
+            .drop(1)
             .collect { state.onScrollFinished() }
+    }
+    LaunchedEffect(state) {
+        snapshotFlow { state.currentLayoutPageInfo }
+            // we want to react on the currentLayoutPageInfo changes happened not because of the
+            // scroll. for example the current page could change because the items were reordered.
+            .filter { !state.isScrollInProgress }
+            .collect { state.updateCurrentPageBasedOnLazyListState() }
     }
 
     val pagerScope = remember(state) { PagerScopeImpl(state) }
@@ -250,8 +291,8 @@ internal fun Pager(
                         // connection which consumes them.
                         // See: https://github.com/google/accompanist/issues/347
                         .nestedScroll(connection = consumeFlingNestedScrollConnection)
-                        // Constraint the content to be <= than the size of the pager.
-                        .fillParentMaxSize()
+                        // Constraint the content height to be <= than the height of the pager.
+                        .fillParentMaxHeight()
                         .wrapContentSize()
                 ) {
                     pagerScope.content(page)
@@ -278,8 +319,8 @@ internal fun Pager(
                         // connection which consumes them.
                         // See: https://github.com/google/accompanist/issues/347
                         .nestedScroll(connection = consumeFlingNestedScrollConnection)
-                        // Constraint the content to be <= than the size of the pager.
-                        .fillParentMaxSize()
+                        // Constraint the content width to be <= than the width of the pager.
+                        .fillParentMaxWidth()
                         .wrapContentSize()
                 ) {
                     pagerScope.content(page)

@@ -186,13 +186,13 @@ HorizontalPager(count = 4) { page ->
 
 ## Reacting to page changes
 
-The [`PagerState.currentPage`][currentpage-api] property is updated whenever the selected page changes. You can use the `snapshowFlow` function to observe changes in a flow:
+The [`PagerState.currentPage`][currentpage-api] property is updated whenever the selected page changes. You can use the `snapshotFlow` function to observe changes in a flow:
 
 ``` kotlin
 val pagerState = rememberPagerState()
 
 LaunchedEffect(pagerState) {
-    // Collect from the a snapshotFlow reading the currentPage
+    // Collect from the pager state a snapshotFlow reading the currentPage
     snapshotFlow { pagerState.currentPage }.collect { page ->
         AnalyticsService.sendPageSelectedEvent(page)
     }

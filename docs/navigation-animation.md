@@ -11,7 +11,19 @@ A library which provides [Compose Animation](https://developer.android.com/jetpa
 ## Usage
 
 The `AnimatedNavHost` composable offers a way to add custom transitions to composables in
-Navigation Compose.
+Navigation Compose via parameters that can be attached to either an individual `composable`
+destination, a `navigation` element, or to the `AnimatedNavHost` itself.
+
+Each lambda has an [`AnimatedContentScope<NavBackStackEntry>`](https://developer.android.com/reference/kotlin/androidx/compose/animation/AnimatedContentScope) receiver scope that allows you to use special transitions (such as [`slideIntoContainer`](https://developer.android.com/reference/kotlin/androidx/compose/animation/AnimatedContentScope#slideIntoContainer(androidx.compose.animation.AnimatedContentScope.SlideDirection,androidx.compose.animation.core.FiniteAnimationSpec,kotlin.Function1)) and [`slideOutOfContainer`](https://developer.android.com/reference/kotlin/androidx/compose/animation/AnimatedContentScope#slideOutOfContainer(androidx.compose.animation.AnimatedContentScope.SlideDirection,androidx.compose.animation.core.FiniteAnimationSpec,kotlin.Function1))) and gives you access to the [`initialState`](https://developer.android.com/reference/kotlin/androidx/compose/animation/AnimatedContentScope#initialState()) and [`targetState`](https://developer.android.com/reference/kotlin/androidx/compose/animation/AnimatedContentScope#targetState()) properties that let you customize what transitions are run based on what screen you are transitioning from (the `initialState`) and transitioning to (the `targetState`). 
+
+- `enterTransition` controls what [`EnterTransition`](https://developer.android.com/reference/kotlin/androidx/compose/animation/EnterTransition.html) is run when the `targetState` `NavBackStackEntry` is appearing on the screen.
+- `exitTransition` controls what [`ExitTransition`](https://developer.android.com/reference/kotlin/androidx/compose/animation/ExitTransition) is run when the `initialState` `NavBackStackEntry` is disappearing from the screen.
+- `popEnterTransition` defaults to `enterTransition`, but can be overridden to provide a separate [`EnterTransition`](https://developer.android.com/reference/kotlin/androidx/compose/animation/EnterTransition.html) when the `targetState` `NavBackStackEntry` is appearing on the screen due to a pop operation (i.e., `popBackStack()`).
+- `popExitTransition` defaults to `exitTransition`, but can be overridden to provide a separate [`ExitTransition`](https://developer.android.com/reference/kotlin/androidx/compose/animation/ExitTransition) when the `initialState` `NavBackStackEntry` is disappearing from the screen due to a pop operation (i.e., `popBackStack()`).
+
+For each transition, if a `composable` destination returns `null`, the parent `navigation` element's transition will be used, thus allowing you to set a global set of transitions at the navigation graph level that will apply to every `composable` in that graph. This continues up the hierarchy until you reach the root `AnimatedNavHost`, which controls the global transitions for all destinations and nested graphs that do not specify one.
+
+Note: this means that if a destination wants to instantly jump cut between destinations, it should return [`EnterTransition.None`](https://developer.android.com/reference/kotlin/androidx/compose/animation/EnterTransition#None()) or [`ExitTransition.None`](https://developer.android.com/reference/kotlin/androidx/compose/animation/ExitTransition#None()) to signify that no transition should be run, rather than return `null`.
 
 ```kotlin
 @Composable
@@ -20,62 +32,62 @@ private fun ExperimentalAnimationNav() {
     AnimatedNavHost(navController, startDestination = "Blue") {
         composable(
             "Blue",
-            enterTransition = { initial, _ ->
-                when (initial.destination.route) {
+            enterTransition = {
+                when (initialState.destination.route) {
                     "Red" ->
-                        slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(700))
+                        slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
                     else -> null
                 }
             },
-            exitTransition = { _, target ->
-                when (target.destination.route) {
+            exitTransition = {
+                when (targetState.destination.route) {
                     "Red" ->
-                        slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween(700))
+                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
                      else -> null
                 }
             },
-            popEnterTransition = { initial, _ ->
-                            when (initial.destination.route) {
+            popEnterTransition = {
+                            when (initialState.destination.route) {
                                 "Red" ->
-                                    slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(700))
+                                    slideIntoContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
                                 else -> null
                             }
                         },
-            popExitTransition = { _, target ->
-                when (target.destination.route) {
+            popExitTransition = {
+                when (targetState.destination.route) {
                     "Red" ->
-                        slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(700))
+                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
                     else -> null
                 }
             }
         ) { BlueScreen(navController) }
         composable(
             "Red",
-            enterTransition = { initial, _ ->
-                when (initial.destination.route) {
+            enterTransition = {
+                when (initialState.destination.route) {
                     "Blue" ->
-                        slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(700))
+                        slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
                     else -> null
                 }
             },
-            exitTransition = { _, target ->
-                when (target.destination.route) {
+            exitTransition = {
+                when (targetState.destination.route) {
                     "Blue" ->
-                        slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween(700))
+                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
                     else -> null
                 }
             },
-            popEnterTransition = { initial, _ ->
-                when (initial.destination.route) {
+            popEnterTransition = {
+                when (initialState.destination.route) {
                     "Blue" ->
-                        slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(700))
+                        slideIntoContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
                     else -> null
                 }
             },
-            popExitTransition = { _, target ->
-                when (target.destination.route) {
+            popExitTransition = {
+                when (targetState.destination.route) {
                     "Blue" ->
-                        slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(700))
+                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
                     else -> null
                 }
             }

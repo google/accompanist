@@ -42,24 +42,6 @@ import io.github.aakira.napier.Napier
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 
-@Deprecated(
-    "Replaced with rememberPagerState(initialPage) and count parameter on Pager composables",
-    ReplaceWith("rememberPagerState(initialPage)"),
-    level = DeprecationLevel.ERROR,
-)
-@Suppress("UNUSED_PARAMETER", "NOTHING_TO_INLINE")
-@ExperimentalPagerApi
-@Composable
-inline fun rememberPagerState(
-    @IntRange(from = 0) pageCount: Int,
-    @IntRange(from = 0) initialPage: Int = 0,
-    @FloatRange(from = 0.0, to = 1.0) initialPageOffset: Float = 0f,
-    @IntRange(from = 1) initialOffscreenLimit: Int = 1,
-    infiniteLoop: Boolean = false
-): PagerState {
-    return rememberPagerState(initialPage = initialPage)
-}
-
 /**
  * Creates a [PagerState] that is remembered across compositions.
  *
@@ -96,10 +78,8 @@ class PagerState(
 
     private var _currentPage by mutableStateOf(currentPage)
 
-    private val currentLayoutPageInfo: LazyListItemInfo?
-        get() = lazyListState.layoutInfo.visibleItemsInfo.asSequence()
-            .filter { it.offset <= 0 && it.offset + it.size > 0 }
-            .lastOrNull()
+    internal val currentLayoutPageInfo: LazyListItemInfo?
+        get() = lazyListState.layoutInfo.visibleItemsInfo.lastOrNull { it.offset <= 0 }
 
     private val currentLayoutPageOffset: Float
         get() = currentLayoutPageInfo?.let { current ->
@@ -177,7 +157,7 @@ class PagerState(
                 // If the offset is 0f (or very close), return the current page
                 currentPageOffset.absoluteValue < 0.001f -> currentPage
                 // If we're offset towards the start, guess the previous page
-                currentPageOffset < -0.5f -> (currentPage - 1).coerceAtLeast(0)
+                currentPageOffset < 0f -> (currentPage - 1).coerceAtLeast(0)
                 // If we're offset towards the end, guess the next page
                 else -> (currentPage + 1).coerceAtMost(pageCount - 1)
             }
@@ -298,9 +278,13 @@ class PagerState(
         }
     }
 
-    internal fun onScrollFinished() {
+    internal fun updateCurrentPageBasedOnLazyListState() {
         // Then update the current page to our layout page
         currentPage = currentLayoutPageInfo?.index ?: 0
+    }
+
+    internal fun onScrollFinished() {
+        updateCurrentPageBasedOnLazyListState()
         // Clear the animation target page
         animationTargetPage = null
     }

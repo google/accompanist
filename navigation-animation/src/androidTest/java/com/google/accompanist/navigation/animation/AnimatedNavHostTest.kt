@@ -136,6 +136,25 @@ class AnimatedNavHostTest {
     }
 
     @Test
+    fun testNestedAnimatedNavHostNullLambda() {
+        lateinit var navController: NavHostController
+
+        composeTestRule.setContent {
+            navController = rememberAnimatedNavController()
+            AnimatedNavHost(navController, startDestination = first) {
+                composable(first) { BasicText(first) }
+                navigation(second, "subGraph", enterTransition = { null }) {
+                    composable(second) { BasicText(second) }
+                }
+            }
+        }
+
+        composeTestRule.runOnIdle {
+            navController.navigate(second)
+        }
+    }
+
+    @Test
     fun testAnimatedNavHostDeeplink() {
         lateinit var navController: NavHostController
 

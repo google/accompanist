@@ -78,8 +78,10 @@ class DrawablePainter(
     }
 
     init {
-        // Update the drawable's bounds to match the intrinsic size
-        drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
+        if (drawable.intrinsicWidth >= 0 && drawable.intrinsicHeight >= 0) {
+            // Update the drawable's bounds to match the intrinsic size
+            drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
+        }
     }
 
     override fun onRemembered() {
@@ -119,10 +121,16 @@ class DrawablePainter(
     }
 
     override val intrinsicSize: Size
-        get() = Size(
-            width = drawable.intrinsicWidth.toFloat(),
-            height = drawable.intrinsicHeight.toFloat()
-        )
+        get() = when {
+            // Only return a finite size if the drawable has an intrinsic size
+            drawable.intrinsicWidth >= 0 && drawable.intrinsicHeight >= 0 -> {
+                Size(
+                    width = drawable.intrinsicWidth.toFloat(),
+                    height = drawable.intrinsicHeight.toFloat(),
+                )
+            }
+            else -> Size.Unspecified
+        }
 
     override fun DrawScope.onDraw() {
         drawIntoCanvas { canvas ->

@@ -23,9 +23,12 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertHeightIsAtLeast
@@ -109,12 +112,15 @@ abstract class BaseHorizontalPagerTest(
             }
     }
 
-    override fun setPagerContent(
+    @Composable
+    override fun AbstractPagerContent(
         count: () -> Int,
+        pagerState: PagerState,
         observeStateInContent: Boolean,
-    ): PagerState {
-        val pagerState = PagerState()
-        composeTestRule.setContent(layoutDirection) {
+        pageToItem: (Int) -> String,
+        useKeys: Boolean,
+    ) {
+        CompositionLocalProvider(LocalLayoutDirection provides layoutDirection) {
             applierScope = rememberCoroutineScope()
 
             Box {
@@ -128,23 +134,28 @@ abstract class BaseHorizontalPagerTest(
                     itemSpacing = itemSpacingDp.dp,
                     reverseLayout = reverseLayout,
                     contentPadding = contentPadding,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
+                    key = if (useKeys) {
+                        { pageToItem(it) }
+                    } else {
+                        null
+                    }
                 ) { page ->
+                    val item = pageToItem(page)
                     Box(
                         modifier = Modifier
                             .fillMaxWidth(itemWidthFraction)
                             .aspectRatio(1f)
                             .background(randomColor())
-                            .testTag(page.toString())
+                            .testTag(item)
                     ) {
                         BasicText(
-                            text = page.toString(),
+                            text = item,
                             modifier = Modifier.align(Alignment.Center)
                         )
                     }
                 }
             }
         }
-        return pagerState
     }
 }
