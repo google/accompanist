@@ -170,6 +170,35 @@ class WebTest {
             .isEqualTo(LINK_URL)
     }
 
+    @Test
+    fun testImageResourceLoadError() {
+        lateinit var state: WebViewState
+
+        rule.setContent {
+            state = rememberWebViewStateWithHTMLData(data = TEST_BAD_DATA)
+            WebTestContent(
+                state,
+                idleResource
+            )
+        }
+
+        rule.waitForIdle()
+
+        // Check an error was captured
+        assertThat(state.errorsForCurrentRequest)
+            .isNotEmpty()
+
+        state.content = WebContent.Data(TEST_DATA)
+
+        // Check the webview can recover from an error and successfully load another request
+        onWebView()
+            .check(webMatches(getCurrentUrl(), containsString("about:blank")))
+
+        // Check that the error is cleared on a new request
+        assertThat(state.errorsForCurrentRequest)
+            .isEmpty()
+    }
+
     private val webNode: SemanticsNodeInteraction
         get() = rule.onNodeWithTag(WebViewTag)
 }
@@ -179,6 +208,8 @@ private const val LINK_TEXT = "Click me"
 private const val LINK_URL = "file:///android_asset/test.html"
 private const val TEST_DATA =
     "<html><body><a id=$LINK_ID href=\"$LINK_URL\">$LINK_TEXT</a></body></html>"
+private const val TEST_BAD_DATA =
+    "<html><body><img src=\"https://alwaysfail.zxyz.zxyz\" /><p>$LINK_TEXT</p></body></html>"
 private const val WebViewTag = "webview_tag"
 
 @Composable

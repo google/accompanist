@@ -23,8 +23,10 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -74,6 +76,7 @@ fun WebView(
                     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                         super.onPageStarted(view, url, favicon)
                         state.isLoading = true
+                        state.errorsForCurrentRequest.clear()
                     }
 
                     override fun onPageFinished(view: WebView?, url: String?) {
@@ -94,9 +97,9 @@ fun WebView(
                         // On older APIs (28 and lower), this method is called when loading
                         // html data. We don't want to update the state in this case as that will
                         // overwrite the html being loaded.
-                        if (url != null
-                            && !url.startsWith("data:text/html")
-                            && state.content.getCurrentUrl() != url
+                        if (url != null &&
+                            !url.startsWith("data:text/html") &&
+                            state.content.getCurrentUrl() != url
                         ) {
                             state.content = WebContent.Url(url)
                         }
@@ -108,6 +111,11 @@ fun WebView(
                         error: WebResourceError?
                     ) {
                         super.onReceivedError(view, request, error)
+
+                        if (error != null) {
+                            state.errorsForCurrentRequest.add(WebViewError(request, error))
+                        }
+
                         onError(request, error)
                     }
 
@@ -170,7 +178,29 @@ class WebViewState(webContent: WebContent) {
      */
     var isLoading: Boolean by mutableStateOf(false)
         internal set
+
+    /**
+     * A list for errors captured in the last load. Reset when a new page is loaded.
+     * Errors could be from any resource (iframe, image, etc.), not just for the main page.
+     * For more fine grained control use the OnError callback of the WebView.
+     */
+    val errorsForCurrentRequest = mutableStateListOf<WebViewError>()
 }
+
+/**
+ * A wrapper class to hold errors from the WebView.
+ */
+@Immutable
+data class WebViewError(
+    /**
+     * The request the error came from.
+     */
+    val request: WebResourceRequest?,
+    /**
+     * The error that was reported.
+     */
+    val error: WebResourceError
+)
 
 /**
  * Creates a WebView state that is remembered across Compositions.

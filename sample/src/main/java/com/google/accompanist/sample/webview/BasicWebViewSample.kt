@@ -20,17 +20,25 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Error
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.unit.dp
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.web.WebContent
 import com.google.accompanist.web.WebView
@@ -42,20 +50,36 @@ class BasicWebViewSample : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AccompanistSampleTheme {
-                val state = rememberWebViewState("https://google.com")
+                val state = rememberWebViewState(url = "https://google.com")
                 val (textFieldValue, setTextFieldValue) = remember(state.content) {
                     mutableStateOf(state.content.getCurrentUrl() ?: "")
                 }
 
                 Column {
                     Row {
-                        OutlinedTextField(
-                            value = textFieldValue,
-                            onValueChange = setTextFieldValue,
-                            modifier = Modifier.weight(1f)
-                        )
+                        Box(modifier = Modifier.weight(1f)) {
+                            if (state.errorsForCurrentRequest.isNotEmpty()) {
+                                Image(
+                                    imageVector = Icons.Default.Error,
+                                    contentDescription = "Error",
+                                    colorFilter = ColorFilter.tint(Color.Red),
+                                    modifier = Modifier
+                                        .align(Alignment.CenterEnd)
+                                        .padding(8.dp)
+                                )
+                            }
+
+                            OutlinedTextField(
+                                value = textFieldValue,
+                                onValueChange = setTextFieldValue,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+
                         Button(
-                            onClick = { state.content = WebContent.Url(textFieldValue) },
+                            onClick = {
+                                state.content = WebContent.Url(textFieldValue)
+                            },
                             modifier = Modifier.align(Alignment.CenterVertically)
                         ) {
                             Text("Go")
