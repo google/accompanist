@@ -23,6 +23,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -93,9 +94,9 @@ fun WebView(
                         // On older APIs (28 and lower), this method is called when loading
                         // html data. We don't want to update the state in this case as that will
                         // overwrite the html being loaded.
-                        if (url != null &&
-                            !url.startsWith("data:text/html") &&
-                            state.content.getCurrentUrl() != url
+                        if (url != null
+                            && !url.startsWith("data:text/html")
+                            && state.content.getCurrentUrl() != url
                         ) {
                             state.content = WebContent.Url(url)
                         }
@@ -127,16 +128,16 @@ fun WebView(
         },
         modifier = modifier
     ) { view ->
-        when (val l = state.content) {
+        when (val content = state.content) {
             is WebContent.Url -> {
-                val url = l.url
+                val url = content.url
 
                 if (url.isNotEmpty() && url != view.url) {
                     view.loadUrl(url)
                 }
             }
             is WebContent.Data -> {
-                view.loadDataWithBaseURL(l.baseUrl, l.data, null, "utf-8", null)
+                view.loadDataWithBaseURL(content.baseUrl, content.data, null, "utf-8", null)
             }
         }
 
@@ -157,6 +158,7 @@ sealed class WebContent {
  * A state holder to hold the state for the WebView. In most cases this will be remembered
  * using the rememberWebViewState(uri) function.
  */
+@Stable
 class WebViewState(webContent: WebContent) {
     /**
      *  The content being loaded by the WebView

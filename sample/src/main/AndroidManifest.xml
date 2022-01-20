@@ -352,7 +352,7 @@
         <activity
             android:name=".webview.BasicWebViewSample"
             android:label="@string/webview_title_basic"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
