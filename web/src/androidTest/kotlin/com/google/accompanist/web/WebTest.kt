@@ -182,7 +182,10 @@ class WebTest {
             )
         }
 
-        rule.waitForIdle()
+        // Wait for content to be loaded
+        onWebView()
+            .withElement(findElement(Locator.TAG_NAME, "p"))
+            .check(webMatches(getText(), containsString(LINK_TEXT)))
 
         // Check an error was captured
         assertThat(state.errorsForCurrentRequest)
