@@ -24,11 +24,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.google.common.truth.Truth
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
@@ -73,13 +76,19 @@ class HalfExpandedTests {
                 ModalBottomSheetLayout(bottomSheetNavigator = bottomSheetNavigator) {
                     NavHost(
                         navController = navController,
-                        startDestination = "bottomSheet"
+                        startDestination = "start"
                     ) {
+                        composable("start") {
+                            Box(modifier = Modifier.fillMaxSize())
+                        }
                         bottomSheet("bottomSheet") {
                             Box(modifier = Modifier.fillMaxSize(screenPercent))
                         }
                     }
                 }
+            }
+            launch(Dispatchers.Main) {
+                navController.navigate("bottomSheet")
             }
             composeTestRule.awaitIdle()
             Truth.assertThat(bottomSheetNavigator.navigatorSheetState.currentValue)
