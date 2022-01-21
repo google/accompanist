@@ -119,6 +119,7 @@ abstract class BaseHorizontalPagerTest(
         observeStateInContent: Boolean,
         pageToItem: (Int) -> String,
         useKeys: Boolean,
+        userScrollEnabled: Boolean,
     ) {
         CompositionLocalProvider(LocalLayoutDirection provides layoutDirection) {
             applierScope = rememberCoroutineScope()
@@ -139,7 +140,8 @@ abstract class BaseHorizontalPagerTest(
                         { pageToItem(it) }
                     } else {
                         null
-                    }
+                    },
+                    userScrollEnabled = userScrollEnabled,
                 ) { page ->
                     val item = pageToItem(page)
                     Box(
