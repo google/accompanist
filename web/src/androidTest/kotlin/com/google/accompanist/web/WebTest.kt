@@ -43,7 +43,9 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 // Emulator image doesn't have a WebView until API 26
-@SdkSuppress(minSdkVersion = 26)
+// Google API emulator image seems to be really flaky before 28 so currently we will set these tests
+// to mine 29
+@SdkSuppress(minSdkVersion = 28)
 class WebTest {
     @get:Rule
     val rule = createComposeRule()
