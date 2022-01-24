@@ -60,6 +60,7 @@ dependencies {
     implementation project(':flowlayout')
     implementation project(':systemuicontroller')
     implementation project(':swiperefresh')
+    implementation project(':web')
 
     implementation libs.androidx.appcompat
 

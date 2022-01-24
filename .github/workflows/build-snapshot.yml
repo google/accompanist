@@ -115,7 +115,7 @@ jobs:
             ~/.gradle/caches/build-cache-*
           key: gradle-${{ hashFiles('checksum.txt') }}
 
-      # Determine what emulator image to use. We run all API 29+ emulators using
+      # Determine what emulator image to use. We run all API 28+ emulators using
       # the google_apis image
       - name: Determine emulator target
         id: determine-target
@@ -123,7 +123,7 @@ jobs:
           API_LEVEL: ${{ matrix.api-level }}
         run: |
           TARGET="default"
-          if [ "$API_LEVEL" -ge "29" ]; then
+          if [ "$API_LEVEL" -ge "28" ]; then
             TARGET="google_apis"
           fi
           echo "::set-output name=TARGET::$TARGET"
