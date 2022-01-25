@@ -469,6 +469,31 @@ abstract class PagerTest {
         }
     }
 
+    @Test
+    fun animatedScrollToIsNotComposingAllTheItemsInBetween() {
+        val pagerState = PagerState(0)
+        val composedPages = mutableSetOf<Int>()
+        composeTestRule.setContent {
+            PagerContent(
+                count = { 11 },
+                pagerState = pagerState,
+                onPageComposed = { composedPages.add(it) }
+            )
+        }
+
+        composeTestRule.runOnIdle {
+            runBlocking(AutoTestFrameClock()) {
+                pagerState.animateScrollToPage(10)
+            }
+        }
+
+        composeTestRule.runOnIdle {
+            assertThat(composedPages).doesNotContain(4)
+            assertThat(composedPages).doesNotContain(5)
+            assertThat(composedPages).doesNotContain(6)
+        }
+    }
+
     /**
      * Swipe across the center of the node. The major axis of the swipe is defined by the
      * overriding test.
@@ -542,6 +567,7 @@ abstract class PagerTest {
         pageToItem: (Int) -> String = { it.toString() },
         userScrollEnabled: Boolean = true,
         useKeys: Boolean = false,
+        onPageComposed: (Int) -> Unit = {}
     ) {
         AbstractPagerContent(
             count = count,
@@ -549,7 +575,8 @@ abstract class PagerTest {
             observeStateInContent = observeStateInContent,
             pageToItem = { pageToItem(it) },
             useKeys = useKeys,
-            userScrollEnabled = userScrollEnabled
+            userScrollEnabled = userScrollEnabled,
+            onPageComposed = onPageComposed
         )
     }
 
@@ -561,6 +588,7 @@ abstract class PagerTest {
         pageToItem: (Int) -> String,
         useKeys: Boolean,
         userScrollEnabled: Boolean,
+        onPageComposed: (Int) -> Unit
     )
 }
 
