@@ -19,7 +19,7 @@ package com.google.accompanist.navigation.material {
   }
 
   public final class BottomSheetNavigatorKt {
-    method @androidx.compose.runtime.Composable @com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi public static com.google.accompanist.navigation.material.BottomSheetNavigator rememberBottomSheetNavigator(optional androidx.compose.animation.core.AnimationSpec<java.lang.Float> animationSpec, optional boolean skipHalfExpanded);
+    method @androidx.compose.runtime.Composable @com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi public static com.google.accompanist.navigation.material.BottomSheetNavigator rememberBottomSheetNavigator(optional androidx.compose.animation.core.AnimationSpec<java.lang.Float> animationSpec);
   }
 
   @com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi public final class BottomSheetNavigatorSheetState {
