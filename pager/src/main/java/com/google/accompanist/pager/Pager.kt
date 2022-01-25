@@ -127,6 +127,8 @@ object PagerDefaults {
  * @param key the scroll position will be maintained based on the key, which means if you
  * add/remove items before the current visible item the item with the given key will be kept as the
  * first visible one.
+ * @param userScrollEnabled whether the scrolling via the user gestures or accessibility actions
+ * is allowed. You can still scroll programmatically using the state even when it is disabled.
  * @param content a block which describes the content. Inside this block you can reference
  * [PagerScope.currentPage] and other properties in [PagerScope].
  */
@@ -146,6 +148,7 @@ fun HorizontalPager(
         endContentPadding = contentPadding.calculateEndPadding(LayoutDirection.Ltr),
     ),
     key: ((page: Int) -> Any)? = null,
+    userScrollEnabled: Boolean = true,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
     Pager(
@@ -159,6 +162,7 @@ fun HorizontalPager(
         flingBehavior = flingBehavior,
         key = key,
         contentPadding = contentPadding,
+        userScrollEnabled = userScrollEnabled,
         content = content
     )
 }
@@ -179,6 +183,8 @@ fun HorizontalPager(
  * @param key the scroll position will be maintained based on the key, which means if you
  * add/remove items before the current visible item the item with the given key will be kept as the
  * first visible one.
+ * @param userScrollEnabled whether the scrolling via the user gestures or accessibility actions
+ * is allowed. You can still scroll programmatically using the state even when it is disabled.
  * @param content a block which describes the content. Inside this block you can reference
  * [PagerScope.currentPage] and other properties in [PagerScope].
  */
@@ -198,6 +204,7 @@ fun VerticalPager(
         endContentPadding = contentPadding.calculateBottomPadding(),
     ),
     key: ((page: Int) -> Any)? = null,
+    userScrollEnabled: Boolean = true,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
     Pager(
@@ -211,6 +218,7 @@ fun VerticalPager(
         flingBehavior = flingBehavior,
         key = key,
         contentPadding = contentPadding,
+        userScrollEnabled = userScrollEnabled,
         content = content
     )
 }
@@ -227,6 +235,7 @@ internal fun Pager(
     flingBehavior: FlingBehavior,
     key: ((page: Int) -> Any)?,
     contentPadding: PaddingValues,
+    userScrollEnabled: Boolean,
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     content: @Composable PagerScope.(page: Int) -> Unit,
@@ -279,6 +288,7 @@ internal fun Pager(
             flingBehavior = flingBehavior,
             reverseLayout = reverseLayout,
             contentPadding = contentPadding,
+            userScrollEnabled = userScrollEnabled,
             modifier = modifier,
         ) {
             items(
@@ -307,6 +317,7 @@ internal fun Pager(
             flingBehavior = flingBehavior,
             reverseLayout = reverseLayout,
             contentPadding = contentPadding,
+            userScrollEnabled = userScrollEnabled,
             modifier = modifier,
         ) {
             items(

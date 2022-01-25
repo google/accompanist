@@ -425,6 +425,50 @@ abstract class PagerTest {
         }
     }
 
+    @Test
+    fun pointerInputScrollingIsDisallowedWhenUserScrollingIsDisabled() {
+        val pagerState = PagerState(0)
+        composeTestRule.setContent {
+            PagerContent(
+                count = { 4 },
+                pagerState = pagerState,
+                userScrollEnabled = false
+            )
+        }
+
+        // Now swipe towards start, from page 0 to page 1
+        composeTestRule.onNodeWithTag("0").swipeAcrossCenter(-MediumSwipeDistance)
+        // ...and assert that we are still on page 0
+        assertPagerLayout(0, pagerState.pageCount)
+
+        composeTestRule.runOnIdle {
+            assertThat(pagerState.currentPage).isEqualTo(0)
+        }
+    }
+
+    @Test
+    fun programmaticScrollingIsAllowedWhenUserScrollingIsDisabled() {
+        val pagerState = PagerState(0)
+        composeTestRule.setContent {
+            PagerContent(
+                count = { 4 },
+                pagerState = pagerState,
+                userScrollEnabled = false
+            )
+        }
+
+        composeTestRule.runOnIdle {
+            runBlocking {
+                pagerState.scrollToPage(1)
+            }
+        }
+
+        assertPagerLayout(1, 4)
+        composeTestRule.runOnIdle {
+            assertThat(pagerState.currentPage).isEqualTo(1)
+        }
+    }
+
     /**
      * Swipe across the center of the node. The major axis of the swipe is defined by the
      * overriding test.
@@ -496,6 +540,7 @@ abstract class PagerTest {
         pagerState: PagerState,
         observeStateInContent: Boolean = false,
         pageToItem: (Int) -> String = { it.toString() },
+        userScrollEnabled: Boolean = true,
         useKeys: Boolean = false,
     ) {
         AbstractPagerContent(
@@ -503,7 +548,8 @@ abstract class PagerTest {
             pagerState = pagerState,
             observeStateInContent = observeStateInContent,
             pageToItem = { pageToItem(it) },
-            useKeys = useKeys
+            useKeys = useKeys,
+            userScrollEnabled = userScrollEnabled
         )
     }
 
@@ -513,7 +559,8 @@ abstract class PagerTest {
         pagerState: PagerState,
         observeStateInContent: Boolean,
         pageToItem: (Int) -> String,
-        useKeys: Boolean
+        useKeys: Boolean,
+        userScrollEnabled: Boolean,
     )
 }
 
