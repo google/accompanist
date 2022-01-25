@@ -490,7 +490,6 @@ abstract class PagerTest {
         composeTestRule.runOnIdle {
             assertThat(composedPages).doesNotContain(4)
             assertThat(composedPages).doesNotContain(5)
-            assertThat(composedPages).doesNotContain(6)
         }
     }
 
