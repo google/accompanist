@@ -97,22 +97,16 @@ public class BottomSheetNavigatorSheetState(private val sheetState: ModalBottomS
 
 /**
  * Create and remember a [BottomSheetNavigator]
- *
- * @param animationSpec The [AnimationSpec] to use for swipes on the bottom sheet
- * @param skipHalfExpanded Whether to skip the half expanded state and expand fully on open,
- * defaulted to false
  */
 @ExperimentalMaterialNavigationApi
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 public fun rememberBottomSheetNavigator(
-    animationSpec: AnimationSpec<Float> = SwipeableDefaults.AnimationSpec,
-    skipHalfExpanded: Boolean = false
+    animationSpec: AnimationSpec<Float> = SwipeableDefaults.AnimationSpec
 ): BottomSheetNavigator {
     val sheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden,
-        animationSpec,
-        skipHalfExpanded = skipHalfExpanded
+        animationSpec
     )
     return remember(sheetState) {
         BottomSheetNavigator(sheetState = sheetState)

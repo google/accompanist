@@ -22,9 +22,6 @@ This features composable bottom sheet destinations.
         val navController = rememberNavController(bottomSheetNavigator)
     }
     ```
-   
-Passing the `skipHalfExpanded=true` flag to `rememberBottomSheetNavigator()` will fully expand bottom 
-sheets by default instead of limiting them to half of screen height.
 
 2. Wrap your `NavHost` in the `ModalBottomSheetLayout` composable that accepts a `BottomSheetNavigator`.
 
