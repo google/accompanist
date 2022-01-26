@@ -39,6 +39,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
+import kotlin.math.abs
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 
@@ -195,6 +196,13 @@ class PagerState(
         requireCurrentPageOffset(pageOffset, "pageOffset")
         try {
             animationTargetPage = page
+
+            // pre-jump to nearby item for long jumps as an optimization
+            // the same trick is done in ViewPager2
+            val oldPage = lazyListState.firstVisibleItemIndex
+            if (abs(page - oldPage) > 3) {
+                lazyListState.scrollToItem(if (page > oldPage) page - 3 else page + 3)
+            }
 
             if (pageOffset <= 0.005f) {
                 // If the offset is (close to) zero, just call animateScrollToItem and we're done
