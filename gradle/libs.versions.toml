@@ -28,7 +28,7 @@ compose-material-material = { module = "androidx.compose.material:material", ver
 compose-material-iconsext = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose" }
 compose-animation-animation = { module = "androidx.compose.animation:animation", version.ref = "compose" }
 
-snapper = "dev.chrisbanes.snapper:snapper:0.1.0"
+snapper = "dev.chrisbanes.snapper:snapper:0.1.2"
 
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "gradlePlugin" }
 gradleMavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.17.0"
