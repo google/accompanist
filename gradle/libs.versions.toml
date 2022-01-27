@@ -1,9 +1,9 @@
 [versions]
-compose = "1.2.0-alpha01"
+compose = "1.2.0-alpha02"
 composesnapshot = "-" # a single character = no snapshot
 
 # gradlePlugin and lint need to be updated together
-gradlePlugin = "7.1.0-rc01"
+gradlePlugin = "7.1.0"
 lint = "30.0.3"
 
 ktlint = "0.42.1"
@@ -13,7 +13,7 @@ okhttp = "3.12.13"
 coil = "1.3.2"
 
 androidxtest = "1.4.0"
-androidxnavigation = "2.4.0-rc01"
+androidxnavigation = "2.4.0"
 
 [libraries]
 compose-ui-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
