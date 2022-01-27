@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://google.github.io/accompanist/navigation-animation/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.0">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.8">
     
     
       
@@ -23,10 +23,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.82f3c0b9.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.6e60f8b8.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.9204c3b2.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.e6a45f82.min.css">
         
           
           
@@ -1123,69 +1123,79 @@ All of the APIs are marked with the <code>@ExperimentalAnimationApi</code> annot
 </div>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
 <p>The <code>AnimatedNavHost</code> composable offers a way to add custom transitions to composables in
-Navigation Compose.</p>
+Navigation Compose via parameters that can be attached to either an individual <code>composable</code>
+destination, a <code>navigation</code> element, or to the <code>AnimatedNavHost</code> itself.</p>
+<p>Each lambda has an <a href="https://developer.android.com/reference/kotlin/androidx/compose/animation/AnimatedContentScope"><code>AnimatedContentScope&lt;NavBackStackEntry&gt;</code></a> receiver scope that allows you to use special transitions (such as <a href="https://developer.android.com/reference/kotlin/androidx/compose/animation/AnimatedContentScope#slideIntoContainer(androidx.compose.animation.AnimatedContentScope.SlideDirection,androidx.compose.animation.core.FiniteAnimationSpec,kotlin.Function1)"><code>slideIntoContainer</code></a> and <a href="https://developer.android.com/reference/kotlin/androidx/compose/animation/AnimatedContentScope#slideOutOfContainer(androidx.compose.animation.AnimatedContentScope.SlideDirection,androidx.compose.animation.core.FiniteAnimationSpec,kotlin.Function1)"><code>slideOutOfContainer</code></a>) and gives you access to the <a href="https://developer.android.com/reference/kotlin/androidx/compose/animation/AnimatedContentScope#initialState()"><code>initialState</code></a> and <a href="https://developer.android.com/reference/kotlin/androidx/compose/animation/AnimatedContentScope#targetState()"><code>targetState</code></a> properties that let you customize what transitions are run based on what screen you are transitioning from (the <code>initialState</code>) and transitioning to (the <code>targetState</code>). </p>
+<ul>
+<li><code>enterTransition</code> controls what <a href="https://developer.android.com/reference/kotlin/androidx/compose/animation/EnterTransition.html"><code>EnterTransition</code></a> is run when the <code>targetState</code> <code>NavBackStackEntry</code> is appearing on the screen.</li>
+<li><code>exitTransition</code> controls what <a href="https://developer.android.com/reference/kotlin/androidx/compose/animation/ExitTransition"><code>ExitTransition</code></a> is run when the <code>initialState</code> <code>NavBackStackEntry</code> is disappearing from the screen.</li>
+<li><code>popEnterTransition</code> defaults to <code>enterTransition</code>, but can be overridden to provide a separate <a href="https://developer.android.com/reference/kotlin/androidx/compose/animation/EnterTransition.html"><code>EnterTransition</code></a> when the <code>targetState</code> <code>NavBackStackEntry</code> is appearing on the screen due to a pop operation (i.e., <code>popBackStack()</code>).</li>
+<li><code>popExitTransition</code> defaults to <code>exitTransition</code>, but can be overridden to provide a separate <a href="https://developer.android.com/reference/kotlin/androidx/compose/animation/ExitTransition"><code>ExitTransition</code></a> when the <code>initialState</code> <code>NavBackStackEntry</code> is disappearing from the screen due to a pop operation (i.e., <code>popBackStack()</code>).</li>
+</ul>
+<p>For each transition, if a <code>composable</code> destination returns <code>null</code>, the parent <code>navigation</code> element's transition will be used, thus allowing you to set a global set of transitions at the navigation graph level that will apply to every <code>composable</code> in that graph. This continues up the hierarchy until you reach the root <code>AnimatedNavHost</code>, which controls the global transitions for all destinations and nested graphs that do not specify one.</p>
+<p>Note: this means that if a destination wants to instantly jump cut between destinations, it should return <a href="https://developer.android.com/reference/kotlin/androidx/compose/animation/EnterTransition#None()"><code>EnterTransition.None</code></a> or <a href="https://developer.android.com/reference/kotlin/androidx/compose/animation/ExitTransition#None()"><code>ExitTransition.None</code></a> to signify that no transition should be run, rather than return <code>null</code>.</p>
 <div class="highlight"><pre><span></span><code><span class="nd">@Composable</span>
 <span class="kd">private</span> <span class="kd">fun</span> <span class="nf">ExperimentalAnimationNav</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">val</span> <span class="nv">navController</span> <span class="o">=</span> <span class="n">rememberAnimatedNavController</span><span class="p">()</span>
     <span class="n">AnimatedNavHost</span><span class="p">(</span><span class="n">navController</span><span class="p">,</span> <span class="n">startDestination</span> <span class="o">=</span> <span class="s">&quot;Blue&quot;</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">composable</span><span class="p">(</span>
             <span class="s">&quot;Blue&quot;</span><span class="p">,</span>
-            <span class="n">enterTransition</span> <span class="o">=</span> <span class="p">{</span> <span class="n">initial</span><span class="p">,</span> <span class="n">_</span> <span class="o">-&gt;</span>
-                <span class="k">when</span> <span class="p">(</span><span class="n">initial</span><span class="p">.</span><span class="na">destination</span><span class="p">.</span><span class="na">route</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">enterTransition</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="k">when</span> <span class="p">(</span><span class="n">initialState</span><span class="p">.</span><span class="na">destination</span><span class="p">.</span><span class="na">route</span><span class="p">)</span> <span class="p">{</span>
                     <span class="s">&quot;Red&quot;</span> <span class="o">-&gt;</span>
-                        <span class="n">slideInHorizontally</span><span class="p">(</span><span class="n">initialOffsetX</span> <span class="o">=</span> <span class="p">{</span> <span class="m">1000</span> <span class="p">},</span> <span class="n">animationSpec</span> <span class="o">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
+                        <span class="n">slideIntoContainer</span><span class="p">(</span><span class="n">AnimatedContentScope</span><span class="p">.</span><span class="na">SlideDirection</span><span class="p">.</span><span class="na">Left</span><span class="p">,</span> <span class="n">animationSpec</span> <span class="o">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
                     <span class="k">else</span> <span class="o">-&gt;</span> <span class="kc">null</span>
                 <span class="p">}</span>
             <span class="p">},</span>
-            <span class="n">exitTransition</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span><span class="p">,</span> <span class="n">target</span> <span class="o">-&gt;</span>
-                <span class="k">when</span> <span class="p">(</span><span class="n">target</span><span class="p">.</span><span class="na">destination</span><span class="p">.</span><span class="na">route</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">exitTransition</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="k">when</span> <span class="p">(</span><span class="n">targetState</span><span class="p">.</span><span class="na">destination</span><span class="p">.</span><span class="na">route</span><span class="p">)</span> <span class="p">{</span>
                     <span class="s">&quot;Red&quot;</span> <span class="o">-&gt;</span>
-                        <span class="n">slideOutHorizontally</span><span class="p">(</span><span class="n">targetOffsetX</span> <span class="o">=</span> <span class="p">{</span> <span class="o">-</span><span class="m">1000</span> <span class="p">},</span> <span class="n">animationSpec</span> <span class="o">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
+                        <span class="n">slideOutOfContainer</span><span class="p">(</span><span class="n">AnimatedContentScope</span><span class="p">.</span><span class="na">SlideDirection</span><span class="p">.</span><span class="na">Left</span><span class="p">,</span> <span class="n">animationSpec</span> <span class="o">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
                      <span class="k">else</span> <span class="o">-&gt;</span> <span class="kc">null</span>
                 <span class="p">}</span>
             <span class="p">},</span>
-            <span class="n">popEnterTransition</span> <span class="o">=</span> <span class="p">{</span> <span class="n">initial</span><span class="p">,</span> <span class="n">_</span> <span class="o">-&gt;</span>
-                            <span class="k">when</span> <span class="p">(</span><span class="n">initial</span><span class="p">.</span><span class="na">destination</span><span class="p">.</span><span class="na">route</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">popEnterTransition</span> <span class="o">=</span> <span class="p">{</span>
+                            <span class="k">when</span> <span class="p">(</span><span class="n">initialState</span><span class="p">.</span><span class="na">destination</span><span class="p">.</span><span class="na">route</span><span class="p">)</span> <span class="p">{</span>
                                 <span class="s">&quot;Red&quot;</span> <span class="o">-&gt;</span>
-                                    <span class="n">slideInHorizontally</span><span class="p">(</span><span class="n">initialOffsetX</span> <span class="o">=</span> <span class="p">{</span> <span class="o">-</span><span class="m">1000</span> <span class="p">},</span> <span class="n">animationSpec</span> <span class="o">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
+                                    <span class="n">slideIntoContainer</span><span class="p">(</span><span class="n">AnimatedContentScope</span><span class="p">.</span><span class="na">SlideDirection</span><span class="p">.</span><span class="na">Right</span><span class="p">,</span> <span class="n">animationSpec</span> <span class="o">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
                                 <span class="k">else</span> <span class="o">-&gt;</span> <span class="kc">null</span>
                             <span class="p">}</span>
                         <span class="p">},</span>
-            <span class="n">popExitTransition</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span><span class="p">,</span> <span class="n">target</span> <span class="o">-&gt;</span>
-                <span class="k">when</span> <span class="p">(</span><span class="n">target</span><span class="p">.</span><span class="na">destination</span><span class="p">.</span><span class="na">route</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">popExitTransition</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="k">when</span> <span class="p">(</span><span class="n">targetState</span><span class="p">.</span><span class="na">destination</span><span class="p">.</span><span class="na">route</span><span class="p">)</span> <span class="p">{</span>
                     <span class="s">&quot;Red&quot;</span> <span class="o">-&gt;</span>
-                        <span class="n">slideOutHorizontally</span><span class="p">(</span><span class="n">targetOffsetX</span> <span class="o">=</span> <span class="p">{</span> <span class="m">1000</span> <span class="p">},</span> <span class="n">animationSpec</span> <span class="o">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
+                        <span class="n">slideOutOfContainer</span><span class="p">(</span><span class="n">AnimatedContentScope</span><span class="p">.</span><span class="na">SlideDirection</span><span class="p">.</span><span class="na">Right</span><span class="p">,</span> <span class="n">animationSpec</span> <span class="o">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
                     <span class="k">else</span> <span class="o">-&gt;</span> <span class="kc">null</span>
                 <span class="p">}</span>
             <span class="p">}</span>
         <span class="p">)</span> <span class="p">{</span> <span class="n">BlueScreen</span><span class="p">(</span><span class="n">navController</span><span class="p">)</span> <span class="p">}</span>
         <span class="n">composable</span><span class="p">(</span>
             <span class="s">&quot;Red&quot;</span><span class="p">,</span>
-            <span class="n">enterTransition</span> <span class="o">=</span> <span class="p">{</span> <span class="n">initial</span><span class="p">,</span> <span class="n">_</span> <span class="o">-&gt;</span>
-                <span class="k">when</span> <span class="p">(</span><span class="n">initial</span><span class="p">.</span><span class="na">destination</span><span class="p">.</span><span class="na">route</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">enterTransition</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="k">when</span> <span class="p">(</span><span class="n">initialState</span><span class="p">.</span><span class="na">destination</span><span class="p">.</span><span class="na">route</span><span class="p">)</span> <span class="p">{</span>
                     <span class="s">&quot;Blue&quot;</span> <span class="o">-&gt;</span>
-                        <span class="n">slideInHorizontally</span><span class="p">(</span><span class="n">initialOffsetX</span> <span class="o">=</span> <span class="p">{</span> <span class="m">1000</span> <span class="p">},</span> <span class="n">animationSpec</span> <span class="o">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
+                        <span class="n">slideIntoContainer</span><span class="p">(</span><span class="n">AnimatedContentScope</span><span class="p">.</span><span class="na">SlideDirection</span><span class="p">.</span><span class="na">Left</span><span class="p">,</span> <span class="n">animationSpec</span> <span class="o">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
                     <span class="k">else</span> <span class="o">-&gt;</span> <span class="kc">null</span>
                 <span class="p">}</span>
             <span class="p">},</span>
-            <span class="n">exitTransition</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span><span class="p">,</span> <span class="n">target</span> <span class="o">-&gt;</span>
-                <span class="k">when</span> <span class="p">(</span><span class="n">target</span><span class="p">.</span><span class="na">destination</span><span class="p">.</span><span class="na">route</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">exitTransition</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="k">when</span> <span class="p">(</span><span class="n">targetState</span><span class="p">.</span><span class="na">destination</span><span class="p">.</span><span class="na">route</span><span class="p">)</span> <span class="p">{</span>
                     <span class="s">&quot;Blue&quot;</span> <span class="o">-&gt;</span>
-                        <span class="n">slideOutHorizontally</span><span class="p">(</span><span class="n">targetOffsetX</span> <span class="o">=</span> <span class="p">{</span> <span class="o">-</span><span class="m">1000</span> <span class="p">},</span> <span class="n">animationSpec</span> <span class="o">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
+                        <span class="n">slideOutOfContainer</span><span class="p">(</span><span class="n">AnimatedContentScope</span><span class="p">.</span><span class="na">SlideDirection</span><span class="p">.</span><span class="na">Left</span><span class="p">,</span> <span class="n">animationSpec</span> <span class="o">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
                     <span class="k">else</span> <span class="o">-&gt;</span> <span class="kc">null</span>
                 <span class="p">}</span>
             <span class="p">},</span>
-            <span class="n">popEnterTransition</span> <span class="o">=</span> <span class="p">{</span> <span class="n">initial</span><span class="p">,</span> <span class="n">_</span> <span class="o">-&gt;</span>
-                <span class="k">when</span> <span class="p">(</span><span class="n">initial</span><span class="p">.</span><span class="na">destination</span><span class="p">.</span><span class="na">route</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">popEnterTransition</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="k">when</span> <span class="p">(</span><span class="n">initialState</span><span class="p">.</span><span class="na">destination</span><span class="p">.</span><span class="na">route</span><span class="p">)</span> <span class="p">{</span>
                     <span class="s">&quot;Blue&quot;</span> <span class="o">-&gt;</span>
-                        <span class="n">slideInHorizontally</span><span class="p">(</span><span class="n">initialOffsetX</span> <span class="o">=</span> <span class="p">{</span> <span class="o">-</span><span class="m">1000</span> <span class="p">},</span> <span class="n">animationSpec</span> <span class="o">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
+                        <span class="n">slideIntoContainer</span><span class="p">(</span><span class="n">AnimatedContentScope</span><span class="p">.</span><span class="na">SlideDirection</span><span class="p">.</span><span class="na">Right</span><span class="p">,</span> <span class="n">animationSpec</span> <span class="o">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
                     <span class="k">else</span> <span class="o">-&gt;</span> <span class="kc">null</span>
                 <span class="p">}</span>
             <span class="p">},</span>
-            <span class="n">popExitTransition</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span><span class="p">,</span> <span class="n">target</span> <span class="o">-&gt;</span>
-                <span class="k">when</span> <span class="p">(</span><span class="n">target</span><span class="p">.</span><span class="na">destination</span><span class="p">.</span><span class="na">route</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">popExitTransition</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="k">when</span> <span class="p">(</span><span class="n">targetState</span><span class="p">.</span><span class="na">destination</span><span class="p">.</span><span class="na">route</span><span class="p">)</span> <span class="p">{</span>
                     <span class="s">&quot;Blue&quot;</span> <span class="o">-&gt;</span>
-                        <span class="n">slideOutHorizontally</span><span class="p">(</span><span class="n">targetOffsetX</span> <span class="o">=</span> <span class="p">{</span> <span class="m">1000</span> <span class="p">},</span> <span class="n">animationSpec</span> <span class="o">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
+                        <span class="n">slideOutOfContainer</span><span class="p">(</span><span class="n">AnimatedContentScope</span><span class="p">.</span><span class="na">SlideDirection</span><span class="p">.</span><span class="na">Right</span><span class="p">,</span> <span class="n">animationSpec</span> <span class="o">=</span> <span class="n">tween</span><span class="p">(</span><span class="m">700</span><span class="p">))</span>
                     <span class="k">else</span> <span class="o">-&gt;</span> <span class="kc">null</span>
                 <span class="p">}</span>
             <span class="p">}</span>
@@ -1279,10 +1289,10 @@ Navigation Compose.</p>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.cefbb252.min.js"}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.22074ed6.min.js"}</script>
     
     
-      <script src="../assets/javascripts/bundle.17f42bbf.min.js"></script>
+      <script src="../assets/javascripts/bundle.960e086b.min.js"></script>
       
     
   </body>
