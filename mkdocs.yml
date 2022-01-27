@@ -51,7 +51,7 @@ nav:
       - 'API': api/navigation-material/
   - 'WebView':
       - 'Guide': webview.md
-      - 'API': api/webview/
+      - 'API': api/web/
   - 'Snapshots': using-snapshot-version.md
   - 'Contributing': contributing.md
   - 'Maintainers':
