@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - compose-1.0
+      - compose-1.1
     paths-ignore:
       - '**.md'
   pull_request:
