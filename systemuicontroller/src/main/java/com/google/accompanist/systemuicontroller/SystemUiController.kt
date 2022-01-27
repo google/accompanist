@@ -32,7 +32,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 
 /**
  * A class which provides easy-to-use utilities for updating the System UI bar
@@ -174,10 +173,8 @@ fun rememberSystemUiController(): SystemUiController {
 internal class AndroidSystemUiController(
     private val view: View
 ) : SystemUiController {
-    private val window = requireNotNull(view.context.findWindow()) {
-        "The Compose View must be hosted in an Activity with a Window!"
-    }
-    private val windowInsetsController = WindowInsetsControllerCompat(window, view)
+    private val window = view.context.findWindow()
+    private val windowInsetsController = ViewCompat.getWindowInsetsController(view)
 
     override fun setStatusBarColor(
         color: Color,
@@ -186,8 +183,8 @@ internal class AndroidSystemUiController(
     ) {
         statusBarDarkContentEnabled = darkIcons
 
-        window.statusBarColor = when {
-            darkIcons && !windowInsetsController.isAppearanceLightStatusBars -> {
+        window?.statusBarColor = when {
+            darkIcons && windowInsetsController?.isAppearanceLightStatusBars != true -> {
                 // If we're set to use dark icons, but our windowInsetsController call didn't
                 // succeed (usually due to API level), we instead transform the color to maintain
                 // contrast
@@ -206,8 +203,8 @@ internal class AndroidSystemUiController(
         navigationBarDarkContentEnabled = darkIcons
         isNavigationBarContrastEnforced = navigationBarContrastEnforced
 
-        window.navigationBarColor = when {
-            darkIcons && !windowInsetsController.isAppearanceLightNavigationBars -> {
+        window?.navigationBarColor = when {
+            darkIcons && windowInsetsController?.isAppearanceLightNavigationBars != true -> {
                 // If we're set to use dark icons, but our windowInsetsController call didn't
                 // succeed (usually due to API level), we instead transform the color to maintain
                 // contrast
@@ -224,9 +221,9 @@ internal class AndroidSystemUiController(
         }
         set(value) {
             if (value) {
-                windowInsetsController.show(WindowInsetsCompat.Type.statusBars())
+                windowInsetsController?.show(WindowInsetsCompat.Type.statusBars())
             } else {
-                windowInsetsController.hide(WindowInsetsCompat.Type.statusBars())
+                windowInsetsController?.hide(WindowInsetsCompat.Type.statusBars())
             }
         }
 
@@ -237,29 +234,53 @@ internal class AndroidSystemUiController(
         }
         set(value) {
             if (value) {
-                windowInsetsController.show(WindowInsetsCompat.Type.navigationBars())
+                windowInsetsController?.show(WindowInsetsCompat.Type.navigationBars())
             } else {
-                windowInsetsController.hide(WindowInsetsCompat.Type.navigationBars())
+                windowInsetsController?.hide(WindowInsetsCompat.Type.navigationBars())
             }
         }
 
     override var statusBarDarkContentEnabled: Boolean
-        get() = windowInsetsController.isAppearanceLightStatusBars
+        get() = windowInsetsController?.isAppearanceLightStatusBars == true
         set(value) {
-            windowInsetsController.isAppearanceLightStatusBars = value
+            // This is an API 30 specific workaround, to set the corresponding flags even
+            // though they shouldn't matter.
+            @Suppress("DEPRECATION")
+            if (Build.VERSION.SDK_INT == 30 && window != null) {
+                window.decorView.systemUiVisibility = if (value) {
+                    window.decorView.systemUiVisibility or
+                        View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                } else {
+                    window.decorView.systemUiVisibility and
+                        View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+                }
+            }
+            windowInsetsController?.isAppearanceLightStatusBars = value
         }
 
     override var navigationBarDarkContentEnabled: Boolean
-        get() = windowInsetsController.isAppearanceLightNavigationBars
+        get() = windowInsetsController?.isAppearanceLightNavigationBars == true
         set(value) {
-            windowInsetsController.isAppearanceLightNavigationBars = value
+            // This is an API 30 specific workaround, to set the corresponding flags even
+            // though they shouldn't matter.
+            @Suppress("DEPRECATION")
+            if (Build.VERSION.SDK_INT == 30 && window != null) {
+                window.decorView.systemUiVisibility = if (value) {
+                    window.decorView.systemUiVisibility or
+                        View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+                } else {
+                    window.decorView.systemUiVisibility and
+                        View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR.inv()
+                }
+            }
+            windowInsetsController?.isAppearanceLightNavigationBars = value
         }
 
     override var isNavigationBarContrastEnforced: Boolean
-        get() = Build.VERSION.SDK_INT >= 29 && window.isNavigationBarContrastEnforced
+        get() = Build.VERSION.SDK_INT >= 29 && window?.isNavigationBarContrastEnforced == true
         set(value) {
             if (Build.VERSION.SDK_INT >= 29) {
-                window.isNavigationBarContrastEnforced = value
+                window?.isNavigationBarContrastEnforced = value
             }
         }
 
