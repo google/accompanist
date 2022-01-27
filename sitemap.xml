@@ -80,4 +80,9 @@
          <lastmod>2022-01-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
+    <url>
+         <loc>https://google.github.io/accompanist/webview/</loc>
+         <lastmod>2022-01-27</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
 </urlset>
