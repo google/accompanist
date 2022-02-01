@@ -243,36 +243,12 @@ internal class AndroidSystemUiController(
     override var statusBarDarkContentEnabled: Boolean
         get() = windowInsetsController?.isAppearanceLightStatusBars == true
         set(value) {
-            // This is an API 30 specific workaround, to set the corresponding flags even
-            // though they shouldn't matter.
-            @Suppress("DEPRECATION")
-            if (Build.VERSION.SDK_INT == 30 && window != null) {
-                window.decorView.systemUiVisibility = if (value) {
-                    window.decorView.systemUiVisibility or
-                        View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-                } else {
-                    window.decorView.systemUiVisibility and
-                        View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
-                }
-            }
             windowInsetsController?.isAppearanceLightStatusBars = value
         }
 
     override var navigationBarDarkContentEnabled: Boolean
         get() = windowInsetsController?.isAppearanceLightNavigationBars == true
         set(value) {
-            // This is an API 30 specific workaround, to set the corresponding flags even
-            // though they shouldn't matter.
-            @Suppress("DEPRECATION")
-            if (Build.VERSION.SDK_INT == 30 && window != null) {
-                window.decorView.systemUiVisibility = if (value) {
-                    window.decorView.systemUiVisibility or
-                        View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-                } else {
-                    window.decorView.systemUiVisibility and
-                        View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR.inv()
-                }
-            }
             windowInsetsController?.isAppearanceLightNavigationBars = value
         }
 
