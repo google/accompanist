@@ -6,7 +6,7 @@ A library which provides a Jetpack Compose wrapper around Android's WebView.
 
 ## Usage
 
-To implement this wrapper there are two key APIs which are needed: [`WebView`][api_webview], which is provides the layout, and [`rememberWebViewState(url)`][api_rememberstate] which provides some remembered state including the URL to display.
+To implement this wrapper there are two key APIs which are needed: [`WebView`](../api/web/com.google.accompanist.web/-web-view.html), which is provides the layout, and [`rememberWebViewState(url)`](../api/web/com.google.accompanist.web/remember-web-view-state.html) which provides some remembered state including the URL to display.
 
 The basic usage is as follows:
 
