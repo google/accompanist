@@ -63,8 +63,8 @@ fun BottomNavigation(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(BottomNavigationHeight + contentPadding.calculateBottomPadding())
                 .padding(contentPadding)
+                .height(BottomNavigationHeight)
                 .selectableGroup(),
             horizontalArrangement = Arrangement.SpaceBetween,
             content = content,
