@@ -359,6 +359,16 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".videoplayer.VideoPlayerSample"
+            android:configChanges="orientation|screenSize"
+            android:exported="true"
+            android:label="@string/videoplayer_sample">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

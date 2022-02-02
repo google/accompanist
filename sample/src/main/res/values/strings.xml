@@ -58,4 +58,6 @@
     <string name="placeholder_title_shimmer">Placeholder: Shimmer</string>
 
     <string name="webview_title_basic">WebView: Basic</string>
+
+    <string name="videoplayer_sample">Video Player Sample</string>
 </resources>

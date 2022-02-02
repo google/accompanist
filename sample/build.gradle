@@ -61,6 +61,7 @@ dependencies {
     implementation project(':systemuicontroller')
     implementation project(':swiperefresh')
     implementation project(':web')
+    implementation project(':videoplayer')
 
     implementation libs.androidx.appcompat
 

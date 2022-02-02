@@ -43,8 +43,8 @@ include ':systemuicontroller'
 include ':swiperefresh'
 include ':sample'
 include ':web'
+include ':videoplayer'
 
 // Enable Gradle's version catalog support
 // https://docs.gradle.org/current/userguide/platforms.html
 enableFeaturePreview("VERSION_CATALOGS")
-
