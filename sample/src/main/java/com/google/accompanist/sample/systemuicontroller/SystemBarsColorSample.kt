@@ -38,6 +38,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -87,6 +88,11 @@ private fun Sample() {
     var clickedColor by remember { mutableStateOf(Color.Unspecified) }
     var statusBarDarkIcons by remember { mutableStateOf(false) }
     var navigationBarDarkIcons by remember { mutableStateOf(false) }
+
+    SideEffect {
+        systemUiController.statusBarDarkContentEnabled = statusBarDarkIcons
+        systemUiController.navigationBarDarkContentEnabled = navigationBarDarkIcons
+    }
 
     @Composable
     fun Color(color: Color) {
@@ -213,7 +219,6 @@ private fun Sample() {
                     modifier = Modifier
                         .clickable {
                             statusBarDarkIcons = !statusBarDarkIcons
-                            systemUiController.statusBarDarkContentEnabled = statusBarDarkIcons
                         }
                         .padding(8.dp),
                     verticalAlignment = Alignment.CenterVertically
@@ -231,7 +236,6 @@ private fun Sample() {
                     modifier = Modifier
                         .clickable {
                             navigationBarDarkIcons = !navigationBarDarkIcons
-                            systemUiController.navigationBarDarkContentEnabled = navigationBarDarkIcons
                         }
                         .padding(8.dp),
                     verticalAlignment = Alignment.CenterVertically

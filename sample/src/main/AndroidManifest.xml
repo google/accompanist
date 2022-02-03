@@ -302,7 +302,8 @@
         <activity
             android:name=".systemuicontroller.SystemBarsColorSample"
             android:label="@string/system_ui_controller_title_color"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/SystemBarsColorSampleTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
