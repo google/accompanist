@@ -25,12 +25,12 @@ kotlin {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     defaultConfig {
         minSdkVersion 21
         // targetSdkVersion has no effect for libraries. This is only used for the test APK
-        targetSdkVersion 30
+        targetSdkVersion 31
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -68,23 +68,48 @@ android {
         }
         animationsDisabled true
     }
+
+    sourceSets {
+        test {
+            java.srcDirs += 'src/sharedTest/kotlin'
+            res.srcDirs += 'src/sharedTest/res'
+        }
+        androidTest {
+            java.srcDirs += 'src/sharedTest/kotlin'
+            res.srcDirs += 'src/sharedTest/res'
+        }
+    }
 }
 
 dependencies {
-    implementation libs.compose.foundation.foundation
+    api libs.compose.foundation.foundation
+    api libs.snapper
+
     implementation libs.napier
 
     // ======================
     // Test dependencies
     // ======================
 
+    androidTestImplementation project(':internal-testutils')
+    testImplementation project(':internal-testutils')
+
     androidTestImplementation libs.junit
+    testImplementation libs.junit
+
     androidTestImplementation libs.truth
+    testImplementation libs.truth
 
     androidTestImplementation libs.compose.ui.test.junit4
+    testImplementation libs.compose.ui.test.junit4
+
     androidTestImplementation libs.compose.ui.test.manifest
-    androidTestImplementation libs.compose.foundation.foundation
+    testImplementation libs.compose.ui.test.manifest
+
     androidTestImplementation libs.androidx.test.runner
+    testImplementation libs.androidx.test.runner
+
+    testImplementation libs.robolectric
 }
 
 apply plugin: "com.vanniktech.maven.publish"

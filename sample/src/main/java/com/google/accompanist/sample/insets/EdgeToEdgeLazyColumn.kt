@@ -95,7 +95,9 @@ private fun Sample() {
             Spacer(Modifier.navigationBarsHeight().fillMaxWidth())
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { /* TODO */ },) {
+            FloatingActionButton(
+                onClick = { /* TODO */ }
+            ) {
                 Icon(
                     imageVector = Icons.Default.Face,
                     contentDescription = "Face icon"

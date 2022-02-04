@@ -49,7 +49,7 @@ SwipeRefresh(
 
 The full example, including the view model implementation can be found [here](https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/swiperefresh/docsamples/SimpleSample.kt).
 
-The content needs to be 'scrollable' for `SwipeRefresh()` to be able to react to swipe gestures. Layouts such as [`LazyColumn`][lazycolumn] are automatically scrollable, but others such as [`Column`][column] are not. In those instances, you can provide a [`Modifier.verticalScroll`][verticalscroll] modifier to that content like so:
+The content needs to be 'vertically scrollable' for `SwipeRefresh()` to be able to react to swipe gestures. Layouts such as [`LazyColumn`][lazycolumn] are automatically vertically scrollable, but others such as [`Column`][column] or [`LazyRow`][lazyrow] are not. In those instances, you can provide a [`Modifier.verticalScroll`][verticalscroll] modifier to that content like so:
 
 ``` kotlin
 SwipeRefresh(
@@ -166,7 +166,7 @@ To customize the default indicator, we can provide our own `indicator` content b
 
 As mentioned, you can also provide your own custom indicator content. A [`SwipeRefreshState`][api_swiperefreshstate] is provided to `indicator` content slot, which contains the information necessary to react to a swipe refresh gesture.
 
-An example of a custom indicator is provided [here][sample_customindictor].
+An example of a custom indicator is provided [here][sample_customindicator].
 
 ## Download
 
@@ -190,7 +190,8 @@ Snapshots of the development version are available in [Sonatype's `snapshots` re
   [api_swiperefreshindicator]: ../api/swiperefresh/swiperefresh/com.google.accompanist.swiperefresh/-swipe-refresh-indicator.html
   [api_swiperefresh]: ../api/swiperefresh/swiperefresh/com.google.accompanist.swiperefresh/-swipe-refresh.html
   [api_rememberstate]: ../api/swiperefresh/swiperefresh/com.google.accompanist.swiperefresh/remember-swipe-refresh-state.html
-  [sample_customindictor]: https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/swiperefresh/SwipeRefreshCustomIndicatorSample.kt
+  [sample_customindicator]: https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/swiperefresh/SwipeRefreshCustomIndicatorSample.kt
   [lazycolumn]: https://developer.android.com/reference/kotlin/androidx/compose/foundation/lazy/package-summary#LazyColumn(androidx.compose.ui.Modifier,androidx.compose.foundation.lazy.LazyListState,androidx.compose.foundation.layout.PaddingValues,kotlin.Boolean,androidx.compose.foundation.layout.Arrangement.Vertical,androidx.compose.ui.Alignment.Horizontal,androidx.compose.foundation.gestures.FlingBehavior,kotlin.Function1)
   [column]: https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/package-summary#Column(androidx.compose.ui.Modifier,androidx.compose.foundation.layout.Arrangement.Vertical,androidx.compose.ui.Alignment.Horizontal,kotlin.Function1)
+  [lazyrow]: https://developer.android.com/reference/kotlin/androidx/compose/foundation/lazy/package-summary#LazyRow(androidx.compose.ui.Modifier,androidx.compose.foundation.lazy.LazyListState,androidx.compose.foundation.layout.PaddingValues,kotlin.Boolean,androidx.compose.foundation.layout.Arrangement.Horizontal,androidx.compose.ui.Alignment.Vertical,androidx.compose.foundation.gestures.FlingBehavior,kotlin.Function1)
   [verticalscroll]: https://developer.android.com/jetpack/compose/gestures#scroll-modifiers

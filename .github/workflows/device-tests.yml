@@ -12,8 +12,8 @@ on:
 
 jobs:
   android-test:
-    runs-on: macos-11.0
-    timeout-minutes: 60
+    runs-on: macos-latest
+    timeout-minutes: 80
 
     strategy:
       # Allow tests to continue on other devices if they fail on one device.
@@ -60,14 +60,15 @@ jobs:
           fi
           echo "::set-output name=TARGET::$TARGET"
 
-      - name: Run tests
+      - name: Run device tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
           target: ${{ steps.determine-target.outputs.TARGET }}
           profile: Galaxy Nexus
+          emulator-build: 7425822 # https://github.com/ReactiveCircus/android-emulator-runner/issues/160
           # We run all tests, sharding them over 3 shards
-          script: ./scripts/run-device-tests.sh --log-file=logcat.txt --shard-index=${{ matrix.shard }} --shard-count=3
+          script: ./scripts/run-tests.sh --log-file=logcat.txt --shard-index=${{ matrix.shard }} --shard-count=3
 
       - name: Clean secrets
         if: always()

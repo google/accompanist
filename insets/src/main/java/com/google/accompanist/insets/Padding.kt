@@ -54,6 +54,36 @@ inline fun Modifier.systemBarsPadding(enabled: Boolean = true): Modifier = compo
 }
 
 /**
+ * Selectively apply additional space which matches the width/height of any system bars present
+ * on the respective edges of the screen.
+ *
+ * @param start Whether to apply padding to the start edge, which matches the system bars width
+ * (if present) on the start edge of the screen. Defaults to `true`.
+ * @param top Whether to apply padding to the top edge, which matches the system bars height
+ * (if present) at the top edge of the screen. Defaults to `true`.
+ * @param end Whether to apply padding to the end edge, which matches the system bars width
+ * (if present) on the end edge of the screen. Defaults to `true`.
+ * @param bottom Whether to apply padding to the bottom edge, which matches the system bars
+ * height (if present) at the bottom edge of the screen. Defaults to `true`.
+ */
+inline fun Modifier.systemBarsPadding(
+    start: Boolean = true,
+    top: Boolean = true,
+    end: Boolean = true,
+    bottom: Boolean = true,
+): Modifier = composed {
+    padding(
+        rememberInsetsPaddingValues(
+            insets = LocalWindowInsets.current.systemBars,
+            applyStart = start,
+            applyTop = top,
+            applyEnd = end,
+            applyBottom = bottom
+        )
+    )
+}
+
+/**
  * Apply additional space which matches the height of the status bars height along the top edge
  * of the content.
  */
@@ -108,6 +138,36 @@ inline fun Modifier.imePadding(): Modifier = composed {
             applyStart = true,
             applyEnd = true,
             applyBottom = true
+        )
+    )
+}
+
+/**
+ * Selectively apply additional space which matches the width/height of any display cutout present
+ * on the respective edges of the screen.
+ *
+ * @param start Whether to apply padding to the start edge, which matches the display cutout width
+ * (if present) on the start edge of the screen. Defaults to `true`.
+ * @param top Whether to apply padding to the top edge, which matches the display cutout height
+ * (if present) at the top edge of the screen. Defaults to `true`.
+ * @param end Whether to apply padding to the end edge, which matches the display cutout width
+ * (if present) on the end edge of the screen. Defaults to `true`.
+ * @param bottom Whether to apply padding to the bottom edge, which matches the display cutout
+ * height (if present) at the bottom edge of the screen. Defaults to `true`.
+ */
+inline fun Modifier.cutoutPadding(
+    start: Boolean = true,
+    top: Boolean = true,
+    end: Boolean = true,
+    bottom: Boolean = true,
+): Modifier = composed {
+    padding(
+        rememberInsetsPaddingValues(
+            insets = LocalWindowInsets.current.displayCutout,
+            applyStart = start,
+            applyTop = top,
+            applyEnd = end,
+            applyBottom = bottom
         )
     )
 }

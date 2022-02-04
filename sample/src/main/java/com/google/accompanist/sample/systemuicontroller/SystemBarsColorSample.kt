@@ -38,6 +38,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,7 +53,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
-import com.google.accompanist.coil.rememberCoilPainter
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.systemBarsPadding
 import com.google.accompanist.sample.AccompanistSampleTheme
@@ -78,6 +80,7 @@ class SystemBarsColorSample : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 private fun Sample() {
     // Get the current SystemUiController
@@ -85,6 +88,11 @@ private fun Sample() {
     var clickedColor by remember { mutableStateOf(Color.Unspecified) }
     var statusBarDarkIcons by remember { mutableStateOf(false) }
     var navigationBarDarkIcons by remember { mutableStateOf(false) }
+
+    SideEffect {
+        systemUiController.statusBarDarkContentEnabled = statusBarDarkIcons
+        systemUiController.navigationBarDarkContentEnabled = navigationBarDarkIcons
+    }
 
     @Composable
     fun Color(color: Color) {
@@ -120,15 +128,14 @@ private fun Sample() {
     BoxWithConstraints(Modifier.fillMaxSize()) {
         // Displaying a random image
         Image(
-            painter = rememberCoilPainter(
-                request = with(LocalDensity.current) {
+            painter = rememberImagePainter(
+                data = with(LocalDensity.current) {
                     rememberRandomSampleImageUrl(
                         seed = 16,
                         width = maxWidth.roundToPx(),
                         height = maxHeight.roundToPx()
                     )
                 },
-                fadeIn = true,
             ),
             contentDescription = null,
             contentScale = ContentScale.Crop,
@@ -212,7 +219,6 @@ private fun Sample() {
                     modifier = Modifier
                         .clickable {
                             statusBarDarkIcons = !statusBarDarkIcons
-                            systemUiController.statusBarDarkContentEnabled = statusBarDarkIcons
                         }
                         .padding(8.dp),
                     verticalAlignment = Alignment.CenterVertically
@@ -230,7 +236,6 @@ private fun Sample() {
                     modifier = Modifier
                         .clickable {
                             navigationBarDarkIcons = !navigationBarDarkIcons
-                            systemUiController.navigationBarDarkContentEnabled = navigationBarDarkIcons
                         }
                         .padding(8.dp),
                     verticalAlignment = Alignment.CenterVertically

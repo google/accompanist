@@ -4,9 +4,6 @@ Accompanist is a group of libraries that aim to supplement [Jetpack Compose][com
 
 Currently, Accompanist contains:
 
-### 🖼️ Image loading libraries
-Jetpack Compose implementations of two popular image loading libraries: [Coil](./coil/) and [Glide](./glide/).
-
 ### 📐 [Insets](./insets/)
 A library that brings [WindowInsets][windowinsets] support to Jetpack Compose.
 
@@ -28,15 +25,38 @@ A library that provides easy-to-use modifiers for displaying a placeholder UI wh
 ### 🌊 [Flow Layouts](./flowlayout/)
 A library that adds Flexbox-like layout components to Jetpack Compose.
 
+### 🧭✨[Navigation-Animation](./navigation-animation/)
+A library which provides [Compose Animation](https://developer.android.com/jetpack/compose/animation) support for Jetpack Navigation Compose.
+
+### 🧭🎨️ [Navigation-Material](./navigation-material/)
+A library which provides [Compose Material](https://developer.android.com/jetpack/androidx/releases/compose-material) support, such as modal bottom sheets, for Jetpack Navigation Compose.
+
+### 🖌️ [Drawable Painter](./drawablepainter/)
+A library which provides a way to use Android Drawables as Jetpack Compose Painters.
+
 ### ⬇️ [Swipe to Refresh](./swiperefresh/)
 A library that provides a layout implementing the swipe-to-refresh UX pattern, similar to Android's [SwipeRefreshLayout](https://developer.android.com/jetpack/androidx/releases/swiperefreshlayout).
 
+### 🌏 [Web](./web/)
+A wrapper around WebView for basic WebView support in Jetpack Compose.
+
 ---
 
-## Updates
+## Compose versions
 
-[Jetpack Compose][compose] is a fast-moving project and we aim to keep these these libraries up-to-date with the
-latest tagged release on Compose as quickly as possible. Each [release](https://github.com/google/accompanist/releases)  outlines what version of the Compose libraries it depends on.
+Each [release](https://github.com/google/accompanist/releases) outlines what version of the Compose libraries it depends on. We are currently releasing multiple versions of Accompanist for the different versions of Compose:
+
+<table>
+ <tr>
+  <td>Compose 1.0 (1.0.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-insets?versionPrefix=0.20"></td>
+ </tr>
+ <tr>
+  <td>Compose 1.1 (1.1.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-insets?versionPrefix=0.22"></td>
+ </tr>
+ <tr>
+  <td>Compose 1.2 (1.2.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-insets"></td>
+ </tr>
+</table>
 
 ## Future?
 

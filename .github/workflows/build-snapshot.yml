@@ -1,0 +1,201 @@
+name: Build & test
+
+on:
+  push:
+    branches:
+      - snapshot
+    paths-ignore:
+      - '**.md'
+  pull_request:
+
+jobs:
+  build:
+    # Skip build if head commit contains 'skip ci'
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          # Fetch expanded history, which is needed for affected module detection
+          fetch-depth: '500'
+
+      - name: Copy CI gradle.properties
+        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+      - name: set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Decrypt secrets
+        run: release/signing-setup.sh ${{ secrets.ENCRYPT_KEY }}
+
+      - name: Generate cache key
+        run: ./checksum.sh checksum.txt
+
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches/modules-*
+            ~/.gradle/caches/jars-*
+            ~/.gradle/caches/build-cache-*
+          key: gradle-${{ hashFiles('checksum.txt') }}
+
+      - name: Build
+        run: |
+          ./gradlew --scan --stacktrace \
+              spotlessCheck \
+              assemble \
+              metalavaCheckCompatibility \
+              lintDebug
+
+      - name: Unit Tests
+        run: |
+          ./scripts/run-tests.sh \
+              --unit-tests \
+              --run-affected \
+              --affected-base-ref=$BASE_REF
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results-robolectric
+          path: |
+            **/build/test-results/*
+            **/build/reports/*
+
+      - name: Clean secrets
+        if: always()
+        run: release/signing-cleanup.sh
+
+  test:
+    runs-on: macos-latest
+    needs: build
+    timeout-minutes: 50
+
+    strategy:
+      # Allow tests to continue on other devices if they fail on one device.
+      fail-fast: false
+      matrix:
+        api-level: [ 22, 26, 28, 29 ]
+        shard: [ 0, 1 ] # Need to update shard-count below if this changes
+
+    env:
+      TERM: dumb
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          # Fetch expanded history, which is needed for affected module detection
+          fetch-depth: '500'
+
+      - name: Copy CI gradle.properties
+        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+      - name: set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Decrypt secrets
+        run: release/signing-setup.sh ${{ secrets.ENCRYPT_KEY }}
+
+      - name: Generate cache key
+        run: ./checksum.sh checksum.txt
+
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches/modules-*
+            ~/.gradle/caches/jars-*
+            ~/.gradle/caches/build-cache-*
+          key: gradle-${{ hashFiles('checksum.txt') }}
+
+      # Determine what emulator image to use. We run all API 28+ emulators using
+      # the google_apis image
+      - name: Determine emulator target
+        id: determine-target
+        env:
+          API_LEVEL: ${{ matrix.api-level }}
+        run: |
+          TARGET="default"
+          if [ "$API_LEVEL" -ge "28" ]; then
+            TARGET="google_apis"
+          fi
+          echo "::set-output name=TARGET::$TARGET"
+
+      - name: Run tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: ${{ steps.determine-target.outputs.TARGET }}
+          profile: Galaxy Nexus
+          script: ./scripts/run-tests.sh --log-file=logcat.txt --run-affected --affected-base-ref=$BASE_REF --shard-index=${{ matrix.shard }} --shard-count=2
+
+      - name: Clean secrets
+        if: always()
+        run: release/signing-cleanup.sh
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: logs-${{ matrix.api-level }}-${{ steps.determine-target.outputs.TARGET }}-${{ matrix.shard }}
+          path: logcat.txt
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results-${{ matrix.api-level }}-${{ steps.determine-target.outputs.TARGET }}-${{ matrix.shard }}
+          path: |
+            **/build/reports/*
+            **/build/outputs/*/connected/*
+
+  deploy:
+    if: github.event_name == 'push' # only deploy for pushed commits (not PRs)
+
+    runs-on: ubuntu-latest
+    needs: [ build, test ]
+    timeout-minutes: 30
+    env:
+      TERM: dumb
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Copy CI gradle.properties
+        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+      - name: set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Decrypt secrets
+        run: release/signing-setup.sh ${{ secrets.ENCRYPT_KEY }}
+
+      - name: Generate cache key
+        run: ./checksum.sh checksum.txt
+
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches/modules-*
+            ~/.gradle/caches/jars-*
+            ~/.gradle/caches/build-cache-*
+          key: gradle-${{ hashFiles('checksum.txt') }}
+
+      - name: Deploy to Sonatype
+        run: ./gradlew publish --no-parallel --stacktrace
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_NEXUS_PASSWORD }}
+
+      - name: Clean secrets
+        if: always()
+        run: release/signing-cleanup.sh

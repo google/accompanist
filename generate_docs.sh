@@ -22,17 +22,10 @@ DOCS_ROOT=docs-gen
 [ -d $DOCS_ROOT ] && rm -r $DOCS_ROOT
 mkdir $DOCS_ROOT
 
-# Work around Dokka failing to link against external links generated from 'gfm' sources.
-curl -o package-list-coil-base https://coil-kt.github.io/coil/api/coil-base/package-list
-sed -i.bak 's/$dokka.linkExtension:md/$dokka.linkExtension:html/g' package-list-coil-base
-
 # Clear out the old API docs
 [ -d docs/api ] && rm -r docs/api
 # Build the docs with dokka
-./gradlew dokkaHtmlMultiModule
-
-# Clean up the temp Coil package list
-rm package-list-coil-base
+./gradlew dokkaHtmlMultiModule --stacktrace
 
 # Create a copy of our docs at our $DOCS_ROOT
 cp -a docs/* $DOCS_ROOT

@@ -17,14 +17,6 @@
 <resources>
     <string name="app_name">Accompanist Sample</string>
 
-    <string name="coil_title_basic">Coil: Basic</string>
-    <string name="coil_title_lazy_row">Coil: Lazy row</string>
-    <string name="coil_title_lazy_grid">Coil: Lazy grid</string>
-
-    <string name="glide_title_basic">Glide: Basic</string>
-    <string name="glide_title_lazy_row">Glide: Lazy row</string>
-    <string name="glide_title_lazy_grid">Glide: Lazy grid</string>
-
     <string name="insets_title_basic">Insets: Basic</string>
     <string name="insets_title_fragment">Insets: Fragment</string>
     <string name="insets_title_list">Insets: Edge-to-edge list</string>
@@ -34,15 +26,17 @@
     <string name="horiz_pager_title_basics">Horizontal Pager: Basic</string>
     <string name="horiz_pager_with_indicator_title">Horizontal Pager: Indicator</string>
     <string name="horiz_pager_with_transition_title">Horizontal Pager: Transition</string>
+    <string name="horiz_pager_title_looping">Horizontal Pager: Looping</string>
     <string name="horiz_pager_title_tabs">Horizontal Pager: Tabs</string>
-    <string name="horiz_pager_title_loop">Horizontal Pager: Loop</string>
     <string name="horiz_pager_title_scroll_content">Horizontal Pager: Scrolling content</string>
 
     <string name="vertical_pager_title_basics">Vertical Pager: Basic</string>
     <string name="vertical_pager_with_indicator_title">Vertical Pager: Indicator</string>
-    <string name="vertical_pager_title_loop">Vertical Pager: Loop</string>
 
     <string name="pagers_title_nested">Pagers: Nested</string>
+
+    <string name="navigation_title_animated">Navigation: Transitions</string>
+    <string name="navigation_title_bottom_sheet">Navigation: Bottom Sheets</string>
 
     <string name="permissions_title_one">Permissions: Request permission</string>
     <string name="permissions_title_multiple">Permissions: Request multiple permissions</string>
@@ -65,4 +59,5 @@
     <string name="placeholder_title_fade">Placeholder: Fade</string>
     <string name="placeholder_title_shimmer">Placeholder: Shimmer</string>
 
+    <string name="webview_title_basic">WebView: Basic</string>
 </resources>

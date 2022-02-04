@@ -101,6 +101,14 @@ subprojects {
         }
     }
 
+    // Remove all test apps after running UI tests.
+    // This is specially important in CI so that test emulators don't run out of space.
+    tasks.whenTaskAdded { task ->
+        if (task.name == 'connectedDebugAndroidTest') {
+            task.finalizedBy 'uninstallDebugAndroidTest'
+        }
+    }
+
     configurations.configureEach {
         resolutionStrategy.eachDependency { DependencyResolveDetails details ->
             // Make sure that we're using the Android version of Guava
@@ -108,6 +116,13 @@ subprojects {
                     && details.requested.module.name == 'guava'
                     && details.requested.version.contains('jre')) {
                 details.useVersion details.requested.version.replace('jre', 'android')
+            }
+
+            // FIXME: The AndroidX snapshots are currently in a weird state where they depend
+            //  on 1.0.1 which isn't yet public. Remove this once 1.0.1 is out.
+            if (details.requested.group.startsWith('androidx.compose')
+                    && details.requested.version == '1.0.1') {
+                details.useVersion libs.versions.compose.get()
             }
         }
     }
@@ -179,19 +194,6 @@ subprojects {
                 externalDocumentationLink {
                     url.set(new URL("https://developer.android.com/reference/kotlin/"))
                     packageListUrl.set(new URL("https://developer.android.com/reference/kotlin/androidx/package-list"))
-                }
-
-                // Coil docs
-                if (rootProject.file('package-list-coil-base').exists()) {
-                    externalDocumentationLink {
-                        url.set(new URL("https://coil-kt.github.io/coil/api/coil-base/"))
-                        packageListUrl.set(new URL("file://$rootDir/package-list-coil-base"))
-                    }
-                }
-
-                // Glide docs
-                externalDocumentationLink {
-                    url.set(new URL("https://bumptech.github.io/glide/javadocs/4110/"))
                 }
 
                 sourceLink {

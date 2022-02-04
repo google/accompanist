@@ -19,12 +19,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     defaultConfig {
         applicationId "com.google.accompanist.sample"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 31
 
         versionCode 1
         versionName "1.0"
@@ -47,10 +47,11 @@ android {
 }
 
 dependencies {
-    implementation project(':coil')
-    implementation project(':glide')
+    implementation project(':drawablepainter')
     implementation project(':insets')
     implementation project(':insets-ui')
+    implementation project(':navigation-animation')
+    implementation project(':navigation-material')
     implementation project(':pager')
     implementation project(':pager-indicators')
     implementation project(':permissions')
@@ -59,9 +60,11 @@ dependencies {
     implementation project(':flowlayout')
     implementation project(':systemuicontroller')
     implementation project(':swiperefresh')
+    implementation project(':web')
 
     implementation libs.androidx.appcompat
 
+    implementation libs.coil.compose
     implementation libs.coil.gif
 
     implementation libs.compose.material.material

@@ -33,6 +33,10 @@ lintOptions {
     ignoreTestSources true
 }
 
+affectedTestConfiguration {
+    jvmTestTask = "test"
+}
+
 /**
  * Creates a configuration for users to use that will be used bundle these dependency
  * jars inside of this lint check's jar. This is required because lintPublish does
@@ -71,6 +75,7 @@ dependencies {
 
     testImplementation libs.junit
     testImplementation libs.kotlin.reflect
+    testImplementation libs.kotlin.stdlibJdk8 // Needed, cannot use `stdlib`
     testImplementation libs.android.tools.lint.lint
     testImplementation libs.android.tools.lint.tests
 }

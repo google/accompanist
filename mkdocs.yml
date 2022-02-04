@@ -15,16 +15,6 @@ repo_url: 'https://github.com/google/accompanist'
 # Navigation
 nav:
   - 'Overview': index.md
-  - 'Coil':
-    - 'Guide': coil.md
-    - 'API': api/coil/
-    - 'Migration from CoilImage': coil/migration-coilimage.md
-  - 'Glide':
-    - 'Guide': glide.md
-    - 'API': api/glide/
-    - 'Migration from GlideImage': glide/migration-glideimage.md
-  - 'Image Loading Core':
-    - 'API': api/imageloading-core/
   - 'Insets':
     - 'Guide': insets.md
     - 'API': api/insets/
@@ -43,13 +33,25 @@ nav:
   - 'Placeholder':
     - 'Guide': placeholder.md
     - 'Foundation API': api/placeholder/
-    - 'Material API': api/placeholder-material/    
+    - 'Material API': api/placeholder-material/
+  - 'Drawable Painter':
+    - 'Guide': drawablepainter.md
+    - 'API': api/drawablepainter/ 
   - 'Flow layouts':
     - 'Guide': flowlayout.md
     - 'API': api/flowlayout/
   - 'Permissions':
     - 'Guide': permissions.md
     - 'API': api/permissions/
+  - 'Navigation Animation':
+      - 'Guide': navigation-animation.md
+      - 'API': api/navigation-animation/
+  - 'Navigation Material':
+      - 'Guide': navigation-material.md
+      - 'API': api/navigation-material/
+  - 'WebView':
+      - 'Guide': webview.md
+      - 'API': api/web/
   - 'Snapshots': using-snapshot-version.md
   - 'Contributing': contributing.md
   - 'Maintainers':

@@ -30,11 +30,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.glide.rememberGlidePainter
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 
 /**
  * Simple list item row which displays an image and text.
  */
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun ListItem(
     imageUrl: String,
@@ -42,7 +44,7 @@ fun ListItem(
 ) {
     Row(modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
         Image(
-            painter = rememberGlidePainter(imageUrl),
+            painter = rememberImagePainter(imageUrl),
             contentDescription = null,
             modifier = Modifier
                 .size(64.dp)

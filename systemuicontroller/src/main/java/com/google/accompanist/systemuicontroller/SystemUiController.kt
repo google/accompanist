@@ -174,7 +174,7 @@ internal class AndroidSystemUiController(
     private val view: View
 ) : SystemUiController {
     private val window = view.context.findWindow()
-    private val windowInsetsController = ViewCompat.getWindowInsetsController(view)!!
+    private val windowInsetsController = ViewCompat.getWindowInsetsController(view)
 
     override fun setStatusBarColor(
         color: Color,
@@ -184,7 +184,7 @@ internal class AndroidSystemUiController(
         statusBarDarkContentEnabled = darkIcons
 
         window?.statusBarColor = when {
-            darkIcons && !windowInsetsController.isAppearanceLightStatusBars -> {
+            darkIcons && windowInsetsController?.isAppearanceLightStatusBars != true -> {
                 // If we're set to use dark icons, but our windowInsetsController call didn't
                 // succeed (usually due to API level), we instead transform the color to maintain
                 // contrast
@@ -204,7 +204,7 @@ internal class AndroidSystemUiController(
         isNavigationBarContrastEnforced = navigationBarContrastEnforced
 
         window?.navigationBarColor = when {
-            darkIcons && !windowInsetsController.isAppearanceLightNavigationBars -> {
+            darkIcons && windowInsetsController?.isAppearanceLightNavigationBars != true -> {
                 // If we're set to use dark icons, but our windowInsetsController call didn't
                 // succeed (usually due to API level), we instead transform the color to maintain
                 // contrast
@@ -221,9 +221,9 @@ internal class AndroidSystemUiController(
         }
         set(value) {
             if (value) {
-                windowInsetsController.show(WindowInsetsCompat.Type.statusBars())
+                windowInsetsController?.show(WindowInsetsCompat.Type.statusBars())
             } else {
-                windowInsetsController.hide(WindowInsetsCompat.Type.statusBars())
+                windowInsetsController?.hide(WindowInsetsCompat.Type.statusBars())
             }
         }
 
@@ -234,22 +234,22 @@ internal class AndroidSystemUiController(
         }
         set(value) {
             if (value) {
-                windowInsetsController.show(WindowInsetsCompat.Type.navigationBars())
+                windowInsetsController?.show(WindowInsetsCompat.Type.navigationBars())
             } else {
-                windowInsetsController.hide(WindowInsetsCompat.Type.navigationBars())
+                windowInsetsController?.hide(WindowInsetsCompat.Type.navigationBars())
             }
         }
 
     override var statusBarDarkContentEnabled: Boolean
-        get() = windowInsetsController.isAppearanceLightStatusBars
+        get() = windowInsetsController?.isAppearanceLightStatusBars == true
         set(value) {
-            windowInsetsController.isAppearanceLightStatusBars = value
+            windowInsetsController?.isAppearanceLightStatusBars = value
         }
 
     override var navigationBarDarkContentEnabled: Boolean
-        get() = windowInsetsController.isAppearanceLightNavigationBars
+        get() = windowInsetsController?.isAppearanceLightNavigationBars == true
         set(value) {
-            windowInsetsController.isAppearanceLightNavigationBars = value
+            windowInsetsController?.isAppearanceLightNavigationBars = value
         }
 
     override var isNavigationBarContrastEnforced: Boolean

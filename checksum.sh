@@ -34,5 +34,5 @@ done < <(find . -type f \( -name "build.gradle*" -o -name "*.versions.toml" -o -
 for FILE in ${FILES[@]}; do
 	echo $(checksum_file $FILE) >> $RESULT_FILE
 done
-# Now sort the file so that it is 
+# Now sort the file so that it is idempotent
 sort $RESULT_FILE -o $RESULT_FILE

@@ -43,10 +43,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.glide.rememberGlidePainter
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.VerticalPager
-import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
@@ -68,7 +68,7 @@ class SwipeRefreshVerticalPagerSample : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalPagerApi::class, ExperimentalCoilApi::class)
 @Composable
 private fun Sample() {
     Scaffold(
@@ -95,14 +95,14 @@ private fun Sample() {
             onRefresh = { refreshing = true },
         ) {
             VerticalPager(
-                state = rememberPagerState(pageCount = 10),
+                count = 10,
                 itemSpacing = 8.dp,
                 modifier = Modifier.fillMaxSize(),
             ) { page ->
                 Box {
                     // Our page content, displaying a random image
                     Image(
-                        painter = rememberGlidePainter(randomSampleImageUrl(width = 600)),
+                        painter = rememberImagePainter(randomSampleImageUrl(width = 600)),
                         contentDescription = null,
                         modifier = Modifier
                             .fillMaxWidth()
