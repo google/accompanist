@@ -84,7 +84,7 @@ class RequestMultiplePermissionsTest {
         }
         doNotAskAgainPermissionInDialog() // Do not ask again second permission
 
-        composeTestRule.onNodeWithText("Denied").assertIsDisplayed()
+        composeTestRule.onNodeWithText("No permission").assertIsDisplayed()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -101,7 +101,7 @@ class RequestMultiplePermissionsTest {
             grantPermissionInDialog()
         }
         doNotAskAgainPermissionInDialog() // Do not ask again second permission
-        composeTestRule.onNodeWithText("Denied").assertIsDisplayed()
+        composeTestRule.onNodeWithText("No permission").assertIsDisplayed()
 
         // This simulates the user going to the Settings screen and granting both permissions.
         // This is cheating, I know, but the order in which the system request the permissions
@@ -125,23 +125,21 @@ class RequestMultiplePermissionsTest {
                 android.Manifest.permission.CAMERA
             )
         )
-        PermissionsRequired(
-            multiplePermissionsState = state,
-            permissionsNotAvailableContent = { Text("Denied") },
-            permissionsNotGrantedContent = {
-                Column {
-                    if (state.permissionRequested) {
-                        Text("ShowRationale")
-                    } else {
-                        Text("No permission")
-                    }
-                    Button(onClick = { state.launchMultiplePermissionRequest() }) {
-                        Text("Request")
-                    }
+        if (state.allPermissionsGranted) {
+            Text("Granted")
+        } else {
+            Column {
+                val textToShow = if (state.shouldShowRationale) {
+                    "ShowRationale"
+                } else {
+                    "No permission"
+                }
+
+                Text(textToShow)
+                Button(onClick = { state.launchMultiplePermissionRequest() }) {
+                    Text("Request")
                 }
             }
-        ) {
-            Text("Granted")
         }
     }
 }

@@ -86,7 +86,7 @@ class MultipleAndSinglePermissionsTest {
         composeTestRule.onNodeWithText("Navigate").performClick()
         instrumentation.waitForIdleSync()
         composeTestRule.onNodeWithText("PermissionsTestActivity").assertIsDisplayed()
-        composeTestRule.onNodeWithText("No permission").assertIsDisplayed()
+        composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
         composeTestRule.onNodeWithText("Request").performClick()
         grantPermissionInDialog()
         composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
@@ -110,7 +110,7 @@ class MultipleAndSinglePermissionsTest {
         composeTestRule.onNodeWithText("Navigate").performClick()
         instrumentation.waitForIdleSync()
         composeTestRule.onNodeWithText("PermissionsTestActivity").assertIsDisplayed()
-        composeTestRule.onNodeWithText("No permission").assertIsDisplayed()
+        composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
         uiDevice.pressBack()
         instrumentation.waitForIdleSync()
         composeTestRule.onNodeWithText("MultipleAndSinglePermissionsTest").assertIsDisplayed()
@@ -140,7 +140,7 @@ class MultipleAndSinglePermissionsTest {
         composeTestRule.onNodeWithText("Navigate").performClick()
         instrumentation.waitForIdleSync()
         composeTestRule.onNodeWithText("PermissionsTestActivity").assertIsDisplayed()
-        composeTestRule.onNodeWithText("No permission").assertIsDisplayed()
+        composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
         uiDevice.pressBack()
         instrumentation.waitForIdleSync()
         composeTestRule.onNodeWithText("MultipleAndSinglePermissionsTest").assertIsDisplayed()
@@ -196,7 +196,7 @@ class MultipleAndSinglePermissionsTest {
         composeTestRule.onNodeWithText("Navigate").performClick()
         instrumentation.waitForIdleSync()
         composeTestRule.onNodeWithText("PermissionsTestActivity").assertIsDisplayed()
-        composeTestRule.onNodeWithText("No permission").assertIsDisplayed()
+        composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
         composeTestRule.onNodeWithText("Request").performClick()
         grantPermissionInDialog() // Grant the permission
         composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
@@ -221,36 +221,28 @@ class MultipleAndSinglePermissionsTest {
         Column {
             Text("MultipleAndSinglePermissionsTest")
             Spacer(Modifier.height(16.dp))
-            when {
-                state.allPermissionsGranted -> {
-                    Text("Granted")
-                }
-                state.shouldShowRationale || !state.permissionRequested -> {
-                    Column {
-                        if (state.permissionRequested) {
-                            Text("ShowRationale")
-                        } else {
-                            Text("No permission")
-                        }
-                        Button(
-                            onClick = {
-                                if (
-                                    requestSinglePermission &&
-                                    state.permissionRequested &&
-                                    state.revokedPermissions.size == 1
-                                ) {
-                                    state.revokedPermissions[0].launchPermissionRequest()
-                                } else {
-                                    state.launchMultiplePermissionRequest()
-                                }
-                            }
-                        ) {
-                            Text("Request")
-                        }
+            if (state.allPermissionsGranted) {
+                Text("Granted")
+            } else {
+                Column {
+                    val textToShow = if (state.shouldShowRationale) {
+                        "ShowRationale"
+                    } else {
+                        "No permission"
                     }
-                }
-                else -> {
-                    Text("Denied")
+
+                    Text(textToShow)
+                    Button(
+                        onClick = {
+                            if (requestSinglePermission && state.revokedPermissions.size == 1) {
+                                state.revokedPermissions[0].launchPermissionRequest()
+                            } else {
+                                state.launchMultiplePermissionRequest()
+                            }
+                        }
+                    ) {
+                        Text("Request")
+                    }
                 }
             }
             Spacer(Modifier.height(16.dp))

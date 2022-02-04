@@ -24,6 +24,8 @@
     <!-- Used for the permissions sample -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="false"
@@ -220,6 +222,16 @@
         <activity
             android:name=".permissions.RequestMultiplePermissionsSample"
             android:label="@string/permissions_title_multiple"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".permissions.RequestLocationPermissionsSample"
+            android:label="@string/permissions_title_location"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

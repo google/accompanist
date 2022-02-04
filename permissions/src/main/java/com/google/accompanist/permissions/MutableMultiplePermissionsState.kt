@@ -25,9 +25,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 
 /**
@@ -37,11 +35,14 @@ import androidx.compose.ui.platform.LocalContext
  * [documentation](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions).
  *
  * @param permissions the permissions to control and observe.
+ * @param onPermissionsResult will be called with whether or not the user granted the permissions
+ *  after [MultiplePermissionsState.launchMultiplePermissionRequest] is called.
  */
 @ExperimentalPermissionsApi
 @Composable
 internal fun rememberMutableMultiplePermissionsState(
-    permissions: List<String>
+    permissions: List<String>,
+    onPermissionsResult: (Map<String, Boolean>) -> Unit = {}
 ): MultiplePermissionsState {
     // Create mutable permissions that can be requested individually
     val mutablePermissions = rememberMutablePermissionsState(permissions)
@@ -57,7 +58,7 @@ internal fun rememberMutableMultiplePermissionsState(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissionsResult ->
         multiplePermissionsState.updatePermissionsStatus(permissionsResult)
-        multiplePermissionsState.permissionRequested = true
+        onPermissionsResult(permissionsResult)
     }
     DisposableEffect(multiplePermissionsState, launcher) {
         multiplePermissionsState.launcher = launcher
@@ -87,7 +88,7 @@ private fun rememberMutablePermissionsState(
             val launcher = rememberLauncherForActivityResult(
                 ActivityResultContracts.RequestPermission()
             ) {
-                permissionState.hasPermission = it
+                permissionState.refreshPermissionStatus(isGranted = it)
             }
             DisposableEffect(launcher) {
                 permissionState.launcher = launcher
@@ -117,19 +118,17 @@ internal class MutableMultiplePermissionsState(
     override val permissions: List<PermissionState> = mutablePermissions
 
     override val revokedPermissions: List<PermissionState> by derivedStateOf {
-        permissions.filter { !it.hasPermission }
+        permissions.filter { it.status != PermissionStatus.Granted }
     }
 
     override val allPermissionsGranted: Boolean by derivedStateOf {
-        permissions.all { it.hasPermission } || // Up to date when the lifecycle is resumed
+        permissions.all { it.status.isGranted } || // Up to date when the lifecycle is resumed
             revokedPermissions.isEmpty() // Up to date when the user launches the action
     }
 
     override val shouldShowRationale: Boolean by derivedStateOf {
-        permissions.any { it.shouldShowRationale }
+        permissions.any { it.status.shouldShowRationale }
     }
-
-    override var permissionRequested: Boolean by mutableStateOf(false)
 
     override fun launchMultiplePermissionRequest() {
         launcher?.launch(
@@ -144,7 +143,7 @@ internal class MutableMultiplePermissionsState(
         for (permission in permissionsStatus.keys) {
             mutablePermissions.firstOrNull { it.permission == permission }?.apply {
                 permissionsStatus[permission]?.let { granted ->
-                    this.hasPermission = granted
+                    this.refreshPermissionStatus(isGranted = granted)
                 }
             }
         }
