@@ -41,7 +41,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.glide.rememberGlidePainter
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
@@ -61,6 +62,7 @@ class SwipeRefreshBottomPositionSample : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 private fun Sample() {
     Scaffold(
@@ -91,7 +93,7 @@ private fun Sample() {
                 items(30) { index ->
                     Row(Modifier.padding(16.dp)) {
                         Image(
-                            painter = rememberGlidePainter(randomSampleImageUrl(index)),
+                            painter = rememberImagePainter(randomSampleImageUrl(index)),
                             contentDescription = null,
                             modifier = Modifier.size(64.dp),
                         )
