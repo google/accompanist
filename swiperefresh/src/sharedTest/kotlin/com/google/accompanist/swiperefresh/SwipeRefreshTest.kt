@@ -24,16 +24,12 @@ import androidx.compose.material.ListItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.test.SemanticsNodeInteraction
-import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsNotDisplayed
-import androidx.compose.ui.test.getUnclippedBoundsInRoot
+import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.performTouchInput
-import androidx.compose.ui.test.swipeDown
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import org.junit.Ignore
@@ -127,28 +123,124 @@ class SwipeRefreshTest {
 
     private val indicatorNode: SemanticsNodeInteraction
         get() = rule.onNodeWithTag(SwipeRefreshIndicatorTag)
+
+    // ------------------------- BOTTOM SWIPE TO REFRESH TESTS --------------------------- //
+
+    @Test
+    @OptIn(ExperimentalTestApi::class)
+    fun bottomSwipeRefreshes_shouldRefresh() {
+        val state = SwipeRefreshState(false)
+        var refreshCallCount = 0
+
+        rule.setContent {
+            SwipeRefreshTestContent(
+                swipeRefreshState = state,
+                indicatorAlignment = Alignment.BottomCenter,
+            ) {
+                state.isRefreshing = true
+                refreshCallCount++
+            }
+        }
+
+        // Scroll to the end of the list
+        listNode.performScrollToIndex(ListItemCount - 1)
+
+        // Swipe up on the swipe refresh
+        swipeRefreshNode.performTouchInput { swipeUp() }
+
+        // Assert that the onRefresh lambda was called and that we're refreshing
+        assertThat(state.isRefreshing).isTrue()
+        assertThat(refreshCallCount).isEqualTo(1)
+
+        // Assert that the indicator is displayed
+        bottomIndicatorNode.assertIsDisplayed()
+
+        // TODO: Test if the indicator is fading out after we set [state.isRefreshing] to false,
+        //  once https://issuetracker.google.com/issues/185814751 is solved.
+    }
+
+    @Test
+    fun refreshingBottomIndicator_returnsToRest() {
+        rule.setContent {
+            SwipeRefreshTestContent(
+                swipeRefreshState = rememberSwipeRefreshState(true),
+                indicatorAlignment = Alignment.BottomCenter,
+            )
+        }
+
+        // Assert that the indicator is displayed
+        bottomIndicatorNode.assertIsDisplayed()
+        // Store the 'resting' bounds
+        val restingBounds = bottomIndicatorNode.getUnclippedBoundsInRoot()
+
+        // Now swipe up. The indicator should react visually
+        swipeRefreshNode.performTouchInput { swipeUp() }
+
+        // Assert that the indicator returns back to it's 'resting' position
+        assertThat(bottomIndicatorNode.getUnclippedBoundsInRoot()).isEqualTo(restingBounds)
+    }
+
+    @Test
+    fun bottomIndicator_refreshingInitially() {
+        rule.setContent {
+            SwipeRefreshTestContent(
+                swipeRefreshState = rememberSwipeRefreshState(true),
+                indicatorAlignment = Alignment.BottomCenter,
+            )
+        }
+
+        // Assert that the indicator is displayed
+        bottomIndicatorNode.assertIsDisplayed()
+    }
+
+    private val bottomIndicatorNode: SemanticsNodeInteraction
+        get() = rule.onNodeWithTag(BottomSwipeRefreshIndicatorTag)
+
+    private val listNode: SemanticsNodeInteraction
+        get() = rule.onNodeWithTag(ListTag)
 }
 
 private const val SwipeRefreshTag = "swipe_refresh"
 private const val SwipeRefreshIndicatorTag = "swipe_refresh_indicator"
+private const val BottomSwipeRefreshIndicatorTag = "bottom_swipe_refresh_indicator"
+private const val ListTag = "list_tag"
+private const val ListItemCount = 30
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun SwipeRefreshTestContent(
-    state: SwipeRefreshState,
-    onRefresh: () -> Unit,
+    swipeRefreshState: SwipeRefreshState,
+    indicatorAlignment: Alignment = Alignment.TopCenter,
+    onRefresh: () -> Unit = {},
 ) {
+    val isTopPosition = (indicatorAlignment as BiasAlignment).verticalBias != 1f
     MaterialTheme {
         SwipeRefresh(
-            state = state,
+            state = swipeRefreshState,
+            indicatorAlignment = indicatorAlignment,
             onRefresh = onRefresh,
             modifier = Modifier.testTag(SwipeRefreshTag),
             indicator = { state, trigger ->
-                SwipeRefreshIndicator(state, trigger, Modifier.testTag(SwipeRefreshIndicatorTag))
-            }
+                SwipeRefreshIndicator(
+                    state = state,
+                    refreshTriggerDistance = trigger,
+                    clockwise = isTopPosition,
+                    modifier = Modifier.testTag(
+                        if (isTopPosition) {
+                            SwipeRefreshIndicatorTag
+                        } else {
+                            BottomSwipeRefreshIndicatorTag
+                        }
+                    ),
+                )
+            },
         ) {
-            LazyColumn(Modifier.fillMaxSize()) {
-                items(30) { index ->
+            LazyColumn(
+                Modifier
+                    .fillMaxSize()
+                    .testTag(ListTag)
+            ) {
+                items(ListItemCount) { index ->
                     ListItem(Modifier.fillMaxWidth()) {
                         Text(text = "Item $index")
                     }
