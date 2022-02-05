@@ -301,7 +301,8 @@
 
         <activity
             android:name=".swiperefresh.SwipeRefreshBottomPositionSample"
-            android:label="@string/swiperefresh_title_bottom_position">
+            android:label="@string/swiperefresh_title_bottom_position"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -310,7 +311,8 @@
 
         <activity
             android:name=".swiperefresh.BidirectionalSwipeRefreshSample"
-            android:label="@string/swiperefresh_title_bidirectional">
+            android:label="@string/swiperefresh_title_bidirectional"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
