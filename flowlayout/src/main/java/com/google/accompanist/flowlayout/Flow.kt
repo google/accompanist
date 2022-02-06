@@ -46,6 +46,7 @@ import kotlin.math.max
 @Composable
 public fun FlowRow(
     modifier: Modifier = Modifier,
+    maxLines: Int = Int.MAX_VALUE,
     mainAxisSize: SizeMode = SizeMode.Wrap,
     mainAxisAlignment: FlowMainAxisAlignment = FlowMainAxisAlignment.Start,
     mainAxisSpacing: Dp = 0.dp,
@@ -56,6 +57,7 @@ public fun FlowRow(
 ) {
     Flow(
         modifier = modifier,
+        maxLines = maxLines,
         orientation = LayoutOrientation.Horizontal,
         mainAxisSize = mainAxisSize,
         mainAxisAlignment = mainAxisAlignment,
@@ -84,6 +86,7 @@ public fun FlowRow(
 @Composable
 public fun FlowColumn(
     modifier: Modifier = Modifier,
+    maxLines: Int = Int.MAX_VALUE,
     mainAxisSize: SizeMode = SizeMode.Wrap,
     mainAxisAlignment: FlowMainAxisAlignment = FlowMainAxisAlignment.Start,
     mainAxisSpacing: Dp = 0.dp,
@@ -94,6 +97,7 @@ public fun FlowColumn(
 ) {
     Flow(
         modifier = modifier,
+        maxLines = maxLines,
         orientation = LayoutOrientation.Vertical,
         mainAxisSize = mainAxisSize,
         mainAxisAlignment = mainAxisAlignment,
@@ -131,6 +135,7 @@ public typealias FlowMainAxisAlignment = MainAxisAlignment
 @Composable
 private fun Flow(
     modifier: Modifier,
+    maxLines: Int,
     orientation: LayoutOrientation,
     mainAxisSize: SizeMode,
     mainAxisAlignment: FlowMainAxisAlignment,
@@ -171,20 +176,27 @@ private fun Flow(
                 placeable.mainAxisSize() <= constraints.mainAxisMax
 
         // Store current sequence information and start a new sequence.
-        fun startNewSequence() {
-            if (sequences.isNotEmpty()) {
-                crossAxisSpace += crossAxisSpacing.roundToPx()
-            }
+        // Return whether current sequence was successfully added (or declined because of
+        // constraints excess).
+        fun startNewSequence(): Boolean {
+            val crossAxisOffset = if (sequences.isNotEmpty()) crossAxisSpacing.roundToPx() else 0
+
+            val canAddCurrentSequence = sequences.size < maxLines &&
+                crossAxisSpace + currentCrossAxisSize + crossAxisOffset <= constraints.crossAxisMax
+            if (!canAddCurrentSequence) return false
+
             sequences += currentSequence.toList()
             crossAxisSizes += currentCrossAxisSize
-            crossAxisPositions += crossAxisSpace
+            crossAxisPositions += crossAxisSpace + crossAxisOffset
 
-            crossAxisSpace += currentCrossAxisSize
+            crossAxisSpace += crossAxisOffset + currentCrossAxisSize
             mainAxisSpace = max(mainAxisSpace, currentMainAxisSize)
 
             currentSequence.clear()
             currentMainAxisSize = 0
             currentCrossAxisSize = 0
+
+            return true
         }
 
         for (measurable in measurables) {
@@ -192,7 +204,10 @@ private fun Flow(
             val placeable = measurable.measure(childConstraints)
 
             // Start a new sequence if there is not enough space.
-            if (!canAddToCurrentSequence(placeable)) startNewSequence()
+            if (!canAddToCurrentSequence(placeable)) {
+                val newSequenceStarted = startNewSequence()
+                if (!newSequenceStarted) break
+            }
 
             // Add the child to the current sequence.
             if (currentSequence.isNotEmpty()) {
