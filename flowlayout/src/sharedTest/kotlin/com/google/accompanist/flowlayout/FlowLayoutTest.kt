@@ -18,6 +18,7 @@ package com.google.accompanist.flowlayout
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.LayoutCoordinates
@@ -2453,6 +2454,294 @@ class FlowTest : LayoutTest() {
                 ),
                 childPosition[i].value
             )
+        }
+    }
+
+    @Test
+    fun testFlowColumn_withMaxLines() {
+        val requestedNumberOfSquares = 15
+        val size = 48
+        val maxLines = 2
+        val spacing = 32
+        val flowHeight = 256
+
+        val squaresInColumn = flowHeight / size
+        val expectedNumberOfSquares = 10
+
+        val flowSize = Ref<IntSize>()
+        val childSize = Array(requestedNumberOfSquares) { Ref<IntSize>() }
+        val childPosition = Array(requestedNumberOfSquares) { Ref<Offset>() }
+        val positionedLatch = CountDownLatch(expectedNumberOfSquares + 1)
+
+        rule.setContent {
+            Box {
+                ConstrainedBox(
+                    constraints = DpConstraints(maxHeight = with(LocalDensity.current) { flowHeight.toDp() }),
+                    modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
+                        flowSize.value = coordinates.size
+                        positionedLatch.countDown()
+                    }
+                ) {
+                    FlowColumn(
+                        maxLines = maxLines,
+                        crossAxisSpacing = with(LocalDensity.current) { spacing.toDp() }
+                    ) {
+                        for (i in 0 until requestedNumberOfSquares) {
+                            Container(
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
+                                modifier = Modifier.saveLayoutInfo(
+                                    childSize[i],
+                                    childPosition[i],
+                                    positionedLatch
+                                )
+                            ) {
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        assertTrue(positionedLatch.await(1, TimeUnit.SECONDS))
+
+        assertEquals(
+            IntSize(
+                width = size * maxLines + spacing * (maxLines - 1),
+                height = size * squaresInColumn,
+            ),
+            flowSize.value
+        )
+        for (i in 0 until requestedNumberOfSquares) {
+            val squareSize = childSize[i].value
+            val squarePosition = childPosition[i].value
+            if (i < expectedNumberOfSquares) {
+                assertEquals(
+                    IntSize(width = size, height = size),
+                    squareSize
+                )
+
+                assertEquals(
+                    Offset(
+                        x = ((size + spacing) * (i / squaresInColumn)).toFloat(),
+                        y = (size * (i % squaresInColumn)).toFloat()
+                    ),
+                    squarePosition
+                )
+            } else {
+                assertNull(squareSize)
+                assertNull(squarePosition)
+            }
+        }
+    }
+
+    @Test
+    fun testFlowColumn_withMaxLines_negative() {
+        val requestedNumberOfSquares = 15
+        val size = 48
+        val maxLines = -1
+        val spacing = 32
+        val flowHeight = 256
+
+        val flowSize = Ref<IntSize>()
+        val childSize = Array(requestedNumberOfSquares) { Ref<IntSize>() }
+        val childPosition = Array(requestedNumberOfSquares) { Ref<Offset>() }
+        val positionedLatch = CountDownLatch( 1)
+
+        rule.setContent {
+            Box {
+                ConstrainedBox(
+                    constraints = DpConstraints(maxHeight = with(LocalDensity.current) { flowHeight.toDp() }),
+                    modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
+                        flowSize.value = coordinates.size
+                        positionedLatch.countDown()
+                    }
+                ) {
+                    FlowColumn(
+                        maxLines = maxLines,
+                        crossAxisSpacing = with(LocalDensity.current) { spacing.toDp() }
+                    ) {
+                        for (i in 0 until requestedNumberOfSquares) {
+                            Container(
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
+                                modifier = Modifier.saveLayoutInfo(
+                                    childSize[i],
+                                    childPosition[i],
+                                    positionedLatch
+                                )
+                            ) {
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        assertTrue(positionedLatch.await(1, TimeUnit.SECONDS))
+
+        assertEquals(
+            IntSize(width = 0, height = 0),
+            flowSize.value
+        )
+        for (i in 0 until requestedNumberOfSquares) {
+            assertNull(childSize[i].value)
+            assertNull(childPosition[i].value)
+        }
+    }
+
+    @Test
+    fun testFlowColumn_withMaxLines_fillMaxWidth() {
+        val requestedNumberOfSquares = 15
+        val size = 48
+        val maxLines = 2
+        val spacing = 32
+        val flowWidth = 1000
+        val flowHeight = 256
+
+        val squaresInColumn = flowHeight / size
+        val expectedNumberOfSquares = 10
+
+        val flowSize = Ref<IntSize>()
+        val childSize = Array(requestedNumberOfSquares) { Ref<IntSize>() }
+        val childPosition = Array(requestedNumberOfSquares) { Ref<Offset>() }
+        val positionedLatch = CountDownLatch(expectedNumberOfSquares + 1)
+
+        rule.setContent {
+            Box {
+                ConstrainedBox(
+                    constraints = DpConstraints(
+                        maxWidth = with(LocalDensity.current) { flowWidth.toDp() },
+                        maxHeight = with(LocalDensity.current) { flowHeight.toDp() }
+                    ),
+                    modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
+                        flowSize.value = coordinates.size
+                        positionedLatch.countDown()
+                    }
+                ) {
+                    FlowColumn(
+                        modifier = Modifier.fillMaxWidth(),
+                        maxLines = maxLines,
+                        crossAxisSpacing = with(LocalDensity.current) { spacing.toDp() }
+                    ) {
+                        for (i in 0 until requestedNumberOfSquares) {
+                            Container(
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
+                                modifier = Modifier.saveLayoutInfo(
+                                    childSize[i],
+                                    childPosition[i],
+                                    positionedLatch
+                                )
+                            ) {
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        assertTrue(positionedLatch.await(1, TimeUnit.SECONDS))
+
+        assertEquals(
+            IntSize(width = flowWidth, height = size * squaresInColumn),
+            flowSize.value
+        )
+        for (i in 0 until requestedNumberOfSquares) {
+            val squareSize = childSize[i].value
+            val squarePosition = childPosition[i].value
+            if (i < expectedNumberOfSquares) {
+                assertEquals(
+                    IntSize(width = size, height = size),
+                    squareSize
+                )
+
+                assertEquals(
+                    Offset(
+                        x = ((size + spacing) * (i / squaresInColumn)).toFloat(),
+                        y = (size * (i % squaresInColumn)).toFloat()
+                    ),
+                    squarePosition
+                )
+            } else {
+                assertNull(squareSize)
+                assertNull(squarePosition)
+            }
+        }
+    }
+
+    @Test
+    fun testFlowColumn_withMaxWidth() {
+        val requestedNumberOfSquares = 15
+        val size = 48
+        val spacing = 32
+        val flowWidth = (size * 2.5f + spacing * 2).roundToInt()
+        val flowHeight = 256
+
+        val squaresInColumn = flowHeight / size
+        val expectedNumberOfSquares = 10
+
+        val flowSize = Ref<IntSize>()
+        val childSize = Array(requestedNumberOfSquares) { Ref<IntSize>() }
+        val childPosition = Array(requestedNumberOfSquares) { Ref<Offset>() }
+        val positionedLatch = CountDownLatch(expectedNumberOfSquares + 1)
+
+        rule.setContent {
+            Box {
+                ConstrainedBox(
+                    constraints = DpConstraints(
+                        maxWidth = with(LocalDensity.current) { flowWidth.toDp() },
+                        maxHeight = with(LocalDensity.current) { flowHeight.toDp() }
+                    ),
+                    modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
+                        flowSize.value = coordinates.size
+                        positionedLatch.countDown()
+                    }
+                ) {
+                    FlowColumn(crossAxisSpacing = with(LocalDensity.current) { spacing.toDp() }) {
+                        for (i in 0 until requestedNumberOfSquares) {
+                            Container(
+                                width = with(LocalDensity.current) { size.toDp() },
+                                height = with(LocalDensity.current) { size.toDp() },
+                                modifier = Modifier.saveLayoutInfo(
+                                    childSize[i],
+                                    childPosition[i],
+                                    positionedLatch
+                                )
+                            ) {
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        assertTrue(positionedLatch.await(1, TimeUnit.SECONDS))
+
+        assertEquals(
+            IntSize(width = size * 2 + spacing, height = size * squaresInColumn),
+            flowSize.value
+        )
+        for (i in 0 until requestedNumberOfSquares) {
+            val squareSize = childSize[i].value
+            val squarePosition = childPosition[i].value
+            if (i < expectedNumberOfSquares) {
+                assertEquals(
+                    IntSize(width = size, height = size),
+                    squareSize
+                )
+
+                assertEquals(
+                    Offset(
+                        x = ((size + spacing) * (i / squaresInColumn)).toFloat(),
+                        y = (size * (i % squaresInColumn)).toFloat()
+                    ),
+                    squarePosition
+                )
+            } else {
+                assertNull(squareSize)
+                assertNull(squarePosition)
+            }
         }
     }
 }
