@@ -71,7 +71,7 @@ class RequestPermissionTest {
         composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
         composeTestRule.onNodeWithText("Request").performClick()
         doNotAskAgainPermissionInDialog()
-        composeTestRule.onNodeWithText("Denied").assertIsDisplayed()
+        composeTestRule.onNodeWithText("No permission").assertIsDisplayed()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -83,7 +83,7 @@ class RequestPermissionTest {
         composeTestRule.onNodeWithText("ShowRationale").assertIsDisplayed()
         composeTestRule.onNodeWithText("Request").performClick()
         doNotAskAgainPermissionInDialog()
-        composeTestRule.onNodeWithText("Denied").assertIsDisplayed()
+        composeTestRule.onNodeWithText("No permission").assertIsDisplayed()
 
         // This simulates the user going to the Settings screen and granting the permission
         grantPermissionProgrammatically("android.permission.CAMERA")
@@ -97,25 +97,25 @@ class RequestPermissionTest {
 
     @Composable
     private fun ComposableUnderTest() {
+
         val state = rememberPermissionState(android.Manifest.permission.CAMERA)
-        when {
-            state.hasPermission -> {
+        when (state.status) {
+            PermissionStatus.Granted -> {
                 Text("Granted")
             }
-            state.shouldShowRationale || !state.permissionRequested -> {
+            is PermissionStatus.Denied -> {
                 Column {
-                    if (state.permissionRequested) {
-                        Text("ShowRationale")
+                    val textToShow = if (state.status.shouldShowRationale) {
+                        "ShowRationale"
                     } else {
-                        Text("No permission")
+                        "No permission"
                     }
+
+                    Text(textToShow)
                     Button(onClick = { state.launchPermissionRequest() }) {
                         Text("Request")
                     }
                 }
-            }
-            else -> {
-                Text("Denied")
             }
         }
     }

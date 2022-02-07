@@ -42,8 +42,8 @@ class PermissionStateTest {
     fun permissionState_hasPermission() {
         composeTestRule.setContent {
             val state = rememberPermissionState(android.Manifest.permission.CAMERA)
-            assertThat(state.hasPermission).isTrue()
-            assertThat(state.shouldShowRationale).isFalse()
+            assertThat(state.status.isGranted).isTrue()
+            assertThat(state.status.shouldShowRationale).isFalse()
         }
     }
 
@@ -57,8 +57,8 @@ class PermissionStateTest {
         composeTestRule.setContent {
             val state = rememberPermissionState(permission)
 
-            assertThat(state.hasPermission).isFalse()
-            assertThat(state.shouldShowRationale).isTrue()
+            assertThat(state.status.isGranted).isFalse()
+            assertThat(state.status.shouldShowRationale).isTrue()
         }
     }
 }
