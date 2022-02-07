@@ -59,7 +59,10 @@ val PermissionStatus.isGranted: Boolean
  */
 @ExperimentalPermissionsApi
 val PermissionStatus.shouldShowRationale: Boolean
-    get() = (this as? PermissionStatus.Denied)?.shouldShowRationale ?: false
+    get() = when (this) {
+        PermissionStatus.Granted -> false
+        is PermissionStatus.Denied -> shouldShowRationale
+    }
 
 /**
  * Effect that updates the `hasPermission` state of a revoked [MutablePermissionState] permission

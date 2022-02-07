@@ -56,7 +56,7 @@ internal fun rememberMutablePermissionState(
 
     // Remember RequestPermission launcher and assign it to permissionState
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
-        permissionState.refreshPermissionStatus(isGranted = it)
+        permissionState.refreshPermissionStatus()
         onPermissionResult(it)
     }
     DisposableEffect(permissionState, launcher) {
@@ -96,12 +96,12 @@ internal class MutablePermissionState(
 
     internal var launcher: ActivityResultLauncher<String>? = null
 
-    internal fun refreshPermissionStatus(isGranted: Boolean? = null) {
-        status = getPermissionStatus(isGranted)
+    internal fun refreshPermissionStatus() {
+        status = getPermissionStatus()
     }
 
-    private fun getPermissionStatus(isGranted: Boolean? = null): PermissionStatus {
-        val hasPermission = isGranted ?: context.checkPermission(permission)
+    private fun getPermissionStatus(): PermissionStatus {
+        val hasPermission = context.checkPermission(permission)
         return if (hasPermission) {
             PermissionStatus.Granted
         } else {

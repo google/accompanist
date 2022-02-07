@@ -88,7 +88,7 @@ private fun rememberMutablePermissionsState(
             val launcher = rememberLauncherForActivityResult(
                 ActivityResultContracts.RequestPermission()
             ) {
-                permissionState.refreshPermissionStatus(isGranted = it)
+                permissionState.refreshPermissionStatus()
             }
             DisposableEffect(launcher) {
                 permissionState.launcher = launcher
@@ -142,8 +142,8 @@ internal class MutableMultiplePermissionsState(
         // Update all permissions with the result
         for (permission in permissionsStatus.keys) {
             mutablePermissions.firstOrNull { it.permission == permission }?.apply {
-                permissionsStatus[permission]?.let { granted ->
-                    this.refreshPermissionStatus(isGranted = granted)
+                permissionsStatus[permission]?.let {
+                    this.refreshPermissionStatus()
                 }
             }
         }
