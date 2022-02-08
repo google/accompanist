@@ -17,6 +17,7 @@
 package com.google.accompanist.web
 
 import android.graphics.Bitmap
+import android.view.ViewGroup
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -32,7 +33,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
-import android.view.ViewGroup
 
 /**
  * A wrapper around the Android View WebView to provide a basic WebView composable.
