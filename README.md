@@ -51,7 +51,7 @@ Each [release](https://github.com/google/accompanist/releases) outlines what ver
   <td>Compose 1.0 (1.0.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-insets?versionPrefix=0.20"></td>
  </tr>
  <tr>
-  <td>Compose 1.1 (1.1.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-insets?versionPrefix=0.22"></td>
+  <td>Compose 1.1 (1.1.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-insets?versionPrefix=0.23"></td>
  </tr>
  <tr>
   <td>Compose 1.2 (1.2.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-insets"></td>
