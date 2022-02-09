@@ -4,7 +4,7 @@ composesnapshot = "-" # a single character = no snapshot
 
 # gradlePlugin and lint need to be updated together
 gradlePlugin = "7.1.1"
-lint = "30.1.0"
+lint = "30.0.3"
 
 ktlint = "0.42.1"
 kotlin = "1.6.10"
