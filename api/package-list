@@ -32,3 +32,5 @@ module:swiperefresh
 com.google.accompanist.swiperefresh
 module:systemuicontroller
 com.google.accompanist.systemuicontroller
+module:web
+com.google.accompanist.web
