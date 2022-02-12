@@ -16,7 +16,6 @@
 
 package com.google.accompanist.permissions.test
 
-import android.Manifest
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -24,8 +23,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.PermissionRequired
+import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 
 @OptIn(ExperimentalPermissionsApi::class)
 class PermissionsTestActivity : ComponentActivity() {
@@ -48,24 +48,23 @@ class PermissionsTestActivity : ComponentActivity() {
             Column {
                 Text("PermissionsTestActivity")
 
-                val state = rememberPermissionState(Manifest.permission.CAMERA)
-                PermissionRequired(
-                    permissionState = state,
-                    permissionNotGrantedContent = {
-                        if (state.permissionRequested) {
-                            Text("ShowRationale")
+                val state = rememberPermissionState(android.Manifest.permission.CAMERA,)
+                when (state.status) {
+                    PermissionStatus.Granted -> {
+                        Text("Granted")
+                    }
+                    is PermissionStatus.Denied -> {
+                        val textToShow = if (state.status.shouldShowRationale) {
+                            "ShowRationale"
                         } else {
-                            Text("No permission")
+                            "No permission"
                         }
+
+                        Text(textToShow)
                         Button(onClick = { state.launchPermissionRequest() }) {
                             Text("Request")
                         }
-                    },
-                    permissionNotAvailableContent = {
-                        Text("Denied")
                     }
-                ) {
-                    Text("Granted")
                 }
             }
         }

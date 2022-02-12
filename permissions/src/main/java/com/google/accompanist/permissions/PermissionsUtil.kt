@@ -22,6 +22,7 @@ import android.content.ContextWrapper
 import android.content.pm.PackageManager
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.core.app.ActivityCompat
@@ -32,6 +33,36 @@ import androidx.lifecycle.LifecycleEventObserver
 @RequiresOptIn(message = "Accompanist Permissions is experimental. The API may be changed in the future.")
 @Retention(AnnotationRetention.BINARY)
 annotation class ExperimentalPermissionsApi
+
+/**
+ * Model of the status of a permission. It can be granted or denied.
+ * If denied, the user might need to be presented with a rationale.
+ */
+@ExperimentalPermissionsApi
+@Stable
+sealed interface PermissionStatus {
+    object Granted : PermissionStatus
+    data class Denied(
+        val shouldShowRationale: Boolean
+    ) : PermissionStatus
+}
+
+/**
+ * `true` if the permission is granted.
+ */
+@ExperimentalPermissionsApi
+val PermissionStatus.isGranted: Boolean
+    get() = this == PermissionStatus.Granted
+
+/**
+ * `true` if a rationale should be presented to the user.
+ */
+@ExperimentalPermissionsApi
+val PermissionStatus.shouldShowRationale: Boolean
+    get() = when (this) {
+        PermissionStatus.Granted -> false
+        is PermissionStatus.Denied -> shouldShowRationale
+    }
 
 /**
  * Effect that updates the `hasPermission` state of a revoked [MutablePermissionState] permission
@@ -50,8 +81,8 @@ internal fun PermissionLifecycleCheckerEffect(
             if (event == lifecycleEvent) {
                 // If the permission is revoked, check again.
                 // We don't check if the permission was denied as that triggers a process restart.
-                if (!permissionState.hasPermission) {
-                    permissionState.refreshHasPermission()
+                if (permissionState.status != PermissionStatus.Granted) {
+                    permissionState.refreshPermissionStatus()
                 }
             }
         }
@@ -81,7 +112,9 @@ internal fun PermissionsLifecycleCheckerEffect(
                 for (permission in permissions) {
                     // If the permission is revoked, check again. We don't check if the permission
                     // was denied as that triggers a process restart.
-                    if (!permission.hasPermission) { permission.refreshHasPermission() }
+                    if (permission.status != PermissionStatus.Granted) {
+                        permission.refreshPermissionStatus()
+                    }
                 }
             }
         }
