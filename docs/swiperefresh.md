@@ -70,6 +70,36 @@ SwipeRefresh(
 }
 ```
 
+### Indicating progress
+
+Optionally, you can show the progress of the your load while refreshing:
+
+``` kotlin
+    var refreshing by remember {
+        mutableStateOf(false)
+    }
+    var progress: Float? by remember {
+        mutableStateOf(null)
+    }
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = refreshing, progress = progress)
+
+    SwipeRefresh(
+        state = swipeRefreshState,
+        onRefresh = {
+            refreshing = true
+            progress = 0.3F // Update in your ViewModel (or similar) depending on the load progress.
+        },
+    ) {
+        LazyColumn {
+            items(30) { index ->
+                // TODO: list items
+            }
+        }
+    }
+```
+
+You can find a sample that you can run [here][sample_progress].
+
 ## Indicator
 
 The library provides a default indicator: [`SwipeRefreshIndicator()`][api_swiperefreshindicator], which `SwipeRefresh` uses automatically. You can customize the default indicator, and even provide your own indicator content using the `indicator` slot.
@@ -142,3 +172,4 @@ Snapshots of the development version are available in [Sonatype's `snapshots` re
   [column]: https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/package-summary#Column(androidx.compose.ui.Modifier,androidx.compose.foundation.layout.Arrangement.Vertical,androidx.compose.ui.Alignment.Horizontal,kotlin.Function1)
   [lazyrow]: https://developer.android.com/reference/kotlin/androidx/compose/foundation/lazy/package-summary#LazyRow(androidx.compose.ui.Modifier,androidx.compose.foundation.lazy.LazyListState,androidx.compose.foundation.layout.PaddingValues,kotlin.Boolean,androidx.compose.foundation.layout.Arrangement.Horizontal,androidx.compose.ui.Alignment.Vertical,androidx.compose.foundation.gestures.FlingBehavior,kotlin.Function1)
   [verticalscroll]: https://developer.android.com/jetpack/compose/gestures#scroll-modifiers
+  [sample_progress]: https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/swiperefresh/SwipeRefreshProgressSample.kt

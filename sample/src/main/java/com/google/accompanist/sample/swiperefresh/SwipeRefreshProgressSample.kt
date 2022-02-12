@@ -91,7 +91,6 @@ private fun Sample() {
                 }
                 progress = null
                 refreshing = false
-
             }
         }
 

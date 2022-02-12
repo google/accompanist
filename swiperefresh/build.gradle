@@ -77,6 +77,9 @@ android {
         androidTest {
             java.srcDirs += 'src/sharedTest/kotlin'
             res.srcDirs += 'src/sharedTest/res'
+            assets {
+                srcDirs 'src/sharedTest/assets'
+            }
         }
     }
 }

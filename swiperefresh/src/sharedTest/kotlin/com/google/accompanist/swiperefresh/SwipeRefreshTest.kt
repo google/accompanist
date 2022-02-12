@@ -24,12 +24,16 @@ import androidx.compose.material.ListItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performTouchInput
@@ -122,6 +126,31 @@ class SwipeRefreshTest {
         assertThat(indicatorNode.getUnclippedBoundsInRoot()).isEqualTo(restingBounds)
     }
 
+    @Test
+    fun refreshingIndicator_withProgress() {
+        fun getGoldenName(suffix: String) = "golden_$suffix"
+        var progress: Float? by mutableStateOf(0F)
+        rule.setContent {
+            SwipeRefreshTestContent(rememberSwipeRefreshState(true, progress)) {}
+        }
+        val progressIndicatorNode =
+            rule.onNode(hasContentDescription("CircularProgressIndicator_ForTest"))
+
+        assertNodeImageMatchGolden(getGoldenName("0-00"), progressIndicatorNode)
+
+        progress = 0.25F
+        assertNodeImageMatchGolden(getGoldenName("0-25"), progressIndicatorNode)
+
+        progress = 0.50F
+        assertNodeImageMatchGolden(getGoldenName("0-50"), progressIndicatorNode)
+
+        progress = 0.75F
+        assertNodeImageMatchGolden(getGoldenName("0-75"), progressIndicatorNode)
+
+        progress = 1F
+        assertNodeImageMatchGolden(getGoldenName("1-00"), progressIndicatorNode)
+    }
+
     private val swipeRefreshNode: SemanticsNodeInteraction
         get() = rule.onNodeWithTag(SwipeRefreshTag)
 
@@ -134,7 +163,7 @@ private const val SwipeRefreshIndicatorTag = "swipe_refresh_indicator"
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun SwipeRefreshTestContent(
+fun SwipeRefreshTestContent(
     state: SwipeRefreshState,
     onRefresh: () -> Unit,
 ) {
