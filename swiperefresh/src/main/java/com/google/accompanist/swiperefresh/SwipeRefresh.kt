@@ -22,6 +22,7 @@ import androidx.compose.foundation.MutatorMutex
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
@@ -54,17 +55,22 @@ private const val DragMultiplier = 0.5f
  * Changes to [isRefreshing] will result in the [SwipeRefreshState] being updated.
  *
  * @param isRefreshing the value for [SwipeRefreshState.isRefreshing]
+ * @param progress The value of the [SwipeRefreshState.isRefreshing]. Represent the
+ * progress of the [SwipeRefreshIndicator].
  */
 @Composable
 fun rememberSwipeRefreshState(
-    isRefreshing: Boolean
+    isRefreshing: Boolean,
+    progress: Float? = null
 ): SwipeRefreshState {
     return remember {
         SwipeRefreshState(
-            isRefreshing = isRefreshing
+            isRefreshing = isRefreshing,
+            progress = progress
         )
     }.apply {
         this.isRefreshing = isRefreshing
+        this.progress = progress
     }
 }
 
@@ -74,10 +80,13 @@ fun rememberSwipeRefreshState(
  * In most cases, this will be created via [rememberSwipeRefreshState].
  *
  * @param isRefreshing the initial value for [SwipeRefreshState.isRefreshing]
+ * @param progress The progress of the [SwipeRefreshIndicator] while refreshing.
+ * If null the indicator while loop like the indeterminate form of [CircularProgressIndicator].
  */
 @Stable
 class SwipeRefreshState(
     isRefreshing: Boolean,
+    progress: Float? = null
 ) {
     private val _indicatorOffset = Animatable(0f)
     private val mutatorMutex = MutatorMutex()
@@ -86,6 +95,11 @@ class SwipeRefreshState(
      * Whether this [SwipeRefreshState] is currently refreshing or not.
      */
     var isRefreshing: Boolean by mutableStateOf(isRefreshing)
+
+    /**
+     * The progress of the [SwipeRefreshIndicator] while refreshing.
+     */
+    var progress: Float? by mutableStateOf(progress)
 
     /**
      * Whether a swipe/drag is currently in progress.

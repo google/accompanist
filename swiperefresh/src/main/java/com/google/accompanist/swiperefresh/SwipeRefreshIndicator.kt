@@ -209,11 +209,20 @@ fun SwipeRefreshIndicator(
             ) {
                 if (refreshing) {
                     val circleSize = (sizes.arcRadius + sizes.strokeWidth) * 2
-                    CircularProgressIndicator(
-                        color = contentColor,
-                        strokeWidth = sizes.strokeWidth,
-                        modifier = Modifier.size(circleSize),
-                    )
+                    if (state.progress == null) {
+                        CircularProgressIndicator(
+                            color = contentColor,
+                            strokeWidth = sizes.strokeWidth,
+                            modifier = Modifier.size(circleSize),
+                        )
+                    } else {
+                        CircularProgressIndicator(
+                            color = contentColor,
+                            strokeWidth = sizes.strokeWidth,
+                            modifier = Modifier.size(circleSize),
+                            progress = state.progress!!
+                        )
+                    }
                 } else {
                     Image(
                         painter = painter,
