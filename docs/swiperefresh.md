@@ -87,6 +87,7 @@ Optionally, you can show the progress of the your load while refreshing:
         state = swipeRefreshState,
         onRefresh = {
             refreshing = true
+            // The accepted values are 0.0, 0.1, ..., 1.0 (Values outside of this range are coerced into the range.)
             progress = 0.3F // Update in your ViewModel (or similar) depending on the load progress.
         },
     ) {

@@ -55,8 +55,9 @@ private const val DragMultiplier = 0.5f
  * Changes to [isRefreshing] will result in the [SwipeRefreshState] being updated.
  *
  * @param isRefreshing the value for [SwipeRefreshState.isRefreshing]
- * @param progress The value of the [SwipeRefreshState.isRefreshing]. Represent the
- * progress of the [SwipeRefreshIndicator].
+ * @param progress The value of the [SwipeRefreshState.progress], where 0.0 represents
+ * no progress and 1.0 represents full progress. Values outside of this range are coerced into the range.
+ * _NOTE_ The progress is shown only if [isRefreshing] = true.
  */
 @Composable
 fun rememberSwipeRefreshState(
@@ -80,7 +81,8 @@ fun rememberSwipeRefreshState(
  * In most cases, this will be created via [rememberSwipeRefreshState].
  *
  * @param isRefreshing the initial value for [SwipeRefreshState.isRefreshing]
- * @param progress The progress of the [SwipeRefreshIndicator] while refreshing.
+ * @param progress The progress of the [SwipeRefreshIndicator] while refreshing, where 0.0 represents
+ * no progress and 1.0 represents full progress. Values outside of this range are coerced into the range.
  * If null the indicator while loop like the indeterminate form of [CircularProgressIndicator].
  */
 @Stable
