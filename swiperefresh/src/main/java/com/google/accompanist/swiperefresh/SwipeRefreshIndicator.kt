@@ -45,6 +45,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
@@ -224,7 +225,7 @@ fun SwipeRefreshIndicator(
                             modifier = Modifier
                                 .size(circleSize)
                                 .semantics {
-                                    contentDescription = "CircularProgressIndicator_ForTest"
+                                    testTag = "CircularProgressIndicator_ForTest"
                                 },
                             progress = state.progress!!,
                         )

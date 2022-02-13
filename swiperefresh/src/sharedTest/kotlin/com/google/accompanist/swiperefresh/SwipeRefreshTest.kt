@@ -33,7 +33,7 @@ import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
-import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performTouchInput
@@ -134,7 +134,7 @@ class SwipeRefreshTest {
             SwipeRefreshTestContent(rememberSwipeRefreshState(true, progress)) {}
         }
         val progressIndicatorNode =
-            rule.onNode(hasContentDescription("CircularProgressIndicator_ForTest"))
+            rule.onNode(hasTestTag("CircularProgressIndicator_ForTest"))
 
         assertNodeImageMatchGolden(getGoldenName("0-00"), progressIndicatorNode)
 

@@ -27,7 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.captureToImage
-import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.hasTestTag
 import androidx.test.platform.app.InstrumentationRegistry
 import java.io.FileOutputStream
 
@@ -49,7 +49,7 @@ fun SwipeRefreshTest.generateGoldenImages() {
         )!!.canonicalPath
 
     val progressIndicatorNode =
-        rule.onNode(hasContentDescription("CircularProgressIndicator_ForTest"))
+        rule.onNode(hasTestTag("CircularProgressIndicator_ForTest"))
 
     var bitmap = progressIndicatorNode.captureToImage().asAndroidBitmap()
     saveScreenshot("golden_0-00.png", bitmap, picturesDirectory)
