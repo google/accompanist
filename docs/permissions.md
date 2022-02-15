@@ -30,10 +30,12 @@ The following code exercises the [permission request workflow](https://developer
 ```kotlin
 @Composable
 private fun FeatureThatRequiresCameraPermission() {
+
     // Camera permission state
     val cameraPermissionState = rememberPermissionState(
         android.Manifest.permission.CAMERA
     )
+    
     when (cameraPermissionState.status) {
         // If the camera permission is granted, then show screen with the feature enabled
         PermissionStatus.Granted -> {
