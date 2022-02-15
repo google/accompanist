@@ -17,6 +17,7 @@
 package com.google.accompanist.web
 
 import android.graphics.Bitmap
+import android.view.ViewGroup
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -71,6 +72,11 @@ fun WebView(
         factory = { context ->
             WebView(context).apply {
                 onCreated(this)
+
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                )
 
                 webViewClient = object : WebViewClient() {
                     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
