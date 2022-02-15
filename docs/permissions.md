@@ -36,7 +36,7 @@ private fun FeatureThatRequiresCameraPermission() {
         android.Manifest.permission.CAMERA
     )
 
-    when (state.status) {
+    when (cameraPermissionState.status) {
         // If the camera permission is granted, then show screen with the feature enabled
         PermissionStatus.Granted -> {
             Text("Camera permission Granted")
