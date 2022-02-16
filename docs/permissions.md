@@ -36,14 +36,14 @@ private fun FeatureThatRequiresCameraPermission() {
         android.Manifest.permission.CAMERA
     )
 
-    when (state.status) {
+    when (cameraPermissionState.status) {
         // If the camera permission is granted, then show screen with the feature enabled
         PermissionStatus.Granted -> {
             Text("Camera permission Granted")
         }
         is PermissionStatus.Denied -> {
             Column {
-                val textToShow = if (state.status.shouldShowRationale) {
+                val textToShow = if (cameraPermissionState.status.shouldShowRationale) {
                     // If the user has denied the permission but the rationale can be shown,
                     // then gently explain why the app requires this permission
                     "The camera is important for this app. Please grant the permission."
@@ -54,9 +54,8 @@ private fun FeatureThatRequiresCameraPermission() {
                     "Camera permission required for this feature to be available. " +
                         "Please grant the permission"
                 }
-
                 Text(textToShow)
-                Button(onClick = { state.launchPermissionRequest() }) {
+                Button(onClick = { cameraPermissionState.launchPermissionRequest() }) {
                     Text("Request permission")
                 }
             }
