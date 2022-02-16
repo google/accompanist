@@ -85,14 +85,14 @@ fun Modifier.statusBarsHeight(
  * ```
  * Column {
  *     // Content to be drawn above status bars (y-axis)
- *     Spacer(Modifier.navigationBarHeight())
+ *     Spacer(Modifier.navigationBarsHeight())
  * }
  * ```
  *
  * It's also useful when used to draw a scrim which matches the navigation bars:
  * ```
  * Spacer(
- *     Modifier.navigationBarHeight()
+ *     Modifier.navigationBarsHeight()
  *         .fillMaxWidth()
  *         .drawBackground(MaterialTheme.colors.background.copy(alpha = 0.3f)
  * )
