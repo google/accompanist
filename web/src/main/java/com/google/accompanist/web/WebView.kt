@@ -18,6 +18,7 @@ package com.google.accompanist.web
 
 import android.graphics.Bitmap
 import android.view.ViewGroup
+import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -77,6 +78,18 @@ fun WebView(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT
                 )
+
+                webChromeClient = object : WebChromeClient() {
+                    override fun onReceivedTitle(view: WebView?, title: String?) {
+                        super.onReceivedTitle(view, title)
+                        state.pageTitle = title
+                    }
+
+                    override fun onReceivedIcon(view: WebView?, icon: Bitmap?) {
+                        super.onReceivedIcon(view, icon)
+                        state.pageIcon = icon
+                    }
+                }
 
                 webViewClient = object : WebViewClient() {
                     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
@@ -183,6 +196,18 @@ class WebViewState(webContent: WebContent) {
      * Whether the WebView is currently loading data in its main frame
      */
     var isLoading: Boolean by mutableStateOf(false)
+        internal set
+
+    /**
+     * The title received from the loaded content of the current page
+     */
+    var pageTitle: String? by mutableStateOf(null)
+        internal set
+
+    /**
+     * the favicon received from the loaded content of the current page
+     */
+    var pageIcon: Bitmap? by mutableStateOf(null)
         internal set
 
     /**
