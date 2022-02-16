@@ -55,7 +55,7 @@ private fun FeatureThatRequiresCameraPermission() {
                         "Please grant the permission"
                 }
                 Text(textToShow)
-                Button(onClick = { state.launchPermissionRequest() }) {
+                Button(onClick = { cameraPermissionState.launchPermissionRequest() }) {
                     Text("Request permission")
                 }
             }
