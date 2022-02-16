@@ -45,7 +45,8 @@ import androidx.compose.ui.viewinterop.AndroidView
  * @param captureBackPresses Set to true to have this Composable capture back presses and navigate
  * the WebView back.
  * @param onCreated Called when the WebView is first created, this can be used to set additional
- * settings on the WebView.
+ * settings on the WebView. WebChromeClient and WebViewClient should not be set here as they will be
+ * subsequently overwritten after this lambda is called.
  * @param onError Called when the WebView encounters an error. Forwarded event from the
  * WebViewClient
  * @sample com.google.accompanist.sample.webview.BasicWebViewSample
