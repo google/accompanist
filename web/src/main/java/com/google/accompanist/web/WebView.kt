@@ -46,10 +46,6 @@ import androidx.compose.ui.viewinterop.AndroidView
  * the WebView back.
  * @param onCreated Called when the WebView is first created, this can be used to set additional
  * settings on the WebView.
- * @param onPageStarted Called when the WebView starts loading a page. Forwarded event from the
- * WebViewClient.
- * @param onPageFinished Called when the WebView finishes loading a page. Forwarded event from the
- * WebViewClient
  * @param onError Called when the WebView encounters an error. Forwarded event from the
  * WebViewClient
  * @sample com.google.accompanist.sample.webview.BasicWebViewSample
