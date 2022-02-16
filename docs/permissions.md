@@ -43,7 +43,7 @@ private fun FeatureThatRequiresCameraPermission() {
         }
         is PermissionStatus.Denied -> {
             Column {
-                val textToShow = if (state.status.shouldShowRationale) {
+                val textToShow = if (cameraPermissionState.status.shouldShowRationale) {
                     // If the user has denied the permission but the rationale can be shown,
                     // then gently explain why the app requires this permission
                     "The camera is important for this app. Please grant the permission."
