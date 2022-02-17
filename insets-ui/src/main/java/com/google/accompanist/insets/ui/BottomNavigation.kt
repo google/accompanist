@@ -54,22 +54,44 @@ fun BottomNavigation(
     elevation: Dp = BottomNavigationDefaults.Elevation,
     content: @Composable RowScope.() -> Unit,
 ) {
+    BottomNavigationSurface(modifier, backgroundColor, contentColor, elevation) {
+        BottomNavigationContent(Modifier.padding(contentPadding)) {
+            content()
+        }
+    }
+}
+
+@Composable
+fun BottomNavigationSurface(
+    modifier: Modifier = Modifier,
+    backgroundColor: Color = MaterialTheme.colors.primarySurface,
+    contentColor: Color = contentColorFor(backgroundColor),
+    elevation: Dp = BottomNavigationDefaults.Elevation,
+    content: @Composable () -> Unit
+) {
     Surface(
         color = backgroundColor,
         contentColor = contentColor,
         elevation = elevation,
         modifier = modifier,
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(contentPadding)
-                .height(BottomNavigationHeight)
-                .selectableGroup(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            content = content,
-        )
+        content()
     }
+}
+
+@Composable
+fun BottomNavigationContent(
+    modifier: Modifier = Modifier,
+    content: @Composable RowScope.() -> Unit,
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(BottomNavigationHeight)
+            .selectableGroup(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        content = content,
+    )
 }
 
 /**
