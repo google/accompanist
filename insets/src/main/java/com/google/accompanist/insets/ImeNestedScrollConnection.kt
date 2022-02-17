@@ -35,6 +35,8 @@ import kotlin.math.roundToInt
  * Remembers a [NestedScrollConnection] which scrolls the Android on-screen keyboard on/off
  * screen as appropriate.
  *
+ * To be superceded: https://issuetracker.google.com/217770710
+ *
  * @param scrollImeOffScreenWhenVisible Set to true to allow scrolling the IME off screen
  * (from being visible), by an downwards scroll. Defaults to `true`.
  * @param scrollImeOnScreenWhenNotVisible Set to true to allow scrolling the IME on screen

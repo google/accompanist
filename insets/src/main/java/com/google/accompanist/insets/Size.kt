@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("NOTHING_TO_INLINE", "unused")
+@file:Suppress("NOTHING_TO_INLINE", "unused", "DEPRECATION")
 
 package com.google.accompanist.insets
 
@@ -35,11 +35,13 @@ import androidx.compose.ui.unit.dp
 /**
  * Represents a horizontal side of the display.
  */
+@Deprecated("accompanist/insets is deprecated")
 enum class HorizontalSide { Left, Right }
 
 /**
  * Represents a vertical side of the display.
  */
+@Deprecated("accompanist/insets is deprecated")
 enum class VerticalSide { Top, Bottom }
 
 /**
@@ -67,8 +69,17 @@ enum class VerticalSide { Top, Bottom }
  *
  * @param additional Any additional height to add to the status bars size.
  */
+@Deprecated(
+    "accompanist/insets is deprecated",
+    replaceWith = ReplaceWith(
+        "windowInsetsTopHeight(WindowInsets.statusBars)",
+        "androidx.compose.foundation.layout.WindowInsets",
+        "androidx.compose.foundation.layout.statusBars",
+        "androidx.compose.foundation.layout.windowInsetsTopHeight"
+    )
+)
 fun Modifier.statusBarsHeight(
-    additional: Dp = 0.dp
+    additional: Dp = 0.dp,
 ): Modifier = composed {
     InsetsSizeModifier(
         insetsType = LocalWindowInsets.current.statusBars,
@@ -102,6 +113,15 @@ fun Modifier.statusBarsHeight(
  *
  * @param additional Any additional height to add to the status bars size.
  */
+@Deprecated(
+    "accompanist/insets is deprecated",
+    replaceWith = ReplaceWith(
+        "windowInsetsBottomHeight(WindowInsets.navigationBars)",
+        "androidx.compose.foundation.layout.WindowInsets",
+        "androidx.compose.foundation.layout.navigationBars",
+        "androidx.compose.foundation.layout.windowInsetsBottomHeight"
+    )
+)
 fun Modifier.navigationBarsHeight(
     additional: Dp = 0.dp
 ): Modifier = composed {
@@ -142,6 +162,16 @@ fun Modifier.navigationBarsHeight(
  * @param side The navigation bar side to use as the source for the width.
  * @param additional Any additional width to add to the status bars size.
  */
+@Deprecated(
+    "accompanist/insets is deprecated",
+    replaceWith = ReplaceWith(
+        "windowInsetsStartWidth(WindowInsets.navigationBars).windowInsetsEndWidth(WindowInsets.systemBars)",
+        "androidx.compose.foundation.layout.WindowInsets",
+        "androidx.compose.foundation.layout.navigationBars",
+        "androidx.compose.foundation.layout.windowInsetsEndWidth",
+        "androidx.compose.foundation.layout.windowInsetsStartWidth"
+    )
+)
 fun Modifier.navigationBarsWidth(
     side: HorizontalSide,
     additional: Dp = 0.dp

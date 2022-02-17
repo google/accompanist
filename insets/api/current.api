@@ -4,9 +4,9 @@ package com.google.accompanist.insets {
   @kotlin.RequiresOptIn(message="Animated Insets support is experimental. The API may be changed in the future.") @kotlin.annotation.Retention(kotlin.annotation.AnnotationRetention) @kotlin.annotation.Target(allowedTargets={kotlin.annotation.AnnotationTarget, kotlin.annotation.AnnotationTarget}) public @interface ExperimentalAnimatedInsets {
   }
 
-  public enum HorizontalSide {
-    enum_constant public static final com.google.accompanist.insets.HorizontalSide Left;
-    enum_constant public static final com.google.accompanist.insets.HorizontalSide Right;
+  @Deprecated public enum HorizontalSide {
+    enum_constant @Deprecated public static final com.google.accompanist.insets.HorizontalSide Left;
+    enum_constant @Deprecated public static final com.google.accompanist.insets.HorizontalSide Right;
   }
 
   @com.google.accompanist.insets.ExperimentalAnimatedInsets public final class ImeNestedScrollConnection implements androidx.compose.ui.input.nestedscroll.NestedScrollConnection {
@@ -20,40 +20,40 @@ package com.google.accompanist.insets {
     method @androidx.compose.runtime.Composable @com.google.accompanist.insets.ExperimentalAnimatedInsets public static androidx.compose.ui.input.nestedscroll.NestedScrollConnection rememberImeNestedScrollConnection(optional boolean scrollImeOffScreenWhenVisible, optional boolean scrollImeOnScreenWhenNotVisible);
   }
 
-  @androidx.compose.runtime.Stable public interface Insets {
-    method public default com.google.accompanist.insets.Insets copy(optional int left, optional int top, optional int right, optional int bottom);
-    method @IntRange(from=0) public int getBottom();
-    method @IntRange(from=0) public int getLeft();
-    method @IntRange(from=0) public int getRight();
-    method @IntRange(from=0) public int getTop();
-    method public default operator com.google.accompanist.insets.Insets minus(com.google.accompanist.insets.Insets other);
-    method public default operator com.google.accompanist.insets.Insets plus(com.google.accompanist.insets.Insets other);
+  @Deprecated @androidx.compose.runtime.Stable public interface Insets {
+    method @Deprecated public default com.google.accompanist.insets.Insets copy(optional int left, optional int top, optional int right, optional int bottom);
+    method @Deprecated @IntRange(from=0) public int getBottom();
+    method @Deprecated @IntRange(from=0) public int getLeft();
+    method @Deprecated @IntRange(from=0) public int getRight();
+    method @Deprecated @IntRange(from=0) public int getTop();
+    method @Deprecated public default operator com.google.accompanist.insets.Insets minus(com.google.accompanist.insets.Insets other);
+    method @Deprecated public default operator com.google.accompanist.insets.Insets plus(com.google.accompanist.insets.Insets other);
     property @IntRange(from=0) public abstract int bottom;
     property @IntRange(from=0) public abstract int left;
     property @IntRange(from=0) public abstract int right;
     property @IntRange(from=0) public abstract int top;
-    field public static final com.google.accompanist.insets.Insets.Companion Companion;
+    field @Deprecated public static final com.google.accompanist.insets.Insets.Companion Companion;
   }
 
-  public static final class Insets.Companion {
-    method public com.google.accompanist.insets.Insets Insets(optional int left, optional int top, optional int right, optional int bottom);
-    method public com.google.accompanist.insets.Insets getEmpty();
+  @Deprecated public static final class Insets.Companion {
+    method @Deprecated public com.google.accompanist.insets.Insets Insets(optional int left, optional int top, optional int right, optional int bottom);
+    method @Deprecated public com.google.accompanist.insets.Insets getEmpty();
     property public final com.google.accompanist.insets.Insets Empty;
   }
 
   public final class InsetsKt {
-    method public static com.google.accompanist.insets.Insets coerceEachDimensionAtLeast(com.google.accompanist.insets.Insets, com.google.accompanist.insets.Insets minimumValue);
+    method @Deprecated public static com.google.accompanist.insets.Insets coerceEachDimensionAtLeast(com.google.accompanist.insets.Insets, com.google.accompanist.insets.Insets minimumValue);
   }
 
   public final class PaddingKt {
-    method public static inline androidx.compose.ui.Modifier cutoutPadding(androidx.compose.ui.Modifier, optional boolean start, optional boolean top, optional boolean end, optional boolean bottom);
-    method public static inline androidx.compose.ui.Modifier imePadding(androidx.compose.ui.Modifier);
-    method public static inline androidx.compose.ui.Modifier navigationBarsPadding(androidx.compose.ui.Modifier, optional boolean bottom, optional boolean start, optional boolean end);
-    method public static inline androidx.compose.ui.Modifier navigationBarsWithImePadding(androidx.compose.ui.Modifier);
-    method @androidx.compose.runtime.Composable public static androidx.compose.foundation.layout.PaddingValues rememberInsetsPaddingValues(com.google.accompanist.insets.Insets insets, optional boolean applyStart, optional boolean applyTop, optional boolean applyEnd, optional boolean applyBottom, optional float additionalStart, optional float additionalTop, optional float additionalEnd, optional float additionalBottom);
-    method public static inline androidx.compose.ui.Modifier statusBarsPadding(androidx.compose.ui.Modifier);
-    method public static inline androidx.compose.ui.Modifier systemBarsPadding(androidx.compose.ui.Modifier, optional boolean enabled);
-    method public static inline androidx.compose.ui.Modifier systemBarsPadding(androidx.compose.ui.Modifier, optional boolean start, optional boolean top, optional boolean end, optional boolean bottom);
+    method @Deprecated public static inline androidx.compose.ui.Modifier cutoutPadding(androidx.compose.ui.Modifier, optional boolean start, optional boolean top, optional boolean end, optional boolean bottom);
+    method @Deprecated public static inline androidx.compose.ui.Modifier imePadding(androidx.compose.ui.Modifier);
+    method @Deprecated public static inline androidx.compose.ui.Modifier navigationBarsPadding(androidx.compose.ui.Modifier, optional boolean bottom, optional boolean start, optional boolean end);
+    method @Deprecated public static inline androidx.compose.ui.Modifier navigationBarsWithImePadding(androidx.compose.ui.Modifier);
+    method @Deprecated @androidx.compose.runtime.Composable public static androidx.compose.foundation.layout.PaddingValues rememberInsetsPaddingValues(com.google.accompanist.insets.Insets insets, optional boolean applyStart, optional boolean applyTop, optional boolean applyEnd, optional boolean applyBottom, optional float additionalStart, optional float additionalTop, optional float additionalEnd, optional float additionalBottom);
+    method @Deprecated public static inline androidx.compose.ui.Modifier statusBarsPadding(androidx.compose.ui.Modifier);
+    method @Deprecated public static inline androidx.compose.ui.Modifier systemBarsPadding(androidx.compose.ui.Modifier, optional boolean enabled);
+    method @Deprecated public static inline androidx.compose.ui.Modifier systemBarsPadding(androidx.compose.ui.Modifier, optional boolean start, optional boolean top, optional boolean end, optional boolean bottom);
     method @Deprecated @androidx.compose.runtime.Composable public static inline androidx.compose.foundation.layout.PaddingValues toPaddingValues(com.google.accompanist.insets.WindowInsets.Type, optional boolean start, optional boolean top, optional boolean end, optional boolean bottom, optional float additionalHorizontal, optional float additionalVertical);
     method @Deprecated @androidx.compose.runtime.Composable public static inline androidx.compose.foundation.layout.PaddingValues toPaddingValues(com.google.accompanist.insets.WindowInsets.Type, optional boolean start, optional boolean top, optional boolean end, optional boolean bottom, optional float additionalStart, optional float additionalTop, optional float additionalEnd, optional float additionalBottom);
   }
@@ -62,56 +62,56 @@ package com.google.accompanist.insets {
   }
 
   public final class SizeKt {
-    method public static androidx.compose.ui.Modifier navigationBarsHeight(androidx.compose.ui.Modifier, optional float additional);
-    method public static androidx.compose.ui.Modifier navigationBarsWidth(androidx.compose.ui.Modifier, com.google.accompanist.insets.HorizontalSide side, optional float additional);
-    method public static androidx.compose.ui.Modifier statusBarsHeight(androidx.compose.ui.Modifier, optional float additional);
+    method @Deprecated public static androidx.compose.ui.Modifier navigationBarsHeight(androidx.compose.ui.Modifier, optional float additional);
+    method @Deprecated public static androidx.compose.ui.Modifier navigationBarsWidth(androidx.compose.ui.Modifier, com.google.accompanist.insets.HorizontalSide side, optional float additional);
+    method @Deprecated public static androidx.compose.ui.Modifier statusBarsHeight(androidx.compose.ui.Modifier, optional float additional);
   }
 
-  public enum VerticalSide {
-    enum_constant public static final com.google.accompanist.insets.VerticalSide Bottom;
-    enum_constant public static final com.google.accompanist.insets.VerticalSide Top;
+  @Deprecated public enum VerticalSide {
+    enum_constant @Deprecated public static final com.google.accompanist.insets.VerticalSide Bottom;
+    enum_constant @Deprecated public static final com.google.accompanist.insets.VerticalSide Top;
   }
 
-  public final class ViewWindowInsetObserver {
-    ctor public ViewWindowInsetObserver(android.view.View view);
-    method public boolean isObserving();
-    method public com.google.accompanist.insets.WindowInsets start(optional boolean consumeWindowInsets, optional boolean windowInsetsAnimationsEnabled);
-    method public void stop();
+  @Deprecated public final class ViewWindowInsetObserver {
+    ctor @Deprecated public ViewWindowInsetObserver(android.view.View view);
+    method @Deprecated public boolean isObserving();
+    method @Deprecated public com.google.accompanist.insets.WindowInsets start(optional boolean consumeWindowInsets, optional boolean windowInsetsAnimationsEnabled);
+    method @Deprecated public void stop();
     property public final boolean isObserving;
   }
 
-  @androidx.compose.runtime.Stable public interface WindowInsets {
-    method public default com.google.accompanist.insets.WindowInsets copy(optional com.google.accompanist.insets.WindowInsets.Type navigationBars, optional com.google.accompanist.insets.WindowInsets.Type statusBars, optional com.google.accompanist.insets.WindowInsets.Type systemGestures, optional com.google.accompanist.insets.WindowInsets.Type ime, optional com.google.accompanist.insets.WindowInsets.Type displayCutout);
-    method public com.google.accompanist.insets.WindowInsets.Type getDisplayCutout();
-    method public com.google.accompanist.insets.WindowInsets.Type getIme();
-    method public com.google.accompanist.insets.WindowInsets.Type getNavigationBars();
-    method public com.google.accompanist.insets.WindowInsets.Type getStatusBars();
-    method public com.google.accompanist.insets.WindowInsets.Type getSystemBars();
-    method public com.google.accompanist.insets.WindowInsets.Type getSystemGestures();
+  @Deprecated @androidx.compose.runtime.Stable public interface WindowInsets {
+    method @Deprecated public default com.google.accompanist.insets.WindowInsets copy(optional com.google.accompanist.insets.WindowInsets.Type navigationBars, optional com.google.accompanist.insets.WindowInsets.Type statusBars, optional com.google.accompanist.insets.WindowInsets.Type systemGestures, optional com.google.accompanist.insets.WindowInsets.Type ime, optional com.google.accompanist.insets.WindowInsets.Type displayCutout);
+    method @Deprecated public com.google.accompanist.insets.WindowInsets.Type getDisplayCutout();
+    method @Deprecated public com.google.accompanist.insets.WindowInsets.Type getIme();
+    method @Deprecated public com.google.accompanist.insets.WindowInsets.Type getNavigationBars();
+    method @Deprecated public com.google.accompanist.insets.WindowInsets.Type getStatusBars();
+    method @Deprecated public com.google.accompanist.insets.WindowInsets.Type getSystemBars();
+    method @Deprecated public com.google.accompanist.insets.WindowInsets.Type getSystemGestures();
     property public abstract com.google.accompanist.insets.WindowInsets.Type displayCutout;
     property public abstract com.google.accompanist.insets.WindowInsets.Type ime;
     property public abstract com.google.accompanist.insets.WindowInsets.Type navigationBars;
     property public abstract com.google.accompanist.insets.WindowInsets.Type statusBars;
     property public abstract com.google.accompanist.insets.WindowInsets.Type systemBars;
     property public abstract com.google.accompanist.insets.WindowInsets.Type systemGestures;
-    field public static final com.google.accompanist.insets.WindowInsets.Companion Companion;
+    field @Deprecated public static final com.google.accompanist.insets.WindowInsets.Companion Companion;
   }
 
-  public static final class WindowInsets.Companion {
-    method public com.google.accompanist.insets.WindowInsets getEmpty();
+  @Deprecated public static final class WindowInsets.Companion {
+    method @Deprecated public com.google.accompanist.insets.WindowInsets getEmpty();
     property public final com.google.accompanist.insets.WindowInsets Empty;
   }
 
-  @androidx.compose.runtime.Stable public static interface WindowInsets.Type extends com.google.accompanist.insets.Insets {
-    method public com.google.accompanist.insets.Insets getAnimatedInsets();
-    method @FloatRange(from=0.0, to=1.0) public float getAnimationFraction();
-    method public boolean getAnimationInProgress();
-    method public default int getBottom();
-    method public com.google.accompanist.insets.Insets getLayoutInsets();
-    method public default int getLeft();
-    method public default int getRight();
-    method public default int getTop();
-    method public boolean isVisible();
+  @Deprecated @androidx.compose.runtime.Stable public static interface WindowInsets.Type extends com.google.accompanist.insets.Insets {
+    method @Deprecated public com.google.accompanist.insets.Insets getAnimatedInsets();
+    method @Deprecated @FloatRange(from=0.0, to=1.0) public float getAnimationFraction();
+    method @Deprecated public boolean getAnimationInProgress();
+    method @Deprecated public default int getBottom();
+    method @Deprecated public com.google.accompanist.insets.Insets getLayoutInsets();
+    method @Deprecated public default int getLeft();
+    method @Deprecated public default int getRight();
+    method @Deprecated public default int getTop();
+    method @Deprecated public boolean isVisible();
     property public abstract com.google.accompanist.insets.Insets animatedInsets;
     property @FloatRange(from=0.0, to=1.0) public abstract float animationFraction;
     property public abstract boolean animationInProgress;
@@ -121,21 +121,21 @@ package com.google.accompanist.insets {
     property public default int left;
     property public default int right;
     property public default int top;
-    field public static final com.google.accompanist.insets.WindowInsets.Type.Companion Companion;
+    field @Deprecated public static final com.google.accompanist.insets.WindowInsets.Type.Companion Companion;
   }
 
-  public static final class WindowInsets.Type.Companion {
-    method public com.google.accompanist.insets.WindowInsets.Type getEmpty();
+  @Deprecated public static final class WindowInsets.Type.Companion {
+    method @Deprecated public com.google.accompanist.insets.WindowInsets.Type getEmpty();
     property public final com.google.accompanist.insets.WindowInsets.Type Empty;
   }
 
   public final class WindowInsetsKt {
-    method @androidx.compose.runtime.Composable public static void ProvideWindowInsets(optional boolean consumeWindowInsets, optional boolean windowInsetsAnimationsEnabled, kotlin.jvm.functions.Function0<kotlin.Unit> content);
-    method public static androidx.compose.runtime.ProvidableCompositionLocal<com.google.accompanist.insets.WindowInsets> getLocalWindowInsets();
+    method @Deprecated @androidx.compose.runtime.Composable public static void ProvideWindowInsets(optional boolean consumeWindowInsets, optional boolean windowInsetsAnimationsEnabled, kotlin.jvm.functions.Function0<kotlin.Unit> content);
+    method @Deprecated public static androidx.compose.runtime.ProvidableCompositionLocal<com.google.accompanist.insets.WindowInsets> getLocalWindowInsets();
   }
 
   public final class WindowInsetsTypeKt {
-    method public static com.google.accompanist.insets.WindowInsets.Type derivedWindowInsetsTypeOf(com.google.accompanist.insets.WindowInsets.Type... types);
+    method @Deprecated public static com.google.accompanist.insets.WindowInsets.Type derivedWindowInsetsTypeOf(com.google.accompanist.insets.WindowInsets.Type... types);
   }
 
 }

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
+
 package com.google.accompanist.sample.systemuicontroller
 
 import android.os.Bundle
