@@ -45,11 +45,15 @@ package com.google.accompanist.web {
     ctor public WebViewState(com.google.accompanist.web.WebContent webContent);
     method public com.google.accompanist.web.WebContent getContent();
     method public androidx.compose.runtime.snapshots.SnapshotStateList<com.google.accompanist.web.WebViewError> getErrorsForCurrentRequest();
+    method public android.graphics.Bitmap? getPageIcon();
+    method public String? getPageTitle();
     method public boolean isLoading();
     method public void setContent(com.google.accompanist.web.WebContent content);
     property public final com.google.accompanist.web.WebContent content;
     property public final androidx.compose.runtime.snapshots.SnapshotStateList<com.google.accompanist.web.WebViewError> errorsForCurrentRequest;
     property public final boolean isLoading;
+    property public final android.graphics.Bitmap? pageIcon;
+    property public final String? pageTitle;
   }
 
 }
