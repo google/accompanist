@@ -93,6 +93,8 @@ fun WebView(
                         super.onPageStarted(view, url, favicon)
                         state.isLoading = true
                         state.errorsForCurrentRequest.clear()
+                        state.pageTitle = null
+                        state.pageIcon = null
                     }
 
                     override fun onPageFinished(view: WebView?, url: String?) {
