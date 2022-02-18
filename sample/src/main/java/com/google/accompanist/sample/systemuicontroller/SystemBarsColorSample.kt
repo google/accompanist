@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:Suppress("DEPRECATION")
-
 package com.google.accompanist.sample.systemuicontroller
 
 import android.os.Bundle
@@ -34,6 +32,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material.Button
 import androidx.compose.material.Checkbox
 import androidx.compose.material.MaterialTheme
@@ -57,8 +56,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
-import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.accompanist.insets.systemBarsPadding
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.rememberRandomSampleImageUrl
@@ -74,9 +71,7 @@ class SystemBarsColorSample : ComponentActivity() {
 
         setContent {
             AccompanistSampleTheme {
-                ProvideWindowInsets {
-                    Sample()
-                }
+                Sample()
             }
         }
     }
