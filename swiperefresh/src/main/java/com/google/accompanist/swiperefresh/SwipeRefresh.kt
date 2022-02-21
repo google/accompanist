@@ -298,7 +298,6 @@ fun SwipeRefresh(
                 .let { if (clipIndicatorToPadding) it.clipToBounds() else it }
         ) {
             Box(Modifier.align(indicatorAlignment)) {
-                (Alignment.TopCenter as BiasAlignment).verticalBias
                 indicator(state, refreshTriggerDistance)
             }
         }
