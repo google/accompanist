@@ -81,6 +81,52 @@ class WebTest {
     }
 
     @Test
+    fun testDataLoadedWithBaseUrl() {
+        lateinit var state: WebViewState
+
+        rule.setContent {
+            state = rememberWebViewStateWithHTMLData(
+                data = TEST_DATA,
+                baseUrl = "file:///android_asset/"
+            )
+            WebTestContent(
+                state,
+                idleResource
+            )
+        }
+
+        onWebView()
+            .withElement(findElement(Locator.TAG_NAME, "a"))
+            .check(webMatches(getText(), containsString(LINK_TEXT)))
+    }
+
+    @Test
+    fun testCanNavigateFromDataToUrl() {
+        lateinit var state: WebViewState
+
+        rule.setContent {
+            state = rememberWebViewStateWithHTMLData(
+                data = TEST_DATA,
+                baseUrl = "file:///android_asset/"
+            )
+            WebTestContent(
+                state,
+                idleResource
+            )
+        }
+
+        onWebView()
+            .withElement(findElement(Locator.ID, "link"))
+            .perform(webClick())
+
+        // Wait for the webview to load and then perform the check
+        rule.waitForIdle()
+        onWebView().check(webMatches(getCurrentUrl(), containsString(LINK_URL)))
+        assertThat(state.content.getCurrentUrl())
+            .isEqualTo(LINK_URL)
+    }
+
+    @Test
     fun testUrlLoaded() {
         lateinit var state: WebViewState
 
