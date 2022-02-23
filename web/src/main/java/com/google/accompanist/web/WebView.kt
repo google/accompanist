@@ -165,8 +165,8 @@ sealed class WebContent {
 
     fun getCurrentUrl(): String? {
         return when (this) {
-            is Url -> { url }
-            is Data -> { baseUrl }
+            is Url -> url
+            is Data -> baseUrl
         }
     }
 }
