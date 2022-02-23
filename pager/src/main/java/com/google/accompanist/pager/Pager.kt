@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -40,6 +41,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.Velocity
@@ -51,6 +54,7 @@ import dev.chrisbanes.snapper.SnapperFlingBehaviorDefaults
 import dev.chrisbanes.snapper.SnapperLayoutInfo
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
 
@@ -348,11 +352,29 @@ internal fun Pager(
             .collect { state.onScrollFinished() }
     }
     LaunchedEffect(state) {
-        snapshotFlow { state.currentLayoutPageInfo }
-            // we want to react on the currentLayoutPageInfo changes happened not because of the
-            // scroll. for example the current page could change because the items were reordered.
-            .filter { !state.isScrollInProgress }
+        snapshotFlow { state.mostVisiblePageLayoutInfo?.index }
+            .distinctUntilChanged()
             .collect { state.updateCurrentPageBasedOnLazyListState() }
+    }
+    val density = LocalDensity.current
+    val layoutDirection = LocalLayoutDirection.current
+    LaunchedEffect(density, contentPadding, isVertical, layoutDirection, reverseLayout, state) {
+        with(density) {
+            // this should be exposed on LazyListLayoutInfo instead. b/200920410
+            state.afterContentPadding = if (isVertical) {
+                if (!reverseLayout) {
+                    contentPadding.calculateBottomPadding()
+                } else {
+                    contentPadding.calculateTopPadding()
+                }
+            } else {
+                if (!reverseLayout) {
+                    contentPadding.calculateEndPadding(layoutDirection)
+                } else {
+                    contentPadding.calculateStartPadding(layoutDirection)
+                }
+            }.roundToPx()
+        }
     }
 
     val pagerScope = remember(state) { PagerScopeImpl(state) }
