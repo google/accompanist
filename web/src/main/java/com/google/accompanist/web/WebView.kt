@@ -164,7 +164,10 @@ sealed class WebContent {
     data class Data(val data: String, val baseUrl: String? = null) : WebContent()
 
     fun getCurrentUrl(): String? {
-        return (this as? Url)?.url
+        return when (this) {
+            is Url -> url
+            is Data -> baseUrl
+        }
     }
 }
 
