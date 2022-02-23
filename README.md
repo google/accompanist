@@ -4,7 +4,23 @@ Accompanist is a group of libraries that aim to supplement [Jetpack Compose][com
 
 Accompanist is a labs like environment for new Compose APIs. We use it to help fill known gaps in the Compose toolkit, experiment with new APIs and to gather insight into the development experience of developing a Compose library. The goal of these libraries is to upstream them into the official toolkit, at which point they will be deprecated and removed from Accompanist.
 
-Currently, Accompanist contains:
+## Compose versions
+
+Each [release](https://github.com/google/accompanist/releases) outlines what version of the Compose libraries it depends on. We are currently releasing multiple versions of Accompanist for the different versions of Compose:
+
+<table>
+ <tr>
+  <td>Compose 1.0 (1.0.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-insets?versionPrefix=0.20"></td>
+ </tr>
+ <tr>
+  <td>Compose 1.1 (1.1.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-insets?versionPrefix=0.23"></td>
+ </tr>
+ <tr>
+  <td>Compose 1.2 (1.2.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-insets"></td>
+ </tr>
+</table>
+
+## Libraries
 
 ### 📐 [Insets](./insets/)
 A library that brings [WindowInsets][windowinsets] support to Jetpack Compose.
@@ -43,22 +59,6 @@ A library that provides a layout implementing the swipe-to-refresh UX pattern, s
 A wrapper around WebView for basic WebView support in Jetpack Compose.
 
 ---
-
-## Compose versions
-
-Each [release](https://github.com/google/accompanist/releases) outlines what version of the Compose libraries it depends on. We are currently releasing multiple versions of Accompanist for the different versions of Compose:
-
-<table>
- <tr>
-  <td>Compose 1.0 (1.0.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-insets?versionPrefix=0.20"></td>
- </tr>
- <tr>
-  <td>Compose 1.1 (1.1.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-insets?versionPrefix=0.23"></td>
- </tr>
- <tr>
-  <td>Compose 1.2 (1.2.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-insets"></td>
- </tr>
-</table>
 
 ## Future?
 
