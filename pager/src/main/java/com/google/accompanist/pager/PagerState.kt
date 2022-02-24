@@ -79,15 +79,23 @@ class PagerState(
 
     private var _currentPage by mutableStateOf(currentPage)
 
-    internal val currentLayoutPageInfo: LazyListItemInfo?
-        get() = lazyListState.layoutInfo.visibleItemsInfo.lastOrNull { it.offset <= 0 }
+    // finds the page which has larger visible area within the viewport not including paddings
+    internal val mostVisiblePageLayoutInfo: LazyListItemInfo?
+        get() {
+            val layoutInfo = lazyListState.layoutInfo
+            return layoutInfo.visibleItemsInfo.maxByOrNull {
+                val start = maxOf(it.offset, 0)
+                val end = minOf(it.offset + it.size, layoutInfo.viewportEndOffset - afterContentPadding)
+                end - start
+            }
+        }
 
-    private val currentLayoutPageOffset: Float
-        get() = currentLayoutPageInfo?.let { current ->
-            // We coerce since itemSpacing can make the offset > 1f.
-            // We don't want to count spacing in the offset so cap it to 1f
-            (-current.offset / current.size.toFloat()).coerceIn(0f, 1f)
-        } ?: 0f
+    internal var afterContentPadding = 0
+
+    private val currentPageLayoutInfo: LazyListItemInfo?
+        get() = lazyListState.layoutInfo.visibleItemsInfo.lastOrNull {
+            it.index == currentPage
+        }
 
     /**
      * [InteractionSource] that will be used to dispatch drag events when this
@@ -129,12 +137,10 @@ class PagerState(
      * To update the scroll position, use [scrollToPage] or [animateScrollToPage].
      */
     val currentPageOffset: Float by derivedStateOf {
-        currentLayoutPageInfo?.let {
-            // The current page offset is the current layout page delta from `currentPage`
-            // (which is only updated after a scroll/animation).
-            // We calculate this by looking at the current layout page + it's offset,
-            // then subtracting the 'current page'.
-            it.index + currentLayoutPageOffset - _currentPage
+        currentPageLayoutInfo?.let {
+            // We coerce since itemSpacing can make the offset > 1f.
+            // We don't want to count spacing in the offset so cap it to 1f
+            (-it.offset / it.size.toFloat()).coerceIn(-1f, 1f)
         } ?: 0f
     }
 
@@ -209,8 +215,8 @@ class PagerState(
                 lazyListState.animateScrollToItem(index = page)
             } else {
                 // Else we need to figure out what the offset is in pixels...
-
-                var target = lazyListState.layoutInfo.visibleItemsInfo
+                val layoutInfo = lazyListState.layoutInfo
+                var target = layoutInfo.visibleItemsInfo
                     .firstOrNull { it.index == page }
 
                 if (target != null) {
@@ -220,9 +226,9 @@ class PagerState(
                         index = page,
                         scrollOffset = (target.size * pageOffset).roundToInt()
                     )
-                } else {
+                } else if (layoutInfo.visibleItemsInfo.isNotEmpty()) {
                     // If we don't, we use the current page size as a guide
-                    val currentSize = currentLayoutPageInfo!!.size
+                    val currentSize = layoutInfo.visibleItemsInfo.first().size
                     lazyListState.animateScrollToItem(
                         index = page,
                         scrollOffset = (currentSize * pageOffset).roundToInt()
@@ -269,11 +275,12 @@ class PagerState(
 
             // First scroll to the given page. It will now be laid out at offset 0
             lazyListState.scrollToItem(index = page)
+            updateCurrentPageBasedOnLazyListState()
 
             // If we have a start spacing, we need to offset (scroll) by that too
             if (pageOffset > 0.0001f) {
                 scroll {
-                    currentLayoutPageInfo?.let {
+                    currentPageLayoutInfo?.let {
                         scrollBy(it.size * pageOffset)
                     }
                 }
@@ -288,11 +295,12 @@ class PagerState(
 
     internal fun updateCurrentPageBasedOnLazyListState() {
         // Then update the current page to our layout page
-        currentPage = currentLayoutPageInfo?.index ?: 0
+        mostVisiblePageLayoutInfo?.let {
+            currentPage = it.index
+        }
     }
 
     internal fun onScrollFinished() {
-        updateCurrentPageBasedOnLazyListState()
         // Clear the animation target page
         animationTargetPage = null
     }
