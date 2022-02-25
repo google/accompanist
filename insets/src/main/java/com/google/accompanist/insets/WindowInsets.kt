@@ -38,7 +38,10 @@ import androidx.core.view.WindowInsetsCompat
  */
 @Stable
 @Deprecated(
-    "accompanist/insets is deprecated",
+"""
+accompanist/insets is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+""",
     replaceWith = ReplaceWith(
         "WindowInsets",
         "androidx.compose.foundation.layout.WindowInsets"
@@ -224,7 +227,13 @@ interface WindowInsets {
  *
  * @param view The view to observe [WindowInsetsCompat]s from.
  */
-@Deprecated("accompanist/insets is deprecated")
+@Deprecated(
+"""
+accompanist/insets is deprecated.
+ViewWindowInsetObserver is not necessary in androidx.compose and can be removed.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+"""
+)
 class ViewWindowInsetObserver(private val view: View) {
     private val attachListener = object : View.OnAttachStateChangeListener {
         override fun onViewAttachedToWindow(v: View) = v.requestApplyInsets()
@@ -357,7 +366,10 @@ class ViewWindowInsetObserver(private val view: View) {
  * the host view. Defaults to `true`.
  */
 @Deprecated(
-    "accompanist/insets is deprecated",
+"""
+accompanist/insets is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+""",
     replaceWith = ReplaceWith("content")
 )
 @Composable
@@ -530,5 +542,11 @@ annotation class ExperimentalAnimatedInsets
 /**
  * Composition local containing the current [WindowInsets].
  */
-@Deprecated("accompanist/insets is deprecated")
+@Deprecated(
+"""
+accompanist/insets is deprecated.
+The androidx.compose equivalent of LocalWindowInsets is the extensions on WindowInsets.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+"""
+)
 val LocalWindowInsets = staticCompositionLocalOf { WindowInsets.Empty }

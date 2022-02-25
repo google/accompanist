@@ -35,13 +35,27 @@ import androidx.compose.ui.unit.dp
 /**
  * Represents a horizontal side of the display.
  */
-@Deprecated("accompanist/insets is deprecated")
+@Deprecated(
+"""
+accompanist/insets is deprecated.
+The androidx.compose equivalent of HorizontalSide is using Modifier.windowInsetsStartWidth or
+Modifier.windowInsetsEndWidth with the desired type of WindowInsets.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+"""
+)
 enum class HorizontalSide { Left, Right }
 
 /**
  * Represents a vertical side of the display.
  */
-@Deprecated("accompanist/insets is deprecated")
+@Deprecated(
+"""
+accompanist/insets is deprecated.
+The androidx.compose equivalent of VerticalSide is using Modifier.windowInsetsTopHeight or
+Modifier.windowInsetsBottomHeight with the desired type of WindowInsets.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+"""
+)
 enum class VerticalSide { Top, Bottom }
 
 /**
@@ -70,7 +84,10 @@ enum class VerticalSide { Top, Bottom }
  * @param additional Any additional height to add to the status bars size.
  */
 @Deprecated(
-    "accompanist/insets is deprecated",
+"""
+accompanist/insets is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+""",
     replaceWith = ReplaceWith(
         "windowInsetsTopHeight(WindowInsets.statusBars)",
         "androidx.compose.foundation.layout.WindowInsets",
@@ -114,7 +131,10 @@ fun Modifier.statusBarsHeight(
  * @param additional Any additional height to add to the status bars size.
  */
 @Deprecated(
-    "accompanist/insets is deprecated",
+"""
+accompanist/insets is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+""",
     replaceWith = ReplaceWith(
         "windowInsetsBottomHeight(WindowInsets.navigationBars)",
         "androidx.compose.foundation.layout.WindowInsets",
@@ -163,7 +183,10 @@ fun Modifier.navigationBarsHeight(
  * @param additional Any additional width to add to the status bars size.
  */
 @Deprecated(
-    "accompanist/insets is deprecated",
+"""
+accompanist/insets is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+""",
     replaceWith = ReplaceWith(
         "windowInsetsStartWidth(WindowInsets.navigationBars).windowInsetsEndWidth(WindowInsets.systemBars)",
         "androidx.compose.foundation.layout.WindowInsets",

@@ -107,7 +107,13 @@ internal class ImmutableWindowInsetsType(
  * is the derived insets of the [WindowInsets.ime] insets, coerced by the
  * [WindowInsets.navigationBars] insets.
  */
-@Deprecated("accompanist/insets is deprecated")
+@Deprecated(
+"""
+accompanist/insets is deprecated.
+The androidx.compose equivalent is WindowInsets.union.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+"""
+)
 fun derivedWindowInsetsTypeOf(vararg types: WindowInsets.Type): WindowInsets.Type = CalculatedWindowInsetsType(*types)
 
 /**

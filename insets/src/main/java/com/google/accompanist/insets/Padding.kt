@@ -42,7 +42,10 @@ import androidx.compose.ui.unit.dp
  * Defaults to `true`.
  */
 @Deprecated(
-    "accompanist/insets is deprecated",
+"""
+accompanist/insets is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+""",
     replaceWith = ReplaceWith(
         "systemBarsPadding()",
         "androidx.compose.foundation.layout.systemBarsPadding"
@@ -74,7 +77,10 @@ inline fun Modifier.systemBarsPadding(enabled: Boolean = true): Modifier = compo
  * height (if present) at the bottom edge of the screen. Defaults to `true`.
  */
 @Deprecated(
-    "accompanist/insets is deprecated",
+"""
+accompanist/insets is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+""",
     replaceWith = ReplaceWith(
         "systemBarsPadding()",
         "androidx.compose.foundation.layout.systemBarsPadding"
@@ -102,7 +108,10 @@ inline fun Modifier.systemBarsPadding(
  * of the content.
  */
 @Deprecated(
-    "accompanist/insets is deprecated",
+"""
+accompanist/insets is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+""",
     replaceWith = ReplaceWith(
         "statusBarsPadding()",
         "androidx.compose.foundation.layout.statusBarsPadding"
@@ -130,7 +139,10 @@ inline fun Modifier.statusBarsPadding(): Modifier = composed {
  * (if present) on the end edge of the screen. Defaults to `true`.
  */
 @Deprecated(
-    "accompanist/insets is deprecated",
+"""
+accompanist/insets is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+""",
     replaceWith = ReplaceWith(
         "navigationBarsPadding()",
         "androidx.compose.foundation.layout.navigationBarsPadding"
@@ -160,7 +172,10 @@ inline fun Modifier.navigationBarsPadding(
  * [Modifier.navigationBarsWithImePadding] modifier.
  */
 @Deprecated(
-    "accompanist/insets is deprecated",
+"""
+accompanist/insets is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+""",
     replaceWith = ReplaceWith(
         "imePadding()",
         "androidx.compose.foundation.layout.imePadding"
@@ -191,7 +206,10 @@ inline fun Modifier.imePadding(): Modifier = composed {
  * height (if present) at the bottom edge of the screen. Defaults to `true`.
  */
 @Deprecated(
-    "accompanist/insets is deprecated",
+"""
+accompanist/insets is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+""",
     replaceWith = ReplaceWith(
         "cutoutPadding()",
         "androidx.compose.foundation.layout.cutoutPadding"
@@ -220,7 +238,10 @@ inline fun Modifier.cutoutPadding(
  * at the bottom of the screen.
  */
 @Deprecated(
-    "accompanist/insets is deprecated",
+"""
+accompanist/insets is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+""",
     replaceWith = ReplaceWith(
         "navigationBarsPadding().imePadding()",
         "androidx.compose.foundation.layout.navigationBarsPadding",
@@ -252,7 +273,10 @@ inline fun Modifier.navigationBarsWithImePadding(): Modifier = composed {
  * @param additionalVertical Value to add to the top and bottom dimensions.
  */
 @Deprecated(
-    "Replaced with rememberInsetsPaddingValues()",
+"""
+accompanist/insets is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+""",
     ReplaceWith(
         """rememberInsetsPaddingValues(
             insets = this,
@@ -301,7 +325,10 @@ inline fun WindowInsets.Type.toPaddingValues(
  * @param additionalBottom Value to add to the bottom dimension.
  */
 @Deprecated(
-    "Replaced with rememberInsetsPaddingValues()",
+"""
+accompanist/insets is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+""",
     ReplaceWith(
         """rememberInsetsPaddingValues(
             insets = this,
@@ -357,7 +384,10 @@ inline fun WindowInsets.Type.toPaddingValues(
  */
 @Composable
 @Deprecated(
-    "accompanist/insets is deprecated",
+"""
+accompanist/insets is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+""",
     replaceWith = ReplaceWith(
         "insets.asPaddingValues()",
         "androidx.compose.foundation.layout.asPaddingValues"

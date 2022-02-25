@@ -29,8 +29,14 @@ import androidx.compose.runtime.setValue
  * Interface which represents a single set of inset values. Each instance holds four integer
  * offsets which describe changes to the four edges of a rectangle.
  */
+@Deprecated(
+"""
+accompanist/insets is deprecated.
+The androidx.compose equivalent of Insets is WindowInsets.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+"""
+)
 @Stable
-@Deprecated("accompanist/insets is deprecated")
 interface Insets {
     /**
      * The left dimension of these insets in pixels.
@@ -149,7 +155,13 @@ internal fun MutableInsets.updateFrom(insets: androidx.core.graphics.Insets) {
  * dimension value in [minimumValue], otherwise a copy of this with each dimension coerced with the
  * corresponding dimension value in [minimumValue].
  */
-@Deprecated("accompanist/insets is deprecated")
+@Deprecated(
+"""
+accompanist/insets is deprecated.
+The androidx.compose equivalent is WindowInsets.copy.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+"""
+)
 fun Insets.coerceEachDimensionAtLeast(minimumValue: Insets): Insets {
     return takeIf {
         // Fast path, no need to copy if: this >= minimumValue
