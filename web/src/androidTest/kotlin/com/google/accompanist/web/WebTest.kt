@@ -26,6 +26,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.espresso.web.assertion.WebViewAssertions.webMatches
 import androidx.test.espresso.web.model.Atoms.getCurrentUrl
+import androidx.test.espresso.web.model.Atoms.getTitle
 import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
 import androidx.test.espresso.web.webdriver.DriverAtoms.getText
@@ -35,6 +36,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import com.google.common.truth.Truth.assertThat
 import org.hamcrest.CoreMatchers.containsString
+import org.hamcrest.CoreMatchers.equalTo
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -250,6 +252,34 @@ class WebTest {
             .isEmpty()
     }
 
+    @Test
+    fun testPageTitle() {
+        lateinit var state: WebViewState
+
+        rule.setContent {
+            state = rememberWebViewStateWithHTMLData(data = TEST_TITLE_DATA)
+            WebTestContent(webViewState = state, idlingResource = idleResource)
+        }
+
+        // Wait for new title
+        onWebView()
+            .check(webMatches(getTitle(), equalTo(TITLE_TEXT)))
+
+        // Check that the web view state has been updated with the HTML title
+        assertThat(state.pageTitle)
+            .isEqualTo(TITLE_TEXT)
+
+        // Check that state is reset on the loading of a new page (without a title or favicon set)
+        state.content = WebContent.Data(TEST_DATA)
+
+        // Wait for new title
+        onWebView()
+            .check(webMatches(getTitle(), equalTo("")))
+
+        assertThat(state.pageTitle)
+            .isEqualTo("about:blank") // No title results in about:blank being received
+    }
+
     private val webNode: SemanticsNodeInteraction
         get() = rule.onNodeWithTag(WebViewTag)
 }
@@ -257,10 +287,13 @@ class WebTest {
 private const val LINK_ID = "link"
 private const val LINK_TEXT = "Click me"
 private const val LINK_URL = "file:///android_asset/test.html"
+private const val TITLE_TEXT = "A Test Title"
 private const val TEST_DATA =
     "<html><body><a id=$LINK_ID href=\"$LINK_URL\">$LINK_TEXT</a></body></html>"
 private const val TEST_BAD_DATA =
     "<html><body><img src=\"https://alwaysfail.zxyz.zxyz\" /><p>$LINK_TEXT</p></body></html>"
+private const val TEST_TITLE_DATA =
+    "<html><head><title>$TITLE_TEXT</title></head><body></body></html>"
 private const val WebViewTag = "webview_tag"
 
 @Composable

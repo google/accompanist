@@ -18,6 +18,7 @@ package com.google.accompanist.web
 
 import android.graphics.Bitmap
 import android.view.ViewGroup
+import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -44,11 +45,8 @@ import androidx.compose.ui.viewinterop.AndroidView
  * @param captureBackPresses Set to true to have this Composable capture back presses and navigate
  * the WebView back.
  * @param onCreated Called when the WebView is first created, this can be used to set additional
- * settings on the WebView.
- * @param onPageStarted Called when the WebView starts loading a page. Forwarded event from the
- * WebViewClient.
- * @param onPageFinished Called when the WebView finishes loading a page. Forwarded event from the
- * WebViewClient
+ * settings on the WebView. WebChromeClient and WebViewClient should not be set here as they will be
+ * subsequently overwritten after this lambda is called.
  * @param onError Called when the WebView encounters an error. Forwarded event from the
  * WebViewClient
  * @sample com.google.accompanist.sample.webview.BasicWebViewSample
@@ -78,11 +76,25 @@ fun WebView(
                     ViewGroup.LayoutParams.MATCH_PARENT
                 )
 
+                webChromeClient = object : WebChromeClient() {
+                    override fun onReceivedTitle(view: WebView?, title: String?) {
+                        super.onReceivedTitle(view, title)
+                        state.pageTitle = title
+                    }
+
+                    override fun onReceivedIcon(view: WebView?, icon: Bitmap?) {
+                        super.onReceivedIcon(view, icon)
+                        state.pageIcon = icon
+                    }
+                }
+
                 webViewClient = object : WebViewClient() {
                     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                         super.onPageStarted(view, url, favicon)
                         state.isLoading = true
                         state.errorsForCurrentRequest.clear()
+                        state.pageTitle = null
+                        state.pageIcon = null
                     }
 
                     override fun onPageFinished(view: WebView?, url: String?) {
@@ -186,6 +198,18 @@ class WebViewState(webContent: WebContent) {
      * Whether the WebView is currently loading data in its main frame
      */
     var isLoading: Boolean by mutableStateOf(false)
+        internal set
+
+    /**
+     * The title received from the loaded content of the current page
+     */
+    var pageTitle: String? by mutableStateOf(null)
+        internal set
+
+    /**
+     * the favicon received from the loaded content of the current page
+     */
+    var pageIcon: Bitmap? by mutableStateOf(null)
         internal set
 
     /**
