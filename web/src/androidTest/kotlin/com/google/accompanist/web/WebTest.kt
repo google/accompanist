@@ -301,7 +301,7 @@ private fun WebTestContent(
     webViewState: WebViewState,
     idlingResource: WebViewIdlingResource
 ) {
-    idlingResource.webviewLoading = webViewState.isLoading
+    idlingResource.webviewLoading = webViewState.loadingState !is WebViewState.Finished
 
     MaterialTheme {
         WebView(

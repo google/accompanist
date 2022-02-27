@@ -86,12 +86,18 @@ fun WebView(
                         super.onReceivedIcon(view, icon)
                         state.pageIcon = icon
                     }
+
+                    override fun onProgressChanged(view: WebView?, newProgress: Int) {
+                        super.onProgressChanged(view, newProgress)
+                        if (state.loadingState is LoadingState.Finished) return
+                        state.loadingState = LoadingState.Loading(newProgress / 100.0f)
+                    }
                 }
 
                 webViewClient = object : WebViewClient() {
                     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                         super.onPageStarted(view, url, favicon)
-                        state.isLoading = true
+                        state.loadingState = LoadingState.Loading(0.0f)
                         state.errorsForCurrentRequest.clear()
                         state.pageTitle = null
                         state.pageIcon = null
@@ -99,7 +105,7 @@ fun WebView(
 
                     override fun onPageFinished(view: WebView?, url: String?) {
                         super.onPageFinished(view, url)
-                        state.isLoading = false
+                        state.loadingState = LoadingState.Finished
                         canGoBack = view?.canGoBack() ?: false
                     }
 
@@ -184,6 +190,24 @@ sealed class WebContent {
 }
 
 /**
+ * Sealed class for constraining possible loading states.
+ * See [Loading] and [Finished].
+ */
+sealed class LoadingState {
+
+    /**
+     * Describes a webview between `onPageStarted` and `onPageFinished` events, contains a
+     * [progress] property which is updated by the webview.
+     */
+    data class Loading(val progress: Float) : LoadingState()
+
+    /**
+     * Describes a webview that has finished loading content (or not started).
+     */
+    object Finished : LoadingState()
+}
+
+/**
  * A state holder to hold the state for the WebView. In most cases this will be remembered
  * using the rememberWebViewState(uri) function.
  */
@@ -195,10 +219,17 @@ class WebViewState(webContent: WebContent) {
     var content by mutableStateOf<WebContent>(webContent)
 
     /**
-     * Whether the WebView is currently loading data in its main frame
+     * Whether the WebView is currently [LoadingState.Loading] data in its main frame (along with
+     * progress) or the data loading has [LoadingState.Finished]. See [LoadingState]
      */
-    var isLoading: Boolean by mutableStateOf(false)
+    var loadingState: LoadingState by mutableStateOf(LoadingState.Finished)
         internal set
+
+    /**
+     * Whether the webview is currently loading data in its main frame
+     */
+    val isLoading: Boolean
+        get() = loadingState !is LoadingState.Finished
 
     /**
      * The title received from the loaded content of the current page
