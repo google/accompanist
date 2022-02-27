@@ -113,6 +113,8 @@ dependencies {
 
     testImplementation libs.androidx.test.espressoWeb
     androidTestImplementation libs.androidx.test.espressoWeb
+
+    androidTestImplementation libs.squareup.mockwebserver
 }
 
 apply plugin: "com.vanniktech.maven.publish"

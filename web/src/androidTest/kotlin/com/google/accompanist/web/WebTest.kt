@@ -18,6 +18,8 @@ package com.google.accompanist.web
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.IdlingResource
@@ -35,6 +37,9 @@ import androidx.test.espresso.web.webdriver.Locator
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.flow.toCollection
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.After
@@ -280,6 +285,38 @@ class WebTest {
             .isEqualTo("about:blank") // No title results in about:blank being received
     }
 
+    @Test
+    fun testLoadingState() {
+        lateinit var state: WebViewState
+
+        val mockServer = MockWebServer()
+        mockServer.enqueue(MockResponse().setBody("Test"))
+        mockServer.start()
+        val baseUrl = mockServer.url("/")
+
+        val collectedLoadingStates = mutableListOf<LoadingState>()
+
+        rule.setContent {
+            state = rememberWebViewState(url = baseUrl.toString())
+
+            LaunchedEffect(state) {
+                snapshotFlow { state.loadingState }
+                    .toCollection(collectedLoadingStates)
+            }
+
+            WebTestContent(webViewState = state, idlingResource = idleResource)
+        }
+
+        rule.waitUntil { collectedLoadingStates.any { it is LoadingState.Loading } }
+        rule.waitForIdle()
+
+        assertThat(collectedLoadingStates.first()).isInstanceOf(LoadingState.Finished::class.java)
+        assertThat(collectedLoadingStates.last()).isInstanceOf(LoadingState.Finished::class.java)
+        assertThat(collectedLoadingStates.filterIsInstance<LoadingState.Loading>()).isNotEmpty()
+
+        mockServer.shutdown()
+    }
+
     private val webNode: SemanticsNodeInteraction
         get() = rule.onNodeWithTag(WebViewTag)
 }
@@ -301,7 +338,7 @@ private fun WebTestContent(
     webViewState: WebViewState,
     idlingResource: WebViewIdlingResource
 ) {
-    idlingResource.webviewLoading = webViewState.loadingState !is WebViewState.Finished
+    idlingResource.webviewLoading = webViewState.loadingState !is LoadingState.Finished
 
     MaterialTheme {
         WebView(
