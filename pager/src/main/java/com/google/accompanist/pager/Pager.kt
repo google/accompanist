@@ -521,5 +521,5 @@ private class PagerScopeImpl(
  */
 @ExperimentalPagerApi
 fun PagerScope.calculateCurrentOffsetForPage(page: Int): Float {
-    return (currentPage + currentPageOffset) - page
+    return (currentPage - page) + currentPageOffset
 }
