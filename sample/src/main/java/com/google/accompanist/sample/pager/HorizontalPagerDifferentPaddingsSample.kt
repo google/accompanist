@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -35,6 +36,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
@@ -44,6 +46,7 @@ import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.rememberRandomSampleImageUrl
+import kotlin.math.roundToInt
 
 class HorizontalPagerDifferentPaddingsSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,14 +96,14 @@ fun HorizontalPagerDifferentPaddings() {
     ) { page ->
         Card(
             Modifier
-                .graphicsLayer {
+                .offset {
                     // Calculate the offset do neutralize paddings on the sides on
                     // the first and the last page.
                     val pageOffset = calculateCurrentOffsetForPage(page)
                     val offsetToFillStartPadding = minOf(page + pageOffset - 1, 0f)
                     val offsetToFillEndPadding = maxOf(page + pageOffset - count + 2, 0f)
-                    translationX =
-                        padding.toPx() * (offsetToFillStartPadding + offsetToFillEndPadding)
+                    val xOffset = padding.toPx() * (offsetToFillStartPadding + offsetToFillEndPadding)
+                    IntOffset(x = xOffset.roundToInt(), y = 0)
                 }
                 .fillMaxWidth()
                 .aspectRatio(1f),
