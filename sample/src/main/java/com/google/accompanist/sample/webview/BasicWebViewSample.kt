@@ -27,10 +27,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,6 +47,7 @@ import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.web.LoadingState
 import com.google.accompanist.web.WebContent
 import com.google.accompanist.web.WebView
+import com.google.accompanist.web.rememberWebViewNavigator
 import com.google.accompanist.web.rememberWebViewState
 
 class BasicWebViewSample : ComponentActivity() {
@@ -52,11 +57,26 @@ class BasicWebViewSample : ComponentActivity() {
         setContent {
             AccompanistSampleTheme {
                 val state = rememberWebViewState(url = "https://google.com")
+                val navigator = rememberWebViewNavigator()
                 val (textFieldValue, setTextFieldValue) = remember(state.content) {
                     mutableStateOf(state.content.getCurrentUrl() ?: "")
                 }
 
                 Column {
+                    TopAppBar(
+                        title = { Text(text = "WebView Sample") },
+                        navigationIcon = {
+                            if (navigator.canGoBack) {
+                                IconButton(onClick = { navigator.navigateBack() }) {
+                                    Icon(
+                                        imageVector = Icons.Default.ArrowBack,
+                                        contentDescription = "Back"
+                                    )
+                                }
+                            }
+                        }
+                    )
+
                     Row {
                         Box(modifier = Modifier.weight(1f)) {
                             if (state.errorsForCurrentRequest.isNotEmpty()) {
@@ -98,6 +118,7 @@ class BasicWebViewSample : ComponentActivity() {
                     WebView(
                         state = state,
                         modifier = Modifier.weight(1f),
+                        navigator = navigator,
                         onCreated = { webView ->
                             webView.settings.javaScriptEnabled = true
                         }

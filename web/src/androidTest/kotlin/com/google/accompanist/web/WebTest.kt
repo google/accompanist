@@ -319,6 +319,131 @@ class WebTest {
         mockServer.shutdown()
     }
 
+    @Test
+    fun testNavigatorBack() {
+        lateinit var state: WebViewState
+        lateinit var navigator: WebViewNavigator
+
+        rule.setContent {
+            state = rememberWebViewStateWithHTMLData(data = TEST_DATA)
+            navigator = rememberWebViewNavigator()
+
+            WebTestContent(
+                webViewState = state,
+                idlingResource = idleResource,
+                navigator = navigator
+            )
+        }
+
+        rule.waitForIdle()
+
+        onWebView()
+            .withElement(findElement(Locator.ID, "link"))
+            .perform(webClick())
+
+        rule.waitUntil { navigator.canGoBack }
+        assertThat(state.content.getCurrentUrl()).isEqualTo(LINK_URL)
+
+        navigator.navigateBack()
+
+        // Check that we're back on the original page with the link
+        onWebView()
+            .withElement(findElement(Locator.ID, "link"))
+            .check(webMatches(getText(), equalTo(LINK_TEXT)))
+    }
+
+    @Test
+    fun testNavigatorForward() {
+        lateinit var state: WebViewState
+        lateinit var navigator: WebViewNavigator
+
+        rule.setContent {
+            state = rememberWebViewStateWithHTMLData(data = TEST_DATA)
+            navigator = rememberWebViewNavigator()
+
+            WebTestContent(
+                webViewState = state,
+                idlingResource = idleResource,
+                navigator = navigator
+            )
+        }
+
+        rule.waitForIdle()
+
+        onWebView()
+            .withElement(findElement(Locator.ID, "link"))
+            .perform(webClick())
+
+        rule.waitUntil { navigator.canGoBack }
+        navigator.navigateBack()
+
+        // Check that we're back on the original page with the link
+        onWebView()
+            .withElement(findElement(Locator.ID, "link"))
+            .check(webMatches(getText(), equalTo(LINK_TEXT)))
+
+        navigator.navigateForward()
+        rule.waitUntil { navigator.canGoBack }
+
+        assertThat(state.content.getCurrentUrl()).isEqualTo(LINK_URL)
+    }
+
+    @Test
+    fun testNavigatorCanGoBack() {
+        lateinit var state: WebViewState
+        lateinit var navigator: WebViewNavigator
+
+        rule.setContent {
+            state = rememberWebViewStateWithHTMLData(data = TEST_DATA)
+            navigator = rememberWebViewNavigator()
+
+            WebTestContent(
+                webViewState = state,
+                idlingResource = idleResource,
+                navigator = navigator
+            )
+        }
+
+        rule.waitForIdle()
+        assertThat(navigator.canGoBack).isFalse()
+
+        onWebView()
+            .withElement(findElement(Locator.ID, "link"))
+            .perform(webClick())
+
+        rule.waitUntil { navigator.canGoBack }
+        assertThat(navigator.canGoBack).isTrue()
+    }
+
+    @Test
+    fun testNavigatorCanGoForward() {
+        lateinit var state: WebViewState
+        lateinit var navigator: WebViewNavigator
+
+        rule.setContent {
+            state = rememberWebViewStateWithHTMLData(data = TEST_DATA)
+            navigator = rememberWebViewNavigator()
+
+            WebTestContent(
+                webViewState = state,
+                idlingResource = idleResource,
+                navigator = navigator
+            )
+        }
+
+        rule.waitForIdle()
+
+        onWebView()
+            .withElement(findElement(Locator.ID, "link"))
+            .perform(webClick())
+
+        rule.waitUntil { navigator.canGoBack }
+        navigator.navigateBack()
+
+        rule.waitUntil { navigator.canGoForward }
+        assertThat(navigator.canGoForward).isTrue()
+    }
+
     private val webNode: SemanticsNodeInteraction
         get() = rule.onNodeWithTag(WebViewTag)
 }
@@ -338,7 +463,8 @@ private const val WebViewTag = "webview_tag"
 @Composable
 private fun WebTestContent(
     webViewState: WebViewState,
-    idlingResource: WebViewIdlingResource
+    idlingResource: WebViewIdlingResource,
+    navigator: WebViewNavigator = rememberWebViewNavigator(),
 ) {
     idlingResource.webviewLoading = webViewState.loadingState !is LoadingState.Finished
 
@@ -346,6 +472,7 @@ private fun WebTestContent(
         WebView(
             state = webViewState,
             modifier = Modifier.testTag(WebViewTag),
+            navigator = navigator,
             onCreated = { it.settings.javaScriptEnabled = true }
         )
     }
