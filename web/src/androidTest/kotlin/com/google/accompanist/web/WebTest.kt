@@ -47,6 +47,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.concurrent.TimeUnit
 
 @RunWith(AndroidJUnit4::class)
 // Emulator image doesn't have a WebView until API 26
@@ -290,7 +291,8 @@ class WebTest {
         lateinit var state: WebViewState
 
         val mockServer = MockWebServer()
-        mockServer.enqueue(MockResponse().setBody("Test"))
+        // Simulate time spent loading
+        mockServer.enqueue(MockResponse().setBody("Test").setBodyDelay(1, TimeUnit.SECONDS))
         mockServer.start()
         val baseUrl = mockServer.url("/")
 
@@ -307,7 +309,7 @@ class WebTest {
             WebTestContent(webViewState = state, idlingResource = idleResource)
         }
 
-        rule.waitUntil { collectedLoadingStates.any { it is LoadingState.Loading } }
+        rule.waitUntil(3_000) { collectedLoadingStates.any { it is LoadingState.Loading } }
         rule.waitForIdle()
 
         assertThat(collectedLoadingStates.first()).isInstanceOf(LoadingState.Finished::class.java)
