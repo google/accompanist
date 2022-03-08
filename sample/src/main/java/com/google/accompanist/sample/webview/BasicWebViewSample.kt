@@ -40,6 +40,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.sample.AccompanistSampleTheme
+import com.google.accompanist.web.LoadingState
 import com.google.accompanist.web.WebContent
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewState
@@ -86,8 +87,12 @@ class BasicWebViewSample : ComponentActivity() {
                         }
                     }
 
-                    if (state.isLoading) {
-                        LinearProgressIndicator(Modifier.fillMaxWidth())
+                    val loadingState = state.loadingState
+                    if (loadingState is LoadingState.Loading) {
+                        LinearProgressIndicator(
+                            progress = loadingState.progress,
+                            modifier = Modifier.fillMaxWidth()
+                        )
                     }
 
                     WebView(

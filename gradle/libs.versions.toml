@@ -83,3 +83,5 @@ android-tools-build-gradle = { module = "com.android.tools.build:gradle", versio
 android-tools-lint-lint = { module = "com.android.tools.lint:lint", version.ref = "lint" }
 android-tools-lint-api = { module = "com.android.tools.lint:lint-api", version.ref = "lint" }
 android-tools-lint-tests = { module = "com.android.tools.lint:lint-tests", version.ref = "lint" }
+
+squareup-mockwebserver = "com.squareup.okhttp3:mockwebserver:4.9.3"
