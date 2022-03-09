@@ -51,19 +51,51 @@ fun TopAppBar(
     contentColor: Color = contentColorFor(backgroundColor),
     elevation: Dp = AppBarDefaults.TopAppBarElevation,
 ) {
-    Surface(
-        color = backgroundColor,
-        elevation = elevation,
-        modifier = modifier
+    TopAppBarSurface(
+        modifier = modifier,
+        backgroundColor = backgroundColor,
+        contentColor = contentColor,
+        elevation = elevation
     ) {
-        TopAppBar(
+        TopAppBarContent(
             title = title,
             navigationIcon = navigationIcon,
             actions = actions,
-            backgroundColor = Color.Transparent,
-            contentColor = contentColor,
-            elevation = 0.dp,
             modifier = Modifier.padding(contentPadding)
         )
     }
+}
+
+@Composable
+fun TopAppBarSurface(
+    modifier: Modifier = Modifier,
+    backgroundColor: Color = MaterialTheme.colors.primarySurface,
+    contentColor: Color = contentColorFor(backgroundColor),
+    elevation: Dp = AppBarDefaults.TopAppBarElevation,
+    content: @Composable () -> Unit,
+) {
+    Surface(
+        color = backgroundColor,
+        contentColor = contentColor,
+        elevation = elevation,
+        modifier = modifier,
+        content = content
+    )
+}
+
+@Composable
+fun TopAppBarContent(
+    title: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+    navigationIcon: @Composable (() -> Unit)? = null,
+    actions: @Composable RowScope.() -> Unit = {},
+) {
+    TopAppBar(
+        title = title,
+        navigationIcon = navigationIcon,
+        actions = actions,
+        backgroundColor = Color.Transparent,
+        elevation = 0.dp,
+        modifier = modifier
+    )
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("NOTHING_TO_INLINE", "unused")
+@file:Suppress("NOTHING_TO_INLINE", "unused", "DEPRECATION")
 
 package com.google.accompanist.insets
 
@@ -41,6 +41,16 @@ import androidx.compose.ui.unit.dp
  * @param enabled Whether to apply padding using the system bars dimensions on the respective edges.
  * Defaults to `true`.
  */
+@Deprecated(
+"""
+accompanist/insets is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+""",
+    replaceWith = ReplaceWith(
+        "systemBarsPadding()",
+        "androidx.compose.foundation.layout.systemBarsPadding"
+    )
+)
 inline fun Modifier.systemBarsPadding(enabled: Boolean = true): Modifier = composed {
     padding(
         rememberInsetsPaddingValues(
@@ -66,6 +76,16 @@ inline fun Modifier.systemBarsPadding(enabled: Boolean = true): Modifier = compo
  * @param bottom Whether to apply padding to the bottom edge, which matches the system bars
  * height (if present) at the bottom edge of the screen. Defaults to `true`.
  */
+@Deprecated(
+"""
+accompanist/insets is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+""",
+    replaceWith = ReplaceWith(
+        "systemBarsPadding()",
+        "androidx.compose.foundation.layout.systemBarsPadding"
+    )
+)
 inline fun Modifier.systemBarsPadding(
     start: Boolean = true,
     top: Boolean = true,
@@ -87,6 +107,16 @@ inline fun Modifier.systemBarsPadding(
  * Apply additional space which matches the height of the status bars height along the top edge
  * of the content.
  */
+@Deprecated(
+"""
+accompanist/insets is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+""",
+    replaceWith = ReplaceWith(
+        "statusBarsPadding()",
+        "androidx.compose.foundation.layout.statusBarsPadding"
+    )
+)
 inline fun Modifier.statusBarsPadding(): Modifier = composed {
     padding(
         rememberInsetsPaddingValues(
@@ -108,6 +138,16 @@ inline fun Modifier.statusBarsPadding(): Modifier = composed {
  * @param end Whether to apply padding to the end edge, which matches the navigation bars width
  * (if present) on the end edge of the screen. Defaults to `true`.
  */
+@Deprecated(
+"""
+accompanist/insets is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+""",
+    replaceWith = ReplaceWith(
+        "navigationBarsPadding()",
+        "androidx.compose.foundation.layout.navigationBarsPadding"
+    )
+)
 inline fun Modifier.navigationBarsPadding(
     bottom: Boolean = true,
     start: Boolean = true,
@@ -131,6 +171,16 @@ inline fun Modifier.navigationBarsPadding(
  * intersect the [WindowInsets.ime]. Most apps will usually want to use the
  * [Modifier.navigationBarsWithImePadding] modifier.
  */
+@Deprecated(
+"""
+accompanist/insets is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+""",
+    replaceWith = ReplaceWith(
+        "imePadding()",
+        "androidx.compose.foundation.layout.imePadding"
+    )
+)
 inline fun Modifier.imePadding(): Modifier = composed {
     padding(
         rememberInsetsPaddingValues(
@@ -155,6 +205,16 @@ inline fun Modifier.imePadding(): Modifier = composed {
  * @param bottom Whether to apply padding to the bottom edge, which matches the display cutout
  * height (if present) at the bottom edge of the screen. Defaults to `true`.
  */
+@Deprecated(
+"""
+accompanist/insets is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+""",
+    replaceWith = ReplaceWith(
+        "cutoutPadding()",
+        "androidx.compose.foundation.layout.cutoutPadding"
+    )
+)
 inline fun Modifier.cutoutPadding(
     start: Boolean = true,
     top: Boolean = true,
@@ -177,6 +237,17 @@ inline fun Modifier.cutoutPadding(
  * height and [WindowInsets.navigationBars]. This is what apps should use to handle any insets
  * at the bottom of the screen.
  */
+@Deprecated(
+"""
+accompanist/insets is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+""",
+    replaceWith = ReplaceWith(
+        "navigationBarsPadding().imePadding()",
+        "androidx.compose.foundation.layout.navigationBarsPadding",
+        "androidx.compose.foundation.layout.imePadding"
+    )
+)
 inline fun Modifier.navigationBarsWithImePadding(): Modifier = composed {
     val ime = LocalWindowInsets.current.ime
     val navBars = LocalWindowInsets.current.navigationBars
@@ -202,7 +273,10 @@ inline fun Modifier.navigationBarsWithImePadding(): Modifier = composed {
  * @param additionalVertical Value to add to the top and bottom dimensions.
  */
 @Deprecated(
-    "Replaced with rememberInsetsPaddingValues()",
+"""
+accompanist/insets is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+""",
     ReplaceWith(
         """rememberInsetsPaddingValues(
             insets = this,
@@ -251,7 +325,10 @@ inline fun WindowInsets.Type.toPaddingValues(
  * @param additionalBottom Value to add to the bottom dimension.
  */
 @Deprecated(
-    "Replaced with rememberInsetsPaddingValues()",
+"""
+accompanist/insets is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+""",
     ReplaceWith(
         """rememberInsetsPaddingValues(
             insets = this,
@@ -306,6 +383,16 @@ inline fun WindowInsets.Type.toPaddingValues(
  * @param additionalBottom Value to add to the bottom dimension.
  */
 @Composable
+@Deprecated(
+"""
+accompanist/insets is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+""",
+    replaceWith = ReplaceWith(
+        "insets.asPaddingValues()",
+        "androidx.compose.foundation.layout.asPaddingValues"
+    )
+)
 fun rememberInsetsPaddingValues(
     insets: Insets,
     applyStart: Boolean = true,
