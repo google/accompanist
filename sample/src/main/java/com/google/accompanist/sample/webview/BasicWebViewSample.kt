@@ -40,6 +40,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.sample.AccompanistSampleTheme
+import com.google.accompanist.web.FullScreenState
 import com.google.accompanist.web.LoadingState
 import com.google.accompanist.web.WebContent
 import com.google.accompanist.web.WebView
@@ -54,6 +55,12 @@ class BasicWebViewSample : ComponentActivity() {
                 val state = rememberWebViewState(url = "https://google.com")
                 val (textFieldValue, setTextFieldValue) = remember(state.content) {
                     mutableStateOf(state.content.getCurrentUrl() ?: "")
+                }
+
+                val fullScreenState = state.fullScreenState
+                if (fullScreenState is FullScreenState.Show) {
+                    // Show the provided full screen view according to your needs
+                    // using the provided callback to dismiss it when necessary
                 }
 
                 Column {

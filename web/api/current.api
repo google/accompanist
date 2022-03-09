@@ -1,6 +1,24 @@
 // Signature format: 4.0
 package com.google.accompanist.web {
 
+  public abstract sealed class FullScreenState {
+  }
+
+  public static final class FullScreenState.None extends com.google.accompanist.web.FullScreenState {
+    field public static final com.google.accompanist.web.FullScreenState.None INSTANCE;
+  }
+
+  public static final class FullScreenState.Show extends com.google.accompanist.web.FullScreenState {
+    ctor public FullScreenState.Show(android.view.View view, kotlin.jvm.functions.Function0<kotlin.Unit> hideFullScreen);
+    method public android.view.View component1();
+    method public kotlin.jvm.functions.Function0<kotlin.Unit> component2();
+    method public com.google.accompanist.web.FullScreenState.Show copy(android.view.View view, kotlin.jvm.functions.Function0<kotlin.Unit> hideFullScreen);
+    method public kotlin.jvm.functions.Function0<kotlin.Unit> getHideFullScreen();
+    method public android.view.View getView();
+    property public final kotlin.jvm.functions.Function0<kotlin.Unit> hideFullScreen;
+    property public final android.view.View view;
+  }
+
   public abstract sealed class LoadingState {
   }
 
@@ -60,6 +78,7 @@ package com.google.accompanist.web {
     ctor public WebViewState(com.google.accompanist.web.WebContent webContent);
     method public com.google.accompanist.web.WebContent getContent();
     method public androidx.compose.runtime.snapshots.SnapshotStateList<com.google.accompanist.web.WebViewError> getErrorsForCurrentRequest();
+    method public com.google.accompanist.web.FullScreenState getFullScreenState();
     method public com.google.accompanist.web.LoadingState getLoadingState();
     method public android.graphics.Bitmap? getPageIcon();
     method public String? getPageTitle();
@@ -67,6 +86,7 @@ package com.google.accompanist.web {
     method public void setContent(com.google.accompanist.web.WebContent content);
     property public final com.google.accompanist.web.WebContent content;
     property public final androidx.compose.runtime.snapshots.SnapshotStateList<com.google.accompanist.web.WebViewError> errorsForCurrentRequest;
+    property public final com.google.accompanist.web.FullScreenState fullScreenState;
     property public final boolean isLoading;
     property public final com.google.accompanist.web.LoadingState loadingState;
     property public final android.graphics.Bitmap? pageIcon;

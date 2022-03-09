@@ -17,6 +17,7 @@
 package com.google.accompanist.web
 
 import android.graphics.Bitmap
+import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
@@ -91,6 +92,16 @@ fun WebView(
                         super.onProgressChanged(view, newProgress)
                         if (state.loadingState is LoadingState.Finished) return
                         state.loadingState = LoadingState.Loading(newProgress / 100.0f)
+                    }
+
+                    override fun onShowCustomView(view: View?, callback: CustomViewCallback?) {
+                        if (view == null) return
+                        state.fullScreenState =
+                            FullScreenState.Show(view) { callback?.onCustomViewHidden() }
+                    }
+
+                    override fun onHideCustomView() {
+                        state.fullScreenState = FullScreenState.None
                     }
                 }
 
@@ -208,6 +219,23 @@ sealed class LoadingState {
 }
 
 /**
+ * Describes the "full-screen" state of the WebView.
+ */
+sealed class FullScreenState {
+    /**
+     * The WebView is requesting that some content be shown full-screen, the provided [view] should
+     * be displayed full screen and the [hideFullScreen] callback can be used to instruct the
+     * WebView to cease displaying content full screen.
+     */
+    data class Show(val view: View, val hideFullScreen: () -> Unit) : FullScreenState()
+
+    /**
+     * The WebView is not requesting that something be shown full screen.
+     */
+    object None : FullScreenState()
+}
+
+/**
  * A state holder to hold the state for the WebView. In most cases this will be remembered
  * using the rememberWebViewState(uri) function.
  */
@@ -241,6 +269,13 @@ class WebViewState(webContent: WebContent) {
      * the favicon received from the loaded content of the current page
      */
     var pageIcon: Bitmap? by mutableStateOf(null)
+        internal set
+
+    /**
+     * Whether the WebView is requesting that content be shown full screen. [FullScreenState.None]
+     * if not, [FullScreenState.Show] if so.
+     */
+    var fullScreenState: FullScreenState by mutableStateOf(FullScreenState.None)
         internal set
 
     /**
