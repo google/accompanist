@@ -231,40 +231,58 @@ private fun Flow(
                     placeables[j].mainAxisSize() +
                         if (j < placeables.lastIndex) mainAxisSpacing.roundToPx() else 0
                 }
-                val arrangement = if (i < sequences.lastIndex) {
-                    mainAxisAlignment.arrangement
+                val alignment = if (i < sequences.lastIndex) {
+                    mainAxisAlignment
                 } else {
-                    lastLineMainAxisAlignment.arrangement
+                    lastLineMainAxisAlignment
                 }
-                // TODO(soboleva): rtl support
-                // Handle vertical direction
+
                 val mainAxisPositions = IntArray(childrenMainAxisSizes.size) { 0 }
-                with(arrangement) {
-                    arrange(mainAxisLayoutSize, childrenMainAxisSizes, mainAxisPositions)
+                when (orientation) {
+                    LayoutOrientation.Horizontal -> with(alignment.toHorizontalArrangement()) {
+                        arrange(
+                            mainAxisLayoutSize,
+                            childrenMainAxisSizes,
+                            layoutDirection,
+                            mainAxisPositions
+                        )
+                    }
+                    LayoutOrientation.Vertical -> with(alignment.toVerticalArrangement()) {
+                        arrange(mainAxisLayoutSize, childrenMainAxisSizes, mainAxisPositions)
+                    }
                 }
+
                 placeables.forEachIndexed { j, placeable ->
+                    val crossAxisSize = placeable.crossAxisSize()
                     val crossAxis = when (crossAxisAlignment) {
                         FlowCrossAxisAlignment.Start -> 0
                         FlowCrossAxisAlignment.End ->
-                            crossAxisSizes[i] - placeable.crossAxisSize()
+                            crossAxisSizes[i] - crossAxisSize
                         FlowCrossAxisAlignment.Center ->
                             Alignment.Center.align(
                                 IntSize.Zero,
                                 IntSize(
                                     width = 0,
-                                    height = crossAxisSizes[i] - placeable.crossAxisSize()
+                                    height = crossAxisSizes[i] - crossAxisSize
                                 ),
                                 LayoutDirection.Ltr
                             ).y
                     }
+
+                    val crossAxisPosition = crossAxisPositions[i] + crossAxis
                     if (orientation == LayoutOrientation.Horizontal) {
                         placeable.place(
                             x = mainAxisPositions[j],
-                            y = crossAxisPositions[i] + crossAxis
+                            y = crossAxisPosition
                         )
                     } else {
                         placeable.place(
-                            x = crossAxisPositions[i] + crossAxis,
+                            x = when (layoutDirection) {
+                                LayoutDirection.Ltr ->
+                                    crossAxisPosition
+                                LayoutDirection.Rtl ->
+                                    crossAxisLayoutSize - crossAxisPosition - crossAxisSize
+                            },
                             y = mainAxisPositions[j]
                         )
                     }
@@ -273,6 +291,26 @@ private fun Flow(
         }
     }
 }
+
+private fun FlowMainAxisAlignment.toHorizontalArrangement() =
+    when (this) {
+        FlowMainAxisAlignment.Center -> Arrangement.Center
+        FlowMainAxisAlignment.Start -> Arrangement.Start
+        FlowMainAxisAlignment.End -> Arrangement.End
+        FlowMainAxisAlignment.SpaceEvenly -> Arrangement.SpaceEvenly
+        FlowMainAxisAlignment.SpaceBetween -> Arrangement.SpaceBetween
+        FlowMainAxisAlignment.SpaceAround -> Arrangement.SpaceAround
+    }
+
+private fun FlowMainAxisAlignment.toVerticalArrangement() =
+    when (this) {
+        FlowMainAxisAlignment.Center -> Arrangement.Center
+        FlowMainAxisAlignment.Start -> Arrangement.Top
+        FlowMainAxisAlignment.End -> Arrangement.Bottom
+        FlowMainAxisAlignment.SpaceEvenly -> Arrangement.SpaceEvenly
+        FlowMainAxisAlignment.SpaceBetween -> Arrangement.SpaceBetween
+        FlowMainAxisAlignment.SpaceAround -> Arrangement.SpaceAround
+    }
 
 /**
  * Used to specify how a layout chooses its own size when multiple behaviors are possible.
@@ -294,40 +332,38 @@ public enum class SizeMode {
 /**
  * Used to specify the alignment of a layout's children, in main axis direction.
  */
-public enum class MainAxisAlignment(internal val arrangement: Arrangement.Vertical) {
-    // TODO(soboleva) support RTl in Flow
-    // workaround for now - use Arrangement that equals to previous Arrangement
+public enum class MainAxisAlignment {
     /**
      * Place children such that they are as close as possible to the middle of the main axis.
      */
-    Center(Arrangement.Center),
+    Center,
 
     /**
      * Place children such that they are as close as possible to the start of the main axis.
      */
-    Start(Arrangement.Top),
+    Start,
 
     /**
      * Place children such that they are as close as possible to the end of the main axis.
      */
-    End(Arrangement.Bottom),
+    End,
 
     /**
      * Place children such that they are spaced evenly across the main axis, including free
      * space before the first child and after the last child.
      */
-    SpaceEvenly(Arrangement.SpaceEvenly),
+    SpaceEvenly,
 
     /**
      * Place children such that they are spaced evenly across the main axis, without free
      * space before the first child or after the last child.
      */
-    SpaceBetween(Arrangement.SpaceBetween),
+    SpaceBetween,
 
     /**
      * Place children such that they are spaced evenly across the main axis, including free
      * space before the first child and after the last child, but half the amount of space
      * existing otherwise between two consecutive children.
      */
-    SpaceAround(Arrangement.SpaceAround);
+    SpaceAround;
 }
