@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
+
 package com.google.accompanist.navigation.material
 
 import androidx.compose.foundation.layout.Box
