@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://google.github.io/accompanist/insets/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.11">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.5">
     
     
       
@@ -23,7 +23,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.50e68009.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.2d9f7617.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.e6a45f82.min.css">
@@ -38,8 +38,9 @@
     
       
         
+        
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CJetBrains+Mono&display=fallback">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
         <style>:root{--md-text-font:"Roboto";--md-code-font:"JetBrains Mono"}</style>
       
     
@@ -286,6 +287,41 @@
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#migration" class="md-nav__link">
+    Migration
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration-steps" class="md-nav__link">
+    Migration steps:
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inset-consumption" class="md-nav__link">
+    Inset consumption
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration-table" class="md-nav__link">
+    Migration table:
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#original-docs" class="md-nav__link">
+    Original docs
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#usage" class="md-nav__link">
@@ -1225,6 +1261,41 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#migration" class="md-nav__link">
+    Migration
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration-steps" class="md-nav__link">
+    Migration steps:
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inset-consumption" class="md-nav__link">
+    Inset consumption
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration-table" class="md-nav__link">
+    Migration table:
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#original-docs" class="md-nav__link">
+    Original docs
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#usage" class="md-nav__link">
     Usage
   </a>
@@ -1349,8 +1420,167 @@
 </a>
 
 
+
 <h1 id="insets-for-jetpack-compose">Insets for Jetpack Compose<a class="headerlink" href="#insets-for-jetpack-compose" title="Permanent link">&para;</a></h1>
 <p><a href="https://search.maven.org/search?q=g:com.google.accompanist"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-insets" /></a></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><strong>This library is deprecated, with official insets support in androidx.compose.foundation.</strong> The migration guide and original documentation is below.</p>
+</div>
+<h2 id="migration">Migration<a class="headerlink" href="#migration" title="Permanent link">&para;</a></h2>
+<p>The official <code>androidx.compose.foundation</code> insets support is very similar to accompanist/insets, with a few changes.</p>
+<p><code>androidx.compose.foundation</code> also does not disable window decor fitting, so you still need to call <a href="https://developer.android.com/reference/androidx/core/view/WindowCompat#setDecorFitsSystemWindows(android.view.Window,%20boolean)"><code>WindowCompat.setDecorFitsSystemWindows(window, false)</code></a> from your Activity.
+You also still need to set the system bar backgrounds to be transparent, which can be done with our <a href="../systemuicontroller">System UI Controller</a> library.</p>
+<p>If you are using insets for IME support, you also still need to ensure that the activity's <code>windowSoftInputMode</code> is set to <code>adjustResize</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;activity</span>
+      <span class="na">android:name=</span><span class="s">&quot;.MyActivity&quot;</span>
+      <span class="na">android:windowSoftInputMode=</span><span class="s">&quot;adjustResize&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/activity&gt;</span>
+</code></pre></div>
+<h2 id="migration-steps">Migration steps:<a class="headerlink" href="#migration-steps" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Remove <code>ProvideWindowInsets</code> (there is no equivalent in <code>androidx.compose.foundation</code>)</li>
+<li>Remove <code>ViewWindowInsetObserver</code> (there is no equivalent in <code>androidx.compose.foundation</code>)</li>
+<li>Replace padding modifiers with <code>androidx.compose.foundation</code> equivalents. If using <code>additionalPadding</code> or only applying the insets to certain sides, use the corresponding <a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/package-summary#(androidx.compose.foundation.layout.WindowInsets).add(androidx.compose.foundation.layout.WindowInsets)"><code>WindowInsets.add</code></a> and <a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/package-summary#(androidx.compose.foundation.layout.WindowInsets).only(androidx.compose.foundation.layout.WindowInsetsSides)"><code>WindowInsets.only</code></a> extensions.</li>
+<li>Replace <code>rememberInsetsPaddingValues</code> with the equivalent <code>WindowInsets.asPaddingValues</code>.</li>
+<li>Replace direct calculations from <code>LocalWindowInsets.current</code> with calculations on <code>WindowInsets</code>.</li>
+<li>Continue using the non-deprecated <a href="#inset-aware-layouts-insets-ui"><code>insets-ui</code></a> and experimental <a href="#controlling-the-ime-on-screen-keyboard"><code>rememberImeNestedScrollConnection()</code></a> for now.</li>
+</ol>
+<p>For reference, consult the <a href="#migration-table">Migration table</a> below.</p>
+<h2 id="inset-consumption">Inset consumption<a class="headerlink" href="#inset-consumption" title="Permanent link">&para;</a></h2>
+<p>The biggest behavioral change between <code>accompanist/insets</code> and <code>androidx.compose.foundation</code> is in the consumption behavior of padding modifiers.</p>
+<p>In <code>accompanist/insets</code>, the padding modifiers always padded the full size of the specified inset types, which led to some unintuitive duplicate padding when nesting modifiers.</p>
+<p>For example, let’s look at what happens when we have nested boxes, where the outer one has Modifier.systemBarsPadding() applied, and the inner has Modifier.imePadding():</p>
+<div class="highlight"><pre><span></span><code><span class="n">Box</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="na">systemBarsPadding</span><span class="p">())</span> <span class="p">{</span>
+    <span class="n">Box</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="na">imePadding</span><span class="p">())</span> <span class="p">{</span>
+        <span class="c1">// content</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Let’s assume that the bottom system bar padding is <code>30dp</code>, to account for the navigation bar padding, and let’s assume that when the IME is visible, the height of the IME is <code>150dp</code>.</p>
+<p>When the IME is closed, the outer box will apply the bottom <code>30dp</code> as padding, and the inner box will apply zero additional padding, since the IME isn’t visible.</p>
+<p>When the IME opens, the outer box will continue to apply the bottom <code>30dp</code> as the system bar padding, and the inner box will now apply <code>150dp</code> bottom padding, since that is the full height of the IME.</p>
+<p>This results in a total padding of <code>180dp</code> applied to the content, which double pads the bottom navigation bar padding.
+The solutions to this issue were using <code>derivedWindowInsetsTypeOf</code>, built-in derived types like <code>Modifier.navigationBarsWithImePadding()</code>, or performing calculations manually to apply the remaining padding.</p>
+<p>In <code>androidx.compose.foundation</code>, when the IME is open, the outer box still apply the bottom <code>30dp</code>, but the inner box will only apply the remaining <code>120dp</code> needed to have the content be padded a total of <code>150dp</code> to match the height of the IME.</p>
+<p>This behavior can be influenced further in <code>androidx.compose.foundation</code> with <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier#(androidx.compose.ui.Modifier).consumedWindowInsets(androidx.compose.foundation.layout.WindowInsets)"><code>Modifier.consumedWindowInsets()</code></a></p>
+<p>As a result, the equivalent of <code>Modifier.navigationBarsWithImePadding()</code> is simply <code>Modifier.navigationBarsPadding().imePadding()</code>.</p>
+<h2 id="migration-table">Migration table:<a class="headerlink" href="#migration-table" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>accompanist/insets</th>
+<th>androidx.compose.foundation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ProvideWindowInsets</code></td>
+<td>(remove)</td>
+</tr>
+<tr>
+<td><code>Modifier.systemBarsPadding()</code></td>
+<td><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier#(androidx.compose.ui.Modifier).systemBarsPadding()"><code>Modifier.systemBarsPadding()</code></a></td>
+</tr>
+<tr>
+<td><code>Modifier.systemBarsPadding(bottom = false)</code></td>
+<td><a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/package-summary#(androidx.compose.ui.Modifier).windowInsetsPadding(androidx.compose.foundation.layout.WindowInsets)"><code>Modifier.windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top))</code></a></td>
+</tr>
+<tr>
+<td><code>Modifier.statusBarsPadding()</code></td>
+<td><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier#(androidx.compose.ui.Modifier).statusBarsPadding()"><code>Modifier.statusBarsPadding()</code></a></td>
+</tr>
+<tr>
+<td><code>Modifier.navigationBarsPadding()</code></td>
+<td><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier#(androidx.compose.ui.Modifier).navigationBarsPadding()"><code>Modifier.navigationBarsPadding()</code></a></td>
+</tr>
+<tr>
+<td><code>Modifier.imePadding()</code></td>
+<td><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier#(androidx.compose.ui.Modifier).imePadding()"><code>Modifier.imePadding()</code></a></td>
+</tr>
+<tr>
+<td><code>Modifier.cutoutPadding()</code></td>
+<td><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier#(androidx.compose.ui.Modifier).displayCutoutPadding()"><code>Modifier.displayCutoutPadding()</code></a></td>
+</tr>
+<tr>
+<td><code>Modifier.navigationBarsWithImePadding()</code></td>
+<td><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier#(androidx.compose.ui.Modifier).imePadding()"><code>Modifier.navigationBarsPadding().imePadding()</code></a></td>
+</tr>
+<tr>
+<td><code>Modifier.statusBarsHeight()</code></td>
+<td><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier#(androidx.compose.ui.Modifier).windowInsetsTopHeight(androidx.compose.foundation.layout.WindowInsets)"><code>Modifier.windowInsetsTopHeight(WindowInsets.statusBars)</code></a></td>
+</tr>
+<tr>
+<td><code>Modifier.navigationBarsHeight()</code></td>
+<td><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier#(androidx.compose.ui.Modifier).windowInsetsBottomHeight(androidx.compose.foundation.layout.WindowInsets)"><code>Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars)</code></a></td>
+</tr>
+<tr>
+<td><code>Modifier.navigationBarsWidth()</code></td>
+<td><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier#(androidx.compose.ui.Modifier).windowInsetsStartWidth(androidx.compose.foundation.layout.WindowInsets)"><code>Modifier.windowInsetsStartWidth(WindowInsets.navigationBars)</code></a> / <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier#(androidx.compose.ui.Modifier).windowInsetsEndWidth(androidx.compose.foundation.layout.WindowInsets)"><code>Modifier.windowInsetsEndWidth(WindowInsets.navigationBars)</code></a></td>
+</tr>
+<tr>
+<td><code>rememberInsetsPaddingValues(insets = LocalWindowInsets.current.statusBars, applyStart = true, applyTop = true, applyEnd = true)</code></td>
+<td><a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/package-summary#(androidx.compose.foundation.layout.WindowInsets).asPaddingValues()"><code>WindowInsets.statusBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top).asPaddingValues()</code></a></td>
+</tr>
+<tr>
+<td><code>derivedWindowInsetsTypeOf</code></td>
+<td><a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/package-summary#(androidx.compose.foundation.layout.WindowInsets).union(androidx.compose.foundation.layout.WindowInsets)"><code>WindowInsets.union(windowInsets: WindowInsets)</code></a></td>
+</tr>
+<tr>
+<td><code>LocalWindowInsets.current.navigationBars</code></td>
+<td><a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/package-summary#(androidx.compose.foundation.layout.WindowInsets.Companion).navigationBars()"><code>WindowInsets.navigationBars</code></a></td>
+</tr>
+<tr>
+<td><code>LocalWindowInsets.current.statusBars</code></td>
+<td><a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/package-summary#(androidx.compose.foundation.layout.WindowInsets.Companion).statusBars()"><code>WindowInsets.statusBars</code></a></td>
+</tr>
+<tr>
+<td><code>LocalWindowInsets.current.ime</code></td>
+<td><a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/package-summary#(androidx.compose.foundation.layout.WindowInsets.Companion).ime()"><code>WindowInsets.ime</code></a></td>
+</tr>
+<tr>
+<td><code>LocalWindowInsets.current.systemGestures</code></td>
+<td><a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/package-summary#(androidx.compose.foundation.layout.WindowInsets.Companion).systemGestures()"><code>WindowInsets.systemGestures</code></a></td>
+</tr>
+<tr>
+<td><code>LocalWindowInsets.current.systemBars</code></td>
+<td><a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/package-summary#(androidx.compose.foundation.layout.WindowInsets.Companion).systemBars()"><code>WindowInsets.systemBars</code></a></td>
+</tr>
+<tr>
+<td><code>LocalWindowInsets.current.displayCutout</code></td>
+<td><a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/package-summary#(androidx.compose.foundation.layout.WindowInsets.Companion).displayCutout()"><code>WindowInsets.displayCutout</code></a></td>
+</tr>
+<tr>
+<td><code>LocalWindowInsets.current.ime.bottom</code></td>
+<td><a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/WindowInsets#getBottom(androidx.compose.ui.unit.Density)"><code>WindowInsets.ime.getBottom(LocalDensity.current)</code></a></td>
+</tr>
+<tr>
+<td><code>WindowInsets.Type.isVisible</code></td>
+<td>https://issuetracker.google.com/issues/217770337</td>
+</tr>
+<tr>
+<td><code>WindowInsets.Type.animationInProgress</code></td>
+<td>https://issuetracker.google.com/issues/217770337</td>
+</tr>
+<tr>
+<td><code>WindowInsets.Type.animationFraction</code></td>
+<td>https://issuetracker.google.com/issues/217770337</td>
+</tr>
+<tr>
+<td><code>WindowInsets.Type.layoutInsets</code></td>
+<td>https://issuetracker.google.com/issues/217770337</td>
+</tr>
+<tr>
+<td><code>WindowInsets.Type.animatedInsets</code></td>
+<td>https://issuetracker.google.com/issues/217770337</td>
+</tr>
+<tr>
+<td><code>rememberImeNestedScrollConnection()</code></td>
+<td>https://issuetracker.google.com/issues/217770710</td>
+</tr>
+</tbody>
+</table>
+<h2 id="original-docs">Original docs<a class="headerlink" href="#original-docs" title="Permanent link">&para;</a></h2>
 <p>Insets for Jetpack Compose takes a lot of the ideas which drove <a href="https://github.com/chrisbanes/insetter">Insetter</a> for views, and applies them for use in composables.</p>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
 <p>To setup Insets in your composables, you need to call the <code>ProvideWindowInsets</code> function and
@@ -1620,10 +1850,10 @@ wrap your content. This would typically be done near the top level of your compo
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.092fa1f6.min.js"}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.bd0b6b67.min.js"}</script>
     
     
-      <script src="../assets/javascripts/bundle.5a9542cf.min.js"></script>
+      <script src="../assets/javascripts/bundle.467223ff.min.js"></script>
       
     
   </body>

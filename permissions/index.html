@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://google.github.io/accompanist/permissions/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.11">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.5">
     
     
       
@@ -23,7 +23,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.50e68009.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.2d9f7617.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.e6a45f82.min.css">
@@ -38,8 +38,9 @@
     
       
         
+        
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CJetBrains+Mono&display=fallback">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
         <style>:root{--md-text-font:"Roboto";--md-code-font:"JetBrains Mono"}</style>
       
     
@@ -1187,6 +1188,7 @@
 </a>
 
 
+
 <h1 id="jetpack-compose-permissions">Jetpack Compose Permissions<a class="headerlink" href="#jetpack-compose-permissions" title="Permanent link">&para;</a></h1>
 <p><a href="https://search.maven.org/search?q=g:com.google.accompanist"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-permissions" /></a></p>
 <p>A library which provides <a href="https://developer.android.com/guide/topics/permissions/overview">Android runtime permissions</a> support for Jetpack Compose.</p>
@@ -1218,14 +1220,14 @@ non-composable callback such as a <code>Button</code>'s <code>onClick</code> lam
         <span class="n">android</span><span class="p">.</span><span class="na">Manifest</span><span class="p">.</span><span class="na">permission</span><span class="p">.</span><span class="na">CAMERA</span>
     <span class="p">)</span>
 
-    <span class="k">when</span> <span class="p">(</span><span class="n">state</span><span class="p">.</span><span class="na">status</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">when</span> <span class="p">(</span><span class="n">cameraPermissionState</span><span class="p">.</span><span class="na">status</span><span class="p">)</span> <span class="p">{</span>
         <span class="c1">// If the camera permission is granted, then show screen with the feature enabled</span>
         <span class="n">PermissionStatus</span><span class="p">.</span><span class="na">Granted</span> <span class="o">-&gt;</span> <span class="p">{</span>
             <span class="n">Text</span><span class="p">(</span><span class="s">&quot;Camera permission Granted&quot;</span><span class="p">)</span>
         <span class="p">}</span>
         <span class="k">is</span> <span class="n">PermissionStatus</span><span class="p">.</span><span class="na">Denied</span> <span class="o">-&gt;</span> <span class="p">{</span>
             <span class="n">Column</span> <span class="p">{</span>
-                <span class="kd">val</span> <span class="nv">textToShow</span> <span class="o">=</span> <span class="k">if</span> <span class="p">(</span><span class="n">state</span><span class="p">.</span><span class="na">status</span><span class="p">.</span><span class="na">shouldShowRationale</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">val</span> <span class="nv">textToShow</span> <span class="o">=</span> <span class="k">if</span> <span class="p">(</span><span class="n">cameraPermissionState</span><span class="p">.</span><span class="na">status</span><span class="p">.</span><span class="na">shouldShowRationale</span><span class="p">)</span> <span class="p">{</span>
                     <span class="c1">// If the user has denied the permission but the rationale can be shown,</span>
                     <span class="c1">// then gently explain why the app requires this permission</span>
                     <span class="s">&quot;The camera is important for this app. Please grant the permission.&quot;</span>
@@ -1236,9 +1238,8 @@ non-composable callback such as a <code>Button</code>'s <code>onClick</code> lam
                     <span class="s">&quot;Camera permission required for this feature to be available. &quot;</span> <span class="o">+</span>
                         <span class="s">&quot;Please grant the permission&quot;</span>
                 <span class="p">}</span>
-
                 <span class="n">Text</span><span class="p">(</span><span class="n">textToShow</span><span class="p">)</span>
-                <span class="n">Button</span><span class="p">(</span><span class="n">onClick</span> <span class="o">=</span> <span class="p">{</span> <span class="n">state</span><span class="p">.</span><span class="na">launchPermissionRequest</span><span class="p">()</span> <span class="p">})</span> <span class="p">{</span>
+                <span class="n">Button</span><span class="p">(</span><span class="n">onClick</span> <span class="o">=</span> <span class="p">{</span> <span class="n">cameraPermissionState</span><span class="p">.</span><span class="na">launchPermissionRequest</span><span class="p">()</span> <span class="p">})</span> <span class="p">{</span>
                     <span class="n">Text</span><span class="p">(</span><span class="s">&quot;Request permission&quot;</span><span class="p">)</span>
                 <span class="p">}</span>
             <span class="p">}</span>
@@ -1323,10 +1324,10 @@ non-composable callback such as a <code>Button</code>'s <code>onClick</code> lam
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.092fa1f6.min.js"}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.bd0b6b67.min.js"}</script>
     
     
-      <script src="../assets/javascripts/bundle.5a9542cf.min.js"></script>
+      <script src="../assets/javascripts/bundle.467223ff.min.js"></script>
       
     
   </body>

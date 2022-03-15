@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://google.github.io/accompanist/webview/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.11">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.5">
     
     
       
@@ -23,7 +23,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.50e68009.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.2d9f7617.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.e6a45f82.min.css">
@@ -38,8 +38,9 @@
     
       
         
+        
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CJetBrains+Mono&display=fallback">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
         <style>:root{--md-text-font:"Roboto";--md-code-font:"JetBrains Mono"}</style>
       
     
@@ -1201,13 +1202,14 @@
 </a>
 
 
+
 <h1 id="webview-wrapper-for-jetpack-compose">WebView wrapper for Jetpack Compose<a class="headerlink" href="#webview-wrapper-for-jetpack-compose" title="Permanent link">&para;</a></h1>
 <p><a href="https://search.maven.org/search?q=g:com.google.accompanist"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-webview" /></a></p>
 <p>A library which provides a Jetpack Compose wrapper around Android's WebView.</p>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
 <p>To implement this wrapper there are two key APIs which are needed: <a href="../api/web/com.google.accompanist.web/-web-view.html"><code>WebView</code></a>, which is provides the layout, and <a href="../api/web/com.google.accompanist.web/remember-web-view-state.html"><code>rememberWebViewState(url)</code></a> which provides some remembered state including the URL to display.</p>
 <p>The basic usage is as follows:</p>
-<div class="highlight"><pre><span></span><code><span class="kd">val</span> <span class="nv">state</span> <span class="k">by</span> <span class="n">rememberWebViewState</span><span class="p">(</span><span class="s">&quot;https://example.com&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span> <span class="nv">state</span> <span class="o">=</span> <span class="n">rememberWebViewState</span><span class="p">(</span><span class="s">&quot;https://example.com&quot;</span><span class="p">)</span>
 
 <span class="n">WebView</span><span class="p">(</span>
     <span class="n">state</span>
@@ -1305,10 +1307,10 @@ the Composable.</p>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.092fa1f6.min.js"}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.bd0b6b67.min.js"}</script>
     
     
-      <script src="../assets/javascripts/bundle.5a9542cf.min.js"></script>
+      <script src="../assets/javascripts/bundle.467223ff.min.js"></script>
       
     
   </body>
