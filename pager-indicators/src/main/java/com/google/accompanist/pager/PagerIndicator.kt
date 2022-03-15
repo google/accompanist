@@ -16,6 +16,7 @@
 
 package com.google.accompanist.pager
 
+import androidx.annotation.FloatRange
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,6 +31,7 @@ import androidx.compose.material.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalDensity
@@ -55,6 +57,7 @@ import androidx.compose.ui.unit.dp
  * @param indicatorHeight the height of each indicator in [Dp]. Defaults to [indicatorWidth].
  * @param spacing the spacing between each indicator in [Dp].
  * @param indicatorShape the shape representing each indicator. This defaults to [CircleShape].
+ * @param activeIndicatorScale the scale to apply to the active page indicator.
  */
 @ExperimentalPagerApi
 @Composable
@@ -67,6 +70,7 @@ fun HorizontalPagerIndicator(
     indicatorHeight: Dp = indicatorWidth,
     spacing: Dp = indicatorWidth,
     indicatorShape: Shape = CircleShape,
+    @FloatRange(from = 1.0) activeIndicatorScale: Float = 1f,
 ) {
 
     val indicatorWidthPx = LocalDensity.current.run { indicatorWidth.roundToPx() }
@@ -100,6 +104,7 @@ fun HorizontalPagerIndicator(
                     )
                 }
                 .size(width = indicatorWidth, height = indicatorHeight)
+                .scale(activeIndicatorScale)
                 .background(
                     color = activeColor,
                     shape = indicatorShape,
@@ -126,6 +131,7 @@ fun HorizontalPagerIndicator(
  * @param indicatorWidth the width of each indicator in [Dp]. Defaults to [indicatorHeight].
  * @param spacing the spacing between each indicator in [Dp].
  * @param indicatorShape the shape representing each indicator. This defaults to [CircleShape].
+ * @param activeIndicatorScale the scale to apply to the active page indicator.
  */
 @ExperimentalPagerApi
 @Composable
@@ -138,6 +144,7 @@ fun VerticalPagerIndicator(
     indicatorWidth: Dp = indicatorHeight,
     spacing: Dp = indicatorHeight,
     indicatorShape: Shape = CircleShape,
+    @FloatRange(from = 1.0) activeIndicatorScale: Float = 1f,
 ) {
 
     val indicatorHeightPx = LocalDensity.current.run { indicatorHeight.roundToPx() }
@@ -171,6 +178,7 @@ fun VerticalPagerIndicator(
                     )
                 }
                 .size(width = indicatorWidth, height = indicatorHeight)
+                .scale(activeIndicatorScale)
                 .background(
                     color = activeColor,
                     shape = indicatorShape,
