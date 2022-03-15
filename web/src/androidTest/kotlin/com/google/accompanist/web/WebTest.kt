@@ -35,6 +35,7 @@ import androidx.test.espresso.web.webdriver.DriverAtoms.getText
 import androidx.test.espresso.web.webdriver.DriverAtoms.webClick
 import androidx.test.espresso.web.webdriver.Locator
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.FlakyTest
 import androidx.test.filters.SdkSuppress
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.flow.toCollection
@@ -286,6 +287,7 @@ class WebTest {
             .isEqualTo("about:blank") // No title results in about:blank being received
     }
 
+    @FlakyTest(detail = "https://github.com/google/accompanist/issues/1085")
     @Test
     fun testLoadingState() {
         lateinit var state: WebViewState

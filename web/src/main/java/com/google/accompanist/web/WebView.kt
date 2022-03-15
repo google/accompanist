@@ -280,7 +280,7 @@ class WebViewNavigator(private val coroutineScope: CoroutineScope) {
     private val navigationEvents: MutableSharedFlow<NavigationEvent> = MutableSharedFlow()
 
     // Use Dispatchers.Main to ensure that the webview methods are called on UI thread
-    internal suspend fun WebView.handleNavigationEvents() = withContext(Dispatchers.Main) {
+    internal suspend fun WebView.handleNavigationEvents(): Nothing = withContext(Dispatchers.Main) {
         navigationEvents.collect { event ->
             when (event) {
                 NavigationEvent.BACK -> goBack()
