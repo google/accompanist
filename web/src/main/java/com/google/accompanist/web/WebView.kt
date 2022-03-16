@@ -109,7 +109,11 @@ fun WebView(
                 val url = content.url
 
                 if (url.isNotEmpty() && url != view.url) {
-                    view.loadUrl(url)
+                    if (content.additionalHttpHeaders != null) {
+                        view.loadUrl(url, content.additionalHttpHeaders)
+                    } else {
+                        view.loadUrl(url)
+                    }
                 }
             }
             is WebContent.Data -> {
@@ -227,7 +231,11 @@ open class AccompanistWebChromeClient : WebChromeClient() {
 }
 
 sealed class WebContent {
-    data class Url(val url: String) : WebContent()
+    data class Url(
+        val url: String,
+        val additionalHttpHeaders: Map<String, String>? = null,
+    ) : WebContent()
+
     data class Data(val data: String, val baseUrl: String? = null) : WebContent()
 
     fun getCurrentUrl(): String? {
@@ -396,8 +404,15 @@ data class WebViewError(
  * @param url The url to load in the WebView
  */
 @Composable
-fun rememberWebViewState(url: String) =
-    remember(url) { WebViewState(WebContent.Url(url)) }
+fun rememberWebViewState(url: String, additionalHttpHeaders: Map<String, String>? = null) =
+    remember(url, additionalHttpHeaders) {
+        WebViewState(
+            WebContent.Url(
+                url = url,
+                additionalHttpHeaders = additionalHttpHeaders
+            )
+        )
+    }
 
 /**
  * Creates a WebView state that is remembered across Compositions.
