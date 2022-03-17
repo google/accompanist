@@ -110,7 +110,7 @@ fun WebView(
 
                 if (url.isNotEmpty() && url != view.url) {
                     if (content.additionalHttpHeaders != null) {
-                        view.loadUrl(url, content.additionalHttpHeaders)
+                        view.loadUrl(url, content.additionalHttpHeaders.toMutableMap())
                     } else {
                         view.loadUrl(url)
                     }
