@@ -22,9 +22,6 @@ Each [release](https://github.com/google/accompanist/releases) outlines what ver
 
 ## Libraries
 
-### 📐 [Insets](./insets/)
-A library that brings [WindowInsets][windowinsets] support to Jetpack Compose.
-
 ### 🍫 [System UI Controller](./systemuicontroller/)
 A library that provides easy-to-use utilities for recoloring the Android system bars from Jetpack Compose.
 
@@ -57,6 +54,9 @@ A library that provides a layout implementing the swipe-to-refresh UX pattern, s
 
 ### 🌏 [Web](./web/)
 A wrapper around WebView for basic WebView support in Jetpack Compose.
+
+### 📐 [Insets](./insets/) (Deprecated)
+See our [Migration Guide](https://google.github.io/accompanist/insets/) for migrating to Insets in Compose.
 
 ---
 
