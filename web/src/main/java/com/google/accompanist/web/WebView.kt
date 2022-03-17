@@ -171,7 +171,7 @@ open class AccompanistWebViewClient : WebViewClient() {
             !url.startsWith("data:text/html") &&
             state.content.getCurrentUrl() != url
         ) {
-            state.content = WebContent.Url(url)
+            state.content = state.content.withUrl(url)
         }
     }
 
@@ -194,8 +194,7 @@ open class AccompanistWebViewClient : WebViewClient() {
         // Override all url loads to make the single source of truth
         // of the URL the state holder Url
         request?.let {
-            val content = WebContent.Url(it.url.toString())
-            state.content = content
+            state.content = state.content.withUrl(it.url.toString())
         }
         return true
     }
@@ -244,6 +243,11 @@ sealed class WebContent {
             is Data -> baseUrl
         }
     }
+}
+
+internal fun WebContent.withUrl(url: String) = when (this) {
+    is WebContent.Url -> copy(url = url)
+    else -> WebContent.Url(url)
 }
 
 /**
