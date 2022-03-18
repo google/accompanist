@@ -79,7 +79,6 @@ robolectric = "org.robolectric:robolectric:4.5.1"
 
 affectedmoduledetector = "com.dropbox.affectedmoduledetector:affectedmoduledetector:0.1.2"
 
-android-tools-build-gradle = { module = "com.android.tools.build:gradle", version.ref = "gradlePlugin" }
 android-tools-lint-lint = { module = "com.android.tools.lint:lint", version.ref = "lintMinCompose" }
 android-tools-lint-api = { module = "com.android.tools.lint:lint-api", version.ref = "lintMinCompose" }
 android-tools-lint-tests = { module = "com.android.tools.lint:lint-tests", version.ref = "lintMinCompose" }
