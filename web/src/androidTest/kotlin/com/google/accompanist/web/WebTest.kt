@@ -16,6 +16,8 @@
 
 package com.google.accompanist.web
 
+import android.graphics.Bitmap
+import android.webkit.WebView
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -173,6 +175,66 @@ class WebTest {
 
         onWebView()
             .check(webMatches(getCurrentUrl(), containsString(LINK_URL)))
+    }
+
+    @Test
+    fun testCustomClientIsAssigned() {
+        lateinit var state: WebViewState
+
+        var pageStartCalled = false
+
+        rule.setContent {
+            state = rememberWebViewStateWithHTMLData(data = TEST_DATA)
+            WebTestContent(
+                state,
+                idleResource,
+                client = object : AccompanistWebViewClient() {
+                    override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                        super.onPageStarted(view, url, favicon)
+                        pageStartCalled = true
+                    }
+                }
+            )
+        }
+
+        // Ensure the data is loaded first
+        onWebView()
+            .check(webMatches(getCurrentUrl(), containsString("about:blank")))
+
+        // Wait for the webview to load and then perform the check
+        rule.waitForIdle()
+
+        assertThat(pageStartCalled).isTrue()
+    }
+
+    @Test
+    fun testChromeClientIsAssigned() {
+        lateinit var state: WebViewState
+
+        var titleReceived: String? = null
+
+        rule.setContent {
+            state = rememberWebViewStateWithHTMLData(data = TEST_TITLE_DATA)
+            WebTestContent(
+                state,
+                idleResource,
+                chromeClient = object : AccompanistWebChromeClient() {
+                    override fun onReceivedTitle(view: WebView?, title: String?) {
+                        super.onReceivedTitle(view, title)
+                        titleReceived = title
+                    }
+                }
+            )
+        }
+
+        // Wait for new title
+        onWebView()
+            .check(webMatches(getTitle(), equalTo(TITLE_TEXT)))
+
+        // Wait for the webview to load and then perform the check
+        rule.waitForIdle()
+
+        assertThat(titleReceived).isEqualTo(TITLE_TEXT)
     }
 
     // SDKs less than 29 do not call onPageStarted when loading about:blank.
@@ -467,6 +529,8 @@ private fun WebTestContent(
     webViewState: WebViewState,
     idlingResource: WebViewIdlingResource,
     navigator: WebViewNavigator = rememberWebViewNavigator(),
+    client: AccompanistWebViewClient = AccompanistWebViewClient(),
+    chromeClient: AccompanistWebChromeClient = AccompanistWebChromeClient()
 ) {
     idlingResource.webviewLoading = webViewState.loadingState !is LoadingState.Finished
 
@@ -475,7 +539,9 @@ private fun WebTestContent(
             state = webViewState,
             modifier = Modifier.testTag(WebViewTag),
             navigator = navigator,
-            onCreated = { it.settings.javaScriptEnabled = true }
+            onCreated = { it.settings.javaScriptEnabled = true },
+            client = client,
+            chromeClient = chromeClient
         )
     }
 }
