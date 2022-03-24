@@ -14,9 +14,9 @@ A library which provides a layout which provides the swipe-to-refresh UX pattern
 
 ## Usage 
 
-To implement this UX pattern there are two key APIs which are needed: [`SwipeRefresh`][api_swiperefresh], which is provides the layout, and [`rememberSwipeRefreshState()`][api_rememberstate] which provides some remembered state.
+To implement this UX pattern there are two key APIs which are needed: [`SwipeRefresh`][../api/swiperefresh/com.google.accompanist.swiperefresh/-swipe-refresh.html], which is provides the layout, and [`rememberSwipeRefreshState()`][../api/swiperefresh/com.google.accompanist.swiperefresh/remember-swipe-refresh-state.html] which provides some remembered state.
 
-The basic usage of a [`SwipeRefresh`][api_swiperefresh] using a ViewModel looks like so:
+The basic usage of a [`SwipeRefresh`][../api/swiperefresh/com.google.accompanist.swiperefresh/-swipe-refresh.html] using a ViewModel looks like so:
 
 ``` kotlin
 val viewModel: MyViewModel = viewModel()
