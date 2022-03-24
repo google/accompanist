@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 
 /**
@@ -174,7 +175,9 @@ internal class AndroidSystemUiController(
     private val view: View
 ) : SystemUiController {
     private val window = view.context.findWindow()
-    private val windowInsetsController = ViewCompat.getWindowInsetsController(view)
+    private val windowInsetsController = window?.let {
+        WindowCompat.getInsetsController(it, view)
+    }
 
     override fun setStatusBarColor(
         color: Color,

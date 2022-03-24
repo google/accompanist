@@ -23,6 +23,7 @@ import android.view.Window
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.graphics.Color
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -120,7 +121,7 @@ class SystemUiControllerTest {
 
         // Assert that the system couldn't apply the native light icons
         rule.scenario.onActivity {
-            val windowInsetsController = ViewCompat.getWindowInsetsController(it.contentView)!!
+            val windowInsetsController = WindowCompat.getInsetsController(window, it.contentView)
             assertThat(windowInsetsController.isAppearanceLightStatusBars).isFalse()
         }
     }
@@ -145,7 +146,7 @@ class SystemUiControllerTest {
 
         // Assert that the system applied the native light icons
         rule.scenario.onActivity {
-            val windowInsetsController = ViewCompat.getWindowInsetsController(it.contentView)!!
+            val windowInsetsController = WindowCompat.getInsetsController(window, it.contentView)
             assertThat(windowInsetsController.isAppearanceLightStatusBars).isTrue()
         }
     }
@@ -171,7 +172,7 @@ class SystemUiControllerTest {
 
         // Assert that the system couldn't apply the native light icons
         rule.scenario.onActivity {
-            val windowInsetsController = ViewCompat.getWindowInsetsController(it.contentView)!!
+            val windowInsetsController = WindowCompat.getInsetsController(window, it.contentView)
             assertThat(windowInsetsController.isAppearanceLightNavigationBars).isFalse()
         }
     }
@@ -196,7 +197,7 @@ class SystemUiControllerTest {
 
         // Assert that the system applied the native light icons
         rule.scenario.onActivity {
-            val windowInsetsController = ViewCompat.getWindowInsetsController(it.contentView)!!
+            val windowInsetsController = WindowCompat.getInsetsController(window, it.contentView)
             assertThat(windowInsetsController.isAppearanceLightNavigationBars).isTrue()
         }
     }
