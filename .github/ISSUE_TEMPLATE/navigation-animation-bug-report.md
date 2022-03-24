@@ -1,7 +1,7 @@
 ---
-name: Navigation bug report
+name: Navigation Animation bug report
 about: Create a report to help us improve
-title: "[Navigation] "
+title: "[Navigation Animation] "
 labels: ''
 assignees: jbw0033
 
