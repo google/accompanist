@@ -14,7 +14,7 @@ A library which provides a layout which provides the swipe-to-refresh UX pattern
 
 ## Usage 
 
-To implement this UX pattern there are two key APIs which are needed: [`SwipeRefresh`][api_swiperefresh], which is provides the layout, and [`rememberSwipeRefreshState()`][api_swiperefreshstate] which provides some remembered state.
+To implement this UX pattern there are two key APIs which are needed: [`SwipeRefresh`][api_swiperefresh], which is provides the layout, and [`rememberSwipeRefreshState()`][api_rememberstate] which provides some remembered state.
 
 The basic usage of a [`SwipeRefresh`][api_swiperefresh] using a ViewModel looks like so:
 
