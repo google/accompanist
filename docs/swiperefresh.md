@@ -14,9 +14,9 @@ A library which provides a layout which provides the swipe-to-refresh UX pattern
 
 ## Usage 
 
-To implement this UX pattern there are two key APIs which are needed: [`SwipeRefresh`][../api/swiperefresh/com.google.accompanist.swiperefresh/-swipe-refresh.html], which is provides the layout, and [`rememberSwipeRefreshState()`][../api/swiperefresh/com.google.accompanist.swiperefresh/remember-swipe-refresh-state.html] which provides some remembered state.
+To implement this UX pattern there are two key APIs which are needed: [`SwipeRefresh`][api_swiperefresh], which is provides the layout, and [`rememberSwipeRefreshState()`][api_swiperefreshstate] which provides some remembered state.
 
-The basic usage of a [`SwipeRefresh`][../api/swiperefresh/com.google.accompanist.swiperefresh/-swipe-refresh.html] using a ViewModel looks like so:
+The basic usage of a [`SwipeRefresh`][api_swiperefresh] using a ViewModel looks like so:
 
 ``` kotlin
 val viewModel: MyViewModel = viewModel()
@@ -133,10 +133,10 @@ Snapshots of the development version are available in [Sonatype's `snapshots` re
 
   [compose]: https://developer.android.com/jetpack/compose
   [snap]: https://oss.sonatype.org/content/repositories/snapshots/com/google/accompanist/accompanist-swiperefresh/
-  [api_swiperefreshstate]: ../api/swiperefresh/swiperefresh/com.google.accompanist.swiperefresh/-swipe-refresh-state/
-  [api_swiperefreshindicator]: ../api/swiperefresh/swiperefresh/com.google.accompanist.swiperefresh/-swipe-refresh-indicator.html
-  [api_swiperefresh]: ../api/swiperefresh/swiperefresh/com.google.accompanist.swiperefresh/-swipe-refresh.html
-  [api_rememberstate]: ../api/swiperefresh/swiperefresh/com.google.accompanist.swiperefresh/remember-swipe-refresh-state.html
+  [api_swiperefreshstate]: ../api/swiperefresh/com.google.accompanist.swiperefresh/-swipe-refresh-state/
+  [api_swiperefreshindicator]: ../api/swiperefresh/com.google.accompanist.swiperefresh/-swipe-refresh-indicator.html
+  [api_swiperefresh]: ../api/swiperefresh/com.google.accompanist.swiperefresh/-swipe-refresh.html
+  [api_rememberstate]: ../api/swiperefresh/com.google.accompanist.swiperefresh/remember-swipe-refresh-state.html
   [sample_customindicator]: https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/swiperefresh/SwipeRefreshCustomIndicatorSample.kt
   [lazycolumn]: https://developer.android.com/reference/kotlin/androidx/compose/foundation/lazy/package-summary#LazyColumn(androidx.compose.ui.Modifier,androidx.compose.foundation.lazy.LazyListState,androidx.compose.foundation.layout.PaddingValues,kotlin.Boolean,androidx.compose.foundation.layout.Arrangement.Vertical,androidx.compose.ui.Alignment.Horizontal,androidx.compose.foundation.gestures.FlingBehavior,kotlin.Function1)
   [column]: https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/package-summary#Column(androidx.compose.ui.Modifier,androidx.compose.foundation.layout.Arrangement.Vertical,androidx.compose.ui.Alignment.Horizontal,kotlin.Function1)
