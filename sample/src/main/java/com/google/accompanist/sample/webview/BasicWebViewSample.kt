@@ -17,7 +17,10 @@
 package com.google.accompanist.sample.webview
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
+import android.webkit.WebView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -44,6 +47,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.sample.AccompanistSampleTheme
+import com.google.accompanist.web.AccompanistWebViewClient
 import com.google.accompanist.web.LoadingState
 import com.google.accompanist.web.WebContent
 import com.google.accompanist.web.WebView
@@ -115,13 +119,28 @@ class BasicWebViewSample : ComponentActivity() {
                         )
                     }
 
+                    // A custom WebViewClient and WebChromeClient can be provided via subclassing
+                    val webClient = remember {
+                        object : AccompanistWebViewClient() {
+                            override fun onPageStarted(
+                                view: WebView?,
+                                url: String?,
+                                favicon: Bitmap?
+                            ) {
+                                super.onPageStarted(view, url, favicon)
+                                Log.d("Accompanist WebView", "Page started loading for $url")
+                            }
+                        }
+                    }
+
                     WebView(
                         state = state,
                         modifier = Modifier.weight(1f),
                         navigator = navigator,
                         onCreated = { webView ->
                             webView.settings.javaScriptEnabled = true
-                        }
+                        },
+                        client = webClient
                     )
                 }
             }
