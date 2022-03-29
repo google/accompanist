@@ -509,6 +509,37 @@ class WebTest {
         assertThat(navigator.canGoForward).isTrue()
     }
 
+    @Test
+    fun testAdditionalHttpHeaders() {
+        val mockServer = MockWebServer()
+        mockServer.start()
+        val baseUrl = mockServer.url("/")
+
+        rule.setContent {
+            val state = rememberWebViewState(
+                url = baseUrl.toString(),
+                additionalHttpHeaders = mapOf(
+                    "first-additional-header" to "first",
+                    "second-additional-header" to "second",
+                )
+            )
+
+            WebTestContent(
+                webViewState = state,
+                idlingResource = idleResource,
+            )
+        }
+
+        rule.waitForIdle()
+
+        val request = mockServer.takeRequest()
+
+        assertThat(request.getHeader("first-additional-header")).isEqualTo("first")
+        assertThat(request.getHeader("second-additional-header")).isEqualTo("second")
+
+        mockServer.shutdown()
+    }
+
     private val webNode: SemanticsNodeInteraction
         get() = rule.onNodeWithTag(WebViewTag)
 }
