@@ -3,10 +3,19 @@ package com.google.accompanist.web {
 
   public class AccompanistWebChromeClient extends android.webkit.WebChromeClient {
     ctor public AccompanistWebChromeClient();
+    method public com.google.accompanist.web.WebViewState getState();
+    property public com.google.accompanist.web.WebViewState state;
+    field public com.google.accompanist.web.WebViewState state;
   }
 
   public class AccompanistWebViewClient extends android.webkit.WebViewClient {
     ctor public AccompanistWebViewClient();
+    method public com.google.accompanist.web.WebViewNavigator getNavigator();
+    method public com.google.accompanist.web.WebViewState getState();
+    property public com.google.accompanist.web.WebViewNavigator navigator;
+    property public com.google.accompanist.web.WebViewState state;
+    field public com.google.accompanist.web.WebViewNavigator navigator;
+    field public com.google.accompanist.web.WebViewState state;
   }
 
   public abstract sealed class LoadingState {
