@@ -68,8 +68,8 @@ fun WebView(
     captureBackPresses: Boolean = true,
     navigator: WebViewNavigator = rememberWebViewNavigator(),
     onCreated: (WebView) -> Unit = {},
-    client: AccompanistWebViewClient = AccompanistWebViewClient(),
-    chromeClient: AccompanistWebChromeClient = AccompanistWebChromeClient()
+    client: AccompanistWebViewClient = remember { AccompanistWebViewClient() },
+    chromeClient: AccompanistWebChromeClient = remember { AccompanistWebChromeClient() }
 ) {
     var webView by remember { mutableStateOf<WebView?>(null) }
 

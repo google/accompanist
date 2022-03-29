@@ -21,6 +21,7 @@ import android.webkit.WebView
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -529,8 +530,8 @@ private fun WebTestContent(
     webViewState: WebViewState,
     idlingResource: WebViewIdlingResource,
     navigator: WebViewNavigator = rememberWebViewNavigator(),
-    client: AccompanistWebViewClient = AccompanistWebViewClient(),
-    chromeClient: AccompanistWebChromeClient = AccompanistWebChromeClient()
+    client: AccompanistWebViewClient = remember { AccompanistWebViewClient() },
+    chromeClient: AccompanistWebChromeClient = remember { AccompanistWebChromeClient() }
 ) {
     idlingResource.webviewLoading = webViewState.loadingState !is LoadingState.Finished
 

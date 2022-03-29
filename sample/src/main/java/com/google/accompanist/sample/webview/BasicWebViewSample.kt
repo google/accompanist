@@ -120,10 +120,16 @@ class BasicWebViewSample : ComponentActivity() {
                     }
 
                     // A custom WebViewClient and WebChromeClient can be provided via subclassing
-                    val webClient = object : AccompanistWebViewClient() {
-                        override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                            super.onPageStarted(view, url, favicon)
-                            Log.d("Accompanist WebView", "Page started loading for $url")
+                    val webClient = remember {
+                        object : AccompanistWebViewClient() {
+                            override fun onPageStarted(
+                                view: WebView?,
+                                url: String?,
+                                favicon: Bitmap?
+                            ) {
+                                super.onPageStarted(view, url, favicon)
+                                Log.d("Accompanist WebView", "Page started loading for $url")
+                            }
                         }
                     }
 
