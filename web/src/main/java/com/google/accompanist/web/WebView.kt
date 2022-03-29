@@ -401,6 +401,8 @@ data class WebViewError(
  * Creates a WebView state that is remembered across Compositions.
  *
  * @param url The url to load in the WebView
+ * @param additionalHttpHeaders Optional, additional HTTP headers that are passed to [WebView.loadUrl].
+ *                              Note that these headers are used for all subsequent requests of the WebView.
  */
 @Composable
 fun rememberWebViewState(url: String, additionalHttpHeaders: Map<String, String> = emptyMap()) =
