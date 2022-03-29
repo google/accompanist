@@ -39,7 +39,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -109,11 +108,7 @@ fun WebView(
                 val url = content.url
 
                 if (url.isNotEmpty() && url != view.url) {
-                    if (content.additionalHttpHeaders != null) {
-                        view.loadUrl(url, content.additionalHttpHeaders.toMutableMap())
-                    } else {
-                        view.loadUrl(url)
-                    }
+                    view.loadUrl(url, content.additionalHttpHeaders.toMutableMap())
                 }
             }
             is WebContent.Data -> {
@@ -232,7 +227,7 @@ open class AccompanistWebChromeClient : WebChromeClient() {
 sealed class WebContent {
     data class Url(
         val url: String,
-        val additionalHttpHeaders: Map<String, String>? = null,
+        val additionalHttpHeaders: Map<String, String> = emptyMap(),
     ) : WebContent()
 
     data class Data(val data: String, val baseUrl: String? = null) : WebContent()
@@ -408,7 +403,7 @@ data class WebViewError(
  * @param url The url to load in the WebView
  */
 @Composable
-fun rememberWebViewState(url: String, additionalHttpHeaders: Map<String, String>? = null) =
+fun rememberWebViewState(url: String, additionalHttpHeaders: Map<String, String> = emptyMap()) =
     remember(url, additionalHttpHeaders) {
         WebViewState(
             WebContent.Url(
