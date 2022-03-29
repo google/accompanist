@@ -131,8 +131,10 @@ fun WebView(
  * class that can be overriden if further custom behaviour is required.
  */
 open class AccompanistWebViewClient : WebViewClient() {
-    internal lateinit var state: WebViewState
-    internal lateinit var navigator: WebViewNavigator
+    open lateinit var state: WebViewState
+        internal set
+    open lateinit var navigator: WebViewNavigator
+        internal set
 
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
         super.onPageStarted(view, url, favicon)
@@ -204,7 +206,8 @@ open class AccompanistWebViewClient : WebViewClient() {
  * class that can be overriden if further custom behaviour is required.
  */
 open class AccompanistWebChromeClient : WebChromeClient() {
-    internal lateinit var state: WebViewState
+    open lateinit var state: WebViewState
+        internal set
 
     override fun onReceivedTitle(view: WebView?, title: String?) {
         super.onReceivedTitle(view, title)
