@@ -29,7 +29,7 @@ package com.google.accompanist.systemuicontroller {
   }
 
   public final class SystemUiControllerKt {
-    method @androidx.compose.runtime.Composable public static com.google.accompanist.systemuicontroller.SystemUiController rememberSystemUiController();
+    method @androidx.compose.runtime.Composable public static com.google.accompanist.systemuicontroller.SystemUiController rememberSystemUiController(optional android.view.Window? window);
   }
 
 }

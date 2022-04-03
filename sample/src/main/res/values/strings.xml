@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2020 The Android Open Source Project
+  ~ Copyright 2022 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -53,6 +53,7 @@
     <string name="swiperefresh_title_verticalpager">Swipe Refresh: VerticalPager</string>
 
     <string name="system_ui_controller_title_color">System Ui Controller: Color</string>
+    <string name="system_ui_controller_title_color_dialog">System Ui Controller: Color in Dialog</string>
     <string name="system_ui_controller_title_visibility">System Ui Controller: Visibility</string>
 
     <string name="placeholder_title_basics">Placeholder: Basic</string>

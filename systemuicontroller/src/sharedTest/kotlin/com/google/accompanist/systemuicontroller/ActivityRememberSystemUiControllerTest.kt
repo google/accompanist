@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 The Android Open Source Project
+ * Copyright 2022 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,16 @@
 
 package com.google.accompanist.systemuicontroller
 
-import android.app.Activity
 import android.os.Build
 import android.view.View
 import android.view.Window
 import androidx.activity.ComponentActivity
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.FlakyTest
 import androidx.test.filters.SdkSuppress
@@ -40,17 +40,25 @@ import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class SystemUiControllerTest {
+class ActivityRememberSystemUiControllerTest {
     @get:Rule
-    val rule = ActivityScenarioRule(ComponentActivity::class.java)
+    val rule = createAndroidComposeRule<ComponentActivity>()
+
+    private lateinit var window: Window
+    private lateinit var contentView: View
 
     @Before
     fun setup() {
+        window = rule.activityRule.scenario.withActivity { it.window }
+        contentView = rule.activityRule.scenario.withActivity {
+            it.findViewById(android.R.id.content)!!
+        }
+
         if (Build.VERSION.SDK_INT >= 29) {
             // On API 29+, the system can modify the bar colors to maintain contrast.
             // We disable that here to make it simple to assert expected values
-            rule.scenario.onActivity {
-                it.window.apply {
+            rule.activityRule.scenario.onActivity {
+                window.apply {
                     isNavigationBarContrastEnforced = false
                     isStatusBarContrastEnforced = false
                 }
@@ -60,12 +68,12 @@ class SystemUiControllerTest {
 
     @Test
     fun statusBarColor() {
-        val window = rule.window
-
-        rule.scenario.onActivity {
-            // Now create an AndroidSystemUiController() and set the status bar color
-            val controller = AndroidSystemUiController(it.contentView)
-            controller.setStatusBarColor(Color.Blue, darkIcons = false)
+        rule.setContent {
+            // Create an systemUiController and set the status bar color
+            val systemUiController = rememberSystemUiController()
+            SideEffect {
+                systemUiController.setStatusBarColor(Color.Blue, darkIcons = false)
+            }
         }
 
         // Assert that the color was set
@@ -74,12 +82,12 @@ class SystemUiControllerTest {
 
     @Test
     fun navigationBarColor() {
-        val window = rule.window
-
-        rule.scenario.onActivity {
-            // Now create an AndroidSystemUiController() and set the status bar color
-            val controller = AndroidSystemUiController(it.contentView)
-            controller.setNavigationBarColor(Color.Green, darkIcons = false)
+        rule.setContent {
+            // Now create an systemUiController and set the navigation bar color
+            val systemUiController = rememberSystemUiController()
+            SideEffect {
+                systemUiController.setNavigationBarColor(Color.Green, darkIcons = false)
+            }
         }
 
         assertThat(Color(window.navigationBarColor)).isEqualTo(Color.Green)
@@ -87,12 +95,12 @@ class SystemUiControllerTest {
 
     @Test
     fun systemBarColor() {
-        val window = rule.window
-
-        // Now create an AndroidSystemUiController() and set the system bar colors
-        rule.scenario.onActivity {
-            val controller = AndroidSystemUiController(it.contentView)
-            controller.setSystemBarsColor(Color.Red, darkIcons = false)
+        rule.setContent {
+            // Now create an systemUiController and set the system bar colors
+            val systemUiController = rememberSystemUiController()
+            SideEffect {
+                systemUiController.setSystemBarsColor(Color.Red, darkIcons = false)
+            }
         }
 
         // Assert that the colors were set
@@ -104,15 +112,15 @@ class SystemUiControllerTest {
     @Category(IgnoreOnRobolectric::class) // Robolectric implements the new behavior from 23+
     @SdkSuppress(maxSdkVersion = 22)
     fun statusBarIcons_scrim() {
-        val window = rule.window
-
-        // Now create an AndroidSystemUiController() and set the navigation bar with dark icons
-        rule.scenario.onActivity {
-            val controller = AndroidSystemUiController(it.contentView)
-            controller.setStatusBarColor(Color.White, darkIcons = true) {
-                // Here we can provide custom logic to 'darken' the color to maintain contrast.
-                // We return red just to assert below.
-                Color.Red
+        // Now create an systemUiController and set the navigation bar with dark icons
+        rule.setContent {
+            val systemUiController = rememberSystemUiController()
+            SideEffect {
+                systemUiController.setStatusBarColor(Color.White, darkIcons = true) {
+                    // Here we can provide custom logic to 'darken' the color to maintain contrast.
+                    // We return red just to assert below.
+                    Color.Red
+                }
             }
         }
 
@@ -120,8 +128,8 @@ class SystemUiControllerTest {
         assertThat(Color(window.statusBarColor)).isEqualTo(Color.Red)
 
         // Assert that the system couldn't apply the native light icons
-        rule.scenario.onActivity {
-            val windowInsetsController = WindowCompat.getInsetsController(window, it.contentView)
+        rule.activityRule.scenario.onActivity {
+            val windowInsetsController = WindowCompat.getInsetsController(window, contentView)
             assertThat(windowInsetsController.isAppearanceLightStatusBars).isFalse()
         }
     }
@@ -129,15 +137,15 @@ class SystemUiControllerTest {
     @Test
     @SdkSuppress(minSdkVersion = 23)
     fun statusBarIcons_native() {
-        val window = rule.window
-
-        // Now create an AndroidSystemUiController() and set the status bar with dark icons
-        rule.scenario.onActivity {
-            val controller = AndroidSystemUiController(it.contentView)
-            controller.setStatusBarColor(Color.White, darkIcons = true) {
-                // Here we can provide custom logic to 'darken' the color to maintain contrast.
-                // We return red just to assert below.
-                Color.Red
+        // Now create an systemUiController and set the status bar with dark icons
+        rule.setContent {
+            val systemUiController = rememberSystemUiController()
+            SideEffect {
+                systemUiController.setStatusBarColor(Color.White, darkIcons = true) {
+                    // Here we can provide custom logic to 'darken' the color to maintain contrast.
+                    // We return red just to assert below.
+                    Color.Red
+                }
             }
         }
 
@@ -145,8 +153,8 @@ class SystemUiControllerTest {
         assertThat(Color(window.statusBarColor)).isEqualTo(Color.White)
 
         // Assert that the system applied the native light icons
-        rule.scenario.onActivity {
-            val windowInsetsController = WindowCompat.getInsetsController(window, it.contentView)
+        rule.activityRule.scenario.onActivity {
+            val windowInsetsController = WindowCompat.getInsetsController(window, contentView)
             assertThat(windowInsetsController.isAppearanceLightStatusBars).isTrue()
         }
     }
@@ -155,15 +163,15 @@ class SystemUiControllerTest {
     @Category(IgnoreOnRobolectric::class) // Robolectric implements the new behavior from 25+
     @SdkSuppress(maxSdkVersion = 25)
     fun navigationBarIcons_scrim() {
-        val window = rule.window
-
-        // Now create an AndroidSystemUiController() and set the navigation bar with dark icons
-        rule.scenario.onActivity {
-            val controller = AndroidSystemUiController(rule.contentView)
-            controller.setNavigationBarColor(Color.White, darkIcons = true) {
-                // Here we can provide custom logic to 'darken' the color to maintain contrast.
-                // We return red just to assert below.
-                Color.Red
+        // Now create an systemUiController and set the navigation bar with dark icons
+        rule.setContent {
+            val systemUiController = rememberSystemUiController()
+            SideEffect {
+                systemUiController.setNavigationBarColor(Color.White, darkIcons = true) {
+                    // Here we can provide custom logic to 'darken' the color to maintain contrast.
+                    // We return red just to assert below.
+                    Color.Red
+                }
             }
         }
 
@@ -171,8 +179,8 @@ class SystemUiControllerTest {
         assertThat(Color(window.navigationBarColor)).isEqualTo(Color.Red)
 
         // Assert that the system couldn't apply the native light icons
-        rule.scenario.onActivity {
-            val windowInsetsController = WindowCompat.getInsetsController(window, it.contentView)
+        rule.activityRule.scenario.onActivity {
+            val windowInsetsController = WindowCompat.getInsetsController(window, contentView)
             assertThat(windowInsetsController.isAppearanceLightNavigationBars).isFalse()
         }
     }
@@ -180,15 +188,15 @@ class SystemUiControllerTest {
     @Test
     @SdkSuppress(minSdkVersion = 26)
     fun navigationBar_native() {
-        val window = rule.window
-
-        // Now create an AndroidSystemUiController() and set the navigation bar with dark icons
-        rule.scenario.onActivity {
-            val controller = AndroidSystemUiController(rule.contentView)
-            controller.setNavigationBarColor(Color.White, darkIcons = true) {
-                // Here we can provide custom logic to 'darken' the color to maintain contrast.
-                // We return red just to assert below.
-                Color.Red
+        // Now create an systemUiController and set the navigation bar with dark icons
+        rule.setContent {
+            val systemUiController = rememberSystemUiController()
+            SideEffect {
+                systemUiController.setNavigationBarColor(Color.White, darkIcons = true) {
+                    // Here we can provide custom logic to 'darken' the color to maintain contrast.
+                    // We return red just to assert below.
+                    Color.Red
+                }
             }
         }
 
@@ -196,8 +204,8 @@ class SystemUiControllerTest {
         assertThat(Color(window.navigationBarColor)).isEqualTo(Color.White)
 
         // Assert that the system applied the native light icons
-        rule.scenario.onActivity {
-            val windowInsetsController = WindowCompat.getInsetsController(window, it.contentView)
+        rule.activityRule.scenario.onActivity {
+            val windowInsetsController = WindowCompat.getInsetsController(window, contentView)
             assertThat(windowInsetsController.isAppearanceLightNavigationBars).isTrue()
         }
     }
@@ -205,18 +213,18 @@ class SystemUiControllerTest {
     @Test
     @SdkSuppress(minSdkVersion = 29)
     fun navigationBar_contrastEnforced() {
-        rule.scenario.onActivity {
-            val view = rule.contentView
-            val window = rule.window
+        lateinit var systemUiController: SystemUiController
 
-            // Now create an AndroidSystemUiController()
-            val controller = AndroidSystemUiController(view)
+        rule.setContent {
+            systemUiController = rememberSystemUiController()
+        }
 
+        rule.activityRule.scenario.onActivity {
             // Assert that the contrast is not enforced initially
-            assertThat(controller.isNavigationBarContrastEnforced).isFalse()
+            assertThat(systemUiController.isNavigationBarContrastEnforced).isFalse()
 
             // and set the navigation bar with dark icons and enforce contrast
-            controller.setNavigationBarColor(
+            systemUiController.setNavigationBarColor(
                 Color.Transparent,
                 darkIcons = true,
                 navigationBarContrastEnforced = true
@@ -233,7 +241,7 @@ class SystemUiControllerTest {
             assertThat(window.isNavigationBarContrastEnforced).isTrue()
 
             // Assert that the controller reflects that the contrast is enforced
-            assertThat(controller.isNavigationBarContrastEnforced).isTrue()
+            assertThat(systemUiController.isNavigationBarContrastEnforced).isTrue()
         }
     }
 
@@ -242,18 +250,21 @@ class SystemUiControllerTest {
     @SdkSuppress(minSdkVersion = 23) // rootWindowInsets which work
     @Category(IgnoreOnRobolectric::class)
     fun statusBarsVisibility() {
-        // Now create an AndroidSystemUiController() and set the system bar colors
-        val controller = rule.scenario.withActivity { AndroidSystemUiController(it.contentView) }
+        lateinit var systemUiController: SystemUiController
+
+        rule.setContent {
+            systemUiController = rememberSystemUiController()
+        }
 
         // First show the bars
-        rule.scenario.onActivity {
-            controller.isStatusBarVisible = true
+        rule.activityRule.scenario.onActivity {
+            systemUiController.isStatusBarVisible = true
         }
         waitUntil { isRootWindowTypeVisible(WindowInsetsCompat.Type.statusBars()) }
 
         // Now hide the bars
-        rule.scenario.onActivity {
-            controller.isStatusBarVisible = false
+        rule.activityRule.scenario.onActivity {
+            systemUiController.isStatusBarVisible = false
         }
         waitUntil { !isRootWindowTypeVisible(WindowInsetsCompat.Type.statusBars()) }
     }
@@ -263,18 +274,21 @@ class SystemUiControllerTest {
     @SdkSuppress(minSdkVersion = 23) // rootWindowInsets which work
     @Category(IgnoreOnRobolectric::class)
     fun navigationBarsVisibility() {
-        // Now create an AndroidSystemUiController() and set the system bar colors
-        val controller = rule.scenario.withActivity { AndroidSystemUiController(it.contentView) }
+        lateinit var systemUiController: SystemUiController
+
+        rule.setContent {
+            systemUiController = rememberSystemUiController()
+        }
 
         // First show the bars
-        rule.scenario.onActivity {
-            controller.isNavigationBarVisible = true
+        rule.activityRule.scenario.onActivity {
+            systemUiController.isNavigationBarVisible = true
         }
         waitUntil { isRootWindowTypeVisible(WindowInsetsCompat.Type.navigationBars()) }
 
         // Now hide the bars
-        rule.scenario.onActivity {
-            controller.isNavigationBarVisible = false
+        rule.activityRule.scenario.onActivity {
+            systemUiController.isNavigationBarVisible = false
         }
         waitUntil { !isRootWindowTypeVisible(WindowInsetsCompat.Type.navigationBars()) }
     }
@@ -284,36 +298,30 @@ class SystemUiControllerTest {
     @FlakyTest(detail = "https://github.com/google/accompanist/issues/491")
     @SdkSuppress(minSdkVersion = 23) // rootWindowInsets which work
     fun systemBarsVisibility() {
-        // Now create an AndroidSystemUiController() and set the system bar colors
-        val controller = rule.scenario.withActivity { AndroidSystemUiController(it.contentView) }
+        lateinit var systemUiController: SystemUiController
+
+        rule.setContent {
+            systemUiController = rememberSystemUiController()
+        }
 
         // First show the bars
-        rule.scenario.onActivity {
-            controller.isSystemBarsVisible = true
+        rule.activityRule.scenario.onActivity {
+            systemUiController.isSystemBarsVisible = true
         }
         waitUntil { isRootWindowTypeVisible(WindowInsetsCompat.Type.navigationBars()) }
         waitUntil { isRootWindowTypeVisible(WindowInsetsCompat.Type.statusBars()) }
 
         // Now hide the bars
-        rule.scenario.onActivity {
-            controller.isSystemBarsVisible = false
+        rule.activityRule.scenario.onActivity {
+            systemUiController.isSystemBarsVisible = false
         }
         waitUntil { !isRootWindowTypeVisible(WindowInsetsCompat.Type.navigationBars()) }
         waitUntil { !isRootWindowTypeVisible(WindowInsetsCompat.Type.statusBars()) }
     }
 
     private fun isRootWindowTypeVisible(type: Int): Boolean {
-        return rule.scenario.withActivity {
-            ViewCompat.getRootWindowInsets(rule.contentView)!!.isVisible(type)
+        return rule.activityRule.scenario.withActivity {
+            ViewCompat.getRootWindowInsets(contentView)!!.isVisible(type)
         }
     }
 }
-
-private val ActivityScenarioRule<*>.contentView: View
-    get() = scenario.withActivity { it.contentView }
-
-private val ActivityScenarioRule<*>.window: Window
-    get() = scenario.withActivity { it.window }
-
-private val Activity.contentView: View
-    get() = findViewById(android.R.id.content)!!
