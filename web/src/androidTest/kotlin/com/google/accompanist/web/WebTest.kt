@@ -509,7 +509,6 @@ class WebTest {
         assertThat(navigator.canGoForward).isTrue()
     }
 
-    @FlakyTest(detail = "https://github.com/google/accompanist/issues/1085")
     @Test
     fun testAdditionalHttpHeaders() {
         val mockServer = MockWebServer()
