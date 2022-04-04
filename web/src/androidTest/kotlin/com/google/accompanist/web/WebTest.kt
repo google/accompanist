@@ -537,7 +537,7 @@ class WebTest {
             )
         }
 
-        rule.waitUntil(3_000) { collectedLoadingStates.any { it is LoadingState.Finished } }
+        rule.waitUntil(5_000) { collectedLoadingStates.any { it is LoadingState.Finished } }
         rule.waitForIdle()
 
         val request = mockServer.takeRequest()
