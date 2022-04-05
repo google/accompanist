@@ -509,13 +509,12 @@ class WebTest {
         assertThat(navigator.canGoForward).isTrue()
     }
 
+    @FlakyTest
     @Test
     fun testAdditionalHttpHeaders() {
         val mockServer = MockWebServer()
         mockServer.start()
         val baseUrl = mockServer.url("/")
-
-        val collectedLoadingStates = mutableListOf<LoadingState>()
 
         rule.setContent {
             val state = rememberWebViewState(
@@ -526,18 +525,12 @@ class WebTest {
                 )
             )
 
-            LaunchedEffect(state) {
-                snapshotFlow { state.loadingState }
-                    .toCollection(collectedLoadingStates)
-            }
-
             WebTestContent(
                 webViewState = state,
                 idlingResource = idleResource,
             )
         }
 
-        rule.waitUntil(5_000) { collectedLoadingStates.any { it is LoadingState.Finished } }
         rule.waitForIdle()
 
         val request = mockServer.takeRequest()
