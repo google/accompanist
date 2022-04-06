@@ -20,6 +20,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -69,7 +70,7 @@ private fun Sample() {
             )
         },
         modifier = Modifier.fillMaxSize()
-    ) {
+    ) { padding ->
         // Simulate a fake 2-second 'load'. Ideally this 'refreshing' value would
         // come from a ViewModel or similar
         var refreshing by remember { mutableStateOf(false) }
@@ -84,7 +85,7 @@ private fun Sample() {
             state = rememberSwipeRefreshState(isRefreshing = refreshing),
             onRefresh = { refreshing = true },
         ) {
-            LazyColumn {
+            LazyColumn(contentPadding = padding) {
                 if (refreshing.not()) {
                     item {
                         ListItem(

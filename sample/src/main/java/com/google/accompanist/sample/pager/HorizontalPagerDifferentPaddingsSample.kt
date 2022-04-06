@@ -16,6 +16,7 @@
 
 package com.google.accompanist.sample.pager
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -61,7 +62,7 @@ class HorizontalPagerDifferentPaddingsSample : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter") // Sample deals with paddings itself
 @Composable
 private fun Sample() {
     Scaffold(
