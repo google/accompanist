@@ -49,10 +49,13 @@ package com.google.accompanist.web {
   }
 
   public static final class WebContent.Url extends com.google.accompanist.web.WebContent {
-    ctor public WebContent.Url(String url);
+    ctor public WebContent.Url(String url, optional java.util.Map<java.lang.String,java.lang.String> additionalHttpHeaders);
     method public String component1();
-    method public com.google.accompanist.web.WebContent.Url copy(String url);
+    method public java.util.Map<java.lang.String,java.lang.String> component2();
+    method public com.google.accompanist.web.WebContent.Url copy(String url, java.util.Map<java.lang.String,java.lang.String> additionalHttpHeaders);
+    method public java.util.Map<java.lang.String,java.lang.String> getAdditionalHttpHeaders();
     method public String getUrl();
+    property public final java.util.Map<java.lang.String,java.lang.String> additionalHttpHeaders;
     property public final String url;
   }
 
@@ -70,7 +73,7 @@ package com.google.accompanist.web {
   public final class WebViewKt {
     method @androidx.compose.runtime.Composable public static void WebView(com.google.accompanist.web.WebViewState state, optional androidx.compose.ui.Modifier modifier, optional boolean captureBackPresses, optional com.google.accompanist.web.WebViewNavigator navigator, optional kotlin.jvm.functions.Function1<? super android.webkit.WebView,kotlin.Unit> onCreated, optional com.google.accompanist.web.AccompanistWebViewClient client, optional com.google.accompanist.web.AccompanistWebChromeClient chromeClient);
     method @androidx.compose.runtime.Composable public static com.google.accompanist.web.WebViewNavigator rememberWebViewNavigator(optional kotlinx.coroutines.CoroutineScope coroutineScope);
-    method @androidx.compose.runtime.Composable public static com.google.accompanist.web.WebViewState rememberWebViewState(String url);
+    method @androidx.compose.runtime.Composable public static com.google.accompanist.web.WebViewState rememberWebViewState(String url, optional java.util.Map<java.lang.String,java.lang.String> additionalHttpHeaders);
     method @androidx.compose.runtime.Composable public static com.google.accompanist.web.WebViewState rememberWebViewStateWithHTMLData(String data, optional String? baseUrl);
   }
 

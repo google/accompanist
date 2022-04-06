@@ -39,7 +39,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -109,7 +108,7 @@ fun WebView(
                 val url = content.url
 
                 if (url.isNotEmpty() && url != view.url) {
-                    view.loadUrl(url)
+                    view.loadUrl(url, content.additionalHttpHeaders.toMutableMap())
                 }
             }
             is WebContent.Data -> {
@@ -167,7 +166,7 @@ open class AccompanistWebViewClient : WebViewClient() {
             !url.startsWith("data:text/html") &&
             state.content.getCurrentUrl() != url
         ) {
-            state.content = WebContent.Url(url)
+            state.content = state.content.withUrl(url)
         }
     }
 
@@ -190,8 +189,7 @@ open class AccompanistWebViewClient : WebViewClient() {
         // Override all url loads to make the single source of truth
         // of the URL the state holder Url
         request?.let {
-            val content = WebContent.Url(it.url.toString())
-            state.content = content
+            state.content = state.content.withUrl(it.url.toString())
         }
         return true
     }
@@ -227,7 +225,11 @@ open class AccompanistWebChromeClient : WebChromeClient() {
 }
 
 sealed class WebContent {
-    data class Url(val url: String) : WebContent()
+    data class Url(
+        val url: String,
+        val additionalHttpHeaders: Map<String, String> = emptyMap(),
+    ) : WebContent()
+
     data class Data(val data: String, val baseUrl: String? = null) : WebContent()
 
     fun getCurrentUrl(): String? {
@@ -236,6 +238,11 @@ sealed class WebContent {
             is Data -> baseUrl
         }
     }
+}
+
+internal fun WebContent.withUrl(url: String) = when (this) {
+    is WebContent.Url -> copy(url = url)
+    else -> WebContent.Url(url)
 }
 
 /**
@@ -394,10 +401,19 @@ data class WebViewError(
  * Creates a WebView state that is remembered across Compositions.
  *
  * @param url The url to load in the WebView
+ * @param additionalHttpHeaders Optional, additional HTTP headers that are passed to [WebView.loadUrl].
+ *                              Note that these headers are used for all subsequent requests of the WebView.
  */
 @Composable
-fun rememberWebViewState(url: String) =
-    remember(url) { WebViewState(WebContent.Url(url)) }
+fun rememberWebViewState(url: String, additionalHttpHeaders: Map<String, String> = emptyMap()) =
+    remember(url, additionalHttpHeaders) {
+        WebViewState(
+            WebContent.Url(
+                url = url,
+                additionalHttpHeaders = additionalHttpHeaders
+            )
+        )
+    }
 
 /**
  * Creates a WebView state that is remembered across Compositions.
