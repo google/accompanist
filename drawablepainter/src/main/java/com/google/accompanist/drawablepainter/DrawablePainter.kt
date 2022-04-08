@@ -59,12 +59,20 @@ class DrawablePainter(
     val drawable: Drawable
 ) : Painter(), RememberObserver {
     private var invalidateTick by mutableStateOf(0)
+    private var layoutTick by mutableStateOf(0)
+
+    private var lastIntrinsicSize: Size = Size.Unspecified
 
     private val callback: Drawable.Callback by lazy {
         object : Drawable.Callback {
             override fun invalidateDrawable(d: Drawable) {
                 // Update the tick so that we get re-drawn
                 invalidateTick++
+
+                if (lastIntrinsicSize != drawable.intrinsicSize) {
+                    // If the intrinsic size has changed, update the layout tick
+                    layoutTick++
+                }
             }
 
             override fun scheduleDrawable(d: Drawable, what: Runnable, time: Long) {
@@ -121,15 +129,10 @@ class DrawablePainter(
     }
 
     override val intrinsicSize: Size
-        get() = when {
-            // Only return a finite size if the drawable has an intrinsic size
-            drawable.intrinsicWidth >= 0 && drawable.intrinsicHeight >= 0 -> {
-                Size(
-                    width = drawable.intrinsicWidth.toFloat(),
-                    height = drawable.intrinsicHeight.toFloat(),
-                )
-            }
-            else -> Size.Unspecified
+        get() {
+            // Reading this ensures that we re-layout when invalidateDrawable() is called
+            layoutTick
+            return drawable.intrinsicSize.also { lastIntrinsicSize = it }
         }
 
     override fun DrawScope.onDraw() {
@@ -169,6 +172,15 @@ fun rememberDrawablePainter(drawable: Drawable?): Painter = remember(drawable) {
         else -> DrawablePainter(drawable.mutate())
     }
 }
+
+private val Drawable.intrinsicSize: Size
+    get() = when {
+        // Only return a finite size if the drawable has an intrinsic size
+        intrinsicWidth >= 0 && intrinsicHeight >= 0 -> {
+            Size(width = intrinsicWidth.toFloat(), height = intrinsicHeight.toFloat())
+        }
+        else -> Size.Unspecified
+    }
 
 internal object EmptyPainter : Painter() {
     override val intrinsicSize: Size get() = Size.Unspecified
