@@ -17,6 +17,7 @@
 package com.google.accompanist.sample.systemuicontroller
 
 import android.os.Bundle
+import android.view.ViewGroup
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -40,6 +41,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,18 +52,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogWindowProvider
 import androidx.core.view.WindowCompat
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.rememberRandomSampleImageUrl
+import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
-class SystemBarsColorSample : ComponentActivity() {
+class DialogSystemBarsColorSample : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -70,8 +77,26 @@ class SystemBarsColorSample : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
+            val parentSystemUiController = rememberSystemUiController()
+
             AccompanistSampleTheme {
-                Sample()
+                Dialog(
+                    onDismissRequest = { finish() },
+                ) {
+                    val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
+                    // Setup the dialog to go edge-to-edge
+                    SideEffect {
+                        window.setLayout(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT
+                        )
+                        WindowCompat.setDecorFitsSystemWindows(
+                            dialogWindowProvider.window,
+                            false
+                        )
+                    }
+                    Sample(parentSystemUiController)
+                }
             }
         }
     }
@@ -79,16 +104,21 @@ class SystemBarsColorSample : ComponentActivity() {
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
-private fun Sample() {
+private fun Sample(parentSystemUiController: SystemUiController) {
     // Get the current SystemUiController
     val systemUiController = rememberSystemUiController()
     var clickedColor by remember { mutableStateOf(Color.Unspecified) }
     var statusBarDarkIcons by remember { mutableStateOf(false) }
     var navigationBarDarkIcons by remember { mutableStateOf(false) }
 
-    LaunchedEffect(systemUiController, statusBarDarkIcons, navigationBarDarkIcons) {
+    // Update the light and dark status bar state for both the Activity's SystemUiController and
+    // the Dialog's. If we just updated the Dialog's things wouldn't work properly for unknown
+    // reasons.
+    LaunchedEffect(parentSystemUiController, statusBarDarkIcons, navigationBarDarkIcons) {
         systemUiController.statusBarDarkContentEnabled = statusBarDarkIcons
         systemUiController.navigationBarDarkContentEnabled = navigationBarDarkIcons
+        parentSystemUiController.statusBarDarkContentEnabled = statusBarDarkIcons
+        parentSystemUiController.navigationBarDarkContentEnabled = navigationBarDarkIcons
     }
 
     @Composable
@@ -138,9 +168,13 @@ private fun Sample() {
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
-        Column(Modifier.fillMaxSize().systemBarsPadding()) {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .systemBarsPadding()
+        ) {
             TopAppBar(
-                title = { Text(stringResource(R.string.system_ui_controller_title_color)) },
+                title = { Text(stringResource(R.string.system_ui_controller_title_color_dialog)) },
                 backgroundColor = MaterialTheme.colors.surface.copy(alpha = 0.5f),
                 elevation = 0.dp,
             )

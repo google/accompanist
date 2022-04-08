@@ -1,0 +1,4 @@
+# Exemption reason: This repo uses binary artifacts to ship gradle.jar for users. It does not allow any others.
+# Exemption timeframe: permanent
+optConfig:
+  optOut: true

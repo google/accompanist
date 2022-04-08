@@ -19,9 +19,11 @@ package com.google.accompanist.sample.flowlayout
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.google.accompanist.flowlayout.FlowColumn
 import com.google.accompanist.sample.AccompanistSampleTheme
@@ -38,8 +40,8 @@ class FlowColumnSample : ComponentActivity() {
                             title = { Text(text = stringResource(R.string.flowlayout_title_column)) }
                         )
                     }
-                ) {
-                    FlowColumn {
+                ) { padding ->
+                    FlowColumn(Modifier.padding(padding)) {
                         SampleContent()
                     }
                 }

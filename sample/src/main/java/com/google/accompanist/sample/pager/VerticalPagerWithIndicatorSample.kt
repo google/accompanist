@@ -67,13 +67,13 @@ private fun Sample() {
             )
         },
         modifier = Modifier.fillMaxSize()
-    ) {
+    ) { padding ->
         Column(Modifier.fillMaxSize()) {
             val pagerState = rememberPagerState()
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f).padding(padding),
             ) {
                 // Display 10 items
                 VerticalPager(

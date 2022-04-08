@@ -71,11 +71,13 @@ dependencies {
 
     compileOnly libs.android.tools.lint.api
     compileOnly libs.kotlin.reflect
-    compileOnly libs.kotlin.stdlibJdk8 // Needed, cannot use `stdlib`
+    compileOnly libs.kotlin.stdlib
+    compileOnly libs.kotlin.stdlibJdk8 // Override version from transitive dependencies
 
     testImplementation libs.junit
     testImplementation libs.kotlin.reflect
-    testImplementation libs.kotlin.stdlibJdk8 // Needed, cannot use `stdlib`
+    testImplementation libs.kotlin.stdlib
+    testImplementation libs.kotlin.stdlibJdk8 // Override version from transitive dependencies
     testImplementation libs.android.tools.lint.lint
     testImplementation libs.android.tools.lint.tests
 }
