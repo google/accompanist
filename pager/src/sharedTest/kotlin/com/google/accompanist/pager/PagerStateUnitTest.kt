@@ -40,6 +40,7 @@ class PagerStateUnitTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Ignore // Not currently working after migration to Lazy
+    @Suppress("DEPRECATION")
     @Test
     fun store_restore_state() = runBlockingTest {
         val stateRestoration = StateRestorationTester(composeTestRule)

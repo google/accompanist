@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 The Android Open Source Project
+  ~ Copyright 2022 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -152,6 +152,16 @@
         <activity
             android:name=".pager.HorizontalPagerScrollingContentSample"
             android:label="@string/horiz_pager_title_scroll_content"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".pager.HorizontalPagerDifferentPaddingsSample"
+            android:label="@string/horiz_pager_title_different_paddings"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -321,6 +331,18 @@
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".systemuicontroller.DialogSystemBarsColorSample"
+            android:label="@string/system_ui_controller_title_color_dialog"
+            android:exported="true"
+            android:theme="@style/DialogSystemUiControllerTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
 
         <activity
             android:name=".systemuicontroller.SystemBarsVisibilitySample"

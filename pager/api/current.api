@@ -11,9 +11,13 @@ package com.google.accompanist.pager {
   }
 
   @com.google.accompanist.pager.ExperimentalPagerApi public final class PagerDefaults {
-    method @androidx.compose.runtime.Composable @dev.chrisbanes.snapper.ExperimentalSnapperApi public androidx.compose.foundation.gestures.FlingBehavior flingBehavior(com.google.accompanist.pager.PagerState state, optional androidx.compose.animation.core.DecayAnimationSpec<java.lang.Float> decayAnimationSpec, optional androidx.compose.animation.core.AnimationSpec<java.lang.Float> snapAnimationSpec, optional kotlin.jvm.functions.Function1<? super dev.chrisbanes.snapper.SnapperLayoutInfo,java.lang.Float> maximumFlingDistance, optional float endContentPadding);
-    method public kotlin.jvm.functions.Function1<dev.chrisbanes.snapper.SnapperLayoutInfo,java.lang.Float> getSinglePageFlingDistance();
-    property public final kotlin.jvm.functions.Function1<dev.chrisbanes.snapper.SnapperLayoutInfo,java.lang.Float> singlePageFlingDistance;
+    method @Deprecated @androidx.compose.runtime.Composable @dev.chrisbanes.snapper.ExperimentalSnapperApi public androidx.compose.foundation.gestures.FlingBehavior flingBehavior(com.google.accompanist.pager.PagerState state, optional androidx.compose.animation.core.DecayAnimationSpec<java.lang.Float> decayAnimationSpec, optional androidx.compose.animation.core.AnimationSpec<java.lang.Float> snapAnimationSpec, optional kotlin.jvm.functions.Function1<? super dev.chrisbanes.snapper.SnapperLayoutInfo,java.lang.Float> maximumFlingDistance, optional float endContentPadding);
+    method @androidx.compose.runtime.Composable @dev.chrisbanes.snapper.ExperimentalSnapperApi public androidx.compose.foundation.gestures.FlingBehavior flingBehavior(com.google.accompanist.pager.PagerState state, optional androidx.compose.animation.core.DecayAnimationSpec<java.lang.Float> decayAnimationSpec, optional androidx.compose.animation.core.AnimationSpec<java.lang.Float> snapAnimationSpec, optional float endContentPadding, kotlin.jvm.functions.Function3<? super dev.chrisbanes.snapper.SnapperLayoutInfo,? super java.lang.Integer,? super java.lang.Integer,java.lang.Integer> snapIndex);
+    method @androidx.compose.runtime.Composable @dev.chrisbanes.snapper.ExperimentalSnapperApi public androidx.compose.foundation.gestures.FlingBehavior flingBehavior(com.google.accompanist.pager.PagerState state, optional androidx.compose.animation.core.DecayAnimationSpec<java.lang.Float> decayAnimationSpec, optional androidx.compose.animation.core.AnimationSpec<java.lang.Float> snapAnimationSpec, optional float endContentPadding);
+    method @Deprecated public kotlin.jvm.functions.Function1<dev.chrisbanes.snapper.SnapperLayoutInfo,java.lang.Float> getSinglePageFlingDistance();
+    method public kotlin.jvm.functions.Function3<dev.chrisbanes.snapper.SnapperLayoutInfo,java.lang.Integer,java.lang.Integer,java.lang.Integer> getSinglePageSnapIndex();
+    property @Deprecated public final kotlin.jvm.functions.Function1<dev.chrisbanes.snapper.SnapperLayoutInfo,java.lang.Float> singlePageFlingDistance;
+    property public final kotlin.jvm.functions.Function3<dev.chrisbanes.snapper.SnapperLayoutInfo,java.lang.Integer,java.lang.Integer,java.lang.Integer> singlePageSnapIndex;
     field public static final com.google.accompanist.pager.PagerDefaults INSTANCE;
   }
 

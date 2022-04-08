@@ -69,8 +69,8 @@ private fun Sample() {
             )
         },
         modifier = Modifier.fillMaxSize()
-    ) {
-        Column(Modifier.fillMaxSize()) {
+    ) { padding ->
+        Column(Modifier.fillMaxSize().padding(padding)) {
             val pagerState = rememberPagerState()
 
             // Display 10 items

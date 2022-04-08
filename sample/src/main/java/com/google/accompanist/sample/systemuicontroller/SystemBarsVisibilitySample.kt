@@ -35,7 +35,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
@@ -47,10 +46,8 @@ class SystemBarsVisibilitySample : ComponentActivity() {
 
         setContent {
             AccompanistSampleTheme {
-                ProvideWindowInsets {
-                    Surface {
-                        Sample()
-                    }
+                Surface {
+                    Sample()
                 }
             }
         }
@@ -70,9 +67,9 @@ private fun Sample() {
             )
         },
         modifier = Modifier.fillMaxSize()
-    ) {
+    ) { padding ->
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().padding(padding),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {

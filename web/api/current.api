@@ -1,6 +1,38 @@
 // Signature format: 4.0
 package com.google.accompanist.web {
 
+  public class AccompanistWebChromeClient extends android.webkit.WebChromeClient {
+    ctor public AccompanistWebChromeClient();
+    method public com.google.accompanist.web.WebViewState getState();
+    property public com.google.accompanist.web.WebViewState state;
+    field public com.google.accompanist.web.WebViewState state;
+  }
+
+  public class AccompanistWebViewClient extends android.webkit.WebViewClient {
+    ctor public AccompanistWebViewClient();
+    method public com.google.accompanist.web.WebViewNavigator getNavigator();
+    method public com.google.accompanist.web.WebViewState getState();
+    property public com.google.accompanist.web.WebViewNavigator navigator;
+    property public com.google.accompanist.web.WebViewState state;
+    field public com.google.accompanist.web.WebViewNavigator navigator;
+    field public com.google.accompanist.web.WebViewState state;
+  }
+
+  public abstract sealed class LoadingState {
+  }
+
+  public static final class LoadingState.Finished extends com.google.accompanist.web.LoadingState {
+    field public static final com.google.accompanist.web.LoadingState.Finished INSTANCE;
+  }
+
+  public static final class LoadingState.Loading extends com.google.accompanist.web.LoadingState {
+    ctor public LoadingState.Loading(float progress);
+    method public float component1();
+    method public com.google.accompanist.web.LoadingState.Loading copy(float progress);
+    method public float getProgress();
+    property public final float progress;
+  }
+
   public abstract sealed class WebContent {
     method public final String? getCurrentUrl();
   }
@@ -17,10 +49,13 @@ package com.google.accompanist.web {
   }
 
   public static final class WebContent.Url extends com.google.accompanist.web.WebContent {
-    ctor public WebContent.Url(String url);
+    ctor public WebContent.Url(String url, optional java.util.Map<java.lang.String,java.lang.String> additionalHttpHeaders);
     method public String component1();
-    method public com.google.accompanist.web.WebContent.Url copy(String url);
+    method public java.util.Map<java.lang.String,java.lang.String> component2();
+    method public com.google.accompanist.web.WebContent.Url copy(String url, java.util.Map<java.lang.String,java.lang.String> additionalHttpHeaders);
+    method public java.util.Map<java.lang.String,java.lang.String> getAdditionalHttpHeaders();
     method public String getUrl();
+    property public final java.util.Map<java.lang.String,java.lang.String> additionalHttpHeaders;
     property public final String url;
   }
 
@@ -36,20 +71,39 @@ package com.google.accompanist.web {
   }
 
   public final class WebViewKt {
-    method @androidx.compose.runtime.Composable public static void WebView(com.google.accompanist.web.WebViewState state, optional androidx.compose.ui.Modifier modifier, optional boolean captureBackPresses, optional kotlin.jvm.functions.Function1<? super android.webkit.WebView,kotlin.Unit> onCreated, optional kotlin.jvm.functions.Function2<? super android.webkit.WebResourceRequest,? super android.webkit.WebResourceError,kotlin.Unit> onError);
-    method @androidx.compose.runtime.Composable public static com.google.accompanist.web.WebViewState rememberWebViewState(String url);
+    method @androidx.compose.runtime.Composable public static void WebView(com.google.accompanist.web.WebViewState state, optional androidx.compose.ui.Modifier modifier, optional boolean captureBackPresses, optional com.google.accompanist.web.WebViewNavigator navigator, optional kotlin.jvm.functions.Function1<? super android.webkit.WebView,kotlin.Unit> onCreated, optional com.google.accompanist.web.AccompanistWebViewClient client, optional com.google.accompanist.web.AccompanistWebChromeClient chromeClient);
+    method @androidx.compose.runtime.Composable public static com.google.accompanist.web.WebViewNavigator rememberWebViewNavigator(optional kotlinx.coroutines.CoroutineScope coroutineScope);
+    method @androidx.compose.runtime.Composable public static com.google.accompanist.web.WebViewState rememberWebViewState(String url, optional java.util.Map<java.lang.String,java.lang.String> additionalHttpHeaders);
     method @androidx.compose.runtime.Composable public static com.google.accompanist.web.WebViewState rememberWebViewStateWithHTMLData(String data, optional String? baseUrl);
+  }
+
+  @androidx.compose.runtime.Stable public final class WebViewNavigator {
+    ctor public WebViewNavigator(kotlinx.coroutines.CoroutineScope coroutineScope);
+    method public boolean getCanGoBack();
+    method public boolean getCanGoForward();
+    method public void navigateBack();
+    method public void navigateForward();
+    method public void reload();
+    method public void stopLoading();
+    property public final boolean canGoBack;
+    property public final boolean canGoForward;
   }
 
   @androidx.compose.runtime.Stable public final class WebViewState {
     ctor public WebViewState(com.google.accompanist.web.WebContent webContent);
     method public com.google.accompanist.web.WebContent getContent();
     method public androidx.compose.runtime.snapshots.SnapshotStateList<com.google.accompanist.web.WebViewError> getErrorsForCurrentRequest();
+    method public com.google.accompanist.web.LoadingState getLoadingState();
+    method public android.graphics.Bitmap? getPageIcon();
+    method public String? getPageTitle();
     method public boolean isLoading();
     method public void setContent(com.google.accompanist.web.WebContent content);
     property public final com.google.accompanist.web.WebContent content;
     property public final androidx.compose.runtime.snapshots.SnapshotStateList<com.google.accompanist.web.WebViewError> errorsForCurrentRequest;
     property public final boolean isLoading;
+    property public final com.google.accompanist.web.LoadingState loadingState;
+    property public final android.graphics.Bitmap? pageIcon;
+    property public final String? pageTitle;
   }
 
 }

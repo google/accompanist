@@ -10,7 +10,7 @@ To implement this wrapper there are two key APIs which are needed: WebView, whic
 
 The basic usage is as follows:
 ```kotlin
-val state by rememberWebViewState("https://example.com")
+val state = rememberWebViewState("https://example.com")
 
 WebView(state)
 ```

@@ -79,19 +79,19 @@ private fun Sample() {
             )
         },
         modifier = Modifier.fillMaxSize()
-    ) {
-        HorizontalPagerWithOffsetTransition()
+    ) { padding ->
+        HorizontalPagerWithOffsetTransition(Modifier.padding(padding))
     }
 }
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalCoilApi::class)
 @Composable
-fun HorizontalPagerWithOffsetTransition() {
+fun HorizontalPagerWithOffsetTransition(modifier: Modifier = Modifier) {
     HorizontalPager(
         count = 10,
         // Add 32.dp horizontal padding to 'center' the pages
         contentPadding = PaddingValues(horizontal = 32.dp),
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) { page ->
         Card(
             Modifier
