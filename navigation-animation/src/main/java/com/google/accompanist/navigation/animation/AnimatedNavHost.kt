@@ -28,20 +28,15 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.with
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavControllerVisibleEntries
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph
@@ -53,6 +48,7 @@ import androidx.navigation.compose.DialogNavigator
 import androidx.navigation.compose.LocalOwnersProvider
 import androidx.navigation.createGraph
 import androidx.navigation.get
+import kotlinx.coroutines.flow.map
 
 /**
  * Provides in place in the Compose hierarchy for self contained navigation to occur.
@@ -117,7 +113,6 @@ public fun AnimatedNavHost(
  * @param popEnterTransition callback to define popEnter transitions for destination in this host
  * @param popExitTransition callback to define popExit transitions for destination in this host
  */
-@OptIn(NavControllerVisibleEntries::class)
 @ExperimentalAnimationApi
 @Composable
 public fun AnimatedNavHost(
@@ -157,18 +152,15 @@ public fun AnimatedNavHost(
     val composeNavigator = navController.navigatorProvider.get<Navigator<out NavDestination>>(
         AnimatedComposeNavigator.NAME
     ) as? AnimatedComposeNavigator ?: return
-    val backStack by composeNavigator.backStack.collectAsState()
-    val transitionsInProgress by composeNavigator.transitionsInProgress.collectAsState()
-    val visibleTransitionsInProgress = rememberVisibleList(transitionsInProgress)
-    val visibleBackStack = rememberVisibleList(backStack)
-    visibleTransitionsInProgress.PopulateVisibleList(transitionsInProgress)
-    visibleBackStack.PopulateVisibleList(backStack)
-    val visibleEntries by navController.visibleEntries.collectAsState()
-
-    val backStackEntry = visibleTransitionsInProgress.lastOrNull() ?: visibleBackStack.lastOrNull()
-        ?: visibleEntries.lastOrNull {
-            it.lifecycle.currentState.isAtLeast(Lifecycle.State.CREATED)
+    val visibleEntries by remember(navController.visibleEntries) {
+        navController.visibleEntries.map {
+            it.filter {
+                entry -> entry.destination.navigatorName == AnimatedComposeNavigator.NAME
+            }
         }
+    }.collectAsState(emptyList())
+
+    val backStackEntry = visibleEntries.lastOrNull()
 
     if (backStackEntry != null) {
         val finalEnter: AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition = {
@@ -206,20 +198,18 @@ public fun AnimatedNavHost(
             contentAlignment,
             contentKey = { it.id }
         ) {
-            val currentEntry = transitionsInProgress.lastOrNull { entry ->
-                it == entry
-            } ?: backStack.lastOrNull { entry ->
+            val currentEntry = visibleEntries.last { entry ->
                 it == entry
             }
             // while in the scope of the composable, we provide the navBackStackEntry as the
             // ViewModelStoreOwner and LifecycleOwner
-            currentEntry?.LocalOwnersProvider(saveableStateHolder) {
+            currentEntry.LocalOwnersProvider(saveableStateHolder) {
                 (currentEntry.destination as AnimatedComposeNavigator.Destination)
                     .content(this, currentEntry)
             }
         }
         if (transition.currentState == transition.targetState) {
-            transitionsInProgress.forEach { entry ->
+            visibleEntries.forEach { entry ->
                 composeNavigator.markTransitionComplete(entry)
             }
         }
@@ -249,43 +239,3 @@ internal val popEnterTransitions =
 @ExperimentalAnimationApi
 internal val popExitTransitions =
     mutableMapOf<String?, (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition?)?>()
-
-@Composable
-private fun MutableList<NavBackStackEntry>.PopulateVisibleList(
-    transitionsInProgress: Collection<NavBackStackEntry>
-) {
-    transitionsInProgress.forEach { entry ->
-        DisposableEffect(entry.lifecycle) {
-            val observer = LifecycleEventObserver { _, event ->
-                // ON_START -> add to visibleBackStack, ON_STOP -> remove from visibleBackStack
-                if (event == Lifecycle.Event.ON_START) {
-                    // We want to treat the visible lists as Sets but we want to keep
-                    // the functionality of mutableStateListOf() so that we recompose in response
-                    // to adds and removes.
-                    if (!contains(entry)) {
-                        add(entry)
-                    }
-                }
-                if (event == Lifecycle.Event.ON_STOP) {
-                    remove(entry)
-                }
-            }
-            entry.lifecycle.addObserver(observer)
-            onDispose {
-                entry.lifecycle.removeObserver(observer)
-            }
-        }
-    }
-}
-
-@Composable
-private fun rememberVisibleList(transitionsInProgress: Collection<NavBackStackEntry>) =
-    remember(transitionsInProgress) {
-        mutableStateListOf<NavBackStackEntry>().also {
-            it.addAll(
-                transitionsInProgress.filter { entry ->
-                    entry.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
-                }
-            )
-        }
-    }
