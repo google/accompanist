@@ -132,7 +132,7 @@ class DrawablePainter(
         get() {
             // Reading this ensures that we re-layout when the instrinsic size changes
             sizeInvalidateTick
-            
+
             return drawable.intrinsicSize.also { lastIntrinsicSize = it }
         }
 
