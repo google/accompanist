@@ -58,8 +58,8 @@ private val MAIN_HANDLER by lazy(LazyThreadSafetyMode.NONE) {
 class DrawablePainter(
     val drawable: Drawable
 ) : Painter(), RememberObserver {
-    private var invalidateTick by mutableStateOf(0)
-    private var layoutTick by mutableStateOf(0)
+    private var drawInvalidateTick by mutableStateOf(0)
+    private var sizeInvalidateTick by mutableStateOf(0)
 
     private var lastIntrinsicSize: Size = Size.Unspecified
 
@@ -67,7 +67,7 @@ class DrawablePainter(
         object : Drawable.Callback {
             override fun invalidateDrawable(d: Drawable) {
                 // Update the tick so that we get re-drawn
-                invalidateTick++
+                drawInvalidateTick++
 
                 if (lastIntrinsicSize != drawable.intrinsicSize) {
                     // If the intrinsic size has changed, update the layout tick
@@ -130,15 +130,16 @@ class DrawablePainter(
 
     override val intrinsicSize: Size
         get() {
-            // Reading this ensures that we re-layout when invalidateDrawable() is called
-            layoutTick
+            // Reading this ensures that we re-layout when the instrinsic size changes
+            sizeInvalidateTick
+            
             return drawable.intrinsicSize.also { lastIntrinsicSize = it }
         }
 
     override fun DrawScope.onDraw() {
         drawIntoCanvas { canvas ->
             // Reading this ensures that we invalidate when invalidateDrawable() is called
-            invalidateTick
+            drawInvalidateTick
 
             // Update the Drawable's bounds
             drawable.setBounds(0, 0, size.width.roundToInt(), size.height.roundToInt())
