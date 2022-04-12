@@ -71,7 +71,7 @@ class DrawablePainter(
 
                 if (lastIntrinsicSize != drawable.intrinsicSize) {
                     // If the intrinsic size has changed, update the layout tick
-                    layoutTick++
+                    sizeInvalidateTick++
                 }
             }
 
