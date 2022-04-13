@@ -262,7 +262,7 @@ sealed class LoadingState {
     data class Loading(val progress: Float) : LoadingState()
 
     /**
-     * Describes a webview that has finished loading content (or not started).
+     * Describes a webview that has finished loading content.
      */
     object Finished : LoadingState()
 }
