@@ -250,6 +250,10 @@ internal fun WebContent.withUrl(url: String) = when (this) {
  * See [Loading] and [Finished].
  */
 sealed class LoadingState {
+    /**
+     * Describes a WebView that has not yet loaded for the first time.
+     */
+    object Initializing : LoadingState()
 
     /**
      * Describes a webview between `onPageStarted` and `onPageFinished` events, contains a
@@ -278,7 +282,7 @@ class WebViewState(webContent: WebContent) {
      * Whether the WebView is currently [LoadingState.Loading] data in its main frame (along with
      * progress) or the data loading has [LoadingState.Finished]. See [LoadingState]
      */
-    var loadingState: LoadingState by mutableStateOf(LoadingState.Finished)
+    var loadingState: LoadingState by mutableStateOf(LoadingState.Initializing)
         internal set
 
     /**

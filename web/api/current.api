@@ -25,6 +25,10 @@ package com.google.accompanist.web {
     field public static final com.google.accompanist.web.LoadingState.Finished INSTANCE;
   }
 
+  public static final class LoadingState.Initializing extends com.google.accompanist.web.LoadingState {
+    field public static final com.google.accompanist.web.LoadingState.Initializing INSTANCE;
+  }
+
   public static final class LoadingState.Loading extends com.google.accompanist.web.LoadingState {
     ctor public LoadingState.Loading(float progress);
     method public float component1();

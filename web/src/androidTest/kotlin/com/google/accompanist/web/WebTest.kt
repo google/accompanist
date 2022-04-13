@@ -377,7 +377,7 @@ class WebTest {
         rule.waitUntil(3_000) { collectedLoadingStates.any { it is LoadingState.Loading } }
         rule.waitForIdle()
 
-        assertThat(collectedLoadingStates.first()).isInstanceOf(LoadingState.Finished::class.java)
+        assertThat(collectedLoadingStates.first()).isInstanceOf(LoadingState.Initializing::class.java)
         assertThat(collectedLoadingStates.last()).isInstanceOf(LoadingState.Finished::class.java)
         assertThat(collectedLoadingStates.filterIsInstance<LoadingState.Loading>()).isNotEmpty()
 
