@@ -102,11 +102,13 @@ public class BottomSheetNavigatorSheetState(private val sheetState: ModalBottomS
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 public fun rememberBottomSheetNavigator(
-    animationSpec: AnimationSpec<Float> = SwipeableDefaults.AnimationSpec
+    animationSpec: AnimationSpec<Float> = SwipeableDefaults.AnimationSpec,
+    skipHalfExpanded: Boolean = false
 ): BottomSheetNavigator {
     val sheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden,
-        animationSpec
+        animationSpec,
+        skipHalfExpanded
     )
     return remember(sheetState) {
         BottomSheetNavigator(sheetState = sheetState)
