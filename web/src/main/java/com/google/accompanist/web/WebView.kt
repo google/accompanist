@@ -17,7 +17,6 @@
 package com.google.accompanist.web
 
 import android.graphics.Bitmap
-import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
@@ -84,11 +83,6 @@ fun WebView(
         factory = { context ->
             WebView(context).apply {
                 onCreated(this)
-
-                layoutParams = ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT
-                )
 
                 // Set the state of the client and chrome client
                 // This is done internally to ensure they always are the same instance as the

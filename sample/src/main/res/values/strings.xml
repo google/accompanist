@@ -61,4 +61,5 @@
     <string name="placeholder_title_shimmer">Placeholder: Shimmer</string>
 
     <string name="webview_title_basic">WebView: Basic</string>
+    <string name="webview_title_pager">WebView: Embedded in Pager</string>
 </resources>

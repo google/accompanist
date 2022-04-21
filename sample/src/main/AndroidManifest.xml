@@ -394,6 +394,17 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".webview.PagerOfWebViewSample"
+            android:exported="false"
+            android:label="@string/webview_title_pager">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>
