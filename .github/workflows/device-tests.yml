@@ -13,6 +13,7 @@ on:
 jobs:
   android-test:
     runs-on: macos-latest
+    if: github.repository == 'google/accompanist'
     timeout-minutes: 80
 
     strategy:
