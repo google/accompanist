@@ -20,6 +20,8 @@ Each [release](https://github.com/google/accompanist/releases) outlines what ver
  </tr>
 </table>
 
+> :warning: **Ensure you are using the Accompanist version that matches with your Compose version**: If you upgrade Accompanist, it will upgrade your Compose version via transitive dependencies.
+
 ## Libraries
 
 ### 🍫 [System UI Controller](./systemuicontroller/)
