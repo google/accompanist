@@ -21,6 +21,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -29,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.plusAssign
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.bottomSheet
@@ -101,11 +101,13 @@ private fun HomeScreen(showSheet: () -> Unit, showFeed: () -> Unit) {
 
 @Composable
 private fun BottomSheet(showFeed: () -> Unit, showAnotherSheet: () -> Unit, arg: String) {
-    Text("Sheet with arg: $arg")
-    Button(onClick = showFeed) {
-        Text("Click me to navigate!")
-    }
-    Button(onClick = showAnotherSheet) {
-        Text("Click me to show another sheet!")
+    Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+        Text("Sheet with arg: $arg")
+        Button(onClick = showFeed) {
+            Text("Click me to navigate!")
+        }
+        Button(onClick = showAnotherSheet) {
+            Text("Click me to show another sheet!")
+        }
     }
 }
