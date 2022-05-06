@@ -8,6 +8,23 @@ A library which provides [Compose Animation](https://developer.android.com/jetpa
     The navigation APIs are currently experimental and they could change at any time.
     All of the APIs are marked with the `@ExperimentalAnimationApi` annotation.
 
+
+## Download
+
+[![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-navigation-animation)](https://search.maven.org/search?q=g:com.google.accompanist)
+
+```groovy
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "com.google.accompanist:accompanist-navigation-animation:<version>"
+}
+```
+
+Follow the steps below to either [add](#usage) Jetpack Navigation Compose to your app, or to [migrate](#migration) an existing Jetpack Navigation Compose implementation.
+
 ## Usage
 
 The `AnimatedNavHost` composable offers a way to add custom transitions to composables in
@@ -97,20 +114,6 @@ private fun ExperimentalAnimationNav() {
 ```
 
 For more examples, refer to the [samples](https://github.com/google/accompanist/tree/main/sample/src/main/java/com/google/accompanist/sample/navigation/animation).
-
-## Download
-
-[![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-navigation-animation)](https://search.maven.org/search?q=g:com.google.accompanist)
-
-```groovy
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    implementation "com.google.accompanist:accompanist-navigation-animation:<version>"
-}
-```
 
 ## Migration
 
