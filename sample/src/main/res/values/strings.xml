@@ -43,8 +43,7 @@
     <string name="permissions_title_multiple">Permissions: Request multiple permissions</string>
     <string name="permissions_title_location">Permissions: Request location permissions</string>
 
-    <string name="flowlayout_title_column">Flow Layout: Column</string>
-    <string name="flowlayout_title_row">Flow Layout: Row</string>
+    <string name="flowlayouts_title_basic">Flow Layouts: Basic</string>
 
     <string name="swiperefresh_title_basics">Swipe Refresh: Basic</string>
     <string name="swiperefresh_title_content_padding">Swipe Refresh: Edge-to-edge</string>
