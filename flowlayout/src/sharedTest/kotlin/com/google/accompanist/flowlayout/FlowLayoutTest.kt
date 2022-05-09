@@ -1181,63 +1181,6 @@ class FlowTest : LayoutTest() {
     }
 
     @Test
-    fun testFlowRow_withMaxLines_negative() {
-        val requestedNumberOfSquares = 15
-        val size = 48
-        val maxLines = -1
-        val spacing = 32
-        val flowWidth = 256
-
-        val flowSize = Ref<IntSize>()
-        val childSize = Array(requestedNumberOfSquares) { Ref<IntSize>() }
-        val childPosition = Array(requestedNumberOfSquares) { Ref<Offset>() }
-        val positionedLatch = CountDownLatch(1)
-
-        rule.setContent {
-            Box {
-                ConstrainedBox(
-                    constraints = DpConstraints(
-                        maxWidth = with(LocalDensity.current) { flowWidth.toDp() }
-                    ),
-                    modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
-                        flowSize.value = coordinates.size
-                        positionedLatch.countDown()
-                    }
-                ) {
-                    FlowRow(
-                        maxLines = maxLines,
-                        crossAxisSpacing = with(LocalDensity.current) { spacing.toDp() }
-                    ) {
-                        for (i in 0 until requestedNumberOfSquares) {
-                            Container(
-                                width = with(LocalDensity.current) { size.toDp() },
-                                height = with(LocalDensity.current) { size.toDp() },
-                                modifier = Modifier.saveLayoutInfo(
-                                    childSize[i],
-                                    childPosition[i],
-                                    positionedLatch
-                                )
-                            ) {
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        assertTrue(positionedLatch.await(1, TimeUnit.SECONDS))
-
-        assertEquals(
-            IntSize(width = 0, height = 0),
-            flowSize.value
-        )
-        for (i in 0 until requestedNumberOfSquares) {
-            assertNull(childSize[i].value)
-            assertNull(childPosition[i].value)
-        }
-    }
-
-    @Test
     fun testFlowRow_withMaxLines_fillMaxHeight() {
         val requestedNumberOfSquares = 15
         val size = 48
@@ -2532,61 +2475,6 @@ class FlowTest : LayoutTest() {
                 assertNull(squareSize)
                 assertNull(squarePosition)
             }
-        }
-    }
-
-    @Test
-    fun testFlowColumn_withMaxLines_negative() {
-        val requestedNumberOfSquares = 15
-        val size = 48
-        val maxLines = -1
-        val spacing = 32
-        val flowHeight = 256
-
-        val flowSize = Ref<IntSize>()
-        val childSize = Array(requestedNumberOfSquares) { Ref<IntSize>() }
-        val childPosition = Array(requestedNumberOfSquares) { Ref<Offset>() }
-        val positionedLatch = CountDownLatch( 1)
-
-        rule.setContent {
-            Box {
-                ConstrainedBox(
-                    constraints = DpConstraints(maxHeight = with(LocalDensity.current) { flowHeight.toDp() }),
-                    modifier = Modifier.onGloballyPositioned { coordinates: LayoutCoordinates ->
-                        flowSize.value = coordinates.size
-                        positionedLatch.countDown()
-                    }
-                ) {
-                    FlowColumn(
-                        maxLines = maxLines,
-                        crossAxisSpacing = with(LocalDensity.current) { spacing.toDp() }
-                    ) {
-                        for (i in 0 until requestedNumberOfSquares) {
-                            Container(
-                                width = with(LocalDensity.current) { size.toDp() },
-                                height = with(LocalDensity.current) { size.toDp() },
-                                modifier = Modifier.saveLayoutInfo(
-                                    childSize[i],
-                                    childPosition[i],
-                                    positionedLatch
-                                )
-                            ) {
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        assertTrue(positionedLatch.await(1, TimeUnit.SECONDS))
-
-        assertEquals(
-            IntSize(width = 0, height = 0),
-            flowSize.value
-        )
-        for (i in 0 until requestedNumberOfSquares) {
-            assertNull(childSize[i].value)
-            assertNull(childPosition[i].value)
         }
     }
 

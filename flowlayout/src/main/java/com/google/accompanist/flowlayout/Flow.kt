@@ -145,6 +145,8 @@ private fun Flow(
     lastLineMainAxisAlignment: FlowMainAxisAlignment,
     content: @Composable () -> Unit
 ) {
+    require(maxLines >= 0) { "maxLines must be >= 0" }
+
     fun Placeable.mainAxisSize() =
         if (orientation == LayoutOrientation.Horizontal) width else height
     fun Placeable.crossAxisSize() =
