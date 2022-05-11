@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://google.github.io/accompanist/webview/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.9">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.14">
     
     
       
@@ -23,10 +23,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.120efc48.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.3de6f41f.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.9647289d.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.cc9b2e1e.min.css">
         
           
           
@@ -1209,38 +1209,38 @@
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
 <p>To implement this wrapper there are two key APIs which are needed: <a href="../api/web/com.google.accompanist.web/-web-view.html"><code>WebView</code></a>, which is provides the layout, and <a href="../api/web/com.google.accompanist.web/remember-web-view-state.html"><code>rememberWebViewState(url)</code></a> which provides some remembered state including the URL to display.</p>
 <p>The basic usage is as follows:</p>
-<div class="highlight"><pre><span></span><code><span class="kd">val</span> <span class="nv">state</span> <span class="o">=</span> <span class="n">rememberWebViewState</span><span class="p">(</span><span class="s">&quot;https://example.com&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rememberWebViewState</span><span class="p">(</span><span class="s">&quot;https://example.com&quot;</span><span class="p">)</span><span class="w"></span>
 
-<span class="n">WebView</span><span class="p">(</span>
-    <span class="n">state</span>
-<span class="p">)</span>
+<span class="n">WebView</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">state</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <p>This will display a WebView in your Compose layout that shows the URL provided.</p>
 <p>There is a larger sample in the sample app which can be found <a href="https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/webview/BasicWebViewSample.kt">here</a>. This sample also shows how to show a loading state.</p>
 <h3 id="webview-settings-including-javascript">WebView settings including Javascript<a class="headerlink" href="#webview-settings-including-javascript" title="Permanent link">&para;</a></h3>
 <p>By default, javascript is disabled in the WebView. To enable it or any other settings you can use the <code>onCreated</code> callback.</p>
-<div class="highlight"><pre><span></span><code><span class="n">WebView</span><span class="p">(</span>
-    <span class="n">state</span> <span class="o">=</span> <span class="n">webViewState</span><span class="p">,</span>
-    <span class="n">onCreated</span> <span class="o">=</span> <span class="p">{</span> <span class="nb">it</span><span class="p">.</span><span class="na">settings</span><span class="p">.</span><span class="na">javaScriptEnabled</span> <span class="o">=</span> <span class="kc">true</span> <span class="p">}</span>
-<span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">WebView</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">webViewState</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">onCreated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nb">it</span><span class="p">.</span><span class="na">settings</span><span class="p">.</span><span class="na">javaScriptEnabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h3 id="capturing-back-presses">Capturing back presses<a class="headerlink" href="#capturing-back-presses" title="Permanent link">&para;</a></h3>
 <p>By default the WebView will capture back presses/swipes when relevant and navigate the WebView back. This can be disabled via the parameter on 
 the Composable.</p>
-<div class="highlight"><pre><span></span><code><span class="n">WebView</span><span class="p">(</span>
-    <span class="p">...</span>
-    <span class="n">captureBackPresses</span> <span class="o">=</span> <span class="kc">false</span>
-<span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">WebView</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="w">    </span><span class="n">captureBackPresses</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h2 id="download">Download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h2>
 <p><a href="https://search.maven.org/search?q=g:com.google.accompanist"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-webview" /></a></p>
-<div class="highlight"><pre><span></span><code><span class="n">repositories</span> <span class="o">{</span>
-    <span class="n">mavenCentral</span><span class="o">()</span>
-<span class="o">}</span>
+<div class="highlight"><pre><span></span><code><span class="n">repositories</span><span class="w"> </span><span class="o">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">mavenCentral</span><span class="o">()</span><span class="w"></span>
+<span class="o">}</span><span class="w"></span>
 
-<span class="n">dependencies</span> <span class="o">{</span>
-    <span class="n">implementation</span> <span class="s2">&quot;com.google.accompanist:accompanist-webview:&lt;version&gt;&quot;</span>
-<span class="o">}</span>
+<span class="n">dependencies</span><span class="w"> </span><span class="o">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">implementation</span><span class="w"> </span><span class="s2">&quot;com.google.accompanist:accompanist-webview:&lt;version&gt;&quot;</span><span class="w"></span>
+<span class="o">}</span><span class="w"></span>
 </code></pre></div>
 
               
@@ -1310,7 +1310,7 @@ the Composable.</p>
     <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.6e54b5cd.min.js"></script>
+      <script src="../assets/javascripts/bundle.c2e1ee47.min.js"></script>
       
     
   </body>

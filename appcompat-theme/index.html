@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://google.github.io/accompanist/appcompat-theme/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.9">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.14">
     
     
       
@@ -23,10 +23,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.120efc48.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.3de6f41f.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.9647289d.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.cc9b2e1e.min.css">
         
           
           
@@ -1303,13 +1303,13 @@
 <p><a href="https://search.maven.org/search?q=g:com.google.accompanist"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-appcompat-theme" /></a></p>
 <p>A library that enables reuse of <a href="https://developer.android.com/jetpack/androidx/releases/appcompat">AppCompat</a> XML themes for theming in <a href="https://developer.android.com/jetpack/compose">Jetpack Compose</a>.</p>
 <p>The basis of theming in <a href="https://developer.android.com/jetpack/compose">Jetpack Compose</a> is the <a href="https://developer.android.com/reference/kotlin/androidx/compose/material/MaterialTheme"><code>MaterialTheme</code></a> composable, where you provide <a href="https://developer.android.com/reference/kotlin/androidx/compose/material/Colors"><code>Colors</code></a>, <a href="https://developer.android.com/reference/kotlin/androidx/compose/material/Shapes"><code>Shapes</code></a> and <a href="https://developer.android.com/reference/kotlin/androidx/compose/material/Typography"><code>Typography</code></a> instances containing your styling parameters:</p>
-<div class="highlight"><pre><span></span><code><span class="n">MaterialTheme</span><span class="p">(</span>
-    <span class="n">typography</span> <span class="o">=</span> <span class="n">type</span><span class="p">,</span>
-    <span class="n">colors</span> <span class="o">=</span> <span class="n">colors</span><span class="p">,</span>
-    <span class="n">shapes</span> <span class="o">=</span> <span class="n">shapes</span>
-<span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// Surface, Scaffold, etc</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="n">MaterialTheme</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">typography</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">colors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">colors</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">shapes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shapes</span><span class="w"></span>
+<span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// Surface, Scaffold, etc</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <p><a href="https://developer.android.com/jetpack/androidx/releases/appcompat">AppCompat</a> XML themes allow for similar but coarser theming via XML theme attributes, like so:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">&lt;style</span> <span class="na">name=</span><span class="s">&quot;Theme.MyApp&quot;</span> <span class="na">parent=</span><span class="s">&quot;Theme.AppCompat.DayNight&quot;</span><span class="nt">&gt;</span>
@@ -1318,10 +1318,10 @@
 <span class="nt">&lt;/style&gt;</span>
 </code></pre></div>
 <p>This library attempts to bridge the gap between <a href="https://developer.android.com/jetpack/androidx/releases/appcompat">AppCompat</a> XML themes, and themes in <a href="https://developer.android.com/jetpack/compose">Jetpack Compose</a>, allowing your composable <a href="https://developer.android.com/reference/kotlin/androidx/compose/material/MaterialTheme"><code>MaterialTheme</code></a> to be based on the <code>Activity</code>'s XML theme:</p>
-<div class="highlight"><pre><span></span><code><span class="n">AppCompatTheme</span> <span class="p">{</span>
-    <span class="c1">// MaterialTheme.colors, MaterialTheme.shapes, MaterialTheme.typography</span>
-    <span class="c1">// will now contain copies of the context&#39;s theme</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="n">AppCompatTheme</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// MaterialTheme.colors, MaterialTheme.shapes, MaterialTheme.typography</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// will now contain copies of the context&#39;s theme</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <p>This is especially handy when you're migrating an existing app, a fragment (or other UI container) at a time.</p>
 <div class="admonition caution">
@@ -1332,18 +1332,18 @@ instead, as it allows much finer-grained reading of your theme.</p>
 </div>
 <h3 id="customizing-the-theme">Customizing the theme<a class="headerlink" href="#customizing-the-theme" title="Permanent link">&para;</a></h3>
 <p>The <a href="../api/appcompat-theme/appcompat-theme/com.google.accompanist.appcompattheme/-app-compat-theme.html"><code>AppCompatTheme()</code></a> function will automatically read the host context's AppCompat theme and pass them to <a href="https://developer.android.com/reference/kotlin/androidx/compose/material/MaterialTheme"><code>MaterialTheme</code></a> on your behalf, but if you want to customize the generated values, you can do so via the <a href="../api/appcompat-theme/appcompat-theme/com.google.accompanist.appcompattheme/create-app-compat-theme.html"><code>createAppCompatTheme()</code></a> function:</p>
-<div class="highlight"><pre><span></span><code><span class="kd">val</span> <span class="nv">context</span> <span class="o">=</span> <span class="n">LocalContext</span><span class="p">.</span><span class="na">current</span>
-<span class="kd">var</span> <span class="p">(</span><span class="nv">colors</span><span class="p">,</span> <span class="nv">type</span><span class="p">)</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="na">createAppCompatTheme</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LocalContext</span><span class="p">.</span><span class="na">current</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="p">(</span><span class="nv">colors</span><span class="p">,</span><span class="w"> </span><span class="nv">type</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="na">createAppCompatTheme</span><span class="p">()</span><span class="w"></span>
 
-<span class="c1">// Modify colors or type as required. Then pass them</span>
-<span class="c1">// through to MaterialTheme...</span>
+<span class="c1">// Modify colors or type as required. Then pass them</span><span class="w"></span>
+<span class="c1">// through to MaterialTheme...</span><span class="w"></span>
 
-<span class="n">MaterialTheme</span><span class="p">(</span>
-    <span class="n">colors</span> <span class="o">=</span> <span class="n">colors</span><span class="p">,</span>
-    <span class="n">typography</span> <span class="o">=</span> <span class="n">type</span>
-<span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// rest of layout</span>
-<span class="p">}</span>
+<span class="n">MaterialTheme</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">colors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">colors</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">typography</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">type</span><span class="w"></span>
+<span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// rest of layout</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </details>
 <h2 id="generated-theme">Generated theme<a class="headerlink" href="#generated-theme" title="Permanent link">&para;</a></h2>
@@ -1438,13 +1438,13 @@ for more information.</p>
 <hr />
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
 <p><a href="https://search.maven.org/search?q=g:com.google.accompanist"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-appcompat-theme" /></a></p>
-<div class="highlight"><pre><span></span><code><span class="n">repositories</span> <span class="o">{</span>
-    <span class="n">mavenCentral</span><span class="o">()</span>
-<span class="o">}</span>
+<div class="highlight"><pre><span></span><code><span class="n">repositories</span><span class="w"> </span><span class="o">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">mavenCentral</span><span class="o">()</span><span class="w"></span>
+<span class="o">}</span><span class="w"></span>
 
-<span class="n">dependencies</span> <span class="o">{</span>
-    <span class="n">implementation</span> <span class="s2">&quot;com.google.accompanist:accompanist-appcompat-theme:&lt;version&gt;&quot;</span>
-<span class="o">}</span>
+<span class="n">dependencies</span><span class="w"> </span><span class="o">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">implementation</span><span class="w"> </span><span class="s2">&quot;com.google.accompanist:accompanist-appcompat-theme:&lt;version&gt;&quot;</span><span class="w"></span>
+<span class="o">}</span><span class="w"></span>
 </code></pre></div>
 <h3 id="library-snapshots">Library Snapshots<a class="headerlink" href="#library-snapshots" title="Permanent link">&para;</a></h3>
 <p>Snapshots of the current development version of this library are available, which track the latest commit. See <a href="../using-snapshot-version">here</a> for more information on how to use them.</p>
@@ -1535,7 +1535,7 @@ limitations under the License.
     <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.6e54b5cd.min.js"></script>
+      <script src="../assets/javascripts/bundle.c2e1ee47.min.js"></script>
       
     
   </body>
