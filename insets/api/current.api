@@ -9,15 +9,15 @@ package com.google.accompanist.insets {
     enum_constant @Deprecated public static final com.google.accompanist.insets.HorizontalSide Right;
   }
 
-  @com.google.accompanist.insets.ExperimentalAnimatedInsets public final class ImeNestedScrollConnection implements androidx.compose.ui.input.nestedscroll.NestedScrollConnection {
-    ctor public ImeNestedScrollConnection(android.view.View view, boolean scrollImeOffScreenWhenVisible, boolean scrollImeOnScreenWhenNotVisible);
-    method public suspend Object? onPostFling(long consumed, long available, kotlin.coroutines.Continuation<? super androidx.compose.ui.unit.Velocity> p);
-    method public long onPostScroll(long consumed, long available, int source);
-    method public long onPreScroll(long available, int source);
+  @Deprecated @com.google.accompanist.insets.ExperimentalAnimatedInsets public final class ImeNestedScrollConnection implements androidx.compose.ui.input.nestedscroll.NestedScrollConnection {
+    ctor @Deprecated public ImeNestedScrollConnection(android.view.View view, boolean scrollImeOffScreenWhenVisible, boolean scrollImeOnScreenWhenNotVisible);
+    method @Deprecated public suspend Object? onPostFling(long consumed, long available, kotlin.coroutines.Continuation<? super androidx.compose.ui.unit.Velocity> p);
+    method @Deprecated public long onPostScroll(long consumed, long available, int source);
+    method @Deprecated public long onPreScroll(long available, int source);
   }
 
   public final class ImeNestedScrollConnectionKt {
-    method @androidx.compose.runtime.Composable @com.google.accompanist.insets.ExperimentalAnimatedInsets public static androidx.compose.ui.input.nestedscroll.NestedScrollConnection rememberImeNestedScrollConnection(optional boolean scrollImeOffScreenWhenVisible, optional boolean scrollImeOnScreenWhenNotVisible);
+    method @Deprecated @androidx.compose.runtime.Composable @com.google.accompanist.insets.ExperimentalAnimatedInsets public static androidx.compose.ui.input.nestedscroll.NestedScrollConnection rememberImeNestedScrollConnection(optional boolean scrollImeOffScreenWhenVisible, optional boolean scrollImeOnScreenWhenNotVisible);
   }
 
   @Deprecated @androidx.compose.runtime.Stable public interface Insets {
