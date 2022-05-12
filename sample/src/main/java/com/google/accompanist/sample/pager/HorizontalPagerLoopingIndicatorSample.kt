@@ -151,13 +151,20 @@ private fun Sample() {
 
             val looping = loopState.value
             if (underDragging.not() && looping) {
-                LaunchedEffect(key1 = underDragging, key2 = looping) {
+                LaunchedEffect(key1 = underDragging) {
                     try {
                         while (true) {
                             delay(1000L)
                             val current = pagerState.currentPage
-                            if (underDragging.not() && looping) {
-                                pagerState.animateScrollToPage(current + 1)
+                            val currentPos = pageMapper(current)
+                            val nextPage = current + 1
+                            if (underDragging.not()) {
+                                val toPage = nextPage.takeIf { nextPage < pagerState.pageCount } ?: (currentPos + startIndex + 1)
+                                if (toPage > current) {
+                                    pagerState.animateScrollToPage(toPage)
+                                } else {
+                                    pagerState.scrollToPage(toPage)
+                                }
                             }
                         }
                     } catch (e: CancellationException) {
