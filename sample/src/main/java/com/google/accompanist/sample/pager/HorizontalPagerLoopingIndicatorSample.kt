@@ -116,8 +116,8 @@ private fun Sample() {
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(16.dp),
-                size = pageCount,
-                pageMapper = ::pageMapper
+                pageCount = pageCount,
+                pageIndexMapping = ::pageMapper
             )
 
             val loopState = remember {

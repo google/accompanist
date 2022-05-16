@@ -50,9 +50,11 @@ import kotlin.math.sign
  *
  * @param pagerState the state object of your [Pager] to be used to observe the list's state.
  * @param modifier the modifier to apply to this layout.
- * @param size the size of indicators should be displayed, defaults to [PagerState.pageCount].
- * @param pageMapper describe how to get a proper page position by a giving page from
- * [PagerState.currentPage], if [size] is not equals to [PagerState.pageCount].
+ * @param pageCount the size of indicators should be displayed, defaults to [PagerState.pageCount].
+ * If you are implementing a looping pager with a much larger [PagerState.pageCount]
+ * than indicators should displayed, e.g. [Int.MAX_VALUE], specify you real size in this param.
+ * @param pageIndexMapping describe how to get the position of active indicator by the giving page
+ * from [PagerState.currentPage], if [pageCount] is not equals to [PagerState.pageCount].
  * @param activeColor the color of the active Page indicator
  * @param inactiveColor the color of page indicators that are inactive. This defaults to
  * [activeColor] with the alpha component set to the [ContentAlpha.disabled].
@@ -66,8 +68,8 @@ import kotlin.math.sign
 fun HorizontalPagerIndicator(
     pagerState: PagerState,
     modifier: Modifier = Modifier,
-    size: Int = pagerState.pageCount,
-    pageMapper: (Int) -> Int = {it},
+    pageCount: Int = pagerState.pageCount,
+    pageIndexMapping: (Int) -> Int = {it},
     activeColor: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
     inactiveColor: Color = activeColor.copy(ContentAlpha.disabled),
     indicatorWidth: Dp = 8.dp,
@@ -91,16 +93,16 @@ fun HorizontalPagerIndicator(
                 .size(width = indicatorWidth, height = indicatorHeight)
                 .background(color = inactiveColor, shape = indicatorShape)
 
-            repeat(size) {
+            repeat(pageCount) {
                 Box(indicatorModifier)
             }
         }
 
-        val position = pageMapper(pagerState.currentPage)
+        val position = pageIndexMapping(pagerState.currentPage)
         val offset = pagerState.currentPageOffset
-        val next = pageMapper(pagerState.currentPage + offset.sign.toInt())
+        val next = pageIndexMapping(pagerState.currentPage + offset.sign.toInt())
         val scrollPosition = ((next - position) * offset.absoluteValue + position)
-            .coerceIn(0f, (size - 1).coerceAtLeast(0).toFloat())
+            .coerceIn(0f, (pageCount - 1).coerceAtLeast(0).toFloat())
 
         Box(
             Modifier
@@ -130,9 +132,11 @@ fun HorizontalPagerIndicator(
  *
  * @param pagerState the state object of your [Pager] to be used to observe the list's state.
  * @param modifier the modifier to apply to this layout.
- * @param size the size of indicators should be displayed, defaults to [PagerState.pageCount].
- * @param pageMapper describe how to get a proper page position by a giving page from
- * [PagerState.currentPage], if [size] is not equals to [PagerState.pageCount].
+ * @param pageCount the size of indicators should be displayed, defaults to [PagerState.pageCount].
+ * If you are implementing a looping pager with a much larger [PagerState.pageCount]
+ * than indicators should displayed, e.g. [Int.MAX_VALUE], specify you real size in this param.
+ * @param pageIndexMapping describe how to get the position of active indicator by the giving page
+ * from [PagerState.currentPage], if [pageCount] is not equals to [PagerState.pageCount].
  * @param activeColor the color of the active Page indicator
  * @param inactiveColor the color of page indicators that are inactive. This defaults to
  * [activeColor] with the alpha component set to the [ContentAlpha.disabled].
@@ -146,8 +150,8 @@ fun HorizontalPagerIndicator(
 fun VerticalPagerIndicator(
     pagerState: PagerState,
     modifier: Modifier = Modifier,
-    size: Int = pagerState.pageCount,
-    pageMapper: (Int) -> Int = {it},
+    pageCount: Int = pagerState.pageCount,
+    pageIndexMapping: (Int) -> Int = {it},
     activeColor: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
     inactiveColor: Color = activeColor.copy(ContentAlpha.disabled),
     indicatorHeight: Dp = 8.dp,
@@ -171,16 +175,16 @@ fun VerticalPagerIndicator(
                 .size(width = indicatorWidth, height = indicatorHeight)
                 .background(color = inactiveColor, shape = indicatorShape)
 
-            repeat(size) {
+            repeat(pageCount) {
                 Box(indicatorModifier)
             }
         }
 
-        val position = pageMapper(pagerState.currentPage)
+        val position = pageIndexMapping(pagerState.currentPage)
         val offset = pagerState.currentPageOffset
-        val next = pageMapper(pagerState.currentPage + offset.sign.toInt())
+        val next = pageIndexMapping(pagerState.currentPage + offset.sign.toInt())
         val scrollPosition = ((next - position) * offset.absoluteValue + position)
-            .coerceIn(0f, (size - 1).coerceAtLeast(0).toFloat())
+            .coerceIn(0f, (pageCount - 1).coerceAtLeast(0).toFloat())
 
         Box(
             Modifier
