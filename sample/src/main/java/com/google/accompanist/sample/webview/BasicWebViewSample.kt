@@ -39,8 +39,10 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Error
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -49,7 +51,6 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.web.AccompanistWebViewClient
 import com.google.accompanist.web.LoadingState
-import com.google.accompanist.web.WebContent
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewNavigator
 import com.google.accompanist.web.rememberWebViewState
@@ -60,9 +61,10 @@ class BasicWebViewSample : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AccompanistSampleTheme {
-                val state = rememberWebViewState(url = "https://google.com")
+                var url by remember { mutableStateOf("https://google.com") }
+                val state = rememberWebViewState(url = url)
                 val navigator = rememberWebViewNavigator()
-                val (textFieldValue, setTextFieldValue) = remember(state.content) {
+                var textFieldValue by remember(state.content.getCurrentUrl()) {
                     mutableStateOf(state.content.getCurrentUrl() ?: "")
                 }
 
@@ -96,14 +98,14 @@ class BasicWebViewSample : ComponentActivity() {
 
                             OutlinedTextField(
                                 value = textFieldValue,
-                                onValueChange = setTextFieldValue,
+                                onValueChange = { textFieldValue = it },
                                 modifier = Modifier.fillMaxWidth()
                             )
                         }
 
                         Button(
                             onClick = {
-                                state.content = WebContent.Url(textFieldValue)
+                                url = textFieldValue
                             },
                             modifier = Modifier.align(Alignment.CenterVertically)
                         ) {
