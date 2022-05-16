@@ -410,12 +410,17 @@ data class WebViewError(
  */
 @Composable
 fun rememberWebViewState(url: String, additionalHttpHeaders: Map<String, String> = emptyMap()) =
-    remember(url, additionalHttpHeaders) {
+    remember {
         WebViewState(
             WebContent.Url(
                 url = url,
                 additionalHttpHeaders = additionalHttpHeaders
             )
+        )
+    }.apply {
+        this.content = WebContent.Url(
+            url = url,
+            additionalHttpHeaders = additionalHttpHeaders
         )
     }
 
@@ -426,4 +431,9 @@ fun rememberWebViewState(url: String, additionalHttpHeaders: Map<String, String>
  */
 @Composable
 fun rememberWebViewStateWithHTMLData(data: String, baseUrl: String? = null) =
-    remember(data, baseUrl) { WebViewState(WebContent.Data(data, baseUrl)) }
+    remember { WebViewState(WebContent.Data(data, baseUrl)) }.apply {
+        this.content = WebContent.Data(
+            data = data,
+            baseUrl = baseUrl
+        )
+    }

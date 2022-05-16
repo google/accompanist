@@ -21,6 +21,7 @@ import android.webkit.WebView
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
@@ -176,6 +177,53 @@ class WebTest {
 
         onWebView()
             .check(webMatches(getCurrentUrl(), containsString(LINK_URL)))
+    }
+
+    @Test
+    fun testUrlUpdatedWithRemember() {
+        val url = mutableStateOf("https://google.com")
+        rule.setContent {
+            @Composable
+            fun MyWebView(url: String) {
+                val webViewState = rememberWebViewState(url = url)
+                WebTestContent(webViewState = webViewState, idlingResource = idleResource)
+            }
+
+            MyWebView(url = url.value)
+        }
+
+        // Ensure the data is loaded first
+        onWebView()
+            .check(webMatches(getCurrentUrl(), containsString("google.com")))
+
+        url.value = "https://youtube.com"
+
+        onWebView()
+            .check(webMatches(getCurrentUrl(), containsString("youtube.com")))
+    }
+
+    @Test
+    fun testDataUpdatedWithRemember() {
+        val data = mutableStateOf(TEST_DATA)
+        rule.setContent {
+            @Composable
+            fun MyWebView(data: String) {
+                val webViewState = rememberWebViewStateWithHTMLData(data = data)
+                WebTestContent(webViewState = webViewState, idlingResource = idleResource)
+            }
+
+            MyWebView(data = data.value)
+        }
+
+        // Ensure the data is loaded first
+        onWebView()
+            .withElement(findElement(Locator.TAG_NAME, "a"))
+            .check(webMatches(getText(), containsString(LINK_TEXT)))
+
+        data.value = TEST_TITLE_DATA
+
+        onWebView()
+            .check(webMatches(getTitle(), containsString(TITLE_TEXT)))
     }
 
     @Test
