@@ -98,15 +98,15 @@ fun HorizontalPagerIndicator(
             }
         }
 
-        val position = pageIndexMapping(pagerState.currentPage)
-        val offset = pagerState.currentPageOffset
-        val next = pageIndexMapping(pagerState.currentPage + offset.sign.toInt())
-        val scrollPosition = ((next - position) * offset.absoluteValue + position)
-            .coerceIn(0f, (pageCount - 1).coerceAtLeast(0).toFloat())
-
         Box(
             Modifier
                 .offset {
+                    val position = pageIndexMapping(pagerState.currentPage)
+                    val offset = pagerState.currentPageOffset
+                    val next = pageIndexMapping(pagerState.currentPage + offset.sign.toInt())
+                    val scrollPosition = ((next - position) * offset.absoluteValue + position)
+                        .coerceIn(0f, (pageCount - 1).coerceAtLeast(0).toFloat())
+
                     IntOffset(
                         x = ((spacingPx + indicatorWidthPx) * scrollPosition).toInt(),
                         y = 0
@@ -180,15 +180,15 @@ fun VerticalPagerIndicator(
             }
         }
 
-        val position = pageIndexMapping(pagerState.currentPage)
-        val offset = pagerState.currentPageOffset
-        val next = pageIndexMapping(pagerState.currentPage + offset.sign.toInt())
-        val scrollPosition = ((next - position) * offset.absoluteValue + position)
-            .coerceIn(0f, (pageCount - 1).coerceAtLeast(0).toFloat())
-
         Box(
             Modifier
                 .offset {
+                    val position = pageIndexMapping(pagerState.currentPage)
+                    val offset = pagerState.currentPageOffset
+                    val next = pageIndexMapping(pagerState.currentPage + offset.sign.toInt())
+                    val scrollPosition = ((next - position) * offset.absoluteValue + position)
+                        .coerceIn(0f, (pageCount - 1).coerceAtLeast(0).toFloat())
+
                     IntOffset(
                         x = 0,
                         y = ((spacingPx + indicatorHeightPx) * scrollPosition).toInt(),
