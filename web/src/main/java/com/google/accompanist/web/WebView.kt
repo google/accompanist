@@ -80,6 +80,13 @@ fun WebView(
         with(navigator) { webView?.handleNavigationEvents() }
     }
 
+    // Set the state of the client and chrome client
+    // This is done internally to ensure they always are the same instance as the
+    // parent Web composable
+    client.state = state
+    client.navigator = navigator
+    chromeClient.state = state
+
     AndroidView(
         factory = { context ->
             WebView(context).apply {
@@ -89,13 +96,6 @@ fun WebView(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT
                 )
-
-                // Set the state of the client and chrome client
-                // This is done internally to ensure they always are the same instance as the
-                // parent Web composable
-                client.state = state
-                client.navigator = navigator
-                chromeClient.state = state
 
                 webChromeClient = chromeClient
                 webViewClient = client
@@ -410,6 +410,8 @@ data class WebViewError(
  */
 @Composable
 fun rememberWebViewState(url: String, additionalHttpHeaders: Map<String, String> = emptyMap()) =
+    // Rather than using .apply {} here we will recreate the state, this prevents
+    // a recomposition loop when the webview updates the url itself.
     remember(url, additionalHttpHeaders) {
         WebViewState(
             WebContent.Url(
@@ -426,4 +428,6 @@ fun rememberWebViewState(url: String, additionalHttpHeaders: Map<String, String>
  */
 @Composable
 fun rememberWebViewStateWithHTMLData(data: String, baseUrl: String? = null) =
-    remember(data, baseUrl) { WebViewState(WebContent.Data(data, baseUrl)) }
+    remember(data, baseUrl) {
+        WebViewState(WebContent.Data(data, baseUrl))
+    }
