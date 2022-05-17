@@ -181,7 +181,10 @@ fun LoopControl(
     loopState: MutableState<Boolean>,
     modifier: Modifier = Modifier,
 ) {
-    IconButton(onClick = { loopState.value = loopState.value.not() }, modifier = modifier) {
+    IconButton(
+        onClick = { loopState.value = loopState.value.not() },
+        modifier = modifier
+    ) {
         val icon = if (loopState.value) {
             Icons.Default.PauseCircle
         } else {
