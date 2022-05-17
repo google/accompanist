@@ -182,7 +182,7 @@ class WebTest {
 
     @Test
     fun testUrlUpdatedWithRemember() {
-        val url = mutableStateOf("https://google.com")
+        val url = mutableStateOf("about:blank")
         rule.setContent {
             @Composable
             fun MyWebView(url: String) {
@@ -195,12 +195,14 @@ class WebTest {
 
         // Ensure the data is loaded first
         onWebView()
-            .check(webMatches(getCurrentUrl(), containsString("google.com")))
+            .check(webMatches(getCurrentUrl(), containsString("about:blank")))
 
-        url.value = "https://github.com"
+        url.value = LINK_URL
+
+        rule.waitForIdle()
 
         onWebView()
-            .check(webMatches(getCurrentUrl(), containsString("github.com")))
+            .check(webMatches(getCurrentUrl(), containsString(LINK_URL)))
     }
 
     @Test
