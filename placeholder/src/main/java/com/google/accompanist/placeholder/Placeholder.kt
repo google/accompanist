@@ -178,7 +178,7 @@ fun Modifier.placeholder(
                 // the alpha applied
                 paint.alpha = placeholderAlpha
                 withLayer(paint) {
-                    drawPlaceholder(
+                    lastOutline.value = drawPlaceholder(
                         shape = shape,
                         color = color,
                         highlight = highlight,
@@ -190,7 +190,7 @@ fun Modifier.placeholder(
                 }
             } else if (placeholderAlpha >= 0.99f) {
                 // If the placeholder alpha is > 99%, draw it with no alpha
-                drawPlaceholder(
+                lastOutline.value = drawPlaceholder(
                     shape = shape,
                     color = color,
                     highlight = highlight,
