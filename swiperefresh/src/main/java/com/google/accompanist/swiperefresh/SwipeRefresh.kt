@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
+import kotlin.math.roundToInt
 
 private const val DragMultiplier = 0.5f
 
@@ -150,7 +151,11 @@ private class SwipeRefreshNestedScrollConnection(
     }
 
     private fun onScroll(available: Offset): Offset {
-        state.isSwipeInProgress = true
+        if (available.y > 0) {
+            state.isSwipeInProgress = true
+        } else if (state.indicatorOffset.roundToInt() == 0) {
+            state.isSwipeInProgress = false
+        }
 
         val newOffset = (available.y * DragMultiplier + state.indicatorOffset).coerceAtLeast(0f)
         val dragConsumed = newOffset - state.indicatorOffset
