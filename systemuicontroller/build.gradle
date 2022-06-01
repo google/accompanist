@@ -25,12 +25,12 @@ kotlin {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
 
     defaultConfig {
         minSdkVersion 21
         // targetSdkVersion has no effect for libraries. This is only used for the test APK
-        targetSdkVersion 31
+        targetSdkVersion 32
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
