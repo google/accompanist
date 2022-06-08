@@ -70,7 +70,8 @@ dependencies {
     implementation libs.compose.material.material
     implementation libs.compose.material.iconsext
     implementation libs.compose.foundation.layout
-    implementation libs.compose.ui.tooling
+    debugImplementation libs.compose.ui.tooling
+    implementation libs.compose.ui.tooling.preview
     implementation libs.compose.ui.util
 
     implementation libs.androidx.lifecycle.viewmodel.compose
