@@ -35,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.viewinterop.AndroidView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -87,6 +88,8 @@ fun WebView(
     client.navigator = navigator
     chromeClient.state = state
 
+    val runningInPreview = LocalInspectionMode.current
+
     AndroidView(
         factory = { context ->
             WebView(context).apply {
@@ -103,6 +106,9 @@ fun WebView(
         },
         modifier = modifier
     ) { view ->
+        // AndroidViews are not supported by preview, bail early
+        if (runningInPreview) return@AndroidView
+
         when (val content = state.content) {
             is WebContent.Url -> {
                 val url = content.url
