@@ -17,6 +17,7 @@
 package com.google.accompanist.pager
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MonotonicFrameClock
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -286,54 +287,157 @@ abstract class PagerTest {
     fun scrollToPage() {
         val pagerState = setPagerContent(count = 10)
 
-        fun testScroll(targetPage: Int, offset: Float = 0f) {
+        fun testScroll(
+            page: Int,
+            offset: Float = 0f,
+            expectedPage: Int = page,
+            expectedOffset: Float = offset
+        ) {
             composeTestRule.runOnIdle {
                 runBlocking {
-                    pagerState.scrollToPage(targetPage, offset)
+                    pagerState.scrollToPage(page, offset)
                 }
             }
             composeTestRule.runOnIdle {
-                assertThat(pagerState.currentPage).isEqualTo(targetPage)
-                assertThat(pagerState.currentPageOffset).isWithin(0.001f).of(offset)
+                assertThat(pagerState.currentPage).isEqualTo(expectedPage)
+                assertThat(pagerState.currentPageOffset).isWithin(0.001f).of(expectedOffset)
             }
-            assertPagerLayout(targetPage, pagerState.pageCount, offset)
+            assertPagerLayout(expectedPage, pagerState.pageCount, expectedOffset)
         }
 
         // Scroll to page 3 and assert
-        testScroll(3)
+        testScroll(page = 3)
         // Now scroll to page 0 and assert
-        testScroll(0)
+        testScroll(page = 0)
         // Now scroll to page 1 with an offset of 0.5 and assert
-        testScroll(1, 0.5f)
+        testScroll(page = 1, offset = 0.5f)
         // Now scroll to page 8 with an offset of 0.25 and assert
-        testScroll(8, 0.25f)
+        testScroll(page = 8, offset = 0.25f)
+        // Now scroll to page 2 with a negative offset
+        testScroll(page = 2, offset = -0.4f)
+        // Now scroll to last page with the offset which can't be reached
+        testScroll(page = 9, offset = 0.5f, expectedOffset = 0f)
+        // Now scroll to page which doesn't exist
+        testScroll(page = 15, offset = 0.5f, expectedPage = 9, expectedOffset = 0f)
     }
 
     @Test
     fun animateScrollToPage() {
         val pagerState = setPagerContent(count = 10)
 
-        fun testScroll(targetPage: Int, offset: Float = 0f) {
+        fun testScroll(
+            page: Int,
+            offset: Float = 0f,
+            expectedPage: Int = page,
+            expectedOffset: Float = offset
+        ) {
             composeTestRule.runOnIdle {
                 runBlocking(AutoTestFrameClock()) {
-                    pagerState.animateScrollToPage(targetPage, offset)
+                    pagerState.animateScrollToPage(page, offset)
                 }
             }
             composeTestRule.runOnIdle {
-                assertThat(pagerState.currentPage).isEqualTo(targetPage)
-                assertThat(pagerState.currentPageOffset).isWithin(0.001f).of(offset)
+                assertThat(pagerState.currentPage + pagerState.currentPageOffset)
+                    .isWithin(0.001f).of(expectedPage + expectedOffset)
+                assertThat(pagerState.currentPage).isEqualTo(expectedPage)
             }
-            assertPagerLayout(targetPage, pagerState.pageCount, offset)
+            assertPagerLayout(expectedPage, pagerState.pageCount, expectedOffset)
         }
 
         // Scroll to page 3 and assert
-        testScroll(3)
+        testScroll(page = 3)
         // Now scroll to page 0 and assert
-        testScroll(0)
-        // Now scroll to page 1 with an offset of 0.5 and assert
-        testScroll(1, 0.5f)
+        testScroll(page = 0)
+        // Now scroll to page 1 with an offset of 0.4 and assert
+        testScroll(page = 1, offset = 0.4f)
         // Now scroll to page 8 with an offset of 0.25 and assert
-        testScroll(8, 0.25f)
+        testScroll(page = 8, offset = 0.25f)
+        // Now scroll to page 2 with a negative offset
+        testScroll(page = 2, offset = -0.4f)
+        // Now scroll to last page with the offset which can't be reached
+        testScroll(page = 9, offset = 0.5f, expectedOffset = 0f)
+        // Now scroll to page which doesn't exist
+        testScroll(page = 15, offset = 0.5f, expectedPage = 9, expectedOffset = 0f)
+    }
+
+    @Test
+    fun scrollToPage_LaunchedEffect() {
+        composeTestRule.setContent {
+            val state = rememberPagerState()
+            PagerContent(
+                count = { 10 },
+                pagerState = state
+            )
+            LaunchedEffect(state) {
+                state.scrollToPage(3)
+            }
+        }
+
+        assertPagerLayout(3, 10)
+    }
+
+    @Test
+    fun scrollToPage_withOffset_LaunchedEffect() {
+        composeTestRule.setContent {
+            val state = rememberPagerState()
+            PagerContent(
+                count = { 10 },
+                pagerState = state
+            )
+            LaunchedEffect(state) {
+                state.scrollToPage(3, 0.5f)
+            }
+        }
+
+        assertPagerLayout(3, 10, 0.5f)
+    }
+
+    @Test
+    fun animatedScrollToPage_LaunchedEffect() {
+        composeTestRule.setContent {
+            val state = rememberPagerState()
+            PagerContent(
+                count = { 10 },
+                pagerState = state
+            )
+            LaunchedEffect(state) {
+                state.animateScrollToPage(2)
+            }
+        }
+
+        assertPagerLayout(2, 10)
+    }
+
+    @Test
+    fun animatedScrollToPage_withOffset_LaunchedEffect() {
+        composeTestRule.setContent {
+            val state = rememberPagerState()
+            PagerContent(
+                count = { 10 },
+                pagerState = state
+            )
+            LaunchedEffect(state) {
+                state.animateScrollToPage(2, 0.5f)
+            }
+        }
+
+        assertPagerLayout(2, 10, 0.5f)
+    }
+
+    @Test
+    fun animatedScrollToPage_moreThan3Pages_LaunchedEffect() {
+        composeTestRule.setContent {
+            val state = rememberPagerState()
+            PagerContent(
+                count = { 10 },
+                pagerState = state
+            )
+            LaunchedEffect(state) {
+                state.animateScrollToPage(6)
+            }
+        }
+
+        assertPagerLayout(6, 10)
     }
 
     @Test
