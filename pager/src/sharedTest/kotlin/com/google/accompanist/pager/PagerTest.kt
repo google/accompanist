@@ -159,6 +159,7 @@ abstract class PagerTest {
         assertPagerLayout(0, pagerState.pageCount)
     }
 
+    @Suppress("DEPRECATION")
     @Test
     fun mediumDistance_fastSwipe_toFling() {
         composeTestRule.mainClock.autoAdvance = false
@@ -190,6 +191,7 @@ abstract class PagerTest {
         assertPagerLayout(1, pagerState.pageCount)
     }
 
+    @Suppress("DEPRECATION")
     @Test
     fun mediumDistance_slowSwipe_toSnapForward() {
         composeTestRule.mainClock.autoAdvance = false
@@ -221,6 +223,7 @@ abstract class PagerTest {
         assertPagerLayout(1, pagerState.pageCount)
     }
 
+    @Suppress("DEPRECATION")
     @Test
     fun shortDistance_fastSwipe_toFling() {
         composeTestRule.mainClock.autoAdvance = false
@@ -252,6 +255,7 @@ abstract class PagerTest {
         assertPagerLayout(1, pagerState.pageCount)
     }
 
+    @Suppress("DEPRECATION")
     @Test
     fun shortDistance_slowSwipe_toSnapBack() {
         composeTestRule.mainClock.autoAdvance = false

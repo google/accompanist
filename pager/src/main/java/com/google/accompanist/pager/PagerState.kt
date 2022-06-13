@@ -155,6 +155,13 @@ class PagerState(
      * The target page for any on-going animations or scrolls by the user.
      * Returns the current page if a scroll or animation is not currently in progress.
      */
+    @Deprecated(
+        "targetPage is deprecated in favor of currentPage as currentPage property is" +
+            "now being updated right after we over scrolled the half of the previous current page." +
+            "If you still think that you need targetPage, not currentPage please file a bug as " +
+            "we are planning to remove this property in future.",
+        ReplaceWith("currentPage")
+    )
     val targetPage: Int
         get() = animationTargetPage
             ?: flingAnimationTarget?.invoke()
