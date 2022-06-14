@@ -41,8 +41,6 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.LocalOwnersProvider
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
@@ -64,7 +62,7 @@ import kotlinx.coroutines.withTimeout
  * pop the back stack here.
  */
 @ExperimentalMaterialNavigationApi
-@OptIn(ExperimentalMaterialApi::class, ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun SheetContentHost(
     columnHost: ColumnScope,
@@ -141,11 +139,7 @@ internal fun SheetContentHost(
             onDispose {
                 scope.launch {
                     hideCalled = true
-                    try {
-                        sheetState.internalHide()
-                    } finally {
-                        hideCalled = false
-                    }
+                    sheetState.internalHide()
                 }
             }
         }

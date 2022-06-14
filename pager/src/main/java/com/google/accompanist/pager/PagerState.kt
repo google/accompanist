@@ -155,6 +155,13 @@ class PagerState(
      * The target page for any on-going animations or scrolls by the user.
      * Returns the current page if a scroll or animation is not currently in progress.
      */
+    @Deprecated(
+        "targetPage is deprecated in favor of currentPage as currentPage property is" +
+            "now being updated right after we over scrolled the half of the previous current page." +
+            "If you still think that you need targetPage, not currentPage please file a bug as " +
+            "we are planning to remove this property in future.",
+        ReplaceWith("currentPage")
+    )
     val targetPage: Int
         get() = animationTargetPage
             ?: flingAnimationTarget?.invoke()
@@ -190,13 +197,13 @@ class PagerState(
      * Cancels the currently running scroll, if any, and suspends until the cancellation is
      * complete.
      *
-     * @param page the page to animate to. Must be between 0 and [pageCount] (inclusive).
-     * @param pageOffset the percentage of the page width to offset, from the start of [page].
-     * Must be in the range 0f..1f.
+     * @param page the page to animate to. Must be >= 0.
+     * @param pageOffset the percentage of the page size to offset, from the start of [page].
+     * Must be in the range -1f..1f.
      */
     suspend fun animateScrollToPage(
         @IntRange(from = 0) page: Int,
-        @FloatRange(from = 0.0, to = 1.0) pageOffset: Float = 0f,
+        @FloatRange(from = -1.0, to = 1.0) pageOffset: Float = 0f,
     ) {
         requireCurrentPage(page, "page")
         requireCurrentPageOffset(pageOffset, "pageOffset")
@@ -210,11 +217,12 @@ class PagerState(
                 lazyListState.scrollToItem(if (page > oldPage) page - 3 else page + 3)
             }
 
-            if (pageOffset <= 0.005f) {
+            if (pageOffset.absoluteValue <= 0.005f) {
                 // If the offset is (close to) zero, just call animateScrollToItem and we're done
                 lazyListState.animateScrollToItem(index = page)
             } else {
                 // Else we need to figure out what the offset is in pixels...
+                lazyListState.scroll { } // this will await for the first layout.
                 val layoutInfo = lazyListState.layoutInfo
                 var target = layoutInfo.visibleItemsInfo
                     .firstOrNull { it.index == page }
@@ -235,9 +243,9 @@ class PagerState(
                     )
 
                     // The target should be visible now
-                    target = lazyListState.layoutInfo.visibleItemsInfo.first { it.index == page }
+                    target = lazyListState.layoutInfo.visibleItemsInfo.firstOrNull { it.index == page }
 
-                    if (target.size != currentSize) {
+                    if (target != null && target.size != currentSize) {
                         // If the size we used for calculating the offset differs from the actual
                         // target page size, we need to scroll again. This doesn't look great,
                         // but there's not much else we can do.
@@ -262,11 +270,13 @@ class PagerState(
      * Cancels the currently running scroll, if any, and suspends until the cancellation is
      * complete.
      *
-     * @param page the page to snap to. Must be between 0 and [pageCount] (inclusive).
+     * @param page the page to snap to. Must be >= 0.
+     * @param pageOffset the percentage of the page size to offset, from the start of [page].
+     * Must be in the range -1f..1f.
      */
     suspend fun scrollToPage(
         @IntRange(from = 0) page: Int,
-        @FloatRange(from = 0.0, to = 1.0) pageOffset: Float = 0f,
+        @FloatRange(from = -1.0, to = 1.0) pageOffset: Float = 0f,
     ) {
         requireCurrentPage(page, "page")
         requireCurrentPageOffset(pageOffset, "pageOffset")
@@ -278,9 +288,9 @@ class PagerState(
             updateCurrentPageBasedOnLazyListState()
 
             // If we have a start spacing, we need to offset (scroll) by that too
-            if (pageOffset > 0.0001f) {
-                scroll {
-                    currentPageLayoutInfo?.let {
+            if (pageOffset.absoluteValue > 0.0001f) {
+                currentPageLayoutInfo?.let {
+                    scroll {
                         scrollBy(it.size * pageOffset)
                     }
                 }
@@ -324,21 +334,11 @@ class PagerState(
         ")"
 
     private fun requireCurrentPage(value: Int, name: String) {
-        if (pageCount == 0) {
-            require(value == 0) { "$name must be 0 when pageCount is 0" }
-        } else {
-            require(value in 0 until pageCount) {
-                "$name[$value] must be >= 0 and < pageCount"
-            }
-        }
+        require(value >= 0) { "$name[$value] must be >= 0" }
     }
 
     private fun requireCurrentPageOffset(value: Float, name: String) {
-        if (pageCount == 0) {
-            require(value == 0f) { "$name must be 0f when pageCount is 0" }
-        } else {
-            require(value in 0f..1f) { "$name must be >= 0 and <= 1" }
-        }
+        require(value in -1f..1f) { "$name must be >= 0 and <= 1" }
     }
 
     companion object {

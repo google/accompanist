@@ -27,6 +27,7 @@
     <string name="horiz_pager_with_indicator_title">Horizontal Pager: Indicator</string>
     <string name="horiz_pager_with_transition_title">Horizontal Pager: Transition</string>
     <string name="horiz_pager_title_looping">Horizontal Pager: Looping</string>
+    <string name="horiz_pager_title_looping_indicator">Horizontal Pager: Looping with Indicators</string>
     <string name="horiz_pager_title_tabs">Horizontal Pager: Tabs</string>
     <string name="horiz_pager_title_scroll_content">Horizontal Pager: Scrolling content</string>
     <string name="horiz_pager_title_different_paddings">Horizontal Pager: Different paddings</string>

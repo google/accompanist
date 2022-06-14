@@ -1,24 +1,25 @@
 [versions]
-compose = "1.2.0-alpha07"
+compose = "1.2.0-beta03"
 composesnapshot = "-" # a single character = no snapshot
 
 # gradlePlugin and lint need to be updated together
-gradlePlugin = "7.1.2"
+gradlePlugin = "7.3.0-beta01"
 lintMinCompose = "30.0.0"
 
 ktlint = "0.42.1"
-kotlin = "1.6.10"
+kotlin = "1.6.21"
 coroutines = "1.6.0"
 okhttp = "3.12.13"
 coil = "1.3.2"
 
 androidxtest = "1.4.0"
-androidxnavigation = "2.4.0"
+androidxnavigation = "2.5.0-rc01"
 
 [libraries]
 compose-ui-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 compose-ui-util = { module = "androidx.compose.ui:ui-util", version.ref = "compose" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
 compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose" }
 compose-foundation-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
@@ -55,7 +56,7 @@ coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 
 androidx-appcompat = "androidx.appcompat:appcompat:1.4.1"
 androidx-core = "androidx.core:core-ktx:1.8.0-alpha06"
-androidx-activity-compose = "androidx.activity:activity-compose:1.4.0"
+androidx-activity-compose = "androidx.activity:activity-compose:1.5.0-rc01"
 androidx-fragment = "androidx.fragment:fragment-ktx:1.4.0"
 androidx-dynamicanimation = "androidx.dynamicanimation:dynamicanimation-ktx:1.0.0-alpha03"
 androidx-lifecycle-runtime = "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"
@@ -71,11 +72,14 @@ androidx-test-runner = { module = "androidx.test:runner", version.ref = "android
 androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidxtest" }
 androidx-test-orchestrator = { module = "androidx.test:orchestrator", version.ref = "androidxtest" }
 androidx-test-uiAutomator = "androidx.test.uiautomator:uiautomator:2.2.0"
-androidx-test-espressoWeb = "androidx.test.espresso:espresso-web:3.4.0"
 
-junit = "junit:junit:4.13"
+# alpha for robolectric x compose fix
+androidx-test-espressoCore = "androidx.test.espresso:espresso-core:3.5.0-alpha06"
+androidx-test-espressoWeb = "androidx.test.espresso:espresso-web:3.5.0-alpha06"
+
+junit = "junit:junit:4.13.2"
 truth = "com.google.truth:truth:1.1.2"
-robolectric = "org.robolectric:robolectric:4.5.1"
+robolectric = "org.robolectric:robolectric:4.8"
 
 affectedmoduledetector = "com.dropbox.affectedmoduledetector:affectedmoduledetector:0.1.2"
 

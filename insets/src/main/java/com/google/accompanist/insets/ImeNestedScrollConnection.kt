@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Android Open Source Project
+ * Copyright 2022 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+@file:Suppress("DEPRECATION")
 
 package com.google.accompanist.insets
 
@@ -44,6 +46,17 @@ import kotlin.math.roundToInt
  */
 @ExperimentalAnimatedInsets
 @Composable
+@Deprecated(
+"""
+accompanist/insets is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+""",
+    replaceWith = ReplaceWith(
+        "Modifier.imeNestedScroll()",
+        "androidx.compose.foundation.layout.imeNestedScroll",
+        "androidx.compose.ui.Modifier"
+    )
+)
 fun rememberImeNestedScrollConnection(
     scrollImeOffScreenWhenVisible: Boolean = true,
     scrollImeOnScreenWhenNotVisible: Boolean = true,
@@ -73,6 +86,17 @@ fun rememberImeNestedScrollConnection(
  * (from not being visible), by an upwards scroll. Defaults to `true`.
  */
 @ExperimentalAnimatedInsets
+@Deprecated(
+"""
+accompanist/insets is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+""",
+    replaceWith = ReplaceWith(
+        "Modifier.imeNestedScroll()",
+        "androidx.compose.foundation.layout.imeNestedScroll",
+        "androidx.compose.ui.Modifier"
+    )
+)
 class ImeNestedScrollConnection(
     private val view: View,
     private val scrollImeOffScreenWhenVisible: Boolean,

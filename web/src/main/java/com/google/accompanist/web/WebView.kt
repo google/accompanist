@@ -35,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.viewinterop.AndroidView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -80,6 +81,15 @@ fun WebView(
         with(navigator) { webView?.handleNavigationEvents() }
     }
 
+    // Set the state of the client and chrome client
+    // This is done internally to ensure they always are the same instance as the
+    // parent Web composable
+    client.state = state
+    client.navigator = navigator
+    chromeClient.state = state
+
+    val runningInPreview = LocalInspectionMode.current
+
     AndroidView(
         factory = { context ->
             WebView(context).apply {
@@ -90,19 +100,15 @@ fun WebView(
                     ViewGroup.LayoutParams.MATCH_PARENT
                 )
 
-                // Set the state of the client and chrome client
-                // This is done internally to ensure they always are the same instance as the
-                // parent Web composable
-                client.state = state
-                client.navigator = navigator
-                chromeClient.state = state
-
                 webChromeClient = chromeClient
                 webViewClient = client
             }.also { webView = it }
         },
         modifier = modifier
     ) { view ->
+        // AndroidViews are not supported by preview, bail early
+        if (runningInPreview) return@AndroidView
+
         when (val content = state.content) {
             is WebContent.Url -> {
                 val url = content.url
@@ -250,6 +256,10 @@ internal fun WebContent.withUrl(url: String) = when (this) {
  * See [Loading] and [Finished].
  */
 sealed class LoadingState {
+    /**
+     * Describes a WebView that has not yet loaded for the first time.
+     */
+    object Initializing : LoadingState()
 
     /**
      * Describes a webview between `onPageStarted` and `onPageFinished` events, contains a
@@ -258,7 +268,7 @@ sealed class LoadingState {
     data class Loading(val progress: Float) : LoadingState()
 
     /**
-     * Describes a webview that has finished loading content (or not started).
+     * Describes a webview that has finished loading content.
      */
     object Finished : LoadingState()
 }
@@ -278,7 +288,7 @@ class WebViewState(webContent: WebContent) {
      * Whether the WebView is currently [LoadingState.Loading] data in its main frame (along with
      * progress) or the data loading has [LoadingState.Finished]. See [LoadingState]
      */
-    var loadingState: LoadingState by mutableStateOf(LoadingState.Finished)
+    var loadingState: LoadingState by mutableStateOf(LoadingState.Initializing)
         internal set
 
     /**
@@ -406,6 +416,8 @@ data class WebViewError(
  */
 @Composable
 fun rememberWebViewState(url: String, additionalHttpHeaders: Map<String, String> = emptyMap()) =
+    // Rather than using .apply {} here we will recreate the state, this prevents
+    // a recomposition loop when the webview updates the url itself.
     remember(url, additionalHttpHeaders) {
         WebViewState(
             WebContent.Url(
@@ -422,4 +434,6 @@ fun rememberWebViewState(url: String, additionalHttpHeaders: Map<String, String>
  */
 @Composable
 fun rememberWebViewStateWithHTMLData(data: String, baseUrl: String? = null) =
-    remember(data, baseUrl) { WebViewState(WebContent.Data(data, baseUrl)) }
+    remember(data, baseUrl) {
+        WebViewState(WebContent.Data(data, baseUrl))
+    }

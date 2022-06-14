@@ -27,8 +27,8 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraph
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.navigation
 import androidx.navigation.get
-import androidx.navigation.navigation
 
 /**
  * Add the [Composable] to the [NavGraphBuilder]
@@ -82,6 +82,8 @@ public fun NavGraphBuilder.composable(
  *
  * @param startDestination the starting destination's route for this NavGraph
  * @param route the destination's unique route
+ * @param arguments list of arguments to associate with destination
+ * @param deepLinks list of deep links to associate with the destinations
  * @param enterTransition callback to define enter transitions for destination in this NavGraph
  * @param exitTransition callback to define exit transitions for destination in this NavGraph
  * @param popEnterTransition callback to define pop enter transitions for destination in this
@@ -95,6 +97,8 @@ public fun NavGraphBuilder.composable(
 public fun NavGraphBuilder.navigation(
     startDestination: String,
     route: String,
+    arguments: List<NamedNavArgument> = emptyList(),
+    deepLinks: List<NavDeepLink> = emptyList(),
     enterTransition: (AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition?)? = null,
     exitTransition: (AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition?)? = null,
     popEnterTransition: (
@@ -105,7 +109,7 @@ public fun NavGraphBuilder.navigation(
     )? = exitTransition,
     builder: NavGraphBuilder.() -> Unit
 ) {
-    navigation(startDestination, route, builder).apply {
+    navigation(startDestination, route, arguments, deepLinks, builder).apply {
         enterTransition?.let { enterTransitions[route] = enterTransition }
         exitTransition?.let { exitTransitions[route] = exitTransition }
         popEnterTransition?.let { popEnterTransitions[route] = popEnterTransition }
