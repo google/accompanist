@@ -34,12 +34,13 @@ import androidx.compose.ui.unit.lerp
 fun Modifier.pagerTabIndicatorOffset(
     pagerState: PagerState,
     tabPositions: List<TabPosition>,
+    pageIndexMapping: (Int) -> Int = { it },
 ): Modifier = layout { measurable, constraints ->
     if (tabPositions.isEmpty()) {
         // If there are no pages, nothing to show
         layout(constraints.maxWidth, 0) {}
     } else {
-        val currentPage = minOf(tabPositions.lastIndex, pagerState.currentPage)
+        val currentPage = minOf(tabPositions.lastIndex, pageIndexMapping(pagerState.currentPage))
         val currentTab = tabPositions[currentPage]
         val previousTab = tabPositions.getOrNull(currentPage - 1)
         val nextTab = tabPositions.getOrNull(currentPage + 1)
