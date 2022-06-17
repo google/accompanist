@@ -7,7 +7,7 @@ package com.google.accompanist.pager {
   }
 
   public final class PagerTabKt {
-    method @com.google.accompanist.pager.ExperimentalPagerApi public static androidx.compose.ui.Modifier pagerTabIndicatorOffset(androidx.compose.ui.Modifier, com.google.accompanist.pager.PagerState pagerState, java.util.List<androidx.compose.material.TabPosition> tabPositions);
+    method @com.google.accompanist.pager.ExperimentalPagerApi public static androidx.compose.ui.Modifier pagerTabIndicatorOffset(androidx.compose.ui.Modifier, com.google.accompanist.pager.PagerState pagerState, java.util.List<androidx.compose.material.TabPosition> tabPositions, optional kotlin.jvm.functions.Function1<? super java.lang.Integer,java.lang.Integer> pageIndexMapping);
   }
 
 }
