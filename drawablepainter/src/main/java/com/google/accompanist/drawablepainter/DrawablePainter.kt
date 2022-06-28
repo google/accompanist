@@ -59,20 +59,15 @@ class DrawablePainter(
     val drawable: Drawable
 ) : Painter(), RememberObserver {
     private var drawInvalidateTick by mutableStateOf(0)
-    private var sizeInvalidateTick by mutableStateOf(0)
-
-    private var lastIntrinsicSize: Size = Size.Unspecified
+    private var drawableIntrinsicSize by mutableStateOf(Size.Unspecified)
 
     private val callback: Drawable.Callback by lazy {
         object : Drawable.Callback {
             override fun invalidateDrawable(d: Drawable) {
                 // Update the tick so that we get re-drawn
                 drawInvalidateTick++
-
-                if (lastIntrinsicSize != drawable.intrinsicSize) {
-                    // If the intrinsic size has changed, update the layout tick
-                    sizeInvalidateTick++
-                }
+                // Update our intrinsic size too
+                drawableIntrinsicSize = drawable.intrinsicSize
             }
 
             override fun scheduleDrawable(d: Drawable, what: Runnable, time: Long) {
@@ -128,13 +123,7 @@ class DrawablePainter(
         return false
     }
 
-    override val intrinsicSize: Size
-        get() {
-            // Reading this ensures that we re-layout when the instrinsic size changes
-            sizeInvalidateTick
-
-            return drawable.intrinsicSize.also { lastIntrinsicSize = it }
-        }
+    override val intrinsicSize: Size get() = drawableIntrinsicSize
 
     override fun DrawScope.onDraw() {
         drawIntoCanvas { canvas ->
