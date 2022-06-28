@@ -147,6 +147,16 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".pager.HorizontalPagerLoopingTabsSample"
+            android:label="@string/horiz_pager_title_looping_tabs"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
 
         <activity
             android:name=".pager.HorizontalPagerTabsSample"
