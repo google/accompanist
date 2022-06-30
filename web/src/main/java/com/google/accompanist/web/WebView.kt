@@ -25,6 +25,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
@@ -33,6 +34,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -68,6 +70,7 @@ fun WebView(
     captureBackPresses: Boolean = true,
     navigator: WebViewNavigator = rememberWebViewNavigator(),
     onCreated: (WebView) -> Unit = {},
+    onDispose: (WebView) -> Unit = { it.destroy() },
     client: AccompanistWebViewClient = remember { AccompanistWebViewClient() },
     chromeClient: AccompanistWebChromeClient = remember { AccompanistWebChromeClient() }
 ) {
@@ -79,6 +82,14 @@ fun WebView(
 
     LaunchedEffect(webView, navigator) {
         with(navigator) { webView?.handleNavigationEvents() }
+    }
+
+    val currentOnDispose by rememberUpdatedState(onDispose)
+
+    webView?.let { it ->
+        DisposableEffect(it) {
+            onDispose { currentOnDispose(it) }
+        }
     }
 
     // Set the state of the client and chrome client
