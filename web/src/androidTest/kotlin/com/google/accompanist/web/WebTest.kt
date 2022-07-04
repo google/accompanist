@@ -21,6 +21,7 @@ import android.webkit.WebView
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
@@ -593,6 +594,29 @@ class WebTest {
         mockServer.shutdown()
     }
 
+    @Test
+    fun testOnDisposeCalled() {
+        lateinit var state: WebViewState
+        lateinit var toggle: MutableState<Boolean>
+        var isOnDisposeCalled = false
+
+        rule.setContent {
+            toggle = remember { mutableStateOf(true) }
+            if (toggle.value) {
+                state = rememberWebViewStateWithHTMLData(data = TEST_DATA)
+                WebTestContent(
+                    state,
+                    idleResource,
+                    onDispose = { isOnDisposeCalled = true },
+                )
+            }
+        }
+
+        toggle.value = false
+        webNode.assertDoesNotExist()
+        assertThat(isOnDisposeCalled).isTrue()
+    }
+
     private val webNode: SemanticsNodeInteraction
         get() = rule.onNodeWithTag(WebViewTag)
 }
@@ -614,6 +638,7 @@ private fun WebTestContent(
     webViewState: WebViewState,
     idlingResource: WebViewIdlingResource,
     navigator: WebViewNavigator = rememberWebViewNavigator(),
+    onDispose: (WebView) -> Unit = {},
     client: AccompanistWebViewClient = remember { AccompanistWebViewClient() },
     chromeClient: AccompanistWebChromeClient = remember { AccompanistWebChromeClient() }
 ) {
@@ -625,6 +650,7 @@ private fun WebTestContent(
             modifier = Modifier.testTag(WebViewTag),
             navigator = navigator,
             onCreated = { it.settings.javaScriptEnabled = true },
+            onDispose = onDispose,
             client = client,
             chromeClient = chromeClient
         )
