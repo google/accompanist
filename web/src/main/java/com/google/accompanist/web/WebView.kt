@@ -70,7 +70,7 @@ fun WebView(
     captureBackPresses: Boolean = true,
     navigator: WebViewNavigator = rememberWebViewNavigator(),
     onCreated: (WebView) -> Unit = {},
-    onDispose: (WebView) -> Unit = { it.destroy() },
+    onDispose: (WebView) -> Unit = {},
     client: AccompanistWebViewClient = remember { AccompanistWebViewClient() },
     chromeClient: AccompanistWebChromeClient = remember { AccompanistWebChromeClient() }
 ) {
