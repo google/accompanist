@@ -36,6 +36,6 @@ fun SystemUiControllerSample() {
             darkIcons = useDarkIcons
         )
 
-        // setStatusBarsColor() and setNavigationBarsColor() also exist
+        // setStatusBarColor() and setNavigationBarColor() also exist
     }
 }

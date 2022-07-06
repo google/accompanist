@@ -22,7 +22,7 @@ SideEffect {
         darkIcons = useDarkIcons
     )
 
-    // setStatusBarsColor() and setNavigationBarColor() also exist
+    // setStatusBarColor() and setNavigationBarColor() also exist
 }
 ```
 
@@ -40,7 +40,7 @@ Similar happens on navigation bar color, which is only available on API 26+.
 The scrim logic can be modified if needed:
 
 ``` kotlin
-systemUiController.setStatusBarsColor(
+systemUiController.setStatusBarColor(
     color = Color.Transparent,
     darkIcons = true
 ) { requestedColor ->
