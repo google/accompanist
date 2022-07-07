@@ -101,11 +101,13 @@ private fun HomeScreen(showSheet: () -> Unit, showFeed: () -> Unit) {
 
 @Composable
 private fun BottomSheet(showFeed: () -> Unit, showAnotherSheet: () -> Unit, arg: String) {
-    Text("Sheet with arg: $arg")
-    Button(onClick = showFeed) {
-        Text("Click me to navigate!")
-    }
-    Button(onClick = showAnotherSheet) {
-        Text("Click me to show another sheet!")
+    Column {
+        Text("Sheet with arg: $arg")
+        Button(onClick = showFeed) {
+            Text("Click me to navigate!")
+        }
+        Button(onClick = showAnotherSheet) {
+            Text("Click me to show another sheet!")
+        }
     }
 }
