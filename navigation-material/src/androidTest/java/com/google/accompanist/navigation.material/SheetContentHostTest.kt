@@ -101,7 +101,7 @@ internal class SheetContentHostTest {
             onSheetDismissed = { entry -> dismissedBackStackEntries.add(entry) }
         )
 
-        assertThat(sheetState.currentValue == ModalBottomSheetValue.Expanded)
+        assertThat(sheetState.currentValue == ModalBottomSheetValue.Expanded).isTrue()
         composeTestRule.onNodeWithTag(bodyContentTag).performClick()
         composeTestRule.runOnIdle {
             assertWithMessage("Sheet is visible")
@@ -126,7 +126,7 @@ internal class SheetContentHostTest {
             onSheetDismissed = { entry -> dismissedBackStackEntries.add(entry) }
         )
 
-        assertThat(sheetState.currentValue == ModalBottomSheetValue.Expanded)
+        assertThat(sheetState.currentValue == ModalBottomSheetValue.Expanded).isTrue()
         composeTestRule.onNodeWithTag(bodyContentTag).performClick()
         composeTestRule.runOnIdle {
             assertWithMessage("Sheet is not visible")
