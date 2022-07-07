@@ -22,9 +22,9 @@ This will display a WebView in your Compose layout that shows the URL provided.
 
 There is a larger sample in the sample app which can be found [here](https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/webview/BasicWebViewSample.kt). This sample also shows how to show a loading state.
 
-### WebView settings including Javascript
+### WebView settings including JavaScript
 
-By default, javascript is disabled in the WebView. To enable it or any other settings you can use the `onCreated` callback.
+By default, JavaScript is disabled in the WebView. To enable it or any other settings you can use the `onCreated` callback.
 
 ```kotlin
 WebView(
