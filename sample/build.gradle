@@ -32,6 +32,11 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    lint {
+        // This lint check is crashing lint on Compose 1.3.0-alpha01
+        disable "DialogFragmentCallbacksDetector"
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
