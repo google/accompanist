@@ -4,7 +4,7 @@ composeCompiler = "1.2.0"
 composesnapshot = "-" # a single character = no snapshot
 
 # gradlePlugin and lint need to be updated together
-gradlePlugin = "7.4.0-alpha08"
+gradlePlugin = "7.3.0-beta05"
 lintMinCompose = "30.0.0"
 
 ktlint = "0.42.1"
