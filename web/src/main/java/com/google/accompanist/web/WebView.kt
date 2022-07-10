@@ -17,7 +17,7 @@
 package com.google.accompanist.web
 
 import android.graphics.Bitmap
-import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
@@ -38,8 +38,12 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.widget.NestedScrollView
+import com.google.accompanist.web.LoadingState.Finished
+import com.google.accompanist.web.LoadingState.Loading
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -101,23 +105,33 @@ fun WebView(
     chromeClient.state = state
 
     val runningInPreview = LocalInspectionMode.current
-
     AndroidView(
         factory = { context ->
-            WebView(context).apply {
+            val web = WebView(context).apply {
                 onCreated(this)
 
-                layoutParams = ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT
+                layoutParams = LayoutParams(
+                    LayoutParams.MATCH_PARENT,
+                    LayoutParams.WRAP_CONTENT
                 )
 
                 webChromeClient = chromeClient
                 webViewClient = client
-            }.also { webView = it }
+
+                webView = this
+            }
+
+            // In order to dispatch nested scrolling correctly, WebView needs to
+            // be wrapped in a NestedScrollView. This is important for things like
+            // SwipeToRefresh and TopAppBar behaviours.
+            NestedScrollView(context).apply {
+                addView(web)
+            }
         },
-        modifier = modifier
-    ) { view ->
+        modifier = modifier.clipToBounds()
+    ) { _ ->
+        val view = webView ?: return@AndroidView
+
         // AndroidViews are not supported by preview, bail early
         if (runningInPreview) return@AndroidView
 
@@ -427,8 +441,11 @@ data class WebViewError(
  *                              Note that these headers are used for all subsequent requests of the WebView.
  */
 @Composable
-fun rememberWebViewState(url: String, additionalHttpHeaders: Map<String, String> = emptyMap()): WebViewState =
-    // Rather than using .apply {} here we will recreate the state, this prevents
+fun rememberWebViewState(
+    url: String,
+    additionalHttpHeaders: Map<String, String> = emptyMap()
+): WebViewState =
+// Rather than using .apply {} here we will recreate the state, this prevents
     // a recomposition loop when the webview updates the url itself.
     remember(url, additionalHttpHeaders) {
         WebViewState(

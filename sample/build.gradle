@@ -68,6 +68,7 @@ dependencies {
     implementation libs.coil.gif
 
     implementation libs.compose.material.material
+    implementation libs.compose.material.m3
     implementation libs.compose.material.iconsext
     implementation libs.compose.foundation.layout
     debugImplementation libs.compose.ui.tooling
