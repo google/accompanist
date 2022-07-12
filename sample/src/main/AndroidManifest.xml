@@ -413,6 +413,16 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".webview.SwipeRefreshWebViewSample"
+            android:label="@string/webview_title_swipe_refresh"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>
