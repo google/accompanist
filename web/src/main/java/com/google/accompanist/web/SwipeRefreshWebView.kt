@@ -73,7 +73,7 @@ class SwipeRefreshWebView @JvmOverloads constructor(
  * @param swipeRefreshState the state object to be used to control or observe the [SwipeRefresh] state.
  * @param swipeEnabled Whether the the layout should react to swipe gestures or not.
  * @param onRefresh Lambda which is invoked when a swipe to refresh gesture is completed.
- * @sample com.google.accompanist.sample.webview.BasicWebViewSample
+ * @sample com.google.accompanist.sample.webview.SwipeRefreshWebViewSample
  */
 @Composable
 fun SwipeRefreshWebView(
