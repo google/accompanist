@@ -81,6 +81,8 @@ dependencies {
     implementation libs.androidx.fragment
     implementation libs.androidx.lifecycle.runtime
 
+    implementation libs.androidx.swiperefreshlayout
+
     implementation libs.kotlin.stdlib
 
     lintChecks(project(":permissions-lint"))

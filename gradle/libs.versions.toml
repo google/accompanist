@@ -62,6 +62,7 @@ androidx-fragment = "androidx.fragment:fragment-ktx:1.4.0"
 androidx-dynamicanimation = "androidx.dynamicanimation:dynamicanimation-ktx:1.0.0-alpha03"
 androidx-lifecycle-runtime = "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"
 androidx-lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0"
+androidx-swiperefreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidxnavigation" }
 androidx-navigation-testing = { module = "androidx.navigation:navigation-testing", version.ref = "androidxnavigation" }
