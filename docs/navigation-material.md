@@ -31,7 +31,7 @@ This features composable bottom sheet destinations.
         val bottomSheetNavigator = rememberBottomSheetNavigator()
         val navController = rememberNavController(bottomSheetNavigator)
         ModalBottomSheetLayout(bottomSheetNavigator) {
-            NavHost(navController, Destinations.Home) {
+            NavHost(navController, "home") {
                // We'll define our graph here in a bit!
             }
         }
@@ -46,7 +46,7 @@ This features composable bottom sheet destinations.
         val bottomSheetNavigator = rememberBottomSheetNavigator()
         val navController = rememberNavController(bottomSheetNavigator)
         ModalBottomSheetLayout(bottomSheetNavigator) {
-            NavHost(navController, Destinations.Home) {
+            NavHost(navController, "home") {
                composable(route = "home") {
                    ...
                }
