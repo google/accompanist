@@ -177,7 +177,7 @@ public class BottomSheetNavigator(
         // currently displaying because it will have its transition completed when the sheet's
         // animation has completed
         DisposableEffect(backStackEntries) {
-            backStackEntries.forEach {
+            state.transitionsInProgress.value.forEach {
                 if (it != latestEntry) state.markTransitionComplete(it)
             }
             onDispose { }

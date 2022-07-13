@@ -17,10 +17,13 @@
 package com.google.accompanist.navigation.material
 
 import android.os.Bundle
+import androidx.activity.OnBackPressedDispatcher
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.Button
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
@@ -34,10 +37,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.plusAssign
 import androidx.navigation.testing.TestNavigatorState
@@ -303,6 +310,62 @@ internal class BottomSheetNavigatorTest {
         assertWithMessage("The back stack entry has been added to the back stack")
             .that(navigatorState.backStack.value)
             .containsExactly(entry)
+    }
+
+    @Test
+    fun testBackPressedDestroysEntry() {
+        lateinit var onBackPressedDispatcher: OnBackPressedDispatcher
+        lateinit var navController: NavHostController
+
+        composeTestRule.setContent {
+            val bottomSheetNavigator = rememberBottomSheetNavigator()
+            navController = rememberNavController(bottomSheetNavigator)
+            onBackPressedDispatcher =
+                LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher!!
+
+            ModalBottomSheetLayout(bottomSheetNavigator) {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    NavHost(
+                        navController = navController,
+                        startDestination = "mainScreen"
+                    ) {
+
+                        composable(
+                            route = "mainScreen",
+                            content = {
+                                Button(onClick = { navController.navigate("bottomSheet") }) {
+                                    Text(text = "open drawer")
+                                }
+                            }
+                        )
+
+                        bottomSheet(
+                            route = "bottomSheet",
+                            content = {
+                                Box(modifier = Modifier.fillMaxSize()) {
+                                    Text(
+                                        text = "bottomSheet"
+                                    )
+                                }
+                            }
+                        )
+                    }
+                }
+            }
+        }
+
+        composeTestRule.onNodeWithText("open drawer").performClick()
+
+        lateinit var bottomSheetEntry: NavBackStackEntry
+
+        composeTestRule.runOnIdle {
+            bottomSheetEntry = navController.currentBackStackEntry!!
+            onBackPressedDispatcher.onBackPressed()
+        }
+
+        composeTestRule.runOnIdle {
+            assertThat(bottomSheetEntry.lifecycle.currentState).isEqualTo(Lifecycle.State.DESTROYED)
+        }
     }
 
     /**
