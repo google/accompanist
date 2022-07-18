@@ -19,8 +19,6 @@ package com.google.accompanist.permissions
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
-import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,7 +30,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-
 
 /**
  * Creates a [MutablePermissionState] that is remembered across compositions.
@@ -71,7 +68,6 @@ internal fun rememberMutablePermissionState(
             permissionState.refreshPermissionStatus()
             onPermissionResult(permissionState.status.isGranted)
         }
-
 
     DisposableEffect(permissionState, requestPermissionLauncher) {
         permissionState.requestPermissionLauncher = requestPermissionLauncher
@@ -121,7 +117,6 @@ internal class MutablePermissionState(
     internal var requestPermissionLauncher: ActivityResultLauncher<String>? = null
     internal var appDetailSettingLauncher: ActivityResultLauncher<Intent>? = null
 
-
     internal fun refreshPermissionStatus() {
         status = getPermissionStatus()
     }
@@ -135,4 +130,3 @@ internal class MutablePermissionState(
         }
     }
 }
-

@@ -70,7 +70,7 @@ interface MultiplePermissionsState {
      * When `true`, the user should be presented with a rationale.
      */
     val shouldShowRationale: Boolean
-    
+
     /**
      * Request the [permissions] to the user.
      *

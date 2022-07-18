@@ -179,7 +179,6 @@ internal class MutableMultiplePermissionsState(
     internal var requestPermissionsLauncher: ActivityResultLauncher<Array<String>>? = null
     internal var appDetailSettingLauncher: ActivityResultLauncher<Intent>? = null
 
-
     internal fun updatePermissionsStatus(permissionsStatus: Map<String, Boolean>) {
         // Update all permissions with the result
         for (permission in permissionsStatus.keys) {
