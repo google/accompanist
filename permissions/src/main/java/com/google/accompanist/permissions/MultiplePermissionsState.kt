@@ -16,6 +16,7 @@
 
 package com.google.accompanist.permissions
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 
@@ -69,7 +70,7 @@ interface MultiplePermissionsState {
      * When `true`, the user should be presented with a rationale.
      */
     val shouldShowRationale: Boolean
-
+    
     /**
      * Request the [permissions] to the user.
      *
@@ -82,4 +83,9 @@ interface MultiplePermissionsState {
      * This behavior varies depending on the Android level API.
      */
     fun launchMultiplePermissionRequest(): Unit
+
+    /**
+     * Go to application detailed settings.
+     */
+    fun launchAppDetailSetting(context: Context): Unit
 }

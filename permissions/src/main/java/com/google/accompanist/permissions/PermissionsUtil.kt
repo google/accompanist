@@ -19,7 +19,10 @@ package com.google.accompanist.permissions
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
+import android.provider.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Stable
@@ -146,3 +149,10 @@ internal fun Context.checkPermission(permission: String): Boolean {
 internal fun Activity.shouldShowRationale(permission: String): Boolean {
     return ActivityCompat.shouldShowRequestPermissionRationale(this, permission)
 }
+
+internal fun Context.createAppDetailSettingIntent(): Intent =
+    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(
+        Uri.parse(
+            "package:$packageName"
+        )
+    )

@@ -72,4 +72,9 @@ interface PermissionState {
      * This behavior varies depending on the Android level API.
      */
     fun launchPermissionRequest(): Unit
+
+    /**
+     * Go to application detailed settings.
+     */
+    fun launchAppDetailSetting(): Unit
 }

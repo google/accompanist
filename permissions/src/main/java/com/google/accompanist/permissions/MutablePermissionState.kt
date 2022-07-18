@@ -18,6 +18,9 @@ package com.google.accompanist.permissions
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -29,6 +32,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+
 
 /**
  * Creates a [MutablePermissionState] that is remembered across compositions.
@@ -55,17 +59,33 @@ internal fun rememberMutablePermissionState(
     PermissionLifecycleCheckerEffect(permissionState)
 
     // Remember RequestPermission launcher and assign it to permissionState
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
-        permissionState.refreshPermissionStatus()
-        onPermissionResult(it)
-    }
-    DisposableEffect(permissionState, launcher) {
-        permissionState.launcher = launcher
+    val requestPermissionLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
+            permissionState.refreshPermissionStatus()
+            onPermissionResult(it)
+        }
+
+    // Remember Application detail setting launcher and assign it to permissionState
+    val appDetailSettingLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            permissionState.refreshPermissionStatus()
+            onPermissionResult(permissionState.status.isGranted)
+        }
+
+
+    DisposableEffect(permissionState, requestPermissionLauncher) {
+        permissionState.requestPermissionLauncher = requestPermissionLauncher
         onDispose {
-            permissionState.launcher = null
+            permissionState.requestPermissionLauncher = null
         }
     }
 
+    DisposableEffect(permissionState, appDetailSettingLauncher) {
+        permissionState.appDetailSettingLauncher = appDetailSettingLauncher
+        onDispose {
+            permissionState.appDetailSettingLauncher = null
+        }
+    }
     return permissionState
 }
 
@@ -83,18 +103,24 @@ internal fun rememberMutablePermissionState(
 internal class MutablePermissionState(
     override val permission: String,
     private val context: Context,
-    private val activity: Activity
+    private val activity: Activity,
 ) : PermissionState {
 
     override var status: PermissionStatus by mutableStateOf(getPermissionStatus())
 
     override fun launchPermissionRequest() {
-        launcher?.launch(
+        requestPermissionLauncher?.launch(
             permission
         ) ?: throw IllegalStateException("ActivityResultLauncher cannot be null")
     }
 
-    internal var launcher: ActivityResultLauncher<String>? = null
+    override fun launchAppDetailSetting() {
+        appDetailSettingLauncher?.launch(context.createAppDetailSettingIntent())
+    }
+
+    internal var requestPermissionLauncher: ActivityResultLauncher<String>? = null
+    internal var appDetailSettingLauncher: ActivityResultLauncher<Intent>? = null
+
 
     internal fun refreshPermissionStatus() {
         status = getPermissionStatus()
@@ -109,3 +135,4 @@ internal class MutablePermissionState(
         }
     }
 }
+

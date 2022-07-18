@@ -16,6 +16,8 @@
 
 package com.google.accompanist.permissions
 
+import android.content.Context
+import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -54,16 +56,35 @@ internal fun rememberMutableMultiplePermissionsState(
     }
 
     // Remember RequestMultiplePermissions launcher and assign it to multiplePermissionsState
-    val launcher = rememberLauncherForActivityResult(
+    val requestPermissionsLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissionsResult ->
         multiplePermissionsState.updatePermissionsStatus(permissionsResult)
         onPermissionsResult(permissionsResult)
     }
-    DisposableEffect(multiplePermissionsState, launcher) {
-        multiplePermissionsState.launcher = launcher
+
+    // Remember Application detail setting launcher and assign it to multiplePermissionsState
+    val appDetailSettingLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            multiplePermissionsState.updatePermissionStatus(permissions)
+            val permissionResult = mutableMapOf<String, Boolean>().apply {
+                multiplePermissionsState.permissions.forEach {
+                    put(it.permission, it.status.isGranted)
+                }
+            }
+            onPermissionsResult(permissionResult)
+        }
+
+    DisposableEffect(multiplePermissionsState, requestPermissionsLauncher) {
+        multiplePermissionsState.requestPermissionsLauncher = requestPermissionsLauncher
         onDispose {
-            multiplePermissionsState.launcher = null
+            multiplePermissionsState.requestPermissionsLauncher = null
+        }
+    }
+    DisposableEffect(multiplePermissionsState, appDetailSettingLauncher) {
+        multiplePermissionsState.appDetailSettingLauncher = appDetailSettingLauncher
+        onDispose {
+            multiplePermissionsState.appDetailSettingLauncher = null
         }
     }
 
@@ -84,16 +105,29 @@ private fun rememberMutablePermissionsState(
     // Update each permission with its own launcher
     for (permissionState in mutablePermissions) {
         key(permissionState.permission) {
-            // Remember launcher and assign it to the permissionState
-            val launcher = rememberLauncherForActivityResult(
+            // Remember RequestPermission launcher and assign it to the permissionState
+            val requestPermissionLauncher = rememberLauncherForActivityResult(
                 ActivityResultContracts.RequestPermission()
             ) {
                 permissionState.refreshPermissionStatus()
             }
-            DisposableEffect(launcher) {
-                permissionState.launcher = launcher
+
+            // Remember Application detail setting launcher and assign it to permissionState
+            val appDetailSettingLauncher =
+                rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                    permissionState.refreshPermissionStatus()
+                }
+
+            DisposableEffect(requestPermissionLauncher) {
+                permissionState.requestPermissionLauncher = requestPermissionLauncher
                 onDispose {
-                    permissionState.launcher = null
+                    permissionState.requestPermissionLauncher = null
+                }
+            }
+            DisposableEffect(permissionState, appDetailSettingLauncher) {
+                permissionState.appDetailSettingLauncher = appDetailSettingLauncher
+                onDispose {
+                    permissionState.appDetailSettingLauncher = null
                 }
             }
         }
@@ -127,16 +161,24 @@ internal class MutableMultiplePermissionsState(
     }
 
     override val shouldShowRationale: Boolean by derivedStateOf {
-        permissions.any { it.status.shouldShowRationale }
+        permissions.any {
+            it.status.shouldShowRationale
+        }
     }
 
     override fun launchMultiplePermissionRequest() {
-        launcher?.launch(
+        requestPermissionsLauncher?.launch(
             permissions.map { it.permission }.toTypedArray()
         ) ?: throw IllegalStateException("ActivityResultLauncher cannot be null")
     }
 
-    internal var launcher: ActivityResultLauncher<Array<String>>? = null
+    override fun launchAppDetailSetting(context: Context) {
+        appDetailSettingLauncher?.launch(context.createAppDetailSettingIntent())
+    }
+
+    internal var requestPermissionsLauncher: ActivityResultLauncher<Array<String>>? = null
+    internal var appDetailSettingLauncher: ActivityResultLauncher<Intent>? = null
+
 
     internal fun updatePermissionsStatus(permissionsStatus: Map<String, Boolean>) {
         // Update all permissions with the result
@@ -145,6 +187,15 @@ internal class MutableMultiplePermissionsState(
                 permissionsStatus[permission]?.let {
                     this.refreshPermissionStatus()
                 }
+            }
+        }
+    }
+
+    internal fun updatePermissionStatus(permissions: List<String>) {
+        // Update all permissions with the result
+        for (permission in permissions) {
+            mutablePermissions.firstOrNull { it.permission == permission }?.apply {
+                this.refreshPermissionStatus()
             }
         }
     }
