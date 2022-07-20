@@ -68,7 +68,7 @@ fun Modifier.pagerTabIndicatorOffset(
             )
         )
         layout(constraints.maxWidth, maxOf(placeable.height, constraints.minHeight)) {
-            placeable.place(
+            placeable.placeRelative(
                 indicatorOffset,
                 maxOf(constraints.minHeight - placeable.height, 0)
             )
