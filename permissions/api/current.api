@@ -9,8 +9,8 @@ package com.google.accompanist.permissions {
     method public java.util.List<com.google.accompanist.permissions.PermissionState> getPermissions();
     method public java.util.List<com.google.accompanist.permissions.PermissionState> getRevokedPermissions();
     method public boolean getShouldShowRationale();
+    method public void launchAppDetailSetting(android.content.Context context);
     method public void launchMultiplePermissionRequest();
-    method public void launchAppDetailSetting(android.content.Context);
     property public abstract boolean allPermissionsGranted;
     property public abstract java.util.List<com.google.accompanist.permissions.PermissionState> permissions;
     property public abstract java.util.List<com.google.accompanist.permissions.PermissionState> revokedPermissions;
@@ -30,8 +30,8 @@ package com.google.accompanist.permissions {
   @androidx.compose.runtime.Stable @com.google.accompanist.permissions.ExperimentalPermissionsApi public interface PermissionState {
     method public String getPermission();
     method public com.google.accompanist.permissions.PermissionStatus getStatus();
-    method public void launchPermissionRequest();
     method public void launchAppDetailSetting();
+    method public void launchPermissionRequest();
     property public abstract String permission;
     property public abstract com.google.accompanist.permissions.PermissionStatus status;
   }
