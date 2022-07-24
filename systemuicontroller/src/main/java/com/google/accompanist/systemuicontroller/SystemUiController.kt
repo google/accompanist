@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 The Android Open Source Project
+ * Copyright 2022 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,9 @@ import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.window.DialogWindowProvider
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 
@@ -42,6 +44,15 @@ import androidx.core.view.WindowInsetsControllerCompat
  */
 @Stable
 interface SystemUiController {
+
+    /**
+     * Control for the behavior of the system bars. This value should be one of the
+     * [WindowInsetsControllerCompat] behavior constants:
+     * [WindowInsetsControllerCompat.BEHAVIOR_SHOW_BARS_BY_TOUCH],
+     * [WindowInsetsControllerCompat.BEHAVIOR_SHOW_BARS_BY_SWIPE] and
+     * [WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE].
+     */
+    var systemBarsBehavior: Int
 
     /**
      * Property which holds the status bar visibility. If set to true, show the status bar,
@@ -157,13 +168,37 @@ interface SystemUiController {
 }
 
 /**
- * Remembers a [SystemUiController] for the current device.
+ * Remembers a [SystemUiController] for the given [window].
+ *
+ * If no [window] is provided, an attempt to find the correct [Window] is made.
+ *
+ * First, if the [LocalView]'s parent is a [DialogWindowProvider], then that dialog's [Window] will
+ * be used.
+ *
+ * Second, we attempt to find [Window] for the [Activity] containing the [LocalView].
+ *
+ * If none of these are found (such as may happen in a preview), then the functionality of the
+ * returned [SystemUiController] will be degraded, but won't throw an exception.
  */
 @Composable
-fun rememberSystemUiController(): SystemUiController {
+fun rememberSystemUiController(
+    window: Window? = findWindow(),
+): SystemUiController {
     val view = LocalView.current
-    return remember(view) { AndroidSystemUiController(view) }
+    return remember(view, window) { AndroidSystemUiController(view, window) }
 }
+
+@Composable
+private fun findWindow(): Window? =
+    (LocalView.current.parent as? DialogWindowProvider)?.window
+        ?: LocalView.current.context.findWindow()
+
+private tailrec fun Context.findWindow(): Window? =
+    when (this) {
+        is Activity -> window
+        is ContextWrapper -> baseContext.findWindow()
+        else -> null
+    }
 
 /**
  * A helper class for setting the navigation and status bar colors for a [View], gracefully
@@ -172,12 +207,12 @@ fun rememberSystemUiController(): SystemUiController {
  * Typically you would use [rememberSystemUiController] to remember an instance of this.
  */
 internal class AndroidSystemUiController(
-    private val view: View
+    private val view: View,
+    private val window: Window?
 ) : SystemUiController {
-    private val window = requireNotNull(view.context.findWindow()) {
-        "The Compose View must be hosted in an Activity with a Window!"
+    private val windowInsetsController = window?.let {
+        WindowCompat.getInsetsController(it, view)
     }
-    private val windowInsetsController = WindowInsetsControllerCompat(window, view)
 
     override fun setStatusBarColor(
         color: Color,
@@ -186,8 +221,8 @@ internal class AndroidSystemUiController(
     ) {
         statusBarDarkContentEnabled = darkIcons
 
-        window.statusBarColor = when {
-            darkIcons && !windowInsetsController.isAppearanceLightStatusBars -> {
+        window?.statusBarColor = when {
+            darkIcons && windowInsetsController?.isAppearanceLightStatusBars != true -> {
                 // If we're set to use dark icons, but our windowInsetsController call didn't
                 // succeed (usually due to API level), we instead transform the color to maintain
                 // contrast
@@ -206,8 +241,8 @@ internal class AndroidSystemUiController(
         navigationBarDarkContentEnabled = darkIcons
         isNavigationBarContrastEnforced = navigationBarContrastEnforced
 
-        window.navigationBarColor = when {
-            darkIcons && !windowInsetsController.isAppearanceLightNavigationBars -> {
+        window?.navigationBarColor = when {
+            darkIcons && windowInsetsController?.isAppearanceLightNavigationBars != true -> {
                 // If we're set to use dark icons, but our windowInsetsController call didn't
                 // succeed (usually due to API level), we instead transform the color to maintain
                 // contrast
@@ -217,6 +252,12 @@ internal class AndroidSystemUiController(
         }.toArgb()
     }
 
+    override var systemBarsBehavior: Int
+        get() = windowInsetsController?.systemBarsBehavior ?: 0
+        set(value) {
+            windowInsetsController?.systemBarsBehavior = value
+        }
+
     override var isStatusBarVisible: Boolean
         get() {
             return ViewCompat.getRootWindowInsets(view)
@@ -224,9 +265,9 @@ internal class AndroidSystemUiController(
         }
         set(value) {
             if (value) {
-                windowInsetsController.show(WindowInsetsCompat.Type.statusBars())
+                windowInsetsController?.show(WindowInsetsCompat.Type.statusBars())
             } else {
-                windowInsetsController.hide(WindowInsetsCompat.Type.statusBars())
+                windowInsetsController?.hide(WindowInsetsCompat.Type.statusBars())
             }
         }
 
@@ -237,40 +278,31 @@ internal class AndroidSystemUiController(
         }
         set(value) {
             if (value) {
-                windowInsetsController.show(WindowInsetsCompat.Type.navigationBars())
+                windowInsetsController?.show(WindowInsetsCompat.Type.navigationBars())
             } else {
-                windowInsetsController.hide(WindowInsetsCompat.Type.navigationBars())
+                windowInsetsController?.hide(WindowInsetsCompat.Type.navigationBars())
             }
         }
 
     override var statusBarDarkContentEnabled: Boolean
-        get() = windowInsetsController.isAppearanceLightStatusBars
+        get() = windowInsetsController?.isAppearanceLightStatusBars == true
         set(value) {
-            windowInsetsController.isAppearanceLightStatusBars = value
+            windowInsetsController?.isAppearanceLightStatusBars = value
         }
 
     override var navigationBarDarkContentEnabled: Boolean
-        get() = windowInsetsController.isAppearanceLightNavigationBars
+        get() = windowInsetsController?.isAppearanceLightNavigationBars == true
         set(value) {
-            windowInsetsController.isAppearanceLightNavigationBars = value
+            windowInsetsController?.isAppearanceLightNavigationBars = value
         }
 
     override var isNavigationBarContrastEnforced: Boolean
-        get() = Build.VERSION.SDK_INT >= 29 && window.isNavigationBarContrastEnforced
+        get() = Build.VERSION.SDK_INT >= 29 && window?.isNavigationBarContrastEnforced == true
         set(value) {
             if (Build.VERSION.SDK_INT >= 29) {
-                window.isNavigationBarContrastEnforced = value
+                window?.isNavigationBarContrastEnforced = value
             }
         }
-
-    private fun Context.findWindow(): Window? {
-        var context = this
-        while (context is ContextWrapper) {
-            if (context is Activity) return context.window
-            context = context.baseContext
-        }
-        return null
-    }
 }
 
 private val BlackScrim = Color(0f, 0f, 0f, 0.3f) // 30% opaque black

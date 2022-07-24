@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
+
 package com.google.accompanist.insets
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -35,7 +37,7 @@ class WindowInsetsTest {
      * Otherwise this module has no tests when running on API < 23.
      */
     @Test
-    fun dummyTest() = Unit
+    fun fakeTest() = Unit
 
     @Test
     @SdkSuppress(minSdkVersion = 23) // ViewCompat.getRootWindowInsets

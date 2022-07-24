@@ -21,12 +21,14 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.internal.test.combineWithParameters
 import com.google.accompanist.internal.test.parameterizedParams
+import org.junit.Ignore
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
 /**
  * Version of [BaseHorizontalPagerTest] which is designed to be run on device/emulators.
  */
+@Ignore("https://buganizer.corp.google.com/issues/218668336") // To be fixed in alpha04
 @RunWith(Parameterized::class)
 class InstrumentedHorizontalPagerTest(
     itemWidthFraction: Float,

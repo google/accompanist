@@ -19,7 +19,7 @@ package com.google.accompanist.permissions
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.filters.SdkSuppress
 import androidx.test.rule.GrantPermissionRule
-import com.google.accompanist.permissions.test.PermissionsTestActivity
+import com.google.accompanist.permissions.test.EmptyPermissionsTestActivity
 import com.google.common.truth.Truth.assertThat
 import org.junit.Rule
 import org.junit.Test
@@ -32,7 +32,7 @@ import org.junit.Test
 class PermissionStateTest {
 
     @get:Rule
-    val composeTestRule = createAndroidComposeRule<PermissionsTestActivity>()
+    val composeTestRule = createAndroidComposeRule<EmptyPermissionsTestActivity>()
 
     @get:Rule
     val permissionRule: GrantPermissionRule =
@@ -42,8 +42,8 @@ class PermissionStateTest {
     fun permissionState_hasPermission() {
         composeTestRule.setContent {
             val state = rememberPermissionState(android.Manifest.permission.CAMERA)
-            assertThat(state.hasPermission).isTrue()
-            assertThat(state.shouldShowRationale).isFalse()
+            assertThat(state.status.isGranted).isTrue()
+            assertThat(state.status.shouldShowRationale).isFalse()
         }
     }
 
@@ -57,8 +57,8 @@ class PermissionStateTest {
         composeTestRule.setContent {
             val state = rememberPermissionState(permission)
 
-            assertThat(state.hasPermission).isFalse()
-            assertThat(state.shouldShowRationale).isTrue()
+            assertThat(state.status.isGranted).isFalse()
+            assertThat(state.status.shouldShowRationale).isTrue()
         }
     }
 }

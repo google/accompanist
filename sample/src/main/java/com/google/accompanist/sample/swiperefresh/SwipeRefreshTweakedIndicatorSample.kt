@@ -74,7 +74,7 @@ private fun Sample() {
             )
         },
         modifier = Modifier.fillMaxSize()
-    ) {
+    ) { padding ->
         // Simulate a fake 2-second 'load'. Ideally this 'refreshing' value would
         // come from a ViewModel or similar
         var refreshing by remember { mutableStateOf(false) }
@@ -101,7 +101,7 @@ private fun Sample() {
                 )
             },
         ) {
-            LazyColumn {
+            LazyColumn(contentPadding = padding) {
                 items(30) { index ->
                     Row(Modifier.padding(16.dp)) {
                         Image(

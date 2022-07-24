@@ -14,44 +14,44 @@
  * limitations under the License.
  */
 
-package com.google.accompanist.navigation.material
+package com.google.accompanist.web
 
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 
 /**
- * Dummy tests to help with sharding: https://github.com/android/android-test/issues/973
+ * Fake tests to help with sharding: https://github.com/android/android-test/issues/973
  */
 @RunWith(JUnit4::class)
-class DummyTests {
+class FakeTests {
     @Test
-    fun dummy1() = Unit
+    fun fake1() = Unit
 
     @Test
-    fun dummy2() = Unit
+    fun fake2() = Unit
 
     @Test
-    fun dummy3() = Unit
+    fun fake3() = Unit
 
     @Test
-    fun dummy4() = Unit
+    fun fake4() = Unit
 
     @Test
-    fun dummy5() = Unit
+    fun fake5() = Unit
 
     @Test
-    fun dummy6() = Unit
+    fun fake6() = Unit
 
     @Test
-    fun dummy7() = Unit
+    fun fake7() = Unit
 
     @Test
-    fun dummy8() = Unit
+    fun fake8() = Unit
 
     @Test
-    fun dummy9() = Unit
+    fun fake9() = Unit
 
     @Test
-    fun dummy10() = Unit
+    fun fake10() = Unit
 }

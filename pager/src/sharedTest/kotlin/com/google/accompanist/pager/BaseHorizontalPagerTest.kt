@@ -119,6 +119,7 @@ abstract class BaseHorizontalPagerTest(
         observeStateInContent: Boolean,
         pageToItem: (Int) -> String,
         useKeys: Boolean,
+        userScrollEnabled: Boolean,
         onPageComposed: (Int) -> Unit
     ) {
         CompositionLocalProvider(LocalLayoutDirection provides layoutDirection) {
@@ -140,7 +141,8 @@ abstract class BaseHorizontalPagerTest(
                         { pageToItem(it) }
                     } else {
                         null
-                    }
+                    },
+                    userScrollEnabled = userScrollEnabled,
                 ) { page ->
                     onPageComposed(page)
                     val item = pageToItem(page)

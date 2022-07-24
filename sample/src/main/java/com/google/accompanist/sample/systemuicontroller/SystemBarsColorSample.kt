@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 The Android Open Source Project
+ * Copyright 2022 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,12 +32,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material.Button
 import androidx.compose.material.Checkbox
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,8 +56,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
-import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.accompanist.insets.systemBarsPadding
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.rememberRandomSampleImageUrl
@@ -71,9 +71,7 @@ class SystemBarsColorSample : ComponentActivity() {
 
         setContent {
             AccompanistSampleTheme {
-                ProvideWindowInsets {
-                    Sample()
-                }
+                Sample()
             }
         }
     }
@@ -87,6 +85,11 @@ private fun Sample() {
     var clickedColor by remember { mutableStateOf(Color.Unspecified) }
     var statusBarDarkIcons by remember { mutableStateOf(false) }
     var navigationBarDarkIcons by remember { mutableStateOf(false) }
+
+    LaunchedEffect(systemUiController, statusBarDarkIcons, navigationBarDarkIcons) {
+        systemUiController.statusBarDarkContentEnabled = statusBarDarkIcons
+        systemUiController.navigationBarDarkContentEnabled = navigationBarDarkIcons
+    }
 
     @Composable
     fun Color(color: Color) {
@@ -213,7 +216,6 @@ private fun Sample() {
                     modifier = Modifier
                         .clickable {
                             statusBarDarkIcons = !statusBarDarkIcons
-                            systemUiController.statusBarDarkContentEnabled = statusBarDarkIcons
                         }
                         .padding(8.dp),
                     verticalAlignment = Alignment.CenterVertically
@@ -223,7 +225,6 @@ private fun Sample() {
                         checked = statusBarDarkIcons,
                         onCheckedChange = {
                             statusBarDarkIcons = it
-                            systemUiController.statusBarDarkContentEnabled = it
                         }
                     )
                 }
@@ -231,7 +232,6 @@ private fun Sample() {
                     modifier = Modifier
                         .clickable {
                             navigationBarDarkIcons = !navigationBarDarkIcons
-                            systemUiController.navigationBarDarkContentEnabled = navigationBarDarkIcons
                         }
                         .padding(8.dp),
                     verticalAlignment = Alignment.CenterVertically
@@ -241,7 +241,6 @@ private fun Sample() {
                         checked = navigationBarDarkIcons,
                         onCheckedChange = {
                             navigationBarDarkIcons = it
-                            systemUiController.navigationBarDarkContentEnabled = it
                         }
                     )
                 }

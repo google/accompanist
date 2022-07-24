@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2020 The Android Open Source Project
+  ~ Copyright 2022 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -27,8 +27,11 @@
     <string name="horiz_pager_with_indicator_title">Horizontal Pager: Indicator</string>
     <string name="horiz_pager_with_transition_title">Horizontal Pager: Transition</string>
     <string name="horiz_pager_title_looping">Horizontal Pager: Looping</string>
+    <string name="horiz_pager_title_looping_indicator">Horizontal Pager: Looping with Indicators</string>
+    <string name="horiz_pager_title_looping_tabs">Horizontal Pager: Looping with Tabs</string>
     <string name="horiz_pager_title_tabs">Horizontal Pager: Tabs</string>
     <string name="horiz_pager_title_scroll_content">Horizontal Pager: Scrolling content</string>
+    <string name="horiz_pager_title_different_paddings">Horizontal Pager: Different paddings</string>
 
     <string name="vertical_pager_title_basics">Vertical Pager: Basic</string>
     <string name="vertical_pager_with_indicator_title">Vertical Pager: Indicator</string>
@@ -40,6 +43,7 @@
 
     <string name="permissions_title_one">Permissions: Request permission</string>
     <string name="permissions_title_multiple">Permissions: Request multiple permissions</string>
+    <string name="permissions_title_location">Permissions: Request location permissions</string>
 
     <string name="flowlayout_title_column">Flow Layout: Column</string>
     <string name="flowlayout_title_row">Flow Layout: Row</string>
@@ -51,10 +55,12 @@
     <string name="swiperefresh_title_verticalpager">Swipe Refresh: VerticalPager</string>
 
     <string name="system_ui_controller_title_color">System Ui Controller: Color</string>
+    <string name="system_ui_controller_title_color_dialog">System Ui Controller: Color in Dialog</string>
     <string name="system_ui_controller_title_visibility">System Ui Controller: Visibility</string>
 
     <string name="placeholder_title_basics">Placeholder: Basic</string>
     <string name="placeholder_title_fade">Placeholder: Fade</string>
     <string name="placeholder_title_shimmer">Placeholder: Shimmer</string>
 
+    <string name="webview_title_basic">WebView: Basic</string>
 </resources>

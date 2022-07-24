@@ -20,23 +20,31 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.accompanist.pager.ExperimentalPagerApi
+import androidx.core.view.WindowInsetsControllerCompat
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -47,17 +55,14 @@ class SystemBarsVisibilitySample : ComponentActivity() {
 
         setContent {
             AccompanistSampleTheme {
-                ProvideWindowInsets {
-                    Surface {
-                        Sample()
-                    }
+                Surface {
+                    Sample()
                 }
             }
         }
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun Sample() {
     // Get the current SystemUiController
@@ -70,12 +75,63 @@ private fun Sample() {
             )
         },
         modifier = Modifier.fillMaxSize()
-    ) {
+    ) { padding ->
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(padding),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            Box {
+                var isShowingDropdownMenu by remember { mutableStateOf(false) }
+
+                Button(
+                    onClick = {
+                        isShowingDropdownMenu = true
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth(0.7f)
+                        .padding(vertical = 8.dp)
+                ) {
+                    Text(text = "Change System Bars Behavior")
+                }
+
+                DropdownMenu(
+                    expanded = isShowingDropdownMenu,
+                    onDismissRequest = { isShowingDropdownMenu = false }
+                ) {
+                    DropdownMenuItem(
+                        onClick = {
+                            systemUiController.systemBarsBehavior =
+                                WindowInsetsControllerCompat.BEHAVIOR_SHOW_BARS_BY_TOUCH
+                            isShowingDropdownMenu = false
+                        }
+                    ) {
+                        Text("BEHAVIOR_SHOW_BARS_BY_TOUCH")
+                    }
+                    DropdownMenuItem(
+                        onClick = {
+                            systemUiController.systemBarsBehavior =
+                                WindowInsetsControllerCompat.BEHAVIOR_SHOW_BARS_BY_SWIPE
+                            isShowingDropdownMenu = false
+                        }
+                    ) {
+                        Text("BEHAVIOR_SHOW_BARS_BY_SWIPE")
+                    }
+                    DropdownMenuItem(
+                        onClick = {
+                            systemUiController.systemBarsBehavior =
+                                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                            isShowingDropdownMenu = false
+                        }
+                    ) {
+                        Text("BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE")
+                    }
+                }
+            }
+
             /** Status bar */
 
             Button(

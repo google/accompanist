@@ -4,6 +4,7 @@ package com.google.accompanist.systemuicontroller {
   @androidx.compose.runtime.Stable public interface SystemUiController {
     method public boolean getNavigationBarDarkContentEnabled();
     method public boolean getStatusBarDarkContentEnabled();
+    method public int getSystemBarsBehavior();
     method public default boolean getSystemBarsDarkContentEnabled();
     method public boolean isNavigationBarContrastEnforced();
     method public boolean isNavigationBarVisible();
@@ -16,6 +17,7 @@ package com.google.accompanist.systemuicontroller {
     method public void setStatusBarColor(long color, optional boolean darkIcons, optional kotlin.jvm.functions.Function1<? super androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color> transformColorForLightContent);
     method public void setStatusBarDarkContentEnabled(boolean statusBarDarkContentEnabled);
     method public void setStatusBarVisible(boolean isStatusBarVisible);
+    method public void setSystemBarsBehavior(int systemBarsBehavior);
     method public default void setSystemBarsColor(long color, optional boolean darkIcons, optional boolean isNavigationBarContrastEnforced, optional kotlin.jvm.functions.Function1<? super androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color> transformColorForLightContent);
     method public default void setSystemBarsDarkContentEnabled(boolean value);
     method public default void setSystemBarsVisible(boolean value);
@@ -25,11 +27,12 @@ package com.google.accompanist.systemuicontroller {
     property public default boolean isSystemBarsVisible;
     property public abstract boolean navigationBarDarkContentEnabled;
     property public abstract boolean statusBarDarkContentEnabled;
+    property public abstract int systemBarsBehavior;
     property public default boolean systemBarsDarkContentEnabled;
   }
 
   public final class SystemUiControllerKt {
-    method @androidx.compose.runtime.Composable public static com.google.accompanist.systemuicontroller.SystemUiController rememberSystemUiController();
+    method @androidx.compose.runtime.Composable public static com.google.accompanist.systemuicontroller.SystemUiController rememberSystemUiController(optional android.view.Window? window);
   }
 
 }

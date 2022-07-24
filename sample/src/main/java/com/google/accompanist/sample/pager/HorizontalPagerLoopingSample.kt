@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -65,8 +66,8 @@ private fun Sample() {
             )
         },
         modifier = Modifier.fillMaxSize()
-    ) {
-        Column(Modifier.fillMaxSize()) {
+    ) { padding ->
+        Column(Modifier.fillMaxSize().padding(padding)) {
             // Display 10 items
             val pageCount = 10
 

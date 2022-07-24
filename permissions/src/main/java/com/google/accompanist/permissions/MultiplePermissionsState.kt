@@ -26,13 +26,16 @@ import androidx.compose.runtime.Stable
  * [documentation](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions).
  *
  * @param permissions the permissions to control and observe.
+ * @param onPermissionsResult will be called with whether or not the user granted the permissions
+ *  after [MultiplePermissionsState.launchMultiplePermissionRequest] is called.
  */
 @ExperimentalPermissionsApi
 @Composable
 fun rememberMultiplePermissionsState(
-    permissions: List<String>
+    permissions: List<String>,
+    onPermissionsResult: (Map<String, Boolean>) -> Unit = {}
 ): MultiplePermissionsState {
-    return rememberMutableMultiplePermissionsState(permissions)
+    return rememberMutableMultiplePermissionsState(permissions, onPermissionsResult)
 }
 
 /**
@@ -66,11 +69,6 @@ interface MultiplePermissionsState {
      * When `true`, the user should be presented with a rationale.
      */
     val shouldShowRationale: Boolean
-
-    /**
-     * When `true`, the [permissions] request has been done previously.
-     */
-    val permissionRequested: Boolean
 
     /**
      * Request the [permissions] to the user.

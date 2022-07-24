@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 The Android Open Source Project
+  ~ Copyright 2022 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -24,6 +24,8 @@
     <!-- Used for the permissions sample -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="false"
@@ -47,7 +49,7 @@
         <activity
             android:name="com.google.accompanist.sample.insets.InsetsBasicSample"
             android:label="@string/insets_title_basic"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -57,7 +59,7 @@
         <activity
             android:name="com.google.accompanist.sample.insets.InsetsFragmentSample"
             android:label="@string/insets_title_fragment"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -68,7 +70,7 @@
         <activity
             android:name="com.google.accompanist.sample.insets.EdgeToEdgeLazyColumnWithBottomNav"
             android:label="@string/insets_title_list_bottomnav"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -78,7 +80,7 @@
         <activity
             android:name="com.google.accompanist.sample.insets.EdgeToEdgeLazyColumn"
             android:label="@string/insets_title_list"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -89,7 +91,7 @@
             android:name="com.google.accompanist.sample.insets.ImeAnimationSample"
             android:label="@string/insets_title_imeanim"
             android:windowSoftInputMode="adjustResize"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -99,7 +101,7 @@
         <activity
             android:name=".pager.HorizontalPagerBasicSample"
             android:label="@string/horiz_pager_title_basics"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -109,7 +111,16 @@
         <activity
             android:name=".pager.HorizontalPagerWithIndicatorSample"
             android:label="@string/horiz_pager_with_indicator_title"
-            android:exported="false">
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".pager.HorizontalPagerLoopingIndicatorSample"
+            android:label="@string/horiz_pager_title_looping_indicator"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -119,7 +130,7 @@
         <activity
             android:name=".pager.HorizontalPagerTransitionSample"
             android:label="@string/horiz_pager_with_transition_title"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -129,7 +140,17 @@
         <activity
             android:name=".pager.HorizontalPagerLoopingSample"
             android:label="@string/horiz_pager_title_looping"
-            android:exported="false">
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".pager.HorizontalPagerLoopingTabsSample"
+            android:label="@string/horiz_pager_title_looping_tabs"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -140,7 +161,7 @@
         <activity
             android:name=".pager.HorizontalPagerTabsSample"
             android:label="@string/horiz_pager_title_tabs"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -150,7 +171,17 @@
         <activity
             android:name=".pager.HorizontalPagerScrollingContentSample"
             android:label="@string/horiz_pager_title_scroll_content"
-            android:exported="false">
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".pager.HorizontalPagerDifferentPaddingsSample"
+            android:label="@string/horiz_pager_title_different_paddings"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -160,7 +191,7 @@
         <activity
             android:name=".pager.VerticalPagerBasicSample"
             android:label="@string/vertical_pager_title_basics"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -170,7 +201,7 @@
         <activity
             android:name=".pager.VerticalPagerWithIndicatorSample"
             android:label="@string/vertical_pager_with_indicator_title"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -180,7 +211,7 @@
         <activity
             android:name=".pager.NestedPagersSample"
             android:label="@string/pagers_title_nested"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -190,7 +221,7 @@
         <activity
             android:name=".navigation.animation.AnimatedNavHostSample"
             android:label="@string/navigation_title_animated"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -200,7 +231,7 @@
         <activity
             android:name=".navigation.material.BottomSheetNavSample"
             android:label="@string/navigation_title_bottom_sheet"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -210,7 +241,7 @@
         <activity
             android:name=".permissions.RequestPermissionSample"
             android:label="@string/permissions_title_one"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -220,7 +251,17 @@
         <activity
             android:name=".permissions.RequestMultiplePermissionsSample"
             android:label="@string/permissions_title_multiple"
-            android:exported="false">
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".permissions.RequestLocationPermissionsSample"
+            android:label="@string/permissions_title_location"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -231,7 +272,7 @@
             android:name=".flowlayout.FlowColumnSample"
             android:label="@string/flowlayout_title_column"
             android:windowSoftInputMode="adjustResize"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -242,7 +283,7 @@
             android:name=".flowlayout.FlowRowSample"
             android:label="@string/flowlayout_title_row"
             android:windowSoftInputMode="adjustResize"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -252,7 +293,7 @@
         <activity
             android:name=".swiperefresh.SwipeRefreshBasicSample"
             android:label="@string/swiperefresh_title_basics"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -262,7 +303,7 @@
         <activity
             android:name=".swiperefresh.SwipeRefreshContentPaddingSample"
             android:label="@string/swiperefresh_title_content_padding"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -272,7 +313,7 @@
         <activity
             android:name=".swiperefresh.SwipeRefreshTweakedIndicatorSample"
             android:label="@string/swiperefresh_title_tweaked"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -282,7 +323,7 @@
         <activity
             android:name=".swiperefresh.SwipeRefreshCustomIndicatorSample"
             android:label="@string/swiperefresh_title_custom"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -292,7 +333,7 @@
         <activity
             android:name=".swiperefresh.SwipeRefreshVerticalPagerSample"
             android:label="@string/swiperefresh_title_verticalpager"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -302,7 +343,8 @@
         <activity
             android:name=".systemuicontroller.SystemBarsColorSample"
             android:label="@string/system_ui_controller_title_color"
-            android:exported="false">
+            android:exported="true"
+            android:theme="@style/SystemBarsColorSampleTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -310,9 +352,21 @@
         </activity>
 
         <activity
+            android:name=".systemuicontroller.DialogSystemBarsColorSample"
+            android:label="@string/system_ui_controller_title_color_dialog"
+            android:exported="true"
+            android:theme="@style/DialogSystemUiControllerTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+
+        <activity
             android:name=".systemuicontroller.SystemBarsVisibilitySample"
             android:label="@string/system_ui_controller_title_visibility"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -322,7 +376,7 @@
         <activity
             android:name=".placeholder.PlaceholderBasicSample"
             android:label="@string/placeholder_title_basics"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -332,7 +386,7 @@
         <activity
             android:name=".placeholder.PlaceholderFadeSample"
             android:label="@string/placeholder_title_fade"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
@@ -342,7 +396,17 @@
         <activity
             android:name=".placeholder.PlaceholderShimmerSample"
             android:label="@string/placeholder_title_shimmer"
-            android:exported="false">
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".webview.BasicWebViewSample"
+            android:label="@string/webview_title_basic"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />

@@ -31,7 +31,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.test.TestMonotonicFrameClock
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -43,11 +42,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.google.common.truth.Truth.assertThat
 import com.google.common.truth.Truth.assertWithMessage
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -60,16 +57,13 @@ import org.junit.runner.RunWith
     ExperimentalMaterialNavigationApi::class
 )
 internal class SheetContentHostTest {
-
-    private val testDispatcher = TestCoroutineDispatcher()
-    private val testClock = TestMonotonicFrameClock(CoroutineScope(testDispatcher))
     private val bodyContentTag = "testBodyContent"
 
     @get:Rule
     val composeTestRule = createComposeRule()
 
     @Test
-    fun testSheetShownAndHidden() = runBlockingTest {
+    fun testSheetShownAndHidden() = runTest {
         val backStackEntryState = mutableStateOf<NavBackStackEntry?>(null)
         val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
 
@@ -94,7 +88,7 @@ internal class SheetContentHostTest {
     }
 
     @Test
-    fun testOnSheetDismissedCalled_ManualDismiss() = runBlockingTest(testClock) {
+    fun testOnSheetDismissedCalled_ManualDismiss() = runTest {
         val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
         val backStackEntry = createBackStackEntry(sheetState)
 
@@ -107,7 +101,7 @@ internal class SheetContentHostTest {
             onSheetDismissed = { entry -> dismissedBackStackEntries.add(entry) }
         )
 
-        assertThat(sheetState.currentValue == ModalBottomSheetValue.Expanded)
+        assertThat(sheetState.currentValue == ModalBottomSheetValue.Expanded).isTrue()
         composeTestRule.onNodeWithTag(bodyContentTag).performClick()
         composeTestRule.runOnIdle {
             assertWithMessage("Sheet is visible")
@@ -119,7 +113,7 @@ internal class SheetContentHostTest {
     }
 
     @Test
-    fun testOnSheetDismissedCalled_initiallyExpanded() = runBlockingTest(testClock) {
+    fun testOnSheetDismissedCalled_initiallyExpanded() = runTest {
         val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Expanded)
         val backStackEntry = createBackStackEntry(sheetState)
 
@@ -132,7 +126,7 @@ internal class SheetContentHostTest {
             onSheetDismissed = { entry -> dismissedBackStackEntries.add(entry) }
         )
 
-        assertThat(sheetState.currentValue == ModalBottomSheetValue.Expanded)
+        assertThat(sheetState.currentValue == ModalBottomSheetValue.Expanded).isTrue()
         composeTestRule.onNodeWithTag(bodyContentTag).performClick()
         composeTestRule.runOnIdle {
             assertWithMessage("Sheet is not visible")
@@ -144,7 +138,7 @@ internal class SheetContentHostTest {
     }
 
     @Test
-    fun testOnSheetShownCalled_onBackStackEntryEnter() = runBlockingTest(testClock) {
+    fun testOnSheetShownCalled_onBackStackEntryEnter() = runTest {
         val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
         val backStackEntryState = mutableStateOf<NavBackStackEntry?>(null)
         val shownBackStackEntries = mutableListOf<NavBackStackEntry>()

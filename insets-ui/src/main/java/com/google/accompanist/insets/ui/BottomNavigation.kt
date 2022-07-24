@@ -16,9 +16,14 @@
 
 package com.google.accompanist.insets.ui
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationDefaults
 import androidx.compose.material.MaterialTheme
@@ -47,19 +52,50 @@ fun BottomNavigation(
     backgroundColor: Color = MaterialTheme.colors.primarySurface,
     contentColor: Color = contentColorFor(backgroundColor),
     elevation: Dp = BottomNavigationDefaults.Elevation,
-    content: @Composable RowScope.() -> Unit
+    content: @Composable RowScope.() -> Unit,
+) {
+    BottomNavigationSurface(modifier, backgroundColor, contentColor, elevation) {
+        BottomNavigationContent(Modifier.padding(contentPadding)) {
+            content()
+        }
+    }
+}
+
+@Composable
+fun BottomNavigationSurface(
+    modifier: Modifier = Modifier,
+    backgroundColor: Color = MaterialTheme.colors.primarySurface,
+    contentColor: Color = contentColorFor(backgroundColor),
+    elevation: Dp = BottomNavigationDefaults.Elevation,
+    content: @Composable () -> Unit
 ) {
     Surface(
         color = backgroundColor,
+        contentColor = contentColor,
         elevation = elevation,
-        modifier = modifier
+        modifier = modifier,
     ) {
-        BottomNavigation(
-            backgroundColor = Color.Transparent,
-            contentColor = contentColor,
-            elevation = 0.dp,
-            modifier = Modifier.padding(contentPadding),
-            content = content
-        )
+        content()
     }
 }
+
+@Composable
+fun BottomNavigationContent(
+    modifier: Modifier = Modifier,
+    content: @Composable RowScope.() -> Unit,
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(BottomNavigationHeight)
+            .selectableGroup(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        content = content,
+    )
+}
+
+/**
+ * Copied from [androidx.compose.material.BottomNavigationHeight]
+ * Height of a [BottomNavigation] component
+ */
+private val BottomNavigationHeight = 56.dp

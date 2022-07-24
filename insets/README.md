@@ -1,22 +1,8 @@
-# Insets for Jetpack Compose
+# Insets for Jetpack Compose (Deprecated)
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-insets)](https://search.maven.org/search?q=g:com.google.accompanist)
 
-Insets for Jetpack Compose takes a lot of the ideas which drove [Insetter][insetter-view] for views, and applies them for use in composables.
-
-## Usage
-To setup Insets in your composables, you need to call the `ProvideWindowInsets` function and
-wrap your content. This would typically be done near the top level of your composable hierarchy:
-
-``` kotlin
-setContent {
-  MaterialTheme {
-    ProvideWindowInsets {
-      // your content
-    }
-  }
-}
-```
+> :warning: This library has been deprecated as official support is now available in Compose 1.2.0. Please see our [Migration Guide](https://google.github.io/accompanist/insets/) for how to migrate.
 
 For more information, visit the documentation: https://google.github.io/accompanist/insets
 

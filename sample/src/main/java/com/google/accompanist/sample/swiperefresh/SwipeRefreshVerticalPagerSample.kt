@@ -79,7 +79,7 @@ private fun Sample() {
             )
         },
         modifier = Modifier.fillMaxSize()
-    ) {
+    ) { padding ->
         // Simulate a fake 2-second 'load'. Ideally this 'refreshing' value would
         // come from a ViewModel or similar
         var refreshing by remember { mutableStateOf(false) }
@@ -97,7 +97,7 @@ private fun Sample() {
             VerticalPager(
                 count = 10,
                 itemSpacing = 8.dp,
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize().padding(padding),
             ) { page ->
                 Box {
                     // Our page content, displaying a random image

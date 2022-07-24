@@ -101,6 +101,14 @@ subprojects {
         }
     }
 
+    // Remove all test apps after running UI tests.
+    // This is specially important in CI so that test emulators don't run out of space.
+    tasks.whenTaskAdded { task ->
+        if (task.name == 'connectedDebugAndroidTest') {
+            task.finalizedBy 'uninstallDebugAndroidTest'
+        }
+    }
+
     configurations.configureEach {
         resolutionStrategy.eachDependency { DependencyResolveDetails details ->
             // Make sure that we're using the Android version of Guava
@@ -126,7 +134,7 @@ subprojects {
             // Set JVM target to 1.8
             jvmTarget = "1.8"
             // Allow use of @OptIn
-            freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+            freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
             // Enable default methods in interfaces
             freeCompilerArgs += "-Xjvm-default=all"
         }

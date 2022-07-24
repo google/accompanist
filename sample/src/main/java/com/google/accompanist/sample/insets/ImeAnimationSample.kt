@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
+
 package com.google.accompanist.sample.insets
 
 import android.os.Bundle
@@ -53,7 +55,6 @@ import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
-@OptIn(ExperimentalAnimatedInsets::class)
 class ImeAnimationSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

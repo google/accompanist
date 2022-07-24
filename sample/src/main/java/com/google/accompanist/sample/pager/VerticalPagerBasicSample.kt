@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -64,8 +65,8 @@ private fun Sample() {
             )
         },
         modifier = Modifier.fillMaxSize()
-    ) {
-        Column(Modifier.fillMaxSize()) {
+    ) { padding ->
+        Column(Modifier.fillMaxSize().padding(padding)) {
             val pagerState = rememberPagerState()
 
             // Display 10 items

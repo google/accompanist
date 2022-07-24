@@ -37,11 +37,14 @@ import androidx.compose.ui.platform.LocalContext
  * [documentation](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions).
  *
  * @param permission the permission to control and observe.
+ * @param onPermissionResult will be called with whether or not the user granted the permission
+ *  after [PermissionState.launchPermissionRequest] is called.
  */
 @ExperimentalPermissionsApi
 @Composable
 internal fun rememberMutablePermissionState(
-    permission: String
+    permission: String,
+    onPermissionResult: (Boolean) -> Unit = {}
 ): MutablePermissionState {
     val context = LocalContext.current
     val permissionState = remember(permission) {
@@ -53,8 +56,8 @@ internal fun rememberMutablePermissionState(
 
     // Remember RequestPermission launcher and assign it to permissionState
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
-        permissionState.hasPermission = it
-        permissionState.permissionRequested = true
+        permissionState.refreshPermissionStatus()
+        onPermissionResult(it)
     }
     DisposableEffect(permissionState, launcher) {
         permissionState.launcher = launcher
@@ -83,20 +86,7 @@ internal class MutablePermissionState(
     private val activity: Activity
 ) : PermissionState {
 
-    private var _hasPermission by mutableStateOf(context.checkPermission(permission))
-    override var hasPermission: Boolean
-        internal set(value) {
-            _hasPermission = value
-            refreshShouldShowRationale()
-        }
-        get() = _hasPermission
-
-    override var shouldShowRationale: Boolean by mutableStateOf(
-        activity.shouldShowRationale(permission)
-    )
-        private set
-
-    override var permissionRequested: Boolean by mutableStateOf(false)
+    override var status: PermissionStatus by mutableStateOf(getPermissionStatus())
 
     override fun launchPermissionRequest() {
         launcher?.launch(
@@ -106,11 +96,16 @@ internal class MutablePermissionState(
 
     internal var launcher: ActivityResultLauncher<String>? = null
 
-    internal fun refreshHasPermission() {
-        hasPermission = context.checkPermission(permission)
+    internal fun refreshPermissionStatus() {
+        status = getPermissionStatus()
     }
 
-    private fun refreshShouldShowRationale() {
-        shouldShowRationale = activity.shouldShowRationale(permission)
+    private fun getPermissionStatus(): PermissionStatus {
+        val hasPermission = context.checkPermission(permission)
+        return if (hasPermission) {
+            PermissionStatus.Granted
+        } else {
+            PermissionStatus.Denied(activity.shouldShowRationale(permission))
+        }
     }
 }

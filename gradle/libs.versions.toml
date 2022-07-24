@@ -1,25 +1,26 @@
 [versions]
-compose = "1.1.0-SNAPSHOT"
-composesnapshot = "8131182" # a single character = no snapshot
-composeCompiler = "1.1.0-SNAPSHOT"
+compose = "1.2.0-rc03"
+composeCompiler = "1.2.0"
+composesnapshot = "-" # a single character = no snapshot
 
 # gradlePlugin and lint need to be updated together
-gradlePlugin = "7.0.4"
-lint = "30.0.3"
+gradlePlugin = "7.3.0-beta01"
+lintMinCompose = "30.0.0"
 
 ktlint = "0.42.1"
-kotlin = "1.6.10"
-coroutines = "1.5.2"
+kotlin = "1.7.0"
+coroutines = "1.6.0"
 okhttp = "3.12.13"
 coil = "1.3.2"
 
 androidxtest = "1.4.0"
-androidxnavigation = "2.4.0-rc01"
+androidxnavigation = "2.5.0-rc02"
 
 [libraries]
 compose-ui-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 compose-ui-util = { module = "androidx.compose.ui:ui-util", version.ref = "compose" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
 compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose" }
 compose-foundation-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
@@ -28,7 +29,7 @@ compose-material-material = { module = "androidx.compose.material:material", ver
 compose-material-iconsext = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose" }
 compose-animation-animation = { module = "androidx.compose.animation:animation", version.ref = "compose" }
 
-snapper = "dev.chrisbanes.snapper:snapper:0.1.0"
+snapper = "dev.chrisbanes.snapper:snapper:0.2.2"
 
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "gradlePlugin" }
 gradleMavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.17.0"
@@ -54,9 +55,9 @@ coil-coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-gif = { module = "io.coil-kt:coil-gif", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 
-androidx-appcompat = "androidx.appcompat:appcompat:1.4.0"
-androidx-core = "androidx.core:core-ktx:1.7.0"
-androidx-activity-compose = "androidx.activity:activity-compose:1.4.0"
+androidx-appcompat = "androidx.appcompat:appcompat:1.4.1"
+androidx-core = "androidx.core:core-ktx:1.8.0-alpha06"
+androidx-activity-compose = "androidx.activity:activity-compose:1.5.0-rc01"
 androidx-fragment = "androidx.fragment:fragment-ktx:1.4.0"
 androidx-dynamicanimation = "androidx.dynamicanimation:dynamicanimation-ktx:1.0.0-alpha03"
 androidx-lifecycle-runtime = "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"
@@ -73,13 +74,19 @@ androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidxt
 androidx-test-orchestrator = { module = "androidx.test:orchestrator", version.ref = "androidxtest" }
 androidx-test-uiAutomator = "androidx.test.uiautomator:uiautomator:2.2.0"
 
-junit = "junit:junit:4.13"
+# alpha for robolectric x compose fix
+androidx-test-espressoCore = "androidx.test.espresso:espresso-core:3.5.0-alpha06"
+androidx-test-espressoWeb = "androidx.test.espresso:espresso-web:3.5.0-alpha06"
+
+junit = "junit:junit:4.13.2"
 truth = "com.google.truth:truth:1.1.2"
-robolectric = "org.robolectric:robolectric:4.5.1"
+robolectric = "org.robolectric:robolectric:4.8"
 
 affectedmoduledetector = "com.dropbox.affectedmoduledetector:affectedmoduledetector:0.1.2"
 
 android-tools-build-gradle = { module = "com.android.tools.build:gradle", version.ref = "gradlePlugin" }
-android-tools-lint-lint = { module = "com.android.tools.lint:lint", version.ref = "lint" }
-android-tools-lint-api = { module = "com.android.tools.lint:lint-api", version.ref = "lint" }
-android-tools-lint-tests = { module = "com.android.tools.lint:lint-tests", version.ref = "lint" }
+android-tools-lint-lint = { module = "com.android.tools.lint:lint", version.ref = "lintMinCompose" }
+android-tools-lint-api = { module = "com.android.tools.lint:lint-api", version.ref = "lintMinCompose" }
+android-tools-lint-tests = { module = "com.android.tools.lint:lint-tests", version.ref = "lintMinCompose" }
+
+squareup-mockwebserver = "com.squareup.okhttp3:mockwebserver:4.9.3"

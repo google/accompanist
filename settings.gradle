@@ -15,7 +15,7 @@
  */
 
 plugins {
-    id 'com.gradle.enterprise' version '3.5'
+    id 'com.gradle.enterprise' version '3.10.1'
 }
 
 gradleEnterprise {
@@ -42,7 +42,9 @@ include ':flowlayout'
 include ':systemuicontroller'
 include ':swiperefresh'
 include ':sample'
+include ':web'
 
 // Enable Gradle's version catalog support
 // https://docs.gradle.org/current/userguide/platforms.html
 enableFeaturePreview("VERSION_CATALOGS")
+

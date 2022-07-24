@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Android Open Source Project
+ * Copyright 2022 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+@file:Suppress("DEPRECATION")
 
 package com.google.accompanist.insets
 
@@ -35,6 +37,8 @@ import kotlin.math.roundToInt
  * Remembers a [NestedScrollConnection] which scrolls the Android on-screen keyboard on/off
  * screen as appropriate.
  *
+ * To be superceded: https://issuetracker.google.com/217770710
+ *
  * @param scrollImeOffScreenWhenVisible Set to true to allow scrolling the IME off screen
  * (from being visible), by an downwards scroll. Defaults to `true`.
  * @param scrollImeOnScreenWhenNotVisible Set to true to allow scrolling the IME on screen
@@ -42,6 +46,17 @@ import kotlin.math.roundToInt
  */
 @ExperimentalAnimatedInsets
 @Composable
+@Deprecated(
+"""
+accompanist/insets is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+""",
+    replaceWith = ReplaceWith(
+        "Modifier.imeNestedScroll()",
+        "androidx.compose.foundation.layout.imeNestedScroll",
+        "androidx.compose.ui.Modifier"
+    )
+)
 fun rememberImeNestedScrollConnection(
     scrollImeOffScreenWhenVisible: Boolean = true,
     scrollImeOnScreenWhenNotVisible: Boolean = true,
@@ -71,6 +86,17 @@ fun rememberImeNestedScrollConnection(
  * (from not being visible), by an upwards scroll. Defaults to `true`.
  */
 @ExperimentalAnimatedInsets
+@Deprecated(
+"""
+accompanist/insets is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+""",
+    replaceWith = ReplaceWith(
+        "Modifier.imeNestedScroll()",
+        "androidx.compose.foundation.layout.imeNestedScroll",
+        "androidx.compose.ui.Modifier"
+    )
+)
 class ImeNestedScrollConnection(
     private val view: View,
     private val scrollImeOffScreenWhenVisible: Boolean,
