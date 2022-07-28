@@ -26,6 +26,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.FlakyTest
 import androidx.test.filters.SdkSuppress
@@ -243,6 +244,60 @@ class ActivityRememberSystemUiControllerTest {
             // Assert that the controller reflects that the contrast is enforced
             assertThat(systemUiController.isNavigationBarContrastEnforced).isTrue()
         }
+    }
+
+    @Test
+    @SdkSuppress(minSdkVersion = 30) // TODO: https://issuetracker.google.com/issues/189366125
+    fun systemBarsBehavior_showBarsByTouch() {
+        lateinit var systemUiController: SystemUiController
+
+        rule.setContent {
+            systemUiController = rememberSystemUiController()
+        }
+
+        rule.activityRule.scenario.onActivity {
+            systemUiController.systemBarsBehavior =
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_BARS_BY_TOUCH
+        }
+
+        assertThat(WindowCompat.getInsetsController(window, contentView).systemBarsBehavior)
+            .isEqualTo(WindowInsetsControllerCompat.BEHAVIOR_SHOW_BARS_BY_TOUCH)
+    }
+
+    @Test
+    @SdkSuppress(minSdkVersion = 30) // TODO: https://issuetracker.google.com/issues/189366125
+    fun systemBarsBehavior_showBarsBySwipe() {
+        lateinit var systemUiController: SystemUiController
+
+        rule.setContent {
+            systemUiController = rememberSystemUiController()
+        }
+
+        rule.activityRule.scenario.onActivity {
+            systemUiController.systemBarsBehavior =
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_BARS_BY_SWIPE
+        }
+
+        assertThat(WindowCompat.getInsetsController(window, contentView).systemBarsBehavior)
+            .isEqualTo(WindowInsetsControllerCompat.BEHAVIOR_SHOW_BARS_BY_SWIPE)
+    }
+
+    @Test
+    @SdkSuppress(minSdkVersion = 30) // TODO: https://issuetracker.google.com/issues/189366125
+    fun systemBarsBehavior_showTransientBarsBySwipe() {
+        lateinit var systemUiController: SystemUiController
+
+        rule.setContent {
+            systemUiController = rememberSystemUiController()
+        }
+
+        rule.activityRule.scenario.onActivity {
+            systemUiController.systemBarsBehavior =
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }
+
+        assertThat(WindowCompat.getInsetsController(window, contentView).systemBarsBehavior)
+            .isEqualTo(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE)
     }
 
     @Test

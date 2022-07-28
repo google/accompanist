@@ -1,4 +1,5 @@
 [versions]
+
 compose = "1.3.0-alpha02"
 composeCompiler = "1.3.0-rc01"
 composesnapshot = "-" # a single character = no snapshot

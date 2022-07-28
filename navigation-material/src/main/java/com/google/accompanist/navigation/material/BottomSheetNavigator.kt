@@ -151,6 +151,18 @@ public class BottomSheetNavigator(
         }
 
     /**
+     * Get the transitionsInProgress from the [state]. In some cases, the [sheetContent] might be
+     * composed before the Navigator is attached, so we specifically return an empty flow if we
+     * aren't attached yet.
+     */
+    private val transitionsInProgress: StateFlow<Set<NavBackStackEntry>>
+        get() = if (attached) {
+            state.transitionsInProgress
+        } else {
+            MutableStateFlow(emptySet())
+        }
+
+    /**
      * Access properties of the [ModalBottomSheetLayout]'s [ModalBottomSheetState]
      */
     public val navigatorSheetState = BottomSheetNavigatorSheetState(sheetState)
@@ -163,6 +175,7 @@ public class BottomSheetNavigator(
         val columnScope = this
         val saveableStateHolder = rememberSaveableStateHolder()
         val backStackEntries by backStack.collectAsState()
+        val transitionsInProgressEntries by transitionsInProgress.collectAsState()
 
         // We always replace the sheet's content instead of overlaying and nesting floating
         // window destinations. That means that only *one* concurrent destination is supported by
@@ -177,7 +190,7 @@ public class BottomSheetNavigator(
         // currently displaying because it will have its transition completed when the sheet's
         // animation has completed
         DisposableEffect(backStackEntries) {
-            backStackEntries.forEach {
+            transitionsInProgressEntries.forEach {
                 if (it != latestEntry) state.markTransitionComplete(it)
             }
             onDispose { }
@@ -194,7 +207,7 @@ public class BottomSheetNavigator(
             onSheetDismissed = { backStackEntry ->
                 // Sheet dismissal can be started through popBackStack in which case we have a
                 // transition that we'll want to complete
-                if (state.transitionsInProgress.value.contains(backStackEntry)) {
+                if (transitionsInProgressEntries.contains(backStackEntry)) {
                     state.markTransitionComplete(backStackEntry)
                 } else {
                     state.pop(popUpTo = backStackEntry, saveState = false)

@@ -34,6 +34,7 @@ import androidx.compose.ui.window.DialogWindowProvider
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 
 /**
  * A class which provides easy-to-use utilities for updating the System UI bar
@@ -43,6 +44,15 @@ import androidx.core.view.WindowInsetsCompat
  */
 @Stable
 interface SystemUiController {
+
+    /**
+     * Control for the behavior of the system bars. This value should be one of the
+     * [WindowInsetsControllerCompat] behavior constants:
+     * [WindowInsetsControllerCompat.BEHAVIOR_SHOW_BARS_BY_TOUCH],
+     * [WindowInsetsControllerCompat.BEHAVIOR_SHOW_BARS_BY_SWIPE] and
+     * [WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE].
+     */
+    var systemBarsBehavior: Int
 
     /**
      * Property which holds the status bar visibility. If set to true, show the status bar,
@@ -241,6 +251,12 @@ internal class AndroidSystemUiController(
             else -> color
         }.toArgb()
     }
+
+    override var systemBarsBehavior: Int
+        get() = windowInsetsController?.systemBarsBehavior ?: 0
+        set(value) {
+            windowInsetsController?.systemBarsBehavior = value
+        }
 
     override var isStatusBarVisible: Boolean
         get() {
