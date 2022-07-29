@@ -6,21 +6,26 @@ Accompanist is a labs like environment for new Compose APIs. We use it to help f
 
 ## Compose versions
 
-Each [release](https://github.com/google/accompanist/releases) outlines what version of the Compose libraries it depends on. We are currently releasing multiple versions of Accompanist for the different versions of Compose:
+Each [release](https://github.com/google/accompanist/releases) outlines what version of the Compose UI libraries it depends on. We are currently releasing multiple versions of Accompanist for the different versions of Compose:
 
 <table>
  <tr>
-  <td>Compose 1.0 (1.0.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-insets?versionPrefix=0.20"></td>
+  <td>Compose 1.0 (1.0.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-permissions?versionPrefix=0.20"></td>
  </tr>
  <tr>
-  <td>Compose 1.1 (1.1.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-insets?versionPrefix=0.23"></td>
+  <td>Compose 1.1 (1.1.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-permissions?versionPrefix=0.23"></td>
  </tr>
  <tr>
-  <td>Compose 1.2 (1.2.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-insets"></td>
+  <td>Compose UI 1.2 (1.2.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-permissions?versionPrefix=0.25"></td>
+ </tr>
+  <tr>
+  <td>Compose UI 1.3 (1.3.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-permissions"></td>
  </tr>
 </table>
 
-> :warning: **Ensure you are using the Accompanist version that matches with your Compose version**: If you upgrade Accompanist, it will upgrade your Compose version via transitive dependencies.
+For stable versions of Compose, we use the latest *stable* version of the Compose compiler. For non-stable versions (alpha, beta, etc), we use the latest compiler at the time of release.
+
+> :warning: **Ensure you are using the Accompanist version that matches with your Compose UI version**: If you upgrade Accompanist, it will upgrade your Compose libraries version via transitive dependencies.
 
 ## Libraries
 

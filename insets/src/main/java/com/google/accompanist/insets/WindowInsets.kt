@@ -24,6 +24,7 @@ import androidx.annotation.FloatRange
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
@@ -549,4 +550,5 @@ The androidx.compose equivalent of LocalWindowInsets is the extensions on Window
 For more migration information, please visit https://google.github.io/accompanist/insets/#migration
 """
 )
-val LocalWindowInsets = staticCompositionLocalOf { WindowInsets.Empty }
+val LocalWindowInsets: ProvidableCompositionLocal<WindowInsets> =
+    staticCompositionLocalOf { WindowInsets.Empty }

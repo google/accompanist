@@ -154,8 +154,7 @@ public fun AnimatedNavHost(
     ) as? AnimatedComposeNavigator ?: return
     val visibleEntries by remember(navController.visibleEntries) {
         navController.visibleEntries.map {
-            it.filter {
-                entry ->
+            it.filter { entry ->
                 entry.destination.navigatorName == AnimatedComposeNavigator.NAME
             }
         }
