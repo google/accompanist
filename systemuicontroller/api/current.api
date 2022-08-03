@@ -1,7 +1,7 @@
 // Signature format: 4.0
 package com.google.accompanist.systemuicontroller {
 
-  @androidx.compose.runtime.Stable public interface SystemUiController {
+  public interface SystemUiController {
     method public boolean getNavigationBarDarkContentEnabled();
     method public boolean getStatusBarDarkContentEnabled();
     method public int getSystemBarsBehavior();

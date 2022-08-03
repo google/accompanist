@@ -23,7 +23,6 @@ import android.os.Build
 import android.view.View
 import android.view.Window
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
@@ -42,7 +41,6 @@ import androidx.core.view.WindowInsetsControllerCompat
  *
  * @sample com.google.accompanist.sample.systemuicontroller.SystemUiControllerSample
  */
-@Stable
 interface SystemUiController {
 
     /**
