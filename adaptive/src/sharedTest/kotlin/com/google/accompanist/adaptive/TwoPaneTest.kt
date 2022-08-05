@@ -911,6 +911,20 @@ class TwoPaneTest {
         lateinit var twoPaneCoordinates: LayoutCoordinates
         lateinit var firstCoordinates: LayoutCoordinates
         lateinit var secondCoordinates: LayoutCoordinates
+        val windowGeometry = object : WindowGeometry {
+            val fakeWindowGeometry by lazy {
+                fakeWindowGeometry(
+                    density = density,
+                    twoPaneCoordinates = twoPaneCoordinates,
+                    localFoldingFeatures = emptyList()
+                )
+            }
+
+            override val windowSizeClass: WindowSizeClass get() =
+                fakeWindowGeometry.windowSizeClass
+            override val displayFeatures: List<DisplayFeature> get() =
+                fakeWindowGeometry.displayFeatures
+        }
 
         composeTestRule.setContent {
             density = LocalDensity.current
@@ -932,15 +946,11 @@ class TwoPaneTest {
                     )
                 },
                 strategy = TwoPaneStrategy(
-                    fallbackStrategy = FractionVerticalTwoPaneStrategy(
+                    windowGeometry = windowGeometry,
+                    defaultStrategy = VerticalTwoPaneStrategy(
+                        windowGeometry = windowGeometry,
                         splitFraction = 1f / 3f
-                    ),
-                    windowGeometry = object : WindowGeometry {
-                        override val windowSizeClass: WindowSizeClass =
-                            WindowSizeClass.calculateFromSize(DpSize(900.dp, 1200.dp))
-                        override val displayFeatures: List<DisplayFeature> =
-                            emptyList()
-                    }
+                    )
                 ),
                 modifier = Modifier
                     .requiredSize(900.dp, 1200.dp)
@@ -977,6 +987,27 @@ class TwoPaneTest {
         lateinit var twoPaneCoordinates: LayoutCoordinates
         lateinit var firstCoordinates: LayoutCoordinates
         lateinit var secondCoordinates: LayoutCoordinates
+        val windowGeometry = object : WindowGeometry {
+            val fakeWindowGeometry by lazy {
+                fakeWindowGeometry(
+                    density = density,
+                    twoPaneCoordinates = twoPaneCoordinates,
+                    localFoldingFeatures = listOf(
+                        LocalFoldingFeature(
+                            center = 600.dp,
+                            size = 0.dp,
+                            state = FoldingFeature.State.HALF_OPENED,
+                            orientation = FoldingFeature.Orientation.HORIZONTAL
+                        )
+                    )
+                )
+            }
+
+            override val windowSizeClass: WindowSizeClass get() =
+                fakeWindowGeometry.windowSizeClass
+            override val displayFeatures: List<DisplayFeature> get() =
+                fakeWindowGeometry.displayFeatures
+        }
 
         composeTestRule.setContent {
             density = LocalDensity.current
@@ -998,30 +1029,11 @@ class TwoPaneTest {
                     )
                 },
                 strategy = TwoPaneStrategy(
-                    fallbackStrategy = FractionHorizontalTwoPaneStrategy(
+                    windowGeometry = windowGeometry,
+                    defaultStrategy = VerticalTwoPaneStrategy(
+                        windowGeometry = windowGeometry,
                         splitFraction = 1f / 3f
-                    ),
-                    windowGeometry = object : WindowGeometry {
-                        val fakeWindowGeometry by lazy {
-                            fakeWindowGeometry(
-                                density = density,
-                                twoPaneCoordinates = twoPaneCoordinates,
-                                localFoldingFeatures = listOf(
-                                    LocalFoldingFeature(
-                                        center = 600.dp,
-                                        size = 0.dp,
-                                        state = FoldingFeature.State.HALF_OPENED,
-                                        orientation = FoldingFeature.Orientation.HORIZONTAL
-                                    )
-                                )
-                            )
-                        }
-
-                        override val windowSizeClass: WindowSizeClass get() =
-                            fakeWindowGeometry.windowSizeClass
-                        override val displayFeatures: List<DisplayFeature> get() =
-                            fakeWindowGeometry.displayFeatures
-                    }
+                    )
                 ),
                 modifier = Modifier
                     .requiredSize(900.dp, 1200.dp)
@@ -1058,6 +1070,27 @@ class TwoPaneTest {
         lateinit var twoPaneCoordinates: LayoutCoordinates
         lateinit var firstCoordinates: LayoutCoordinates
         lateinit var secondCoordinates: LayoutCoordinates
+        val windowGeometry = object : WindowGeometry {
+            val fakeWindowGeometry by lazy {
+                fakeWindowGeometry(
+                    density = density,
+                    twoPaneCoordinates = twoPaneCoordinates,
+                    localFoldingFeatures = listOf(
+                        LocalFoldingFeature(
+                            center = 600.dp,
+                            size = 60.dp,
+                            state = FoldingFeature.State.FLAT,
+                            orientation = FoldingFeature.Orientation.HORIZONTAL
+                        )
+                    )
+                )
+            }
+
+            override val windowSizeClass: WindowSizeClass get() =
+                fakeWindowGeometry.windowSizeClass
+            override val displayFeatures: List<DisplayFeature> get() =
+                fakeWindowGeometry.displayFeatures
+        }
 
         composeTestRule.setContent {
             density = LocalDensity.current
@@ -1079,30 +1112,11 @@ class TwoPaneTest {
                     )
                 },
                 strategy = TwoPaneStrategy(
-                    fallbackStrategy = FractionHorizontalTwoPaneStrategy(
+                    windowGeometry = windowGeometry,
+                    defaultStrategy = VerticalTwoPaneStrategy(
+                        windowGeometry = windowGeometry,
                         splitFraction = 1f / 3f
-                    ),
-                    windowGeometry = object : WindowGeometry {
-                        val fakeWindowGeometry by lazy {
-                            fakeWindowGeometry(
-                                density = density,
-                                twoPaneCoordinates = twoPaneCoordinates,
-                                localFoldingFeatures = listOf(
-                                    LocalFoldingFeature(
-                                        center = 600.dp,
-                                        size = 60.dp,
-                                        state = FoldingFeature.State.FLAT,
-                                        orientation = FoldingFeature.Orientation.HORIZONTAL
-                                    )
-                                )
-                            )
-                        }
-
-                        override val windowSizeClass: WindowSizeClass get() =
-                            fakeWindowGeometry.windowSizeClass
-                        override val displayFeatures: List<DisplayFeature> get() =
-                            fakeWindowGeometry.displayFeatures
-                    }
+                    )
                 ),
                 modifier = Modifier
                     .requiredSize(900.dp, 1200.dp)
@@ -1139,6 +1153,27 @@ class TwoPaneTest {
         lateinit var twoPaneCoordinates: LayoutCoordinates
         lateinit var firstCoordinates: LayoutCoordinates
         lateinit var secondCoordinates: LayoutCoordinates
+        val windowGeometry = object : WindowGeometry {
+            val fakeWindowGeometry by lazy {
+                fakeWindowGeometry(
+                    density = density,
+                    twoPaneCoordinates = twoPaneCoordinates,
+                    localFoldingFeatures = listOf(
+                        LocalFoldingFeature(
+                            center = 600.dp,
+                            size = 0.dp,
+                            state = FoldingFeature.State.FLAT,
+                            orientation = FoldingFeature.Orientation.HORIZONTAL
+                        )
+                    )
+                )
+            }
+
+            override val windowSizeClass: WindowSizeClass get() =
+                fakeWindowGeometry.windowSizeClass
+            override val displayFeatures: List<DisplayFeature> get() =
+                fakeWindowGeometry.displayFeatures
+        }
 
         composeTestRule.setContent {
             density = LocalDensity.current
@@ -1160,30 +1195,11 @@ class TwoPaneTest {
                     )
                 },
                 strategy = TwoPaneStrategy(
-                    fallbackStrategy = FractionVerticalTwoPaneStrategy(
+                    windowGeometry = windowGeometry,
+                    defaultStrategy = VerticalTwoPaneStrategy(
+                        windowGeometry = windowGeometry,
                         splitFraction = 1f / 3f
                     ),
-                    windowGeometry = object : WindowGeometry {
-                        val fakeWindowGeometry by lazy {
-                            fakeWindowGeometry(
-                                density = density,
-                                twoPaneCoordinates = twoPaneCoordinates,
-                                localFoldingFeatures = listOf(
-                                    LocalFoldingFeature(
-                                        center = 600.dp,
-                                        size = 0.dp,
-                                        state = FoldingFeature.State.FLAT,
-                                        orientation = FoldingFeature.Orientation.HORIZONTAL
-                                    )
-                                )
-                            )
-                        }
-
-                        override val windowSizeClass: WindowSizeClass get() =
-                            fakeWindowGeometry.windowSizeClass
-                        override val displayFeatures: List<DisplayFeature> get() =
-                            fakeWindowGeometry.displayFeatures
-                    }
                 ),
                 modifier = Modifier
                     .requiredSize(900.dp, 1200.dp)
@@ -1220,6 +1236,27 @@ class TwoPaneTest {
         lateinit var twoPaneCoordinates: LayoutCoordinates
         lateinit var firstCoordinates: LayoutCoordinates
         lateinit var secondCoordinates: LayoutCoordinates
+        val windowGeometry = object : WindowGeometry {
+            val fakeWindowGeometry by lazy {
+                fakeWindowGeometry(
+                    density = density,
+                    twoPaneCoordinates = twoPaneCoordinates,
+                    localFoldingFeatures = listOf(
+                        LocalFoldingFeature(
+                            center = 450.dp,
+                            size = 0.dp,
+                            state = FoldingFeature.State.HALF_OPENED,
+                            orientation = FoldingFeature.Orientation.VERTICAL
+                        )
+                    )
+                )
+            }
+
+            override val windowSizeClass: WindowSizeClass get() =
+                fakeWindowGeometry.windowSizeClass
+            override val displayFeatures: List<DisplayFeature> get() =
+                fakeWindowGeometry.displayFeatures
+        }
 
         composeTestRule.setContent {
             density = LocalDensity.current
@@ -1241,30 +1278,11 @@ class TwoPaneTest {
                     )
                 },
                 strategy = TwoPaneStrategy(
-                    fallbackStrategy = FractionHorizontalTwoPaneStrategy(
+                    windowGeometry = windowGeometry,
+                    defaultStrategy = VerticalTwoPaneStrategy(
+                        windowGeometry = windowGeometry,
                         splitFraction = 1f / 3f
                     ),
-                    windowGeometry = object : WindowGeometry {
-                        val fakeWindowGeometry by lazy {
-                            fakeWindowGeometry(
-                                density = density,
-                                twoPaneCoordinates = twoPaneCoordinates,
-                                localFoldingFeatures = listOf(
-                                    LocalFoldingFeature(
-                                        center = 450.dp,
-                                        size = 0.dp,
-                                        state = FoldingFeature.State.HALF_OPENED,
-                                        orientation = FoldingFeature.Orientation.VERTICAL
-                                    )
-                                )
-                            )
-                        }
-
-                        override val windowSizeClass: WindowSizeClass get() =
-                            fakeWindowGeometry.windowSizeClass
-                        override val displayFeatures: List<DisplayFeature> get() =
-                            fakeWindowGeometry.displayFeatures
-                    }
                 ),
                 modifier = Modifier
                     .requiredSize(900.dp, 1200.dp)
@@ -1301,6 +1319,27 @@ class TwoPaneTest {
         lateinit var twoPaneCoordinates: LayoutCoordinates
         lateinit var firstCoordinates: LayoutCoordinates
         lateinit var secondCoordinates: LayoutCoordinates
+        val windowGeometry = object : WindowGeometry {
+            val fakeWindowGeometry by lazy {
+                fakeWindowGeometry(
+                    density = density,
+                    twoPaneCoordinates = twoPaneCoordinates,
+                    localFoldingFeatures = listOf(
+                        LocalFoldingFeature(
+                            center = 450.dp,
+                            size = 64.dp,
+                            state = FoldingFeature.State.FLAT,
+                            orientation = FoldingFeature.Orientation.VERTICAL
+                        )
+                    )
+                )
+            }
+
+            override val windowSizeClass: WindowSizeClass get() =
+                fakeWindowGeometry.windowSizeClass
+            override val displayFeatures: List<DisplayFeature> get() =
+                fakeWindowGeometry.displayFeatures
+        }
 
         composeTestRule.setContent {
             density = LocalDensity.current
@@ -1322,30 +1361,11 @@ class TwoPaneTest {
                     )
                 },
                 strategy = TwoPaneStrategy(
-                    fallbackStrategy = FractionHorizontalTwoPaneStrategy(
+                    windowGeometry = windowGeometry,
+                    defaultStrategy = HorizontalTwoPaneStrategy(
+                        windowGeometry = windowGeometry,
                         splitFraction = 1f / 3f
                     ),
-                    windowGeometry = object : WindowGeometry {
-                        val fakeWindowGeometry by lazy {
-                            fakeWindowGeometry(
-                                density = density,
-                                twoPaneCoordinates = twoPaneCoordinates,
-                                localFoldingFeatures = listOf(
-                                    LocalFoldingFeature(
-                                        center = 450.dp,
-                                        size = 64.dp,
-                                        state = FoldingFeature.State.FLAT,
-                                        orientation = FoldingFeature.Orientation.VERTICAL
-                                    )
-                                )
-                            )
-                        }
-
-                        override val windowSizeClass: WindowSizeClass get() =
-                            fakeWindowGeometry.windowSizeClass
-                        override val displayFeatures: List<DisplayFeature> get() =
-                            fakeWindowGeometry.displayFeatures
-                    }
                 ),
                 modifier = Modifier
                     .requiredSize(900.dp, 1200.dp)
@@ -1385,6 +1405,28 @@ class TwoPaneTest {
 
         composeTestRule.setContent {
             density = LocalDensity.current
+            val windowGeometry = object : WindowGeometry {
+                val fakeWindowGeometry by lazy {
+                    fakeWindowGeometry(
+                        density = density,
+                        twoPaneCoordinates = twoPaneCoordinates,
+                        localFoldingFeatures = listOf(
+                            LocalFoldingFeature(
+                                center = 450.dp,
+                                size = 0.dp,
+                                state = FoldingFeature.State.FLAT,
+                                orientation = FoldingFeature.Orientation.VERTICAL
+                            )
+                        )
+                    )
+                }
+
+                override val windowSizeClass: WindowSizeClass get() =
+                    fakeWindowGeometry.windowSizeClass
+                override val displayFeatures: List<DisplayFeature> get() =
+                    fakeWindowGeometry.displayFeatures
+            }
+
             TwoPane(
                 first = {
                     Spacer(
@@ -1403,30 +1445,11 @@ class TwoPaneTest {
                     )
                 },
                 strategy = TwoPaneStrategy(
-                    fallbackStrategy = FractionVerticalTwoPaneStrategy(
+                    windowGeometry = windowGeometry,
+                    defaultStrategy = VerticalTwoPaneStrategy(
+                        windowGeometry = windowGeometry,
                         splitFraction = 1f / 3f
-                    ),
-                    windowGeometry = object : WindowGeometry {
-                        val fakeWindowGeometry by lazy {
-                            fakeWindowGeometry(
-                                density = density,
-                                twoPaneCoordinates = twoPaneCoordinates,
-                                localFoldingFeatures = listOf(
-                                    LocalFoldingFeature(
-                                        center = 450.dp,
-                                        size = 0.dp,
-                                        state = FoldingFeature.State.FLAT,
-                                        orientation = FoldingFeature.Orientation.VERTICAL
-                                    )
-                                )
-                            )
-                        }
-
-                        override val windowSizeClass: WindowSizeClass get() =
-                            fakeWindowGeometry.windowSizeClass
-                        override val displayFeatures: List<DisplayFeature> get() =
-                            fakeWindowGeometry.displayFeatures
-                    }
+                    )
                 ),
                 modifier = Modifier
                     .requiredSize(900.dp, 1200.dp)

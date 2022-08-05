@@ -27,10 +27,10 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.adaptive.FractionHorizontalTwoPaneStrategy
-import com.google.accompanist.adaptive.FractionVerticalTwoPaneStrategy
+import com.google.accompanist.adaptive.HorizontalTwoPaneStrategy
 import com.google.accompanist.adaptive.TwoPane
 import com.google.accompanist.adaptive.TwoPaneStrategy
+import com.google.accompanist.adaptive.VerticalTwoPaneStrategy
 import com.google.accompanist.adaptive.calculateWindowGeometry
 import com.google.accompanist.sample.AccompanistSampleTheme
 
@@ -67,19 +67,21 @@ class BasicTwoPaneSample : ComponentActivity() {
                         }
                     },
                     strategy = TwoPaneStrategy(
-                        fallbackStrategy = { density, layoutDirection, layoutCoordinates ->
+                        windowGeometry = windowGeometry,
+                        defaultStrategy = { density, layoutDirection, layoutCoordinates ->
                             // Split vertically if the height is larger than the width
                             if (layoutCoordinates.size.height >= layoutCoordinates.size.width) {
-                                FractionVerticalTwoPaneStrategy(
+                                VerticalTwoPaneStrategy(
+                                    windowGeometry = windowGeometry,
                                     splitFraction = 0.75f,
                                 )
                             } else {
-                                FractionHorizontalTwoPaneStrategy(
+                                HorizontalTwoPaneStrategy(
+                                    windowGeometry = windowGeometry,
                                     splitFraction = 0.75f,
                                 )
                             }.calculateSplitResult(density, layoutDirection, layoutCoordinates)
                         },
-                        windowGeometry = windowGeometry
                     ),
                     modifier = Modifier.padding(8.dp)
                 )
