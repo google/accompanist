@@ -413,6 +413,16 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".adaptive.BasicTwoPaneSample"
+            android:label="@string/adaptive_two_pane_basic"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>
