@@ -151,7 +151,11 @@ fun TwoPane(
 @Stable
 fun interface TwoPaneStrategy {
     /**
-     * Calculates the split result in local bounds.
+     * Calculates the split result in local bounds of the [TwoPane].
+     *
+     * @param density the [Density] for measuring and laying out
+     * @param layoutDirection the [LayoutDirection] for measuring and laying out
+     * @param layoutCoordinates the [LayoutCoordinates] of the [TwoPane]
      */
     fun calculateSplitResult(
         density: Density,
@@ -175,6 +179,8 @@ class SplitResult(
      * The area that is nether a `start` pane or an `end` pane, but a separation between those two.
      * In case width or height is 0 - it means that the area itself is a 0 width/height, but the
      * place within the layout is still defined.
+     *
+     * The [splitArea] should be defined in local bounds to the [TwoPane].
      */
     val splitArea: Rect,
 )
