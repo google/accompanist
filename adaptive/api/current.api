@@ -1,0 +1,40 @@
+// Signature format: 4.0
+package com.google.accompanist.adaptive {
+
+  public final class SplitResult {
+    ctor public SplitResult(boolean isHorizontalSplit, androidx.compose.ui.geometry.Rect splitArea);
+    method public androidx.compose.ui.geometry.Rect getSplitArea();
+    method public boolean isHorizontalSplit();
+    property public final boolean isHorizontalSplit;
+    property public final androidx.compose.ui.geometry.Rect splitArea;
+  }
+
+  public final class TwoPaneKt {
+    method public static com.google.accompanist.adaptive.TwoPaneStrategy DelegateTwoPaneStrategy(com.google.accompanist.adaptive.TwoPaneStrategy firstStrategy, com.google.accompanist.adaptive.TwoPaneStrategy secondStrategy, kotlin.jvm.functions.Function3<? super androidx.compose.ui.unit.Density,? super androidx.compose.ui.unit.LayoutDirection,? super androidx.compose.ui.layout.LayoutCoordinates,java.lang.Boolean> useFirstStrategy);
+    method public static com.google.accompanist.adaptive.TwoPaneStrategy FixedOffsetHorizontalTwoPaneStrategy(float splitOffset, boolean offsetFromStart, optional float splitWidth);
+    method public static com.google.accompanist.adaptive.TwoPaneStrategy FixedOffsetVerticalTwoPaneStrategy(float splitOffset, boolean offsetFromTop, optional float splitHeight);
+    method public static com.google.accompanist.adaptive.TwoPaneStrategy FractionHorizontalTwoPaneStrategy(float splitFraction, optional float splitWidth);
+    method public static com.google.accompanist.adaptive.TwoPaneStrategy FractionVerticalTwoPaneStrategy(float splitFraction, optional float splitHeight);
+    method public static com.google.accompanist.adaptive.TwoPaneStrategy HorizontalTwoPaneStrategy(com.google.accompanist.adaptive.TwoPaneStrategy fallbackStrategy, com.google.accompanist.adaptive.WindowGeometry windowGeometry);
+    method @androidx.compose.runtime.Composable public static void TwoPane(kotlin.jvm.functions.Function0<kotlin.Unit> first, kotlin.jvm.functions.Function0<kotlin.Unit> second, com.google.accompanist.adaptive.TwoPaneStrategy strategy, optional androidx.compose.ui.Modifier modifier);
+    method public static com.google.accompanist.adaptive.TwoPaneStrategy TwoPaneStrategy(com.google.accompanist.adaptive.TwoPaneStrategy fallbackStrategy, com.google.accompanist.adaptive.WindowGeometry windowGeometry);
+    method public static com.google.accompanist.adaptive.TwoPaneStrategy VerticalTwoPaneStrategy(com.google.accompanist.adaptive.TwoPaneStrategy fallbackStrategy, com.google.accompanist.adaptive.WindowGeometry windowGeometry);
+  }
+
+  @androidx.compose.runtime.Stable public fun interface TwoPaneStrategy {
+    method public com.google.accompanist.adaptive.SplitResult calculateSplitResult(androidx.compose.ui.unit.Density density, androidx.compose.ui.unit.LayoutDirection layoutDirection, androidx.compose.ui.layout.LayoutCoordinates layoutCoordinates);
+  }
+
+  public interface WindowGeometry {
+    method public java.util.List<androidx.window.layout.DisplayFeature> getDisplayFeatures();
+    method public androidx.compose.material3.windowsizeclass.WindowSizeClass getWindowSizeClass();
+    property public abstract java.util.List<androidx.window.layout.DisplayFeature> displayFeatures;
+    property public abstract androidx.compose.material3.windowsizeclass.WindowSizeClass windowSizeClass;
+  }
+
+  public final class WindowGeometryKt {
+    method @androidx.compose.runtime.Composable public static com.google.accompanist.adaptive.WindowGeometry calculateWindowGeometry(android.app.Activity activity);
+  }
+
+}
+

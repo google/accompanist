@@ -25,7 +25,7 @@ kotlin {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     defaultConfig {
         minSdkVersion 21
@@ -83,6 +83,9 @@ android {
 
 dependencies {
     api libs.compose.foundation.foundation
+    api libs.compose.ui.ui
+    api libs.compose.material3.windowSizeClass
+    api libs.androidx.window
 
     implementation libs.napier
 
@@ -107,6 +110,9 @@ dependencies {
 
     androidTestImplementation libs.androidx.test.runner
     testImplementation libs.androidx.test.runner
+
+    androidTestImplementation libs.androidx.window.testing
+    testImplementation libs.androidx.window.testing
 
     testImplementation libs.robolectric
 }

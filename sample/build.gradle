@@ -19,7 +19,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "com.google.accompanist.sample"
@@ -47,6 +47,7 @@ android {
 }
 
 dependencies {
+    implementation project(':adaptive')
     implementation project(':drawablepainter')
     implementation project(':insets')
     implementation project(':insets-ui')
