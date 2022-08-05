@@ -2,18 +2,18 @@
 package com.google.accompanist.adaptive {
 
   public final class SplitResult {
-    ctor public SplitResult(boolean isHorizontalSplit, androidx.compose.ui.geometry.Rect splitArea);
-    method public androidx.compose.ui.geometry.Rect getSplitArea();
+    ctor public SplitResult(boolean isHorizontalSplit, androidx.compose.ui.geometry.Rect gapBounds);
+    method public androidx.compose.ui.geometry.Rect getGapBounds();
     method public boolean isHorizontalSplit();
+    property public final androidx.compose.ui.geometry.Rect gapBounds;
     property public final boolean isHorizontalSplit;
-    property public final androidx.compose.ui.geometry.Rect splitArea;
   }
 
   public final class TwoPaneKt {
-    method public static com.google.accompanist.adaptive.TwoPaneStrategy FixedOffsetHorizontalTwoPaneStrategy(float splitOffset, boolean offsetFromStart, optional float splitWidth);
-    method public static com.google.accompanist.adaptive.TwoPaneStrategy FixedOffsetVerticalTwoPaneStrategy(float splitOffset, boolean offsetFromTop, optional float splitHeight);
-    method public static com.google.accompanist.adaptive.TwoPaneStrategy FractionHorizontalTwoPaneStrategy(float splitFraction, optional float splitWidth);
-    method public static com.google.accompanist.adaptive.TwoPaneStrategy FractionVerticalTwoPaneStrategy(float splitFraction, optional float splitHeight);
+    method public static com.google.accompanist.adaptive.TwoPaneStrategy FixedOffsetHorizontalTwoPaneStrategy(float splitOffset, boolean offsetFromStart, optional float gapWidth);
+    method public static com.google.accompanist.adaptive.TwoPaneStrategy FixedOffsetVerticalTwoPaneStrategy(float splitOffset, boolean offsetFromTop, optional float gapHeight);
+    method public static com.google.accompanist.adaptive.TwoPaneStrategy FractionHorizontalTwoPaneStrategy(float splitFraction, optional float gapWidth);
+    method public static com.google.accompanist.adaptive.TwoPaneStrategy FractionVerticalTwoPaneStrategy(float splitFraction, optional float gapHeight);
     method public static com.google.accompanist.adaptive.TwoPaneStrategy HorizontalTwoPaneStrategy(com.google.accompanist.adaptive.TwoPaneStrategy fallbackStrategy, com.google.accompanist.adaptive.WindowGeometry windowGeometry);
     method @androidx.compose.runtime.Composable public static void TwoPane(kotlin.jvm.functions.Function0<kotlin.Unit> first, kotlin.jvm.functions.Function0<kotlin.Unit> second, com.google.accompanist.adaptive.TwoPaneStrategy strategy, optional androidx.compose.ui.Modifier modifier);
     method public static com.google.accompanist.adaptive.TwoPaneStrategy TwoPaneStrategy(com.google.accompanist.adaptive.TwoPaneStrategy fallbackStrategy, com.google.accompanist.adaptive.WindowGeometry windowGeometry);

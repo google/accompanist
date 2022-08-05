@@ -23,9 +23,6 @@ import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
@@ -214,7 +211,7 @@ class TwoPaneTest {
                     },
                     strategy = FractionHorizontalTwoPaneStrategy(
                         splitFraction = 1f / 3f,
-                        splitWidth = 64.dp
+                        gapWidth = 64.dp
                     ),
                     modifier = Modifier
                         .requiredSize(900.dp, 1200.dp)
@@ -275,7 +272,7 @@ class TwoPaneTest {
                     },
                     strategy = FractionHorizontalTwoPaneStrategy(
                         splitFraction = 1f / 3f,
-                        splitWidth = 64.dp
+                        gapWidth = 64.dp
                     ),
                     modifier = Modifier
                         .requiredSize(900.dp, 1200.dp)
@@ -393,7 +390,7 @@ class TwoPaneTest {
                 },
                 strategy = FractionVerticalTwoPaneStrategy(
                     splitFraction = 1f / 3f,
-                    splitHeight = 64.dp
+                    gapHeight = 64.dp
                 ),
                 modifier = Modifier
                     .requiredSize(900.dp, 1200.dp)
@@ -576,7 +573,7 @@ class TwoPaneTest {
                     strategy = FixedOffsetHorizontalTwoPaneStrategy(
                         splitOffset = 200.dp,
                         offsetFromStart = true,
-                        splitWidth = 64.dp
+                        gapWidth = 64.dp
                     ),
                     modifier = Modifier
                         .requiredSize(900.dp, 1200.dp)
@@ -638,7 +635,7 @@ class TwoPaneTest {
                     strategy = FixedOffsetHorizontalTwoPaneStrategy(
                         splitOffset = 200.dp,
                         offsetFromStart = true,
-                        splitWidth = 64.dp
+                        gapWidth = 64.dp
                     ),
                     modifier = Modifier
                         .requiredSize(900.dp, 1200.dp)
@@ -758,7 +755,7 @@ class TwoPaneTest {
                 strategy = FixedOffsetVerticalTwoPaneStrategy(
                     splitOffset = 300.dp,
                     offsetFromTop = true,
-                    splitHeight = 64.dp
+                    gapHeight = 64.dp
                 ),
                 modifier = Modifier
                     .requiredSize(900.dp, 1200.dp)
@@ -877,7 +874,7 @@ class TwoPaneTest {
                 strategy = FixedOffsetVerticalTwoPaneStrategy(
                     splitOffset = 300.dp,
                     offsetFromTop = false,
-                    splitHeight = 64.dp
+                    gapHeight = 64.dp
                 ),
                 modifier = Modifier
                     .requiredSize(900.dp, 1200.dp)
