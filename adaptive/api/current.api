@@ -10,7 +10,6 @@ package com.google.accompanist.adaptive {
   }
 
   public final class TwoPaneKt {
-    method public static com.google.accompanist.adaptive.TwoPaneStrategy DelegateTwoPaneStrategy(com.google.accompanist.adaptive.TwoPaneStrategy firstStrategy, com.google.accompanist.adaptive.TwoPaneStrategy secondStrategy, kotlin.jvm.functions.Function3<? super androidx.compose.ui.unit.Density,? super androidx.compose.ui.unit.LayoutDirection,? super androidx.compose.ui.layout.LayoutCoordinates,java.lang.Boolean> useFirstStrategy);
     method public static com.google.accompanist.adaptive.TwoPaneStrategy FixedOffsetHorizontalTwoPaneStrategy(float splitOffset, boolean offsetFromStart, optional float splitWidth);
     method public static com.google.accompanist.adaptive.TwoPaneStrategy FixedOffsetVerticalTwoPaneStrategy(float splitOffset, boolean offsetFromTop, optional float splitHeight);
     method public static com.google.accompanist.adaptive.TwoPaneStrategy FractionHorizontalTwoPaneStrategy(float splitFraction, optional float splitWidth);

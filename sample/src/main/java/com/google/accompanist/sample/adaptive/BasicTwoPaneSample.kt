@@ -27,7 +27,6 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.adaptive.DelegateTwoPaneStrategy
 import com.google.accompanist.adaptive.FractionHorizontalTwoPaneStrategy
 import com.google.accompanist.adaptive.FractionVerticalTwoPaneStrategy
 import com.google.accompanist.adaptive.TwoPane
@@ -68,18 +67,18 @@ class BasicTwoPaneSample : ComponentActivity() {
                         }
                     },
                     strategy = TwoPaneStrategy(
-                        fallbackStrategy = DelegateTwoPaneStrategy(
-                            firstStrategy = FractionVerticalTwoPaneStrategy(
-                                splitFraction = 0.75f,
-                            ),
-                            secondStrategy = FractionHorizontalTwoPaneStrategy(
-                                splitFraction = 0.75f,
-                            ),
-                            useFirstStrategy = { _, _, layoutCoordinates ->
-                                // Split vertically if the height is larger than the width
-                                layoutCoordinates.size.height >= layoutCoordinates.size.width
-                            }
-                        ),
+                        fallbackStrategy = { density, layoutDirection, layoutCoordinates ->
+                            // Split vertically if the height is larger than the width
+                            if (layoutCoordinates.size.height >= layoutCoordinates.size.width) {
+                                FractionVerticalTwoPaneStrategy(
+                                    splitFraction = 0.75f,
+                                )
+                            } else {
+                                FractionHorizontalTwoPaneStrategy(
+                                    splitFraction = 0.75f,
+                                )
+                            }.calculateSplitResult(density, layoutDirection, layoutCoordinates)
+                        },
                         windowGeometry = windowGeometry
                     ),
                     modifier = Modifier.padding(8.dp)

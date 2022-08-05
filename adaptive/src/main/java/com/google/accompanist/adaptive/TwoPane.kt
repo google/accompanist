@@ -394,24 +394,3 @@ public fun FixedOffsetVerticalTwoPaneStrategy(
         )
     )
 }
-
-/**
- * Returns a [DelegateTwoPaneStrategy] that will delegate [TwoPaneStrategy.calculateSplitResult] to
- * the [firstStrategy] when [useFirstStrategy] returns `true`. Otherwise, it will delegate to
- * the [secondStrategy].
- */
-public fun DelegateTwoPaneStrategy(
-    firstStrategy: TwoPaneStrategy,
-    secondStrategy: TwoPaneStrategy,
-    useFirstStrategy: (
-        density: Density,
-        layoutDirection: LayoutDirection,
-        layoutCoordinates: LayoutCoordinates
-    ) -> Boolean,
-): TwoPaneStrategy = TwoPaneStrategy { density, layoutDirection, layoutCoordinates ->
-    if (useFirstStrategy(density, layoutDirection, layoutCoordinates)) {
-        firstStrategy
-    } else {
-        secondStrategy
-    }.calculateSplitResult(density, layoutDirection, layoutCoordinates)
-}
