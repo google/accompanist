@@ -84,7 +84,6 @@ android {
 dependencies {
     api libs.compose.foundation.foundation
     api libs.compose.ui.ui
-    api libs.compose.material3.windowSizeClass
     api libs.androidx.window
 
     implementation libs.napier
