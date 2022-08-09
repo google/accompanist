@@ -17,9 +17,6 @@
 package com.google.accompanist.adaptive
 
 import android.app.Activity
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
@@ -28,29 +25,10 @@ import androidx.window.layout.DisplayFeature
 import androidx.window.layout.WindowInfoTracker
 
 /**
- * A description of the current window geometry.
+ * Calculates the list of [DisplayFeature]s from the given [activity].
  */
-public interface WindowGeometry {
-
-    /**
-     * The current [WindowSizeClass].
-     */
-    val windowSizeClass: WindowSizeClass
-
-    /**
-     * The current list of known [DisplayFeature]s.
-     */
-    val displayFeatures: List<DisplayFeature>
-}
-
-/**
- * Calculates the [WindowGeometry] for the given [activity].
- */
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
-public fun calculateWindowGeometry(activity: Activity): WindowGeometry {
-    val windowSizeClass = calculateWindowSizeClass(activity)
-
+public fun calculateDisplayFeatures(activity: Activity): List<DisplayFeature> {
     val windowInfoTracker = remember(activity) { WindowInfoTracker.getOrCreate(activity) }
     val windowLayoutInfo = remember(windowInfoTracker, activity) {
         windowInfoTracker.windowLayoutInfo(activity)
@@ -62,11 +40,5 @@ public fun calculateWindowGeometry(activity: Activity): WindowGeometry {
         }
     }
 
-    return object : WindowGeometry {
-        override val windowSizeClass: WindowSizeClass
-            get() = windowSizeClass
-
-        override val displayFeatures: List<DisplayFeature>
-            get() = displayFeatures
-    }
+    return displayFeatures
 }

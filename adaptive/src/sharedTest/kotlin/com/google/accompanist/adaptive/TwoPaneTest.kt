@@ -20,13 +20,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.requiredSize
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toAndroidRect
 import androidx.compose.ui.layout.LayoutCoordinates
@@ -44,7 +41,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toIntRect
 import androidx.compose.ui.unit.toOffset
-import androidx.compose.ui.unit.toSize
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.window.core.ExperimentalWindowApi
 import androidx.window.layout.DisplayFeature
@@ -56,7 +52,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import kotlin.math.roundToInt
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @RunWith(AndroidJUnit4::class)
 class TwoPaneTest {
     @get:Rule
@@ -911,19 +906,12 @@ class TwoPaneTest {
         lateinit var twoPaneCoordinates: LayoutCoordinates
         lateinit var firstCoordinates: LayoutCoordinates
         lateinit var secondCoordinates: LayoutCoordinates
-        val windowGeometry = object : WindowGeometry {
-            val fakeWindowGeometry by lazy {
-                fakeWindowGeometry(
-                    density = density,
-                    twoPaneCoordinates = twoPaneCoordinates,
-                    localFoldingFeatures = emptyList()
-                )
-            }
-
-            override val windowSizeClass: WindowSizeClass get() =
-                fakeWindowGeometry.windowSizeClass
-            override val displayFeatures: List<DisplayFeature> get() =
-                fakeWindowGeometry.displayFeatures
+        val displayFeatures = DelegateList {
+            fakeDisplayFeatures(
+                density = density,
+                twoPaneCoordinates = twoPaneCoordinates,
+                localFoldingFeatures = emptyList()
+            )
         }
 
         composeTestRule.setContent {
@@ -945,13 +933,10 @@ class TwoPaneTest {
                             .onPlaced { secondCoordinates = it }
                     )
                 },
-                strategy = TwoPaneStrategy(
-                    windowGeometry = windowGeometry,
-                    defaultStrategy = VerticalTwoPaneStrategy(
-                        windowGeometry = windowGeometry,
-                        splitFraction = 1f / 3f
-                    )
+                strategy = VerticalTwoPaneStrategy(
+                    splitFraction = 1f / 3f
                 ),
+                displayFeatures = displayFeatures,
                 modifier = Modifier
                     .requiredSize(900.dp, 1200.dp)
                     .onPlaced { twoPaneCoordinates = it }
@@ -987,26 +972,19 @@ class TwoPaneTest {
         lateinit var twoPaneCoordinates: LayoutCoordinates
         lateinit var firstCoordinates: LayoutCoordinates
         lateinit var secondCoordinates: LayoutCoordinates
-        val windowGeometry = object : WindowGeometry {
-            val fakeWindowGeometry by lazy {
-                fakeWindowGeometry(
-                    density = density,
-                    twoPaneCoordinates = twoPaneCoordinates,
-                    localFoldingFeatures = listOf(
-                        LocalFoldingFeature(
-                            center = 600.dp,
-                            size = 0.dp,
-                            state = FoldingFeature.State.HALF_OPENED,
-                            orientation = FoldingFeature.Orientation.HORIZONTAL
-                        )
+        val displayFeatures = DelegateList {
+            fakeDisplayFeatures(
+                density = density,
+                twoPaneCoordinates = twoPaneCoordinates,
+                localFoldingFeatures = listOf(
+                    LocalFoldingFeature(
+                        center = 600.dp,
+                        size = 0.dp,
+                        state = FoldingFeature.State.HALF_OPENED,
+                        orientation = FoldingFeature.Orientation.HORIZONTAL
                     )
                 )
-            }
-
-            override val windowSizeClass: WindowSizeClass get() =
-                fakeWindowGeometry.windowSizeClass
-            override val displayFeatures: List<DisplayFeature> get() =
-                fakeWindowGeometry.displayFeatures
+            )
         }
 
         composeTestRule.setContent {
@@ -1028,13 +1006,10 @@ class TwoPaneTest {
                             .onPlaced { secondCoordinates = it }
                     )
                 },
-                strategy = TwoPaneStrategy(
-                    windowGeometry = windowGeometry,
-                    defaultStrategy = VerticalTwoPaneStrategy(
-                        windowGeometry = windowGeometry,
-                        splitFraction = 1f / 3f
-                    )
+                strategy = VerticalTwoPaneStrategy(
+                    splitFraction = 1f / 3f
                 ),
+                displayFeatures = displayFeatures,
                 modifier = Modifier
                     .requiredSize(900.dp, 1200.dp)
                     .onPlaced { twoPaneCoordinates = it }
@@ -1070,26 +1045,19 @@ class TwoPaneTest {
         lateinit var twoPaneCoordinates: LayoutCoordinates
         lateinit var firstCoordinates: LayoutCoordinates
         lateinit var secondCoordinates: LayoutCoordinates
-        val windowGeometry = object : WindowGeometry {
-            val fakeWindowGeometry by lazy {
-                fakeWindowGeometry(
-                    density = density,
-                    twoPaneCoordinates = twoPaneCoordinates,
-                    localFoldingFeatures = listOf(
-                        LocalFoldingFeature(
-                            center = 600.dp,
-                            size = 60.dp,
-                            state = FoldingFeature.State.FLAT,
-                            orientation = FoldingFeature.Orientation.HORIZONTAL
-                        )
+        val displayFeatures = DelegateList {
+            fakeDisplayFeatures(
+                density = density,
+                twoPaneCoordinates = twoPaneCoordinates,
+                localFoldingFeatures = listOf(
+                    LocalFoldingFeature(
+                        center = 600.dp,
+                        size = 60.dp,
+                        state = FoldingFeature.State.FLAT,
+                        orientation = FoldingFeature.Orientation.HORIZONTAL
                     )
                 )
-            }
-
-            override val windowSizeClass: WindowSizeClass get() =
-                fakeWindowGeometry.windowSizeClass
-            override val displayFeatures: List<DisplayFeature> get() =
-                fakeWindowGeometry.displayFeatures
+            )
         }
 
         composeTestRule.setContent {
@@ -1111,13 +1079,10 @@ class TwoPaneTest {
                             .onPlaced { secondCoordinates = it }
                     )
                 },
-                strategy = TwoPaneStrategy(
-                    windowGeometry = windowGeometry,
-                    defaultStrategy = VerticalTwoPaneStrategy(
-                        windowGeometry = windowGeometry,
-                        splitFraction = 1f / 3f
-                    )
+                strategy = VerticalTwoPaneStrategy(
+                    splitFraction = 1f / 3f
                 ),
+                displayFeatures = displayFeatures,
                 modifier = Modifier
                     .requiredSize(900.dp, 1200.dp)
                     .onPlaced { twoPaneCoordinates = it }
@@ -1153,26 +1118,19 @@ class TwoPaneTest {
         lateinit var twoPaneCoordinates: LayoutCoordinates
         lateinit var firstCoordinates: LayoutCoordinates
         lateinit var secondCoordinates: LayoutCoordinates
-        val windowGeometry = object : WindowGeometry {
-            val fakeWindowGeometry by lazy {
-                fakeWindowGeometry(
-                    density = density,
-                    twoPaneCoordinates = twoPaneCoordinates,
-                    localFoldingFeatures = listOf(
-                        LocalFoldingFeature(
-                            center = 600.dp,
-                            size = 0.dp,
-                            state = FoldingFeature.State.FLAT,
-                            orientation = FoldingFeature.Orientation.HORIZONTAL
-                        )
+        val displayFeatures = DelegateList {
+            fakeDisplayFeatures(
+                density = density,
+                twoPaneCoordinates = twoPaneCoordinates,
+                localFoldingFeatures = listOf(
+                    LocalFoldingFeature(
+                        center = 600.dp,
+                        size = 0.dp,
+                        state = FoldingFeature.State.FLAT,
+                        orientation = FoldingFeature.Orientation.HORIZONTAL
                     )
                 )
-            }
-
-            override val windowSizeClass: WindowSizeClass get() =
-                fakeWindowGeometry.windowSizeClass
-            override val displayFeatures: List<DisplayFeature> get() =
-                fakeWindowGeometry.displayFeatures
+            )
         }
 
         composeTestRule.setContent {
@@ -1194,13 +1152,10 @@ class TwoPaneTest {
                             .onPlaced { secondCoordinates = it }
                     )
                 },
-                strategy = TwoPaneStrategy(
-                    windowGeometry = windowGeometry,
-                    defaultStrategy = VerticalTwoPaneStrategy(
-                        windowGeometry = windowGeometry,
-                        splitFraction = 1f / 3f
-                    ),
+                strategy = VerticalTwoPaneStrategy(
+                    splitFraction = 1f / 3f
                 ),
+                displayFeatures = displayFeatures,
                 modifier = Modifier
                     .requiredSize(900.dp, 1200.dp)
                     .onPlaced { twoPaneCoordinates = it }
@@ -1236,26 +1191,19 @@ class TwoPaneTest {
         lateinit var twoPaneCoordinates: LayoutCoordinates
         lateinit var firstCoordinates: LayoutCoordinates
         lateinit var secondCoordinates: LayoutCoordinates
-        val windowGeometry = object : WindowGeometry {
-            val fakeWindowGeometry by lazy {
-                fakeWindowGeometry(
-                    density = density,
-                    twoPaneCoordinates = twoPaneCoordinates,
-                    localFoldingFeatures = listOf(
-                        LocalFoldingFeature(
-                            center = 450.dp,
-                            size = 0.dp,
-                            state = FoldingFeature.State.HALF_OPENED,
-                            orientation = FoldingFeature.Orientation.VERTICAL
-                        )
+        val displayFeatures = DelegateList {
+            fakeDisplayFeatures(
+                density = density,
+                twoPaneCoordinates = twoPaneCoordinates,
+                localFoldingFeatures = listOf(
+                    LocalFoldingFeature(
+                        center = 450.dp,
+                        size = 0.dp,
+                        state = FoldingFeature.State.HALF_OPENED,
+                        orientation = FoldingFeature.Orientation.VERTICAL
                     )
                 )
-            }
-
-            override val windowSizeClass: WindowSizeClass get() =
-                fakeWindowGeometry.windowSizeClass
-            override val displayFeatures: List<DisplayFeature> get() =
-                fakeWindowGeometry.displayFeatures
+            )
         }
 
         composeTestRule.setContent {
@@ -1277,13 +1225,10 @@ class TwoPaneTest {
                             .onPlaced { secondCoordinates = it }
                     )
                 },
-                strategy = TwoPaneStrategy(
-                    windowGeometry = windowGeometry,
-                    defaultStrategy = VerticalTwoPaneStrategy(
-                        windowGeometry = windowGeometry,
-                        splitFraction = 1f / 3f
-                    ),
+                strategy = VerticalTwoPaneStrategy(
+                    splitFraction = 1f / 3f
                 ),
+                displayFeatures = displayFeatures,
                 modifier = Modifier
                     .requiredSize(900.dp, 1200.dp)
                     .onPlaced { twoPaneCoordinates = it }
@@ -1319,26 +1264,19 @@ class TwoPaneTest {
         lateinit var twoPaneCoordinates: LayoutCoordinates
         lateinit var firstCoordinates: LayoutCoordinates
         lateinit var secondCoordinates: LayoutCoordinates
-        val windowGeometry = object : WindowGeometry {
-            val fakeWindowGeometry by lazy {
-                fakeWindowGeometry(
-                    density = density,
-                    twoPaneCoordinates = twoPaneCoordinates,
-                    localFoldingFeatures = listOf(
-                        LocalFoldingFeature(
-                            center = 450.dp,
-                            size = 64.dp,
-                            state = FoldingFeature.State.FLAT,
-                            orientation = FoldingFeature.Orientation.VERTICAL
-                        )
+        val displayFeatures = DelegateList {
+            fakeDisplayFeatures(
+                density = density,
+                twoPaneCoordinates = twoPaneCoordinates,
+                localFoldingFeatures = listOf(
+                    LocalFoldingFeature(
+                        center = 450.dp,
+                        size = 64.dp,
+                        state = FoldingFeature.State.FLAT,
+                        orientation = FoldingFeature.Orientation.VERTICAL
                     )
                 )
-            }
-
-            override val windowSizeClass: WindowSizeClass get() =
-                fakeWindowGeometry.windowSizeClass
-            override val displayFeatures: List<DisplayFeature> get() =
-                fakeWindowGeometry.displayFeatures
+            )
         }
 
         composeTestRule.setContent {
@@ -1360,13 +1298,10 @@ class TwoPaneTest {
                             .onPlaced { secondCoordinates = it }
                     )
                 },
-                strategy = TwoPaneStrategy(
-                    windowGeometry = windowGeometry,
-                    defaultStrategy = HorizontalTwoPaneStrategy(
-                        windowGeometry = windowGeometry,
-                        splitFraction = 1f / 3f
-                    ),
+                strategy = VerticalTwoPaneStrategy(
+                    splitFraction = 1f / 3f
                 ),
+                displayFeatures = displayFeatures,
                 modifier = Modifier
                     .requiredSize(900.dp, 1200.dp)
                     .onPlaced { twoPaneCoordinates = it }
@@ -1405,26 +1340,19 @@ class TwoPaneTest {
 
         composeTestRule.setContent {
             density = LocalDensity.current
-            val windowGeometry = object : WindowGeometry {
-                val fakeWindowGeometry by lazy {
-                    fakeWindowGeometry(
-                        density = density,
-                        twoPaneCoordinates = twoPaneCoordinates,
-                        localFoldingFeatures = listOf(
-                            LocalFoldingFeature(
-                                center = 450.dp,
-                                size = 0.dp,
-                                state = FoldingFeature.State.FLAT,
-                                orientation = FoldingFeature.Orientation.VERTICAL
-                            )
+            val displayFeatures = DelegateList {
+                fakeDisplayFeatures(
+                    density = density,
+                    twoPaneCoordinates = twoPaneCoordinates,
+                    localFoldingFeatures = listOf(
+                        LocalFoldingFeature(
+                            center = 450.dp,
+                            size = 0.dp,
+                            state = FoldingFeature.State.FLAT,
+                            orientation = FoldingFeature.Orientation.VERTICAL
                         )
                     )
-                }
-
-                override val windowSizeClass: WindowSizeClass get() =
-                    fakeWindowGeometry.windowSizeClass
-                override val displayFeatures: List<DisplayFeature> get() =
-                    fakeWindowGeometry.displayFeatures
+                )
             }
 
             TwoPane(
@@ -1444,13 +1372,10 @@ class TwoPaneTest {
                             .onPlaced { secondCoordinates = it }
                     )
                 },
-                strategy = TwoPaneStrategy(
-                    windowGeometry = windowGeometry,
-                    defaultStrategy = VerticalTwoPaneStrategy(
-                        windowGeometry = windowGeometry,
-                        splitFraction = 1f / 3f
-                    )
+                strategy = VerticalTwoPaneStrategy(
+                    splitFraction = 1f / 3f
                 ),
+                displayFeatures = displayFeatures,
                 modifier = Modifier
                     .requiredSize(900.dp, 1200.dp)
                     .onPlaced { twoPaneCoordinates = it }
@@ -1504,6 +1429,27 @@ private data class LocalFoldingFeature(
 )
 
 /**
+ * A [List] that lazily constructs the backing delegate list by calling the provided lambda.
+ */
+private class DelegateList<T>(
+    listFactory: () -> List<T>
+) : List<T> {
+    val delegate by lazy(listFactory)
+    override val size: Int get() = delegate.size
+    override fun get(index: Int): T = delegate[index]
+    override fun isEmpty(): Boolean = delegate.isEmpty()
+    override fun iterator(): Iterator<T> = delegate.iterator()
+    override fun listIterator(): ListIterator<T> = delegate.listIterator()
+    override fun listIterator(index: Int): ListIterator<T> = delegate.listIterator(index)
+    override fun subList(fromIndex: Int, toIndex: Int): List<T> =
+        delegate.subList(fromIndex, toIndex)
+    override fun lastIndexOf(element: T): Int = delegate.lastIndexOf(element)
+    override fun indexOf(element: T): Int = delegate.indexOf(element)
+    override fun containsAll(elements: Collection<T>): Boolean = delegate.containsAll(elements)
+    override fun contains(element: T): Boolean = delegate.contains(element)
+}
+
+/**
  * Folding features are always expressed in window coordinates.
  *
  * For the sake of testing, however, we want to specify them relative to the [TwoPane] under test.
@@ -1515,92 +1461,78 @@ private data class LocalFoldingFeature(
  * In other words, this allows specifying [LocalFoldingFeature]s as if the [TwoPane] layout matches
  * the window bounds.
  */
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class, ExperimentalWindowApi::class)
-private fun fakeWindowGeometry(
+@OptIn(ExperimentalWindowApi::class)
+private fun fakeDisplayFeatures(
     density: Density,
     twoPaneCoordinates: LayoutCoordinates,
     localFoldingFeatures: List<LocalFoldingFeature>
-): WindowGeometry =
-    object : WindowGeometry {
-        override val windowSizeClass: WindowSizeClass =
-            WindowSizeClass.calculateFromSize(twoPaneCoordinates.size.toSize().toDpSize(density))
+): List<DisplayFeature> {
+    val boundsTopLeftOffset = twoPaneCoordinates.localToWindow(
+        twoPaneCoordinates.size.toIntRect().topLeft.toOffset()
+    )
+    val boundsBottomRightOffset = twoPaneCoordinates.localToWindow(
+        twoPaneCoordinates.size.toIntRect().bottomRight.toOffset()
+    )
+    val bounds = Rect(
+        boundsTopLeftOffset,
+        boundsBottomRightOffset
+    )
 
-        override val displayFeatures: List<DisplayFeature> get() {
-            val boundsTopLeftOffset = twoPaneCoordinates.localToWindow(
-                twoPaneCoordinates.size.toIntRect().topLeft.toOffset()
-            )
-            val boundsBottomRightOffset = twoPaneCoordinates.localToWindow(
-                twoPaneCoordinates.size.toIntRect().bottomRight.toOffset()
-            )
-            val bounds = Rect(
-                boundsTopLeftOffset,
-                boundsBottomRightOffset
-            )
+    return localFoldingFeatures.map { localFoldingFeature ->
+        val foldLeft: Float
+        val foldTop: Float
+        val foldRight: Float
+        val foldBottom: Float
 
-            return localFoldingFeatures.map { localFoldingFeature ->
-                val foldLeft: Float
-                val foldTop: Float
-                val foldRight: Float
-                val foldBottom: Float
-
-                with(density) {
-                    if (localFoldingFeature.orientation == FoldingFeature.Orientation.HORIZONTAL) {
-                        foldLeft = 0f
-                        foldTop =
-                            (localFoldingFeature.center - localFoldingFeature.size / 2).toPx()
-                        foldRight = twoPaneCoordinates.size.width.toFloat()
-                        foldBottom =
-                            (localFoldingFeature.center + localFoldingFeature.size / 2).toPx()
-                    } else {
-                        foldLeft =
-                            (localFoldingFeature.center - localFoldingFeature.size / 2).toPx()
-                        foldTop = 0f
-                        foldRight =
-                            (localFoldingFeature.center + localFoldingFeature.size / 2).toPx()
-                        foldBottom = twoPaneCoordinates.size.height.toFloat()
-                    }
-                }
-
-                val foldTopLeftOffset = twoPaneCoordinates.localToWindow(
-                    Offset(foldLeft, foldTop)
-                )
-                val foldBottomRightOffset = twoPaneCoordinates.localToWindow(
-                    Offset(foldRight, foldBottom)
-                )
-                val foldBounds = Rect(
-                    foldTopLeftOffset,
-                    foldBottomRightOffset,
-                )
-
-                val center: Int
-                val size: Int
-
-                if (localFoldingFeature.orientation == FoldingFeature.Orientation.HORIZONTAL) {
-                    center = foldBounds.center.y.roundToInt()
-                    size = foldBounds.height.roundToInt()
-                } else {
-                    center = foldBounds.center.x.roundToInt()
-                    size = foldBounds.width.roundToInt()
-                }
-
-                FoldingFeature(
-                    windowBounds = bounds.toAndroidRect(),
-                    center = center,
-                    size = size,
-                    state = localFoldingFeature.state,
-                    orientation = localFoldingFeature.orientation,
-                )
+        with(density) {
+            if (localFoldingFeature.orientation == FoldingFeature.Orientation.HORIZONTAL) {
+                foldLeft = 0f
+                foldTop =
+                    (localFoldingFeature.center - localFoldingFeature.size / 2).toPx()
+                foldRight = twoPaneCoordinates.size.width.toFloat()
+                foldBottom =
+                    (localFoldingFeature.center + localFoldingFeature.size / 2).toPx()
+            } else {
+                foldLeft =
+                    (localFoldingFeature.center - localFoldingFeature.size / 2).toPx()
+                foldTop = 0f
+                foldRight =
+                    (localFoldingFeature.center + localFoldingFeature.size / 2).toPx()
+                foldBottom = twoPaneCoordinates.size.height.toFloat()
             }
         }
-    }
 
-private fun Size.toDpSize(density: Density) =
-    with(density) {
-        DpSize(
-            width = width.toDp(),
-            height = height.toDp()
+        val foldTopLeftOffset = twoPaneCoordinates.localToWindow(
+            Offset(foldLeft, foldTop)
+        )
+        val foldBottomRightOffset = twoPaneCoordinates.localToWindow(
+            Offset(foldRight, foldBottom)
+        )
+        val foldBounds = Rect(
+            foldTopLeftOffset,
+            foldBottomRightOffset,
+        )
+
+        val center: Int
+        val size: Int
+
+        if (localFoldingFeature.orientation == FoldingFeature.Orientation.HORIZONTAL) {
+            center = foldBounds.center.y.roundToInt()
+            size = foldBounds.height.roundToInt()
+        } else {
+            center = foldBounds.center.x.roundToInt()
+            size = foldBounds.width.roundToInt()
+        }
+
+        FoldingFeature(
+            windowBounds = bounds.toAndroidRect(),
+            center = center,
+            size = size,
+            state = localFoldingFeature.state,
+            orientation = localFoldingFeature.orientation,
         )
     }
+}
 
 private fun Rect.round(): IntRect =
     IntRect(

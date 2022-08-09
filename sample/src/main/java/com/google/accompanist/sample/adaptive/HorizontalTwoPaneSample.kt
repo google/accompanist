@@ -27,14 +27,13 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.adaptive.FoldAwareConfiguration
 import com.google.accompanist.adaptive.HorizontalTwoPaneStrategy
 import com.google.accompanist.adaptive.TwoPane
-import com.google.accompanist.adaptive.TwoPaneStrategy
-import com.google.accompanist.adaptive.VerticalTwoPaneStrategy
 import com.google.accompanist.adaptive.calculateDisplayFeatures
 import com.google.accompanist.sample.AccompanistSampleTheme
 
-class BasicTwoPaneSample : ComponentActivity() {
+class HorizontalTwoPaneSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -66,19 +65,11 @@ class BasicTwoPaneSample : ComponentActivity() {
                             }
                         }
                     },
-                    strategy = TwoPaneStrategy { density, layoutDirection, layoutCoordinates ->
-                        // Split vertically if the height is larger than the width
-                        if (layoutCoordinates.size.height >= layoutCoordinates.size.width) {
-                            VerticalTwoPaneStrategy(
-                                splitFraction = 0.75f
-                            )
-                        } else {
-                            HorizontalTwoPaneStrategy(
-                                splitFraction = 0.75f
-                            )
-                        }.calculateSplitResult(density, layoutDirection, layoutCoordinates)
-                    },
+                    strategy = HorizontalTwoPaneStrategy(
+                        splitFraction = 1f / 3f,
+                    ),
                     displayFeatures = displayFeatures,
+                    foldAwareConfiguration = FoldAwareConfiguration.VerticalFoldsOnly,
                     modifier = Modifier.padding(8.dp)
                 )
             }

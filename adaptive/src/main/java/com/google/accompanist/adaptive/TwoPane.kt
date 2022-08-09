@@ -16,6 +16,7 @@
 
 package com.google.accompanist.adaptive
 
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
@@ -35,6 +36,7 @@ import androidx.compose.ui.unit.constrain
 import androidx.compose.ui.unit.constrainHeight
 import androidx.compose.ui.unit.constrainWidth
 import androidx.compose.ui.unit.dp
+import androidx.window.layout.DisplayFeature
 import androidx.window.layout.FoldingFeature
 import kotlin.math.roundToInt
 
@@ -42,11 +44,14 @@ import kotlin.math.roundToInt
  * A layout that places two different pieces of content defined by the [first] and [second]
  * slots where the arrangement, sizes and separation behaviour is controlled by [TwoPaneStrategy].
  *
- * The default implementations of [TwoPaneStrategy] are fold and hinges aware, meaning that the two
- * pane will adopt its layout to properly separate [first] and [second] panes so they don't
- * interfere with hardware hinges (vertical or horizontal), or respect folds when needed
- * (for example, when foldable is half-folded (90-degree fold AKA tabletop) the split will become
- * on the bend).
+ * [TwoPane] is fold and hinges aware using the provided the [displayFeatures] (which should
+ * normally be calculated via [calculateDisplayFeatures]). The layout will be adapted to properly
+ * separate [first] and [second] panes so they don't interfere with hardware hinges (vertical or
+ * horizontal) as specified in [displayFeatures], or respect folds when needed (for example, when
+ * foldable is half-folded (90-degree fold AKA tabletop) the split will become on the bend).
+ *
+ * To only be aware of folds with a specific orientation, pass in an alternate
+ * [foldAwareConfiguration] to only adjust for vertical or horizontal folds.
  *
  * The [TwoPane] layout will always place both [first] and [second], based on the provided
  * [strategy] and window environment. If you instead only want to place one or the other,
@@ -61,9 +66,46 @@ import kotlin.math.roundToInt
  * @param strategy strategy of the two pane that controls the arrangement of the layout
  * @param modifier an optional modifier for the layout
  */
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 public fun TwoPane(
+    first: @Composable () -> Unit,
+    second: @Composable () -> Unit,
+    strategy: TwoPaneStrategy,
+    displayFeatures: List<DisplayFeature>,
+    modifier: Modifier = Modifier,
+    foldAwareConfiguration: FoldAwareConfiguration = FoldAwareConfiguration.AllFolds,
+) {
+    TwoPane(
+        first = first,
+        second = second,
+        strategy = when (foldAwareConfiguration) {
+            FoldAwareConfiguration.HorizontalFoldsOnly -> {
+                VerticalTwoPaneStrategy(
+                    displayFeatures = displayFeatures,
+                    defaultStrategy = strategy,
+                )
+            }
+            FoldAwareConfiguration.VerticalFoldsOnly -> {
+                HorizontalTwoPaneStrategy(
+                    displayFeatures = displayFeatures,
+                    defaultStrategy = strategy,
+                )
+            }
+            FoldAwareConfiguration.AllFolds -> {
+                TwoPaneStrategy(
+                    displayFeatures = displayFeatures,
+                    defaultStrategy = strategy,
+                )
+            }
+            else -> error("Unknown FoldAware value!")
+        },
+        modifier = modifier,
+    )
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+internal fun TwoPane(
     first: @Composable () -> Unit,
     second: @Composable () -> Unit,
     strategy: TwoPaneStrategy,
@@ -93,7 +135,7 @@ public fun TwoPane(
                 }
             )
 
-            val isHorizontalSplit = splitResult.isHorizontalSplit
+            val gapOrientation = splitResult.gapOrientation
             val gapBounds = splitResult.gapBounds
 
             val gapLeft = constraints.constrainWidth(gapBounds.left.roundToInt())
@@ -101,7 +143,7 @@ public fun TwoPane(
             val gapTop = constraints.constrainHeight(gapBounds.top.roundToInt())
             val gapBottom = constraints.constrainHeight(gapBounds.bottom.roundToInt())
             val firstConstraints =
-                if (isHorizontalSplit) {
+                if (gapOrientation == Orientation.Vertical) {
                     val width = when (layoutDirection) {
                         LayoutDirection.Ltr -> gapLeft
                         LayoutDirection.Rtl -> constraints.maxWidth - gapRight
@@ -112,7 +154,7 @@ public fun TwoPane(
                     constraints.copy(minHeight = gapTop, maxHeight = gapTop)
                 }
             val secondConstraints =
-                if (isHorizontalSplit) {
+                if (gapOrientation == Orientation.Vertical) {
                     val width = when (layoutDirection) {
                         LayoutDirection.Ltr -> constraints.maxWidth - gapRight
                         LayoutDirection.Rtl -> gapLeft
@@ -127,13 +169,13 @@ public fun TwoPane(
 
             firstPlaceable.placeRelative(0, 0)
             val detailOffsetX =
-                if (isHorizontalSplit) {
+                if (gapOrientation == Orientation.Vertical) {
                     constraints.maxWidth - secondPlaceable.width
                 } else {
                     0
                 }
             val detailOffsetY =
-                if (isHorizontalSplit) {
+                if (gapOrientation == Orientation.Vertical) {
                     0
                 } else {
                     constraints.maxHeight - secondPlaceable.height
@@ -144,15 +186,42 @@ public fun TwoPane(
 }
 
 /**
+ * The configuration for which type of folds for a [TwoPane] to automatically avoid.
+ */
+@JvmInline
+public value class FoldAwareConfiguration private constructor(private val value: Int) {
+
+    companion object {
+        /**
+         * The [TwoPane] will only be aware of horizontal folds only, splitting the content
+         * vertically.
+         */
+        val HorizontalFoldsOnly = FoldAwareConfiguration(0)
+
+        /**
+         * The [TwoPane] will only be aware of vertical folds only, splitting the content
+         * horizontally.
+         */
+        val VerticalFoldsOnly = FoldAwareConfiguration(1)
+
+        /**
+         * The [TwoPane] will be aware of both horizontal and vertical folds, splitting the content
+         * vertically and horizontally respectively.
+         */
+        val AllFolds = FoldAwareConfiguration(2)
+    }
+}
+
+/**
  * Returns the specification for where to place a split in [TwoPane] as a result of
  * [TwoPaneStrategy.calculateSplitResult]
  */
 public class SplitResult(
 
     /**
-     * Whether the split is vertical or horizontal
+     * Whether the gap is vertical or horizontal
      */
-    public val isHorizontalSplit: Boolean,
+    public val gapOrientation: Orientation,
 
     /**
      * The bounds that are nether a `start` pane or an `end` pane, but a separation between those
@@ -207,34 +276,6 @@ private fun interface ConditionalTwoPaneStrategy {
 }
 
 /**
- * Returns a [TwoPaneStrategy] that will place the slots vertically or horizontally if there is a
- * horizontal or vertical fold respectively.
- *
- * If there is no fold, then the [defaultStrategy] will be used instead.
- */
-public fun TwoPaneStrategy(
-    windowGeometry: WindowGeometry,
-    defaultStrategy: TwoPaneStrategy,
-): TwoPaneStrategy = TwoPaneStrategy(
-    FoldAwareHorizontalTwoPaneStrategy(windowGeometry),
-    FoldAwareVerticalTwoPaneStrategy(windowGeometry),
-    defaultStrategy = defaultStrategy
-)
-
-/**
- * Returns a [TwoPaneStrategy] that will place the slots horizontally if there is a vertical fold.
- *
- * If there is no fold, then the [defaultStrategy] will be used instead.
- */
-public fun HorizontalTwoPaneStrategy(
-    windowGeometry: WindowGeometry,
-    defaultStrategy: TwoPaneStrategy,
-): TwoPaneStrategy = TwoPaneStrategy(
-    FoldAwareHorizontalTwoPaneStrategy(windowGeometry),
-    defaultStrategy = defaultStrategy
-)
-
-/**
  * Returns a [TwoPaneStrategy] that will place the slots horizontally.
  *
  * If there is a vertical fold, then the gap will be placed along the fold.
@@ -243,15 +284,11 @@ public fun HorizontalTwoPaneStrategy(
  * [gapWidth].
  */
 public fun HorizontalTwoPaneStrategy(
-    windowGeometry: WindowGeometry,
     splitFraction: Float,
     gapWidth: Dp = 0.dp,
-): TwoPaneStrategy = TwoPaneStrategy(
-    FoldAwareHorizontalTwoPaneStrategy(windowGeometry),
-    defaultStrategy = FractionHorizontalTwoPaneStrategy(
-        splitFraction = splitFraction,
-        gapWidth = gapWidth
-    )
+): TwoPaneStrategy = FractionHorizontalTwoPaneStrategy(
+    splitFraction = splitFraction,
+    gapWidth = gapWidth
 )
 
 /**
@@ -263,30 +300,13 @@ public fun HorizontalTwoPaneStrategy(
  * [offsetFromStart], with the given [gapWidth].
  */
 public fun HorizontalTwoPaneStrategy(
-    windowGeometry: WindowGeometry,
     splitOffset: Dp,
-    offsetFromStart: Boolean,
+    offsetFromStart: Boolean = true,
     gapWidth: Dp = 0.dp,
-): TwoPaneStrategy = TwoPaneStrategy(
-    FoldAwareHorizontalTwoPaneStrategy(windowGeometry),
-    defaultStrategy = FixedOffsetHorizontalTwoPaneStrategy(
-        splitOffset = splitOffset,
-        offsetFromStart = offsetFromStart,
-        gapWidth = gapWidth
-    )
-)
-
-/**
- * Returns a [TwoPaneStrategy] that will place the slots vertically if there is a horizontal fold.
- *
- * If there is no fold, then the [defaultStrategy] will be used instead.
- */
-public fun VerticalTwoPaneStrategy(
-    windowGeometry: WindowGeometry,
-    defaultStrategy: TwoPaneStrategy,
-): TwoPaneStrategy = TwoPaneStrategy(
-    FoldAwareVerticalTwoPaneStrategy(windowGeometry),
-    defaultStrategy = defaultStrategy
+): TwoPaneStrategy = FixedOffsetHorizontalTwoPaneStrategy(
+    splitOffset = splitOffset,
+    offsetFromStart = offsetFromStart,
+    gapWidth = gapWidth
 )
 
 /**
@@ -298,15 +318,11 @@ public fun VerticalTwoPaneStrategy(
  * [gapHeight].
  */
 public fun VerticalTwoPaneStrategy(
-    windowGeometry: WindowGeometry,
     splitFraction: Float,
     gapHeight: Dp = 0.dp,
-): TwoPaneStrategy = TwoPaneStrategy(
-    FoldAwareHorizontalTwoPaneStrategy(windowGeometry),
-    defaultStrategy = FractionVerticalTwoPaneStrategy(
-        splitFraction = splitFraction,
-        gapHeight = gapHeight
-    )
+): TwoPaneStrategy = FractionVerticalTwoPaneStrategy(
+    splitFraction = splitFraction,
+    gapHeight = gapHeight
 )
 
 /**
@@ -318,17 +334,54 @@ public fun VerticalTwoPaneStrategy(
  * [offsetFromTop], with the given [gapHeight].
  */
 public fun VerticalTwoPaneStrategy(
-    windowGeometry: WindowGeometry,
     splitOffset: Dp,
-    offsetFromTop: Boolean,
+    offsetFromTop: Boolean = true,
     gapHeight: Dp = 0.dp,
+): TwoPaneStrategy = FixedOffsetVerticalTwoPaneStrategy(
+    splitOffset = splitOffset,
+    offsetFromTop = offsetFromTop,
+    gapHeight = gapHeight
+)
+
+/**
+ * Returns a [TwoPaneStrategy] that will place the slots vertically or horizontally if there is a
+ * horizontal or vertical fold respectively.
+ *
+ * If there is no fold, then the [defaultStrategy] will be used instead.
+ */
+private fun TwoPaneStrategy(
+    displayFeatures: List<DisplayFeature>,
+    defaultStrategy: TwoPaneStrategy,
 ): TwoPaneStrategy = TwoPaneStrategy(
-    FoldAwareHorizontalTwoPaneStrategy(windowGeometry),
-    defaultStrategy = FixedOffsetVerticalTwoPaneStrategy(
-        splitOffset = splitOffset,
-        offsetFromTop = offsetFromTop,
-        gapHeight = gapHeight
-    )
+    FoldAwareHorizontalTwoPaneStrategy(displayFeatures),
+    FoldAwareVerticalTwoPaneStrategy(displayFeatures),
+    defaultStrategy = defaultStrategy
+)
+
+/**
+ * Returns a [TwoPaneStrategy] that will place the slots horizontally if there is a vertical fold.
+ *
+ * If there is no fold, then the [defaultStrategy] will be used instead.
+ */
+private fun HorizontalTwoPaneStrategy(
+    displayFeatures: List<DisplayFeature>,
+    defaultStrategy: TwoPaneStrategy,
+): TwoPaneStrategy = TwoPaneStrategy(
+    FoldAwareHorizontalTwoPaneStrategy(displayFeatures),
+    defaultStrategy = defaultStrategy
+)
+
+/**
+ * Returns a [TwoPaneStrategy] that will place the slots vertically if there is a horizontal fold.
+ *
+ * If there is no fold, then the [defaultStrategy] will be used instead.
+ */
+private fun VerticalTwoPaneStrategy(
+    displayFeatures: List<DisplayFeature>,
+    defaultStrategy: TwoPaneStrategy,
+): TwoPaneStrategy = TwoPaneStrategy(
+    FoldAwareVerticalTwoPaneStrategy(displayFeatures),
+    defaultStrategy = defaultStrategy
 )
 
 /**
@@ -360,9 +413,9 @@ private fun TwoPaneStrategy(
  * vertical fold, or `null` if there is no fold.
  */
 private fun FoldAwareHorizontalTwoPaneStrategy(
-    windowGeometry: WindowGeometry,
+    displayFeatures: List<DisplayFeature>,
 ): ConditionalTwoPaneStrategy = ConditionalTwoPaneStrategy { _, _, layoutCoordinates ->
-    val verticalFold = windowGeometry.displayFeatures.find {
+    val verticalFold = displayFeatures.find {
         it is FoldingFeature && it.orientation == FoldingFeature.Orientation.VERTICAL
     } as FoldingFeature?
 
@@ -375,7 +428,7 @@ private fun FoldAwareHorizontalTwoPaneStrategy(
     ) {
         val foldBounds = verticalFold.bounds.toComposeRect()
         SplitResult(
-            isHorizontalSplit = true,
+            gapOrientation = Orientation.Vertical,
             gapBounds = Rect(
                 layoutCoordinates.windowToLocal(foldBounds.topLeft),
                 layoutCoordinates.windowToLocal(foldBounds.bottomRight)
@@ -391,9 +444,9 @@ private fun FoldAwareHorizontalTwoPaneStrategy(
  * horizontal fold, or `null` if there is no fold.
  */
 private fun FoldAwareVerticalTwoPaneStrategy(
-    windowGeometry: WindowGeometry,
+    displayFeatures: List<DisplayFeature>,
 ): ConditionalTwoPaneStrategy = ConditionalTwoPaneStrategy { _, _, layoutCoordinates ->
-    val horizontalFold = windowGeometry.displayFeatures.find {
+    val horizontalFold = displayFeatures.find {
         it is FoldingFeature && it.orientation == FoldingFeature.Orientation.HORIZONTAL
     } as FoldingFeature?
 
@@ -406,7 +459,7 @@ private fun FoldAwareVerticalTwoPaneStrategy(
     ) {
         val foldBounds = horizontalFold.bounds.toComposeRect()
         SplitResult(
-            isHorizontalSplit = false,
+            gapOrientation = Orientation.Horizontal,
             gapBounds = Rect(
                 layoutCoordinates.windowToLocal(foldBounds.topLeft),
                 layoutCoordinates.windowToLocal(foldBounds.bottomRight)
@@ -435,7 +488,7 @@ internal fun FractionHorizontalTwoPaneStrategy(
     val splitWidthPixel = with(density) { gapWidth.toPx() }
 
     SplitResult(
-        isHorizontalSplit = true,
+        gapOrientation = Orientation.Vertical,
         gapBounds = Rect(
             left = splitX - splitWidthPixel / 2f,
             top = 0f,
@@ -476,7 +529,7 @@ internal fun FixedOffsetHorizontalTwoPaneStrategy(
     val splitWidthPixel = with(density) { gapWidth.toPx() }
 
     SplitResult(
-        isHorizontalSplit = true,
+        gapOrientation = Orientation.Vertical,
         gapBounds = Rect(
             left = splitX - splitWidthPixel / 2f,
             top = 0f,
@@ -501,7 +554,7 @@ internal fun FractionVerticalTwoPaneStrategy(
     val splitHeightPixel = with(density) { gapHeight.toPx() }
 
     SplitResult(
-        isHorizontalSplit = false,
+        gapOrientation = Orientation.Horizontal,
         gapBounds = Rect(
             left = 0f,
             top = splitY - splitHeightPixel / 2f,
@@ -534,7 +587,7 @@ internal fun FixedOffsetVerticalTwoPaneStrategy(
     val splitHeightPixel = with(density) { gapHeight.toPx() }
 
     SplitResult(
-        isHorizontalSplit = false,
+        gapOrientation = Orientation.Horizontal,
         gapBounds = Rect(
             left = 0f,
             top = splitY - splitHeightPixel / 2f,
