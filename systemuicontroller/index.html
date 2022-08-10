@@ -1226,9 +1226,9 @@
 <p>In your layouts you can update the system bar colors like so:</p>
 <div class="highlight"><pre><span></span><code><span class="c1">// Remember a SystemUiController</span><span class="w"></span>
 <span class="kd">val</span><span class="w"> </span><span class="nv">systemUiController</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rememberSystemUiController</span><span class="p">()</span><span class="w"></span>
-<span class="kd">val</span><span class="w"> </span><span class="nv">useDarkIcons</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">!</span><span class="n">isSystemInDarkTheme</span><span class="p">()</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">useDarkIcons</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MaterialTheme</span><span class="p">.</span><span class="na">colors</span><span class="p">.</span><span class="na">isLight</span><span class="w"></span>
 
-<span class="n">DisposableEffect</span><span class="p">(</span><span class="n">systemUiController</span><span class="p">,</span><span class="w"> </span><span class="n">useDarkIcons</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="n">SideEffect</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="c1">// Update all of the system bar colors to be transparent, and use</span><span class="w"></span>
 <span class="w">    </span><span class="c1">// dark icons if we&#39;re in light theme</span><span class="w"></span>
 <span class="w">    </span><span class="n">systemUiController</span><span class="p">.</span><span class="na">setSystemBarsColor</span><span class="p">(</span><span class="w"></span>
@@ -1237,8 +1237,6 @@
 <span class="w">    </span><span class="p">)</span><span class="w"></span>
 
 <span class="w">    </span><span class="c1">// setStatusBarColor() and setNavigationBarColor() also exist</span><span class="w"></span>
-
-<span class="w">    </span><span class="n">onDispose</span><span class="w"> </span><span class="p">{}</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <h2 id="system-bar-icon-colors">System bar icon colors<a class="headerlink" href="#system-bar-icon-colors" title="Permanent link">&para;</a></h2>

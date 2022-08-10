@@ -29,18 +29,18 @@
             <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button><button class="section-tab" data-togglable="Sources">Sources</button><button class="section-tab" data-togglable="Samples">Samples</button></div>
             <div class="tabs-section-body">
               <h2 class="">Samples</h2>
-              <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Samples"><div class="content sourceset-depenent-content" data-active="" data-togglable=":systemuicontroller:dokkaHtmlPartial/release"><div class="sample-container"><code class="runnablesample monospace" theme="idea"><pre>import androidx.compose.foundation.isSystemInDarkTheme
+              <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Samples"><div class="content sourceset-depenent-content" data-active="" data-togglable=":systemuicontroller:dokkaHtmlPartial/release"><div class="sample-container"><code class="runnablesample monospace" theme="idea"><pre>import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 fun main() { 
    //sampleStart 
-   // Remember a SystemUiController
+   // Get the current SystemUiController
 val systemUiController = rememberSystemUiController()
-val useDarkIcons = !isSystemInDarkTheme()
+val useDarkIcons = MaterialTheme.colors.isLight
 
-DisposableEffect(systemUiController, useDarkIcons) {
+SideEffect {
     // Update all of the system bar colors to be transparent, and use
     // dark icons if we're in light theme
     systemUiController.setSystemBarsColor(
@@ -49,7 +49,6 @@ DisposableEffect(systemUiController, useDarkIcons) {
     )
 
     // setStatusBarColor() and setNavigationBarColor() also exist
-    onDispose {}
 } 
    //sampleEnd
 }</pre></code></div></div></div>
