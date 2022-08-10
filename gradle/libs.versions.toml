@@ -1,8 +1,8 @@
 [versions]
 
-compose = "1.3.0-SNAPSHOT"
-composeCompiler = "1.3.0-rc01"
-composesnapshot = "8898423" # a single character = no snapshot
+compose = "1.3.0-alpha03"
+composeCompiler = "1.3.0"
+composesnapshot = "-" # a single character = no snapshot
 
 # gradlePlugin and lint need to be updated together
 gradlePlugin = "7.3.0-beta05"
