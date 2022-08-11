@@ -64,6 +64,8 @@ import kotlin.math.roundToInt
  * and the bottom-most in a vertical split based on the [SplitResult] of
  * [TwoPaneStrategy.calculateSplitResult]
  * @param strategy strategy of the two pane that controls the arrangement of the layout
+ * @param displayFeatures the list of known display features to automatically avoid
+ * @param foldAwareConfiguration the types of display features to automatically avoid
  * @param modifier an optional modifier for the layout
  */
 @Composable
@@ -278,9 +280,7 @@ private fun interface ConditionalTwoPaneStrategy {
 /**
  * Returns a [TwoPaneStrategy] that will place the slots horizontally.
  *
- * If there is a vertical fold, then the gap will be placed along the fold.
- *
- * Otherwise, the gap will be placed at the given [splitFraction] from start, with the given
+ * The gap will be placed at the given [splitFraction] from start, with the given
  * [gapWidth].
  */
 public fun HorizontalTwoPaneStrategy(
@@ -294,9 +294,7 @@ public fun HorizontalTwoPaneStrategy(
 /**
  * Returns a [TwoPaneStrategy] that will place the slots horizontally.
  *
- * If there is a vertical fold, then the gap will be placed along the fold.
- *
- * Otherwise, the gap will be placed at [splitOffset] either from the start or end based on
+ * The gap will be placed at [splitOffset] either from the start or end based on
  * [offsetFromStart], with the given [gapWidth].
  */
 public fun HorizontalTwoPaneStrategy(
@@ -312,9 +310,7 @@ public fun HorizontalTwoPaneStrategy(
 /**
  * Returns a [TwoPaneStrategy] that will place the slots horizontally.
  *
- * If there is a vertical fold, then the gap will be placed along the fold.
- *
- * Otherwise, the gap will be placed at the given [splitFraction] from top, with the given
+ * The gap will be placed at the given [splitFraction] from top, with the given
  * [gapHeight].
  */
 public fun VerticalTwoPaneStrategy(
@@ -328,9 +324,7 @@ public fun VerticalTwoPaneStrategy(
 /**
  * Returns a [TwoPaneStrategy] that will place the slots horizontally.
  *
- * If there is a vertical fold, then the gap will be placed along the fold.
- *
- * Otherwise, the gap will be placed at [splitOffset] either from the top or bottom based on
+ * The gap will be placed at [splitOffset] either from the top or bottom based on
  * [offsetFromTop], with the given [gapHeight].
  */
 public fun VerticalTwoPaneStrategy(
