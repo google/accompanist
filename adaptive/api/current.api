@@ -1,0 +1,42 @@
+// Signature format: 4.0
+package com.google.accompanist.adaptive {
+
+  public final class DisplayFeaturesKt {
+    method @androidx.compose.runtime.Composable public static java.util.List<androidx.window.layout.DisplayFeature> calculateDisplayFeatures(android.app.Activity activity);
+  }
+
+  @kotlin.jvm.JvmInline public final class FoldAwareConfiguration {
+    field public static final com.google.accompanist.adaptive.FoldAwareConfiguration.Companion Companion;
+  }
+
+  public static final class FoldAwareConfiguration.Companion {
+    method public int getAllFolds();
+    method public int getHorizontalFoldsOnly();
+    method public int getVerticalFoldsOnly();
+    property public final int AllFolds;
+    property public final int HorizontalFoldsOnly;
+    property public final int VerticalFoldsOnly;
+  }
+
+  public final class SplitResult {
+    ctor public SplitResult(androidx.compose.foundation.gestures.Orientation gapOrientation, androidx.compose.ui.geometry.Rect gapBounds);
+    method public androidx.compose.ui.geometry.Rect getGapBounds();
+    method public androidx.compose.foundation.gestures.Orientation getGapOrientation();
+    property public final androidx.compose.ui.geometry.Rect gapBounds;
+    property public final androidx.compose.foundation.gestures.Orientation gapOrientation;
+  }
+
+  public final class TwoPaneKt {
+    method public static com.google.accompanist.adaptive.TwoPaneStrategy HorizontalTwoPaneStrategy(float splitFraction, optional float gapWidth);
+    method public static com.google.accompanist.adaptive.TwoPaneStrategy HorizontalTwoPaneStrategy(float splitOffset, optional boolean offsetFromStart, optional float gapWidth);
+    method @androidx.compose.runtime.Composable public static void TwoPane(kotlin.jvm.functions.Function0<kotlin.Unit> first, kotlin.jvm.functions.Function0<kotlin.Unit> second, com.google.accompanist.adaptive.TwoPaneStrategy strategy, java.util.List<? extends androidx.window.layout.DisplayFeature> displayFeatures, optional androidx.compose.ui.Modifier modifier, optional int foldAwareConfiguration);
+    method public static com.google.accompanist.adaptive.TwoPaneStrategy VerticalTwoPaneStrategy(float splitFraction, optional float gapHeight);
+    method public static com.google.accompanist.adaptive.TwoPaneStrategy VerticalTwoPaneStrategy(float splitOffset, optional boolean offsetFromTop, optional float gapHeight);
+  }
+
+  public fun interface TwoPaneStrategy {
+    method public com.google.accompanist.adaptive.SplitResult calculateSplitResult(androidx.compose.ui.unit.Density density, androidx.compose.ui.unit.LayoutDirection layoutDirection, androidx.compose.ui.layout.LayoutCoordinates layoutCoordinates);
+  }
+
+}
+
