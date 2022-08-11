@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
 
 @RunWith(AndroidJUnit4::class)
-class FlowTest : LayoutTest() {
+class FlowLayoutTest : LayoutTest() {
     @Test
     fun testFlowRow() {
         val numberOfSquares = 15

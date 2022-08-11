@@ -381,10 +381,12 @@ internal fun Pager(
 
     // We only consume nested flings in the main-axis, allowing cross-axis flings to propagate
     // as normal
-    val consumeFlingNestedScrollConnection = ConsumeFlingNestedScrollConnection(
-        consumeHorizontal = !isVertical,
-        consumeVertical = isVertical,
-    )
+    val consumeFlingNestedScrollConnection = remember(isVertical) {
+        ConsumeFlingNestedScrollConnection(
+            consumeHorizontal = !isVertical,
+            consumeVertical = isVertical,
+        )
+    }
 
     if (isVertical) {
         LazyColumn(

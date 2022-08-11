@@ -12,9 +12,9 @@ In your layouts you can update the system bar colors like so:
 ``` kotlin
 // Remember a SystemUiController
 val systemUiController = rememberSystemUiController()
-val useDarkIcons = MaterialTheme.colors.isLight
+val useDarkIcons = !isSystemInDarkTheme()
 
-SideEffect {
+DisposableEffect(systemUiController, useDarkIcons) {
     // Update all of the system bar colors to be transparent, and use
     // dark icons if we're in light theme
     systemUiController.setSystemBarsColor(
@@ -23,6 +23,8 @@ SideEffect {
     )
 
     // setStatusBarColor() and setNavigationBarColor() also exist
+
+    onDispose {}
 }
 ```
 

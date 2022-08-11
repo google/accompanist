@@ -15,7 +15,7 @@
  */
 
 plugins {
-    id 'com.gradle.enterprise' version '3.10.1'
+    id 'com.gradle.enterprise' version '3.10.3'
 }
 
 gradleEnterprise {
@@ -25,6 +25,7 @@ gradleEnterprise {
     }
 }
 
+include ':adaptive'
 include ':internal-testutils'
 include ':insets'
 include ':insets-ui'
@@ -43,8 +44,3 @@ include ':systemuicontroller'
 include ':swiperefresh'
 include ':sample'
 include ':web'
-
-// Enable Gradle's version catalog support
-// https://docs.gradle.org/current/userguide/platforms.html
-enableFeaturePreview("VERSION_CATALOGS")
-

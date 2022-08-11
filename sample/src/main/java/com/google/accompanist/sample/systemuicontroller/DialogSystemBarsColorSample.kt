@@ -17,7 +17,7 @@
 package com.google.accompanist.sample.systemuicontroller
 
 import android.os.Bundle
-import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -32,12 +32,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Checkbox
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -55,6 +58,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogWindowProvider
@@ -86,9 +90,11 @@ class DialogSystemBarsColorSample : ComponentActivity() {
                     val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
                     // Setup the dialog to go edge-to-edge
                     SideEffect {
-                        window.setLayout(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.MATCH_PARENT
+                        // Use SOFT_INPUT_ADJUST_RESIZE for API compatibility with IME insets
+                        // See https://issuetracker.google.com/issues/176400965
+                        @Suppress("DEPRECATION")
+                        dialogWindowProvider.window.setSoftInputMode(
+                            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
                         )
                         WindowCompat.setDecorFitsSystemWindows(
                             dialogWindowProvider.window,
@@ -171,7 +177,7 @@ private fun Sample(parentSystemUiController: SystemUiController) {
         Column(
             Modifier
                 .fillMaxSize()
-                .systemBarsPadding()
+                .safeDrawingPadding()
         ) {
             TopAppBar(
                 title = { Text(stringResource(R.string.system_ui_controller_title_color_dialog)) },
@@ -179,10 +185,13 @@ private fun Sample(parentSystemUiController: SystemUiController) {
                 elevation = 0.dp,
             )
             Spacer(modifier = Modifier.weight(1f))
+            var text by remember { mutableStateOf(TextFieldValue("Test for IME support")) }
+            TextField(value = text, onValueChange = { text = it })
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
                     .background(MaterialTheme.colors.surface.copy(alpha = 0.5f))
                     .padding(vertical = 16.dp),
             ) {

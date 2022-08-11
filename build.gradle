@@ -36,7 +36,7 @@ buildscript {
 }
 
 plugins {
-    id "com.diffplug.spotless" version "5.9.0"
+    id "com.diffplug.spotless" version "6.5.2"
 }
 
 apply plugin: 'org.jetbrains.dokka'
@@ -86,6 +86,7 @@ allprojects {
 
 subprojects {
     apply plugin: 'com.diffplug.spotless'
+
     spotless {
         kotlin {
             target "**/*.kt"
@@ -116,13 +117,6 @@ subprojects {
                     && details.requested.module.name == 'guava'
                     && details.requested.version.contains('jre')) {
                 details.useVersion details.requested.version.replace('jre', 'android')
-            }
-
-            // FIXME: The AndroidX snapshots are currently in a weird state where they depend
-            //  on 1.0.1 which isn't yet public. Remove this once 1.0.1 is out.
-            if (details.requested.group.startsWith('androidx.compose')
-                    && details.requested.version == '1.0.1') {
-                details.useVersion libs.versions.compose.get()
             }
         }
     }

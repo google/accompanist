@@ -36,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.viewinterop.AndroidView
@@ -293,7 +294,7 @@ class WebViewState(webContent: WebContent) {
     /**
      *  The content being loaded by the WebView
      */
-    var content by mutableStateOf<WebContent>(webContent)
+    var content: WebContent by mutableStateOf(webContent)
 
     /**
      * Whether the WebView is currently [LoadingState.Loading] data in its main frame (along with
@@ -325,7 +326,7 @@ class WebViewState(webContent: WebContent) {
      * Errors could be from any resource (iframe, image, etc.), not just for the main page.
      * For more fine grained control use the OnError callback of the WebView.
      */
-    val errorsForCurrentRequest = mutableStateListOf<WebViewError>()
+    val errorsForCurrentRequest: SnapshotStateList<WebViewError> = mutableStateListOf()
 }
 
 /**
@@ -401,7 +402,7 @@ class WebViewNavigator(private val coroutineScope: CoroutineScope) {
 @Composable
 fun rememberWebViewNavigator(
     coroutineScope: CoroutineScope = rememberCoroutineScope()
-) = remember(coroutineScope) { WebViewNavigator(coroutineScope) }
+): WebViewNavigator = remember(coroutineScope) { WebViewNavigator(coroutineScope) }
 
 /**
  * A wrapper class to hold errors from the WebView.
@@ -426,7 +427,7 @@ data class WebViewError(
  *                              Note that these headers are used for all subsequent requests of the WebView.
  */
 @Composable
-fun rememberWebViewState(url: String, additionalHttpHeaders: Map<String, String> = emptyMap()) =
+fun rememberWebViewState(url: String, additionalHttpHeaders: Map<String, String> = emptyMap()): WebViewState =
     // Rather than using .apply {} here we will recreate the state, this prevents
     // a recomposition loop when the webview updates the url itself.
     remember(url, additionalHttpHeaders) {
@@ -444,7 +445,7 @@ fun rememberWebViewState(url: String, additionalHttpHeaders: Map<String, String>
  * @param data The uri to load in the WebView
  */
 @Composable
-fun rememberWebViewStateWithHTMLData(data: String, baseUrl: String? = null) =
+fun rememberWebViewStateWithHTMLData(data: String, baseUrl: String? = null): WebViewState =
     remember(data, baseUrl) {
         WebViewState(WebContent.Data(data, baseUrl))
     }
