@@ -82,7 +82,7 @@ jobs:
       # Allow tests to continue on other devices if they fail on one device.
       fail-fast: false
       matrix:
-        api-level: [ 22, 26, 28, 29 ]
+        api-level: [ 22, 26, 29, 31, 32 ]
         shard: [ 0, 1 ] # Need to update shard-count below if this changes
 
     env:
@@ -133,6 +133,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
+          arch: x86_64
           target: ${{ steps.determine-target.outputs.TARGET }}
           profile: Galaxy Nexus
           script: ./scripts/run-tests.sh --log-file=logcat.txt --run-affected --affected-base-ref=$BASE_REF --shard-index=${{ matrix.shard }} --shard-count=2
