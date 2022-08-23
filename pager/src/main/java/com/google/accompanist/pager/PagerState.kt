@@ -338,7 +338,7 @@ class PagerState(
     }
 
     private fun requireCurrentPageOffset(value: Float, name: String) {
-        require(value in -1f..1f) { "$name must be >= 0 and <= 1" }
+        require(value in -1f..1f) { "$name must be >= -1 and <= 1" }
     }
 
     companion object {
