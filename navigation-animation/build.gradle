@@ -75,6 +75,7 @@ dependencies {
     implementation libs.compose.animation.animation
     implementation libs.compose.foundation.foundation
     implementation libs.compose.material.material
+    implementation libs.kotlin.coroutines.android
 
     // ======================
     // Test dependencies

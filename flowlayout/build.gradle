@@ -84,6 +84,7 @@ android {
 dependencies {
     implementation libs.compose.foundation.foundation
     implementation libs.compose.ui.util
+    implementation libs.kotlin.coroutines.android
 
     // ======================
     // Test dependencies

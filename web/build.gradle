@@ -86,6 +86,7 @@ dependencies {
     implementation libs.compose.material.material
     implementation libs.compose.ui.util
     implementation libs.androidx.activity.compose
+    implementation libs.kotlin.coroutines.android
 
     // ======================
     // Test dependencies
