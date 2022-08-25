@@ -36,9 +36,11 @@ import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.google.accompanist.permissions.test.PermissionsTestActivity
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
+@Ignore
 @OptIn(ExperimentalPermissionsApi::class)
 @FlakyTest(detail = "https://github.com/google/accompanist/issues/490")
 @SdkSuppress(minSdkVersion = 23)
