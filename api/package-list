@@ -1,6 +1,8 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
 
+module:adaptive
+com.google.accompanist.adaptive
 module:appcompat-theme
 com.google.accompanist.appcompattheme
 module:drawablepainter
