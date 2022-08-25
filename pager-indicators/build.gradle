@@ -85,6 +85,8 @@ dependencies {
     api project(':pager')
     api libs.compose.material.material
 
+    implementation libs.kotlin.coroutines.android
+
     // ======================
     // Test dependencies
     // ======================

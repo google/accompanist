@@ -86,6 +86,7 @@ dependencies {
     api libs.snapper
 
     implementation libs.napier
+    implementation libs.kotlin.coroutines.android
 
     // ======================
     // Test dependencies

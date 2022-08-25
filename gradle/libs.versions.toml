@@ -1,16 +1,16 @@
 [versions]
 
-compose = "1.3.0-alpha03"
+compose = "1.3.0-beta01"
 composeCompiler = "1.3.0"
 composesnapshot = "-" # a single character = no snapshot
 
 # gradlePlugin and lint need to be updated together
-gradlePlugin = "7.3.0-beta05"
+gradlePlugin = "7.3.0-rc01"
 lintMinCompose = "30.0.0"
 
 ktlint = "0.45.2"
 kotlin = "1.7.10"
-coroutines = "1.6.0"
+coroutines = "1.6.4"
 okhttp = "3.12.13"
 coil = "1.3.2"
 
@@ -72,15 +72,15 @@ androidx-navigation-testing = { module = "androidx.navigation:navigation-testing
 
 napier = "io.github.aakira:napier:1.4.1"
 
-androidx-test-core = { module = "androidx.test:core-ktx", version.ref = "androidxtest" }
-androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidxtest" }
+androidx-test-core = "androidx.test:core-ktx:1.5.0-alpha02"
+androidx-test-runner = "androidx.test:runner:1.5.0-alpha04"
 androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidxtest" }
-androidx-test-orchestrator = { module = "androidx.test:orchestrator", version.ref = "androidxtest" }
+androidx-test-orchestrator = "androidx.test:orchestrator:1.4.1"
 androidx-test-uiAutomator = "androidx.test.uiautomator:uiautomator:2.2.0"
 
 # alpha for robolectric x compose fix
-androidx-test-espressoCore = "androidx.test.espresso:espresso-core:3.5.0-alpha06"
-androidx-test-espressoWeb = "androidx.test.espresso:espresso-web:3.5.0-alpha06"
+androidx-test-espressoCore = "androidx.test.espresso:espresso-core:3.5.0-alpha07"
+androidx-test-espressoWeb = "androidx.test.espresso:espresso-web:3.5.0-alpha07"
 
 junit = "junit:junit:4.13.2"
 truth = "com.google.truth:truth:1.1.2"

@@ -87,6 +87,7 @@ dependencies {
     api libs.androidx.window
 
     implementation libs.napier
+    implementation libs.kotlin.coroutines.android
 
     // ======================
     // Test dependencies

@@ -65,6 +65,7 @@ android {
 
 dependencies {
     implementation libs.compose.ui.ui
+    implementation libs.kotlin.coroutines.android
 }
 
 apply plugin: "com.vanniktech.maven.publish"
