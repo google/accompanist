@@ -89,7 +89,7 @@ jobs:
       TERM: dumb
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           # Fetch expanded history, which is needed for affected module detection
           fetch-depth: '500'
@@ -108,7 +108,7 @@ jobs:
       - name: Generate cache key
         run: ./checksum.sh checksum.txt
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: |
             ~/.gradle/caches/modules-*
