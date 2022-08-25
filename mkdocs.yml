@@ -52,6 +52,9 @@ nav:
   - 'WebView':
       - 'Guide': webview.md
       - 'API': api/web/
+  - 'Adaptive':
+      - 'Guide': adaptive.md
+      - 'API': api/adaptive
   - 'Snapshots': using-snapshot-version.md
   - 'Contributing': contributing.md
   - 'Maintainers':
