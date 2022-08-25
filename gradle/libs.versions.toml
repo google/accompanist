@@ -72,15 +72,15 @@ androidx-navigation-testing = { module = "androidx.navigation:navigation-testing
 
 napier = "io.github.aakira:napier:1.4.1"
 
-androidx-test-core = { module = "androidx.test:core-ktx", version.ref = "androidxtest" }
-androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidxtest" }
+androidx-test-core = "androidx.test:core-ktx:1.5.0-alpha02"
+androidx-test-runner = "androidx.test:runner:1.5.0-alpha04"
 androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidxtest" }
 androidx-test-orchestrator = "androidx.test:orchestrator:1.4.1"
 androidx-test-uiAutomator = "androidx.test.uiautomator:uiautomator:2.2.0"
 
 # alpha for robolectric x compose fix
-androidx-test-espressoCore = "androidx.test.espresso:espresso-core:3.5.0-alpha06"
-androidx-test-espressoWeb = "androidx.test.espresso:espresso-web:3.5.0-alpha06"
+androidx-test-espressoCore = "androidx.test.espresso:espresso-core:3.5.0-alpha07"
+androidx-test-espressoWeb = "androidx.test.espresso:espresso-web:3.5.0-alpha07"
 
 junit = "junit:junit:4.13.2"
 truth = "com.google.truth:truth:1.1.2"
