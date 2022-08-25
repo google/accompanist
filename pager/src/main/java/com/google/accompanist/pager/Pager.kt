@@ -44,7 +44,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
@@ -53,7 +52,6 @@ import dev.chrisbanes.snapper.SnapperFlingBehavior
 import dev.chrisbanes.snapper.SnapperFlingBehaviorDefaults
 import dev.chrisbanes.snapper.SnapperLayoutInfo
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
@@ -73,18 +71,6 @@ annotation class ExperimentalPagerApi
 @ExperimentalPagerApi
 object PagerDefaults {
     /**
-     * The default implementation for the `maximumFlingDistance` parameter of
-     * [flingBehavior] which limits the fling distance to a single page.
-     */
-    @ExperimentalSnapperApi
-    @Suppress("MemberVisibilityCanBePrivate")
-    @Deprecated("MaximumFlingDistance has been deprecated in Snapper")
-    val singlePageFlingDistance: (SnapperLayoutInfo) -> Float = { layoutInfo ->
-        // We can scroll up to the scrollable size of the lazy layout
-        layoutInfo.endScrollOffset - layoutInfo.startScrollOffset.toFloat()
-    }
-
-    /**
      * The default implementation for the `snapIndex` parameter of
      * [flingBehavior] which limits the fling distance to a single page.
      */
@@ -99,48 +85,9 @@ object PagerDefaults {
     /**
      * Remember the default [FlingBehavior] that represents the scroll curve.
      *
-     * Please remember to provide the correct [endContentPadding] if supplying your own
-     * [FlingBehavior] to [VerticalPager] or [HorizontalPager]. See those functions for how they
-     * calculate the value.
-     *
      * @param state The [PagerState] to update.
      * @param decayAnimationSpec The decay animation spec to use for decayed flings.
      * @param snapAnimationSpec The animation spec to use when snapping.
-     * @param maximumFlingDistance Block which returns the maximum fling distance in pixels.
-     * @param endContentPadding The amount of content padding on the end edge of the lazy list
-     * in pixels (end/bottom depending on the scrolling direction).
-     */
-    @Composable
-    @ExperimentalSnapperApi
-    @Deprecated("MaximumFlingDistance has been deprecated in Snapper, replaced with snapIndex")
-    @Suppress("DEPRECATION")
-    fun flingBehavior(
-        state: PagerState,
-        decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
-        snapAnimationSpec: AnimationSpec<Float> = SnapperFlingBehaviorDefaults.SpringAnimationSpec,
-        maximumFlingDistance: (SnapperLayoutInfo) -> Float = singlePageFlingDistance,
-        endContentPadding: Dp = 0.dp,
-    ): FlingBehavior = rememberSnapperFlingBehavior(
-        lazyListState = state.lazyListState,
-        snapOffsetForItem = SnapOffsets.Start, // pages are full width, so we use the simplest
-        decayAnimationSpec = decayAnimationSpec,
-        springAnimationSpec = snapAnimationSpec,
-        maximumFlingDistance = maximumFlingDistance,
-        endContentPadding = endContentPadding,
-    )
-
-    /**
-     * Remember the default [FlingBehavior] that represents the scroll curve.
-     *
-     * Please remember to provide the correct [endContentPadding] if supplying your own
-     * [FlingBehavior] to [VerticalPager] or [HorizontalPager]. See those functions for how they
-     * calculate the value.
-     *
-     * @param state The [PagerState] to update.
-     * @param decayAnimationSpec The decay animation spec to use for decayed flings.
-     * @param snapAnimationSpec The animation spec to use when snapping.
-     * @param endContentPadding The amount of content padding on the end edge of the lazy list
-     * in pixels (end/bottom depending on the scrolling direction).
      * @param snapIndex Block which returns the index to snap to. The block is provided with the
      * [SnapperLayoutInfo], the index where the fling started, and the index which Snapper has
      * determined is the correct target index. Callers can override this value to any valid index
@@ -153,50 +100,35 @@ object PagerDefaults {
         state: PagerState,
         decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
         snapAnimationSpec: AnimationSpec<Float> = SnapperFlingBehaviorDefaults.SpringAnimationSpec,
-        endContentPadding: Dp = 0.dp,
-        snapIndex: (SnapperLayoutInfo, startIndex: Int, targetIndex: Int) -> Int,
+        snapIndex: (SnapperLayoutInfo, startIndex: Int, targetIndex: Int) -> Int = singlePageSnapIndex,
     ): FlingBehavior = rememberSnapperFlingBehavior(
         lazyListState = state.lazyListState,
         snapOffsetForItem = SnapOffsets.Start, // pages are full width, so we use the simplest
         decayAnimationSpec = decayAnimationSpec,
         springAnimationSpec = snapAnimationSpec,
-        endContentPadding = endContentPadding,
         snapIndex = snapIndex,
     )
 
-    /**
-     * Remember the default [FlingBehavior] that represents the scroll curve.
-     *
-     * Please remember to provide the correct [endContentPadding] if supplying your own
-     * [FlingBehavior] to [VerticalPager] or [HorizontalPager]. See those functions for how they
-     * calculate the value.
-     *
-     * @param state The [PagerState] to update.
-     * @param decayAnimationSpec The decay animation spec to use for decayed flings.
-     * @param snapAnimationSpec The animation spec to use when snapping.
-     * @param endContentPadding The amount of content padding on the end edge of the lazy list
-     * in pixels (end/bottom depending on the scrolling direction).
-     */
+    @Deprecated(
+        message = "No longer necessary to pass in endContentPadding",
+        replaceWith = ReplaceWith(
+            expression = "PagerDefaults.flingBehavior(state, decayAnimationSpec,snapAnimationSpec, snapIndex)"
+        )
+    )
     @Composable
     @ExperimentalSnapperApi
     fun flingBehavior(
         state: PagerState,
         decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
         snapAnimationSpec: AnimationSpec<Float> = SnapperFlingBehaviorDefaults.SpringAnimationSpec,
-        endContentPadding: Dp = 0.dp,
-    ): FlingBehavior {
-        // You might be wondering this is function exists rather than a default value for snapIndex
-        // above. It was done to remove overload ambiguity with the maximumFlingDistance overload
-        // below. When that function is removed, we also remove this function and move to a default
-        // param value.
-        return flingBehavior(
-            state = state,
-            decayAnimationSpec = decayAnimationSpec,
-            snapAnimationSpec = snapAnimationSpec,
-            endContentPadding = endContentPadding,
-            snapIndex = singlePageSnapIndex,
-        )
-    }
+        @Suppress("UNUSED_PARAMETER") endContentPadding: Dp = 0.dp,
+        snapIndex: (SnapperLayoutInfo, startIndex: Int, targetIndex: Int) -> Int = singlePageSnapIndex,
+    ): FlingBehavior = flingBehavior(
+        state = state,
+        decayAnimationSpec = decayAnimationSpec,
+        snapAnimationSpec = snapAnimationSpec,
+        snapIndex = snapIndex
+    )
 }
 
 /**
@@ -231,10 +163,7 @@ fun HorizontalPager(
     itemSpacing: Dp = 0.dp,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
-    flingBehavior: FlingBehavior = PagerDefaults.flingBehavior(
-        state = state,
-        endContentPadding = contentPadding.calculateEndPadding(LayoutDirection.Ltr),
-    ),
+    flingBehavior: FlingBehavior = PagerDefaults.flingBehavior(state),
     key: ((page: Int) -> Any)? = null,
     userScrollEnabled: Boolean = true,
     content: @Composable PagerScope.(page: Int) -> Unit,
@@ -287,10 +216,7 @@ fun VerticalPager(
     itemSpacing: Dp = 0.dp,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
-    flingBehavior: FlingBehavior = PagerDefaults.flingBehavior(
-        state = state,
-        endContentPadding = contentPadding.calculateBottomPadding(),
-    ),
+    flingBehavior: FlingBehavior = PagerDefaults.flingBehavior(state),
     key: ((page: Int) -> Any)? = null,
     userScrollEnabled: Boolean = true,
     content: @Composable PagerScope.(page: Int) -> Unit,
