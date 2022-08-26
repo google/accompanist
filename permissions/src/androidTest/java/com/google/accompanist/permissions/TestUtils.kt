@@ -84,7 +84,7 @@ internal fun denyPermissionInDialog(
         else -> "Don’t allow"
     }
     val permissionButton = UiDevice.getInstance(instrumentation).findPermissionButton(text)
-    assert(permissionButton.clickForPermission(instrumentation)) { "Could not deny permission" }
+    permissionButton.clickForPermission(instrumentation)
 }
 
 internal fun doNotAskAgainPermissionInDialog(
