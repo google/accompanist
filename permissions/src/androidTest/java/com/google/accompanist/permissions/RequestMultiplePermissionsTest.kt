@@ -30,11 +30,9 @@ import androidx.compose.ui.test.performClick
 import androidx.test.filters.SdkSuppress
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
-@Ignore
 @OptIn(ExperimentalPermissionsApi::class)
 @SdkSuppress(minSdkVersion = 23)
 class RequestMultiplePermissionsTest {

@@ -21,14 +21,12 @@ import androidx.test.filters.SdkSuppress
 import androidx.test.rule.GrantPermissionRule
 import com.google.accompanist.permissions.test.EmptyPermissionsTestActivity
 import com.google.common.truth.Truth.assertThat
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
 /**
  * Simple tests that prove the data comes from the right place
  */
-@Ignore
 @OptIn(ExperimentalPermissionsApi::class)
 @SdkSuppress(minSdkVersion = 23)
 class PermissionStateTest {
