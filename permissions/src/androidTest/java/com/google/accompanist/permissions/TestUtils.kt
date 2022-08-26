@@ -78,12 +78,13 @@ internal fun grantPermissionInDialog(
 internal fun denyPermissionInDialog(
     instrumentation: Instrumentation = InstrumentationRegistry.getInstrumentation()
 ) {
-    UiDevice.getInstance(instrumentation).findPermissionButton(
-        when (Build.VERSION.SDK_INT) {
-            in 24..28 -> "DENY"
-            else -> "Deny"
-        }
-    ).clickForPermission(instrumentation)
+    val text = when (Build.VERSION.SDK_INT) {
+        in 24..28 -> "DENY"
+        in 29..30 -> "Deny"
+        else -> "Don’t allow"
+    }
+    val permissionButton = UiDevice.getInstance(instrumentation).findPermissionButton(text)
+    assert(permissionButton.clickForPermission(instrumentation)) { "Could not deny permission" }
 }
 
 internal fun doNotAskAgainPermissionInDialog(
@@ -91,7 +92,7 @@ internal fun doNotAskAgainPermissionInDialog(
 ) {
     val uiDevice = UiDevice.getInstance(instrumentation)
     when {
-        Build.VERSION.SDK_INT == 30 -> {
+        Build.VERSION.SDK_INT >= 30 -> {
             denyPermissionInDialog(instrumentation)
         }
         Build.VERSION.SDK_INT > 28 -> {
