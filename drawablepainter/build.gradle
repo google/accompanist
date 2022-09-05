@@ -66,6 +66,32 @@ android {
 dependencies {
     implementation libs.compose.ui.ui
     implementation libs.kotlin.coroutines.android
+
+    // ======================
+    // Test dependencies
+    // ======================
+
+    androidTestImplementation libs.compose.foundation.foundation
+
+    androidTestImplementation project(':internal-testutils')
+    testImplementation project(':internal-testutils')
+
+    androidTestImplementation libs.junit
+    testImplementation libs.junit
+
+    androidTestImplementation libs.truth
+    testImplementation libs.truth
+
+    androidTestImplementation libs.compose.ui.test.junit4
+    testImplementation libs.compose.ui.test.junit4
+
+    androidTestImplementation libs.compose.ui.test.manifest
+    testImplementation libs.compose.ui.test.manifest
+
+    androidTestImplementation libs.androidx.test.runner
+    testImplementation libs.androidx.test.runner
+
+    testImplementation libs.robolectric
 }
 
 apply plugin: "com.vanniktech.maven.publish"

@@ -130,8 +130,10 @@ class DrawablePainter(
             // Reading this ensures that we invalidate when invalidateDrawable() is called
             drawInvalidateTick
 
-            // Update the Drawable's bounds
-            drawable.setBounds(0, 0, size.width.roundToInt(), size.height.roundToInt())
+            // Update the Drawable's bounds if necessary
+            if (drawable.bounds.isEmpty) {
+                drawable.setBounds(0, 0, size.width.roundToInt(), size.height.roundToInt())
+            }
 
             canvas.withSave {
                 drawable.draw(canvas.nativeCanvas)
