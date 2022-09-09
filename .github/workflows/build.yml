@@ -82,7 +82,7 @@ jobs:
       # Allow tests to continue on other devices if they fail on one device.
       fail-fast: false
       matrix:
-        api-level: [ 22, 26, 29, 31, 32 ]
+        api-level: [ 22, 26, 29, 31 ]
         shard: [ 0, 1 ] # Need to update shard-count below if this changes
 
     env:
@@ -128,12 +128,21 @@ jobs:
             TARGET="google_apis"
           fi
           echo "::set-output name=TARGET::$TARGET"
-
+      - name: Determine emulator arch
+        id: determine-arch
+        env: 
+          API_LEVEL: ${{ matrix.api-level }}
+        run: |
+          ARCH="x86"
+          if [ "$API_LEVEL" -ge "31" ]; then
+            ARCH="x86_64"
+          fi
+          echo "::set-output name=ARCH::$ARCH"
       - name: Run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          arch: x86_64
+          arch: ${{ steps.determine-arch.outputs.ARCH }}
           target: ${{ steps.determine-target.outputs.TARGET }}
           profile: Galaxy Nexus
           script: ./scripts/run-tests.sh --log-file=logcat.txt --run-affected --affected-base-ref=$BASE_REF --shard-index=${{ matrix.shard }} --shard-count=2
