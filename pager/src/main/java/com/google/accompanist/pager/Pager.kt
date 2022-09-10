@@ -385,6 +385,7 @@ internal fun Pager(
         ConsumeFlingNestedScrollConnection(
             consumeHorizontal = !isVertical,
             consumeVertical = isVertical,
+            pagerState = state,
         )
     }
 
@@ -449,9 +450,11 @@ internal fun Pager(
     }
 }
 
+@OptIn(ExperimentalPagerApi::class)
 private class ConsumeFlingNestedScrollConnection(
     private val consumeHorizontal: Boolean,
     private val consumeVertical: Boolean,
+    private val pagerState: PagerState,
 ) : NestedScrollConnection {
     override fun onPostScroll(
         consumed: Offset,
@@ -465,9 +468,15 @@ private class ConsumeFlingNestedScrollConnection(
     }
 
     override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
-        // We can consume all post fling velocity on the main-axis
-        // so that it doesn't propagate up to the Pager
-        return available.consume(consumeHorizontal, consumeVertical)
+        return if (pagerState.currentPageLayoutInfo?.offset != 0) {
+            // The Pager is already scrolling. This means that a nested scroll child was
+            // scrolled to end, and the Pager can use this fling
+            Velocity.Zero
+        } else {
+            // A nested scroll child is still scrolling. We can consume all post fling
+            // velocity on the main-axis so that it doesn't propagate up to the Pager
+            available.consume(consumeHorizontal, consumeVertical)
+        }
     }
 }
 
