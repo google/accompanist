@@ -132,9 +132,7 @@ internal fun TwoPane(
             val splitResult = strategy.calculateSplitResult(
                 density = density,
                 layoutDirection = layoutDirection,
-                layoutCoordinates = checkNotNull(coordinates) {
-                    "TwoPane does not support the use of alignment lines!"
-                }
+                layoutCoordinates = coordinates ?: return@layout
             )
 
             val gapOrientation = splitResult.gapOrientation
