@@ -202,6 +202,8 @@ public fun AnimatedNavHost(
                     finalEnter(this) with finalExit(this)
                 } else {
                     EnterTransition.None with ExitTransition.None
+                }.apply {
+                    targetContentZIndex = navController.backQueue.size.toFloat()
                 }
             },
             contentAlignment,
