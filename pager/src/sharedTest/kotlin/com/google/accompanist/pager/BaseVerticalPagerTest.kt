@@ -65,25 +65,28 @@ abstract class BaseVerticalPagerTest(
     override fun SemanticsNodeInteraction.assertLaidOutItemPosition(
         page: Int,
         currentPage: Int,
-        offset: Float,
+        pageCount: Int,
+        offset: Float
     ): SemanticsNodeInteraction {
         val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
         val expectedItemHeight = rootBounds.height -
             contentPadding.calculateTopPadding() -
             contentPadding.calculateBottomPadding()
+        val expectedItemHeightWithSpacing = expectedItemHeight + itemSpacingDp.dp
         val expectedItemWidth = rootBounds.width
 
         val expectedLeft = (rootBounds.width - expectedItemWidth) / 2
         val expectedFirstItemTop = when (reverseLayout) {
-            true -> (rootBounds.height - contentPadding.calculateBottomPadding() - expectedItemHeight) + (expectedItemHeight * offset)
-            false -> contentPadding.calculateTopPadding() - (expectedItemHeight * offset)
+            true -> (rootBounds.height - contentPadding.calculateBottomPadding() - expectedItemHeight) +
+                (expectedItemHeightWithSpacing * offset)
+            false -> contentPadding.calculateTopPadding() - (expectedItemHeightWithSpacing * offset)
         }
 
         return assertWidthIsEqualTo(expectedItemWidth)
             .assertHeightIsAtLeast(expectedItemHeight)
             .assertLeftPositionInRootIsEqualTo(expectedLeft)
             .run {
-                val pageDelta = ((expectedItemHeight + itemSpacingDp.dp) * (page - currentPage))
+                val pageDelta = (expectedItemHeightWithSpacing * (page - currentPage))
                 if (reverseLayout) {
                     assertTopPositionInRootIsEqualTo(expectedFirstItemTop - pageDelta)
                 } else {
