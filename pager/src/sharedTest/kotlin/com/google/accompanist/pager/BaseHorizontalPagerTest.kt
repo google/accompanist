@@ -75,7 +75,8 @@ abstract class BaseHorizontalPagerTest(
     override fun SemanticsNodeInteraction.assertLaidOutItemPosition(
         page: Int,
         currentPage: Int,
-        offset: Float,
+        pageCount: Int,
+        offset: Float
     ): SemanticsNodeInteraction {
         val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
         val expectedItemSize = (
@@ -83,6 +84,7 @@ abstract class BaseHorizontalPagerTest(
                 contentPadding.calculateLeftPadding(layoutDirection) -
                 contentPadding.calculateRightPadding(layoutDirection)
             ) * itemWidthFraction
+        val expectedItemSizeWithSpacing = expectedItemSize + itemSpacingDp.dp
 
         // The expected coordinates. This uses the implicit fact that VerticalPager by
         // use Alignment.CenterVertically by default, and that we're using items
@@ -94,16 +96,17 @@ abstract class BaseHorizontalPagerTest(
                     expectedItemSize -
                     contentPadding.calculateRightPadding(layoutDirection)
                 ) +
-                (expectedItemSize * offset)
+                (expectedItemSizeWithSpacing * offset)
         } else {
-            contentPadding.calculateLeftPadding(layoutDirection) - (expectedItemSize * offset)
+            contentPadding.calculateLeftPadding(layoutDirection) -
+                (expectedItemSizeWithSpacing * offset)
         }
 
         return assertWidthIsEqualTo(expectedItemSize)
             .assertHeightIsAtLeast(expectedItemSize)
             .assertTopPositionInRootIsEqualTo(expectedTop)
             .run {
-                val pageDelta = ((expectedItemSize + itemSpacingDp.dp) * (page - currentPage))
+                val pageDelta = (expectedItemSizeWithSpacing * (page - currentPage))
                 if (laidOutRtl) {
                     assertLeftPositionInRootIsEqualTo(expectedFirstItemLeft - pageDelta)
                 } else {

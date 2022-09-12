@@ -620,14 +620,14 @@ abstract class PagerTest {
         // Assert that the 'current page' exists and is laid out in the correct position
         composeTestRule.onNodeWithTag(currentPage.toString())
             .assertExists()
-            .assertLaidOutItemPosition(currentPage, currentPage, offset)
+            .assertLaidOutItemPosition(currentPage, currentPage, pageCount, offset)
 
         // Go through all of the pages, and assert the expected layout state (if it exists)
         (0 until pageCount).forEach { page ->
             // If this exists assert that it is laid out in the correct position
             composeTestRule.onNodeWithTag(page.toString()).apply {
                 if (exists && isLaidOut) {
-                    assertLaidOutItemPosition(page, currentPage, offset)
+                    assertLaidOutItemPosition(page, currentPage, pageCount, offset)
                 }
             }
         }
@@ -636,7 +636,8 @@ abstract class PagerTest {
     protected abstract fun SemanticsNodeInteraction.assertLaidOutItemPosition(
         page: Int,
         currentPage: Int,
-        offset: Float,
+        pageCount: Int,
+        offset: Float
     ): SemanticsNodeInteraction
 
     private fun setPagerContent(

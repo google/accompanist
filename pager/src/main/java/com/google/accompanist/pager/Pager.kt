@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -42,7 +41,6 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.Velocity
@@ -53,7 +51,6 @@ import dev.chrisbanes.snapper.SnapperFlingBehavior
 import dev.chrisbanes.snapper.SnapperFlingBehaviorDefaults
 import dev.chrisbanes.snapper.SnapperLayoutInfo
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
@@ -357,24 +354,8 @@ internal fun Pager(
             .collect { state.updateCurrentPageBasedOnLazyListState() }
     }
     val density = LocalDensity.current
-    val layoutDirection = LocalLayoutDirection.current
-    LaunchedEffect(density, contentPadding, isVertical, layoutDirection, reverseLayout, state) {
-        with(density) {
-            // this should be exposed on LazyListLayoutInfo instead. b/200920410
-            state.afterContentPadding = if (isVertical) {
-                if (!reverseLayout) {
-                    contentPadding.calculateBottomPadding()
-                } else {
-                    contentPadding.calculateTopPadding()
-                }
-            } else {
-                if (!reverseLayout) {
-                    contentPadding.calculateEndPadding(layoutDirection)
-                } else {
-                    contentPadding.calculateStartPadding(layoutDirection)
-                }
-            }.roundToPx()
-        }
+    LaunchedEffect(density, state, itemSpacing) {
+        with(density) { state.itemSpacing = itemSpacing.roundToPx() }
     }
 
     val pagerScope = remember(state) { PagerScopeImpl(state) }
