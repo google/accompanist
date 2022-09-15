@@ -212,6 +212,8 @@ object PagerDefaults {
  * @param key the scroll position will be maintained based on the key, which means if you
  * add/remove items before the current visible item the item with the given key will be kept as the
  * first visible one.
+ * @param contentType - the item compositions of the same type could be reused more efficiently.
+ * Note that null is a valid type and items of such type will be considered compatible.
  * @param userScrollEnabled whether the scrolling via the user gestures or accessibility actions
  * is allowed. You can still scroll programmatically using the state even when it is disabled.
  * @param content a block which describes the content. Inside this block you can reference
@@ -233,6 +235,7 @@ fun HorizontalPager(
         endContentPadding = contentPadding.calculateEndPadding(LayoutDirection.Ltr),
     ),
     key: ((page: Int) -> Any)? = null,
+    contentType: (page: Int) -> Any? = { null },
     userScrollEnabled: Boolean = true,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
@@ -246,6 +249,7 @@ fun HorizontalPager(
         verticalAlignment = verticalAlignment,
         flingBehavior = flingBehavior,
         key = key,
+        contentType = contentType,
         contentPadding = contentPadding,
         userScrollEnabled = userScrollEnabled,
         content = content
@@ -268,6 +272,8 @@ fun HorizontalPager(
  * @param key the scroll position will be maintained based on the key, which means if you
  * add/remove items before the current visible item the item with the given key will be kept as the
  * first visible one.
+ * @param contentType - the item compositions of the same type could be reused more efficiently.
+ * Note that null is a valid type and items of such type will be considered compatible.
  * @param userScrollEnabled whether the scrolling via the user gestures or accessibility actions
  * is allowed. You can still scroll programmatically using the state even when it is disabled.
  * @param content a block which describes the content. Inside this block you can reference
@@ -289,6 +295,7 @@ fun VerticalPager(
         endContentPadding = contentPadding.calculateBottomPadding(),
     ),
     key: ((page: Int) -> Any)? = null,
+    contentType: (page: Int) -> Any? = { null },
     userScrollEnabled: Boolean = true,
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
@@ -302,6 +309,7 @@ fun VerticalPager(
         horizontalAlignment = horizontalAlignment,
         flingBehavior = flingBehavior,
         key = key,
+        contentType = contentType,
         contentPadding = contentPadding,
         userScrollEnabled = userScrollEnabled,
         content = content
@@ -319,6 +327,7 @@ internal fun Pager(
     isVertical: Boolean,
     flingBehavior: FlingBehavior,
     key: ((page: Int) -> Any)?,
+    contentType: (page: Int) -> Any?,
     contentPadding: PaddingValues,
     userScrollEnabled: Boolean,
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
@@ -383,6 +392,7 @@ internal fun Pager(
             items(
                 count = count,
                 key = key,
+                contentType = contentType,
             ) { page ->
                 Box(
                     Modifier
@@ -412,6 +422,7 @@ internal fun Pager(
             items(
                 count = count,
                 key = key,
+                contentType = contentType,
             ) { page ->
                 Box(
                     Modifier
