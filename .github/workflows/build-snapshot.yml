@@ -84,7 +84,7 @@ jobs:
       # Allow tests to continue on other devices if they fail on one device.
       fail-fast: false
       matrix:
-        api-level: [ 22, 26, 29, 31, 32 ]
+        api-level: [ 22, 26 ]
         shard: [ 0, 1 ] # Need to update shard-count below if this changes
 
     env:
@@ -147,14 +147,86 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: logs-${{ matrix.api-level }}-${{ steps.determine-target.outputs.TARGET }}-${{ matrix.shard }}
+          name: logs-aer-${{ matrix.api-level }}-${{ steps.determine-target.outputs.TARGET }}-${{ matrix.shard }}
           path: logcat.txt
 
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: test-results-${{ matrix.api-level }}-${{ steps.determine-target.outputs.TARGET }}-${{ matrix.shard }}
+          name: test-aer-results-${{ matrix.api-level }}-${{ steps.determine-target.outputs.TARGET }}-${{ matrix.shard }}
+          path: |
+            **/build/reports/*
+            **/build/outputs/*/connected/*
+
+  test-gmd:
+    runs-on: macos-latest
+    needs: build
+    timeout-minutes: 50
+
+    strategy:
+      # Allow tests to continue on other devices if they fail on one device.
+      fail-fast: false
+      matrix:
+        api-level: [ 29, 31, 32 ]
+        shard: [ 0, 1 ] # Need to update shard-count below if this changes
+
+    env:
+      TERM: dumb
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          # Fetch expanded history, which is needed for affected module detection
+          fetch-depth: '500'
+
+      - name: Copy CI gradle.properties
+        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+      - name: set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Decrypt secrets
+        run: release/signing-setup.sh ${{ secrets.ENCRYPT_KEY }}
+
+      - name: Generate cache key
+        run: ./checksum.sh checksum.txt
+
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches/modules-*
+            ~/.gradle/caches/jars-*
+            ~/.gradle/caches/build-cache-*
+          key: gradle-${{ hashFiles('checksum.txt') }}
+
+      - name: Accept licenses
+        run: |
+          echo -e "\n24333f8a63b6825ea9c5514f83c2829b004d1fee" > "$ANDROID_SDK_ROOT/licenses/android-sdk-license"
+          echo -e "\n859f317696f67ef3d7f30a50a5560e7834b43903" > "$ANDROID_SDK_ROOT/licenses/android-sdk-arm-dbt-license"
+          echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_SDK_ROOT/licenses/android-sdk-preview-license"
+
+      - name: Run tests
+        run: ./scripts/run-tests.sh --log-file=logcat.txt --gmd-api=${{ matrix.api-level }} --run-affected --affected-base-ref=$BASE_REF --shard-index=${{ matrix.shard }} --shard-count=2
+
+      - name: Clean secrets
+        if: always()
+        run: release/signing-cleanup.sh
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: logs-gmd-${{ matrix.api-level }}-${{ matrix.shard }}
+          path: logcat.txt
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-gmd-results-${{ matrix.api-level }}-${{ matrix.shard }}
           path: |
             **/build/reports/*
             **/build/outputs/*/connected/*
@@ -163,7 +235,7 @@ jobs:
     if: github.event_name == 'push' # only deploy for pushed commits (not PRs)
 
     runs-on: ubuntu-latest
-    needs: [ build, test ]
+    needs: [ build, test-aer, test-gmd ]
     timeout-minutes: 30
     env:
       TERM: dumb

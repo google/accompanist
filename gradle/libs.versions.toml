@@ -90,7 +90,7 @@ junit = "junit:junit:4.13.2"
 truth = "com.google.truth:truth:1.1.2"
 robolectric = "org.robolectric:robolectric:4.9"
 
-affectedmoduledetector = "com.dropbox.affectedmoduledetector:affectedmoduledetector:0.1.2"
+affectedmoduledetector = "com.dropbox.affectedmoduledetector:affectedmoduledetector:0.1.6"
 
 android-tools-build-gradle = { module = "com.android.tools.build:gradle", version.ref = "gradlePlugin" }
 android-tools-lint-lint = { module = "com.android.tools.lint:lint", version.ref = "lintMinCompose" }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import com.dropbox.affectedmoduledetector.AffectedModuleConfiguration
 
 buildscript {
     repositories {
@@ -58,6 +59,13 @@ affectedModuleDetector {
 
     logFilename = "output.log"
     logFolder = "${rootProject.buildDir}/affectedModuleDetector"
+    customTasks = [28, 29, 31, 32].collect { api ->
+        new AffectedModuleConfiguration.CustomTask(
+                "runAffectedApi${api}AndroidTests",
+                "api${api}DebugAndroidTest",
+                "Run API ${api} GMD Android tests by Impact"
+        )
+    }
 
     String baseRef = findProperty("affected_base_ref")
     // If we have a base ref to diff against, extract the branch name and use it

@@ -44,6 +44,10 @@ for i in "$@"; do
     LOG_FILE="${i#*=}"
     shift
     ;;
+  --gmd-api=*)
+    GMD_API="${i#*=}"
+    shift
+    ;;
   --run-affected)
     RUN_AFFECTED=true
     shift
@@ -77,7 +81,11 @@ fi
 # If we're set to only run affected test, update the Gradle task
 if [[ ! -z "$RUN_AFFECTED" ]]; then
   if [ "$DEVICE" = true ]; then
-    TASK="runAffectedAndroidTests"
+    if [ ! -z "$GMD_API" ]; then
+      TASK="runAffectedApi${GMD_API}AndroidTests"
+    else
+      TASK="runAffectedAndroidTests"
+    fi
   else
     TASK="runAffectedUnitTests"
   fi
@@ -92,10 +100,20 @@ fi
 # If we don't have a task yet, use the defaults
 if [[ -z "$TASK" ]]; then
   if [ "$DEVICE" = true ]; then
-    TASK="connectedCheck"
+    if [ ! -z "$GMD_API" ]; then
+      TASK="api${GMD_API}DebugAndroidTest"
+    else
+      TASK="connectedCheck"
+    fi
   else
     TASK="testDebug"
   fi
+fi
+
+# Add Gradle Managed Devices specific properties for CI
+# TODO: Remove --no-parallel and -Dorg.gradle.workers.max=2 when GMD handles parallelization better
+if [[ ! -z "$GMD_API" ]]; then
+  TASK="$TASK -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect --no-parallel -Dorg.gradle.workers.max=2"
 fi
 
 SHARD_OPTS=""

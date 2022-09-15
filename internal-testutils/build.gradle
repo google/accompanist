@@ -58,6 +58,11 @@ android {
     }
 }
 
+// TODO: Workaround https://github.com/dropbox/AffectedModuleDetector/issues/159
+[28, 29, 31, 32].collect { api ->
+    tasks.register("api${api}DebugAndroidTest")
+}
+
 dependencies {
     implementation libs.kotlin.stdlib
     implementation libs.kotlin.coroutines.android
