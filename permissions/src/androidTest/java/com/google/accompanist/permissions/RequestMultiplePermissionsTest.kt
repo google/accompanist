@@ -33,7 +33,7 @@ import org.junit.Rule
 import org.junit.Test
 
 @OptIn(ExperimentalPermissionsApi::class)
-@SdkSuppress(minSdkVersion = 23)
+@SdkSuppress(minSdkVersion = 27) // Flaky on 26
 class RequestMultiplePermissionsTest {
 
     @get:Rule
