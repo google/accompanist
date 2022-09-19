@@ -43,6 +43,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.FlakyTest
 import androidx.test.filters.SdkSuppress
 import com.google.common.truth.Truth.assertThat
+import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.flow.toCollection
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -59,7 +60,7 @@ import java.util.concurrent.TimeUnit
 @RunWith(AndroidJUnit4::class)
 // Emulator image doesn't have a WebView until API 26
 // Google API emulator image seems to be really flaky before 28 so currently we will set these tests
-// to mine 29
+// to min 29
 @SdkSuppress(minSdkVersion = 28)
 class WebTest {
     @get:Rule
@@ -615,6 +616,48 @@ class WebTest {
         toggle.value = false
         webNode.assertDoesNotExist()
         assertThat(isOnDisposeCalled).isTrue()
+    }
+
+    @Test
+    fun testJSReloadTriggersRefresh() {
+        lateinit var state: WebViewState
+        var pageStartedCalled = 0
+        val client = object : AccompanistWebViewClient() {
+            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                super.onPageStarted(view, url, favicon)
+                pageStartedCalled++
+            }
+        }
+
+        rule.setContent {
+            state = rememberWebViewStateWithHTMLData(
+                data =
+                """
+                <html><body>
+                   <input id="button" type="button" value="Reload" 
+                   onclick="window.location.reload()" />
+                </body></html>
+                """.trimIndent()
+            )
+
+            WebTestContent(
+                webViewState = state,
+                idlingResource = idleResource,
+                client = client
+            )
+        }
+
+        rule.waitForIdle()
+
+        onWebView()
+            .withElement(findElement(Locator.ID, "button"))
+            .perform(webClick())
+
+        // Check the url remained about:blank
+        onWebView()
+            .check(webMatches(getCurrentUrl(), equalTo("about:blank")))
+
+        assertEquals("Page should be loaded twice", 2, pageStartedCalled)
     }
 
     private val webNode: SemanticsNodeInteraction
