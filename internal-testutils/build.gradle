@@ -64,5 +64,6 @@ dependencies {
     api libs.compose.ui.test.junit4
 
     api libs.androidx.test.core
+    api libs.androidx.test.runner
     implementation libs.truth
 }

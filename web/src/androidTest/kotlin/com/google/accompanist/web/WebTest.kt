@@ -18,6 +18,8 @@ package com.google.accompanist.web
 
 import android.graphics.Bitmap
 import android.webkit.WebView
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,8 +31,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.IdlingResource
 import androidx.compose.ui.test.SemanticsNodeInteraction
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.ComposeTestRule
+import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.web.assertion.WebViewAssertions.webMatches
 import androidx.test.espresso.web.model.Atoms.getCurrentUrl
 import androidx.test.espresso.web.model.Atoms.getTitle
@@ -42,6 +46,7 @@ import androidx.test.espresso.web.webdriver.Locator
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.FlakyTest
 import androidx.test.filters.SdkSuppress
+import com.google.accompanist.internal.test.RetryTestRule
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.flow.toCollection
 import okhttp3.mockwebserver.MockResponse
@@ -50,7 +55,6 @@ import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.After
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -62,13 +66,20 @@ import java.util.concurrent.TimeUnit
 // to mine 29
 @SdkSuppress(minSdkVersion = 28)
 class WebTest {
-    @get:Rule
-    val rule = createComposeRule()
+
+    @get:Rule(order = 0)
+    val rule = createEmptyComposeRule()
+
+    private lateinit var scenario: ActivityScenario<ComponentActivity>
+
+    @get:Rule(order = 1)
+    val retryTestRule = RetryTestRule(3)
 
     private lateinit var idleResource: WebViewIdlingResource
 
     @Before
     fun setup() {
+        scenario = ActivityScenario.launch(ComponentActivity::class.java)
         idleResource = WebViewIdlingResource()
         rule.registerIdlingResource(idleResource)
     }
@@ -76,6 +87,12 @@ class WebTest {
     @After
     fun tearDown() {
         rule.unregisterIdlingResource(idleResource)
+
+        scenario.close()
+    }
+
+    fun launchActivity() {
+        scenario.onActivity { }
     }
 
     @Test
@@ -561,8 +578,7 @@ class WebTest {
         assertThat(navigator.canGoForward).isTrue()
     }
 
-    @FlakyTest
-    @Ignore("Slow and flaky: https://github.com/google/accompanist/issues/1085")
+    @FlakyTest(detail = "Slow and flaky: https://github.com/google/accompanist/issues/1085")
     @Test
     fun testAdditionalHttpHeaders() {
         val mockServer = MockWebServer()
@@ -611,6 +627,7 @@ class WebTest {
                 )
             }
         }
+        rule.waitForIdle()
 
         toggle.value = false
         webNode.assertDoesNotExist()
@@ -619,6 +636,14 @@ class WebTest {
 
     private val webNode: SemanticsNodeInteraction
         get() = rule.onNodeWithTag(WebViewTag)
+
+    private fun ComposeTestRule.setContent(function: @Composable () -> Unit) {
+        scenario.onActivity { activity ->
+            activity.setContent {
+                function()
+            }
+        }
+    }
 }
 
 private const val LINK_ID = "link"
