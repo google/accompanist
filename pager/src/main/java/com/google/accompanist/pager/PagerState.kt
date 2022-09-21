@@ -92,7 +92,7 @@ class PagerState(
 
     internal var afterContentPadding = 0
 
-    internal val currentPageLayoutInfo: LazyListItemInfo?
+    private val currentPageLayoutInfo: LazyListItemInfo?
         get() = lazyListState.layoutInfo.visibleItemsInfo.lastOrNull {
             it.index == currentPage
         }

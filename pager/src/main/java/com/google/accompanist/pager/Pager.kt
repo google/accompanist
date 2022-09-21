@@ -468,7 +468,7 @@ private class ConsumeFlingNestedScrollConnection(
     }
 
     override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
-        return if (pagerState.currentPageLayoutInfo?.offset != 0) {
+        return if (pagerState.currentPageOffset != 0f) {
             // The Pager is already scrolling. This means that a nested scroll child was
             // scrolled to end, and the Pager can use this fling
             Velocity.Zero
