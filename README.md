@@ -61,7 +61,7 @@ A library which provides a way to use Android Drawables as Jetpack Compose Paint
 ### ⬇️ [Swipe to Refresh](./swiperefresh/)
 A library that provides a layout implementing the swipe-to-refresh UX pattern, similar to Android's [SwipeRefreshLayout](https://developer.android.com/jetpack/androidx/releases/swiperefreshlayout).
 
-### 🌏 [Web](./web/)
+### 🌏 [Web](./webview/)
 A wrapper around WebView for basic WebView support in Jetpack Compose.
 
 ### 📜 [Adaptive](./adaptive/)
