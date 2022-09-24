@@ -16,6 +16,7 @@
 
 package com.google.accompanist.web
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.webkit.WebView
 import androidx.compose.material.MaterialTheme
@@ -619,6 +620,22 @@ class WebTest {
 
     private val webNode: SemanticsNodeInteraction
         get() = rule.onNodeWithTag(WebViewTag)
+
+    @Test
+    fun testWebViewFactoryUsedIfSupplied() {
+        lateinit var constructedWebView: WebView
+
+        rule.setContent {
+            WebTestContent(
+                rememberWebViewState(url = LINK_URL),
+                idleResource,
+                onCreated = { constructedWebView = it },
+                factory = { context -> CustomWebView(context) }
+            )
+        }
+
+        assertThat(constructedWebView).isInstanceOf(CustomWebView::class.java)
+    }
 }
 
 private const val LINK_ID = "link"
@@ -638,9 +655,11 @@ private fun WebTestContent(
     webViewState: WebViewState,
     idlingResource: WebViewIdlingResource,
     navigator: WebViewNavigator = rememberWebViewNavigator(),
+    onCreated: (WebView) -> Unit = { it.settings.javaScriptEnabled = true },
     onDispose: (WebView) -> Unit = {},
     client: AccompanistWebViewClient = remember { AccompanistWebViewClient() },
-    chromeClient: AccompanistWebChromeClient = remember { AccompanistWebChromeClient() }
+    chromeClient: AccompanistWebChromeClient = remember { AccompanistWebChromeClient() },
+    factory: ((Context) -> WebView)? = null
 ) {
     idlingResource.webviewLoading = webViewState.loadingState !is LoadingState.Finished
 
@@ -649,10 +668,11 @@ private fun WebTestContent(
             state = webViewState,
             modifier = Modifier.testTag(WebViewTag),
             navigator = navigator,
-            onCreated = { it.settings.javaScriptEnabled = true },
+            onCreated = onCreated,
             onDispose = onDispose,
             client = client,
-            chromeClient = chromeClient
+            chromeClient = chromeClient,
+            factory = factory
         )
     }
 }
@@ -663,3 +683,5 @@ private class WebViewIdlingResource : IdlingResource {
     override val isIdleNow: Boolean
         get() = !webviewLoading
 }
+
+private class CustomWebView(context: Context) : WebView(context)

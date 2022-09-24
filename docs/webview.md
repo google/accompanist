@@ -45,6 +45,17 @@ WebView(
 )
 ```
 
+### Using a subclass of WebView
+
+If you want to use a subclass of `WebView`, or simply require more control over its instantiation, you can provide a factory.
+
+```kotlin
+WebView(
+    ...
+    factory = { context -> CustomWebView(context) }
+)
+```
+
 ## Download
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-webview)](https://search.maven.org/search?q=g:com.google.accompanist)
