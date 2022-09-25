@@ -50,7 +50,7 @@ nav:
       - 'Guide': navigation-material.md
       - 'API': api/navigation-material/
   - 'WebView':
-      - 'Guide': webview.md
+      - 'Guide': web.md
       - 'API': api/web/
   - 'Adaptive':
       - 'Guide': adaptive.md
