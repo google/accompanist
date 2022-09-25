@@ -502,6 +502,7 @@ class WebTest {
 
         navigator.navigateForward()
         rule.waitUntil { navigator.canGoBack }
+        rule.waitForIdle()
 
         assertThat(state.content.getCurrentUrl()).isEqualTo(LINK_URL)
     }
