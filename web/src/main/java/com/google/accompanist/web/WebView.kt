@@ -16,6 +16,7 @@
 
 package com.google.accompanist.web
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.view.ViewGroup
 import android.webkit.WebChromeClient
@@ -62,6 +63,7 @@ import kotlinx.coroutines.withContext
  * subsequently overwritten after this lambda is called.
  * @param client Provides access to WebViewClient via subclassing
  * @param chromeClient Provides access to WebChromeClient via subclassing
+ * @param factory An optional WebView factory for using a custom subclass of WebView
  * @sample com.google.accompanist.sample.webview.BasicWebViewSample
  */
 @Composable
@@ -73,7 +75,8 @@ fun WebView(
     onCreated: (WebView) -> Unit = {},
     onDispose: (WebView) -> Unit = {},
     client: AccompanistWebViewClient = remember { AccompanistWebViewClient() },
-    chromeClient: AccompanistWebChromeClient = remember { AccompanistWebChromeClient() }
+    chromeClient: AccompanistWebChromeClient = remember { AccompanistWebChromeClient() },
+    factory: ((Context) -> WebView)? = null
 ) {
     var webView by remember { mutableStateOf<WebView?>(null) }
 
@@ -104,7 +107,7 @@ fun WebView(
 
     AndroidView(
         factory = { context ->
-            WebView(context).apply {
+            (factory?.invoke(context) ?: WebView(context)).apply {
                 onCreated(this)
 
                 layoutParams = ViewGroup.LayoutParams(
