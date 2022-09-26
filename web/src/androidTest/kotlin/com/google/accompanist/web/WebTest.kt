@@ -470,6 +470,7 @@ class WebTest {
             .check(webMatches(getText(), equalTo(LINK_TEXT)))
     }
 
+    @FlakyTest
     @Test
     fun testNavigatorForward() {
         lateinit var state: WebViewState
