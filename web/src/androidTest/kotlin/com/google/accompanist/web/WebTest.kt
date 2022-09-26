@@ -60,8 +60,8 @@ import java.util.concurrent.TimeUnit
 @RunWith(AndroidJUnit4::class)
 // Emulator image doesn't have a WebView until API 26
 // Google API emulator image seems to be really flaky before 28 so currently we will set these tests
-// to min 29
-@SdkSuppress(minSdkVersion = 28)
+// to min 29 and max 30. 31/32 image is also really flaky
+@SdkSuppress(minSdkVersion = 28, maxSdkVersion = 30)
 class WebTest {
     @get:Rule
     val rule = createComposeRule()
