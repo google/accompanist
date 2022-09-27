@@ -207,6 +207,12 @@ open class AccompanistWebViewClient : WebViewClient() {
         view: WebView?,
         request: WebResourceRequest?
     ): Boolean {
+        // If the url hasn't changed, this is probably an internal event like
+        // a javascript reload. We should let it happen.
+        if (view?.url == request?.url.toString()) {
+            return false
+        }
+
         // Override all url loads to make the single source of truth
         // of the URL the state holder Url
         request?.let {
