@@ -82,7 +82,7 @@ jobs:
       # Allow tests to continue on other devices if they fail on one device.
       fail-fast: false
       matrix:
-        api-level: [ 22, 26, 29, 31 ]
+        api-level: [ 22, 26, 29 ]
         shard: [ 0, 1 ] # Need to update shard-count below if this changes
 
     env:
