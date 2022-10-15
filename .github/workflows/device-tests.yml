@@ -59,7 +59,7 @@ jobs:
           if [ "$API_LEVEL" -ge "29" ]; then
             TARGET="google_apis"
           fi
-          echo "::set-output name=TARGET::$TARGET"
+          echo "TARGET=$TARGET" >> $GITHUB_OUTPUT
 
       - name: Run device tests
         uses: reactivecircus/android-emulator-runner@v2
