@@ -63,6 +63,13 @@ private fun FeatureThatRequiresCameraPermission() {
 
 For more examples, refer to the [samples](https://github.com/google/accompanist/tree/main/sample/src/main/java/com/google/accompanist/sample/permissions).
 
+## Limitations
+
+This permissions wrapper is built on top of the available Android platform APIs. We cannot extend
+the platform's capabilities. For example, it's not possible to differentiate the between the
+_it's the first time requesting the permission_ vs _the user doesn't want to be asked again_
+use cases.
+
 ## Download
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-permissions)](https://search.maven.org/search?q=g:com.google.accompanist)
