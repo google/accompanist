@@ -28,6 +28,7 @@ Both APIs expose properties for you to follow the workflow as described in the
 The following code exercises the [permission request workflow](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions).
 
 ```kotlin
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun FeatureThatRequiresCameraPermission() {
 
@@ -36,28 +37,24 @@ private fun FeatureThatRequiresCameraPermission() {
         android.Manifest.permission.CAMERA
     )
 
-    when (cameraPermissionState.status) {
-        // If the camera permission is granted, then show screen with the feature enabled
-        PermissionStatus.Granted -> {
-            Text("Camera permission Granted")
-        }
-        is PermissionStatus.Denied -> {
-            Column {
-                val textToShow = if (cameraPermissionState.status.shouldShowRationale) {
-                    // If the user has denied the permission but the rationale can be shown,
-                    // then gently explain why the app requires this permission
-                    "The camera is important for this app. Please grant the permission."
-                } else {
-                    // If it's the first time the user lands on this feature, or the user
-                    // doesn't want to be asked again for this permission, explain that the
-                    // permission is required
-                    "Camera permission required for this feature to be available. " +
-                        "Please grant the permission"
-                }
-                Text(textToShow)
-                Button(onClick = { cameraPermissionState.launchPermissionRequest() }) {
-                    Text("Request permission")
-                }
+    if (cameraPermissionState.status.isGranted) {
+        Text("Camera permission Granted")
+    } else {
+        Column {
+            val textToShow = if (cameraPermissionState.status.shouldShowRationale) {
+                // If the user has denied the permission but the rationale can be shown,
+                // then gently explain why the app requires this permission
+                "The camera is important for this app. Please grant the permission."
+            } else {
+                // If it's the first time the user lands on this feature, or the user
+                // doesn't want to be asked again for this permission, explain that the
+                // permission is required
+                "Camera permission required for this feature to be available. " +
+                    "Please grant the permission"
+            }
+            Text(textToShow)
+            Button(onClick = { cameraPermissionState.launchPermissionRequest() }) {
+                Text("Request permission")
             }
         }
     }
