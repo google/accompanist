@@ -62,7 +62,6 @@ class SwipeRefreshBasicSample : ComponentActivity() {
     }
 }
 
-// @Suppress("DEPRECATION")
 @Suppress("DEPRECATION")
 @OptIn(ExperimentalCoilApi::class)
 @Composable
