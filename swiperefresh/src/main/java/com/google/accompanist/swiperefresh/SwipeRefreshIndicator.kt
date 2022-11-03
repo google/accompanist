@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("DEPRECATION")
 
 package com.google.accompanist.swiperefresh
 
@@ -100,6 +101,13 @@ private val LargeSizes = SwipeRefreshIndicatorSizes(
  * @param largeIndication Whether the indicator should be 'large' or not. Defaults to false.
  * @param elevation The size of the shadow below the indicator.
  */
+@Deprecated(
+    """
+     accompanist/swiperefresh is deprecated.
+     The androidx.compose equivalent of SwipeRefreshIndicator() is PullRefreshIndicator().
+     For more migration information, please visit https://google.github.io/accompanist/swiperefresh/#migration
+    """
+)
 @Composable
 fun SwipeRefreshIndicator(
     state: SwipeRefreshState,

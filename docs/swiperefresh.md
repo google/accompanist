@@ -2,6 +2,43 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-swiperefresh)](https://search.maven.org/search?q=g:com.google.accompanist)
 
+!!! warning
+    **This library is deprecated, with official insets support in androidx.compose.foundation.** The migration guide and original documentation is below.
+
+## Migration
+
+Accompanist SwipeRefresh has been replaced by PullRefresh in [Compose Material 1.3.0](https://developer.android.com/jetpack/androidx/releases/compose-material#1.3.0). The implementation is similar but instead of being a Composable function, it is a Modifier that can be applied to a Composable function.
+
+A simple example is as follows:
+
+```kotlin
+val viewModel: MyViewModel = viewModel()
+val refreshing by viewModel.isRefreshing
+
+val pullRefreshState = rememberPullRefreshState(refreshing, { viewModel.refresh() })
+
+Box(Modifier.pullRefresh(pullRefreshState)) {
+    LazyColumn(Modifier.fillMaxSize()) {
+        ...
+    }
+
+    PullRefreshIndicator(refreshing, pullRefreshState, Modifier.align(Alignment.TopCenter))
+}
+```
+
+### Migration steps
+
+1. Replace SwipeRefresh with a Box or other layout of your choice, save your `onRefresh` lambda for the next step.
+2. Replace `rememberSwipeRefreshState()` with `rememberPullRefreshState(refreshing, onRefresh)`
+3. Add either the default `PullRefreshIndicator` or your own custom implementation to your layout.
+
+### Custom Indicator
+
+Instead of using the provided `PullRefreshIndicator` composable, you can create your own custom indicator.
+A full sample can be seen in the [Compose samples](https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:compose/material/material/samples/src/main/java/androidx/compose/material/samples/PullRefreshSamples.kt;l=91?q=pullrefresh).
+
+## Original Docs
+
 A library which provides a layout which provides the swipe-to-refresh UX pattern, similar to Android's [`SwipeRefreshLayout`](https://developer.android.com/training/swipe/add-swipe-interface).
 
 <figure>

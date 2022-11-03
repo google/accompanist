@@ -20,6 +20,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -62,6 +63,8 @@ class SwipeRefreshBasicSample : ComponentActivity() {
     }
 }
 
+//@Suppress("DEPRECATION")
+@Suppress("DEPRECATION")
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 private fun Sample() {
@@ -84,8 +87,9 @@ private fun Sample() {
             }
         }
 
+        val state = rememberSwipeRefreshState(isRefreshing = true)
         SwipeRefresh(
-            state = rememberSwipeRefreshState(isRefreshing = refreshing),
+            state = state,
             onRefresh = { refreshing = true },
         ) {
             LazyColumn(contentPadding = padding) {
