@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
+
 package com.google.accompanist.sample.swiperefresh
 
 import android.os.Bundle
@@ -71,6 +73,7 @@ class SwipeRefreshCustomIndicatorSample : ComponentActivity() {
     }
 }
 
+@Suppress("DEPRECATION")
 @Composable
 private fun Sample() {
     Scaffold(

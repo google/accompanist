@@ -2,7 +2,7 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-swiperefresh)](https://search.maven.org/search?q=g:com.google.accompanist)
 
-For more information, visit the documentation: https://google.github.io/accompanist/swiperefresh
+> :warning: This library has been deprecated as official support is now available in Compose Material 1.3.0. Please see our [Migration Guide](https://google.github.io/accompanist/swiperefresh/) for how to migrate.
 
 ## Download
 

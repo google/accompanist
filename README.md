@@ -58,9 +58,6 @@ A library which provides [Compose Material](https://developer.android.com/jetpac
 ### 🖌️ [Drawable Painter](./drawablepainter/)
 A library which provides a way to use Android Drawables as Jetpack Compose Painters.
 
-### ⬇️ [Swipe to Refresh](./swiperefresh/)
-A library that provides a layout implementing the swipe-to-refresh UX pattern, similar to Android's [SwipeRefreshLayout](https://developer.android.com/jetpack/androidx/releases/swiperefreshlayout).
-
 ### 🌏 [Web](./web/)
 A wrapper around WebView for basic WebView support in Jetpack Compose.
 
@@ -69,6 +66,9 @@ A library providing a collection of utilities for adaptive layouts.
 
 ### 📐 [Insets](./insets/) (Deprecated)
 See our [Migration Guide](https://google.github.io/accompanist/insets/) for migrating to Insets in Compose.
+
+### ⬇️ [Swipe to Refresh](./swiperefresh/) (Deprecated)
+See our [Migration Guide](https://google.github.io/accompanist/swiperefresh/) for migrating to PullRefresh in Compose Material.
 
 ---
 

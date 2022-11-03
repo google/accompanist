@@ -62,6 +62,7 @@ class SwipeRefreshBasicSample : ComponentActivity() {
     }
 }
 
+@Suppress("DEPRECATION")
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 private fun Sample() {
@@ -84,8 +85,9 @@ private fun Sample() {
             }
         }
 
+        val state = rememberSwipeRefreshState(isRefreshing = true)
         SwipeRefresh(
-            state = rememberSwipeRefreshState(isRefreshing = refreshing),
+            state = state,
             onRefresh = { refreshing = true },
         ) {
             LazyColumn(contentPadding = padding) {
