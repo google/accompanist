@@ -16,17 +16,32 @@
 
 package com.google.accompanist.testharness
 
+import android.content.res.Configuration
 import android.os.Build
+import android.os.LocaleList
+import android.util.DisplayMetrics
+import android.view.ContextThemeWrapper
+import android.view.View
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFontFamilyResolver
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.font.createFontFamilyResolver
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.core.os.ConfigurationCompat
 import androidx.core.os.LocaleListCompat
+import kotlin.math.roundToInt
 
 /**
  * Render [content] in a [Box] within a harness, overriding various device configuration values to
@@ -53,8 +68,134 @@ import androidx.core.os.LocaleListCompat
  */
 @Composable
 fun TestHarness(
+    size: DpSize = DpSize.Unspecified,
+    darkMode: Boolean = isSystemInDarkTheme(),
+    locales: LocaleListCompat = ConfigurationCompat.getLocales(LocalConfiguration.current),
+    layoutDirection: LayoutDirection? = null,
+    fontScale: Float = LocalDensity.current.fontScale,
+    fontWeightAdjustment: Int? =
+        if (Build.VERSION.SDK_INT >= 31) LocalConfiguration.current.fontWeightAdjustment else null,
     content: @Composable () -> Unit
 ) {
-    // TODO: Alex to implement this.
-    content()
+    // Use the DensityForcedSize content wrapper if specified
+    val sizeContentWrapper: @Composable (@Composable () -> Unit) -> Unit =
+        if (size == DpSize.Unspecified) {
+            { it() }
+        } else {
+            { DensityForcedSize(size, it) }
+        }
+
+    // First override the density. Doing this first allows using the resulting density in the
+    // overridden configuration.
+    sizeContentWrapper {
+        // Second, override the configuration, with the current configuration modified by the
+        // given parameters.
+        OverriddenConfiguration(
+            configuration = Configuration().apply {
+                // Initialize from the current configuration
+                updateFrom(LocalConfiguration.current)
+                // Set dark mode directly
+                uiMode = uiMode and Configuration.UI_MODE_NIGHT_MASK.inv() or if (darkMode) {
+                    Configuration.UI_MODE_NIGHT_YES
+                } else {
+                    Configuration.UI_MODE_NIGHT_NO
+                }
+                // Update the locale list
+                if (Build.VERSION.SDK_INT >= 24) {
+                    setLocales(LocaleList.forLanguageTags(locales.toLanguageTags()))
+                } else {
+                    setLocale(locales[0])
+                }
+                // Override densityDpi
+                densityDpi =
+                    (LocalDensity.current.density * DisplayMetrics.DENSITY_DEFAULT).roundToInt()
+                // Override font scale
+                this.fontScale = fontScale
+                // Maybe override fontWeightAdjustment
+                if (Build.VERSION.SDK_INT >= 31 && fontWeightAdjustment != null) {
+                    this.fontWeightAdjustment = fontWeightAdjustment
+                }
+            },
+        ) {
+            // Finally, override the layout direction again if manually specified, potentially
+            // overriding the one from the locale.
+            CompositionLocalProvider(
+                LocalLayoutDirection provides (layoutDirection ?: LocalLayoutDirection.current)
+            ) {
+                content()
+            }
+        }
+    }
+}
+
+/**
+ * Overrides the compositions locals related to the given [configuration].
+ *
+ * There currently isn't a single source of truth for these values, so we update them all
+ * according to the given [configuration].
+ */
+@Composable
+internal fun OverriddenConfiguration(
+    configuration: Configuration,
+    content: @Composable () -> Unit
+) {
+    // We don't override the theme, but we do want to override the configuration and this seems
+    // convenient to do so
+    val newContext = ContextThemeWrapper(LocalContext.current, 0).apply {
+        applyOverrideConfiguration(configuration)
+    }
+
+    CompositionLocalProvider(
+        LocalContext provides newContext,
+        LocalConfiguration provides configuration,
+        LocalLayoutDirection provides
+            if (configuration.layoutDirection == View.LAYOUT_DIRECTION_LTR) {
+                LayoutDirection.Ltr
+            } else {
+                LayoutDirection.Rtl
+            },
+        LocalDensity provides Density(
+            configuration.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT,
+            configuration.fontScale
+        ),
+        LocalFontFamilyResolver provides createFontFamilyResolver(newContext),
+        content = content
+    )
+}
+
+/**
+ * Render [content] in a [Box] that is forced to have the given [size] without clipping.
+ *
+ * This is only suitable for tests, since this will override [LocalDensity] to ensure that the
+ * [size] is met (as opposed to [Modifier.requiredSize] which will result in clipping).
+ */
+@Composable
+internal fun DensityForcedSize(
+    size: DpSize,
+    content: @Composable () -> Unit
+) {
+    BoxWithConstraints(
+        // Try to set the size naturally, we'll be overriding the density below if this fails
+        modifier = Modifier.size(size)
+    ) {
+        CompositionLocalProvider(
+            LocalDensity provides Density(
+                // Override the density with the factor needed to meet both the minimum width and
+                // height requirements.
+                density = LocalDensity.current.density * minOf(
+                    maxWidth / maxOf(maxWidth, size.width),
+                    maxHeight / maxOf(maxHeight, size.height),
+                ),
+                // Pass through the font scale
+                fontScale = LocalDensity.current.fontScale
+            )
+        ) {
+            Box(
+                // This size will now be guaranteed to match the constraints
+                modifier = Modifier.size(size).fillMaxSize()
+            ) {
+                content()
+            }
+        }
+    }
 }
