@@ -61,6 +61,8 @@ dependencies {
     implementation project(':flowlayout')
     implementation project(':systemuicontroller')
     implementation project(':swiperefresh')
+    testImplementation project(':testharness')
+    androidTestImplementation project(':testharness')
     implementation project(':web')
 
     implementation libs.androidx.appcompat
