@@ -23,10 +23,14 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.FiniteAnimationSpec
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandIn
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.shrinkOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -44,7 +48,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -60,7 +66,25 @@ class AnimatedNavHostSample : ComponentActivity() {
 
         setContent {
             AccompanistSampleTheme {
-                ExperimentalAnimationNav()
+                val navController = rememberAnimatedNavController()
+                AnimatedNavHost(navController, "select") {
+                    composable("select") {
+                        Column {
+                            Button(onClick = { navController.navigate("sample") }) {
+                                Text("AnimationNav")
+                            }
+                            Button(onClick = { navController.navigate("zOrder") }) {
+                                Text("Z-ordered Animations")
+                            }
+                        }
+                    }
+                    composable("sample") {
+                        ExperimentalAnimationNav()
+                    }
+                    composable("zOrder") {
+                        NavTestScreen()
+                    }
+                }
             }
         }
     }
@@ -315,4 +339,74 @@ fun NavigateBackButton(navController: NavController) {
             Text(text = "Go to Previous screen")
         }
     }
+}
+
+object Destinations {
+    const val Login = "login"
+    const val Home = "home"
+}
+
+@ExperimentalAnimationApi
+@Composable
+fun NavTestScreen() {
+    val navController = rememberAnimatedNavController()
+    AnimatedNavHost(
+        navController = navController,
+        startDestination = Destinations.Login,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        composable(
+            Destinations.Login,
+            enterTransition = { NavigationTransition.IdentityEnter },
+            exitTransition = { NavigationTransition.IdentityExit },
+        ) {
+            Button(onClick = {
+                navController.navigate(Destinations.Home)
+            }) {
+                Text(text = "Next")
+            }
+        }
+        composable(
+            route = Destinations.Home,
+            enterTransition = { NavigationTransition.slideInBottomAnimation },
+            exitTransition = { NavigationTransition.slideOutBottomAnimation },
+        ) {
+            Button(
+                onClick = {
+                    navController.popBackStack()
+                },
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Yellow),
+                modifier = Modifier.zIndex(100f)
+            ) {
+                Text(text = "label")
+            }
+        }
+    }
+}
+
+object NavigationTransition {
+    private val animation: FiniteAnimationSpec<IntOffset> = tween(
+        easing = LinearOutSlowInEasing,
+        durationMillis = 2000,
+    )
+
+    val IdentityEnter = slideInVertically(
+        initialOffsetY = {
+            -1 // fix for https://github.com/google/accompanist/issues/1159
+        },
+        animationSpec = animation
+    )
+
+    val IdentityExit = slideOutVertically(
+        targetOffsetY = {
+            -1 // fix for https://github.com/google/accompanist/issues/1159
+        },
+        animationSpec = animation
+    )
+
+    var slideInBottomAnimation =
+        slideInVertically(initialOffsetY = { fullHeight -> fullHeight }, animationSpec = animation)
+
+    var slideOutBottomAnimation =
+        slideOutVertically(targetOffsetY = { fullHeight -> fullHeight }, animationSpec = animation)
 }
