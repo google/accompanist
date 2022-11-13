@@ -2,7 +2,9 @@
 package com.google.accompanist.systemuicontroller {
 
   @androidx.compose.runtime.Stable public interface SystemUiController {
+    method public androidx.compose.ui.graphics.Color? getNavigationBarColor();
     method public boolean getNavigationBarDarkContentEnabled();
+    method public androidx.compose.ui.graphics.Color? getStatusBarColor();
     method public boolean getStatusBarDarkContentEnabled();
     method public int getSystemBarsBehavior();
     method public default boolean getSystemBarsDarkContentEnabled();
@@ -25,7 +27,9 @@ package com.google.accompanist.systemuicontroller {
     property public abstract boolean isNavigationBarVisible;
     property public abstract boolean isStatusBarVisible;
     property public default boolean isSystemBarsVisible;
+    property public abstract androidx.compose.ui.graphics.Color? navigationBarColor;
     property public abstract boolean navigationBarDarkContentEnabled;
+    property public abstract androidx.compose.ui.graphics.Color? statusBarColor;
     property public abstract boolean statusBarDarkContentEnabled;
     property public abstract int systemBarsBehavior;
     property public default boolean systemBarsDarkContentEnabled;
