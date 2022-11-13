@@ -95,6 +95,13 @@ interface SystemUiController {
     )
 
     /**
+     * Get the status bar color.
+     *
+     * @return Status bar color or `null` if underlying [Window] could not be retrieved.
+     */
+    val statusBarColor: Color?
+
+    /**
      * Set the navigation bar color.
      *
      * @param color The **desired** [Color] to set. This may require modification if running on an
@@ -117,6 +124,13 @@ interface SystemUiController {
         navigationBarContrastEnforced: Boolean = true,
         transformColorForLightContent: (Color) -> Color = BlackScrimmed
     )
+
+    /**
+     * Get the navigation bar color.
+     *
+     * @return Navigation bar color or `null` if underlying [Window] could not be retrieved.
+     */
+    val navigationBarColor: Color?
 
     /**
      * Set the status and navigation bars to [color].
@@ -232,6 +246,9 @@ internal class AndroidSystemUiController(
         }.toArgb()
     }
 
+    override val statusBarColor: Color?
+        get() = window?.statusBarColor?.let(::Color)
+
     override fun setNavigationBarColor(
         color: Color,
         darkIcons: Boolean,
@@ -251,6 +268,9 @@ internal class AndroidSystemUiController(
             else -> color
         }.toArgb()
     }
+
+    override val navigationBarColor: Color?
+        get() = window?.navigationBarColor?.let(::Color)
 
     override var systemBarsBehavior: Int
         get() = windowInsetsController?.systemBarsBehavior ?: 0

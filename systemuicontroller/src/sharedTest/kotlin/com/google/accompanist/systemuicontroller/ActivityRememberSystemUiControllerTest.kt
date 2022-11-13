@@ -82,6 +82,20 @@ class ActivityRememberSystemUiControllerTest {
     }
 
     @Test
+    fun getStatusBarColor() {
+        lateinit var systemUiController: SystemUiController
+
+        rule.setContent {
+            systemUiController = rememberSystemUiController()
+            SideEffect {
+                systemUiController.setStatusBarColor(Color.Blue, darkIcons = false)
+            }
+        }
+
+        assertThat(systemUiController.statusBarColor).isEqualTo(Color.Blue)
+    }
+
+    @Test
     fun navigationBarColor() {
         rule.setContent {
             // Now create an systemUiController and set the navigation bar color
@@ -92,6 +106,20 @@ class ActivityRememberSystemUiControllerTest {
         }
 
         assertThat(Color(window.navigationBarColor)).isEqualTo(Color.Green)
+    }
+
+    @Test
+    fun getNavigationBarColor() {
+        lateinit var systemUiController: SystemUiController
+
+        rule.setContent {
+            systemUiController = rememberSystemUiController()
+            SideEffect {
+                systemUiController.setNavigationBarColor(Color.Green, darkIcons = false)
+            }
+        }
+
+        assertThat(systemUiController.navigationBarColor).isEqualTo(Color.Green)
     }
 
     @Test

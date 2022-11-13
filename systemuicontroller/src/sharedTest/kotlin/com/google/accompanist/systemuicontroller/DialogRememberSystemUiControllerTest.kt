@@ -78,6 +78,24 @@ class DialogRememberSystemUiControllerTest {
     }
 
     @Test
+    fun getStatusBarColor() {
+        lateinit var systemUiController: SystemUiController
+
+        rule.setContent {
+            Dialog(onDismissRequest = {}) {
+                window = (LocalView.current.parent as DialogWindowProvider).window
+
+                systemUiController = rememberSystemUiController()
+                SideEffect {
+                    systemUiController.setStatusBarColor(Color.Blue, darkIcons = false)
+                }
+            }
+        }
+
+        assertThat(systemUiController.statusBarColor).isEqualTo(Color.Blue)
+    }
+
+    @Test
     fun navigationBarColor() {
         rule.setContent {
             Dialog(onDismissRequest = {}) {
@@ -92,6 +110,24 @@ class DialogRememberSystemUiControllerTest {
         }
 
         assertThat(Color(window.navigationBarColor)).isEqualTo(Color.Green)
+    }
+
+    @Test
+    fun getNavigationBarColor() {
+        lateinit var systemUiController: SystemUiController
+
+        rule.setContent {
+            Dialog(onDismissRequest = {}) {
+                window = (LocalView.current.parent as DialogWindowProvider).window
+
+                systemUiController = rememberSystemUiController()
+                SideEffect {
+                    systemUiController.setNavigationBarColor(Color.Green, darkIcons = false)
+                }
+            }
+        }
+
+        assertThat(systemUiController.navigationBarColor).isEqualTo(Color.Green)
     }
 
     @Test

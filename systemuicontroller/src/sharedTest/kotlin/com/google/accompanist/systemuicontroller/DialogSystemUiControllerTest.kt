@@ -96,6 +96,18 @@ class DialogSystemUiControllerTest {
     }
 
     @Test
+    fun getStatusBarColor() {
+        lateinit var controller: AndroidSystemUiController
+
+        rule.scenario.onActivity {
+            controller = AndroidSystemUiController(contentView, window)
+            controller.setStatusBarColor(Color.Blue, darkIcons = false)
+        }
+
+        assertThat(controller.statusBarColor).isEqualTo(Color.Blue)
+    }
+
+    @Test
     fun navigationBarColor() {
         rule.scenario.onActivity {
             // Now create an AndroidSystemUiController() and set the status bar color
@@ -104,6 +116,18 @@ class DialogSystemUiControllerTest {
         }
 
         assertThat(Color(window.navigationBarColor)).isEqualTo(Color.Green)
+    }
+
+    @Test
+    fun getNavigationBarColor() {
+        lateinit var controller: AndroidSystemUiController
+
+        rule.scenario.onActivity {
+            controller = AndroidSystemUiController(contentView, window)
+            controller.setNavigationBarColor(Color.Green, darkIcons = false)
+        }
+
+        assertThat(controller.navigationBarColor).isEqualTo(Color.Green)
     }
 
     @Test
