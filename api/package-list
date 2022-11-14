@@ -30,8 +30,6 @@ module:placeholder
 com.google.accompanist.placeholder
 module:placeholder-material
 com.google.accompanist.placeholder.material
-module:swiperefresh
-com.google.accompanist.swiperefresh
 module:systemuicontroller
 com.google.accompanist.systemuicontroller
 module:web

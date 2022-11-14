@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://google.github.io/accompanist/swiperefresh/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.7">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
     
     
       
@@ -23,10 +23,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.20d9efc8.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.472b142f.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.cbb835fc.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.08040f6c.min.css">
         
           
           
@@ -62,7 +62,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="black" data-md-color-accent="deep-orange">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="deep-orange">
   
     
     
@@ -540,6 +540,40 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#migration" class="md-nav__link">
+    Migration
+  </a>
+  
+    <nav class="md-nav" aria-label="Migration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#migration-steps" class="md-nav__link">
+    Migration steps
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-indicator" class="md-nav__link">
+    Custom Indicator
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#original-docs" class="md-nav__link">
+    Original Docs
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#usage" class="md-nav__link">
     Usage
   </a>
@@ -575,7 +609,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#custom-indicator" class="md-nav__link">
+  <a href="#custom-indicator_1" class="md-nav__link">
     Custom indicator
   </a>
   
@@ -1237,6 +1271,40 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#migration" class="md-nav__link">
+    Migration
+  </a>
+  
+    <nav class="md-nav" aria-label="Migration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#migration-steps" class="md-nav__link">
+    Migration steps
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-indicator" class="md-nav__link">
+    Custom Indicator
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#original-docs" class="md-nav__link">
+    Original Docs
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#usage" class="md-nav__link">
     Usage
   </a>
@@ -1272,7 +1340,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#custom-indicator" class="md-nav__link">
+  <a href="#custom-indicator_1" class="md-nav__link">
     Custom indicator
   </a>
   
@@ -1312,6 +1380,36 @@
 
 <h1 id="swipe-refresh-for-jetpack-compose">Swipe Refresh for Jetpack Compose<a class="headerlink" href="#swipe-refresh-for-jetpack-compose" title="Permanent link">&para;</a></h1>
 <p><a href="https://search.maven.org/search?q=g:com.google.accompanist"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-swiperefresh" /></a></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>**This library is deprecated, with official pull refresh support in androidx.compose.material.pullrefresh The migration guide and original documentation is below.</p>
+</div>
+<h2 id="migration">Migration<a class="headerlink" href="#migration" title="Permanent link">&para;</a></h2>
+<p>Accompanist SwipeRefresh has been replaced by PullRefresh in <a href="https://developer.android.com/jetpack/androidx/releases/compose-material#1.3.0">Compose Material 1.3.0</a>. The implementation is similar but instead of being a Composable function, it is a Modifier that can be applied to a Composable function.</p>
+<p>A simple example is as follows:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv">viewModel</span><span class="p">:</span><span class="w"> </span><span class="n">MyViewModel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewModel</span><span class="p">()</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">refreshing</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">viewModel</span><span class="p">.</span><span class="na">isRefreshing</span><span class="w"></span>
+
+<span class="kd">val</span><span class="w"> </span><span class="nv">pullRefreshState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rememberPullRefreshState</span><span class="p">(</span><span class="n">refreshing</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">viewModel</span><span class="p">.</span><span class="na">refresh</span><span class="p">()</span><span class="w"> </span><span class="p">})</span><span class="w"></span>
+
+<span class="n">Box</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="na">pullRefresh</span><span class="p">(</span><span class="n">pullRefreshState</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">LazyColumn</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="na">fillMaxSize</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="p">...</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">PullRefreshIndicator</span><span class="p">(</span><span class="n">refreshing</span><span class="p">,</span><span class="w"> </span><span class="n">pullRefreshState</span><span class="p">,</span><span class="w"> </span><span class="n">Modifier</span><span class="p">.</span><span class="na">align</span><span class="p">(</span><span class="n">Alignment</span><span class="p">.</span><span class="na">TopCenter</span><span class="p">))</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<h3 id="migration-steps">Migration steps<a class="headerlink" href="#migration-steps" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Replace SwipeRefresh with a Box or other layout of your choice, save your <code>onRefresh</code> lambda for the next step.</li>
+<li>Replace <code>rememberSwipeRefreshState()</code> with <code>rememberPullRefreshState(refreshing, onRefresh)</code></li>
+<li>Add either the default <code>PullRefreshIndicator</code> or your own custom implementation to your layout.</li>
+</ol>
+<h3 id="custom-indicator">Custom Indicator<a class="headerlink" href="#custom-indicator" title="Permanent link">&para;</a></h3>
+<p>Instead of using the provided <code>PullRefreshIndicator</code> composable, you can create your own custom indicator.
+A full sample can be seen in the <a href="https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:compose/material/material/samples/src/main/java/androidx/compose/material/samples/PullRefreshSamples.kt;l=91?q=pullrefresh">Compose samples</a>.</p>
+<h2 id="original-docs">Original Docs<a class="headerlink" href="#original-docs" title="Permanent link">&para;</a></h2>
 <p>A library which provides a layout which provides the swipe-to-refresh UX pattern, similar to Android's <a href="https://developer.android.com/training/swipe/add-swipe-interface"><code>SwipeRefreshLayout</code></a>.</p>
 <figure>
     <video width="400" controls loop>
@@ -1397,7 +1495,7 @@
 </figure></p>
 </div>
 </div>
-<h3 id="custom-indicator">Custom indicator<a class="headerlink" href="#custom-indicator" title="Permanent link">&para;</a></h3>
+<h3 id="custom-indicator_1">Custom indicator<a class="headerlink" href="#custom-indicator_1" title="Permanent link">&para;</a></h3>
 <p>As mentioned, you can also provide your own custom indicator content. A <a href="../api/swiperefresh/com.google.accompanist.swiperefresh/-swipe-refresh-state/"><code>SwipeRefreshState</code></a> is provided to <code>indicator</code> content slot, which contains the information necessary to react to a swipe refresh gesture.</p>
 <p>An example of a custom indicator is provided <a href="https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/swiperefresh/SwipeRefreshCustomIndicatorSample.kt">here</a>.</p>
 <h2 id="download">Download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h2>
@@ -1487,7 +1585,7 @@
     <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.8492ddcf.min.js"></script>
+      <script src="../assets/javascripts/bundle.d6c3db9e.min.js"></script>
       
     
   </body>
