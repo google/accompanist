@@ -16,6 +16,7 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.google.accompanist.sample">
 
     <!-- Used for loading images from the network -->
@@ -34,6 +35,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.Material.Light.NoActionBar">
+
+        <profileable android:shell="true"
+            tools:targetApi="q" />
 
         <activity
             android:name="com.google.accompanist.sample.MainActivity"
@@ -406,6 +410,15 @@
         <activity
             android:name=".webview.BasicWebViewSample"
             android:label="@string/webview_title_basic"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".webview.WrappedContentWebViewSample"
+            android:label="@string/webview_title_wrapped"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -18,13 +18,14 @@ package com.google.accompanist.web
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Immutable
@@ -105,40 +106,51 @@ fun WebView(
 
     val runningInPreview = LocalInspectionMode.current
 
-    AndroidView(
-        factory = { context ->
-            (factory?.invoke(context) ?: WebView(context)).apply {
-                onCreated(this)
+    BoxWithConstraints(modifier) {
+        AndroidView(
+            factory = { context ->
+                (factory?.invoke(context) ?: WebView(context)).apply {
+                    onCreated(this)
 
-                layoutParams = ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT
-                )
+                    // WebView changes it's layout strategy based on
+                    // it's layoutParams. We convert from Compose Modifier to
+                    // layout params here.
+                    val height =
+                        if (constraints.hasFixedHeight)
+                            LayoutParams.MATCH_PARENT
+                        else
+                            LayoutParams.WRAP_CONTENT
 
-                webChromeClient = chromeClient
-                webViewClient = client
-            }.also { webView = it }
-        },
-        modifier = modifier
-    ) { view ->
-        // AndroidViews are not supported by preview, bail early
-        if (runningInPreview) return@AndroidView
+                    layoutParams = LayoutParams(
+                        LayoutParams.MATCH_PARENT,
+                        height
+                    )
 
-        when (val content = state.content) {
-            is WebContent.Url -> {
-                val url = content.url
+                    webChromeClient = chromeClient
+                    webViewClient = client
+                }.also { webView = it }
+            }
+        ) { view ->
+            // AndroidViews are not supported by preview, bail early
+            if (runningInPreview) return@AndroidView
 
-                if (url.isNotEmpty() && url != view.url) {
-                    view.loadUrl(url, content.additionalHttpHeaders.toMutableMap())
+            when (val content = state.content) {
+                is WebContent.Url -> {
+                    val url = content.url
+
+                    if (url.isNotEmpty() && url != view.url) {
+                        view.loadUrl(url, content.additionalHttpHeaders.toMutableMap())
+                    }
+                }
+
+                is WebContent.Data -> {
+                    view.loadDataWithBaseURL(content.baseUrl, content.data, null, "utf-8", null)
                 }
             }
-            is WebContent.Data -> {
-                view.loadDataWithBaseURL(content.baseUrl, content.data, null, "utf-8", null)
-            }
-        }
 
-        navigator.canGoBack = view.canGoBack()
-        navigator.canGoForward = view.canGoForward()
+            navigator.canGoBack = view.canGoBack()
+            navigator.canGoForward = view.canGoForward()
+        }
     }
 }
 
@@ -436,8 +448,11 @@ data class WebViewError(
  *                              Note that these headers are used for all subsequent requests of the WebView.
  */
 @Composable
-fun rememberWebViewState(url: String, additionalHttpHeaders: Map<String, String> = emptyMap()): WebViewState =
-    // Rather than using .apply {} here we will recreate the state, this prevents
+fun rememberWebViewState(
+    url: String,
+    additionalHttpHeaders: Map<String, String> = emptyMap()
+): WebViewState =
+// Rather than using .apply {} here we will recreate the state, this prevents
     // a recomposition loop when the webview updates the url itself.
     remember(url, additionalHttpHeaders) {
         WebViewState(

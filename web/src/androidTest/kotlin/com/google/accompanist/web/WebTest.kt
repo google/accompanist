@@ -19,6 +19,12 @@ package com.google.accompanist.web
 import android.content.Context
 import android.graphics.Bitmap
 import android.webkit.WebView
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,11 +33,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.IdlingResource
 import androidx.compose.ui.test.SemanticsNodeInteraction
+import androidx.compose.ui.test.assertHeightIsAtLeast
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.unit.dp
 import androidx.test.espresso.web.assertion.WebViewAssertions.webMatches
 import androidx.test.espresso.web.model.Atoms.getCurrentUrl
 import androidx.test.espresso.web.model.Atoms.getTitle
@@ -681,6 +690,32 @@ class WebTest {
 
         assertThat(constructedWebView).isInstanceOf(CustomWebView::class.java)
     }
+
+    @Test
+    fun testWebViewCanWrapHeight() {
+        rule.setContent {
+            Column(Modifier.fillMaxSize()) {
+                val webViewState = rememberWebViewStateWithHTMLData(data = TEST_DATA)
+                WebTestContent(
+                    webViewState = webViewState,
+                    idlingResource = idleResource,
+                    modifier = Modifier.wrapContentHeight()
+                )
+                Box(
+                    Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                        .background(Color.Red)
+                        .testTag("box")
+                )
+            }
+        }
+
+        rule.waitForIdle()
+
+        // If the WebView is wrapping it's content successfully, the box will have some height.
+        rule.onNodeWithTag("box").assertHeightIsAtLeast(1.dp)
+    }
 }
 
 private const val LINK_ID = "link"
@@ -699,6 +734,7 @@ private const val WebViewTag = "webview_tag"
 private fun WebTestContent(
     webViewState: WebViewState,
     idlingResource: WebViewIdlingResource,
+    modifier: Modifier = Modifier,
     navigator: WebViewNavigator = rememberWebViewNavigator(),
     onCreated: (WebView) -> Unit = { it.settings.javaScriptEnabled = true },
     onDispose: (WebView) -> Unit = {},
@@ -711,7 +747,7 @@ private fun WebTestContent(
     MaterialTheme {
         WebView(
             state = webViewState,
-            modifier = Modifier.testTag(WebViewTag),
+            modifier = modifier.testTag(WebViewTag),
             navigator = navigator,
             onCreated = onCreated,
             onDispose = onDispose,
