@@ -38,18 +38,27 @@ package com.google.accompanist.web {
   }
 
   public abstract sealed class WebContent {
-    method public final String? getCurrentUrl();
+    method @Deprecated public final String? getCurrentUrl();
   }
 
   public static final class WebContent.Data extends com.google.accompanist.web.WebContent {
-    ctor public WebContent.Data(String data, optional String? baseUrl);
+    ctor public WebContent.Data(String data, optional String? baseUrl, optional String encoding, optional String? mimeType, optional String? historyUrl);
     method public String component1();
     method public String? component2();
-    method public com.google.accompanist.web.WebContent.Data copy(String data, String? baseUrl);
+    method public String component3();
+    method public String? component4();
+    method public String? component5();
+    method public com.google.accompanist.web.WebContent.Data copy(String data, String? baseUrl, String encoding, String? mimeType, String? historyUrl);
     method public String? getBaseUrl();
     method public String getData();
+    method public String getEncoding();
+    method public String? getHistoryUrl();
+    method public String? getMimeType();
     property public final String? baseUrl;
     property public final String data;
+    property public final String encoding;
+    property public final String? historyUrl;
+    property public final String? mimeType;
   }
 
   public static final class WebContent.Url extends com.google.accompanist.web.WebContent {
@@ -78,13 +87,15 @@ package com.google.accompanist.web {
     method @androidx.compose.runtime.Composable public static void WebView(com.google.accompanist.web.WebViewState state, optional androidx.compose.ui.Modifier modifier, optional boolean captureBackPresses, optional com.google.accompanist.web.WebViewNavigator navigator, optional kotlin.jvm.functions.Function1<? super android.webkit.WebView,kotlin.Unit> onCreated, optional kotlin.jvm.functions.Function1<? super android.webkit.WebView,kotlin.Unit> onDispose, optional com.google.accompanist.web.AccompanistWebViewClient client, optional com.google.accompanist.web.AccompanistWebChromeClient chromeClient, optional kotlin.jvm.functions.Function1<? super android.content.Context,? extends android.webkit.WebView>? factory);
     method @androidx.compose.runtime.Composable public static com.google.accompanist.web.WebViewNavigator rememberWebViewNavigator(optional kotlinx.coroutines.CoroutineScope coroutineScope);
     method @androidx.compose.runtime.Composable public static com.google.accompanist.web.WebViewState rememberWebViewState(String url, optional java.util.Map<java.lang.String,java.lang.String> additionalHttpHeaders);
-    method @androidx.compose.runtime.Composable public static com.google.accompanist.web.WebViewState rememberWebViewStateWithHTMLData(String data, optional String? baseUrl);
+    method @androidx.compose.runtime.Composable public static com.google.accompanist.web.WebViewState rememberWebViewStateWithHTMLData(String data, optional String? baseUrl, optional String encoding, optional String? mimeType, optional String? historyUrl);
   }
 
   @androidx.compose.runtime.Stable public final class WebViewNavigator {
     ctor public WebViewNavigator(kotlinx.coroutines.CoroutineScope coroutineScope);
     method public boolean getCanGoBack();
     method public boolean getCanGoForward();
+    method public void loadHtml(String html, optional String? baseUrl);
+    method public void loadUrl(String url, optional java.util.Map<java.lang.String,java.lang.String> additionalHttpHeaders);
     method public void navigateBack();
     method public void navigateForward();
     method public void reload();
@@ -97,6 +108,7 @@ package com.google.accompanist.web {
     ctor public WebViewState(com.google.accompanist.web.WebContent webContent);
     method public com.google.accompanist.web.WebContent getContent();
     method public androidx.compose.runtime.snapshots.SnapshotStateList<com.google.accompanist.web.WebViewError> getErrorsForCurrentRequest();
+    method public String? getLastLoadedUrl();
     method public com.google.accompanist.web.LoadingState getLoadingState();
     method public android.graphics.Bitmap? getPageIcon();
     method public String? getPageTitle();
@@ -105,6 +117,7 @@ package com.google.accompanist.web {
     property public final com.google.accompanist.web.WebContent content;
     property public final androidx.compose.runtime.snapshots.SnapshotStateList<com.google.accompanist.web.WebViewError> errorsForCurrentRequest;
     property public final boolean isLoading;
+    property public final String? lastLoadedUrl;
     property public final com.google.accompanist.web.LoadingState loadingState;
     property public final android.graphics.Bitmap? pageIcon;
     property public final String? pageTitle;
