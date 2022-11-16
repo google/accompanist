@@ -92,7 +92,7 @@ class HorizontalPagerScrollingContentTest {
 
         // Perform a scroll in the same direction again
         rule.onNodeWithTag(TestTag)
-            .swipeAcrossCenterWithVelocity(velocityPerSec = 2_000.dp, distancePercentageX = -0.5f)
+            .swipeAcrossCenterWithVelocity(velocityPerSec = 2_000.dp, distancePercentageX = -0.6f)
 
         // Wait for the flings to end
         rule.waitForIdle()
