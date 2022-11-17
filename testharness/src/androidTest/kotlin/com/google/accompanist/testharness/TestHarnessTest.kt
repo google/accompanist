@@ -16,30 +16,35 @@
 
 package com.google.accompanist.testharness
 
+import android.content.res.Configuration.UI_MODE_NIGHT_MASK
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.core.os.LocaleListCompat
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.SdkSuppress
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.Locale
 
 @RunWith(AndroidJUnit4::class)
 class TestHarnessTest {
@@ -47,7 +52,6 @@ class TestHarnessTest {
     val composeTestRule = createComposeRule()
 
     private val contentTag = "TestHarnessTestTag"
-
 
     @Test
     fun sizeSmallerThanContent_measuredWidthSmaller() {
@@ -91,40 +95,126 @@ class TestHarnessTest {
         }
         composeTestRule.waitForIdle()
 
+        assertEquals(darkMode and UI_MODE_NIGHT_MASK, UI_MODE_NIGHT_YES)
     }
 
     @Test
-    fun locales() {
+    fun darkMode_disabled() {
+        var darkMode: Int = -1
+        composeTestRule.setContent {
+            TestHarness(darkMode = false) {
+                darkMode = LocalConfiguration.current.uiMode
+            }
+        }
+        composeTestRule.waitForIdle()
 
+        assertEquals(darkMode and UI_MODE_NIGHT_MASK, UI_MODE_NIGHT_NO)
     }
 
     @Test
-    fun localesAPI23() {
+    @SdkSuppress(maxSdkVersion = 23)
+    fun locales_api23_onlyfirstLocaleApplied() {
+        val expectedLocales = LocaleListCompat.create(Locale.CANADA, Locale.ITALY)
+        lateinit var locales: LocaleListCompat
+        composeTestRule.setContent {
+            TestHarness(locales = expectedLocales) {
+                locales = LocaleListCompat.wrap(LocalConfiguration.current.locales)
+            }
+        }
 
+        composeTestRule.waitForIdle()
+
+        // Only one of the locales is used in Sdk<24
+        assertEquals(expectedLocales[0], locales)
     }
-    @Test
-    fun localesAPI24() {
 
+    @Test
+    @SdkSuppress(minSdkVersion = 24)
+    fun locales_api24_allLocalesApplied() {
+        val expectedLocales = LocaleListCompat.create(Locale.CANADA, Locale.ITALY)
+        lateinit var locales: LocaleListCompat
+        composeTestRule.setContent {
+            TestHarness(locales = expectedLocales) {
+                locales = LocaleListCompat.wrap(LocalConfiguration.current.locales)
+            }
+        }
+
+        composeTestRule.waitForIdle()
+
+        // All locales are expected in Sdk>=24
+        assertEquals(expectedLocales, locales)
     }
 
     @Test
-    fun layoutDirection() {
+    fun layoutDirection_default() {
+        lateinit var direction: LayoutDirection
+        val initialLayoutDirection = LayoutDirection.Rtl
+        composeTestRule.setContent {
+            CompositionLocalProvider(
+                LocalLayoutDirection provides initialLayoutDirection
+            ) {
+                TestHarness(layoutDirection = null) {
+                    direction = LocalLayoutDirection.current
+                }
+            }
+        }
+        composeTestRule.waitForIdle()
 
+        // The default should be the one provided by the CompositionLocal
+        assertEquals(initialLayoutDirection, direction)
+    }
+
+    @Test
+    fun layoutDirection_setLtr() {
+        lateinit var direction: LayoutDirection
+        val initialLayoutDirection = LayoutDirection.Rtl
+        val expected = LayoutDirection.Ltr
+        composeTestRule.setContent {
+            CompositionLocalProvider(
+                LocalLayoutDirection provides initialLayoutDirection
+            ) {
+                TestHarness(layoutDirection = expected) {
+                    direction = LocalLayoutDirection.current
+                }
+            }
+        }
+        composeTestRule.waitForIdle()
+
+        // The default should be the one provided by the CompositionLocal
+        assertEquals(expected, direction)
+    }
+
+    @Test
+    fun layoutDirection_setRtl() {
+        lateinit var direction: LayoutDirection
+        val initialLayoutDirection = LayoutDirection.Ltr
+        val expected = LayoutDirection.Rtl
+        composeTestRule.setContent {
+            CompositionLocalProvider(
+                LocalLayoutDirection provides initialLayoutDirection
+            ) {
+                TestHarness(layoutDirection = expected) {
+                    direction = LocalLayoutDirection.current
+                }
+            }
+        }
+        composeTestRule.waitForIdle()
+
+        // The default should be the one provided by the CompositionLocal
+        assertEquals(expected, direction)
     }
 
     @Test
     fun fontScale() {
-
     }
 
     @Test
     fun fontWeightAdjustment() {
-
     }
 
 
     @Composable
-    private fun BoxOfSize(size: Dp, onSize:(Dp) -> Unit) {
+    private fun BoxOfSize(size: Dp, onSize: (Dp) -> Unit) {
         val localDensity = LocalDensity.current
         Box(
             Modifier
