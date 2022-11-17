@@ -3,7 +3,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-swiperefresh)](https://search.maven.org/search?q=g:com.google.accompanist)
 
 !!! warning
-    **This library is deprecated, with official pull refresh support in [androidx.compose.material.pullrefresh[() The migration guide and original documentation is below.
+    **This library is deprecated, with official pull refresh support in [androidx.compose.material.pullrefresh](https://developer.android.com/reference/kotlin/androidx/compose/material/pullrefresh/package-summary) The migration guide and original documentation is below.
 
 ## Migration
 
