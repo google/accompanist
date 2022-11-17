@@ -41,6 +41,7 @@ import androidx.core.os.LocaleListCompat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -146,22 +147,73 @@ class TestHarnessTest {
     }
 
     @Test
-    fun layoutDirection_default() {
+    fun layoutDirection_RtlLocale_usesOverride() {
         lateinit var direction: LayoutDirection
-        val initialLayoutDirection = LayoutDirection.Rtl
+        val initialLocale = LocaleListCompat.create(Locale("ar")) // Arabic
+        val initialLayoutDirection = LayoutDirection.Ltr
+
+        // Given an initial layout direction, when the test harness sets an RTL Locale and doesn't
+        // force the layout direction
+        composeTestRule.setContent {
+            TestHarness(
+                layoutDirection = initialLayoutDirection,
+                locales = initialLocale
+            ) {
+                direction = LocalLayoutDirection.current
+            }
+
+        }
+        composeTestRule.waitForIdle()
+
+        // The used locale should be the one overriden with the test harness, ignoring the Locale's.
+        assertEquals(initialLayoutDirection, direction)
+    }
+
+    @Test
+    fun layoutDirection_default_RtlLocale() {
+        lateinit var direction: LayoutDirection
+        val initialLocale = LocaleListCompat.create(Locale("ar")) // Arabic
+
+        // Given an initial layout direction, when the test harness sets an RTL Locale and doesn't
+        // force the layout direction
+        composeTestRule.setContent {
+            TestHarness(
+                layoutDirection = null,
+                locales = initialLocale
+            ) {
+                direction = LocalLayoutDirection.current
+            }
+
+        }
+        composeTestRule.waitForIdle()
+
+        // The used locale should be the Locale's.
+        assertEquals(LayoutDirection.Rtl, direction)
+    }
+
+    @Test
+    fun layoutDirection_default_usesLocales() {
+        lateinit var direction: LayoutDirection
+        val initialLocale = LocaleListCompat.create(Locale("ar")) // Arabic
+        val initialLayoutDirection = LayoutDirection.Ltr
+
+        // Given no layout direction, when the test harness sets an RTL Locale
         composeTestRule.setContent {
             CompositionLocalProvider(
                 LocalLayoutDirection provides initialLayoutDirection
             ) {
-                TestHarness(layoutDirection = null) {
+                TestHarness(
+                    layoutDirection = null,
+                    locales = initialLocale
+                ) {
                     direction = LocalLayoutDirection.current
                 }
             }
         }
         composeTestRule.waitForIdle()
 
-        // The default should be the one provided by the CompositionLocal
-        assertEquals(initialLayoutDirection, direction)
+        // The default should be the one provided by the Locale
+        assertNotEquals(initialLayoutDirection, direction)
     }
 
     @Test
@@ -169,6 +221,8 @@ class TestHarnessTest {
         lateinit var direction: LayoutDirection
         val initialLayoutDirection = LayoutDirection.Rtl
         val expected = LayoutDirection.Ltr
+
+        // Given a content with an initial RTL layout direction, when the test harness overrides it
         composeTestRule.setContent {
             CompositionLocalProvider(
                 LocalLayoutDirection provides initialLayoutDirection
@@ -180,7 +234,7 @@ class TestHarnessTest {
         }
         composeTestRule.waitForIdle()
 
-        // The default should be the one provided by the CompositionLocal
+        // The direction should be the one forced by the test harness
         assertEquals(expected, direction)
     }
 
@@ -189,6 +243,8 @@ class TestHarnessTest {
         lateinit var direction: LayoutDirection
         val initialLayoutDirection = LayoutDirection.Ltr
         val expected = LayoutDirection.Rtl
+
+        // Given a content with an initial RTL layout direction, when the test harness overrides it
         composeTestRule.setContent {
             CompositionLocalProvider(
                 LocalLayoutDirection provides initialLayoutDirection
@@ -200,16 +256,39 @@ class TestHarnessTest {
         }
         composeTestRule.waitForIdle()
 
-        // The default should be the one provided by the CompositionLocal
+        // The direction should be the one forced by the test harness
         assertEquals(expected, direction)
     }
 
     @Test
     fun fontScale() {
+        val expectedFontScale = 5f
+        var fontScale = 0f
+        composeTestRule.setContent {
+            TestHarness(fontScale = expectedFontScale) {
+                fontScale = LocalConfiguration.current.fontScale
+            }
+        }
+
+        composeTestRule.waitForIdle()
+
+        assertEquals(expectedFontScale, fontScale)
     }
 
     @Test
+    @SdkSuppress(minSdkVersion = 31)
     fun fontWeightAdjustment() {
+        val expectedFontWeightAdjustment = 10
+        var fontWeightAdjustment = 0
+        composeTestRule.setContent {
+            TestHarness(fontWeightAdjustment = expectedFontWeightAdjustment) {
+                fontWeightAdjustment = LocalConfiguration.current.fontWeightAdjustment
+            }
+        }
+
+        composeTestRule.waitForIdle()
+
+        assertEquals(expectedFontWeightAdjustment, fontWeightAdjustment)
     }
 
 
