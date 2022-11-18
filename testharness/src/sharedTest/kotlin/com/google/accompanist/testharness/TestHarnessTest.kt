@@ -16,6 +16,7 @@
 
 package com.google.accompanist.testharness
 
+import android.content.res.Configuration
 import android.content.res.Configuration.UI_MODE_NIGHT_MASK
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
@@ -31,7 +32,6 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
@@ -52,10 +52,8 @@ class TestHarnessTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private val contentTag = "TestHarnessTestTag"
-
     @Test
-    fun sizeSmallerThanContent_measuredWidthSmaller() {
+    fun size_SmallerThanContent_measuredWidthSmaller() {
         var afterWidth = 0.dp
         var preWidth = 0.dp
         composeTestRule.setContent {
@@ -71,7 +69,7 @@ class TestHarnessTest {
     }
 
     @Test
-    fun sizeBiggerThanContent_noChangeInWidth() {
+    fun size_BiggerThanContent_noChangeInWidth() {
         var afterWidth = 0.dp
         var preWidth = 0.dp
         composeTestRule.setContent {
@@ -113,23 +111,6 @@ class TestHarnessTest {
     }
 
     @Test
-    @SdkSuppress(maxSdkVersion = 23)
-    fun locales_api23_onlyfirstLocaleApplied() {
-        val expectedLocales = LocaleListCompat.create(Locale.CANADA, Locale.ITALY)
-        lateinit var locales: LocaleListCompat
-        composeTestRule.setContent {
-            TestHarness(locales = expectedLocales) {
-                locales = LocaleListCompat.wrap(LocalConfiguration.current.locales)
-            }
-        }
-
-        composeTestRule.waitForIdle()
-
-        // Only one of the locales is used in Sdk<24
-        assertEquals(expectedLocales[0], locales)
-    }
-
-    @Test
     @SdkSuppress(minSdkVersion = 24)
     fun locales_api24_allLocalesApplied() {
         val expectedLocales = LocaleListCompat.create(Locale.CANADA, Locale.ITALY)
@@ -152,8 +133,8 @@ class TestHarnessTest {
         val initialLocale = LocaleListCompat.create(Locale("ar")) // Arabic
         val initialLayoutDirection = LayoutDirection.Ltr
 
-        // Given an initial layout direction, when the test harness sets an RTL Locale and doesn't
-        // force the layout direction
+        // Given test harness setting an RTL Locale but it also forcing the opposite
+        // layout direction
         composeTestRule.setContent {
             TestHarness(
                 layoutDirection = initialLayoutDirection,
@@ -197,7 +178,8 @@ class TestHarnessTest {
         val initialLocale = LocaleListCompat.create(Locale("ar")) // Arabic
         val initialLayoutDirection = LayoutDirection.Ltr
 
-        // Given no layout direction, when the test harness sets an RTL Locale
+        // Given no layout direction, when the test harness sets an RTL Locale with an initial
+        // LTR direction
         composeTestRule.setContent {
             CompositionLocalProvider(
                 LocalLayoutDirection provides initialLayoutDirection
@@ -261,9 +243,54 @@ class TestHarnessTest {
     }
 
     @Test
+    fun layoutDirection_default_followsLocaleLtr() {
+        lateinit var direction: LayoutDirection
+
+        // Given an initial layout direction and no overrides
+        composeTestRule.setContent {
+            CompositionLocalProvider(
+                LocalConfiguration provides Configuration().apply {
+                    setLocale(Locale.ENGLISH)
+                }
+            ) {
+                TestHarness(layoutDirection = null) {
+                    direction = LocalLayoutDirection.current
+                }
+            }
+        }
+        composeTestRule.waitForIdle()
+
+        // The direction should be set by the Locale
+        assertEquals(LayoutDirection.Ltr, direction)
+    }
+
+    @Test
+    fun layoutDirection_default_followsLocaleRtl() {
+        lateinit var direction: LayoutDirection
+
+        // Given an initial layout direction and no overrides
+        composeTestRule.setContent {
+            CompositionLocalProvider(
+                LocalConfiguration provides Configuration().apply {
+                    setLocale(Locale("ar"))
+                }
+            ) {
+                TestHarness(layoutDirection = null) {
+                    direction = LocalLayoutDirection.current
+                }
+            }
+        }
+        composeTestRule.waitForIdle()
+
+        // The direction should be set by the Locale
+        assertEquals(LayoutDirection.Rtl, direction)
+    }
+
+    @Test
     fun fontScale() {
         val expectedFontScale = 5f
         var fontScale = 0f
+        // Given
         composeTestRule.setContent {
             TestHarness(fontScale = expectedFontScale) {
                 fontScale = LocalConfiguration.current.fontScale
@@ -299,7 +326,6 @@ class TestHarnessTest {
             Modifier
                 .size(size)
                 .background(color = Color.Black)
-                .testTag(contentTag)
                 .onGloballyPositioned { it: LayoutCoordinates ->
                     onSize(with(localDensity) { it.size.width.toDp() })
                 }
