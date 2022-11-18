@@ -142,7 +142,6 @@ class TestHarnessTest {
             ) {
                 direction = LocalLayoutDirection.current
             }
-
         }
         composeTestRule.waitForIdle()
 
@@ -164,7 +163,6 @@ class TestHarnessTest {
             ) {
                 direction = LocalLayoutDirection.current
             }
-
         }
         composeTestRule.waitForIdle()
 
@@ -317,7 +315,6 @@ class TestHarnessTest {
 
         assertEquals(expectedFontWeightAdjustment, fontWeightAdjustment)
     }
-
 
     @Composable
     private fun BoxOfSize(size: Dp, onSize: (Dp) -> Unit) {
