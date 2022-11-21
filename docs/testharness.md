@@ -86,20 +86,14 @@ See the full list of parameters and effects below.
 
 The full list of parameters and their effects:
 
-| Parameter | Default value | Effect |
-| - | - | - |
-| `size: DpSize` | `DpSize.Unspecified` | If specified, overrides `LocalDensity` if needed to give
-the `DpSize` amount of space to the composable under test |
-| `darkMode: Boolean` | `isSystemInDarkTheme()` | Overrides `LocalConfiguration.current.uiMode` |
-| `fontScale: Float` | `LocalDensity.current.fontScale` | Overrides `LocalDensity.current.fontScale`
-and `LocalConfiguration.current.fontScale` |
-| `fontWeightAdjustment: Int?` | `LocalConfiguration.current.fontWeightAdjustment` on API 31 and
-above, otherwise `null` | Overrides `LocalConfiguration.current.fontWeightAdjustment` on API 31 and
-above and not-null |
-| `locales: LocaleListCompat` | `ConfigurationCompat.getLocales(LocalConfiguration.current)` |
-Overrides `LocalConfiguration.current.locales` |
-| `layoutDirection: LayoutDirection?` | `null` (which uses the resulting locale layout direction) |
-Overrides `LocalLayoutDirection.current` and `LocalConfiguration.current.screenLayout` |
+| Parameter                           | Default value                                                                           | Effect                                                                                                             |
+|-------------------------------------|-----------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| `size: DpSize`                      | `DpSize.Unspecified`                                                                    | If specified, overrides `LocalDensity` if needed to give the `DpSize` amount of space to the composable under test |
+| `darkMode: Boolean`                 | `isSystemInDarkTheme()`                                                                 | Overrides `LocalConfiguration.current.uiMode`                                                                      |
+| `fontScale: Float`                  | `LocalDensity.current.fontScale`                                                        | Overrides `LocalDensity.current.fontScale` and `LocalConfiguration.current.fontScale`                              |
+| `fontWeightAdjustment: Int?`        | `LocalConfiguration.current.fontWeightAdjustment` on API 31 and above, otherwise `null` | Overrides `LocalConfiguration.current.fontWeightAdjustment` on API 31 and above and not-null                       |
+| `locales: LocaleListCompat`         | `ConfigurationCompat.getLocales(LocalConfiguration.current)`                            | Overrides `LocalConfiguration.current.locales`                                                                     |
+| `layoutDirection: LayoutDirection?` | `null` (which uses the resulting locale layout direction)                               | Overrides `LocalLayoutDirection.current` and `LocalConfiguration.current.screenLayout`                             |
 
 ## Implementation
 
