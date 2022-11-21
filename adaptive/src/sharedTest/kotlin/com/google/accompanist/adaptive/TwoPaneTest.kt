@@ -102,7 +102,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(firstCoordinates),
-            0.001f
+            1f
         )
 
         compareRectWithTolerance(
@@ -113,7 +113,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(secondCoordinates),
-            0.001f
+            1f
         )
     }
 
@@ -164,7 +164,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(firstCoordinates),
-            0.001f
+            1f
         )
 
         compareRectWithTolerance(
@@ -175,7 +175,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(secondCoordinates),
-            0.001f
+            1f
         )
     }
 
@@ -227,7 +227,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(firstCoordinates),
-            0.001f
+            1f
         )
 
         compareRectWithTolerance(
@@ -238,7 +238,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(secondCoordinates),
-            0.001f
+            1f
         )
     }
 
@@ -290,7 +290,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(firstCoordinates),
-            0.001f
+            1f
         )
 
         compareRectWithTolerance(
@@ -301,7 +301,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(secondCoordinates),
-            0.001f
+            1f
         )
     }
 
@@ -351,7 +351,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(firstCoordinates),
-            0.001f
+            1f
         )
 
         compareRectWithTolerance(
@@ -362,7 +362,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(secondCoordinates),
-            0.001f
+            1f
         )
     }
 
@@ -413,7 +413,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(firstCoordinates),
-            0.001f
+            1f
         )
 
         compareRectWithTolerance(
@@ -424,7 +424,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(secondCoordinates),
-            0.001f
+            1f
         )
     }
 
@@ -476,7 +476,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(firstCoordinates),
-            0.001f
+            1f
         )
 
         compareRectWithTolerance(
@@ -487,7 +487,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(secondCoordinates),
-            0.001f
+            1f
         )
     }
 
@@ -539,7 +539,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(firstCoordinates),
-            0.001f
+            1f
         )
 
         compareRectWithTolerance(
@@ -550,7 +550,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(secondCoordinates),
-            0.001f
+            1f
         )
     }
 
@@ -603,7 +603,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(firstCoordinates),
-            0.001f
+            1f
         )
 
         compareRectWithTolerance(
@@ -614,7 +614,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(secondCoordinates),
-            0.001f
+            1f
         )
     }
 
@@ -667,7 +667,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(firstCoordinates),
-            0.001f
+            1f
         )
 
         compareRectWithTolerance(
@@ -678,7 +678,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(secondCoordinates),
-            0.001f
+            1f
         )
     }
 
@@ -729,7 +729,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(firstCoordinates),
-            0.001f
+            1f
         )
 
         compareRectWithTolerance(
@@ -740,7 +740,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(secondCoordinates),
-            0.001f
+            1f
         )
     }
 
@@ -792,7 +792,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(firstCoordinates),
-            0.001f
+            1f
         )
 
         compareRectWithTolerance(
@@ -803,7 +803,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(secondCoordinates),
-            0.001f
+            1f
         )
     }
 
@@ -854,7 +854,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(firstCoordinates),
-            0.001f
+            1f
         )
 
         compareRectWithTolerance(
@@ -865,7 +865,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(secondCoordinates),
-            0.001f
+            1f
         )
     }
 
@@ -917,7 +917,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(firstCoordinates),
-            0.001f
+            1f
         )
 
         compareRectWithTolerance(
@@ -928,7 +928,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(secondCoordinates),
-            0.001f
+            1f
         )
     }
 
@@ -986,7 +986,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(firstCoordinates),
-            0.001f
+            1f
         )
 
         compareRectWithTolerance(
@@ -997,7 +997,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(secondCoordinates),
-            0.001f
+            1f
         )
     }
 
@@ -1062,7 +1062,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(firstCoordinates),
-            0.001f
+            1f
         )
 
         compareRectWithTolerance(
@@ -1073,7 +1073,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(secondCoordinates),
-            0.001f
+            1f
         )
     }
 
@@ -1138,7 +1138,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(firstCoordinates),
-            0.001f
+            1f
         )
 
         compareRectWithTolerance(
@@ -1149,7 +1149,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(secondCoordinates),
-            0.001f
+            1f
         )
     }
 
@@ -1214,7 +1214,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(firstCoordinates),
-            0.001f
+            1f
         )
 
         compareRectWithTolerance(
@@ -1225,7 +1225,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(secondCoordinates),
-            0.001f
+            1f
         )
     }
 
@@ -1290,7 +1290,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(firstCoordinates),
-            0.001f
+            1f
         )
 
         compareRectWithTolerance(
@@ -1301,7 +1301,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(secondCoordinates),
-            0.001f
+            1f
         )
     }
 
@@ -1366,7 +1366,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(firstCoordinates),
-            0.001f
+            1f
         )
 
         compareRectWithTolerance(
@@ -1377,7 +1377,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(secondCoordinates),
-            0.001f
+            1f
         )
     }
 
@@ -1443,7 +1443,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(firstCoordinates),
-            0.001f
+            1f
         )
 
         compareRectWithTolerance(
@@ -1454,7 +1454,7 @@ class TwoPaneTest {
                 ).toRect().round().toRect()
             },
             twoPaneCoordinates.localBoundingBoxOf(secondCoordinates),
-            0.001f
+            1f
         )
     }
 }
