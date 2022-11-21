@@ -19,8 +19,6 @@ package com.google.accompanist.adaptive
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.requiredSize
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
@@ -29,7 +27,6 @@ import androidx.compose.ui.graphics.toAndroidRect
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
@@ -46,6 +43,7 @@ import androidx.window.core.ExperimentalWindowApi
 import androidx.window.layout.DisplayFeature
 import androidx.window.layout.FoldingFeature
 import androidx.window.testing.layout.FoldingFeature
+import com.google.accompanist.testharness.TestHarness
 import com.google.common.truth.Truth.assertThat
 import org.junit.Rule
 import org.junit.Test
@@ -65,8 +63,11 @@ class TwoPaneTest {
         lateinit var secondCoordinates: LayoutCoordinates
 
         composeTestRule.setContent {
-            density = LocalDensity.current
-            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+            TestHarness(
+                size = DpSize(900.dp, 1200.dp),
+                layoutDirection = LayoutDirection.Ltr
+            ) {
+                density = LocalDensity.current
                 TwoPane(
                     first = {
                         Spacer(
@@ -88,7 +89,6 @@ class TwoPaneTest {
                         splitFraction = 1f / 3f
                     ),
                     modifier = Modifier
-                        .requiredSize(900.dp, 1200.dp)
                         .onPlaced { twoPaneCoordinates = it }
                 )
             }
@@ -125,8 +125,11 @@ class TwoPaneTest {
         lateinit var secondCoordinates: LayoutCoordinates
 
         composeTestRule.setContent {
-            density = LocalDensity.current
-            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+            TestHarness(
+                size = DpSize(900.dp, 1200.dp),
+                layoutDirection = LayoutDirection.Rtl
+            ) {
+                density = LocalDensity.current
                 TwoPane(
                     first = {
                         Spacer(
@@ -148,7 +151,6 @@ class TwoPaneTest {
                         splitFraction = 1f / 3f
                     ),
                     modifier = Modifier
-                        .requiredSize(900.dp, 1200.dp)
                         .onPlaced { twoPaneCoordinates = it }
                 )
             }
@@ -185,8 +187,11 @@ class TwoPaneTest {
         lateinit var secondCoordinates: LayoutCoordinates
 
         composeTestRule.setContent {
-            density = LocalDensity.current
-            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+            TestHarness(
+                size = DpSize(900.dp, 1200.dp),
+                layoutDirection = LayoutDirection.Ltr
+            ) {
+                density = LocalDensity.current
                 TwoPane(
                     first = {
                         Spacer(
@@ -209,7 +214,6 @@ class TwoPaneTest {
                         gapWidth = 64.dp
                     ),
                     modifier = Modifier
-                        .requiredSize(900.dp, 1200.dp)
                         .onPlaced { twoPaneCoordinates = it }
                 )
             }
@@ -246,8 +250,11 @@ class TwoPaneTest {
         lateinit var secondCoordinates: LayoutCoordinates
 
         composeTestRule.setContent {
-            density = LocalDensity.current
-            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+            TestHarness(
+                size = DpSize(900.dp, 1200.dp),
+                layoutDirection = LayoutDirection.Rtl
+            ) {
+                density = LocalDensity.current
                 TwoPane(
                     first = {
                         Spacer(
@@ -270,7 +277,6 @@ class TwoPaneTest {
                         gapWidth = 64.dp
                     ),
                     modifier = Modifier
-                        .requiredSize(900.dp, 1200.dp)
                         .onPlaced { twoPaneCoordinates = it }
                 )
             }
@@ -307,31 +313,34 @@ class TwoPaneTest {
         lateinit var secondCoordinates: LayoutCoordinates
 
         composeTestRule.setContent {
-            density = LocalDensity.current
-            TwoPane(
-                first = {
-                    Spacer(
-                        Modifier
-                            .background(Color.Red)
-                            .fillMaxSize()
-                            .onPlaced { firstCoordinates = it }
-                    )
-                },
-                second = {
-                    Spacer(
-                        Modifier
-                            .background(Color.Blue)
-                            .fillMaxSize()
-                            .onPlaced { secondCoordinates = it }
-                    )
-                },
-                strategy = FractionVerticalTwoPaneStrategy(
-                    splitFraction = 1f / 3f
-                ),
-                modifier = Modifier
-                    .requiredSize(900.dp, 1200.dp)
-                    .onPlaced { twoPaneCoordinates = it }
-            )
+            TestHarness(
+                size = DpSize(900.dp, 1200.dp)
+            ) {
+                density = LocalDensity.current
+                TwoPane(
+                    first = {
+                        Spacer(
+                            Modifier
+                                .background(Color.Red)
+                                .fillMaxSize()
+                                .onPlaced { firstCoordinates = it }
+                        )
+                    },
+                    second = {
+                        Spacer(
+                            Modifier
+                                .background(Color.Blue)
+                                .fillMaxSize()
+                                .onPlaced { secondCoordinates = it }
+                        )
+                    },
+                    strategy = FractionVerticalTwoPaneStrategy(
+                        splitFraction = 1f / 3f
+                    ),
+                    modifier = Modifier
+                        .onPlaced { twoPaneCoordinates = it }
+                )
+            }
         }
 
         compareRectWithTolerance(
@@ -365,32 +374,35 @@ class TwoPaneTest {
         lateinit var secondCoordinates: LayoutCoordinates
 
         composeTestRule.setContent {
-            density = LocalDensity.current
-            TwoPane(
-                first = {
-                    Spacer(
-                        Modifier
-                            .background(Color.Red)
-                            .fillMaxSize()
-                            .onPlaced { firstCoordinates = it }
-                    )
-                },
-                second = {
-                    Spacer(
-                        Modifier
-                            .background(Color.Blue)
-                            .fillMaxSize()
-                            .onPlaced { secondCoordinates = it }
-                    )
-                },
-                strategy = FractionVerticalTwoPaneStrategy(
-                    splitFraction = 1f / 3f,
-                    gapHeight = 64.dp
-                ),
-                modifier = Modifier
-                    .requiredSize(900.dp, 1200.dp)
-                    .onPlaced { twoPaneCoordinates = it }
-            )
+            TestHarness(
+                size = DpSize(900.dp, 1200.dp),
+            ) {
+                density = LocalDensity.current
+                TwoPane(
+                    first = {
+                        Spacer(
+                            Modifier
+                                .background(Color.Red)
+                                .fillMaxSize()
+                                .onPlaced { firstCoordinates = it }
+                        )
+                    },
+                    second = {
+                        Spacer(
+                            Modifier
+                                .background(Color.Blue)
+                                .fillMaxSize()
+                                .onPlaced { secondCoordinates = it }
+                        )
+                    },
+                    strategy = FractionVerticalTwoPaneStrategy(
+                        splitFraction = 1f / 3f,
+                        gapHeight = 64.dp
+                    ),
+                    modifier = Modifier
+                        .onPlaced { twoPaneCoordinates = it }
+                )
+            }
         }
 
         compareRectWithTolerance(
@@ -424,8 +436,11 @@ class TwoPaneTest {
         lateinit var secondCoordinates: LayoutCoordinates
 
         composeTestRule.setContent {
-            density = LocalDensity.current
-            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+            TestHarness(
+                size = DpSize(900.dp, 1200.dp),
+                layoutDirection = LayoutDirection.Ltr
+            ) {
+                density = LocalDensity.current
                 TwoPane(
                     first = {
                         Spacer(
@@ -448,7 +463,6 @@ class TwoPaneTest {
                         offsetFromStart = true,
                     ),
                     modifier = Modifier
-                        .requiredSize(900.dp, 1200.dp)
                         .onPlaced { twoPaneCoordinates = it }
                 )
             }
@@ -485,8 +499,11 @@ class TwoPaneTest {
         lateinit var secondCoordinates: LayoutCoordinates
 
         composeTestRule.setContent {
-            density = LocalDensity.current
-            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+            TestHarness(
+                size = DpSize(900.dp, 1200.dp),
+                layoutDirection = LayoutDirection.Rtl
+            ) {
+                density = LocalDensity.current
                 TwoPane(
                     first = {
                         Spacer(
@@ -509,7 +526,6 @@ class TwoPaneTest {
                         offsetFromStart = true,
                     ),
                     modifier = Modifier
-                        .requiredSize(900.dp, 1200.dp)
                         .onPlaced { twoPaneCoordinates = it }
                 )
             }
@@ -546,8 +562,11 @@ class TwoPaneTest {
         lateinit var secondCoordinates: LayoutCoordinates
 
         composeTestRule.setContent {
-            density = LocalDensity.current
-            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+            TestHarness(
+                size = DpSize(900.dp, 1200.dp),
+                layoutDirection = LayoutDirection.Ltr
+            ) {
+                density = LocalDensity.current
                 TwoPane(
                     first = {
                         Spacer(
@@ -571,7 +590,6 @@ class TwoPaneTest {
                         gapWidth = 64.dp
                     ),
                     modifier = Modifier
-                        .requiredSize(900.dp, 1200.dp)
                         .onPlaced { twoPaneCoordinates = it }
                 )
             }
@@ -608,8 +626,11 @@ class TwoPaneTest {
         lateinit var secondCoordinates: LayoutCoordinates
 
         composeTestRule.setContent {
-            density = LocalDensity.current
-            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+            TestHarness(
+                size = DpSize(900.dp, 1200.dp),
+                layoutDirection = LayoutDirection.Rtl
+            ) {
+                density = LocalDensity.current
                 TwoPane(
                     first = {
                         Spacer(
@@ -633,7 +654,6 @@ class TwoPaneTest {
                         gapWidth = 64.dp
                     ),
                     modifier = Modifier
-                        .requiredSize(900.dp, 1200.dp)
                         .onPlaced { twoPaneCoordinates = it }
                 )
             }
@@ -670,32 +690,35 @@ class TwoPaneTest {
         lateinit var secondCoordinates: LayoutCoordinates
 
         composeTestRule.setContent {
-            density = LocalDensity.current
-            TwoPane(
-                first = {
-                    Spacer(
-                        Modifier
-                            .background(Color.Red)
-                            .fillMaxSize()
-                            .onPlaced { firstCoordinates = it }
-                    )
-                },
-                second = {
-                    Spacer(
-                        Modifier
-                            .background(Color.Blue)
-                            .fillMaxSize()
-                            .onPlaced { secondCoordinates = it }
-                    )
-                },
-                strategy = FixedOffsetVerticalTwoPaneStrategy(
-                    splitOffset = 300.dp,
-                    offsetFromTop = true
-                ),
-                modifier = Modifier
-                    .requiredSize(900.dp, 1200.dp)
-                    .onPlaced { twoPaneCoordinates = it }
-            )
+            TestHarness(
+                size = DpSize(900.dp, 1200.dp)
+            ) {
+                density = LocalDensity.current
+                TwoPane(
+                    first = {
+                        Spacer(
+                            Modifier
+                                .background(Color.Red)
+                                .fillMaxSize()
+                                .onPlaced { firstCoordinates = it }
+                        )
+                    },
+                    second = {
+                        Spacer(
+                            Modifier
+                                .background(Color.Blue)
+                                .fillMaxSize()
+                                .onPlaced { secondCoordinates = it }
+                        )
+                    },
+                    strategy = FixedOffsetVerticalTwoPaneStrategy(
+                        splitOffset = 300.dp,
+                        offsetFromTop = true
+                    ),
+                    modifier = Modifier
+                        .onPlaced { twoPaneCoordinates = it }
+                )
+            }
         }
 
         compareRectWithTolerance(
@@ -729,33 +752,36 @@ class TwoPaneTest {
         lateinit var secondCoordinates: LayoutCoordinates
 
         composeTestRule.setContent {
-            density = LocalDensity.current
-            TwoPane(
-                first = {
-                    Spacer(
-                        Modifier
-                            .background(Color.Red)
-                            .fillMaxSize()
-                            .onPlaced { firstCoordinates = it }
-                    )
-                },
-                second = {
-                    Spacer(
-                        Modifier
-                            .background(Color.Blue)
-                            .fillMaxSize()
-                            .onPlaced { secondCoordinates = it }
-                    )
-                },
-                strategy = FixedOffsetVerticalTwoPaneStrategy(
-                    splitOffset = 300.dp,
-                    offsetFromTop = true,
-                    gapHeight = 64.dp
-                ),
-                modifier = Modifier
-                    .requiredSize(900.dp, 1200.dp)
-                    .onPlaced { twoPaneCoordinates = it }
-            )
+            TestHarness(
+                size = DpSize(900.dp, 1200.dp)
+            ) {
+                density = LocalDensity.current
+                TwoPane(
+                    first = {
+                        Spacer(
+                            Modifier
+                                .background(Color.Red)
+                                .fillMaxSize()
+                                .onPlaced { firstCoordinates = it }
+                        )
+                    },
+                    second = {
+                        Spacer(
+                            Modifier
+                                .background(Color.Blue)
+                                .fillMaxSize()
+                                .onPlaced { secondCoordinates = it }
+                        )
+                    },
+                    strategy = FixedOffsetVerticalTwoPaneStrategy(
+                        splitOffset = 300.dp,
+                        offsetFromTop = true,
+                        gapHeight = 64.dp
+                    ),
+                    modifier = Modifier
+                        .onPlaced { twoPaneCoordinates = it }
+                )
+            }
         }
 
         compareRectWithTolerance(
@@ -789,32 +815,35 @@ class TwoPaneTest {
         lateinit var secondCoordinates: LayoutCoordinates
 
         composeTestRule.setContent {
-            density = LocalDensity.current
-            TwoPane(
-                first = {
-                    Spacer(
-                        Modifier
-                            .background(Color.Red)
-                            .fillMaxSize()
-                            .onPlaced { firstCoordinates = it }
-                    )
-                },
-                second = {
-                    Spacer(
-                        Modifier
-                            .background(Color.Blue)
-                            .fillMaxSize()
-                            .onPlaced { secondCoordinates = it }
-                    )
-                },
-                strategy = FixedOffsetVerticalTwoPaneStrategy(
-                    splitOffset = 300.dp,
-                    offsetFromTop = false
-                ),
-                modifier = Modifier
-                    .requiredSize(900.dp, 1200.dp)
-                    .onPlaced { twoPaneCoordinates = it }
-            )
+            TestHarness(
+                size = DpSize(900.dp, 1200.dp)
+            ) {
+                density = LocalDensity.current
+                TwoPane(
+                    first = {
+                        Spacer(
+                            Modifier
+                                .background(Color.Red)
+                                .fillMaxSize()
+                                .onPlaced { firstCoordinates = it }
+                        )
+                    },
+                    second = {
+                        Spacer(
+                            Modifier
+                                .background(Color.Blue)
+                                .fillMaxSize()
+                                .onPlaced { secondCoordinates = it }
+                        )
+                    },
+                    strategy = FixedOffsetVerticalTwoPaneStrategy(
+                        splitOffset = 300.dp,
+                        offsetFromTop = false
+                    ),
+                    modifier = Modifier
+                        .onPlaced { twoPaneCoordinates = it }
+                )
+            }
         }
 
         compareRectWithTolerance(
@@ -848,33 +877,36 @@ class TwoPaneTest {
         lateinit var secondCoordinates: LayoutCoordinates
 
         composeTestRule.setContent {
-            density = LocalDensity.current
-            TwoPane(
-                first = {
-                    Spacer(
-                        Modifier
-                            .background(Color.Red)
-                            .fillMaxSize()
-                            .onPlaced { firstCoordinates = it }
-                    )
-                },
-                second = {
-                    Spacer(
-                        Modifier
-                            .background(Color.Blue)
-                            .fillMaxSize()
-                            .onPlaced { secondCoordinates = it }
-                    )
-                },
-                strategy = FixedOffsetVerticalTwoPaneStrategy(
-                    splitOffset = 300.dp,
-                    offsetFromTop = false,
-                    gapHeight = 64.dp
-                ),
-                modifier = Modifier
-                    .requiredSize(900.dp, 1200.dp)
-                    .onPlaced { twoPaneCoordinates = it }
-            )
+            TestHarness(
+                size = DpSize(900.dp, 1200.dp)
+            ) {
+                density = LocalDensity.current
+                TwoPane(
+                    first = {
+                        Spacer(
+                            Modifier
+                                .background(Color.Red)
+                                .fillMaxSize()
+                                .onPlaced { firstCoordinates = it }
+                        )
+                    },
+                    second = {
+                        Spacer(
+                            Modifier
+                                .background(Color.Blue)
+                                .fillMaxSize()
+                                .onPlaced { secondCoordinates = it }
+                        )
+                    },
+                    strategy = FixedOffsetVerticalTwoPaneStrategy(
+                        splitOffset = 300.dp,
+                        offsetFromTop = false,
+                        gapHeight = 64.dp
+                    ),
+                    modifier = Modifier
+                        .onPlaced { twoPaneCoordinates = it }
+                )
+            }
         }
 
         compareRectWithTolerance(
@@ -915,32 +947,35 @@ class TwoPaneTest {
         }
 
         composeTestRule.setContent {
-            density = LocalDensity.current
-            TwoPane(
-                first = {
-                    Spacer(
-                        Modifier
-                            .background(Color.Red)
-                            .fillMaxSize()
-                            .onPlaced { firstCoordinates = it }
-                    )
-                },
-                second = {
-                    Spacer(
-                        Modifier
-                            .background(Color.Blue)
-                            .fillMaxSize()
-                            .onPlaced { secondCoordinates = it }
-                    )
-                },
-                strategy = VerticalTwoPaneStrategy(
-                    splitFraction = 1f / 3f
-                ),
-                displayFeatures = displayFeatures,
-                modifier = Modifier
-                    .requiredSize(900.dp, 1200.dp)
-                    .onPlaced { twoPaneCoordinates = it }
-            )
+            TestHarness(
+                size = DpSize(900.dp, 1200.dp)
+            ) {
+                density = LocalDensity.current
+                TwoPane(
+                    first = {
+                        Spacer(
+                            Modifier
+                                .background(Color.Red)
+                                .fillMaxSize()
+                                .onPlaced { firstCoordinates = it }
+                        )
+                    },
+                    second = {
+                        Spacer(
+                            Modifier
+                                .background(Color.Blue)
+                                .fillMaxSize()
+                                .onPlaced { secondCoordinates = it }
+                        )
+                    },
+                    strategy = VerticalTwoPaneStrategy(
+                        splitFraction = 1f / 3f
+                    ),
+                    displayFeatures = displayFeatures,
+                    modifier = Modifier
+                        .onPlaced { twoPaneCoordinates = it }
+                )
+            }
         }
 
         compareRectWithTolerance(
@@ -988,32 +1023,35 @@ class TwoPaneTest {
         }
 
         composeTestRule.setContent {
-            density = LocalDensity.current
-            TwoPane(
-                first = {
-                    Spacer(
-                        Modifier
-                            .background(Color.Red)
-                            .fillMaxSize()
-                            .onPlaced { firstCoordinates = it }
-                    )
-                },
-                second = {
-                    Spacer(
-                        Modifier
-                            .background(Color.Blue)
-                            .fillMaxSize()
-                            .onPlaced { secondCoordinates = it }
-                    )
-                },
-                strategy = VerticalTwoPaneStrategy(
-                    splitFraction = 1f / 3f
-                ),
-                displayFeatures = displayFeatures,
-                modifier = Modifier
-                    .requiredSize(900.dp, 1200.dp)
-                    .onPlaced { twoPaneCoordinates = it }
-            )
+            TestHarness(
+                size = DpSize(900.dp, 1200.dp)
+            ) {
+                density = LocalDensity.current
+                TwoPane(
+                    first = {
+                        Spacer(
+                            Modifier
+                                .background(Color.Red)
+                                .fillMaxSize()
+                                .onPlaced { firstCoordinates = it }
+                        )
+                    },
+                    second = {
+                        Spacer(
+                            Modifier
+                                .background(Color.Blue)
+                                .fillMaxSize()
+                                .onPlaced { secondCoordinates = it }
+                        )
+                    },
+                    strategy = VerticalTwoPaneStrategy(
+                        splitFraction = 1f / 3f
+                    ),
+                    displayFeatures = displayFeatures,
+                    modifier = Modifier
+                        .onPlaced { twoPaneCoordinates = it }
+                )
+            }
         }
 
         compareRectWithTolerance(
@@ -1061,32 +1099,35 @@ class TwoPaneTest {
         }
 
         composeTestRule.setContent {
-            density = LocalDensity.current
-            TwoPane(
-                first = {
-                    Spacer(
-                        Modifier
-                            .background(Color.Red)
-                            .fillMaxSize()
-                            .onPlaced { firstCoordinates = it }
-                    )
-                },
-                second = {
-                    Spacer(
-                        Modifier
-                            .background(Color.Blue)
-                            .fillMaxSize()
-                            .onPlaced { secondCoordinates = it }
-                    )
-                },
-                strategy = VerticalTwoPaneStrategy(
-                    splitFraction = 1f / 3f
-                ),
-                displayFeatures = displayFeatures,
-                modifier = Modifier
-                    .requiredSize(900.dp, 1200.dp)
-                    .onPlaced { twoPaneCoordinates = it }
-            )
+            TestHarness(
+                size = DpSize(900.dp, 1200.dp)
+            ) {
+                density = LocalDensity.current
+                TwoPane(
+                    first = {
+                        Spacer(
+                            Modifier
+                                .background(Color.Red)
+                                .fillMaxSize()
+                                .onPlaced { firstCoordinates = it }
+                        )
+                    },
+                    second = {
+                        Spacer(
+                            Modifier
+                                .background(Color.Blue)
+                                .fillMaxSize()
+                                .onPlaced { secondCoordinates = it }
+                        )
+                    },
+                    strategy = VerticalTwoPaneStrategy(
+                        splitFraction = 1f / 3f
+                    ),
+                    displayFeatures = displayFeatures,
+                    modifier = Modifier
+                        .onPlaced { twoPaneCoordinates = it }
+                )
+            }
         }
 
         compareRectWithTolerance(
@@ -1134,32 +1175,35 @@ class TwoPaneTest {
         }
 
         composeTestRule.setContent {
-            density = LocalDensity.current
-            TwoPane(
-                first = {
-                    Spacer(
-                        Modifier
-                            .background(Color.Red)
-                            .fillMaxSize()
-                            .onPlaced { firstCoordinates = it }
-                    )
-                },
-                second = {
-                    Spacer(
-                        Modifier
-                            .background(Color.Blue)
-                            .fillMaxSize()
-                            .onPlaced { secondCoordinates = it }
-                    )
-                },
-                strategy = VerticalTwoPaneStrategy(
-                    splitFraction = 1f / 3f
-                ),
-                displayFeatures = displayFeatures,
-                modifier = Modifier
-                    .requiredSize(900.dp, 1200.dp)
-                    .onPlaced { twoPaneCoordinates = it }
-            )
+            TestHarness(
+                size = DpSize(900.dp, 1200.dp)
+            ) {
+                density = LocalDensity.current
+                TwoPane(
+                    first = {
+                        Spacer(
+                            Modifier
+                                .background(Color.Red)
+                                .fillMaxSize()
+                                .onPlaced { firstCoordinates = it }
+                        )
+                    },
+                    second = {
+                        Spacer(
+                            Modifier
+                                .background(Color.Blue)
+                                .fillMaxSize()
+                                .onPlaced { secondCoordinates = it }
+                        )
+                    },
+                    strategy = VerticalTwoPaneStrategy(
+                        splitFraction = 1f / 3f
+                    ),
+                    displayFeatures = displayFeatures,
+                    modifier = Modifier
+                        .onPlaced { twoPaneCoordinates = it }
+                )
+            }
         }
 
         compareRectWithTolerance(
@@ -1207,32 +1251,35 @@ class TwoPaneTest {
         }
 
         composeTestRule.setContent {
-            density = LocalDensity.current
-            TwoPane(
-                first = {
-                    Spacer(
-                        Modifier
-                            .background(Color.Red)
-                            .fillMaxSize()
-                            .onPlaced { firstCoordinates = it }
-                    )
-                },
-                second = {
-                    Spacer(
-                        Modifier
-                            .background(Color.Blue)
-                            .fillMaxSize()
-                            .onPlaced { secondCoordinates = it }
-                    )
-                },
-                strategy = VerticalTwoPaneStrategy(
-                    splitFraction = 1f / 3f
-                ),
-                displayFeatures = displayFeatures,
-                modifier = Modifier
-                    .requiredSize(900.dp, 1200.dp)
-                    .onPlaced { twoPaneCoordinates = it }
-            )
+            TestHarness(
+                size = DpSize(900.dp, 1200.dp)
+            ) {
+                density = LocalDensity.current
+                TwoPane(
+                    first = {
+                        Spacer(
+                            Modifier
+                                .background(Color.Red)
+                                .fillMaxSize()
+                                .onPlaced { firstCoordinates = it }
+                        )
+                    },
+                    second = {
+                        Spacer(
+                            Modifier
+                                .background(Color.Blue)
+                                .fillMaxSize()
+                                .onPlaced { secondCoordinates = it }
+                        )
+                    },
+                    strategy = VerticalTwoPaneStrategy(
+                        splitFraction = 1f / 3f
+                    ),
+                    displayFeatures = displayFeatures,
+                    modifier = Modifier
+                        .onPlaced { twoPaneCoordinates = it }
+                )
+            }
         }
 
         compareRectWithTolerance(
@@ -1280,32 +1327,35 @@ class TwoPaneTest {
         }
 
         composeTestRule.setContent {
-            density = LocalDensity.current
-            TwoPane(
-                first = {
-                    Spacer(
-                        Modifier
-                            .background(Color.Red)
-                            .fillMaxSize()
-                            .onPlaced { firstCoordinates = it }
-                    )
-                },
-                second = {
-                    Spacer(
-                        Modifier
-                            .background(Color.Blue)
-                            .fillMaxSize()
-                            .onPlaced { secondCoordinates = it }
-                    )
-                },
-                strategy = VerticalTwoPaneStrategy(
-                    splitFraction = 1f / 3f
-                ),
-                displayFeatures = displayFeatures,
-                modifier = Modifier
-                    .requiredSize(900.dp, 1200.dp)
-                    .onPlaced { twoPaneCoordinates = it }
-            )
+            TestHarness(
+                size = DpSize(900.dp, 1200.dp)
+            ) {
+                density = LocalDensity.current
+                TwoPane(
+                    first = {
+                        Spacer(
+                            Modifier
+                                .background(Color.Red)
+                                .fillMaxSize()
+                                .onPlaced { firstCoordinates = it }
+                        )
+                    },
+                    second = {
+                        Spacer(
+                            Modifier
+                                .background(Color.Blue)
+                                .fillMaxSize()
+                                .onPlaced { secondCoordinates = it }
+                        )
+                    },
+                    strategy = VerticalTwoPaneStrategy(
+                        splitFraction = 1f / 3f
+                    ),
+                    displayFeatures = displayFeatures,
+                    modifier = Modifier
+                        .onPlaced { twoPaneCoordinates = it }
+                )
+            }
         }
 
         compareRectWithTolerance(
@@ -1337,49 +1387,52 @@ class TwoPaneTest {
         lateinit var twoPaneCoordinates: LayoutCoordinates
         lateinit var firstCoordinates: LayoutCoordinates
         lateinit var secondCoordinates: LayoutCoordinates
-
-        composeTestRule.setContent {
-            density = LocalDensity.current
-            val displayFeatures = DelegateList {
-                fakeDisplayFeatures(
-                    density = density,
-                    twoPaneCoordinates = twoPaneCoordinates,
-                    localFoldingFeatures = listOf(
-                        LocalFoldingFeature(
-                            center = 450.dp,
-                            size = 0.dp,
-                            state = FoldingFeature.State.FLAT,
-                            orientation = FoldingFeature.Orientation.VERTICAL
-                        )
+        val displayFeatures = DelegateList {
+            fakeDisplayFeatures(
+                density = density,
+                twoPaneCoordinates = twoPaneCoordinates,
+                localFoldingFeatures = listOf(
+                    LocalFoldingFeature(
+                        center = 450.dp,
+                        size = 0.dp,
+                        state = FoldingFeature.State.FLAT,
+                        orientation = FoldingFeature.Orientation.VERTICAL
                     )
                 )
-            }
-
-            TwoPane(
-                first = {
-                    Spacer(
-                        Modifier
-                            .background(Color.Red)
-                            .fillMaxSize()
-                            .onPlaced { firstCoordinates = it }
-                    )
-                },
-                second = {
-                    Spacer(
-                        Modifier
-                            .background(Color.Blue)
-                            .fillMaxSize()
-                            .onPlaced { secondCoordinates = it }
-                    )
-                },
-                strategy = VerticalTwoPaneStrategy(
-                    splitFraction = 1f / 3f
-                ),
-                displayFeatures = displayFeatures,
-                modifier = Modifier
-                    .requiredSize(900.dp, 1200.dp)
-                    .onPlaced { twoPaneCoordinates = it }
             )
+        }
+
+        composeTestRule.setContent {
+            TestHarness(
+                size = DpSize(900.dp, 1200.dp)
+            ) {
+                density = LocalDensity.current
+
+                TwoPane(
+                    first = {
+                        Spacer(
+                            Modifier
+                                .background(Color.Red)
+                                .fillMaxSize()
+                                .onPlaced { firstCoordinates = it }
+                        )
+                    },
+                    second = {
+                        Spacer(
+                            Modifier
+                                .background(Color.Blue)
+                                .fillMaxSize()
+                                .onPlaced { secondCoordinates = it }
+                        )
+                    },
+                    strategy = VerticalTwoPaneStrategy(
+                        splitFraction = 1f / 3f
+                    ),
+                    displayFeatures = displayFeatures,
+                    modifier = Modifier
+                        .onPlaced { twoPaneCoordinates = it }
+                )
+            }
         }
 
         compareRectWithTolerance(
