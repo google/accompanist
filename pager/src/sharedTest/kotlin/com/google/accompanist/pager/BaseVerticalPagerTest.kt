@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.height
 import androidx.compose.ui.unit.width
+import com.google.accompanist.testharness.TestHarness
 
 /**
  * Contains the [VerticalPager] tests. This class is extended
@@ -105,7 +106,7 @@ abstract class BaseVerticalPagerTest(
         userScrollEnabled: Boolean,
         onPageComposed: (Int) -> Unit
     ) {
-        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+        TestHarness(layoutDirection = LayoutDirection.Ltr) {
             applierScope = rememberCoroutineScope()
 
             Box {

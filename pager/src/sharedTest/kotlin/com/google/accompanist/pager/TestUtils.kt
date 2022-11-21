@@ -32,18 +32,6 @@ import kotlin.math.hypot
 import kotlin.math.roundToLong
 import kotlin.random.Random
 
-fun ComposeContentTestRule.setContent(
-    layoutDirection: LayoutDirection? = null,
-    composable: @Composable () -> Unit,
-) {
-    setContent {
-        CompositionLocalProvider(
-            LocalLayoutDirection provides (layoutDirection ?: LocalLayoutDirection.current),
-            content = composable
-        )
-    }
-}
-
 internal fun SemanticsNodeInteraction.swipeAcrossCenterWithVelocity(
     velocityPerSec: Dp,
     distancePercentageX: Float = 0f,
