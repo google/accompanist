@@ -22,6 +22,7 @@ import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -42,6 +43,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -53,35 +55,52 @@ class TestHarnessTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun size_SmallerThanContent_measuredWidthSmaller() {
-        var afterWidth = 0.dp
-        var preWidth = 0.dp
+    fun size_SmallerThanOuterBox_measuredWidthIsCorrect() {
+        var width = 0.dp
         composeTestRule.setContent {
-            BoxOfSize(200.dp, onSize = { preWidth = it })
-            TestHarness(size = DpSize(100.dp, 100.dp)) {
-                BoxOfSize(200.dp, onSize = { afterWidth = it })
+            Box(Modifier.requiredSize(300.dp)) {
+                TestHarness(size = DpSize(200.dp, 200.dp)) {
+                    BoxOfSize(200.dp, onWidth = { width = it })
+                }
             }
         }
         composeTestRule.waitForIdle()
 
-        // Widths are approximate because of rounding in BoxWithConstraints
-        assertEquals(afterWidth / preWidth, 0.5f, 0.01f)
+        val ratio = width / 200.dp
+        assertTrue(ratio >= 1)
+        assertEquals(ratio, 1f, 0.01f)
     }
 
     @Test
-    fun size_BiggerThanContent_noChangeInWidth() {
-        var afterWidth = 0.dp
-        var preWidth = 0.dp
+    fun size_BiggerThanOuterBox_measuredWidthIsCorrect() {
+        var width = 0.dp
         composeTestRule.setContent {
-            BoxOfSize(200.dp, onSize = { preWidth = it })
-            TestHarness(size = DpSize(400.dp, 400.dp)) {
-                BoxOfSize(200.dp, onSize = { afterWidth = it })
+            Box(Modifier.requiredSize(100.dp)) {
+                TestHarness(size = DpSize(200.dp, 200.dp)) {
+                    BoxOfSize(200.dp, onWidth = { width = it })
+                }
             }
         }
         composeTestRule.waitForIdle()
 
-        // Widths are approximate because of rounding in BoxWithConstraints
-        assertEquals(afterWidth / preWidth, 1f, 0.001f)
+        val ratio = width / 200.dp
+        assertTrue(ratio >= 1)
+        assertEquals(ratio, 1f, 0.01f)
+    }
+
+    @Test
+    fun size_ExtremelyBig_measuredWidthIsCorrect() {
+        var width = 0.dp
+        composeTestRule.setContent {
+            TestHarness(size = DpSize(10000.dp, 10000.dp)) {
+                BoxOfSize(10000.dp, onWidth = { width = it })
+            }
+        }
+        composeTestRule.waitForIdle()
+
+        val ratio = width / 10000.dp
+        assertTrue(ratio >= 1)
+        assertEquals(ratio, 1f, 0.01f)
     }
 
     @Test
@@ -317,14 +336,14 @@ class TestHarnessTest {
     }
 
     @Composable
-    private fun BoxOfSize(size: Dp, onSize: (Dp) -> Unit) {
+    private fun BoxOfSize(size: Dp, onWidth: (Dp) -> Unit) {
         val localDensity = LocalDensity.current
         Box(
             Modifier
                 .size(size)
                 .background(color = Color.Black)
                 .onGloballyPositioned { it: LayoutCoordinates ->
-                    onSize(with(localDensity) { it.size.width.toDp() })
+                    onWidth(with(localDensity) { it.size.width.toDp() })
                 }
         )
     }

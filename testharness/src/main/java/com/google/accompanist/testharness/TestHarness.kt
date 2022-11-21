@@ -26,6 +26,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -41,7 +42,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.core.os.ConfigurationCompat
 import androidx.core.os.LocaleListCompat
-import kotlin.math.roundToInt
+import kotlin.math.floor
 
 /**
  * Render [content] in a [Box] within a harness, overriding various device configuration values to
@@ -108,7 +109,7 @@ fun TestHarness(
                 }
                 // Override densityDpi
                 densityDpi =
-                    (LocalDensity.current.density * DisplayMetrics.DENSITY_DEFAULT).roundToInt()
+                    floor(LocalDensity.current.density * DisplayMetrics.DENSITY_DEFAULT).toInt()
                 // Override font scale
                 this.fontScale = fontScale
                 // Maybe override fontWeightAdjustment
@@ -178,20 +179,27 @@ internal fun DensityForcedSize(
         // Try to set the size naturally, we'll be overriding the density below if this fails
         modifier = Modifier.size(size)
     ) {
+        // Compute the minimum density required so that both the requested width and height both
+        // fit
+        val density = LocalDensity.current.density * minOf(
+            maxWidth / maxOf(maxWidth, size.width),
+            maxHeight / maxOf(maxHeight, size.height),
+        )
+        // Configuration requires the density DPI to be an integer, so round down to ensure we
+        // have enough space
+        val densityDpi = floor(density * DisplayMetrics.DENSITY_DEFAULT).toInt()
+
         CompositionLocalProvider(
             LocalDensity provides Density(
                 // Override the density with the factor needed to meet both the minimum width and
-                // height requirements.
-                density = LocalDensity.current.density * minOf(
-                    maxWidth / maxOf(maxWidth, size.width),
-                    maxHeight / maxOf(maxHeight, size.height),
-                ),
+                // height requirements, and the configuration override requirements.
+                density = densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT,
                 // Pass through the font scale
                 fontScale = LocalDensity.current.fontScale
             )
         ) {
             Box(
-                // This size will now be guaranteed to match the constraints
+                // This size will now be guaranteed to be able to match the constraints
                 modifier = Modifier.size(size).fillMaxSize()
             ) {
                 content()
