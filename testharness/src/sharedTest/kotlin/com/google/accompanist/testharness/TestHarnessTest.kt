@@ -67,7 +67,6 @@ class TestHarnessTest {
         composeTestRule.waitForIdle()
 
         val ratio = width / 200.dp
-        assertTrue(ratio >= 1)
         assertEquals(ratio, 1f, 0.01f)
     }
 
@@ -84,7 +83,6 @@ class TestHarnessTest {
         composeTestRule.waitForIdle()
 
         val ratio = width / 200.dp
-        assertTrue(ratio >= 1)
         assertEquals(ratio, 1f, 0.01f)
     }
 
@@ -99,7 +97,6 @@ class TestHarnessTest {
         composeTestRule.waitForIdle()
 
         val ratio = width / 10000.dp
-        assertTrue(ratio >= 1)
         assertEquals(ratio, 1f, 0.01f)
     }
 
