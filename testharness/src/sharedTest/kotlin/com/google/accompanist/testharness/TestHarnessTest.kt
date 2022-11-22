@@ -24,6 +24,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
@@ -33,7 +34,9 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
@@ -41,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.LocaleListCompat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
+import com.google.accompanist.testharness.test.R
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Rule
@@ -140,6 +144,26 @@ class TestHarnessTest {
 
         // All locales are expected in Sdk>=24
         assertEquals(expectedLocales, locales)
+    }
+
+    @Test
+    fun usLocale_usesCorrectResource() {
+        composeTestRule.setContent {
+            TestHarness(locales = LocaleListCompat.forLanguageTags("us")) {
+                BasicText(text = stringResource(R.string.this_is_content, "abc"))
+            }
+        }
+        composeTestRule.onNodeWithText("This is content\nabc").assertExists()
+    }
+
+    @Test
+    fun arLocale_usesCorrectResource() {
+        composeTestRule.setContent {
+            TestHarness(locales = LocaleListCompat.forLanguageTags("ar")) {
+                BasicText(text = stringResource(R.string.this_is_content, "abc"))
+            }
+        }
+        composeTestRule.onNodeWithText("هذا مضمون \nabc").assertExists()
     }
 
     @Test
