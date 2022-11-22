@@ -45,8 +45,8 @@ import androidx.compose.ui.unit.sp
 import androidx.test.filters.SdkSuppress
 import com.google.accompanist.themeadapter.core.FontFamilyWithWeight
 import com.google.accompanist.themeadapter.material.test.R
-import org.junit.Assert
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
@@ -127,14 +127,9 @@ abstract class BaseMdcThemeTest<T : AppCompatActivity>(
             val typography = MaterialTheme.typography
             val density = LocalDensity.current
 
-            val rubik = FontFamily(
-                Font(resId = R.font.rubik_300, weight = FontWeight.W300),
-                Font(resId = R.font.rubik_400, weight = FontWeight.W400),
-                Font(resId = R.font.rubik_500, weight = FontWeight.W500),
-                Font(resId = R.font.rubik_700, weight = FontWeight.W700)
-            )
             val rubik300 = Font(R.font.rubik_300).toFontFamily()
             val rubik400 = Font(R.font.rubik_400).toFontFamily()
+            val rubik500 = Font(R.font.rubik_500).toFontFamily()
             val sansSerif = FontFamilyWithWeight(FontFamily.SansSerif)
             val sansSerifLight = FontFamilyWithWeight(FontFamily.SansSerif, FontWeight.Light)
             val sansSerifBlack = FontFamilyWithWeight(FontFamily.SansSerif, FontWeight.Black)
@@ -199,7 +194,7 @@ abstract class BaseMdcThemeTest<T : AppCompatActivity>(
             }
 
             typography.button.run {
-                assertEquals(rubik, fontFamily)
+                assertEquals(rubik500, fontFamily)
             }
 
             typography.caption.run {
@@ -288,19 +283,19 @@ internal fun Typography.assertFontFamilies(
     expected: FontFamily,
     notEquals: Boolean = false
 ) {
-    if (notEquals) Assert.assertNotEquals(expected, h1.fontFamily) else assertEquals(expected, h1.fontFamily)
-    if (notEquals) Assert.assertNotEquals(expected, h2.fontFamily) else assertEquals(expected, h2.fontFamily)
-    if (notEquals) Assert.assertNotEquals(expected, h3.fontFamily) else assertEquals(expected, h3.fontFamily)
-    if (notEquals) Assert.assertNotEquals(expected, h4.fontFamily) else assertEquals(expected, h4.fontFamily)
-    if (notEquals) Assert.assertNotEquals(expected, h5.fontFamily) else assertEquals(expected, h5.fontFamily)
-    if (notEquals) Assert.assertNotEquals(expected, h6.fontFamily) else assertEquals(expected, h6.fontFamily)
-    if (notEquals) Assert.assertNotEquals(expected, subtitle1.fontFamily) else assertEquals(expected, subtitle1.fontFamily)
-    if (notEquals) Assert.assertNotEquals(expected, subtitle2.fontFamily) else assertEquals(expected, subtitle2.fontFamily)
-    if (notEquals) Assert.assertNotEquals(expected, body1.fontFamily) else assertEquals(expected, body1.fontFamily)
-    if (notEquals) Assert.assertNotEquals(expected, body2.fontFamily) else assertEquals(expected, body2.fontFamily)
-    if (notEquals) Assert.assertNotEquals(expected, button.fontFamily) else assertEquals(expected, button.fontFamily)
-    if (notEquals) Assert.assertNotEquals(expected, caption.fontFamily) else assertEquals(expected, caption.fontFamily)
-    if (notEquals) Assert.assertNotEquals(expected, overline.fontFamily) else assertEquals(expected, overline.fontFamily)
+    if (notEquals) assertNotEquals(expected, h1.fontFamily) else assertEquals(expected, h1.fontFamily)
+    if (notEquals) assertNotEquals(expected, h2.fontFamily) else assertEquals(expected, h2.fontFamily)
+    if (notEquals) assertNotEquals(expected, h3.fontFamily) else assertEquals(expected, h3.fontFamily)
+    if (notEquals) assertNotEquals(expected, h4.fontFamily) else assertEquals(expected, h4.fontFamily)
+    if (notEquals) assertNotEquals(expected, h5.fontFamily) else assertEquals(expected, h5.fontFamily)
+    if (notEquals) assertNotEquals(expected, h6.fontFamily) else assertEquals(expected, h6.fontFamily)
+    if (notEquals) assertNotEquals(expected, subtitle1.fontFamily) else assertEquals(expected, subtitle1.fontFamily)
+    if (notEquals) assertNotEquals(expected, subtitle2.fontFamily) else assertEquals(expected, subtitle2.fontFamily)
+    if (notEquals) assertNotEquals(expected, body1.fontFamily) else assertEquals(expected, body1.fontFamily)
+    if (notEquals) assertNotEquals(expected, body2.fontFamily) else assertEquals(expected, body2.fontFamily)
+    if (notEquals) assertNotEquals(expected, button.fontFamily) else assertEquals(expected, button.fontFamily)
+    if (notEquals) assertNotEquals(expected, caption.fontFamily) else assertEquals(expected, caption.fontFamily)
+    if (notEquals) assertNotEquals(expected, overline.fontFamily) else assertEquals(expected, overline.fontFamily)
 }
 
 /**
