@@ -79,11 +79,11 @@
     <string name="sans_serif_condensed_light">sans-serif-condensed-light</string>
 
     <style name="TextAppearance.Mdc3ThemeTest.LabelLarge" parent="TextAppearance.Material3.LabelLarge">
-        <item name="fontFamily">@font/rubik</item>
+        <item name="fontFamily">@font/rubik_500</item>
     </style>
 
     <style name="TextAppearance.Mdc3ThemeTest.LabelMedium" parent="TextAppearance.Material3.LabelMedium">
-        <item name="fontFamily">@font/rubik</item>
+        <item name="fontFamily">@font/rubik_700</item>
     </style>
 
     <style name="TextAppearance.Mdc3ThemeTest.LabelSmall" parent="TextAppearance.Material3.LabelSmall">

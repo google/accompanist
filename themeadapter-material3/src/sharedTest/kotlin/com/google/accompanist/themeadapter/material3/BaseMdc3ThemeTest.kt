@@ -153,14 +153,10 @@ abstract class BaseMdc3ThemeTest<T : AppCompatActivity>(
             val typography = MaterialTheme.typography
             val density = LocalDensity.current
 
-            val rubik = FontFamily(
-                Font(resId = R.font.rubik_300, weight = FontWeight.W300),
-                Font(resId = R.font.rubik_400, weight = FontWeight.W400),
-                Font(resId = R.font.rubik_500, weight = FontWeight.W500),
-                Font(resId = R.font.rubik_700, weight = FontWeight.W700)
-            )
             val rubik300 = Font(R.font.rubik_300).toFontFamily()
             val rubik400 = Font(R.font.rubik_400).toFontFamily()
+            val rubik500 = Font(R.font.rubik_500).toFontFamily()
+            val rubik700 = Font(R.font.rubik_700).toFontFamily()
             val sansSerif = FontFamilyWithWeight(FontFamily.SansSerif)
             val sansSerifLight = FontFamilyWithWeight(FontFamily.SansSerif, FontWeight.Light)
             val sansSerifBlack = FontFamilyWithWeight(FontFamily.SansSerif, FontWeight.Black)
@@ -235,11 +231,11 @@ abstract class BaseMdc3ThemeTest<T : AppCompatActivity>(
             }
 
             typography.labelLarge.run {
-                assertEquals(rubik, fontFamily)
+                assertEquals(rubik500, fontFamily)
             }
 
             typography.labelMedium.run {
-                assertEquals(rubik, fontFamily)
+                assertEquals(rubik700, fontFamily)
             }
 
             typography.labelSmall.run {
