@@ -21,9 +21,18 @@ nav:
   - 'System UI Controller':
     - 'Guide': systemuicontroller.md
     - 'API': api/systemuicontroller/
-  - 'AppCompat Theme':
-    - 'Guide': appcompat-theme.md
-    - 'API': api/appcompat-theme/
+  - 'AppCompat Theme Adapter':
+    - 'Guide': themeadapter-appcompat.md
+    - 'API': api/themeadapter-appcompat/
+  - 'Material Theme Adapter':
+    - 'Guide': themeadapter-material.md
+    - 'API': api/themeadapter-material/
+  - 'Material 3 Theme Adapter':
+    - 'Guide': themeadapter-material3.md
+    - 'API': api/themeadapter-material3/
+  - 'Core Theme Adapter':
+    - 'Guide': themeadapter-core.md
+    - 'API': api/themeadapter-core/
   - 'Pager layouts':
     - 'Guide': pager.md
     - 'API': api/pager/

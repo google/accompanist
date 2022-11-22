@@ -34,8 +34,14 @@ For stable versions of Compose, we use the latest *stable* version of the Compos
 ### 🍫 [System UI Controller](./systemuicontroller/)
 A library that provides easy-to-use utilities for recoloring the Android system bars from Jetpack Compose.
 
-### 🎨 [AppCompat Theme Adapter](./appcompat-theme/)
-A library that enables the reuse of [AppCompat][appcompat] XML themes for theming in Jetpack Compose.
+### 🎨 [AppCompat Theme Adapter](./themeadapter-appcompat/)
+A library that enables the reuse of [AppCompat][appcompat] XML themes, for theming in Jetpack Compose.
+
+### 🎨 [Material Theme Adapter](./themeadapter-material/)
+A library that enables the reuse of [MDC-Android][mdc] Material 2 XML themes, for theming in Jetpack Compose.
+
+### 🎨 [Material 3 Theme Adapter](./themeadapter-material3/)
+A library that enables the reuse of [MDC-Android][mdc] Material 3 XML themes, for theming in Jetpack Compose.
 
 ### 📖 [Pager](./pager/)
 A library that provides utilities for building paginated layouts in Jetpack Compose, similar to Android's [ViewPager][viewpager].
@@ -115,7 +121,7 @@ limitations under the License.
 [appcompat]: https://developer.android.com/jetpack/androidx/releases/appcompat
 [compose]: https://developer.android.com/jetpack/compose
 [snap]: https://oss.sonatype.org/content/repositories/snapshots/com/google/accompanist/
-[mdc]: https://material.io/develop/android/
+[mdc]: https://github.com/material-components/material-components-android
 [windowinsets]: https://developer.android.com/reference/kotlin/android/view/WindowInsets
 [viewpager]: https://developer.android.com/reference/kotlin/androidx/viewpager/widget/ViewPager
 [runtimepermissions]: https://developer.android.com/guide/topics/permissions/overview
