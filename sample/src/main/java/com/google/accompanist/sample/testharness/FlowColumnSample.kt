@@ -64,7 +64,6 @@ class TestHarnessSample : ComponentActivity() {
                     TestHarnessScreen("with a big font scale")
                 }
             }
-
         }
     }
 }
@@ -83,5 +82,3 @@ fun TestHarnessScreen(text: String = "") {
         }
     }
 }
-
-
