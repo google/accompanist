@@ -32,4 +32,24 @@
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
+
+    <style name="Theme.Sample.ThemeAdapter.Material" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+
+        <item name="colorPrimary">@color/deep_orange_300</item>
+        <item name="colorPrimaryVariant">@color/deep_orange_600</item>
+        <item name="colorSecondary">@color/pink_a200</item>
+        <item name="colorSecondaryVariant">@color/pink_dark</item>
+
+        <item name="textAppearanceHeadline3">@style/TextAppearance.Sample.ThemeAdapter.Headline3</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.Sample.ThemeAdapter.Subtitle1</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.Sample.ThemeAdapter.Caption</item>
+
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.Sample.ThemeAdapter.SmallComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.Sample.ThemeAdapter.MediumComponent</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.Sample.ThemeAdapter.LargeComponent</item>
+    </style>
+    <style name="Theme.Sample.ThemeAdapter.Material3" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Material 3 sample uses dynamic color on Android 12+, or falls back to baseline -->
+    </style>
 </resources>

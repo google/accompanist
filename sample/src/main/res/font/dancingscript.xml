@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 The Android Open Source Project
+  ~ Copyright 2022 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,9 +15,17 @@
   ~ limitations under the License.
   -->
 
-<resources>
-    <color name="deep_orange_300">#ff8a65</color>
-    <color name="deep_orange_600">#f4511e</color>
-    <color name="pink_a200">#ff4081</color>
-    <color name="pink_dark">#c60055</color>
-</resources>
+<font-family xmlns:app="http://schemas.android.com/apk/res-auto">
+    <font
+        app:font="@font/dancingscript_regular"
+        app:fontWeight="400" />
+    <font
+        app:font="@font/dancingscript_medium"
+        app:fontWeight="500" />
+    <font
+        app:font="@font/dancingscript_semibold"
+        app:fontWeight="600" />
+    <font
+        app:font="@font/dancingscript_bold"
+        app:fontWeight="700" />
+</font-family>
