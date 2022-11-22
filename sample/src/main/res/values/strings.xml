@@ -68,4 +68,6 @@
     <string name="adaptive_two_pane_horizontal">Adaptive: TwoPane Horizontal</string>
     <string name="adaptive_two_pane_vertical">Adaptive: TwoPane Vertical</string>
 
+    <string name="testharness">Test Harness</string>
+
 </resources>
