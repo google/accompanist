@@ -32,12 +32,16 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.core.os.LocaleListCompat
 import com.google.accompanist.sample.AccompanistSampleTheme
+import com.google.accompanist.sample.R
 import com.google.accompanist.testharness.TestHarness
+import java.util.Locale
 
 /**
  * A visual sample for the TestHarness Composable. Note that it should not be used in production.
@@ -47,7 +51,9 @@ class TestHarnessSample : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             Column(
-                modifier = Modifier.padding(16.dp).verticalScroll(rememberScrollState()),
+                modifier = Modifier
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 TestHarnessScreen()
@@ -57,11 +63,14 @@ class TestHarnessSample : ComponentActivity() {
                 TestHarness(darkMode = true) {
                     TestHarnessScreen("with darkMode enabled")
                 }
+                TestHarness(fontScale = 2f) {
+                    TestHarnessScreen("with a big font scale")
+                }
                 TestHarness(layoutDirection = LayoutDirection.Rtl) {
                     TestHarnessScreen("in RTL")
                 }
-                TestHarness(fontScale = 2f) {
-                    TestHarnessScreen("with a big font scale")
+                TestHarness(locales = LocaleListCompat.create(Locale("ar"))) {
+                    TestHarnessScreen("in Arabic")
                 }
             }
         }
@@ -78,7 +87,10 @@ fun TestHarnessScreen(text: String = "") {
                 .height(100.dp)
                 .fillMaxWidth()
         ) {
-            Text("This is content $text", modifier = Modifier.padding(8.dp))
+            Text(
+                stringResource(R.string.this_is_content, text),
+                modifier = Modifier.padding(8.dp)
+            )
         }
     }
 }
