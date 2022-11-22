@@ -135,6 +135,10 @@ UI on a small portrait phone.
 The mechanism that the test harness uses is also not suitable for production code: in production,
 the default configuration as specified by the user and the system should be used.
 
+The mechanism that the test harness uses to override the configuration (`ContextThemeWrapper`) is
+currently not supported by layoutlib, meaning `TestHarness` will not work in Android Studio
+previews or screenshot testing that uses layoutlib.
+
 ## Download
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-testharness)](https://search.maven.org/search?q=g:com.google.accompanist)
