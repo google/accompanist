@@ -54,7 +54,7 @@ class InstrumentedAppCompatThemeTest<T : AppCompatActivity>(
     fun type_rubik_family_api21() = composeTestRule.setContent {
         val rubik = Font(R.font.rubik, FontWeight.W400).toFontFamily()
 
-        WithThemeOverlay(R.style.ThemeOverlay_RubikFontFamily) {
+        WithThemeOverlay(R.style.ThemeOverlay_AppCompatThemeTest_RubikFontFamily) {
             AppCompatTheme {
                 MaterialTheme.typography.assertFontFamily(expected = rubik)
             }
