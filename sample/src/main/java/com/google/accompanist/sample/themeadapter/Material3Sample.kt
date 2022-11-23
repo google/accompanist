@@ -35,6 +35,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedButton
@@ -69,8 +70,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.sample.R
 import com.google.accompanist.themeadapter.material3.Mdc3Theme
 import com.google.android.material.color.DynamicColors
 
@@ -102,12 +105,12 @@ fun Material3Sample() {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        /*topBar = {
+        topBar = {
             CenterAlignedTopAppBar(
-                title = { Text(text = stringResource(R.string.material_3_integration)) },
+                title = { Text(text = stringResource(R.string.themeadapter_title_material3)) },
                 scrollBehavior = scrollBehavior
             )
-        }*/
+        }
     ) { padding ->
         Column(
             modifier = Modifier

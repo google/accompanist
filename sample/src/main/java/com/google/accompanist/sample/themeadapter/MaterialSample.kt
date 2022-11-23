@@ -35,13 +35,16 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.sample.R
 import com.google.accompanist.themeadapter.material.MdcTheme
 
 class MdcThemeSample : ComponentActivity() {
@@ -68,11 +71,11 @@ fun MaterialSamplePreview() {
 @Composable
 fun MaterialSample() {
     Scaffold(
-        /*topBar = {
+        topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(R.string.material_integration)) }
+                title = { Text(text = stringResource(R.string.themeadapter_title_material)) }
             )
-        }*/
+        }
     ) { padding ->
         Column(
             modifier = Modifier
