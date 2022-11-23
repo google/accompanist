@@ -136,8 +136,8 @@ The mechanism that the test harness uses is also not suitable for production cod
 the default configuration as specified by the user and the system should be used.
 
 The mechanism that the test harness uses to override the configuration (`ContextThemeWrapper`) is
-currently not supported by layoutlib, meaning `TestHarness` will not work in Android Studio
-previews or screenshot testing that uses layoutlib.
+not fully supported by layoutlib. In particular, alternate resources are available just by using
+`TestHarness`.
 
 ## Download
 
