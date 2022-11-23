@@ -64,6 +64,9 @@ nav:
   - 'Adaptive':
       - 'Guide': adaptive.md
       - 'API': api/adaptive
+  - 'Test Harness':
+      - 'Guide': testharness.md
+      - 'API': api/testharness
   - 'Snapshots': using-snapshot-version.md
   - 'Contributing': contributing.md
   - 'Maintainers':
