@@ -39,6 +39,12 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    buildTypes {
+        debug {
+            enableUnitTestCoverage = true
+        }
+    }
+
     buildFeatures {
         buildConfig false
         compose true
@@ -62,9 +68,27 @@ android {
         excludes += "/META-INF/LGPL2.1"
     }
 
+    testCoverage {
+        jacocoVersion = "0.8.8"
+    }
+
     testOptions {
         unitTests {
             includeAndroidResources = true
+        }
+        unitTests.all {
+            useJUnit {
+                excludeCategories 'com.google.accompanist.internal.test.IgnoreOnRobolectric'
+            }
+            jacoco {
+                // Required for JaCoCo + Robolectric
+                // https://github.com/robolectric/robolectric/issues/2230
+                includeNoLocationClasses = true
+
+                // Required for JDK 11 with the above
+                // https://github.com/gradle/gradle/issues/5184#issuecomment-391982009
+                excludes = ["jdk.internal.*"]
+            }
         }
         animationsDisabled true
     }
@@ -82,9 +106,9 @@ android {
 }
 
 dependencies {
-    api libs.compose.foundation.foundation
-    api libs.snapper
-
+    implementation libs.compose.foundation.foundation
+    implementation libs.androidx.core
+    testImplementation libs.androidx.core
     implementation libs.napier
     implementation libs.kotlin.coroutines.android
 
@@ -94,9 +118,6 @@ dependencies {
 
     androidTestImplementation project(':internal-testutils')
     testImplementation project(':internal-testutils')
-
-    androidTestImplementation project(':testharness')
-    testImplementation project(':testharness')
 
     androidTestImplementation libs.junit
     testImplementation libs.junit

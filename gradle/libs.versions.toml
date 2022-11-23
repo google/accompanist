@@ -84,7 +84,7 @@ androidx-test-espressoWeb = "androidx.test.espresso:espresso-web:3.5.0-alpha07"
 
 junit = "junit:junit:4.13.2"
 truth = "com.google.truth:truth:1.1.2"
-robolectric = "org.robolectric:robolectric:4.8"
+robolectric = "org.robolectric:robolectric:4.9"
 
 affectedmoduledetector = "com.dropbox.affectedmoduledetector:affectedmoduledetector:0.1.2"
 
