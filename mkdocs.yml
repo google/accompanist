@@ -21,6 +21,9 @@ nav:
   - 'System UI Controller':
     - 'Guide': systemuicontroller.md
     - 'API': api/systemuicontroller/
+  - 'AppCompat Theme':
+    - 'Guide': appcompat-theme.md
+    - 'API': api/appcompat-theme/
   - 'AppCompat Theme Adapter':
     - 'Guide': themeadapter-appcompat.md
     - 'API': api/themeadapter-appcompat/

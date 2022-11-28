@@ -79,6 +79,9 @@ See our [Migration Guide](https://google.github.io/accompanist/insets/) for migr
 ### ⬇️ [Swipe to Refresh](./swiperefresh/) (Deprecated)
 See our [Migration Guide](https://google.github.io/accompanist/swiperefresh/) for migrating to PullRefresh in Compose Material.
 
+### 🎨 [AppCompat Theme Adapter](./appcompat-theme/) (Deprecated)
+See our [Migration Guide](https://google.github.io/accompanist/appcompat-theme/) for migrating to the new artifact in Accompanist.
+
 ---
 
 ## Future?
