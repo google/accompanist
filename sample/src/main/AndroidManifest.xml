@@ -455,10 +455,32 @@
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
             </intent-filter>
         </activity>
-
+        
         <activity
             android:name=".testharness.TestHarnessSample"
             android:label="@string/testharness"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".themeadapter.MdcThemeSample"
+            android:label="@string/themeadapter_title_material"
+            android:theme="@style/Theme.Sample.ThemeAdapter.Material"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".themeadapter.Mdc3ThemeSample"
+            android:label="@string/themeadapter_title_material3"
+            android:theme="@style/Theme.Sample.ThemeAdapter.Material3"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
