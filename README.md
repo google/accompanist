@@ -70,7 +70,7 @@ A wrapper around WebView for basic WebView support in Jetpack Compose.
 ### 📜 [Adaptive](./adaptive/)
 A library providing a collection of utilities for adaptive layouts.
 
-### 📜 [Test Harness](./testharness/)
+### 🗜 [Test Harness](./testharness/)
 Utilities for testing Compose layouts.
 
 ### 📐 [Insets](./insets/) (Deprecated)
