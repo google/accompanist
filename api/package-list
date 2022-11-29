@@ -3,8 +3,6 @@ $dokka.linkExtension:html
 
 module:adaptive
 com.google.accompanist.adaptive
-module:appcompat-theme
-com.google.accompanist.appcompattheme
 module:drawablepainter
 com.google.accompanist.drawablepainter
 module:flowlayout
@@ -32,5 +30,15 @@ module:placeholder-material
 com.google.accompanist.placeholder.material
 module:systemuicontroller
 com.google.accompanist.systemuicontroller
+module:testharness
+com.google.accompanist.testharness
+module:themeadapter-appcompat
+com.google.accompanist.themeadapter.appcompat
+module:themeadapter-core
+com.google.accompanist.themeadapter.core
+module:themeadapter-material
+com.google.accompanist.themeadapter.material
+module:themeadapter-material3
+com.google.accompanist.themeadapter.material3
 module:web
 com.google.accompanist.web
