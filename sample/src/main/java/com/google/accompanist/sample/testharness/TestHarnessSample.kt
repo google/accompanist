@@ -50,29 +50,35 @@ class TestHarnessSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Column(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                TestHarnessScreen()
-                TestHarness(size = DpSize(100.dp, 100.dp)) {
-                    TestHarnessScreen("with a set size")
-                }
-                TestHarness(darkMode = true) {
-                    TestHarnessScreen("with darkMode enabled")
-                }
-                TestHarness(fontScale = 2f) {
-                    TestHarnessScreen("with a big font scale")
-                }
-                TestHarness(layoutDirection = LayoutDirection.Rtl) {
-                    TestHarnessScreen("in RTL")
-                }
-                TestHarness(locales = LocaleListCompat.create(Locale("ar"))) {
-                    TestHarnessScreen("in Arabic")
-                }
-            }
+            TestHarnessSampleScreen()
+        }
+    }
+}
+
+@Preview
+@Composable
+fun TestHarnessSampleScreen() {
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        TestHarnessScreen()
+        TestHarness(size = DpSize(100.dp, 100.dp)) {
+            TestHarnessScreen("with a set size")
+        }
+        TestHarness(darkMode = true) {
+            TestHarnessScreen("with darkMode enabled")
+        }
+        TestHarness(fontScale = 2f) {
+            TestHarnessScreen("with a big font scale")
+        }
+        TestHarness(layoutDirection = LayoutDirection.Rtl) {
+            TestHarnessScreen("in RTL")
+        }
+        TestHarness(locales = LocaleListCompat.create(Locale("ar"))) {
+            TestHarnessScreen("in Arabic")
         }
     }
 }

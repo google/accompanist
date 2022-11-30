@@ -20,7 +20,6 @@ import android.content.res.Configuration
 import android.os.Build
 import android.os.LocaleList
 import android.util.DisplayMetrics
-import android.view.ContextThemeWrapper
 import android.view.View
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
