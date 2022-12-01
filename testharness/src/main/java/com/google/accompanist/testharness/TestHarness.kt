@@ -65,6 +65,9 @@ import kotlin.math.floor
  *
  * @param fontWeightAdjustment the font weight adjustment for fonts. This defaults to the current
  * [fontWeightAdjustment] (if any). If `null`, the [fontWeightAdjustment] will be left unchanged.
+ *
+ * @param isScreenRound the device roundness. This defaults to null. If `null`,
+ * the [isScreenRound] will be left unchanged.
  */
 @Composable
 fun TestHarness(
@@ -75,6 +78,7 @@ fun TestHarness(
     fontScale: Float = LocalDensity.current.fontScale,
     fontWeightAdjustment: Int? =
         if (Build.VERSION.SDK_INT >= 31) LocalConfiguration.current.fontWeightAdjustment else null,
+    isScreenRound: Boolean? = null,
     content: @Composable () -> Unit
 ) {
     // Use the DensityForcedSize content wrapper if specified
@@ -114,6 +118,15 @@ fun TestHarness(
                 // Maybe override fontWeightAdjustment
                 if (Build.VERSION.SDK_INT >= 31 && fontWeightAdjustment != null) {
                     this.fontWeightAdjustment = fontWeightAdjustment
+                }
+                // override isRound for Wear
+                if (Build.VERSION.SDK_INT >= 23 && isScreenRound != null) {
+                    screenLayout = when (isScreenRound) {
+                        true -> (screenLayout and Configuration.SCREENLAYOUT_ROUND_MASK.inv()) or
+                            Configuration.SCREENLAYOUT_ROUND_YES
+                        false -> (screenLayout and Configuration.SCREENLAYOUT_ROUND_MASK.inv()) or
+                            Configuration.SCREENLAYOUT_ROUND_NO
+                    }
                 }
             },
         ) {
@@ -199,7 +212,9 @@ internal fun DensityForcedSize(
         ) {
             Box(
                 // This size will now be guaranteed to be able to match the constraints
-                modifier = Modifier.size(size).fillMaxSize()
+                modifier = Modifier
+                    .size(size)
+                    .fillMaxSize()
             ) {
                 content()
             }
