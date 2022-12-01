@@ -4,7 +4,7 @@
 
 A library that enables the reuse of [MDC-Android][mdc] Material 3 XML themes, for theming in [Jetpack Compose][compose].
 
-![Material 3 Theme Adapter header](material3-header.png)
+![Material 3 Theme Adapter header](themeadapter/material3-header.png)
 
 The basis of Material Design 3 theming in [Jetpack Compose][compose] is the [`MaterialTheme`][materialtheme] composable, where you provide [`ColorScheme`][colorscheme], [`Typography`][typography] and [`Shapes`][shapes] instances containing your styling parameters:
 

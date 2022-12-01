@@ -4,7 +4,7 @@
 
 A library that enables the reuse of [MDC-Android][mdc] Material 2 XML themes, for theming in [Jetpack Compose][compose].
 
-![Material Theme Adapter header](material-header.png)
+![Material Theme Adapter header](themeadapter/material-header.png)
 
 The basis of Material Design 2 theming in [Jetpack Compose][compose] is the [`MaterialTheme`][materialtheme] composable, where you provide [`Colors`][colors], [`Typography`][typography] and [`Shapes`][shapes] instances containing your styling parameters:
 
