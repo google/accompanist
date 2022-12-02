@@ -16,12 +16,15 @@
 
 package com.google.accompanist.adaptive
 
+import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.accompanist.testharness.TestHarness
 import com.google.common.truth.Truth.assertThat
+import org.junit.Assume
+import org.junit.Assume.assumeTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -34,6 +37,8 @@ class WearTest {
 
     @Test
     fun is_round_for_wear() {
+        assumeTrue(Build.VERSION.SDK_INT >= 23)
+
         var defaultRound: Boolean? = null
         var forcedRound: Boolean? = null
         var forcedNotRound: Boolean? = null
