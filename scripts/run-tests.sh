@@ -113,7 +113,7 @@ fi
 # Add Gradle Managed Devices specific properties for CI
 # TODO: Remove --no-parallel and -Dorg.gradle.workers.max=2 when GMD handles parallelization better
 if [[ ! -z "$GMD_API" ]]; then
-  TASK="$TASK -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect --no-parallel -Dorg.gradle.workers.max=2"
+  TASK="$TASK -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect --no-parallel -Dorg.gradle.workers.max=2 -Pandroid.experimental.testOptions.installApkTimeout=600"
 fi
 
 SHARD_OPTS=""
