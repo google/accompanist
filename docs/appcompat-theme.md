@@ -3,7 +3,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-appcompat-theme)](https://search.maven.org/search?q=g:com.google.accompanist)
 
 !!! warning
-**This library is deprecated in favor of the new [`themeadapter-appcompat`][themeadapterappcompatlib] artifact. The migration guide and original documentation is below.
+	**This library is deprecated in favor of the new [`themeadapter-appcompat`][themeadapterappcompatlib] artifact.** The migration guide and original documentation is below.
 
 ## Migration
 

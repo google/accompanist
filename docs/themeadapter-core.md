@@ -1,6 +1,6 @@
 # Core Theme Adapter
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist--themeadapter-core)](https://search.maven.org/search?q=g:com.google.accompanist)
+[![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-themeadapter-core)](https://search.maven.org/search?q=g:com.google.accompanist)
 
 A library that includes common utilities that enable the reuse of XML themes, for theming in [Jetpack Compose][compose].
 
