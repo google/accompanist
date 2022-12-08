@@ -30,7 +30,9 @@ package com.google.accompanist.navigation.material {
     method public androidx.compose.runtime.State<java.lang.Float> getOverflow();
     method public androidx.compose.material.SwipeProgress<androidx.compose.material.ModalBottomSheetValue> getProgress();
     method public androidx.compose.material.ModalBottomSheetValue getTargetValue();
+    method public suspend Object? hide(kotlin.coroutines.Continuation<? super kotlin.Unit> p);
     method public boolean isVisible();
+    method public suspend Object? show(kotlin.coroutines.Continuation<? super kotlin.Unit> p);
     property public final androidx.compose.material.ModalBottomSheetValue currentValue;
     property public final float direction;
     property public final boolean isVisible;

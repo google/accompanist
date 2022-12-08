@@ -93,6 +93,20 @@ public class BottomSheetNavigatorSheetState(private val sheetState: ModalBottomS
      */
     public val progress: SwipeProgress<ModalBottomSheetValue>
         get() = sheetState.progress
+
+    /**
+     * @see ModalBottomSheetState.show
+     */
+    public suspend fun show() {
+        sheetState.show()
+    }
+
+    /**
+     * @see ModalBottomSheetState.show
+     */
+    public suspend fun hide() {
+        sheetState.hide()
+    }
 }
 
 /**
