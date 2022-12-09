@@ -14,22 +14,21 @@
   ~ limitations under the License.
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.google.accompanist.themeadapter.material">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
         <activity
-            android:name=".LightMdcActivity"
+            android:name="com.google.accompanist.themeadapter.material.LightMdcActivity"
             android:exported="true"
             android:theme="@style/Theme.MdcThemeTest" />
 
         <activity
-            android:name=".DarkMdcActivity"
+            android:name="com.google.accompanist.themeadapter.material.DarkMdcActivity"
             android:exported="true"
             android:theme="@style/Theme.MdcThemeTest" />
 
         <activity
-            android:name=".NotMdcActivity"
+            android:name="com.google.accompanist.themeadapter.material.NotMdcActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.DayNight" />
     </application>

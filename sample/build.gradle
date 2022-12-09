@@ -44,6 +44,7 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion libs.versions.composeCompiler.get()
     }
+    namespace 'com.google.accompanist.sample'
 }
 
 dependencies {

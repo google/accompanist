@@ -25,6 +25,8 @@ kotlin {
 }
 
 android {
+    namespace "com.google.accompanist.themeadapter.material3"
+
     compileSdkVersion 33
 
     defaultConfig {

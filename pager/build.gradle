@@ -25,6 +25,8 @@ kotlin {
 }
 
 android {
+    namespace "com.google.accompanist.pager"
+
     compileSdkVersion 33
 
     defaultConfig {

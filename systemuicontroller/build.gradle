@@ -84,6 +84,7 @@ android {
             res.srcDirs += 'src/sharedTest/res'
         }
     }
+    namespace 'com.google.accompanist.systemuicontroller'
 }
 
 dependencies {

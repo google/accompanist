@@ -25,6 +25,8 @@ kotlin {
 }
 
 android {
+    namespace "com.google.accompanist.swiperefresh"
+
     compileSdkVersion 33
 
     defaultConfig {
