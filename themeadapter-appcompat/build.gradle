@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import com.android.build.api.dsl.ManagedVirtualDevice
+
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
@@ -70,6 +72,17 @@ android {
             includeAndroidResources = true
         }
         animationsDisabled true
+        managedDevices {
+            devices {
+                [28, 29, 31, 32].each { api ->
+                    create("api$api", ManagedVirtualDevice) {
+                        device = "Pixel 6"
+                        apiLevel = api
+                        systemImageSource = "google"
+                    }
+                }
+            }
+        }
     }
 
     sourceSets {
