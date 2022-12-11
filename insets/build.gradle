@@ -25,6 +25,8 @@ kotlin {
 }
 
 android {
+    namespace "com.google.accompanist.insets"
+
     compileSdkVersion 33
 
     defaultConfig {

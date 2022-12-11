@@ -25,6 +25,9 @@ kotlin {
 }
 
 android {
+    namespace "com.google.accompanist.themeadapter.appcompat"
+    testNamespace "com.google.accompanist.themeadapter.appcompat.test"
+
     compileSdkVersion 33
 
     defaultConfig {

@@ -16,8 +16,7 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.google.accompanist.sample">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Used for loading images from the network -->
     <uses-permission android:name="android.permission.INTERNET" />

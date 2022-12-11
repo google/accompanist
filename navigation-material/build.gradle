@@ -25,6 +25,8 @@ kotlin {
 }
 
 android {
+    namespace "com.google.accompanist.navigation.material"
+
     compileSdkVersion 33
 
     defaultConfig {

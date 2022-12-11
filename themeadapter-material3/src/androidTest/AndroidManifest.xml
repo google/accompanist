@@ -14,17 +14,16 @@
   ~ limitations under the License.
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.google.accompanist.themeadapter.material3">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
         <activity
-            android:name=".Mdc3Activity"
+            android:name="com.google.accompanist.themeadapter.material3.Mdc3Activity"
             android:exported="true"
             android:theme="@style/Theme.Mdc3ThemeTest" />
 
         <activity
-            android:name=".NotMdc3Activity"
+            android:name="com.google.accompanist.themeadapter.material3.NotMdc3Activity"
             android:exported="true"
             android:theme="@style/Theme.MaterialComponents.DayNight" />
     </application>

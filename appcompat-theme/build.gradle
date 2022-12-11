@@ -25,6 +25,8 @@ kotlin {
 }
 
 android {
+    namespace "com.google.accompanist.appcompattheme"
+
     compileSdkVersion 33
 
     defaultConfig {

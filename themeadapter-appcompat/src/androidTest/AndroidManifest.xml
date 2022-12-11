@@ -14,22 +14,21 @@
   ~ limitations under the License.
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.google.accompanist.themeadapter.appcompat">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
         <activity
-            android:name=".LightAppCompatActivity"
+            android:name="com.google.accompanist.themeadapter.appcompat.LightAppCompatActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompatThemeTest" />
 
         <activity
-            android:name=".DarkAppCompatActivity"
+            android:name="com.google.accompanist.themeadapter.appcompat.DarkAppCompatActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompatThemeTest" />
 
         <activity
-            android:name=".NotAppCompatActivity"
+            android:name="com.google.accompanist.themeadapter.appcompat.NotAppCompatActivity"
             android:exported="true"
             android:theme="@android:style/Theme.Material" />
     </application>
