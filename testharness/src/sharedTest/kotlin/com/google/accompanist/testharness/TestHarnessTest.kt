@@ -20,6 +20,7 @@ import android.content.res.Configuration
 import android.content.res.Configuration.UI_MODE_NIGHT_MASK
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.requiredSize
@@ -35,7 +36,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
@@ -55,7 +56,7 @@ import java.util.Locale
 @RunWith(AndroidJUnit4::class)
 class TestHarnessTest {
     @get:Rule
-    val composeTestRule = createComposeRule()
+    val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
     fun size_SmallerThanOuterBox_measuredWidthIsCorrect() {
@@ -353,6 +354,33 @@ class TestHarnessTest {
         composeTestRule.waitForIdle()
 
         assertEquals(expectedFontWeightAdjustment, fontWeightAdjustment)
+    }
+
+    @Test
+    @SdkSuppress(minSdkVersion = 23) // SCREENLAYOUT_ROUND_YES supported on API 23+
+    fun isScreenRound() {
+        var defaultRound: Boolean? = null
+        var forcedRound: Boolean? = null
+        var forcedNotRound: Boolean? = null
+
+        composeTestRule.setContent {
+            defaultRound = LocalConfiguration.current.isScreenRound
+            TestHarness(isScreenRound = false) {
+                TestHarness(isScreenRound = true) {
+                    forcedRound = LocalConfiguration.current.isScreenRound
+                    TestHarness(isScreenRound = false) {
+                        forcedNotRound = LocalConfiguration.current.isScreenRound
+                    }
+                }
+            }
+        }
+
+        assertEquals(
+            composeTestRule.activity.resources.configuration.isScreenRound,
+            defaultRound
+        )
+        assertEquals(true, forcedRound)
+        assertEquals(false, forcedNotRound)
     }
 
     @Composable
