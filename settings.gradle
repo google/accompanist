@@ -49,3 +49,5 @@ include ':themeadapter-appcompat'
 include ':themeadapter-material'
 include ':themeadapter-material3'
 include ':web'
+
+rootProject.name = 'accompanist'
