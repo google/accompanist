@@ -25,6 +25,8 @@ kotlin {
 }
 
 android {
+    namespace "com.google.accompanist.placeholder.material3"
+
     compileSdkVersion 33
 
     defaultConfig {
@@ -71,7 +73,7 @@ android {
 }
 
 dependencies {
-    implementation libs.compose.material.material3
+    implementation libs.compose.material3.material3
     api project(':placeholder')
     implementation libs.napier
     implementation libs.kotlin.coroutines.android
