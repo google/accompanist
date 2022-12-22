@@ -342,43 +342,64 @@ fun NavigateBackButton(navController: NavController) {
 }
 
 object Destinations {
-    const val Login = "login"
-    const val Home = "home"
+    const val First = "first"
+    const val Second = "second"
+    const val Third = "third"
 }
-
 @ExperimentalAnimationApi
 @Composable
 fun NavTestScreen() {
     val navController = rememberAnimatedNavController()
     AnimatedNavHost(
         navController = navController,
-        startDestination = Destinations.Login,
+        startDestination = Destinations.First,
         modifier = Modifier.fillMaxSize()
     ) {
         composable(
-            Destinations.Login,
-            enterTransition = { NavigationTransition.IdentityEnter },
+            Destinations.First,
+            enterTransition = { NavigationTransition.slideInBottomAnimation },
+            popEnterTransition = { NavigationTransition.IdentityEnter },
             exitTransition = { NavigationTransition.IdentityExit },
+            popExitTransition = { NavigationTransition.slideOutBottomAnimation },
         ) {
             Button(onClick = {
-                navController.navigate(Destinations.Home)
+                navController.navigate(Destinations.Second)
             }) {
-                Text(text = "Next")
+                Text(text = "First")
             }
         }
         composable(
-            route = Destinations.Home,
+            route = Destinations.Second,
             enterTransition = { NavigationTransition.slideInBottomAnimation },
-            exitTransition = { NavigationTransition.slideOutBottomAnimation },
+            popEnterTransition = { NavigationTransition.IdentityEnter },
+            exitTransition = { NavigationTransition.IdentityExit },
+            popExitTransition = { NavigationTransition.slideOutBottomAnimation },
+        ) {
+            Button(
+                onClick = {
+                    navController.navigate(Destinations.Third)
+                },
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Yellow),
+                modifier = Modifier.zIndex(100f)
+            ) {
+                Text(text = "Second")
+            }
+        }
+        composable(
+            route = Destinations.Third,
+            enterTransition = { NavigationTransition.slideInBottomAnimation },
+            popEnterTransition = { NavigationTransition.IdentityEnter },
+            exitTransition = { NavigationTransition.IdentityExit },
+            popExitTransition = { NavigationTransition.slideOutBottomAnimation },
         ) {
             Button(
                 onClick = {
                     navController.popBackStack()
                 },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Yellow),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Blue),
                 modifier = Modifier.zIndex(100f)
             ) {
-                Text(text = "label")
+                Text(text = "Third")
             }
         }
     }
