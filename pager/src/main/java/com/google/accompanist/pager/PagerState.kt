@@ -207,8 +207,8 @@ class PagerState(
         @IntRange(from = 0) page: Int,
         @FloatRange(from = -1.0, to = 1.0) pageOffset: Float = 0f,
     ) {
-        requireCurrentPage(page, "page")
-        requireCurrentPageOffset(pageOffset, "pageOffset")
+        requireCurrentPage(page)
+        requireCurrentPageOffset(pageOffset)
         try {
             animationTargetPage = page
 
@@ -280,8 +280,8 @@ class PagerState(
         @IntRange(from = 0) page: Int,
         @FloatRange(from = -1.0, to = 1.0) pageOffset: Float = 0f,
     ) {
-        requireCurrentPage(page, "page")
-        requireCurrentPageOffset(pageOffset, "pageOffset")
+        requireCurrentPage(page)
+        requireCurrentPageOffset(pageOffset)
         try {
             animationTargetPage = page
 
@@ -335,12 +335,12 @@ class PagerState(
         "currentPageOffset=$currentPageOffset" +
         ")"
 
-    private fun requireCurrentPage(value: Int, name: String) {
-        require(value >= 0) { "$name[$value] must be >= 0" }
+    private fun requireCurrentPage(value: Int) {
+        require(value >= 0) { "page[$value] must be >= 0" }
     }
 
-    private fun requireCurrentPageOffset(value: Float, name: String) {
-        require(value in -1f..1f) { "$name must be >= -1 and <= 1" }
+    private fun requireCurrentPageOffset(value: Float) {
+        require(value in -1f..1f) { "pageOffset must be >= -1 and <= 1" }
     }
 
     companion object {
