@@ -148,7 +148,8 @@ class PagerState(
     /**
      * The target page for any on-going animations.
      */
-    private var animationTargetPage: Int? by mutableStateOf(null)
+    var animationTargetPage: Int? by mutableStateOf(null)
+        private set
 
     internal var flingAnimationTarget: (() -> Int?)? by mutableStateOf(null)
 
