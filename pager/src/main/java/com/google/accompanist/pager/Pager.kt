@@ -42,12 +42,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
-import dev.chrisbanes.snapper.ExperimentalSnapperApi
-import dev.chrisbanes.snapper.SnapOffsets
-import dev.chrisbanes.snapper.SnapperFlingBehavior
-import dev.chrisbanes.snapper.SnapperFlingBehaviorDefaults
-import dev.chrisbanes.snapper.SnapperLayoutInfo
-import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
@@ -167,6 +163,7 @@ fun VerticalPager(
     )
 }
 
+@OptIn(FlowPreview::class)
 @ExperimentalPagerApi
 @Composable
 internal fun Pager(
@@ -192,6 +189,18 @@ internal fun Pager(
 
     LaunchedEffect(count) {
         state.currentPage = minOf(count - 1, state.currentPage).coerceAtLeast(0)
+    }
+
+    // This handles scroll snap on desktop, which doesn't trigger `isScrollInProgress` or related APIs
+    LaunchedEffect(state) {
+        snapshotFlow { Triple(state.currentPageOffset, state.isScrollInProgress, state.animationTargetPage) }
+            // Ignore when no scrolling is needed, when scrolling via existing APIs, and when scrolling via this block
+            .filter { it.first != 0f && !it.second && it.third == null }
+            // Allow some time to interact before snapping to the correct position
+            .debounce(timeoutMillis = 50)
+            .collect {
+                state.animateScrollToPage(state.currentPage)
+            }
     }
 
     // Once a fling (scroll) has finished, notify the state
