@@ -158,7 +158,6 @@ private fun Sample() {
     }
 }
 
-
 @Stable
 private class ZoomableState {
     private var _scale by mutableStateOf(MinimumScale)
