@@ -68,9 +68,9 @@ var (colors, typography, shapes) = createMdcTheme(
 // Then pass them through to MaterialTheme...
 
 MaterialTheme(
-    colors = colors,
-    typography = type,
-    shapes = shapes
+    colors = colors ?: MaterialTheme.colors,
+    typography = typography ?: MaterialTheme.typography,
+    shapes = shapes ?: MaterialTheme.shapes
 ) {
     // Rest of M2 layout
 }
