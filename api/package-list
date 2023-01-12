@@ -28,6 +28,8 @@ module:placeholder
 com.google.accompanist.placeholder
 module:placeholder-material
 com.google.accompanist.placeholder.material
+module:placeholder-material3
+com.google.accompanist.placeholder.material3
 module:systemuicontroller
 com.google.accompanist.systemuicontroller
 module:testharness
