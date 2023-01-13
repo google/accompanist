@@ -17,7 +17,6 @@
 package com.google.accompanist.drawablepainter
 
 import android.graphics.drawable.Animatable
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
@@ -34,11 +33,9 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.asAndroidColorFilter
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.withSave
@@ -155,7 +152,6 @@ class DrawablePainter(
 fun rememberDrawablePainter(drawable: Drawable?): Painter = remember(drawable) {
     when (drawable) {
         null -> EmptyPainter
-        is BitmapDrawable -> BitmapPainter(drawable.bitmap.asImageBitmap())
         is ColorDrawable -> ColorPainter(Color(drawable.color))
         // Since the DrawablePainter will be remembered and it implements RememberObserver, it
         // will receive the necessary events
