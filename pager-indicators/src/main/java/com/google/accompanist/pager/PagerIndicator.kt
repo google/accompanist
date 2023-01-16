@@ -113,9 +113,12 @@ fun HorizontalPagerIndicator(
                     )
                 }
                 .size(width = indicatorWidth, height = indicatorHeight)
-                .background(
-                    color = activeColor,
-                    shape = indicatorShape,
+                .then(
+                    if (pageCount > 0) Modifier.background(
+                        color = activeColor,
+                        shape = indicatorShape,
+                    )
+                    else Modifier
                 )
         )
     }
@@ -195,9 +198,12 @@ fun VerticalPagerIndicator(
                     )
                 }
                 .size(width = indicatorWidth, height = indicatorHeight)
-                .background(
-                    color = activeColor,
-                    shape = indicatorShape,
+                .then(
+                    if (pageCount > 0) Modifier.background(
+                        color = activeColor,
+                        shape = indicatorShape,
+                    )
+                    else Modifier
                 )
         )
     }

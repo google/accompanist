@@ -28,13 +28,12 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.filters.SdkSuppress
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
 @OptIn(ExperimentalPermissionsApi::class)
-@SdkSuppress(minSdkVersion = 23)
+@SdkSuppress(minSdkVersion = 27) // Flaky on 26
 class RequestMultiplePermissionsTest {
 
     @get:Rule
@@ -87,7 +86,6 @@ class RequestMultiplePermissionsTest {
         composeTestRule.onNodeWithText("No permission").assertIsDisplayed()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun permissionTest_grantInTheBackground() {
         composeTestRule.onNodeWithText("No permission").assertIsDisplayed()

@@ -72,6 +72,7 @@ class SwipeRefreshContentPaddingSample : ComponentActivity() {
 
 private val listItems = List(40) { randomSampleImageUrl(it) }
 
+@Suppress("DEPRECATION")
 @Composable
 private fun Sample() {
     val systemUiController = rememberSystemUiController()

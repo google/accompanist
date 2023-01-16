@@ -84,11 +84,13 @@ android {
             res.srcDirs += 'src/sharedTest/res'
         }
     }
+    namespace 'com.google.accompanist.systemuicontroller'
 }
 
 dependencies {
     implementation libs.androidx.core
     implementation libs.compose.ui.ui
+    implementation libs.kotlin.coroutines.android
 
     // ======================
     // Test dependencies

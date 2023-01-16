@@ -19,9 +19,13 @@ package com.google.accompanist.navigation.material
 import android.os.Bundle
 import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Button
 import androidx.compose.material.ExperimentalMaterialApi
@@ -34,19 +38,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.test.click
+import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.height
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.plusAssign
 import androidx.navigation.testing.TestNavigatorState
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
@@ -56,6 +66,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.math.roundToLong
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
@@ -72,7 +83,7 @@ internal class BottomSheetNavigatorTest {
         val navigator = BottomSheetNavigator(sheetState)
 
         navigator.onAttach(navigatorState)
-        val entry = navigatorState.createBackStackEntry(navigator.createDestination(), null)
+        val entry = navigatorState.createBackStackEntry(navigator.createFakeDestination(), null)
         navigator.navigate(listOf(entry), null, null)
 
         assertWithMessage("The back stack entry has been added to the back stack")
@@ -87,8 +98,8 @@ internal class BottomSheetNavigatorTest {
         val navigatorState = TestNavigatorState()
 
         navigator.onAttach(navigatorState)
-        val firstEntry = navigatorState.createBackStackEntry(navigator.createDestination(), null)
-        val secondEntry = navigatorState.createBackStackEntry(navigator.createDestination(), null)
+        val firstEntry = navigatorState.createBackStackEntry(navigator.createFakeDestination(), null)
+        val secondEntry = navigatorState.createBackStackEntry(navigator.createFakeDestination(), null)
 
         navigator.navigate(listOf(firstEntry), null, null)
         assertWithMessage("The first entry has been added to the back stack")
@@ -134,7 +145,11 @@ internal class BottomSheetNavigatorTest {
                 secondDestinationCompositions++
                 onDispose { secondDestinationCompositions = 0 }
             }
-            Box(Modifier.size(64.dp).testTag(secondDestinationContentTag))
+            Box(
+                Modifier
+                    .size(64.dp)
+                    .testTag(secondDestinationContentTag)
+            )
         }
         val secondEntry = navigatorState.createBackStackEntry(secondDestination, null)
 
@@ -171,11 +186,20 @@ internal class BottomSheetNavigatorTest {
         composeTestRule.setContent {
             ModalBottomSheetLayout(
                 bottomSheetNavigator = navigator,
-                content = { Box(Modifier.fillMaxSize().testTag(bodyContentTag)) }
+                content = {
+                    Box(
+                        Modifier
+                            .fillMaxSize()
+                            .testTag(bodyContentTag)
+                    )
+                }
             )
         }
 
-        val destination = navigator.createFakeDestination()
+        val destination = BottomSheetNavigator.Destination(
+            navigator = navigator,
+            content = { Box(Modifier.height(20.dp)) }
+        )
         val backStackEntry = navigatorState.createBackStackEntry(destination, null)
         navigator.navigate(listOf(backStackEntry), null, null)
         composeTestRule.awaitIdle()
@@ -190,6 +214,7 @@ internal class BottomSheetNavigatorTest {
         composeTestRule.awaitIdle()
         assertWithMessage("Sheet should be hidden")
             .that(sheetState.isVisible).isFalse()
+        assertThat(navigatorState.transitionsInProgress.value).isEmpty()
         assertWithMessage("Back stack entry should be popped off the back stack")
             .that(navigatorState.backStack.value)
             .isEmpty()
@@ -203,6 +228,7 @@ internal class BottomSheetNavigatorTest {
         var compositionState by mutableStateOf(0)
 
         val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
+        val textInSheetTag = "textInSheet"
 
         composeTestRule.setContent {
             navigator = remember { BottomSheetNavigator(sheetState) }
@@ -214,7 +240,7 @@ internal class BottomSheetNavigatorTest {
                 ) {
                     NavHost(navController, startDestination = "first") {
                         bottomSheet("first") {
-                            Text("Hello!")
+                            Text("Hello!", Modifier.testTag(textInSheetTag))
                         }
                     }
                 }
@@ -227,8 +253,7 @@ internal class BottomSheetNavigatorTest {
         compositionState = 1
         composeTestRule.awaitIdle()
 
-        assertWithMessage("Bottom Sheet is visible")
-            .that(sheetState.isVisible).isFalse()
+        composeTestRule.onNodeWithTag(textInSheetTag).assertDoesNotExist()
 
         // Recompose with the ModalBottomSheetLayout
         compositionState = 0
@@ -271,11 +296,9 @@ internal class BottomSheetNavigatorTest {
 
         composeTestRule.awaitIdle()
 
-        assertThat(navigatorState.transitionsInProgress.value)
-            .doesNotContain(backStackEntry1)
-
-        assertThat(navigatorState.transitionsInProgress.value)
-            .doesNotContain(backStackEntry2)
+        assertThat(navigatorState.transitionsInProgress.value).doesNotContain(backStackEntry1)
+        assertThat(navigatorState.transitionsInProgress.value).doesNotContain(backStackEntry2)
+        assertThat(backStackEntry2.lifecycle.currentState).isEqualTo(Lifecycle.State.RESUMED)
     }
 
     @Test
@@ -368,13 +391,398 @@ internal class BottomSheetNavigatorTest {
         }
     }
 
-    /**
-     * Create a [BottomSheetNavigator.Destination] with some fake content
-     * Having an empty Composable will result in the sheet's height being 0 which crashes
-     * ModalBottomSheetLayout
-     */
+    @Test
+    fun testSheetContentSizeChangeDuringAnimation_opensSheet_shortSheetToShortSheet() {
+        lateinit var navigator: BottomSheetNavigator
+        lateinit var navController: NavHostController
+        var height: Dp by mutableStateOf(20.dp)
+        lateinit var sheetNavBackStackEntry: NavBackStackEntry
+        val homeDestination = "home"
+        val sheetDestination = "sheet"
+
+        composeTestRule.setContent {
+            navigator = rememberBottomSheetNavigator()
+            navController = rememberNavController(navigator)
+            ModalBottomSheetLayout(navigator) {
+                NavHost(navController, homeDestination) {
+                    composable(homeDestination) {
+                        Box(
+                            Modifier
+                                .fillMaxSize()
+                                .background(Color.Blue)
+                        )
+                    }
+                    bottomSheet(sheetDestination) { backStackEntry ->
+                        sheetNavBackStackEntry = backStackEntry
+                        Box(
+                            Modifier
+                                .height(height)
+                                .fillMaxWidth()
+                                .background(Color.Red)
+                        )
+                    }
+                }
+            }
+        }
+
+        composeTestRule.mainClock.autoAdvance = false
+        composeTestRule.runOnUiThread { navController.navigate(sheetDestination) }
+        composeTestRule.mainClock.advanceTimeBy(100)
+
+        assertThat(navigator.transitionsInProgress.value.lastOrNull())
+            .isEqualTo(sheetNavBackStackEntry)
+
+        height = (composeTestRule.onRoot().getUnclippedBoundsInRoot().height) / 3
+
+        composeTestRule.mainClock.autoAdvance = true
+        composeTestRule.waitForIdle()
+        assertThat(navigator.navigatorSheetState.isVisible).isTrue()
+
+        assertThat(navigator.transitionsInProgress.value).isEmpty()
+
+        composeTestRule.runOnUiThread { navController.navigate(homeDestination) }
+        composeTestRule.waitForIdle()
+        assertThat(navigator.navigatorSheetState.isVisible).isFalse()
+    }
+
+    @Test
+    fun testSheetContentSizeChangeDuringAnimation_opensSheet_shortSheetToTallSheet() {
+        lateinit var navigator: BottomSheetNavigator
+        lateinit var navController: NavHostController
+        var height: Dp by mutableStateOf(20.dp)
+        lateinit var sheetNavBackStackEntry: NavBackStackEntry
+        val homeDestination = "home"
+        val sheetDestination = "sheet"
+
+        composeTestRule.setContent {
+            navigator = rememberBottomSheetNavigator()
+            navController = rememberNavController(navigator)
+            ModalBottomSheetLayout(navigator) {
+                NavHost(navController, homeDestination) {
+                    composable(homeDestination) {
+                        Box(Modifier.fillMaxSize().background(Color.Blue))
+                    }
+                    bottomSheet(sheetDestination) { backStackEntry ->
+                        sheetNavBackStackEntry = backStackEntry
+                        Box(Modifier.height(height).fillMaxWidth().background(Color.Red))
+                    }
+                }
+            }
+        }
+
+        composeTestRule.mainClock.autoAdvance = false
+        composeTestRule.runOnUiThread { navController.navigate(sheetDestination) }
+        composeTestRule.mainClock.advanceTimeBy(100)
+        assertThat(navigator.transitionsInProgress.value.lastOrNull())
+            .isEqualTo(sheetNavBackStackEntry)
+
+        height = (composeTestRule.onRoot().getUnclippedBoundsInRoot().height) / 0.9f
+
+        composeTestRule.mainClock.autoAdvance = true
+        composeTestRule.waitForIdle()
+        assertThat(navigator.navigatorSheetState.isVisible).isTrue()
+
+        assertThat(navigator.transitionsInProgress.value).isEmpty()
+
+        composeTestRule.runOnUiThread { navController.navigate(homeDestination) }
+        composeTestRule.waitForIdle()
+        assertThat(navigator.navigatorSheetState.isVisible).isFalse()
+    }
+
+    @Test
+    fun testSheetContentSizeChangeDuringAnimation_opensSheet_tallSheetToTallSheet() {
+        lateinit var navigator: BottomSheetNavigator
+        lateinit var navController: NavHostController
+        lateinit var sheetNavBackStackEntry: NavBackStackEntry
+        var height: Dp by mutableStateOf(0.dp)
+        val homeDestination = "home"
+        val sheetDestination = "sheet"
+
+        composeTestRule.setContent {
+            navigator = rememberBottomSheetNavigator()
+            navController = rememberNavController(navigator)
+            ModalBottomSheetLayout(navigator) {
+                NavHost(navController, homeDestination) {
+                    composable(homeDestination) {
+                        Box(Modifier.fillMaxSize().background(Color.Blue))
+                    }
+                    bottomSheet(sheetDestination) { backStackEntry ->
+                        sheetNavBackStackEntry = backStackEntry
+                        Box(Modifier.height(height).fillMaxWidth().background(Color.Red))
+                    }
+                }
+            }
+        }
+
+        val rootHeight = composeTestRule.onRoot().getUnclippedBoundsInRoot().height
+        height = rootHeight
+
+        composeTestRule.mainClock.autoAdvance = false
+        composeTestRule.runOnUiThread { navController.navigate(sheetDestination) }
+        composeTestRule.mainClock.advanceTimeBy(100)
+        assertThat(navigator.transitionsInProgress.value.lastOrNull())
+            .isEqualTo(sheetNavBackStackEntry)
+
+        height = (composeTestRule.onRoot().getUnclippedBoundsInRoot().height) / 0.9f
+
+        composeTestRule.mainClock.autoAdvance = true
+        composeTestRule.waitForIdle()
+        assertThat(navigator.navigatorSheetState.isVisible).isTrue()
+
+        assertThat(navigator.transitionsInProgress.value).isEmpty()
+
+        composeTestRule.runOnUiThread { navController.navigate(homeDestination) }
+        composeTestRule.waitForIdle()
+        assertThat(navigator.navigatorSheetState.isVisible).isFalse()
+    }
+
+    @Test
+    fun testSheetContentSizeChangeDuringAnimation_opensSheet_tallSheetToShortSheet() {
+        lateinit var navigator: BottomSheetNavigator
+        lateinit var navController: NavHostController
+        var height: Dp by mutableStateOf(0.dp)
+        lateinit var sheetNavBackStackEntry: NavBackStackEntry
+        val homeDestination = "home"
+        val sheetDestination = "sheet"
+
+        composeTestRule.setContent {
+            navigator = rememberBottomSheetNavigator()
+            navController = rememberNavController(navigator)
+            ModalBottomSheetLayout(navigator) {
+                NavHost(navController, homeDestination) {
+                    composable(homeDestination) {
+                        Box(Modifier.fillMaxSize().background(Color.Blue))
+                    }
+                    bottomSheet(sheetDestination) { backStackEntry ->
+                        sheetNavBackStackEntry = backStackEntry
+                        Box(Modifier.height(height).fillMaxWidth().background(Color.Red))
+                    }
+                }
+            }
+        }
+
+        val rootHeight = composeTestRule.onRoot().getUnclippedBoundsInRoot().height
+        height = rootHeight
+
+        composeTestRule.mainClock.autoAdvance = false
+        composeTestRule.runOnUiThread { navController.navigate(sheetDestination) }
+        composeTestRule.mainClock.advanceTimeBy(100)
+        assertThat(navigator.transitionsInProgress.value.lastOrNull())
+            .isEqualTo(sheetNavBackStackEntry)
+
+        height = (composeTestRule.onRoot().getUnclippedBoundsInRoot().height) / 3f
+
+        composeTestRule.mainClock.autoAdvance = true
+        composeTestRule.waitForIdle()
+        assertThat(navigator.navigatorSheetState.isVisible).isTrue()
+
+        assertThat(navigator.transitionsInProgress.value).isEmpty()
+
+        composeTestRule.runOnUiThread { navController.navigate(homeDestination) }
+        composeTestRule.waitForIdle()
+        assertThat(navigator.navigatorSheetState.isVisible).isFalse()
+    }
+
+    @OptIn(ExperimentalMaterialApi::class)
+    @Test
+    fun testPopBackStackHidesSheetWithAnimation() {
+        val animationDuration = 2000
+        val animationSpec = tween<Float>(animationDuration)
+        lateinit var navigator: BottomSheetNavigator
+        lateinit var navController: NavHostController
+
+        composeTestRule.setContent {
+            navigator = rememberBottomSheetNavigator(animationSpec)
+            navController = rememberNavController(navigator)
+            ModalBottomSheetLayout(navigator) {
+                NavHost(navController, "first") {
+                    composable("first") {
+                        Box(Modifier.fillMaxSize())
+                    }
+                    bottomSheet("sheet") {
+                        Box(Modifier.height(200.dp))
+                    }
+                }
+            }
+        }
+
+        composeTestRule.runOnUiThread { navController.navigate("sheet") }
+        composeTestRule.waitForIdle()
+        assertThat(navigator.navigatorSheetState.isVisible).isTrue()
+
+        composeTestRule.mainClock.autoAdvance = false
+        composeTestRule.runOnUiThread { navController.popBackStack() }
+
+        val firstAnimationTimeBreakpoint = (animationDuration * 0.9).roundToLong()
+
+        composeTestRule.mainClock.advanceTimeBy(firstAnimationTimeBreakpoint)
+        assertThat(navigator.navigatorSheetState.currentValue)
+            .isAnyOf(ModalBottomSheetValue.HalfExpanded, ModalBottomSheetValue.Expanded)
+        assertThat(navigator.navigatorSheetState.targetValue)
+            .isEqualTo(ModalBottomSheetValue.Hidden)
+
+        composeTestRule.runOnUiThread { navController.navigate("first") }
+
+        composeTestRule.mainClock.autoAdvance = true
+        composeTestRule.waitForIdle()
+        assertThat(navigator.navigatorSheetState.currentValue)
+            .isEqualTo(ModalBottomSheetValue.Hidden)
+    }
+
+    @Test
+    fun testTapOnScrimDismissesSheetAndPopsBackStack() {
+        val animationDuration = 2000
+        val animationSpec = tween<Float>(animationDuration)
+        lateinit var navigator: BottomSheetNavigator
+        lateinit var navController: NavHostController
+        val sheetLayoutTestTag = "sheetLayout"
+        val homeDestination = "home"
+        val sheetDestination = "sheet"
+
+        composeTestRule.setContent {
+            navigator = rememberBottomSheetNavigator(animationSpec)
+            navController = rememberNavController(navigator)
+            ModalBottomSheetLayout(navigator, Modifier.testTag(sheetLayoutTestTag)) {
+                NavHost(navController, homeDestination) {
+                    composable(homeDestination) {
+                        Box(
+                            Modifier
+                                .fillMaxSize()
+                                .background(Color.Red)
+                        )
+                    }
+                    bottomSheet(sheetDestination) {
+                        Box(
+                            Modifier
+                                .height(200.dp)
+                                .fillMaxWidth()
+                                .background(Color.Green)
+                        ) {
+                            Text("Hello!")
+                        }
+                    }
+                }
+            }
+        }
+
+        assertThat(navController.currentBackStackEntry?.destination?.route).isEqualTo(
+            homeDestination
+        )
+        assertThat(navigator.navigatorSheetState.isVisible).isFalse()
+
+        composeTestRule.runOnUiThread { navController.navigate(sheetDestination) }
+        composeTestRule.waitForIdle()
+
+        assertThat(navController.currentBackStackEntry?.destination?.route).isEqualTo(
+            sheetDestination
+        )
+        assertThat(navController.currentBackStackEntry?.lifecycle?.currentState).isEqualTo(Lifecycle.State.RESUMED)
+        assertThat(navigator.navigatorSheetState.isVisible).isTrue()
+
+        composeTestRule.onNodeWithTag(sheetLayoutTestTag)
+            .performTouchInput { click(position = topCenter) }
+
+        composeTestRule.waitForIdle()
+        assertThat(navigator.navigatorSheetState.isVisible).isFalse()
+    }
+
+    @Test
+    fun testNavigatingFromSheetToSheetDismissesAndThenShowsSheet() {
+        val animationDuration = 2000
+        val animationSpec = tween<Float>(animationDuration)
+        lateinit var navigator: BottomSheetNavigator
+        lateinit var navController: NavHostController
+        val sheetLayoutTestTag = "sheetLayout"
+        val homeDestination = "home"
+        val firstSheetDestination = "sheet1"
+        val secondSheetDestination = "sheet2"
+
+        composeTestRule.setContent {
+            navigator = rememberBottomSheetNavigator(animationSpec)
+            navController = rememberNavController(navigator)
+            ModalBottomSheetLayout(navigator, Modifier.testTag(sheetLayoutTestTag)) {
+                NavHost(navController, homeDestination) {
+                    composable(homeDestination) {
+                        Box(
+                            Modifier
+                                .fillMaxSize()
+                                .background(Color.Red)
+                        )
+                    }
+                    bottomSheet(firstSheetDestination) {
+                        Box(
+                            Modifier
+                                .height(200.dp)
+                                .fillMaxWidth()
+                                .background(Color.Green)
+                        ) {
+                            Text("Hello!")
+                        }
+                    }
+                    bottomSheet(secondSheetDestination) {
+                        Box(
+                            Modifier
+                                .height(200.dp)
+                                .fillMaxWidth()
+                                .background(Color.Blue)
+                        ) {
+                            Text("Hello!")
+                        }
+                    }
+                }
+            }
+        }
+
+        assertThat(navController.currentBackStackEntry?.destination?.route)
+            .isEqualTo(homeDestination)
+
+        composeTestRule.runOnUiThread { navController.navigate(firstSheetDestination) }
+        composeTestRule.waitForIdle()
+
+        assertThat(navController.currentBackStackEntry?.destination?.route)
+            .isEqualTo(firstSheetDestination)
+        assertThat(navigator.sheetState.currentValue)
+            .isAnyOf(ModalBottomSheetValue.HalfExpanded, ModalBottomSheetValue.Expanded)
+
+        composeTestRule.mainClock.autoAdvance = false
+        composeTestRule.runOnUiThread { navController.navigate(secondSheetDestination) }
+
+        composeTestRule.mainClock.advanceTimeUntil { navigator.sheetState.isAnimationRunning }
+        composeTestRule.mainClock.advanceTimeBy(animationDuration.toLong())
+        composeTestRule.mainClock.advanceTimeByFrame()
+
+        assertThat(navigator.sheetState.currentValue).isEqualTo(ModalBottomSheetValue.Hidden)
+
+        composeTestRule.mainClock.advanceTimeUntil { navigator.sheetState.isAnimationRunning }
+        composeTestRule.mainClock.advanceTimeBy(animationDuration.toLong())
+        composeTestRule.mainClock.advanceTimeByFrame()
+
+        assertThat(navigator.sheetState.currentValue)
+            .isAnyOf(ModalBottomSheetValue.HalfExpanded, ModalBottomSheetValue.Expanded)
+        assertThat(navController.currentBackStackEntry?.destination?.route)
+            .isEqualTo(secondSheetDestination)
+
+        composeTestRule.runOnUiThread {
+            navController.popBackStack(firstSheetDestination, inclusive = false)
+        }
+        composeTestRule.mainClock.advanceTimeBy(animationDuration.toLong())
+        composeTestRule.mainClock.advanceTimeByFrame()
+
+        assertThat(navigator.sheetState.currentValue).isEqualTo(ModalBottomSheetValue.Hidden)
+
+        composeTestRule.mainClock.autoAdvance = true
+        composeTestRule.waitForIdle()
+
+        assertThat(navigator.sheetState.currentValue)
+            .isAnyOf(ModalBottomSheetValue.HalfExpanded, ModalBottomSheetValue.Expanded)
+        assertThat(navController.currentBackStackEntry?.destination?.route)
+            .isEqualTo(firstSheetDestination)
+    }
+
     private fun BottomSheetNavigator.createFakeDestination() =
         BottomSheetNavigator.Destination(this) {
             Text("Fake Sheet Content")
         }
+
+    private val ModalBottomSheetState.isAnimationRunning get() = currentValue != targetValue
 }

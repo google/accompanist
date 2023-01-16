@@ -4,6 +4,8 @@ Accompanist is a group of libraries that aim to supplement [Jetpack Compose][com
 
 Accompanist is a labs like environment for new Compose APIs. We use it to help fill known gaps in the Compose toolkit, experiment with new APIs and to gather insight into the development experience of developing a Compose library. The goal of these libraries is to upstream them into the official toolkit, at which point they will be deprecated and removed from Accompanist.
 
+For more details like, why does this library exist? Why is it not part of AndroidX? Will you be releasing more libraries? Check out our [Accompanist FAQ](https://medium.com/p/b55117b02712).
+
 ## Compose versions
 
 Each [release](https://github.com/google/accompanist/releases) outlines what version of the Compose UI libraries it depends on. We are currently releasing multiple versions of Accompanist for the different versions of Compose:
@@ -18,8 +20,11 @@ Each [release](https://github.com/google/accompanist/releases) outlines what ver
  <tr>
   <td>Compose UI 1.2 (1.2.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-permissions?versionPrefix=0.25"></td>
  </tr>
-  <tr>
-  <td>Compose UI 1.3 (1.3.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-permissions"></td>
+ <tr>
+  <td>Compose UI 1.3 (1.3.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-permissions?versionPrefix=0.28"></td>
+ </tr>
+ <tr>
+  <td>Compose UI 1.4 (1.4.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-permissions"></td>
  </tr>
 </table>
 
@@ -32,8 +37,14 @@ For stable versions of Compose, we use the latest *stable* version of the Compos
 ### 🍫 [System UI Controller](./systemuicontroller/)
 A library that provides easy-to-use utilities for recoloring the Android system bars from Jetpack Compose.
 
-### 🎨 [AppCompat Theme Adapter](./appcompat-theme/)
-A library that enables the reuse of [AppCompat][appcompat] XML themes for theming in Jetpack Compose.
+### 🎨 [AppCompat Theme Adapter](./themeadapter-appcompat/)
+A library that enables the reuse of [AppCompat][appcompat] XML themes, for theming in Jetpack Compose.
+
+### 🎨 [Material Theme Adapter](./themeadapter-material/)
+A library that enables the reuse of [MDC-Android][mdc] Material 2 XML themes, for theming in Jetpack Compose.
+
+### 🎨 [Material 3 Theme Adapter](./themeadapter-material3/)
+A library that enables the reuse of [MDC-Android][mdc] Material 3 XML themes, for theming in Jetpack Compose.
 
 ### 📖 [Pager](./pager/)
 A library that provides utilities for building paginated layouts in Jetpack Compose, similar to Android's [ViewPager][viewpager].
@@ -56,17 +67,23 @@ A library which provides [Compose Material](https://developer.android.com/jetpac
 ### 🖌️ [Drawable Painter](./drawablepainter/)
 A library which provides a way to use Android Drawables as Jetpack Compose Painters.
 
-### ⬇️ [Swipe to Refresh](./swiperefresh/)
-A library that provides a layout implementing the swipe-to-refresh UX pattern, similar to Android's [SwipeRefreshLayout](https://developer.android.com/jetpack/androidx/releases/swiperefreshlayout).
-
 ### 🌏 [Web](./web/)
 A wrapper around WebView for basic WebView support in Jetpack Compose.
 
 ### 📜 [Adaptive](./adaptive/)
 A library providing a collection of utilities for adaptive layouts.
 
+### 🗜 [Test Harness](./testharness/)
+Utilities for testing Compose layouts.
+
 ### 📐 [Insets](./insets/) (Deprecated)
 See our [Migration Guide](https://google.github.io/accompanist/insets/) for migrating to Insets in Compose.
+
+### ⬇️ [Swipe to Refresh](./swiperefresh/) (Deprecated)
+See our [Migration Guide](https://google.github.io/accompanist/swiperefresh/) for migrating to PullRefresh in Compose Material.
+
+### 🎨 [AppCompat Theme Adapter](./appcompat-theme/) (Deprecated)
+See our [Migration Guide](https://google.github.io/accompanist/appcompat-theme/) for migrating to the new artifact in Accompanist.
 
 ---
 
@@ -113,7 +130,7 @@ limitations under the License.
 [appcompat]: https://developer.android.com/jetpack/androidx/releases/appcompat
 [compose]: https://developer.android.com/jetpack/compose
 [snap]: https://oss.sonatype.org/content/repositories/snapshots/com/google/accompanist/
-[mdc]: https://material.io/develop/android/
+[mdc]: https://github.com/material-components/material-components-android
 [windowinsets]: https://developer.android.com/reference/kotlin/android/view/WindowInsets
 [viewpager]: https://developer.android.com/reference/kotlin/androidx/viewpager/widget/ViewPager
 [runtimepermissions]: https://developer.android.com/guide/topics/permissions/overview

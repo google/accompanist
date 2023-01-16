@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
+
 package com.google.accompanist.swiperefresh
 
 import androidx.compose.animation.core.Animatable
@@ -56,6 +58,17 @@ private const val DragMultiplier = 0.5f
  *
  * @param isRefreshing the value for [SwipeRefreshState.isRefreshing]
  */
+@Deprecated(
+    """
+     accompanist/swiperefresh is deprecated.
+     The androidx.compose equivalent of rememberSwipeRefreshState() is rememberPullRefreshState().
+     For more migration information, please visit https://google.github.io/accompanist/swiperefresh/#migration
+    """,
+    replaceWith = ReplaceWith(
+        "rememberPullRefreshState(isRefreshing, onRefresh = )",
+        "androidx.compose.material.pullrefresh.rememberPullRefreshState"
+    )
+)
 @Composable
 fun rememberSwipeRefreshState(
     isRefreshing: Boolean
@@ -76,6 +89,13 @@ fun rememberSwipeRefreshState(
  *
  * @param isRefreshing the initial value for [SwipeRefreshState.isRefreshing]
  */
+@Deprecated(
+    """
+     accompanist/swiperefresh is deprecated.
+     The androidx.compose equivalent of SwipeRefreshState is PullRefreshState.
+     For more migration information, please visit https://google.github.io/accompanist/swiperefresh/#migration
+    """
+)
 @Stable
 class SwipeRefreshState(
     isRefreshing: Boolean,
@@ -223,6 +243,19 @@ private class SwipeRefreshNestedScrollConnection(
  * provided the indicator will be clipped to the [content] bounds. Defaults to true.
  * @param content The content containing a scroll composable.
  */
+@Deprecated(
+    """
+ accompanist/swiperefresh is deprecated.
+ The androidx.compose equivalent of SwipeRefresh is Modifier.pullRefresh().
+ This is often migrated as:
+ Box(modifier = Modifier.pullRefresh(refreshState)) { 
+    ... 
+    PullRefreshIndicator(...) 
+ }
+ 
+ For more migration information, please visit https://google.github.io/accompanist/swiperefresh/#migration
+"""
+)
 @Composable
 fun SwipeRefresh(
     state: SwipeRefreshState,

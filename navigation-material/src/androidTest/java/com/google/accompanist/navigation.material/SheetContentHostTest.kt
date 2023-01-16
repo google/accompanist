@@ -26,6 +26,7 @@ import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
@@ -43,7 +44,6 @@ import androidx.test.filters.LargeTest
 import com.google.common.truth.Truth.assertThat
 import com.google.common.truth.Truth.assertWithMessage
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -61,31 +61,6 @@ internal class SheetContentHostTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
-
-    @Test
-    fun testSheetShownAndHidden() = runTest {
-        val backStackEntryState = mutableStateOf<NavBackStackEntry?>(null)
-        val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
-
-        composeTestRule.setBottomSheetContent(
-            backStackEntryState,
-            sheetState,
-            onSheetShown = { },
-            onSheetDismissed = { }
-        )
-
-        backStackEntryState.value = createBackStackEntry(sheetState)
-        composeTestRule.runOnIdle {
-            assertWithMessage("Bottom sheet was shown")
-                .that(sheetState.isVisible).isTrue()
-        }
-
-        backStackEntryState.value = null
-        composeTestRule.runOnIdle {
-            assertWithMessage("Bottom sheet was hidden")
-                .that(sheetState.isVisible).isFalse()
-        }
-    }
 
     @Test
     fun testOnSheetDismissedCalled_ManualDismiss() = runTest {
@@ -138,7 +113,7 @@ internal class SheetContentHostTest {
     }
 
     @Test
-    fun testOnSheetShownCalled_onBackStackEntryEnter() = runTest {
+    fun testOnSheetShownCalled_onBackStackEntryEnter_shortSheet() = runTest {
         val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
         val backStackEntryState = mutableStateOf<NavBackStackEntry?>(null)
         val shownBackStackEntries = mutableListOf<NavBackStackEntry>()
@@ -165,35 +140,7 @@ internal class SheetContentHostTest {
     }
 
     @Test
-    fun testSheetHalfExpanded_onBackStackEntryEnter_shortSheet(): Unit = runBlocking {
-        val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
-        val backStackEntryState = mutableStateOf<NavBackStackEntry?>(null)
-        val shownBackStackEntries = mutableListOf<NavBackStackEntry>()
-
-        composeTestRule.setBottomSheetContent(
-            backStackEntry = backStackEntryState,
-            sheetState = sheetState,
-            onSheetShown = { entry -> shownBackStackEntries.add(entry) },
-            onSheetDismissed = { }
-        )
-
-        val backStackEntry = createBackStackEntry(sheetState) {
-            Box(Modifier.height(100.dp))
-        }
-        backStackEntryState.value = backStackEntry
-
-        composeTestRule.runOnIdle {
-            assertWithMessage("Sheet is fully expanded")
-                .that(sheetState.currentValue)
-                .isEqualTo(ModalBottomSheetValue.Expanded)
-            assertWithMessage("Back stack entry should be in the shown entries list")
-                .that(shownBackStackEntries)
-                .containsExactly(backStackEntry)
-        }
-    }
-
-    @Test
-    fun testSheetHalfExpanded_onBackStackEntryEnter_tallSheet(): Unit = runBlocking {
+    fun testOnSheetShownCalled_onBackStackEntryEnter_tallSheet() = runTest {
         val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
         val backStackEntryState = mutableStateOf<NavBackStackEntry?>(null)
         val shownBackStackEntries = mutableListOf<NavBackStackEntry>()
@@ -211,9 +158,8 @@ internal class SheetContentHostTest {
         backStackEntryState.value = backStackEntry
 
         composeTestRule.runOnIdle {
-            assertWithMessage("Tall sheet is half-expanded")
-                .that(sheetState.currentValue)
-                .isEqualTo(ModalBottomSheetValue.HalfExpanded)
+            assertWithMessage("Sheet is visible")
+                .that(sheetState.isVisible).isTrue()
             assertWithMessage("Back stack entry should be in the shown entries list")
                 .that(shownBackStackEntries)
                 .containsExactly(backStackEntry)
@@ -228,10 +174,12 @@ internal class SheetContentHostTest {
     ) {
         setContent {
             val saveableStateHolder = rememberSaveableStateHolder()
+            LaunchedEffect(backStackEntry.value) {
+                if (backStackEntry.value == null) sheetState.hide() else sheetState.show()
+            }
             ModalBottomSheetLayout(
                 sheetContent = {
                     SheetContentHost(
-                        columnHost = this,
                         backStackEntry = backStackEntry.value,
                         sheetState = sheetState,
                         saveableStateHolder = saveableStateHolder,

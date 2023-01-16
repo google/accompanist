@@ -25,6 +25,8 @@ kotlin {
 }
 
 android {
+    namespace "com.google.accompanist.pager"
+
     compileSdkVersion 33
 
     defaultConfig {
@@ -86,6 +88,7 @@ dependencies {
     api libs.snapper
 
     implementation libs.napier
+    implementation libs.kotlin.coroutines.android
 
     // ======================
     // Test dependencies
@@ -93,6 +96,9 @@ dependencies {
 
     androidTestImplementation project(':internal-testutils')
     testImplementation project(':internal-testutils')
+
+    androidTestImplementation project(':testharness')
+    testImplementation project(':testharness')
 
     androidTestImplementation libs.junit
     testImplementation libs.junit

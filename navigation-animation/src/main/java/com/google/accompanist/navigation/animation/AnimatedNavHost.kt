@@ -19,6 +19,7 @@ package com.google.accompanist.navigation.animation
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -195,11 +196,12 @@ public fun AnimatedNavHost(
         transition.AnimatedContent(
             modifier,
             transitionSpec = {
+                val zIndex = composeNavigator.backStack.value.size.toFloat()
                 // If the initialState of the AnimatedContent is not in visibleEntries, we are in
                 // a case where visible has cleared the old state for some reason, so instead of
                 // attempting to animate away from the initialState, we skip the animation.
                 if (initialState in visibleEntries) {
-                    finalEnter(this) with finalExit(this)
+                    ContentTransform(finalEnter(this), finalExit(this), zIndex)
                 } else {
                     EnterTransition.None with ExitTransition.None
                 }

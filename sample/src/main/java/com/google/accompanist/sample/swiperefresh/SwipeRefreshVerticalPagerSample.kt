@@ -68,6 +68,7 @@ class SwipeRefreshVerticalPagerSample : ComponentActivity() {
     }
 }
 
+@Suppress("DEPRECATION")
 @OptIn(ExperimentalPagerApi::class, ExperimentalCoilApi::class)
 @Composable
 private fun Sample() {

@@ -20,6 +20,8 @@ plugins {
 }
 
 android {
+    namespace "com.google.accompanist.internal.test"
+
     compileSdkVersion 33
 
     defaultConfig {

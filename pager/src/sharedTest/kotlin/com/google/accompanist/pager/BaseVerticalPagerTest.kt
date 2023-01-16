@@ -22,11 +22,9 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertHeightIsAtLeast
@@ -40,6 +38,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.height
 import androidx.compose.ui.unit.width
+import com.google.accompanist.testharness.TestHarness
 
 /**
  * Contains the [VerticalPager] tests. This class is extended
@@ -65,25 +64,28 @@ abstract class BaseVerticalPagerTest(
     override fun SemanticsNodeInteraction.assertLaidOutItemPosition(
         page: Int,
         currentPage: Int,
-        offset: Float,
+        pageCount: Int,
+        offset: Float
     ): SemanticsNodeInteraction {
         val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
         val expectedItemHeight = rootBounds.height -
             contentPadding.calculateTopPadding() -
             contentPadding.calculateBottomPadding()
+        val expectedItemHeightWithSpacing = expectedItemHeight + itemSpacingDp.dp
         val expectedItemWidth = rootBounds.width
 
         val expectedLeft = (rootBounds.width - expectedItemWidth) / 2
         val expectedFirstItemTop = when (reverseLayout) {
-            true -> (rootBounds.height - contentPadding.calculateBottomPadding() - expectedItemHeight) + (expectedItemHeight * offset)
-            false -> contentPadding.calculateTopPadding() - (expectedItemHeight * offset)
+            true -> (rootBounds.height - contentPadding.calculateBottomPadding() - expectedItemHeight) +
+                (expectedItemHeightWithSpacing * offset)
+            false -> contentPadding.calculateTopPadding() - (expectedItemHeightWithSpacing * offset)
         }
 
         return assertWidthIsEqualTo(expectedItemWidth)
             .assertHeightIsAtLeast(expectedItemHeight)
             .assertLeftPositionInRootIsEqualTo(expectedLeft)
             .run {
-                val pageDelta = ((expectedItemHeight + itemSpacingDp.dp) * (page - currentPage))
+                val pageDelta = (expectedItemHeightWithSpacing * (page - currentPage))
                 if (reverseLayout) {
                     assertTopPositionInRootIsEqualTo(expectedFirstItemTop - pageDelta)
                 } else {
@@ -102,7 +104,7 @@ abstract class BaseVerticalPagerTest(
         userScrollEnabled: Boolean,
         onPageComposed: (Int) -> Unit
     ) {
-        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+        TestHarness(layoutDirection = LayoutDirection.Ltr) {
             applierScope = rememberCoroutineScope()
 
             Box {

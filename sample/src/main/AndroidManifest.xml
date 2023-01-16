@@ -16,7 +16,7 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.google.accompanist.sample">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Used for loading images from the network -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -34,6 +34,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.Material.Light.NoActionBar">
+
+        <profileable android:shell="true"
+            tools:targetApi="q" />
 
         <activity
             android:name="com.google.accompanist.sample.MainActivity"
@@ -412,6 +415,15 @@
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".webview.WrappedContentWebViewSample"
+            android:label="@string/webview_title_wrapped"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".adaptive.BasicTwoPaneSample"
@@ -436,6 +448,38 @@
         <activity
             android:name=".adaptive.VerticalTwoPaneSample"
             android:label="@string/adaptive_two_pane_vertical"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name=".testharness.TestHarnessSample"
+            android:label="@string/testharness"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".themeadapter.MdcThemeSample"
+            android:label="@string/themeadapter_title_material"
+            android:theme="@style/Theme.Sample.ThemeAdapter.Material"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".themeadapter.Mdc3ThemeSample"
+            android:label="@string/themeadapter_title_material3"
+            android:theme="@style/Theme.Sample.ThemeAdapter.Material3"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

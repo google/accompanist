@@ -25,6 +25,8 @@ kotlin {
 }
 
 android {
+    namespace "com.google.accompanist.web"
+
     compileSdkVersion 33
 
     defaultConfig {
@@ -86,6 +88,7 @@ dependencies {
     implementation libs.compose.material.material
     implementation libs.compose.ui.util
     implementation libs.androidx.activity.compose
+    implementation libs.kotlin.coroutines.android
 
     // ======================
     // Test dependencies

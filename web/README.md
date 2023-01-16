@@ -2,7 +2,7 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-webview)](https://search.maven.org/search?q=g:com.google.accompanist)
 
-For more information, visit the documentation: https://google.github.io/accompanist/webview/
+For more information, visit the documentation: https://google.github.io/accompanist/web/
 
 ## Basic Usage
 

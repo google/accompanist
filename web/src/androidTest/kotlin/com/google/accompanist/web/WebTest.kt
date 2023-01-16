@@ -16,8 +16,15 @@
 
 package com.google.accompanist.web
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.webkit.WebView
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,11 +33,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.IdlingResource
 import androidx.compose.ui.test.SemanticsNodeInteraction
+import androidx.compose.ui.test.assertHeightIsAtLeast
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.unit.dp
 import androidx.test.espresso.web.assertion.WebViewAssertions.webMatches
 import androidx.test.espresso.web.model.Atoms.getCurrentUrl
 import androidx.test.espresso.web.model.Atoms.getTitle
@@ -43,6 +53,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.FlakyTest
 import androidx.test.filters.SdkSuppress
 import com.google.common.truth.Truth.assertThat
+import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.flow.toCollection
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -59,8 +70,8 @@ import java.util.concurrent.TimeUnit
 @RunWith(AndroidJUnit4::class)
 // Emulator image doesn't have a WebView until API 26
 // Google API emulator image seems to be really flaky before 28 so currently we will set these tests
-// to mine 29
-@SdkSuppress(minSdkVersion = 28)
+// to min 29 and max 30. 31/32 image is also really flaky
+@SdkSuppress(minSdkVersion = 28, maxSdkVersion = 30)
 class WebTest {
     @get:Rule
     val rule = createComposeRule()
@@ -469,6 +480,7 @@ class WebTest {
             .check(webMatches(getText(), equalTo(LINK_TEXT)))
     }
 
+    @FlakyTest
     @Test
     fun testNavigatorForward() {
         lateinit var state: WebViewState
@@ -501,6 +513,7 @@ class WebTest {
 
         navigator.navigateForward()
         rule.waitUntil { navigator.canGoBack }
+        rule.waitForIdle()
 
         assertThat(state.content.getCurrentUrl()).isEqualTo(LINK_URL)
     }
@@ -617,8 +630,92 @@ class WebTest {
         assertThat(isOnDisposeCalled).isTrue()
     }
 
+    @Test
+    fun testJSReloadTriggersRefresh() {
+        lateinit var state: WebViewState
+        var pageStartedCalled = 0
+        val client = object : AccompanistWebViewClient() {
+            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                super.onPageStarted(view, url, favicon)
+                pageStartedCalled++
+            }
+        }
+
+        rule.setContent {
+            state = rememberWebViewStateWithHTMLData(
+                data =
+                """
+                <html><body>
+                   <input id="button" type="button" value="Reload" 
+                   onclick="window.location.reload()" />
+                </body></html>
+                """.trimIndent()
+            )
+
+            WebTestContent(
+                webViewState = state,
+                idlingResource = idleResource,
+                client = client
+            )
+        }
+
+        rule.waitForIdle()
+
+        onWebView()
+            .withElement(findElement(Locator.ID, "button"))
+            .perform(webClick())
+
+        // Check the url remained about:blank
+        onWebView()
+            .check(webMatches(getCurrentUrl(), equalTo("about:blank")))
+
+        assertEquals("Page should be loaded twice", 2, pageStartedCalled)
+    }
+
     private val webNode: SemanticsNodeInteraction
         get() = rule.onNodeWithTag(WebViewTag)
+
+    @Test
+    fun testWebViewFactoryUsedIfSupplied() {
+        lateinit var constructedWebView: WebView
+
+        rule.setContent {
+            WebTestContent(
+                rememberWebViewState(url = LINK_URL),
+                idleResource,
+                onCreated = { constructedWebView = it },
+                factory = { context -> CustomWebView(context) }
+            )
+        }
+
+        assertThat(constructedWebView).isInstanceOf(CustomWebView::class.java)
+    }
+
+    @Test
+    fun testWebViewCanWrapHeight() {
+        rule.setContent {
+            Column(Modifier.fillMaxSize()) {
+                val webViewState = rememberWebViewStateWithHTMLData(data = TEST_DATA)
+                WebTestContent(
+                    webViewState = webViewState,
+                    idlingResource = idleResource,
+                    modifier = Modifier.wrapContentHeight()
+                )
+                Box(
+                    Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                        .background(Color.Red)
+                        .testTag("box")
+                )
+            }
+        }
+
+        rule.waitForIdle()
+
+        // If the WebView is wrapping it's content successfully, the box will have some height.
+        rule.onNodeWithTag("box").assertHeightIsAtLeast(1.dp)
+    }
 }
 
 private const val LINK_ID = "link"
@@ -637,22 +734,26 @@ private const val WebViewTag = "webview_tag"
 private fun WebTestContent(
     webViewState: WebViewState,
     idlingResource: WebViewIdlingResource,
+    modifier: Modifier = Modifier,
     navigator: WebViewNavigator = rememberWebViewNavigator(),
+    onCreated: (WebView) -> Unit = { it.settings.javaScriptEnabled = true },
     onDispose: (WebView) -> Unit = {},
     client: AccompanistWebViewClient = remember { AccompanistWebViewClient() },
-    chromeClient: AccompanistWebChromeClient = remember { AccompanistWebChromeClient() }
+    chromeClient: AccompanistWebChromeClient = remember { AccompanistWebChromeClient() },
+    factory: ((Context) -> WebView)? = null
 ) {
     idlingResource.webviewLoading = webViewState.loadingState !is LoadingState.Finished
 
     MaterialTheme {
         WebView(
             state = webViewState,
-            modifier = Modifier.testTag(WebViewTag),
+            modifier = modifier.testTag(WebViewTag),
             navigator = navigator,
-            onCreated = { it.settings.javaScriptEnabled = true },
+            onCreated = onCreated,
             onDispose = onDispose,
             client = client,
-            chromeClient = chromeClient
+            chromeClient = chromeClient,
+            factory = factory
         )
     }
 }
@@ -663,3 +764,5 @@ private class WebViewIdlingResource : IdlingResource {
     override val isIdleNow: Boolean
         get() = !webviewLoading
 }
+
+private class CustomWebView(context: Context) : WebView(context)

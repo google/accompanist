@@ -15,6 +15,7 @@
  */
 
 @file:JvmName("AppCompatTheme")
+@file:Suppress("DEPRECATION")
 
 package com.google.accompanist.appcompattheme
 
@@ -96,6 +97,13 @@ import androidx.core.content.res.use
  * @param readTypography whether to read the font family from [context]'s theme.
  * @param shapes A set of shapes to be used by the components in this hierarchy.
  */
+@Deprecated(
+    """
+     accompanist/appcompat-theme is deprecated.
+     The API has moved to accompanist/themeadapter/appcompat.
+     For more migration information, please visit https://google.github.io/accompanist/appcompat-theme/#migration
+    """
+)
 @Composable
 fun AppCompatTheme(
     context: Context = LocalContext.current,
@@ -129,6 +137,13 @@ fun AppCompatTheme(
  * This class contains some of the individual components of a [MaterialTheme]:
  * [Colors] & [Typography].
  */
+@Deprecated(
+    """
+     accompanist/appcompat-theme is deprecated.
+     The API has moved to accompanist/themeadapter/appcompat.
+     For more migration information, please visit https://google.github.io/accompanist/appcompat-theme/#migration
+    """
+)
 data class ThemeParameters(
     val colors: Colors?,
     val typography: Typography?
@@ -148,6 +163,13 @@ data class ThemeParameters(
  *
  * @return [ThemeParameters] instance containing the resulting [Colors] and [Typography]
  */
+@Deprecated(
+    """
+     accompanist/appcompat-theme is deprecated.
+     The API has moved to accompanist/themeadapter/appcompat.
+     For more migration information, please visit https://google.github.io/accompanist/appcompat-theme/#migration
+    """
+)
 fun Context.createAppCompatTheme(
     readColors: Boolean = true,
     readTypography: Boolean = true

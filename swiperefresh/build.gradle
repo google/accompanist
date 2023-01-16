@@ -25,6 +25,8 @@ kotlin {
 }
 
 android {
+    namespace "com.google.accompanist.swiperefresh"
+
     compileSdkVersion 33
 
     defaultConfig {
@@ -84,11 +86,11 @@ android {
 dependencies {
     implementation libs.compose.material.material
     implementation libs.compose.ui.util
+    implementation libs.kotlin.coroutines.android
 
     // ======================
     // Test dependencies
     // ======================
-
     androidTestImplementation project(':internal-testutils')
     testImplementation project(':internal-testutils')
 

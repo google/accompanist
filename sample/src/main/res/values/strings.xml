@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">Accompanist Sample</string>
 
     <string name="insets_title_basic">Insets: Basic</string>
@@ -63,9 +63,16 @@
     <string name="placeholder_title_shimmer">Placeholder: Shimmer</string>
 
     <string name="webview_title_basic">WebView: Basic</string>
+    <string name="webview_title_wrapped">WebView: Wrapped Content</string>
 
     <string name="adaptive_two_pane_basic">Adaptive: TwoPane Basic</string>
     <string name="adaptive_two_pane_horizontal">Adaptive: TwoPane Horizontal</string>
     <string name="adaptive_two_pane_vertical">Adaptive: TwoPane Vertical</string>
+    
+    <string name="testharness">Test Harness</string>
+    <string name="this_is_content">This is content\n%s</string>
+
+    <string name="themeadapter_title_material">Theme Adapter: Material</string>
+    <string name="themeadapter_title_material3">Theme Adapter: Material 3</string>
 
 </resources>

@@ -25,6 +25,8 @@ kotlin {
 }
 
 android {
+    namespace "com.google.accompanist.appcompattheme"
+
     compileSdkVersion 33
 
     defaultConfig {
@@ -84,6 +86,7 @@ android {
 dependencies {
     implementation libs.androidx.core
     implementation libs.compose.material.material
+    implementation libs.kotlin.coroutines.android
 
     api libs.androidx.appcompat
 

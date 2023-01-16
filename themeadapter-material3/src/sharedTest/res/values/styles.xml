@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2022 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+
+    <style name="ShapeAppearance.Mdc3ThemeTest.RoundedDifferentSizes" parent="">
+        <item name="cornerFamily">rounded</item>
+
+        <!-- We intentionally use a mix of px and dp values -->
+        <item name="cornerSizeBottomRight">5px</item>
+        <item name="cornerSizeTopRight">9dp</item>
+        <item name="cornerSizeBottomLeft">3dp</item>
+        <!-- We intentionally omitted topLeft, to fallback to cornerSize -->
+        <item name="cornerSize">4px</item>
+    </style>
+
+    <style name="ShapeAppearance.Mdc3ThemeTest.CutDifferentSizes" parent="">
+        <item name="cornerFamily">cut</item>
+
+        <!-- We intentionally use a mix of px and dp values -->
+        <item name="cornerSizeBottomRight">5px</item>
+        <item name="cornerSizeTopRight">9dp</item>
+        <item name="cornerSizeBottomLeft">3dp</item>
+        <!-- We intentionally omitted topLeft, to fallback to cornerSize -->
+        <item name="cornerSize">4px</item>
+    </style>
+
+    <style name="ShapeAppearance.Mdc3ThemeTest.RoundedSameSize" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
+
+    <style name="ShapeAppearance.Mdc3ThemeTest.CutNoSize" parent="">
+        <item name="cornerFamily">cut</item>
+    </style>
+
+    <style name="ShapeAppearance.Mdc3ThemeTest.RoundedNoSize" parent="">
+        <item name="cornerFamily">rounded</item>
+    </style>
+
+</resources>

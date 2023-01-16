@@ -2,6 +2,21 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-appcompat-theme)](https://search.maven.org/search?q=g:com.google.accompanist)
 
+!!! warning
+	**This library is deprecated in favor of the new [`themeadapter-appcompat`][themeadapterappcompatlib] artifact.** The migration guide and original documentation is below.
+
+## Migration
+
+Accompanist AppCompat Theme Adapter has moved from the [`appcompat-theme`][appcompatthemelib] artifact to the [`themeadapter-appcompat`][themeadapterappcompatlib] artifact.
+The implementation is identical but the dependency and import package have changed.
+
+### Migration steps
+
+1. Change the dependency from `com.google.accompanist:accompanist-appcompat-theme:<version>` to `com.google.accompanist:accompanist-themeadapter-appcompat:<version>`
+2. Change any `com.google.accompanist.appcompattheme.*` imports to `com.google.accompanist.themeadapter.appcompat.*`
+
+## Original Docs
+
 A library that enables reuse of [AppCompat][appcompat] XML themes for theming in [Jetpack Compose][compose].
 
 The basis of theming in [Jetpack Compose][compose] is the [`MaterialTheme`][materialtheme] composable, where you provide [`Colors`][colors], [`Shapes`][shapes] and [`Typography`][typography] instances containing your styling parameters:
@@ -167,6 +182,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ```
 
+ [appcompatthemelib]: ../appcompat-theme
+ [themeadapterappcompatlib]: ../themeadapter-appcompat
  [compose]: https://developer.android.com/jetpack/compose
  [appcompat]: https://developer.android.com/jetpack/androidx/releases/appcompat
  [appcompattheme]: ../api/appcompat-theme/appcompat-theme/com.google.accompanist.appcompattheme/-app-compat-theme.html

@@ -16,14 +16,16 @@
 
 package com.google.accompanist.web
 
+import android.content.Context
 import android.graphics.Bitmap
-import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Immutable
@@ -62,6 +64,7 @@ import kotlinx.coroutines.withContext
  * subsequently overwritten after this lambda is called.
  * @param client Provides access to WebViewClient via subclassing
  * @param chromeClient Provides access to WebChromeClient via subclassing
+ * @param factory An optional WebView factory for using a custom subclass of WebView
  * @sample com.google.accompanist.sample.webview.BasicWebViewSample
  */
 @Composable
@@ -73,7 +76,8 @@ fun WebView(
     onCreated: (WebView) -> Unit = {},
     onDispose: (WebView) -> Unit = {},
     client: AccompanistWebViewClient = remember { AccompanistWebViewClient() },
-    chromeClient: AccompanistWebChromeClient = remember { AccompanistWebChromeClient() }
+    chromeClient: AccompanistWebChromeClient = remember { AccompanistWebChromeClient() },
+    factory: ((Context) -> WebView)? = null
 ) {
     var webView by remember { mutableStateOf<WebView?>(null) }
 
@@ -102,40 +106,56 @@ fun WebView(
 
     val runningInPreview = LocalInspectionMode.current
 
-    AndroidView(
-        factory = { context ->
-            WebView(context).apply {
-                onCreated(this)
+    BoxWithConstraints(modifier) {
+        AndroidView(
+            factory = { context ->
+                (factory?.invoke(context) ?: WebView(context)).apply {
+                    onCreated(this)
 
-                layoutParams = ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT
-                )
+                    // WebView changes it's layout strategy based on
+                    // it's layoutParams. We convert from Compose Modifier to
+                    // layout params here.
+                    val width =
+                        if (constraints.hasFixedWidth)
+                            LayoutParams.MATCH_PARENT
+                        else
+                            LayoutParams.WRAP_CONTENT
+                    val height =
+                        if (constraints.hasFixedHeight)
+                            LayoutParams.MATCH_PARENT
+                        else
+                            LayoutParams.WRAP_CONTENT
 
-                webChromeClient = chromeClient
-                webViewClient = client
-            }.also { webView = it }
-        },
-        modifier = modifier
-    ) { view ->
-        // AndroidViews are not supported by preview, bail early
-        if (runningInPreview) return@AndroidView
+                    layoutParams = LayoutParams(
+                        width,
+                        height
+                    )
 
-        when (val content = state.content) {
-            is WebContent.Url -> {
-                val url = content.url
+                    webChromeClient = chromeClient
+                    webViewClient = client
+                }.also { webView = it }
+            }
+        ) { view ->
+            // AndroidViews are not supported by preview, bail early
+            if (runningInPreview) return@AndroidView
 
-                if (url.isNotEmpty() && url != view.url) {
-                    view.loadUrl(url, content.additionalHttpHeaders.toMutableMap())
+            when (val content = state.content) {
+                is WebContent.Url -> {
+                    val url = content.url
+
+                    if (url.isNotEmpty() && url != view.url) {
+                        view.loadUrl(url, content.additionalHttpHeaders.toMutableMap())
+                    }
+                }
+
+                is WebContent.Data -> {
+                    view.loadDataWithBaseURL(content.baseUrl, content.data, null, "utf-8", null)
                 }
             }
-            is WebContent.Data -> {
-                view.loadDataWithBaseURL(content.baseUrl, content.data, null, "utf-8", null)
-            }
-        }
 
-        navigator.canGoBack = view.canGoBack()
-        navigator.canGoForward = view.canGoForward()
+            navigator.canGoBack = view.canGoBack()
+            navigator.canGoForward = view.canGoForward()
+        }
     }
 }
 
@@ -204,6 +224,12 @@ open class AccompanistWebViewClient : WebViewClient() {
         view: WebView?,
         request: WebResourceRequest?
     ): Boolean {
+        // If the url hasn't changed, this is probably an internal event like
+        // a javascript reload. We should let it happen.
+        if (view?.url == request?.url.toString()) {
+            return false
+        }
+
         // Override all url loads to make the single source of truth
         // of the URL the state holder Url
         request?.let {
@@ -427,8 +453,11 @@ data class WebViewError(
  *                              Note that these headers are used for all subsequent requests of the WebView.
  */
 @Composable
-fun rememberWebViewState(url: String, additionalHttpHeaders: Map<String, String> = emptyMap()): WebViewState =
-    // Rather than using .apply {} here we will recreate the state, this prevents
+fun rememberWebViewState(
+    url: String,
+    additionalHttpHeaders: Map<String, String> = emptyMap()
+): WebViewState =
+// Rather than using .apply {} here we will recreate the state, this prevents
     // a recomposition loop when the webview updates the url itself.
     remember(url, additionalHttpHeaders) {
         WebViewState(

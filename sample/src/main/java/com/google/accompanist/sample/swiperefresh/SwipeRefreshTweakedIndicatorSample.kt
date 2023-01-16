@@ -63,6 +63,7 @@ class SwipeRefreshTweakedIndicatorSample : ComponentActivity() {
     }
 }
 
+@Suppress("DEPRECATION")
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 private fun Sample() {

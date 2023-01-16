@@ -88,6 +88,17 @@ class VerticalPagerScrollingContentTest {
         // Assert that we're still on page 0
         assertThat(pagerState.currentPage).isEqualTo(0)
         assertThat(pagerState.currentPageOffset).isWithin(0.01f).of(0f)
+
+        // Perform a scroll in the same direction again
+        rule.onNodeWithTag(TestTag)
+            .swipeAcrossCenterWithVelocity(velocityPerSec = 2_000.dp, distancePercentageY = -0.6f)
+
+        // Wait for the flings to end
+        rule.waitForIdle()
+
+        // Assert that we're now on page 1
+        assertThat(pagerState.currentPage).isEqualTo(1)
+        assertThat(pagerState.currentPageOffset).isWithin(0.01f).of(0f)
     }
 
     companion object {

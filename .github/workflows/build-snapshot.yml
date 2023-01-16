@@ -1,4 +1,4 @@
-name: Build & test
+name: Build & test (snapshot)
 
 on:
   push:
@@ -7,6 +7,8 @@ on:
     paths-ignore:
       - '**.md'
   pull_request:
+    branches:
+      - snapshot
   workflow_dispatch:
 
 jobs:
@@ -82,7 +84,7 @@ jobs:
       # Allow tests to continue on other devices if they fail on one device.
       fail-fast: false
       matrix:
-        api-level: [ 22, 26, 28, 29 ]
+        api-level: [ 22, 26, 29, 31, 32 ]
         shard: [ 0, 1 ] # Need to update shard-count below if this changes
 
     env:
@@ -127,7 +129,7 @@ jobs:
           if [ "$API_LEVEL" -ge "28" ]; then
             TARGET="google_apis"
           fi
-          echo "::set-output name=TARGET::$TARGET"
+          echo "TARGET=$TARGET" >> $GITHUB_OUTPUT
 
       - name: Run tests
         uses: reactivecircus/android-emulator-runner@v2

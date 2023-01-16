@@ -19,20 +19,26 @@ package com.google.accompanist.sample.placeholder
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
@@ -44,8 +50,6 @@ import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.randomSampleImageUrl
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.delay
 
 class PlaceholderFadeSample : ComponentActivity() {
@@ -60,7 +64,7 @@ class PlaceholderFadeSample : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalCoilApi::class)
+@OptIn(ExperimentalCoilApi::class, ExperimentalMaterialApi::class)
 @Composable
 private fun Sample() {
     Scaffold(
@@ -82,10 +86,12 @@ private fun Sample() {
             }
         }
 
-        SwipeRefresh(
-            state = rememberSwipeRefreshState(isRefreshing = refreshing),
-            onRefresh = { refreshing = true },
-        ) {
+        val state = rememberPullRefreshState(
+            refreshing = refreshing,
+            onRefresh = { refreshing = true }
+        )
+
+        Box(Modifier.pullRefresh(state)) {
             LazyColumn(contentPadding = padding) {
                 if (refreshing.not()) {
                     item {
@@ -108,6 +114,12 @@ private fun Sample() {
                     )
                 }
             }
+
+            PullRefreshIndicator(
+                refreshing = refreshing,
+                state = state,
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
         }
     }
 }

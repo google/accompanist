@@ -24,11 +24,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertHeightIsAtLeast
@@ -42,6 +40,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.height
 import androidx.compose.ui.unit.width
+import com.google.accompanist.testharness.TestHarness
 
 /**
  * Contains [HorizontalPager] tests. This class is extended
@@ -75,7 +74,8 @@ abstract class BaseHorizontalPagerTest(
     override fun SemanticsNodeInteraction.assertLaidOutItemPosition(
         page: Int,
         currentPage: Int,
-        offset: Float,
+        pageCount: Int,
+        offset: Float
     ): SemanticsNodeInteraction {
         val rootBounds = composeTestRule.onRoot().getUnclippedBoundsInRoot()
         val expectedItemSize = (
@@ -83,6 +83,7 @@ abstract class BaseHorizontalPagerTest(
                 contentPadding.calculateLeftPadding(layoutDirection) -
                 contentPadding.calculateRightPadding(layoutDirection)
             ) * itemWidthFraction
+        val expectedItemSizeWithSpacing = expectedItemSize + itemSpacingDp.dp
 
         // The expected coordinates. This uses the implicit fact that VerticalPager by
         // use Alignment.CenterVertically by default, and that we're using items
@@ -94,16 +95,17 @@ abstract class BaseHorizontalPagerTest(
                     expectedItemSize -
                     contentPadding.calculateRightPadding(layoutDirection)
                 ) +
-                (expectedItemSize * offset)
+                (expectedItemSizeWithSpacing * offset)
         } else {
-            contentPadding.calculateLeftPadding(layoutDirection) - (expectedItemSize * offset)
+            contentPadding.calculateLeftPadding(layoutDirection) -
+                (expectedItemSizeWithSpacing * offset)
         }
 
         return assertWidthIsEqualTo(expectedItemSize)
             .assertHeightIsAtLeast(expectedItemSize)
             .assertTopPositionInRootIsEqualTo(expectedTop)
             .run {
-                val pageDelta = ((expectedItemSize + itemSpacingDp.dp) * (page - currentPage))
+                val pageDelta = (expectedItemSizeWithSpacing * (page - currentPage))
                 if (laidOutRtl) {
                     assertLeftPositionInRootIsEqualTo(expectedFirstItemLeft - pageDelta)
                 } else {
@@ -122,7 +124,7 @@ abstract class BaseHorizontalPagerTest(
         userScrollEnabled: Boolean,
         onPageComposed: (Int) -> Unit
     ) {
-        CompositionLocalProvider(LocalLayoutDirection provides layoutDirection) {
+        TestHarness(layoutDirection = layoutDirection) {
             applierScope = rememberCoroutineScope()
 
             Box {

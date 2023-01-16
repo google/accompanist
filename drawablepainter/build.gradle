@@ -25,6 +25,8 @@ kotlin {
 }
 
 android {
+    namespace "com.google.accompanist.drawablepainter"
+
     compileSdkVersion 33
 
     defaultConfig {
@@ -65,6 +67,7 @@ android {
 
 dependencies {
     implementation libs.compose.ui.ui
+    implementation libs.kotlin.coroutines.android
 }
 
 apply plugin: "com.vanniktech.maven.publish"

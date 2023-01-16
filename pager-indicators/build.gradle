@@ -25,6 +25,8 @@ kotlin {
 }
 
 android {
+    namespace "com.google.accompanist.pager.indicators"
+
     compileSdkVersion 33
 
     defaultConfig {
@@ -84,6 +86,8 @@ android {
 dependencies {
     api project(':pager')
     api libs.compose.material.material
+
+    implementation libs.kotlin.coroutines.android
 
     // ======================
     // Test dependencies

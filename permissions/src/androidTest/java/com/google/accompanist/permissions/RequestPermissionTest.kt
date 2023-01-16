@@ -26,8 +26,8 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.test.filters.FlakyTest
 import androidx.test.filters.SdkSuppress
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -74,7 +74,7 @@ class RequestPermissionTest {
         composeTestRule.onNodeWithText("No permission").assertIsDisplayed()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    @FlakyTest
     @Test
     fun permissionTest_grantInTheBackground() {
         composeTestRule.onNodeWithText("No permission").assertIsDisplayed()

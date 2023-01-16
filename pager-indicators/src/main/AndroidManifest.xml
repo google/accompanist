@@ -14,5 +14,7 @@
   ~ limitations under the License.
   -->
 
-<manifest package="com.google.accompanist.pager.indicators">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+  <uses-sdk android:minSdkVersion="21" tools:ignore="GradleOverrides" />
 </manifest>

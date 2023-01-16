@@ -25,6 +25,8 @@ kotlin {
 }
 
 android {
+    namespace "com.google.accompanist.navigation.material"
+
     compileSdkVersion 33
 
     defaultConfig {
@@ -74,6 +76,7 @@ dependencies {
     api libs.androidx.navigation.compose
     implementation libs.compose.foundation.foundation
     implementation libs.compose.material.material
+    implementation libs.kotlin.coroutines.android
 
     // ======================
     // Test dependencies

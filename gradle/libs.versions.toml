@@ -1,20 +1,21 @@
 [versions]
-compose = "1.3.0-alpha03"
-composeCompiler = "1.3.0"
+compose = "1.4.0-alpha04"
+composeCompiler = "1.4.0-alpha02"
+composeMaterial3 = "1.0.1"
 composesnapshot = "-" # a single character = no snapshot
 
 # gradlePlugin and lint need to be updated together
-gradlePlugin = "7.3.0-beta05"
+gradlePlugin = "7.3.1"
 lintMinCompose = "30.0.0"
 
 ktlint = "0.45.2"
-kotlin = "1.7.10"
-coroutines = "1.6.0"
+kotlin = "1.7.21"
+coroutines = "1.6.4"
 okhttp = "3.12.13"
 coil = "1.3.2"
 
 androidxtest = "1.4.0"
-androidxnavigation = "2.5.0-rc02"
+androidxnavigation = "2.5.3"
 androidxWindow = "1.0.0"
 
 [libraries]
@@ -28,6 +29,7 @@ compose-foundation-foundation = { module = "androidx.compose.foundation:foundati
 compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout", version.ref = "compose" }
 compose-material-material = { module = "androidx.compose.material:material", version.ref = "compose" }
 compose-material-iconsext = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose" }
+compose-material3-material3 = { module = "androidx.compose.material3:material3", version.ref = "composeMaterial3" }
 compose-animation-animation = { module = "androidx.compose.animation:animation", version.ref = "compose" }
 
 snapper = "dev.chrisbanes.snapper:snapper:0.2.2"
@@ -69,21 +71,23 @@ androidx-window-testing = { module = "androidx.window:window-testing", version.r
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidxnavigation" }
 androidx-navigation-testing = { module = "androidx.navigation:navigation-testing", version.ref = "androidxnavigation" }
 
+mdc = "com.google.android.material:material:1.7.0"
+
 napier = "io.github.aakira:napier:1.4.1"
 
-androidx-test-core = { module = "androidx.test:core-ktx", version.ref = "androidxtest" }
-androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidxtest" }
+androidx-test-core = "androidx.test:core-ktx:1.5.0-alpha02"
+androidx-test-runner = "androidx.test:runner:1.5.0-alpha04"
 androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidxtest" }
-androidx-test-orchestrator = { module = "androidx.test:orchestrator", version.ref = "androidxtest" }
+androidx-test-orchestrator = "androidx.test:orchestrator:1.4.1"
 androidx-test-uiAutomator = "androidx.test.uiautomator:uiautomator:2.2.0"
 
 # alpha for robolectric x compose fix
-androidx-test-espressoCore = "androidx.test.espresso:espresso-core:3.5.0-alpha06"
-androidx-test-espressoWeb = "androidx.test.espresso:espresso-web:3.5.0-alpha06"
+androidx-test-espressoCore = "androidx.test.espresso:espresso-core:3.5.0-alpha07"
+androidx-test-espressoWeb = "androidx.test.espresso:espresso-web:3.5.0-alpha07"
 
 junit = "junit:junit:4.13.2"
 truth = "com.google.truth:truth:1.1.2"
-robolectric = "org.robolectric:robolectric:4.8"
+robolectric = "org.robolectric:robolectric:4.9"
 
 affectedmoduledetector = "com.dropbox.affectedmoduledetector:affectedmoduledetector:0.1.2"
 

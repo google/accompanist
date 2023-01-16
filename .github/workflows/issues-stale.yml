@@ -10,7 +10,7 @@ jobs:
       - uses: actions/stale@v3
         with:
           stale-issue-message: 'This issue is stale because it has been open 30 days with no activity. Remove stale label or comment or this will be closed in 5 days.'
-          days-before-stale: 30
+          days-before-stale: 45
           days-before-close: 5
           exempt-all-pr-milestones: true
           exempt-issue-labels: 'waiting for info,waiting on dependency'

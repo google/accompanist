@@ -25,6 +25,8 @@ kotlin {
 }
 
 android {
+    namespace "com.google.accompanist.insets"
+
     compileSdkVersion 33
 
     defaultConfig {
@@ -86,6 +88,7 @@ dependencies {
     implementation libs.androidx.dynamicanimation
 
     implementation libs.compose.foundation.foundation
+    implementation libs.kotlin.coroutines.android
 
     // ======================
     // Test dependencies
