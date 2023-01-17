@@ -71,7 +71,7 @@ import java.util.concurrent.TimeUnit
 @RunWith(AndroidJUnit4::class)
 // Emulator image doesn't have a WebView until API 26
 // Google API emulator image seems to be really flaky before 28 so currently we will set these tests
-// to min 29 and max 30. 31/32 image is also really flaky
+// to min 29.
 @SdkSuppress(minSdkVersion = 28)
 class WebTest {
     @get:Rule
@@ -466,10 +466,7 @@ class WebTest {
         }
 
         rule.waitForIdle()
-
-        // HACK: EspressoWeb webClick doesn't track back navigation for some reason
-        // so manually click the view
-        rule.onNodeWithTag(WebViewTag).performClick()
+        clickOnWebViewLink()
 
         rule.waitUntil { navigator.canGoBack }
         assertThat(state.lastLoadedUrl).isEqualTo(LINK_URL)
@@ -499,10 +496,7 @@ class WebTest {
         }
 
         rule.waitForIdle()
-
-        // HACK: EspressoWeb webClick doesn't track back navigation for some reason
-        // so manually click the view
-        rule.onNodeWithTag(WebViewTag).performClick()
+        clickOnWebViewLink()
 
         rule.waitUntil { navigator.canGoBack }
         assertThat(state.lastLoadedUrl).isEqualTo(LINK_URL)
@@ -538,10 +532,7 @@ class WebTest {
         }
 
         rule.waitForIdle()
-
-        // HACK: EspressoWeb webClick doesn't track back navigation for some reason
-        // so manually click the view
-        rule.onNodeWithTag(WebViewTag).performClick()
+        clickOnWebViewLink()
 
         rule.waitUntil { navigator.canGoBack }
         assertThat(navigator.canGoBack).isTrue()
@@ -565,10 +556,7 @@ class WebTest {
         }
 
         rule.waitForIdle()
-
-        // HACK: EspressoWeb webClick doesn't track back navigation for some reason
-        // so manually click the view
-        rule.onNodeWithTag(WebViewTag).performClick()
+        clickOnWebViewLink()
 
         rule.waitUntil { navigator.canGoBack }
         navigator.navigateBack()
@@ -718,6 +706,12 @@ class WebTest {
 
         // If the WebView is wrapping it's content successfully, the box will have some height.
         rule.onNodeWithTag("box").assertHeightIsAtLeast(1.dp)
+    }
+
+    private fun clickOnWebViewLink() {
+        // HACK: EspressoWeb webClick doesn't track back navigation for some reason
+        // so manually click the view
+        rule.onNodeWithTag(WebViewTag).performClick()
     }
 }
 
