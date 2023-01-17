@@ -74,8 +74,7 @@ fun rememberPagerState(
 class PagerState(
     @IntRange(from = 0) currentPage: Int = 0,
 ) : ScrollableState {
-    // Should this be public?
-    internal val lazyListState = LazyListState(firstVisibleItemIndex = currentPage)
+    val lazyListState = LazyListState(firstVisibleItemIndex = currentPage)
 
     private var _currentPage by mutableStateOf(currentPage)
 
