@@ -356,7 +356,13 @@ class WebViewNavigator(private val coroutineScope: CoroutineScope) {
             val additionalHttpHeaders: Map<String, String> = emptyMap()
         ) : NavigationEvent
 
-        data class LoadHtml(val html: String, val baseUrl: String? = null) : NavigationEvent
+        data class LoadHtml(
+            val html: String,
+            val baseUrl: String? = null,
+            val mimeType: String? = null,
+            val encoding: String? = "utf-8",
+            val historyUrl: String? = null
+        ) : NavigationEvent
     }
 
     private val navigationEvents: MutableSharedFlow<NavigationEvent> = MutableSharedFlow()
@@ -372,9 +378,9 @@ class WebViewNavigator(private val coroutineScope: CoroutineScope) {
                 is NavigationEvent.LoadHtml -> loadDataWithBaseURL(
                     event.baseUrl,
                     event.html,
-                    null,
-                    "utf-8",
-                    null
+                    event.mimeType,
+                    event.encoding,
+                    event.historyUrl
                 )
 
                 is NavigationEvent.LoadUrl -> {
@@ -407,8 +413,24 @@ class WebViewNavigator(private val coroutineScope: CoroutineScope) {
         }
     }
 
-    fun loadHtml(html: String, baseUrl: String? = null) {
-        coroutineScope.launch { navigationEvents.emit(NavigationEvent.LoadHtml(html, baseUrl)) }
+    fun loadHtml(
+        html: String,
+        baseUrl: String? = null,
+        mimeType: String? = null,
+        encoding: String? = "utf-8",
+        historyUrl: String? = null
+    ) {
+        coroutineScope.launch {
+            navigationEvents.emit(
+                NavigationEvent.LoadHtml(
+                    html,
+                    baseUrl,
+                    mimeType,
+                    encoding,
+                    historyUrl
+                )
+            )
+        }
     }
 
     /**

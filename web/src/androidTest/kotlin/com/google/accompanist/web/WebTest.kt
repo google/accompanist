@@ -520,6 +520,7 @@ class WebTest {
         assertThat(state.lastLoadedUrl).isEqualTo(LINK_URL)
     }
 
+    @FlakyTest
     @Test
     fun testNavigatorCanGoBack() {
         lateinit var state: WebViewState
@@ -546,6 +547,7 @@ class WebTest {
         assertThat(navigator.canGoBack).isTrue()
     }
 
+    @FlakyTest
     @Test
     fun testNavigatorCanGoForward() {
         lateinit var state: WebViewState

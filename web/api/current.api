@@ -94,7 +94,7 @@ package com.google.accompanist.web {
     ctor public WebViewNavigator(kotlinx.coroutines.CoroutineScope coroutineScope);
     method public boolean getCanGoBack();
     method public boolean getCanGoForward();
-    method public void loadHtml(String html, optional String? baseUrl);
+    method public void loadHtml(String html, optional String? baseUrl, optional String? mimeType, optional String? encoding, optional String? historyUrl);
     method public void loadUrl(String url, optional java.util.Map<java.lang.String,java.lang.String> additionalHttpHeaders);
     method public void navigateBack();
     method public void navigateForward();
@@ -108,7 +108,7 @@ package com.google.accompanist.web {
     ctor public WebViewState(com.google.accompanist.web.WebContent webContent);
     method public com.google.accompanist.web.WebContent getContent();
     method public androidx.compose.runtime.snapshots.SnapshotStateList<com.google.accompanist.web.WebViewError> getErrorsForCurrentRequest();
-    method public String? getLastLoadedUrl();
+    method public error.NonExistentClass! getLastLoadedUrl();
     method public com.google.accompanist.web.LoadingState getLoadingState();
     method public android.graphics.Bitmap? getPageIcon();
     method public String? getPageTitle();
@@ -117,7 +117,7 @@ package com.google.accompanist.web {
     property public final com.google.accompanist.web.WebContent content;
     property public final androidx.compose.runtime.snapshots.SnapshotStateList<com.google.accompanist.web.WebViewError> errorsForCurrentRequest;
     property public final boolean isLoading;
-    property public final String? lastLoadedUrl;
+    property public final error.NonExistentClass! lastLoadedUrl;
     property public final com.google.accompanist.web.LoadingState loadingState;
     property public final android.graphics.Bitmap? pageIcon;
     property public final String? pageTitle;
