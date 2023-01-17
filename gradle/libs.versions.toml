@@ -83,8 +83,8 @@ androidx-test-orchestrator = "androidx.test:orchestrator:1.4.1"
 androidx-test-uiAutomator = "androidx.test.uiautomator:uiautomator:2.2.0"
 
 # alpha for robolectric x compose fix
-androidx-test-espressoCore = "androidx.test.espresso:espresso-core:3.5.0-alpha07"
-androidx-test-espressoWeb = "androidx.test.espresso:espresso-web:3.5.0-alpha07"
+androidx-test-espressoCore = "androidx.test.espresso:espresso-core:3.5.1"
+androidx-test-espressoWeb = "androidx.test.espresso:espresso-web:3.5.1"
 
 junit = "junit:junit:4.13.2"
 truth = "com.google.truth:truth:1.1.2"

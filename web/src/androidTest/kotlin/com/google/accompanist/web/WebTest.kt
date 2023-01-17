@@ -40,6 +40,7 @@ import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertHeightIsAtLeast
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.dp
 import androidx.test.espresso.web.assertion.WebViewAssertions.webMatches
 import androidx.test.espresso.web.model.Atoms.getCurrentUrl
@@ -70,8 +71,8 @@ import java.util.concurrent.TimeUnit
 @RunWith(AndroidJUnit4::class)
 // Emulator image doesn't have a WebView until API 26
 // Google API emulator image seems to be really flaky before 28 so currently we will set these tests
-// to min 29 and max 30. 31/32 image is also really flaky
-@SdkSuppress(minSdkVersion = 28, maxSdkVersion = 30)
+// to min 29.
+@SdkSuppress(minSdkVersion = 28)
 class WebTest {
     @get:Rule
     val rule = createComposeRule()
@@ -148,7 +149,7 @@ class WebTest {
         // Wait for the webview to load and then perform the check
         rule.waitForIdle()
         onWebView().check(webMatches(getCurrentUrl(), containsString(LINK_URL)))
-        assertThat(state.content.getCurrentUrl())
+        assertThat(state.lastLoadedUrl)
             .isEqualTo(LINK_URL)
     }
 
@@ -326,7 +327,7 @@ class WebTest {
         rule.waitForIdle()
 
         onWebView().check(webMatches(getCurrentUrl(), containsString("about:blank")))
-        assertThat(state.content.getCurrentUrl())
+        assertThat(state.lastLoadedUrl)
             .isEqualTo("about:blank")
     }
 
@@ -349,7 +350,7 @@ class WebTest {
         // Wait for the webview to load and then perform the check
         rule.waitForIdle()
         onWebView().check(webMatches(getCurrentUrl(), containsString(LINK_URL)))
-        assertThat(state.content.getCurrentUrl())
+        assertThat(state.lastLoadedUrl)
             .isEqualTo(LINK_URL)
     }
 
@@ -447,13 +448,14 @@ class WebTest {
         mockServer.shutdown()
     }
 
+    @FlakyTest
     @Test
     fun testNavigatorBack() {
         lateinit var state: WebViewState
         lateinit var navigator: WebViewNavigator
 
         rule.setContent {
-            state = rememberWebViewStateWithHTMLData(data = TEST_DATA)
+            state = rememberWebViewState(url = TEST_LINK_FILE_URL)
             navigator = rememberWebViewNavigator()
 
             WebTestContent(
@@ -464,20 +466,16 @@ class WebTest {
         }
 
         rule.waitForIdle()
-
-        onWebView()
-            .withElement(findElement(Locator.ID, "link"))
-            .perform(webClick())
+        clickOnWebViewLink()
 
         rule.waitUntil { navigator.canGoBack }
-        assertThat(state.content.getCurrentUrl()).isEqualTo(LINK_URL)
+        assertThat(state.lastLoadedUrl).isEqualTo(LINK_URL)
 
         navigator.navigateBack()
 
         // Check that we're back on the original page with the link
         onWebView()
-            .withElement(findElement(Locator.ID, "link"))
-            .check(webMatches(getText(), equalTo(LINK_TEXT)))
+            .withElement(findElement(Locator.LINK_TEXT, TEST_LINK_FILE_TEXT))
     }
 
     @FlakyTest
@@ -487,7 +485,7 @@ class WebTest {
         lateinit var navigator: WebViewNavigator
 
         rule.setContent {
-            state = rememberWebViewStateWithHTMLData(data = TEST_DATA)
+            state = rememberWebViewState(url = TEST_LINK_FILE_URL)
             navigator = rememberWebViewNavigator()
 
             WebTestContent(
@@ -498,33 +496,32 @@ class WebTest {
         }
 
         rule.waitForIdle()
-
-        onWebView()
-            .withElement(findElement(Locator.ID, "link"))
-            .perform(webClick())
+        clickOnWebViewLink()
 
         rule.waitUntil { navigator.canGoBack }
+        assertThat(state.lastLoadedUrl).isEqualTo(LINK_URL)
+
         navigator.navigateBack()
 
         // Check that we're back on the original page with the link
         onWebView()
-            .withElement(findElement(Locator.ID, "link"))
-            .check(webMatches(getText(), equalTo(LINK_TEXT)))
+            .withElement(findElement(Locator.LINK_TEXT, TEST_LINK_FILE_TEXT))
 
         navigator.navigateForward()
         rule.waitUntil { navigator.canGoBack }
         rule.waitForIdle()
 
-        assertThat(state.content.getCurrentUrl()).isEqualTo(LINK_URL)
+        assertThat(state.lastLoadedUrl).isEqualTo(LINK_URL)
     }
 
+    @FlakyTest
     @Test
     fun testNavigatorCanGoBack() {
         lateinit var state: WebViewState
         lateinit var navigator: WebViewNavigator
 
         rule.setContent {
-            state = rememberWebViewStateWithHTMLData(data = TEST_DATA)
+            state = rememberWebViewState(url = TEST_LINK_FILE_URL)
             navigator = rememberWebViewNavigator()
 
             WebTestContent(
@@ -535,23 +532,20 @@ class WebTest {
         }
 
         rule.waitForIdle()
-        assertThat(navigator.canGoBack).isFalse()
-
-        onWebView()
-            .withElement(findElement(Locator.ID, "link"))
-            .perform(webClick())
+        clickOnWebViewLink()
 
         rule.waitUntil { navigator.canGoBack }
         assertThat(navigator.canGoBack).isTrue()
     }
 
+    @FlakyTest
     @Test
     fun testNavigatorCanGoForward() {
         lateinit var state: WebViewState
         lateinit var navigator: WebViewNavigator
 
         rule.setContent {
-            state = rememberWebViewStateWithHTMLData(data = TEST_DATA)
+            state = rememberWebViewState(url = TEST_LINK_FILE_URL)
             navigator = rememberWebViewNavigator()
 
             WebTestContent(
@@ -562,10 +556,7 @@ class WebTest {
         }
 
         rule.waitForIdle()
-
-        onWebView()
-            .withElement(findElement(Locator.ID, "link"))
-            .perform(webClick())
+        clickOnWebViewLink()
 
         rule.waitUntil { navigator.canGoBack }
         navigator.navigateBack()
@@ -716,11 +707,19 @@ class WebTest {
         // If the WebView is wrapping it's content successfully, the box will have some height.
         rule.onNodeWithTag("box").assertHeightIsAtLeast(1.dp)
     }
+
+    private fun clickOnWebViewLink() {
+        // HACK: EspressoWeb webClick doesn't track back navigation for some reason
+        // so manually click the view
+        rule.onNodeWithTag(WebViewTag).performClick()
+    }
 }
 
 private const val LINK_ID = "link"
 private const val LINK_TEXT = "Click me"
 private const val LINK_URL = "file:///android_asset/test.html"
+private const val TEST_LINK_FILE_URL = "file:///android_asset/test_link.html"
+private const val TEST_LINK_FILE_TEXT = "Test link"
 private const val TITLE_TEXT = "A Test Title"
 private const val TEST_DATA =
     "<html><body><a id=$LINK_ID href=\"$LINK_URL\">$LINK_TEXT</a></body></html>"

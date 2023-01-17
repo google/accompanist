@@ -59,16 +59,16 @@ import com.google.accompanist.web.rememberWebViewNavigator
 import com.google.accompanist.web.rememberWebViewState
 
 class BasicWebViewSample : ComponentActivity() {
+    val initialUrl = "https://google.com"
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             AccompanistSampleTheme {
-                var url by remember { mutableStateOf("https://google.com") }
-                val state = rememberWebViewState(url = url)
+                val state = rememberWebViewState(url = initialUrl)
                 val navigator = rememberWebViewNavigator()
-                var textFieldValue by remember(state.content.getCurrentUrl()) {
-                    mutableStateOf(state.content.getCurrentUrl() ?: "")
+                var textFieldValue by remember(state.lastLoadedUrl) {
+                    mutableStateOf(state.lastLoadedUrl)
                 }
 
                 Column {
@@ -100,7 +100,7 @@ class BasicWebViewSample : ComponentActivity() {
                             }
 
                             OutlinedTextField(
-                                value = textFieldValue,
+                                value = textFieldValue ?: "",
                                 onValueChange = { textFieldValue = it },
                                 modifier = Modifier.fillMaxWidth()
                             )
@@ -108,7 +108,9 @@ class BasicWebViewSample : ComponentActivity() {
 
                         Button(
                             onClick = {
-                                url = textFieldValue
+                                textFieldValue?.let {
+                                    navigator.loadUrl(it)
+                                }
                             },
                             modifier = Modifier.align(Alignment.CenterVertically)
                         ) {
@@ -140,7 +142,8 @@ class BasicWebViewSample : ComponentActivity() {
 
                     WebView(
                         state = state,
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier
+                            .weight(1f),
                         navigator = navigator,
                         onCreated = { webView ->
                             webView.settings.javaScriptEnabled = true

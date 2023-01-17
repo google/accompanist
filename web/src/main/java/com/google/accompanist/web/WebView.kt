@@ -38,10 +38,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.viewinterop.AndroidView
+import com.google.accompanist.web.LoadingState.Finished
+import com.google.accompanist.web.LoadingState.Loading
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -89,9 +91,31 @@ fun WebView(
         with(navigator) { webView?.handleNavigationEvents() }
     }
 
+    LaunchedEffect(webView, state) {
+        if (webView == null) return@LaunchedEffect
+
+        snapshotFlow { state.content }.collect { content ->
+            when (content) {
+                is WebContent.Url -> {
+                    webView?.loadUrl(content.url, content.additionalHttpHeaders)
+                }
+
+                is WebContent.Data -> {
+                    webView?.loadDataWithBaseURL(
+                        content.baseUrl,
+                        content.data,
+                        content.mimeType,
+                        content.encoding,
+                        content.historyUrl
+                    )
+                }
+            }
+        }
+    }
+
     val currentOnDispose by rememberUpdatedState(onDispose)
 
-    webView?.let { it ->
+    webView?.let {
         DisposableEffect(it) {
             onDispose { currentOnDispose(it) }
         }
@@ -103,8 +127,6 @@ fun WebView(
     client.state = state
     client.navigator = navigator
     chromeClient.state = state
-
-    val runningInPreview = LocalInspectionMode.current
 
     BoxWithConstraints(modifier) {
         AndroidView(
@@ -135,27 +157,7 @@ fun WebView(
                     webViewClient = client
                 }.also { webView = it }
             }
-        ) { view ->
-            // AndroidViews are not supported by preview, bail early
-            if (runningInPreview) return@AndroidView
-
-            when (val content = state.content) {
-                is WebContent.Url -> {
-                    val url = content.url
-
-                    if (url.isNotEmpty() && url != view.url) {
-                        view.loadUrl(url, content.additionalHttpHeaders.toMutableMap())
-                    }
-                }
-
-                is WebContent.Data -> {
-                    view.loadDataWithBaseURL(content.baseUrl, content.data, null, "utf-8", null)
-                }
-            }
-
-            navigator.canGoBack = view.canGoBack()
-            navigator.canGoForward = view.canGoForward()
-        }
+        )
     }
 }
 
@@ -179,33 +181,20 @@ open class AccompanistWebViewClient : WebViewClient() {
         state.errorsForCurrentRequest.clear()
         state.pageTitle = null
         state.pageIcon = null
+
+        state.lastLoadedUrl = url
     }
 
     override fun onPageFinished(view: WebView?, url: String?) {
         super.onPageFinished(view, url)
         state.loadingState = LoadingState.Finished
-        navigator.canGoBack = view?.canGoBack() ?: false
-        navigator.canGoForward = view?.canGoForward() ?: false
     }
 
-    override fun doUpdateVisitedHistory(
-        view: WebView?,
-        url: String?,
-        isReload: Boolean
-    ) {
+    override fun doUpdateVisitedHistory(view: WebView?, url: String?, isReload: Boolean) {
         super.doUpdateVisitedHistory(view, url, isReload)
-        // WebView will often update the current url itself.
-        // This happens in situations like redirects and navigating through
-        // history. We capture this change and update our state holder url.
-        // On older APIs (28 and lower), this method is called when loading
-        // html data. We don't want to update the state in this case as that will
-        // overwrite the html being loaded.
-        if (url != null &&
-            !url.startsWith("data:text/html") &&
-            state.content.getCurrentUrl() != url
-        ) {
-            state.content = state.content.withUrl(url)
-        }
+
+        navigator.canGoBack = view?.canGoBack() ?: false
+        navigator.canGoForward = view?.canGoForward() ?: false
     }
 
     override fun onReceivedError(
@@ -218,24 +207,6 @@ open class AccompanistWebViewClient : WebViewClient() {
         if (error != null) {
             state.errorsForCurrentRequest.add(WebViewError(request, error))
         }
-    }
-
-    override fun shouldOverrideUrlLoading(
-        view: WebView?,
-        request: WebResourceRequest?
-    ): Boolean {
-        // If the url hasn't changed, this is probably an internal event like
-        // a javascript reload. We should let it happen.
-        if (view?.url == request?.url.toString()) {
-            return false
-        }
-
-        // Override all url loads to make the single source of truth
-        // of the URL the state holder Url
-        request?.let {
-            state.content = state.content.withUrl(it.url.toString())
-        }
-        return true
     }
 }
 
@@ -274,8 +245,15 @@ sealed class WebContent {
         val additionalHttpHeaders: Map<String, String> = emptyMap(),
     ) : WebContent()
 
-    data class Data(val data: String, val baseUrl: String? = null) : WebContent()
+    data class Data(
+        val data: String,
+        val baseUrl: String? = null,
+        val encoding: String = "utf-8",
+        val mimeType: String? = null,
+        val historyUrl: String? = null
+    ) : WebContent()
 
+    @Deprecated("Use state.lastLoadedUrl instead")
     fun getCurrentUrl(): String? {
         return when (this) {
             is Url -> url
@@ -317,6 +295,9 @@ sealed class LoadingState {
  */
 @Stable
 class WebViewState(webContent: WebContent) {
+    var lastLoadedUrl by mutableStateOf<String?>(null)
+        internal set
+
     /**
      *  The content being loaded by the WebView
      */
@@ -364,7 +345,25 @@ class WebViewState(webContent: WebContent) {
 @Stable
 class WebViewNavigator(private val coroutineScope: CoroutineScope) {
 
-    private enum class NavigationEvent { BACK, FORWARD, RELOAD, STOP_LOADING }
+    private sealed interface NavigationEvent {
+        object Back : NavigationEvent
+        object Forward : NavigationEvent
+        object Reload : NavigationEvent
+        object StopLoading : NavigationEvent
+
+        data class LoadUrl(
+            val url: String,
+            val additionalHttpHeaders: Map<String, String> = emptyMap()
+        ) : NavigationEvent
+
+        data class LoadHtml(
+            val html: String,
+            val baseUrl: String? = null,
+            val mimeType: String? = null,
+            val encoding: String? = "utf-8",
+            val historyUrl: String? = null
+        ) : NavigationEvent
+    }
 
     private val navigationEvents: MutableSharedFlow<NavigationEvent> = MutableSharedFlow()
 
@@ -372,10 +371,21 @@ class WebViewNavigator(private val coroutineScope: CoroutineScope) {
     internal suspend fun WebView.handleNavigationEvents(): Nothing = withContext(Dispatchers.Main) {
         navigationEvents.collect { event ->
             when (event) {
-                NavigationEvent.BACK -> goBack()
-                NavigationEvent.FORWARD -> goForward()
-                NavigationEvent.RELOAD -> reload()
-                NavigationEvent.STOP_LOADING -> stopLoading()
+                is NavigationEvent.Back -> goBack()
+                is NavigationEvent.Forward -> goForward()
+                is NavigationEvent.Reload -> reload()
+                is NavigationEvent.StopLoading -> stopLoading()
+                is NavigationEvent.LoadHtml -> loadDataWithBaseURL(
+                    event.baseUrl,
+                    event.html,
+                    event.mimeType,
+                    event.encoding,
+                    event.historyUrl
+                )
+
+                is NavigationEvent.LoadUrl -> {
+                    loadUrl(event.url, event.additionalHttpHeaders)
+                }
             }
         }
     }
@@ -392,32 +402,63 @@ class WebViewNavigator(private val coroutineScope: CoroutineScope) {
     var canGoForward: Boolean by mutableStateOf(false)
         internal set
 
+    fun loadUrl(url: String, additionalHttpHeaders: Map<String, String> = emptyMap()) {
+        coroutineScope.launch {
+            navigationEvents.emit(
+                NavigationEvent.LoadUrl(
+                    url,
+                    additionalHttpHeaders
+                )
+            )
+        }
+    }
+
+    fun loadHtml(
+        html: String,
+        baseUrl: String? = null,
+        mimeType: String? = null,
+        encoding: String? = "utf-8",
+        historyUrl: String? = null
+    ) {
+        coroutineScope.launch {
+            navigationEvents.emit(
+                NavigationEvent.LoadHtml(
+                    html,
+                    baseUrl,
+                    mimeType,
+                    encoding,
+                    historyUrl
+                )
+            )
+        }
+    }
+
     /**
      * Navigates the webview back to the previous page.
      */
     fun navigateBack() {
-        coroutineScope.launch { navigationEvents.emit(NavigationEvent.BACK) }
+        coroutineScope.launch { navigationEvents.emit(NavigationEvent.Back) }
     }
 
     /**
      * Navigates the webview forward after going back from a page.
      */
     fun navigateForward() {
-        coroutineScope.launch { navigationEvents.emit(NavigationEvent.FORWARD) }
+        coroutineScope.launch { navigationEvents.emit(NavigationEvent.Forward) }
     }
 
     /**
      * Reloads the current page in the webview.
      */
     fun reload() {
-        coroutineScope.launch { navigationEvents.emit(NavigationEvent.RELOAD) }
+        coroutineScope.launch { navigationEvents.emit(NavigationEvent.Reload) }
     }
 
     /**
      * Stops the current page load (if one is loading).
      */
     fun stopLoading() {
-        coroutineScope.launch { navigationEvents.emit(NavigationEvent.STOP_LOADING) }
+        coroutineScope.launch { navigationEvents.emit(NavigationEvent.StopLoading) }
     }
 }
 
@@ -459,12 +500,17 @@ fun rememberWebViewState(
 ): WebViewState =
 // Rather than using .apply {} here we will recreate the state, this prevents
     // a recomposition loop when the webview updates the url itself.
-    remember(url, additionalHttpHeaders) {
+    remember {
         WebViewState(
             WebContent.Url(
                 url = url,
                 additionalHttpHeaders = additionalHttpHeaders
             )
+        )
+    }.apply {
+        this.content = WebContent.Url(
+            url = url,
+            additionalHttpHeaders = additionalHttpHeaders
         )
     }
 
@@ -474,7 +520,17 @@ fun rememberWebViewState(
  * @param data The uri to load in the WebView
  */
 @Composable
-fun rememberWebViewStateWithHTMLData(data: String, baseUrl: String? = null): WebViewState =
-    remember(data, baseUrl) {
-        WebViewState(WebContent.Data(data, baseUrl))
+fun rememberWebViewStateWithHTMLData(
+    data: String,
+    baseUrl: String? = null,
+    encoding: String = "utf-8",
+    mimeType: String? = null,
+    historyUrl: String? = null
+): WebViewState =
+    remember {
+        WebViewState(WebContent.Data(data, baseUrl, encoding, mimeType, historyUrl))
+    }.apply {
+        this.content = WebContent.Data(
+            data, baseUrl, encoding, mimeType, historyUrl
+        )
     }
