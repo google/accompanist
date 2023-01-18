@@ -40,10 +40,9 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import kotlin.math.absoluteValue
 import kotlin.math.sign
-import androidx.compose.foundation.pager.PagerState as FoundationPagerState
 
 /**
- * An horizontally laid out indicator for a [HorizontalPager] or [VerticalPager], representing
+ * A horizontally laid out indicator for a [HorizontalPager] or [VerticalPager], representing
  * the currently active page and total pages drawn using a [Shape].
  *
  * This element allows the setting of the [indicatorShape], which defines how the
@@ -51,7 +50,7 @@ import androidx.compose.foundation.pager.PagerState as FoundationPagerState
  *
  * @sample com.google.accompanist.sample.pager.HorizontalPagerIndicatorSample
  *
- * @param pagerState the state object of your [Pager] to be used to observe the list's state.
+ * @param pagerState the state object of your pager to be used to observe the list's state.
  * @param modifier the modifier to apply to this layout.
  * @param pageCount the size of indicators should be displayed, defaults to [PagerState.pageCount].
  * If you are implementing a looping pager with a much larger [PagerState.pageCount]
@@ -104,7 +103,7 @@ fun HorizontalPagerIndicator(
 }
 
 /**
- * An horizontally laid out indicator for a [HorizontalPager] or [VerticalPager], representing
+ * A horizontally laid out indicator for a [HorizontalPager] or [VerticalPager], representing
  * the currently active page and total pages drawn using a [Shape].
  *
  * This element allows the setting of the [indicatorShape], which defines how the
@@ -112,8 +111,9 @@ fun HorizontalPagerIndicator(
  *
  * @sample com.google.accompanist.sample.pager.HorizontalPagerIndicatorSample
  *
- * @param pagerState The Compose Foundation PagerState object of your [Pager] to be used to observe
- * the list's state.
+ * @param pagerState A [androidx.compose.foundation.pager.PagerState] object of your
+ * [androidx.compose.foundation.pager.VerticalPager] or
+ * [androidx.compose.foundation.pager.HorizontalPager]to be used to observe the list's state.
  * @param modifier the modifier to apply to this layout.
  * @param pageCount the size of indicators should be displayed.
  * If you are implementing a looping pager with a much larger [pageCount]
@@ -132,7 +132,7 @@ fun HorizontalPagerIndicator(
 @ExperimentalPagerApi
 @Composable
 fun HorizontalPagerIndicator(
-    pagerState: FoundationPagerState,
+    pagerState: androidx.compose.foundation.pager.PagerState,
     pageCount: Int,
     modifier: Modifier = Modifier,
     pageIndexMapping: (Int) -> Int = { it },
@@ -232,7 +232,7 @@ private fun HorizontalPagerIndicator(
 }
 
 /**
- * An vertically laid out indicator for a [VerticalPager] or [HorizontalPager], representing
+ * A vertically laid out indicator for a [VerticalPager] or [HorizontalPager], representing
  * the currently active page and total pages drawn using a [Shape].
  *
  * This element allows the setting of the [indicatorShape], which defines how the
@@ -240,7 +240,7 @@ private fun HorizontalPagerIndicator(
  *
  * @sample com.google.accompanist.sample.pager.VerticalPagerIndicatorSample
  *
- * @param pagerState the state object of your [Pager] to be used to observe the list's state.
+ * @param pagerState the state object of your pager to be used to observe the list's state.
  * @param modifier the modifier to apply to this layout.
  * @param pageCount the size of indicators should be displayed, defaults to [PagerState.pageCount].
  * If you are implementing a looping pager with a much larger [PagerState.pageCount]
@@ -293,14 +293,16 @@ fun VerticalPagerIndicator(
 }
 
 /**
- * An vertically laid out indicator for a [VerticalPager] or [HorizontalPager], representing
+ * A vertically laid out indicator for a [androidx.compose.foundation.pager.VerticalPager] or
+ * [androidx.compose.foundation.pager.HorizontalPager], representing
  * the currently active page and total pages drawn using a [Shape].
  *
  * This element allows the setting of the [indicatorShape], which defines how the
  * indicator is visually represented.
  *
- * @param pagerState The Compose Foundation PagerState object of your [Pager] to be used to observe
- * the list's state.
+ * @param pagerState A [androidx.compose.foundation.pager.PagerState] object of your
+ * [androidx.compose.foundation.pager.VerticalPager] or
+ * [androidx.compose.foundation.pager.HorizontalPager]to be used to observe the list's state.
  * @param modifier the modifier to apply to this layout.
  * @param pageCount the size of indicators should be displayed. If you are implementing a looping
  * pager with a much larger [pageCount] than indicators should displayed, e.g. [Int.MAX_VALUE],
@@ -319,7 +321,7 @@ fun VerticalPagerIndicator(
 @ExperimentalPagerApi
 @Composable
 fun VerticalPagerIndicator(
-    pagerState: FoundationPagerState,
+    pagerState: androidx.compose.foundation.pager.PagerState,
     pageCount: Int,
     modifier: Modifier = Modifier,
     pageIndexMapping: (Int) -> Int = { it },
