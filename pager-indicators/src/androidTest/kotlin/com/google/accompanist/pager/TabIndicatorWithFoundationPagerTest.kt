@@ -55,7 +55,6 @@ class TabIndicatorWithFoundationPagerTest {
     private val IndicatorTag = "indicator"
     private val TabRowTag = "TabRow"
 
-
     @Test
     fun emptyPager() {
         rule.setContent {

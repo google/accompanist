@@ -37,7 +37,7 @@ fun Modifier.pagerTabIndicatorOffset(
     tabPositions: List<TabPosition>,
     pageIndexMapping: (Int) -> Int = { it },
 ): Modifier {
-    val stateBridge = object : PagerStateBridge{
+    val stateBridge = object : PagerStateBridge {
         override val currentPage: Int
             get() = pagerState.currentPage
         override val currentPageOffset: Float
@@ -60,7 +60,7 @@ fun Modifier.pagerTabIndicatorOffset(
     tabPositions: List<TabPosition>,
     pageIndexMapping: (Int) -> Int = { it },
 ): Modifier {
-    val stateBridge = object : PagerStateBridge{
+    val stateBridge = object : PagerStateBridge {
         override val currentPage: Int
             get() = pagerState.currentPage
         override val currentPageOffset: Float
