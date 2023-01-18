@@ -24,6 +24,7 @@ import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.FrameLayout
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.runtime.Composable
@@ -131,7 +132,7 @@ fun WebView(
     BoxWithConstraints(modifier) {
         AndroidView(
             factory = { context ->
-                (factory?.invoke(context) ?: WebView(context)).apply {
+                val childView = (factory?.invoke(context) ?: WebView(context)).apply {
                     onCreated(this)
 
                     // WebView changes it's layout strategy based on
@@ -156,6 +157,14 @@ fun WebView(
                     webChromeClient = chromeClient
                     webViewClient = client
                 }.also { webView = it }
+
+                // Workaround a crash on certain devices that expect WebView to be
+                // wrapped in a ViewGroup.
+                // b/243567497
+                val parentLayout = FrameLayout(context)
+                parentLayout.addView(childView)
+
+                parentLayout
             }
         )
     }
