@@ -46,7 +46,7 @@ import androidx.compose.foundation.pager.HorizontalPager as FoundationHorizontal
 import androidx.compose.foundation.pager.PagerState as FoundationPagerState
 import androidx.compose.foundation.pager.rememberPagerState as rememberFoundationPagerState
 
-@OptIn(ExperimentalPagerApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @RunWith(AndroidJUnit4::class)
 class FoundationTabIndicatorTest {
     @get:Rule
@@ -152,6 +152,7 @@ class FoundationTabIndicatorTest {
         }
     }
 
+    @OptIn(ExperimentalPagerApi::class)
     @Composable
     private fun TabRow(pagerState: FoundationPagerState, pageCount: Int) {
         ScrollableTabRow(
