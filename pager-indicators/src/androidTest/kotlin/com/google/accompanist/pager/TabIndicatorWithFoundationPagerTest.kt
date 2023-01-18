@@ -48,7 +48,7 @@ import androidx.compose.foundation.pager.rememberPagerState as rememberFoundatio
 
 @OptIn(ExperimentalFoundationApi::class)
 @RunWith(AndroidJUnit4::class)
-class FoundationTabIndicatorTest {
+class TabIndicatorWithFoundationPagerTest {
     @get:Rule
     val rule = createComposeRule()
 
