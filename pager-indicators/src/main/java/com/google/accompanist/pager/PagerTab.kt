@@ -48,9 +48,8 @@ fun Modifier.pagerTabIndicatorOffset(
 
 /**
  * This indicator syncs up a [TabRow] or [ScrollableTabRow] tab indicator with a
- * [HorizontalPager] or [VerticalPager]. See the sample for a full demonstration.
- * This is an adaptation of [pagerTabIndicatorOffset] to be used with foundation
- * PagerState.
+ * [androidx.compose.foundation.pager.HorizontalPager] or
+ * [androidx.compose.foundation.pager.VerticalPager].
  */
 @OptIn(ExperimentalFoundationApi::class)
 @ExperimentalPagerApi

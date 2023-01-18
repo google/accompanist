@@ -103,7 +103,8 @@ fun HorizontalPagerIndicator(
 }
 
 /**
- * A horizontally laid out indicator for a [HorizontalPager] or [VerticalPager], representing
+ * A horizontally laid out indicator for a [androidx.compose.foundation.pager.HorizontalPager] or
+ * [androidx.compose.foundation.pager.VerticalPager], representing
  * the currently active page and total pages drawn using a [Shape].
  *
  * This element allows the setting of the [indicatorShape], which defines how the
@@ -119,7 +120,7 @@ fun HorizontalPagerIndicator(
  * If you are implementing a looping pager with a much larger [pageCount]
  * than indicators should displayed, e.g. [Int.MAX_VALUE], specify you real size in this param.
  * @param pageIndexMapping describe how to get the position of active indicator by the giving page
- * from [PagerState.currentPage].
+ * from [androidx.compose.foundation.pager.PagerState.currentPage].
  * @param activeColor the color of the active Page indicator
  * @param inactiveColor the color of page indicators that are inactive. This defaults to
  * [activeColor] with the alpha component set to the [ContentAlpha.disabled].
@@ -308,7 +309,7 @@ fun VerticalPagerIndicator(
  * pager with a much larger [pageCount] than indicators should displayed, e.g. [Int.MAX_VALUE],
  * specify you real size in this param.
  * @param pageIndexMapping describe how to get the position of active indicator by the giving page
- * from [PagerState.currentPage].
+ * from [androidx.compose.foundation.pager.PagerState.currentPage].
  * @param activeColor the color of the active Page indicator
  * @param inactiveColor the color of page indicators that are inactive. This defaults to
  * [activeColor] with the alpha component set to the [ContentAlpha.disabled].
