@@ -16,6 +16,7 @@
 
 package com.google.accompanist.pager
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.TabPosition
 import androidx.compose.material.TabRow
@@ -23,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.lerp
-
 /**
  * This indicator syncs up a [TabRow] or [ScrollableTabRow] tab indicator with a
  * [HorizontalPager] or [VerticalPager]. See the sample for a full demonstration.
@@ -33,6 +33,43 @@ import androidx.compose.ui.unit.lerp
 @ExperimentalPagerApi
 fun Modifier.pagerTabIndicatorOffset(
     pagerState: PagerState,
+    tabPositions: List<TabPosition>,
+    pageIndexMapping: (Int) -> Int = { it },
+): Modifier {
+    val stateBridge = object : PagerStateBridge {
+        override val currentPage: Int
+            get() = pagerState.currentPage
+        override val currentPageOffset: Float
+            get() = pagerState.currentPageOffset
+    }
+
+    return pagerTabIndicatorOffset(stateBridge, tabPositions, pageIndexMapping)
+}
+
+/**
+ * This indicator syncs up a [TabRow] or [ScrollableTabRow] tab indicator with a
+ * [androidx.compose.foundation.pager.HorizontalPager] or
+ * [androidx.compose.foundation.pager.VerticalPager].
+ */
+@OptIn(ExperimentalFoundationApi::class)
+@ExperimentalPagerApi
+fun Modifier.pagerTabIndicatorOffset(
+    pagerState: androidx.compose.foundation.pager.PagerState,
+    tabPositions: List<TabPosition>,
+    pageIndexMapping: (Int) -> Int = { it },
+): Modifier {
+    val stateBridge = object : PagerStateBridge {
+        override val currentPage: Int
+            get() = pagerState.currentPage
+        override val currentPageOffset: Float
+            get() = pagerState.currentPageOffsetFraction
+    }
+
+    return pagerTabIndicatorOffset(stateBridge, tabPositions, pageIndexMapping)
+}
+
+private fun Modifier.pagerTabIndicatorOffset(
+    pagerState: PagerStateBridge,
     tabPositions: List<TabPosition>,
     pageIndexMapping: (Int) -> Int = { it },
 ): Modifier = layout { measurable, constraints ->
@@ -74,4 +111,9 @@ fun Modifier.pagerTabIndicatorOffset(
             )
         }
     }
+}
+
+internal interface PagerStateBridge {
+    val currentPage: Int
+    val currentPageOffset: Float
 }
