@@ -46,7 +46,7 @@ A library that enables the reuse of [MDC-Android][mdc] Material 2 XML themes, fo
 ### 🎨 [Material 3 Theme Adapter](./themeadapter-material3/)
 A library that enables the reuse of [MDC-Android][mdc] Material 3 XML themes, for theming in Jetpack Compose.
 
-### 📖 [Pager](./pager/)
+### 📖 [Pager](./pager/) (Soon to be deprecated - Upstreamed in Compose 1.4)
 A library that provides utilities for building paginated layouts in Jetpack Compose, similar to Android's [ViewPager][viewpager].
 
 ### 📫 [Permissions](./permissions/)
@@ -55,7 +55,7 @@ A library that provides [Android runtime permissions][runtimepermissions] suppor
 ### ⏳ [Placeholder](./placeholder/)
 A library that provides easy-to-use modifiers for displaying a placeholder UI while content is loading.
 
-### 🌊 [Flow Layouts](./flowlayout/)
+### 🌊 [Flow Layouts](./flowlayout/) (Soon to be deprecated - Upstreamed in Compose 1.4)
 A library that adds Flexbox-like layout components to Jetpack Compose.
 
 ### 🧭✨[Navigation-Animation](./navigation-animation/)
