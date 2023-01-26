@@ -44,6 +44,17 @@ import kotlin.math.max
  * @param lastLineMainAxisAlignment Overrides the main axis alignment of the last row.
  */
 @Composable
+@Deprecated(
+    """
+accompanist/FlowRow is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/flowlayouts/#migration
+""",
+    replaceWith = ReplaceWith(
+        "FlowRow",
+        "androidx.compose.foundation.layout.FlowRow",
+        "androidx.compose.ui.Modifier"
+    )
+)
 public fun FlowRow(
     modifier: Modifier = Modifier,
     mainAxisSize: SizeMode = SizeMode.Wrap,
@@ -82,6 +93,17 @@ public fun FlowRow(
  * @param lastLineMainAxisAlignment Overrides the main axis alignment of the last column.
  */
 @Composable
+@Deprecated(
+    """
+accompanist/FlowColumn is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/flowlayouts/#migration
+""",
+    replaceWith = ReplaceWith(
+        "FlowColumn",
+        "androidx.compose.foundation.layout.FlowColumn",
+        "androidx.compose.ui.Modifier"
+    )
+)
 public fun FlowColumn(
     modifier: Modifier = Modifier,
     mainAxisSize: SizeMode = SizeMode.Wrap,
@@ -108,6 +130,12 @@ public fun FlowColumn(
 /**
  * Used to specify the alignment of a layout's children, in cross axis direction.
  */
+@Deprecated(
+    """
+accompanist/FlowCrossAxisAlignment is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/flowlayouts/#migration
+"""
+)
 public enum class FlowCrossAxisAlignment {
     /**
      * Place children such that their center is in the middle of the cross axis.
@@ -123,12 +151,24 @@ public enum class FlowCrossAxisAlignment {
     End,
 }
 
+@Deprecated(
+    """
+accompanist/FlowMainAxisAlignment is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/flowlayouts/#migration
+"""
+)
 public typealias FlowMainAxisAlignment = MainAxisAlignment
 
 /**
  * Layout model that arranges its children in a horizontal or vertical flow.
  */
 @Composable
+@Deprecated(
+    """
+accompanist/Flow is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/flowlayouts/#migration
+"""
+)
 private fun Flow(
     modifier: Modifier,
     orientation: LayoutOrientation,
@@ -278,6 +318,12 @@ private fun Flow(
  * Used to specify how a layout chooses its own size when multiple behaviors are possible.
  */
 // TODO(popam): remove this when Flow is reworked
+@Deprecated(
+    """
+accompanist/SizeMode is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/flowlayouts/#migration
+"""
+)
 public enum class SizeMode {
     /**
      * Minimize the amount of free space by wrapping the children,
@@ -294,6 +340,12 @@ public enum class SizeMode {
 /**
  * Used to specify the alignment of a layout's children, in main axis direction.
  */
+@Deprecated(
+    """
+accompanist/MainAxisAlignment is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/flowlayouts/#migration
+"""
+)
 public enum class MainAxisAlignment(internal val arrangement: Arrangement.Vertical) {
     // TODO(soboleva) support RTl in Flow
     // workaround for now - use Arrangement that equals to previous Arrangement

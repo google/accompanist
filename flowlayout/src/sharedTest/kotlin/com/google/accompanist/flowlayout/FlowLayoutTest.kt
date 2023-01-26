@@ -33,6 +33,7 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
 
+@Suppress("DEPRECATION")
 @RunWith(AndroidJUnit4::class)
 class FlowLayoutTest : LayoutTest() {
     @Test
