@@ -29,6 +29,7 @@ import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 
+@Suppress("DEPRECATION")
 class FlowRowSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

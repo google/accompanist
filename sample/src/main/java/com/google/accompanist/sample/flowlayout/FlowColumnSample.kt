@@ -29,6 +29,7 @@ import com.google.accompanist.flowlayout.FlowColumn
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 
+@Suppress("DEPRECATION")
 class FlowColumnSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
