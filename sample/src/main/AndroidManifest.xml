@@ -464,6 +464,36 @@
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".adaptive.NavRailFoldAwareColumnSample"
+            android:label="@string/adaptive_fold_aware_column_nav_rail"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".adaptive.NavDrawerFoldAwareColumnSample"
+            android:label="@string/adaptive_fold_aware_column_nav_drawer"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".adaptive.DraggableFoldAwareColumnSample"
+            android:label="@string/adaptive_fold_aware_column_draggable"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
         
         <activity
             android:name=".testharness.TestHarnessSample"

@@ -69,7 +69,10 @@
     <string name="adaptive_two_pane_basic">Adaptive: TwoPane Basic</string>
     <string name="adaptive_two_pane_horizontal">Adaptive: TwoPane Horizontal</string>
     <string name="adaptive_two_pane_vertical">Adaptive: TwoPane Vertical</string>
-    
+    <string name="adaptive_fold_aware_column_nav_rail">Adaptive: Fold Aware Column with Nav Rail</string>
+    <string name="adaptive_fold_aware_column_nav_drawer">Adaptive: Fold Aware Column with Nav Drawer</string>
+    <string name="adaptive_fold_aware_column_draggable">Adaptive: Draggable Fold Aware Column</string>
+
     <string name="testharness">Test Harness</string>
     <string name="this_is_content">This is content\n%s</string>
 
