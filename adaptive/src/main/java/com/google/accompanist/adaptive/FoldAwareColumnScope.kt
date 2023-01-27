@@ -26,9 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Measured
 import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.platform.debugInspectorInfo
-import com.google.accompanist.adaptive.foldawarecolumn.HorizontalAlignModifier
-import com.google.accompanist.adaptive.foldawarecolumn.IgnoreFoldModifier
-import com.google.accompanist.adaptive.foldawarecolumn.SiblingsAlignedModifier
 
 /**
  * Copy of [ColumnScope] that excludes the weight Modifier attribute.

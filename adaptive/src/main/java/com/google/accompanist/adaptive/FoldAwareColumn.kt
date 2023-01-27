@@ -596,7 +596,7 @@ private enum class LayoutOrientation {
  * Used to specify the alignment of a layout's children, in cross axis direction.
  */
 @Immutable
-private sealed class CrossAxisAlignment {
+internal sealed class CrossAxisAlignment {
     /**
      * Aligns to [size]. If this is a vertical alignment, [layoutDirection] should be
      * [LayoutDirection.Ltr].
@@ -608,7 +608,7 @@ private sealed class CrossAxisAlignment {
      * @param beforeCrossAxisAlignmentLine The space before the cross-axis alignment line if
      * an alignment line is being used or 0 if no alignment line is being used.
      */
-    private abstract fun align(
+    internal abstract fun align(
         size: Int,
         layoutDirection: LayoutDirection,
         placeable: Placeable,
@@ -618,14 +618,14 @@ private sealed class CrossAxisAlignment {
     /**
      * Returns `true` if this is [Relative].
      */
-    private open val isRelative: Boolean
+    internal open val isRelative: Boolean
         get() = false
 
     /**
      * Returns the alignment line position relative to the left/top of the space or `null` if
      * this alignment doesn't rely on alignment lines.
      */
-    private open fun calculateAlignmentLinePosition(placeable: Placeable): Int? = null
+    internal open fun calculateAlignmentLinePosition(placeable: Placeable): Int? = null
 
     companion object {
         /**
@@ -658,19 +658,19 @@ private sealed class CrossAxisAlignment {
          * Align children relative to their siblings using the alignment line provided as a
          * parameter using [AlignmentLineProvider].
          */
-        private fun Relative(alignmentLineProvider: AlignmentLineProvider): CrossAxisAlignment =
+        internal fun Relative(alignmentLineProvider: AlignmentLineProvider): CrossAxisAlignment =
             AlignmentLineCrossAxisAlignment(alignmentLineProvider)
 
         /**
          * Align children with vertical alignment.
          */
-        private fun vertical(vertical: Alignment.Vertical): CrossAxisAlignment =
+        internal fun vertical(vertical: Alignment.Vertical): CrossAxisAlignment =
             VerticalCrossAxisAlignment(vertical)
 
         /**
          * Align children with horizontal alignment.
          */
-        private fun horizontal(horizontal: Alignment.Horizontal): CrossAxisAlignment =
+        internal fun horizontal(horizontal: Alignment.Horizontal): CrossAxisAlignment =
             HorizontalCrossAxisAlignment(horizontal)
     }
 
@@ -1054,7 +1054,7 @@ private fun intrinsicCrossAxisSize(
     return crossAxisMax
 }
 
-private class IgnoreFoldModifier(
+internal class IgnoreFoldModifier(
     inspectorInfo: InspectorInfo.() -> Unit
 ) : ParentDataModifier, InspectorValueInfo(inspectorInfo) {
     override fun Density.modifyParentData(parentData: Any?) =
@@ -1076,40 +1076,12 @@ private class IgnoreFoldModifier(
         "IgnoreFoldModifier(ignoreFold=true)"
 }
 
-private class LayoutWeightImpl(
-    val weight: Float,
-    val fill: Boolean,
-    inspectorInfo: InspectorInfo.() -> Unit
-) : ParentDataModifier, InspectorValueInfo(inspectorInfo) {
-    override fun Density.modifyParentData(parentData: Any?) =
-        ((parentData as? RowColumnParentData) ?: RowColumnParentData()).also {
-            it.weight = weight
-            it.fill = fill
-        }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        val otherModifier = other as? LayoutWeightImpl ?: return false
-        return weight == otherModifier.weight &&
-            fill == otherModifier.fill
-    }
-
-    override fun hashCode(): Int {
-        var result = weight.hashCode()
-        result = 31 * result + fill.hashCode()
-        return result
-    }
-
-    override fun toString(): String =
-        "LayoutWeightImpl(weight=$weight, fill=$fill)"
-}
-
-private sealed class SiblingsAlignedModifier(
+internal sealed class SiblingsAlignedModifier(
     inspectorInfo: InspectorInfo.() -> Unit
 ) : ParentDataModifier, InspectorValueInfo(inspectorInfo) {
     abstract override fun Density.modifyParentData(parentData: Any?): Any?
 
-    private class WithAlignmentLineBlock(
+    internal class WithAlignmentLineBlock(
         val block: (Measured) -> Int,
         inspectorInfo: InspectorInfo.() -> Unit
     ) : SiblingsAlignedModifier(inspectorInfo) {
@@ -1131,7 +1103,7 @@ private sealed class SiblingsAlignedModifier(
         override fun toString(): String = "WithAlignmentLineBlock(block=$block)"
     }
 
-    private class WithAlignmentLine(
+    internal class WithAlignmentLine(
         val alignmentLine: AlignmentLine,
         inspectorInfo: InspectorInfo.() -> Unit
     ) : SiblingsAlignedModifier(inspectorInfo) {
@@ -1154,7 +1126,7 @@ private sealed class SiblingsAlignedModifier(
     }
 }
 
-private class HorizontalAlignModifier(
+internal class HorizontalAlignModifier(
     val horizontal: Alignment.Horizontal,
     inspectorInfo: InspectorInfo.() -> Unit
 ) : ParentDataModifier, InspectorValueInfo(inspectorInfo) {
@@ -1201,7 +1173,7 @@ private class VerticalAlignModifier(
 /**
  * Parent data associated with children.
  */
-private data class RowColumnParentData(
+internal data class RowColumnParentData(
     var weight: Float = 0f,
     var fill: Boolean = true,
     var crossAxisAlignment: CrossAxisAlignment? = null,
@@ -1211,7 +1183,7 @@ private data class RowColumnParentData(
 /**
  * Provides the alignment line.
  */
-private sealed class AlignmentLineProvider {
+internal sealed class AlignmentLineProvider {
     abstract fun calculateAlignmentLinePosition(placeable: Placeable): Int
     data class Block(val lineProviderBlock: (Measured) -> Int) : AlignmentLineProvider() {
         override fun calculateAlignmentLinePosition(
