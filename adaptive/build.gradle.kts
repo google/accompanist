@@ -100,6 +100,7 @@ dependencies {
 
     implementation(libs.napier)
     implementation(libs.kotlin.coroutines.android)
+    implementation(libs.compose.ui.util)
 
     // ======================
     // Test dependencies
