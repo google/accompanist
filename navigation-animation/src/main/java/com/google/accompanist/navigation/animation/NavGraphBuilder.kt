@@ -16,6 +16,7 @@
 
 package com.google.accompanist.navigation.animation
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.EnterTransition
@@ -42,6 +43,7 @@ import androidx.navigation.get
  * @param popExitTransition callback to determine the destination's popExit transition
  * @param content composable for the destination
  */
+@SuppressLint("NewApi") // b/187418647
 @ExperimentalAnimationApi
 public fun NavGraphBuilder.composable(
     route: String,
