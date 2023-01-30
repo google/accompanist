@@ -16,6 +16,7 @@
 
 package com.google.accompanist.navigation.material
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.runtime.Composable
 import androidx.navigation.NamedNavArgument
@@ -32,6 +33,7 @@ import androidx.navigation.get
  * @param deepLinks list of deep links to associate with the destinations
  * @param content the sheet content at the given destination
  */
+@SuppressLint("NewApi") // b/187418647
 @ExperimentalMaterialNavigationApi
 public fun NavGraphBuilder.bottomSheet(
     route: String,

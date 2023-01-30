@@ -16,6 +16,7 @@
 
 package com.google.accompanist.navigation.material
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material.ExperimentalMaterialApi
@@ -247,6 +248,7 @@ class BottomSheetNavigator(
         content = {}
     )
 
+    @SuppressLint("NewApi") // b/187418647
     override fun navigate(
         entries: List<NavBackStackEntry>,
         navOptions: NavOptions?,
