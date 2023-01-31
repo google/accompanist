@@ -21,7 +21,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
@@ -44,7 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
@@ -102,7 +101,7 @@ private fun Sample() {
                 }
                 items(30) { index ->
                     ListItem(
-                        painter = rememberImagePainter(randomSampleImageUrl(index)),
+                        painter = rememberAsyncImagePainter(randomSampleImageUrl(index)),
                         text = "Text",
                         // We're using the modifier provided by placeholder-material which
                         // uses good default values for the color

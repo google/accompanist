@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+@file:Suppress("DEPRECATION")
 package com.google.accompanist.sample.pager
 
 import android.os.Bundle
@@ -84,7 +84,7 @@ private fun Sample() {
     }
 }
 
-@OptIn(ExperimentalPagerApi::class, ExperimentalCoilApi::class)
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun HorizontalPagerWithOffsetTransition(modifier: Modifier = Modifier) {
     HorizontalPager(

@@ -43,7 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.fade
 import com.google.accompanist.placeholder.material.placeholder
@@ -103,7 +103,7 @@ private fun Sample() {
                 }
                 items(30) { index ->
                     ListItem(
-                        painter = rememberImagePainter(randomSampleImageUrl(index)),
+                        painter = rememberAsyncImagePainter(randomSampleImageUrl(index)),
                         text = "Text",
                         // We're using the modifier provided by placeholder-material which
                         // uses good default values for the color

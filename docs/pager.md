@@ -5,8 +5,33 @@
 A library which provides paging layouts for Jetpack Compose. If you've used Android's [`ViewPager`](https://developer.android.com/reference/kotlin/androidx/viewpager/widget/ViewPager) before, it has similar properties.
 
 !!! warning
-    The pager layouts are currently experimental and the APIs could change at any time.
-    All of the APIs are marked with the `@ExperimentalPagerApi` annotation.
+**This library is deprecated, with official pager support in androidx.compose.foundation.** The migration guide and original documentation is below.
+
+## Migration
+
+Make sure you are using Compose 1.4+ before attempting to migrate. 
+
+## Migration Table
+
+The following is a mapping of the pager classes from accompanist to androidx.compose:
+
+| accompanist/pager                    | androidx.compose.foundation                                                  |
+|--------------------------------------|------------------------------------------------------------------------------|
+| `HorizontalPager`                    | `androidx.compose.foundation.pager.HorizontalPager`                          |
+| `VerticalPager`                      | `androidx.compose.foundation.pager.VerticalPager`                            |
+| `PagerState#pageCount`               | Use `canScrollForward` or `canScrollBackward`                                |
+| `calculateCurrentOffsetForPage`      | Use `(pagerState.currentPage - page) + pagerState.currentPageOffsetFraction` |
+| `Modifier.pagerTabIndicatorOffset()` |                                                                              |
+| `PagerState#currentPageOffset`       | `PagerState#currentPageOffsetFraction`                                        |
+
+
+Its worth noting, by default the content is no longer centered with `androidx.compose.foundation.pager`, but rather aligned to the top of the composable area. 
+
+
+
+
+# Deprecated Guidance for Accompanist Pager
+The following is the deprecated guide for using Pager in Accompanist. Please see above migration section for how to use the androidx.compose Pager.
 
 ## HorizontalPager
 

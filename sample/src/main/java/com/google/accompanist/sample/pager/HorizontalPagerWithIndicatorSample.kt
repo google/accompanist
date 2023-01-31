@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-@file:Suppress("UNUSED_ANONYMOUS_PARAMETER")
+@file:Suppress("DEPRECATION")
 
 package com.google.accompanist.sample.pager
 

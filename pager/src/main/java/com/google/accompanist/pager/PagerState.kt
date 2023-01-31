@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-@file:Suppress("MemberVisibilityCanBePrivate")
+@file:Suppress("DEPRECATION", "MemberVisibilityCanBePrivate")
 
 package com.google.accompanist.pager
 
@@ -52,6 +51,17 @@ import kotlin.math.roundToInt
  *
  * @param initialPage the initial value for [PagerState.currentPage]
  */
+@Deprecated(
+    """
+accompanist/pager is deprecated.
+The androidx.compose equivalent of rememberPagerState is androidx.compose.foundation.pager.rememberPagerState().
+For more migration information, please visit https://google.github.io/accompanist/pager/#migration
+""",
+    replaceWith = ReplaceWith(
+        "androidx.compose.foundation.pager.rememberPagerState(initialPage = initialPage)",
+        "androidx.compose.foundation.pager.rememberPagerState"
+    )
+)
 @ExperimentalPagerApi
 @Composable
 fun rememberPagerState(
@@ -69,6 +79,17 @@ fun rememberPagerState(
  *
  * @param currentPage the initial value for [PagerState.currentPage]
  */
+@Deprecated(
+    """
+accompanist/pager is deprecated.
+The androidx.compose equivalent of Insets is Pager.
+For more migration information, please visit https://google.github.io/accompanist/pager/#migration
+""",
+    replaceWith = ReplaceWith(
+        "PagerState(currentPage = currentPage)",
+        "androidx.compose.foundation.pager.PagerState"
+    )
+)
 @ExperimentalPagerApi
 @Stable
 class PagerState(
@@ -112,6 +133,7 @@ class PagerState(
      * The number of pages to display.
      */
     @get:IntRange(from = 0)
+    @Deprecated("pageCount is deprecated, use androidx.compose.foundation.pager.PagerState.canScrollForward or androidx.compose.foundation.pager.PagerState.canScrollBackward")
     val pageCount: Int by derivedStateOf {
         lazyListState.layoutInfo.totalItemsCount
     }
