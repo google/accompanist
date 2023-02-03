@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 @file:Suppress("DEPRECATION")
 @file:JvmName("Pager")
 
@@ -121,11 +122,13 @@ object PagerDefaults {
      * @param endContentPadding The amount of content padding on the end edge of the lazy list
      * in pixels (end/bottom depending on the scrolling direction).
      */
-    @Deprecated("""
+    @Deprecated(
+        """
             accompanist/pager is deprecated.
             The androidx.compose equivalent of Pager is androidx.compose.foundation.pager.Pager.
             For more migration information, please visit https://google.github.io/accompanist/pager/#migration
-    """)
+    """
+    )
     @Composable
     @ExperimentalSnapperApi
     @Suppress("DEPRECATION")
@@ -203,10 +206,11 @@ For more migration information, please visit https://google.github.io/accompanis
         """
 accompanist/pager is deprecated.
 For more migration information, please visit https://google.github.io/accompanist/pager/#migration
-""", replaceWith = ReplaceWith(
-        "androidx.compose.foundation.pager.PagerDefaults.flingBehavior(state = state)",
-        "androidx.compose.foundation.pager.PagerDefaults"
-    )
+""",
+        replaceWith = ReplaceWith(
+            "androidx.compose.foundation.pager.PagerDefaults.flingBehavior(state = state)",
+            "androidx.compose.foundation.pager.PagerDefaults"
+        )
     )
     @Composable
     @ExperimentalSnapperApi
