@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 @file:Suppress("DEPRECATION")
 package com.google.accompanist.pager
 
@@ -65,11 +66,13 @@ import kotlin.math.sign
  * @param spacing the spacing between each indicator in [Dp].
  * @param indicatorShape the shape representing each indicator. This defaults to [CircleShape].
  */
-@Deprecated("""
+@Deprecated(
+    """
    HorizontalPagerIndicator for accompanist Pagers are deprecated, please use the version that takes 
    androidx.compose.foundation.pager.PagerState instead
 For more migration information, please visit https://google.github.io/accompanist/pager/#migration
-""")
+"""
+)
 @ExperimentalPagerApi
 @Composable
 fun HorizontalPagerIndicator(
@@ -261,11 +264,13 @@ private fun HorizontalPagerIndicator(
  * @param spacing the spacing between each indicator in [Dp].
  * @param indicatorShape the shape representing each indicator. This defaults to [CircleShape].
  */
-@Deprecated("""
+@Deprecated(
+    """
    VerticalPagerIndicator for accompanist Pagers are deprecated, please use the version that takes 
    androidx.compose.foundation.pager.PagerState instead
 For more migration information, please visit https://google.github.io/accompanist/pager/#migration
-""")
+"""
+)
 @ExperimentalPagerApi
 @Composable
 fun VerticalPagerIndicator(

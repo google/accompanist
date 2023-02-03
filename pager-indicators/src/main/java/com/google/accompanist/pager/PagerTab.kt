@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 @file:Suppress("DEPRECATION")
 package com.google.accompanist.pager
 
@@ -30,11 +31,13 @@ import androidx.compose.ui.unit.lerp
  *
  * @sample com.google.accompanist.sample.pager.PagerWithTabs
  */
-@Deprecated("""
+@Deprecated(
+    """
    pagerTabIndicatorOffset for accompanist Pagers are deprecated, please use the version that takes 
    androidx.compose.foundation.pager.PagerState instead
 For more migration information, please visit https://google.github.io/accompanist/pager/#migration
-""")
+"""
+)
 @ExperimentalPagerApi
 fun Modifier.pagerTabIndicatorOffset(
     pagerState: PagerState,

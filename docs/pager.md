@@ -10,7 +10,17 @@ The migration guide and original documentation is below the migration guide.
 
 ## Migration
 
-Make sure you are using Compose 1.4+ before attempting to migrate to `androidx.compose.foundation.pager`. 
+1. Make sure you are using Compose 1.4.0+ before attempting to migrate to `androidx.compose.foundation.pager`. 
+2. Change `com.google.accompanist.pager.HorizontalPager` to `androidx.compose.foundation.pager.HorizontalPager`, and the same for `com.google.accompanist.pager.VerticalPager` to change to `androidx.compose.foundation.pager.VerticalPager`
+3. Change `count` variable to `pageCount`. 
+4. Change `itemSpacing` parameter to `pageSpacing`.
+5. Change any usages of `rememberPagerState()` to `androidx.compose.foundation.pager.rememberPagerState()`
+6. For more mappings - see the migration table below. 
+7. Run your changes on device and check to see if there are any differences. 
+
+One thing to note is that there is a new parameter on `androidx.compose.foundation.Pager`, for `pageSize`, by default this 
+uses a `PageSize.Fill`, but can also be changed to use a fixed size, like `PageSize.Fixed(200.dp)` for a fixed size paging.
+
 
 ## Migration Table
 
@@ -20,6 +30,7 @@ The following is a mapping of the pager classes from accompanist to androidx.com
 |--------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
 | `HorizontalPager`                    | `androidx.compose.foundation.pager.HorizontalPager`                                                                                                 |
 | `VerticalPager`                      | `androidx.compose.foundation.pager.VerticalPager`                                                                                                   |
+| `rememberPagerState`                 | `androidx.compose.foundation.pager.rememberPagerState`                                                                                              |
 | `PagerState#pageCount`               | Use `canScrollForward` or `canScrollBackward`                                                                                                       |
 | `calculateCurrentOffsetForPage`      | Use `(pagerState.currentPage - page) + pagerState.currentPageOffsetFraction`                                                                        |
 | `PagerState#currentPageOffset`       | `PagerState#currentPageOffsetFraction`                                                                                                              |
