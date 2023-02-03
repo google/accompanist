@@ -125,13 +125,15 @@ private fun Sample() {
     BoxWithConstraints(Modifier.fillMaxSize()) {
         // Displaying a random image
         Image(
-            painter = rememberAsyncImagePainter(model = with(LocalDensity.current) {
-                rememberRandomSampleImageUrl(
-                    seed = 16,
-                    width = maxWidth.roundToPx(),
-                    height = maxHeight.roundToPx()
-                )
-            }),
+            painter = rememberAsyncImagePainter(
+                model = with(LocalDensity.current) {
+                    rememberRandomSampleImageUrl(
+                        seed = 16,
+                        width = maxWidth.roundToPx(),
+                        height = maxHeight.roundToPx()
+                    )
+                }
+            ),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
