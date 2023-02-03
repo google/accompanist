@@ -154,6 +154,7 @@ subprojects {
         apply plugin: 'me.tylerbwong.gradle.metalava'
 
         metalava {
+            sourcePaths.from("src/main")
             filename = "api/current.api"
             reportLintsAsErrors = true
         }

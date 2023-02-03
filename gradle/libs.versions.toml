@@ -37,7 +37,7 @@ snapper = "dev.chrisbanes.snapper:snapper:0.2.2"
 
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "gradlePlugin" }
 gradleMavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.17.0"
-metalavaGradle = "me.tylerbwong.gradle:metalava-gradle:0.1.9"
+metalavaGradle = "me.tylerbwong.gradle.metalava:plugin:0.3.3"
 
 glide = "com.github.bumptech.glide:glide:4.12.0"
 
