@@ -55,7 +55,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import com.google.accompanist.sample.rememberRandomSampleImageUrl
@@ -125,8 +125,8 @@ private fun Sample() {
     BoxWithConstraints(Modifier.fillMaxSize()) {
         // Displaying a random image
         Image(
-            painter = rememberAsyncImagePainter(
-                model = with(LocalDensity.current) {
+            painter = rememberImagePainter(
+                data = with(LocalDensity.current) {
                     rememberRandomSampleImageUrl(
                         seed = 16,
                         width = maxWidth.roundToPx(),

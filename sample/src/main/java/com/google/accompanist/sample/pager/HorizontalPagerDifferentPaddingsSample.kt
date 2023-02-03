@@ -39,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -83,7 +84,7 @@ private fun Sample() {
  * there is no start padding before the first item and no end padding after the last item,
  * but all other items are centered with half of the padding applied for the first/last item.
  */
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalPagerApi::class, ExperimentalCoilApi::class)
 @Composable
 fun HorizontalPagerDifferentPaddings() {
     val count = 4

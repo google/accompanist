@@ -85,7 +85,7 @@ private fun Sample() {
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalPagerApi::class, ExperimentalCoilApi::class)
 @Composable
 fun HorizontalPagerWithOffsetTransition(modifier: Modifier = Modifier) {
     HorizontalPager(
