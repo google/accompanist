@@ -259,7 +259,11 @@ For more migration information, please visit https://google.github.io/accompanis
 accompanist/pager is deprecated.
 The androidx.compose equivalent of HorizontalPager is androidx.compose.foundation.pager.HorizontalPager
 For more migration information, please visit https://google.github.io/accompanist/pager/#migration
-"""
+""",
+    replaceWith = ReplaceWith(
+        "HorizontalPager",
+        "androidx.compose.foundation.pager.HorizontalPager"
+    )
 )
 fun HorizontalPager(
     count: Int,
