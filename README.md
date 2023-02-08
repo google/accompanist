@@ -46,9 +46,6 @@ A library that enables the reuse of [MDC-Android][mdc] Material 2 XML themes, fo
 ### 🎨 [Material 3 Theme Adapter](./themeadapter-material3/)
 A library that enables the reuse of [MDC-Android][mdc] Material 3 XML themes, for theming in Jetpack Compose.
 
-### 📖 [Pager](./pager/) (Deprecated)
-See our [Migration Guide](https://google.github.io/accompanist/pager/) for migrating to Pager in Compose.
-
 ### 📫 [Permissions](./permissions/)
 A library that provides [Android runtime permissions][runtimepermissions] support for Jetpack Compose.
 
@@ -84,6 +81,9 @@ See our [Migration Guide](https://google.github.io/accompanist/swiperefresh/) fo
 
 ### 🎨 [AppCompat Theme Adapter](./appcompat-theme/) (Deprecated)
 See our [Migration Guide](https://google.github.io/accompanist/appcompat-theme/) for migrating to the new artifact in Accompanist.
+
+### 📖 [Pager](./pager/) (Deprecated)
+See our [Migration Guide](https://google.github.io/accompanist/pager/) for migrating to Pager in Compose.
 
 ---
 
