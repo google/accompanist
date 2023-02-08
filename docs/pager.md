@@ -6,7 +6,7 @@ A library which provides paging layouts for Jetpack Compose. If you've used Andr
 
 !!! warning
 **This library is deprecated, with official pager support in `androidx.compose.foundation.pager` ** 
-The migration guide and original documentation is below the migration guide.
+The original documentation is below the migration guide.
 
 ## Migration
 
