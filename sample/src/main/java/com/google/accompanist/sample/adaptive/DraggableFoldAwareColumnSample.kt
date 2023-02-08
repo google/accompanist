@@ -51,7 +51,6 @@ import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
 import kotlin.math.roundToInt
 
-
 class DraggableFoldAwareColumnSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

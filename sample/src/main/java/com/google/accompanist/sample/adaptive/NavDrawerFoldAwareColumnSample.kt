@@ -16,7 +16,6 @@
 
 package com.google.accompanist.sample.adaptive
 
-
 import android.app.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -53,7 +52,6 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.adaptive.FoldAwareColumn
 import com.google.accompanist.adaptive.calculateDisplayFeatures
 import com.google.accompanist.sample.AccompanistSampleTheme
-
 
 class NavDrawerFoldAwareColumnSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
