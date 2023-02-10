@@ -29,6 +29,9 @@ package com.google.accompanist.adaptive {
     property public final int VerticalFoldsOnly;
   }
 
+  public final class RowColumnImplKt {
+  }
+
   public final class SplitResult {
     ctor public SplitResult(androidx.compose.foundation.gestures.Orientation gapOrientation, androidx.compose.ui.geometry.Rect gapBounds);
     method public androidx.compose.ui.geometry.Rect getGapBounds();
