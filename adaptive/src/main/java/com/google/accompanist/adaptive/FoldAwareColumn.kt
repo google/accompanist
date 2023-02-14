@@ -65,9 +65,9 @@ public fun FoldAwareColumn(
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
     content: @Composable FoldAwareColumnScope.() -> Unit,
 ) {
-    // Extract folding feature if horizontal
+    // Extract folding feature if horizontal and separating
     val fold = displayFeatures.find {
-        it is FoldingFeature && it.orientation == FoldingFeature.Orientation.HORIZONTAL
+        it is FoldingFeature && it.orientation == FoldingFeature.Orientation.HORIZONTAL && it.isSeparating
     } as FoldingFeature?
 
     // Calculate fold bounds in pixels (including any added fold padding)
@@ -85,16 +85,12 @@ public fun FoldAwareColumn(
         }
     }
 
-    // Extract other folding feature properties
-    val foldIsSeparating = fold?.isSeparating
-
     Layout(
         modifier = modifier,
         measurePolicy = foldAwareColumnMeasurePolicy(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = horizontalAlignment,
-            foldBoundsPx = foldBoundsPx,
-            foldIsSeparating = foldIsSeparating
+            foldBoundsPx = foldBoundsPx
         ),
         content = { FoldAwareColumnScopeInstance.content() }
     )
@@ -108,9 +104,8 @@ public fun FoldAwareColumn(
 private fun foldAwareColumnMeasurePolicy(
     verticalArrangement: Arrangement.Vertical,
     horizontalAlignment: Alignment.Horizontal,
-    foldBoundsPx: Rect?,
-    foldIsSeparating: Boolean?
-) = remember(verticalArrangement, horizontalAlignment, foldBoundsPx, foldIsSeparating) {
+    foldBoundsPx: Rect?
+) = remember(verticalArrangement, horizontalAlignment, foldBoundsPx) {
 
     val orientation = LayoutOrientation.Vertical
     val arrangement: (Int, IntArray, LayoutDirection, Density, IntArray) -> Unit =
@@ -172,7 +167,6 @@ private fun foldAwareColumnMeasurePolicy(
                     measureResult,
                     0,
                     layoutDirection,
-                    foldIsSeparating,
                     foldBoundsPx
                 )
             }
@@ -245,7 +239,6 @@ private class FoldAwareColumnMeasurementHelper(
         measureResult: RowColumnMeasureHelperResult,
         crossAxisOffset: Int,
         layoutDirection: LayoutDirection,
-        foldIsSeparating: Boolean?,
         foldBoundsPx: Rect?
     ) {
         with(placeableScope) {
@@ -279,8 +272,8 @@ private class FoldAwareColumnMeasurementHelper(
                     val absoluteBounds =
                         relativeBounds.translate(layoutBounds.left, layoutBounds.top)
 
-                    // If fold is separating and placeable overlaps fold, push placeable below fold
-                    if (foldIsSeparating == true && foldBoundsPx?.let { absoluteBounds.overlaps(it) } == true &&
+                    // If placeable overlaps fold, push placeable below
+                    if (foldBoundsPx?.let { absoluteBounds.overlaps(it) } == true &&
                         (placeable.parentData as? RowColumnParentData)?.ignoreFold != true
                     ) {
                         placeableY = (foldBoundsPx.bottom - layoutBounds.top).toInt()
