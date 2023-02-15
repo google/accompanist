@@ -130,24 +130,25 @@ fun WebView(
     chromeClient.state = state
 
     BoxWithConstraints(modifier) {
+
+        // WebView changes it's layout strategy based on
+        // it's layoutParams. We convert from Compose Modifier to
+        // layout params here.
+        val width =
+            if (constraints.hasFixedWidth)
+                LayoutParams.MATCH_PARENT
+            else
+                LayoutParams.WRAP_CONTENT
+        val height =
+            if (constraints.hasFixedHeight)
+                LayoutParams.MATCH_PARENT
+            else
+                LayoutParams.WRAP_CONTENT
+
         AndroidView(
             factory = { context ->
                 val childView = (factory?.invoke(context) ?: WebView(context)).apply {
                     onCreated(this)
-
-                    // WebView changes it's layout strategy based on
-                    // it's layoutParams. We convert from Compose Modifier to
-                    // layout params here.
-                    val width =
-                        if (constraints.hasFixedWidth)
-                            LayoutParams.MATCH_PARENT
-                        else
-                            LayoutParams.WRAP_CONTENT
-                    val height =
-                        if (constraints.hasFixedHeight)
-                            LayoutParams.MATCH_PARENT
-                        else
-                            LayoutParams.WRAP_CONTENT
 
                     layoutParams = LayoutParams(
                         width,
@@ -162,6 +163,10 @@ fun WebView(
                 // wrapped in a ViewGroup.
                 // b/243567497
                 val parentLayout = FrameLayout(context)
+                parentLayout.layoutParams = LayoutParams(
+                    width,
+                    height
+                )
                 parentLayout.addView(childView)
 
                 parentLayout
