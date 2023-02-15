@@ -32,7 +32,6 @@ import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.test.assertHeightIsEqualTo
 import androidx.compose.ui.test.assertTopPositionInRootIsEqualTo
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -134,26 +133,25 @@ class FoldAwareColumnTest {
     }
 
     @Test
-    fun layout_height_matches_child_height_normally() {
+    fun layout_bounds_align_with_child_bounds_normally() {
         setUp(includeFold = false)
 
-        composeTestRule.onRoot().assertHeightIsEqualTo(firstSpacerDp + secondSpacerDp)
+        val layoutBottomPx = composeTestRule.onRoot().fetchSemanticsNode().boundsInWindow.bottom
+
+        assertEquals(layoutBottomPx, secondSpacerBoundsPx.bottom)
     }
 
     @Test
-    fun layout_height_contains_child_height_with_separating_fold() {
+    fun layout_bounds_contain_child_bounds_with_separating_fold() {
         setUp(firstSpacerPct = 0.1f, secondSpacerPct = 0.1f)
 
-        val childHeightDp = firstSpacerDp + secondSpacerDp
-        val layoutHeightDp = with(density) {
-            composeTestRule.onRoot().fetchSemanticsNode().boundsInWindow.height.toDp()
-        }
+        val layoutBottomPx = composeTestRule.onRoot().fetchSemanticsNode().boundsInWindow.bottom
 
-        assert(childHeightDp <= layoutHeightDp)
+        assert(secondSpacerBoundsPx.bottom <= layoutBottomPx)
     }
 
     @Test
-    fun layout_height_aligns_with_bottom_child_when_pushed_below_separating_fold() {
+    fun layout_bounds_align_with_child_bounds_when_pushed_below_separating_fold() {
         setUp()
 
         val layoutBottomPx = composeTestRule.onRoot().fetchSemanticsNode().boundsInWindow.bottom
