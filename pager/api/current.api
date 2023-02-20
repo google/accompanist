@@ -1,7 +1,7 @@
 // Signature format: 4.0
 package com.google.accompanist.pager {
 
-  @kotlin.RequiresOptIn(message="Accompanist Pager is experimental. The API may be changed in the future.") @kotlin.annotation.Retention(kotlin.annotation.AnnotationRetention) public @interface ExperimentalPagerApi {
+  @kotlin.RequiresOptIn(message="Accompanist Pager is experimental. The API may be changed in the future.") @kotlin.annotation.Retention(kotlin.annotation.AnnotationRetention.BINARY) public @interface ExperimentalPagerApi {
   }
 
   public final class Pager {
@@ -29,23 +29,23 @@ package com.google.accompanist.pager {
   }
 
   @androidx.compose.runtime.Stable @com.google.accompanist.pager.ExperimentalPagerApi public final class PagerState implements androidx.compose.foundation.gestures.ScrollableState {
-    ctor public PagerState(optional @IntRange(from=0) int currentPage);
-    method @Deprecated public suspend Object? animateScrollToPage(@IntRange(from=0) int page, optional @FloatRange(from=0.0, to=1.0) float pageOffset, optional androidx.compose.animation.core.AnimationSpec<java.lang.Float> animationSpec, optional float initialVelocity, optional boolean skipPages, optional kotlin.coroutines.Continuation<? super kotlin.Unit> p);
-    method public suspend Object? animateScrollToPage(@IntRange(from=0) int page, optional @FloatRange(from=-1.0, to=1.0) float pageOffset, optional kotlin.coroutines.Continuation<? super kotlin.Unit> p);
+    ctor public PagerState(optional @IntRange(from=0L) int currentPage);
+    method @Deprecated public suspend Object? animateScrollToPage(@IntRange(from=0L) int page, optional @FloatRange(from=0.0, to=1.0) float pageOffset, optional androidx.compose.animation.core.AnimationSpec<java.lang.Float> animationSpec, optional float initialVelocity, optional boolean skipPages, optional kotlin.coroutines.Continuation<? super kotlin.Unit>);
+    method public suspend Object? animateScrollToPage(@IntRange(from=0L) int page, optional @FloatRange(from=-1.0, to=1.0) float pageOffset, optional kotlin.coroutines.Continuation<? super kotlin.Unit>);
     method public float dispatchRawDelta(float delta);
-    method @IntRange(from=0) public int getCurrentPage();
+    method @IntRange(from=0L) public int getCurrentPage();
     method public float getCurrentPageOffset();
     method public androidx.compose.foundation.interaction.InteractionSource getInteractionSource();
-    method @IntRange(from=0) public int getPageCount();
+    method @IntRange(from=0L) public int getPageCount();
     method @Deprecated public int getTargetPage();
     method public boolean isScrollInProgress();
-    method public suspend Object? scroll(androidx.compose.foundation.MutatePriority scrollPriority, kotlin.jvm.functions.Function2<? super androidx.compose.foundation.gestures.ScrollScope,? super kotlin.coroutines.Continuation<? super kotlin.Unit>,?> block, kotlin.coroutines.Continuation<? super kotlin.Unit> p);
-    method public suspend Object? scrollToPage(@IntRange(from=0) int page, optional @FloatRange(from=-1.0, to=1.0) float pageOffset, optional kotlin.coroutines.Continuation<? super kotlin.Unit> p);
-    property @IntRange(from=0) public final int currentPage;
+    method public suspend Object? scroll(androidx.compose.foundation.MutatePriority scrollPriority, kotlin.jvm.functions.Function2<? super androidx.compose.foundation.gestures.ScrollScope,? super kotlin.coroutines.Continuation<? super kotlin.Unit>,?> block, kotlin.coroutines.Continuation<? super kotlin.Unit>);
+    method public suspend Object? scrollToPage(@IntRange(from=0L) int page, optional @FloatRange(from=-1.0, to=1.0) float pageOffset, optional kotlin.coroutines.Continuation<? super kotlin.Unit>);
+    property @IntRange(from=0L) public final int currentPage;
     property public final float currentPageOffset;
     property public final androidx.compose.foundation.interaction.InteractionSource interactionSource;
     property public boolean isScrollInProgress;
-    property @IntRange(from=0) public final int pageCount;
+    property @IntRange(from=0L) public final int pageCount;
     property @Deprecated public final int targetPage;
     field public static final com.google.accompanist.pager.PagerState.Companion Companion;
   }
@@ -56,7 +56,7 @@ package com.google.accompanist.pager {
   }
 
   public final class PagerStateKt {
-    method @androidx.compose.runtime.Composable @com.google.accompanist.pager.ExperimentalPagerApi public static com.google.accompanist.pager.PagerState rememberPagerState(optional @IntRange(from=0) int initialPage);
+    method @androidx.compose.runtime.Composable @com.google.accompanist.pager.ExperimentalPagerApi public static com.google.accompanist.pager.PagerState rememberPagerState(optional @IntRange(from=0L) int initialPage);
   }
 
 }

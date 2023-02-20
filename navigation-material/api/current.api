@@ -38,7 +38,7 @@ package com.google.accompanist.navigation.material {
     property public final androidx.compose.material.ModalBottomSheetValue targetValue;
   }
 
-  @kotlin.RequiresOptIn(message="This APIs are experimental and may change in the future.") @kotlin.annotation.Retention(kotlin.annotation.AnnotationRetention) public @interface ExperimentalMaterialNavigationApi {
+  @kotlin.RequiresOptIn(message="This APIs are experimental and may change in the future.") @kotlin.annotation.Retention(kotlin.annotation.AnnotationRetention.BINARY) public @interface ExperimentalMaterialNavigationApi {
   }
 
   public final class NavGraphBuilderKt {

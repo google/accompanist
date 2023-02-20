@@ -1,17 +1,19 @@
 // Signature format: 4.0
 package com.google.accompanist.insets {
 
-  @kotlin.RequiresOptIn(message="Animated Insets support is experimental. The API may be changed in the future.") @kotlin.annotation.Retention(kotlin.annotation.AnnotationRetention) @kotlin.annotation.Target(allowedTargets={kotlin.annotation.AnnotationTarget, kotlin.annotation.AnnotationTarget}) public @interface ExperimentalAnimatedInsets {
+  @kotlin.RequiresOptIn(message="Animated Insets support is experimental. The API may be changed in the future.") @kotlin.annotation.Retention(kotlin.annotation.AnnotationRetention.BINARY) @kotlin.annotation.Target(allowedTargets={kotlin.annotation.AnnotationTarget.CLASS, kotlin.annotation.AnnotationTarget.FUNCTION}) public @interface ExperimentalAnimatedInsets {
   }
 
   @Deprecated public enum HorizontalSide {
+    method @Deprecated public static com.google.accompanist.insets.HorizontalSide valueOf(String name) throws java.lang.IllegalArgumentException;
+    method @Deprecated public static com.google.accompanist.insets.HorizontalSide[] values();
     enum_constant @Deprecated public static final com.google.accompanist.insets.HorizontalSide Left;
     enum_constant @Deprecated public static final com.google.accompanist.insets.HorizontalSide Right;
   }
 
   @Deprecated @com.google.accompanist.insets.ExperimentalAnimatedInsets public final class ImeNestedScrollConnection implements androidx.compose.ui.input.nestedscroll.NestedScrollConnection {
     ctor @Deprecated public ImeNestedScrollConnection(android.view.View view, boolean scrollImeOffScreenWhenVisible, boolean scrollImeOnScreenWhenNotVisible);
-    method @Deprecated public suspend Object? onPostFling(long consumed, long available, kotlin.coroutines.Continuation<? super androidx.compose.ui.unit.Velocity> p);
+    method @Deprecated public suspend Object? onPostFling(long consumed, long available, kotlin.coroutines.Continuation<? super androidx.compose.ui.unit.Velocity>);
     method @Deprecated public long onPostScroll(long consumed, long available, int source);
     method @Deprecated public long onPreScroll(long available, int source);
   }
@@ -22,16 +24,16 @@ package com.google.accompanist.insets {
 
   @Deprecated @androidx.compose.runtime.Stable public interface Insets {
     method @Deprecated public default com.google.accompanist.insets.Insets copy(optional int left, optional int top, optional int right, optional int bottom);
-    method @Deprecated @IntRange(from=0) public int getBottom();
-    method @Deprecated @IntRange(from=0) public int getLeft();
-    method @Deprecated @IntRange(from=0) public int getRight();
-    method @Deprecated @IntRange(from=0) public int getTop();
+    method @Deprecated @IntRange(from=0L) public int getBottom();
+    method @Deprecated @IntRange(from=0L) public int getLeft();
+    method @Deprecated @IntRange(from=0L) public int getRight();
+    method @Deprecated @IntRange(from=0L) public int getTop();
     method @Deprecated public default operator com.google.accompanist.insets.Insets minus(com.google.accompanist.insets.Insets other);
     method @Deprecated public default operator com.google.accompanist.insets.Insets plus(com.google.accompanist.insets.Insets other);
-    property @IntRange(from=0) public abstract int bottom;
-    property @IntRange(from=0) public abstract int left;
-    property @IntRange(from=0) public abstract int right;
-    property @IntRange(from=0) public abstract int top;
+    property @IntRange(from=0L) public abstract int bottom;
+    property @IntRange(from=0L) public abstract int left;
+    property @IntRange(from=0L) public abstract int right;
+    property @IntRange(from=0L) public abstract int top;
     field @Deprecated public static final com.google.accompanist.insets.Insets.Companion Companion;
   }
 
@@ -68,6 +70,8 @@ package com.google.accompanist.insets {
   }
 
   @Deprecated public enum VerticalSide {
+    method @Deprecated public static com.google.accompanist.insets.VerticalSide valueOf(String name) throws java.lang.IllegalArgumentException;
+    method @Deprecated public static com.google.accompanist.insets.VerticalSide[] values();
     enum_constant @Deprecated public static final com.google.accompanist.insets.VerticalSide Bottom;
     enum_constant @Deprecated public static final com.google.accompanist.insets.VerticalSide Top;
   }
@@ -132,6 +136,7 @@ package com.google.accompanist.insets {
   public final class WindowInsetsKt {
     method @Deprecated @androidx.compose.runtime.Composable public static void ProvideWindowInsets(optional boolean consumeWindowInsets, optional boolean windowInsetsAnimationsEnabled, kotlin.jvm.functions.Function0<kotlin.Unit> content);
     method @Deprecated public static androidx.compose.runtime.ProvidableCompositionLocal<com.google.accompanist.insets.WindowInsets> getLocalWindowInsets();
+    property @Deprecated public static final androidx.compose.runtime.ProvidableCompositionLocal<com.google.accompanist.insets.WindowInsets> LocalWindowInsets;
   }
 
   public final class WindowInsetsTypeKt {
