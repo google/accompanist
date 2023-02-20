@@ -5,7 +5,7 @@ package com.google.accompanist.adaptive {
     method @androidx.compose.runtime.Composable public static java.util.List<androidx.window.layout.DisplayFeature> calculateDisplayFeatures(android.app.Activity activity);
   }
 
-  @kotlin.jvm.JvmInline public final class FoldAwareConfiguration {
+  @kotlin.jvm.JvmInline public final value class FoldAwareConfiguration {
     field public static final com.google.accompanist.adaptive.FoldAwareConfiguration.Companion Companion;
   }
 

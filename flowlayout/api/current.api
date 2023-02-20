@@ -2,6 +2,8 @@
 package com.google.accompanist.flowlayout {
 
   public enum FlowCrossAxisAlignment {
+    method public static com.google.accompanist.flowlayout.FlowCrossAxisAlignment valueOf(String name) throws java.lang.IllegalArgumentException;
+    method public static com.google.accompanist.flowlayout.FlowCrossAxisAlignment[] values();
     enum_constant public static final com.google.accompanist.flowlayout.FlowCrossAxisAlignment Center;
     enum_constant public static final com.google.accompanist.flowlayout.FlowCrossAxisAlignment End;
     enum_constant public static final com.google.accompanist.flowlayout.FlowCrossAxisAlignment Start;
@@ -13,6 +15,8 @@ package com.google.accompanist.flowlayout {
   }
 
   public enum MainAxisAlignment {
+    method public static com.google.accompanist.flowlayout.MainAxisAlignment valueOf(String name) throws java.lang.IllegalArgumentException;
+    method public static com.google.accompanist.flowlayout.MainAxisAlignment[] values();
     enum_constant public static final com.google.accompanist.flowlayout.MainAxisAlignment Center;
     enum_constant public static final com.google.accompanist.flowlayout.MainAxisAlignment End;
     enum_constant public static final com.google.accompanist.flowlayout.MainAxisAlignment SpaceAround;
@@ -22,6 +26,8 @@ package com.google.accompanist.flowlayout {
   }
 
   public enum SizeMode {
+    method public static com.google.accompanist.flowlayout.SizeMode valueOf(String name) throws java.lang.IllegalArgumentException;
+    method public static com.google.accompanist.flowlayout.SizeMode[] values();
     enum_constant public static final com.google.accompanist.flowlayout.SizeMode Expand;
     enum_constant public static final com.google.accompanist.flowlayout.SizeMode Wrap;
   }
