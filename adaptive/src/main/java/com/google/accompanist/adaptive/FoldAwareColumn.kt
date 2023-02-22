@@ -50,7 +50,7 @@ import kotlin.math.roundToInt
 /**
  * A simplified version of [Column] that places children in a fold-aware manner.
  *
- * @param displayFeatures the list of known display features to automatically avoid
+ * @param displayFeatures a list of display features the device currently has
  * @param modifier an optional modifier for the layout
  * @param foldPadding the optional padding to add around a fold
  * @param horizontalAlignment the horizontal alignment of the layout's children.
