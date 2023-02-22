@@ -43,9 +43,9 @@ import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
 import androidx.navigation.NavigatorState
 import com.google.accompanist.navigation.material.BottomSheetNavigator.Destination
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.transform
 
 /**
@@ -201,11 +201,16 @@ class BottomSheetNavigator(
                     // the sheet first before deciding whether to re-show it or keep it hidden
                     try {
                         sheetState.hide()
+                    } catch (_: CancellationException) {
+                        // We catch but ignore possible cancellation exceptions as we don't want
+                        // them to bubble up and cancel the whole produceState coroutine
                     } finally {
                         emit(backStackEntries.lastOrNull())
                     }
                 }
-                .collectLatest { value = it }
+                .collect {
+                    value = it
+                }
         }
 
         if (retainedEntry != null) {
