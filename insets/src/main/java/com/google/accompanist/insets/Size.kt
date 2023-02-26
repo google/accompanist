@@ -97,7 +97,7 @@ For more migration information, please visit https://google.github.io/accompanis
 )
 fun Modifier.statusBarsHeight(
     additional: Dp = 0.dp,
-): Modifier = this then composed {
+): Modifier = composed {
     InsetsSizeModifier(
         insetsType = LocalWindowInsets.current.statusBars,
         heightSide = VerticalSide.Top,
@@ -144,7 +144,7 @@ For more migration information, please visit https://google.github.io/accompanis
 )
 fun Modifier.navigationBarsHeight(
     additional: Dp = 0.dp
-): Modifier = this then composed {
+): Modifier = composed {
     InsetsSizeModifier(
         insetsType = LocalWindowInsets.current.navigationBars,
         heightSide = VerticalSide.Bottom,
@@ -198,7 +198,7 @@ For more migration information, please visit https://google.github.io/accompanis
 fun Modifier.navigationBarsWidth(
     side: HorizontalSide,
     additional: Dp = 0.dp
-): Modifier = this then composed {
+): Modifier = composed {
     InsetsSizeModifier(
         insetsType = LocalWindowInsets.current.navigationBars,
         widthSide = side,

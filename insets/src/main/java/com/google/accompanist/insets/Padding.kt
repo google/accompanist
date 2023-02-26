@@ -51,7 +51,7 @@ For more migration information, please visit https://google.github.io/accompanis
         "androidx.compose.foundation.layout.systemBarsPadding"
     )
 )
-inline fun Modifier.systemBarsPadding(enabled: Boolean = true): Modifier = this then composed {
+inline fun Modifier.systemBarsPadding(enabled: Boolean = true): Modifier = composed {
     padding(
         rememberInsetsPaddingValues(
             insets = LocalWindowInsets.current.systemBars,
@@ -91,7 +91,7 @@ inline fun Modifier.systemBarsPadding(
     top: Boolean = true,
     end: Boolean = true,
     bottom: Boolean = true,
-): Modifier = this then composed {
+): Modifier = composed {
     padding(
         rememberInsetsPaddingValues(
             insets = LocalWindowInsets.current.systemBars,
@@ -117,7 +117,7 @@ For more migration information, please visit https://google.github.io/accompanis
         "androidx.compose.foundation.layout.statusBarsPadding"
     )
 )
-inline fun Modifier.statusBarsPadding(): Modifier = this then composed {
+inline fun Modifier.statusBarsPadding(): Modifier = composed {
     padding(
         rememberInsetsPaddingValues(
             insets = LocalWindowInsets.current.statusBars,
@@ -152,7 +152,7 @@ inline fun Modifier.navigationBarsPadding(
     bottom: Boolean = true,
     start: Boolean = true,
     end: Boolean = true,
-): Modifier = this then composed {
+): Modifier = composed {
     padding(
         rememberInsetsPaddingValues(
             insets = LocalWindowInsets.current.navigationBars,
@@ -181,7 +181,7 @@ For more migration information, please visit https://google.github.io/accompanis
         "androidx.compose.foundation.layout.imePadding"
     )
 )
-inline fun Modifier.imePadding(): Modifier = this then composed {
+inline fun Modifier.imePadding(): Modifier = composed {
     padding(
         rememberInsetsPaddingValues(
             insets = LocalWindowInsets.current.ime,
@@ -220,7 +220,7 @@ inline fun Modifier.cutoutPadding(
     top: Boolean = true,
     end: Boolean = true,
     bottom: Boolean = true,
-): Modifier = this then composed {
+): Modifier = composed {
     padding(
         rememberInsetsPaddingValues(
             insets = LocalWindowInsets.current.displayCutout,
@@ -248,7 +248,7 @@ For more migration information, please visit https://google.github.io/accompanis
         "androidx.compose.foundation.layout.imePadding"
     )
 )
-inline fun Modifier.navigationBarsWithImePadding(): Modifier = this then composed {
+inline fun Modifier.navigationBarsWithImePadding(): Modifier = composed {
     val ime = LocalWindowInsets.current.ime
     val navBars = LocalWindowInsets.current.navigationBars
     val insets = remember(ime, navBars) { derivedWindowInsetsTypeOf(ime, navBars) }
