@@ -191,6 +191,7 @@ fun createMdc3Theme(
             val surfaceInverse = ta.parseColor(R.styleable.ThemeAdapterMaterial3Theme_colorSurfaceInverse)
             val onSurfaceInverse = ta.parseColor(R.styleable.ThemeAdapterMaterial3Theme_colorOnSurfaceInverse)
             val outline = ta.parseColor(R.styleable.ThemeAdapterMaterial3Theme_colorOutline)
+            val outlineVariant = ta.parseColor(R.styleable.ThemeAdapterMaterial3Theme_colorOutlineVariant)
             val error = ta.parseColor(R.styleable.ThemeAdapterMaterial3Theme_colorError)
             val onError = ta.parseColor(R.styleable.ThemeAdapterMaterial3Theme_colorOnError)
             val errorContainer = ta.parseColor(R.styleable.ThemeAdapterMaterial3Theme_colorErrorContainer)
@@ -224,7 +225,7 @@ fun createMdc3Theme(
                     inverseSurface = surfaceInverse,
                     inverseOnSurface = onSurfaceInverse,
                     outline = outline,
-                    // TODO: MDC-Android doesn't include outlineVariant yet, add when available
+                    outlineVariant = outlineVariant,
                     error = error,
                     onError = onError,
                     errorContainer = errorContainer,
@@ -256,7 +257,7 @@ fun createMdc3Theme(
                     inverseSurface = surfaceInverse,
                     inverseOnSurface = onSurfaceInverse,
                     outline = outline,
-                    // TODO: MDC-Android doesn't include outlineVariant yet, add when available
+                    outlineVariant = outlineVariant,
                     error = error,
                     onError = onError,
                     errorContainer = errorContainer,
