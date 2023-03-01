@@ -18,6 +18,7 @@ package com.google.accompanist.inappreviews
 
 import android.app.Activity
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import com.google.android.play.core.review.ReviewManager
@@ -26,6 +27,7 @@ import com.google.android.play.core.review.ReviewManagerFactory
 /**
  * An interface that defines the contract for managing the in-app review process.
  */
+@Stable
 interface InAppReviewManager {
     /**
      * Launches the native Google Play Store dialog for requesting reviews from the user.
