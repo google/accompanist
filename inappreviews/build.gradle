@@ -98,16 +98,6 @@ dependencies {
     implementation libs.androidx.core
     implementation libs.compose.ui.ui
     implementation libs.playReview
-
-
-    // ======================
-    // Test dependencies
-    // ======================
-
-    testImplementation project(':internal-testutils')
-    testImplementation libs.junit
-    testImplementation libs.truth
-    testImplementation libs.mockk
 }
 
 apply plugin: "com.vanniktech.maven.publish"
