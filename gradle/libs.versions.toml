@@ -89,6 +89,7 @@ androidx-test-espressoWeb = "androidx.test.espresso:espresso-web:3.5.1"
 junit = "junit:junit:4.13.2"
 truth = "com.google.truth:truth:1.1.2"
 robolectric = "org.robolectric:robolectric:4.9"
+mockk = "io.mockk:mockk:1.13.4"
 
 affectedmoduledetector = "com.dropbox.affectedmoduledetector:affectedmoduledetector:0.1.2"
 
@@ -98,3 +99,5 @@ android-tools-lint-api = { module = "com.android.tools.lint:lint-api", version.r
 android-tools-lint-tests = { module = "com.android.tools.lint:lint-tests", version.ref = "lintMinCompose" }
 
 squareup-mockwebserver = "com.squareup.okhttp3:mockwebserver:4.9.3"
+
+playReview = "com.google.android.play:review:2.0.1"
