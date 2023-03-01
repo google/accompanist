@@ -75,6 +75,7 @@ dependencies {
     implementation project(':themeadapter-material')
     implementation project(':themeadapter-material3')
     implementation project(':web')
+    implementation project(':inappreviews')
 
     implementation libs.androidx.appcompat
     implementation libs.mdc

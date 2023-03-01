@@ -76,6 +76,9 @@ A library providing a collection of utilities for adaptive layouts.
 ### 🗜 [Test Harness](./testharness/)
 Utilities for testing Compose layouts.
 
+### 🗜 [In-App Reviews](./inappreviews/)
+In-App Reviews for Jetpack Compose.
+
 ### 📐 [Insets](./insets/) (Deprecated)
 See our [Migration Guide](https://google.github.io/accompanist/insets/) for migrating to Insets in Compose.
 
