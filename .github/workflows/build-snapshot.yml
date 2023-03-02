@@ -52,7 +52,7 @@ jobs:
           ./gradlew --scan --stacktrace \
               spotlessCheck \
               assemble \
-              metalavaCheckCompatibility \
+              metalavaCheckCompatibilityRelease \
               lintDebug
 
       - name: Unit Tests

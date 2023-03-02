@@ -18,7 +18,7 @@ package com.google.accompanist.swiperefresh {
     method @Deprecated public float getIndicatorOffset();
     method @Deprecated public boolean isRefreshing();
     method @Deprecated public boolean isSwipeInProgress();
-    method @Deprecated public void setRefreshing(boolean isRefreshing);
+    method @Deprecated public void setRefreshing(boolean);
     property public final float indicatorOffset;
     property public final boolean isRefreshing;
     property public final boolean isSwipeInProgress;

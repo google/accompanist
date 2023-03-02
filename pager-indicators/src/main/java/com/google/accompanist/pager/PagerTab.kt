@@ -80,7 +80,7 @@ private fun Modifier.pagerTabIndicatorOffset(
     pagerState: PagerStateBridge,
     tabPositions: List<TabPosition>,
     pageIndexMapping: (Int) -> Int = { it },
-): Modifier = this then layout { measurable, constraints ->
+): Modifier = layout { measurable, constraints ->
     if (tabPositions.isEmpty()) {
         // If there are no pages, nothing to show
         layout(constraints.maxWidth, 0) {}

@@ -115,7 +115,7 @@ fun Modifier.placeholder(
     highlight: PlaceholderHighlight? = null,
     placeholderFadeTransitionSpec: @Composable Transition.Segment<Boolean>.() -> FiniteAnimationSpec<Float> = { spring() },
     contentFadeTransitionSpec: @Composable Transition.Segment<Boolean>.() -> FiniteAnimationSpec<Float> = { spring() },
-): Modifier = this then composed {
+): Modifier = composed {
     Modifier.placeholder(
         visible = visible,
         color = if (color.isSpecified) color else PlaceholderDefaults.color(),

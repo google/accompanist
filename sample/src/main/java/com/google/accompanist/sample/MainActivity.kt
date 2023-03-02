@@ -50,7 +50,6 @@ class MainActivity : ListActivity() {
         listView.isTextFilterEnabled = true
     }
 
-    @SuppressLint("NewApi") // b/187418647
     private fun getData(prefix: String?): List<Map<String, Any>> {
         val myData = ArrayList<Map<String, Any>>()
 
