@@ -32,7 +32,7 @@ information on using pull requests.
 
 ## API Changes
 
-If you are changing any public APIs, you need to run `./gradlew metalavaGenerateSignature` which will 
+If you are changing any public APIs, you need to run `./gradlew metalavaGenerateSignatureRelease` which will 
 update the API signatures.
 
 ## Formatting 
