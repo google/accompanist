@@ -72,7 +72,7 @@ androidx-window-testing = { module = "androidx.window:window-testing", version.r
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidxnavigation" }
 androidx-navigation-testing = { module = "androidx.navigation:navigation-testing", version.ref = "androidxnavigation" }
 
-mdc = "com.google.android.material:material:1.7.0"
+mdc = "com.google.android.material:material:1.8.0"
 
 napier = "io.github.aakira:napier:1.4.1"
 
