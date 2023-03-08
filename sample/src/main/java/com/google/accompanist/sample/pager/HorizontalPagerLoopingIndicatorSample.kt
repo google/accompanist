@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
 package com.google.accompanist.sample.pager
 
 import android.os.Bundle
