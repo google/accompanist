@@ -16,17 +16,15 @@
 
 package com.google.accompanist.adaptive
 
-import android.graphics.RectF
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.toAndroidRectF
-import androidx.compose.ui.layout.boundsInWindow
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.toComposeRect
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.platform.LocalConfiguration
@@ -38,7 +36,6 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
-import androidx.core.graphics.toRectF
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.window.layout.DisplayFeature
 import androidx.window.layout.FoldingFeature
@@ -64,56 +61,56 @@ class FoldAwareColumnTest {
 
     private var windowHeight = 0.dp
     private lateinit var density: Density
-    private lateinit var foldBoundsPx: RectF
+    private lateinit var foldBoundsPx: Rect
     private var firstSpacerDp = 0.dp
     private var secondSpacerDp = 0.dp
     private var secondSpacerTopPx = 0f
-    private var secondSpacerBoundsPx = RectF()
+    private var secondSpacerBottomPx = 0f
 
     @Test
-    fun hinge_places_correctly() {
+    fun second_spacer_placed_below_fold_with_hinge() {
         setUp()
 
         assertEquals(foldBoundsPx.bottom, secondSpacerTopPx)
     }
 
     @Test
-    fun separating_fold_places_correctly() {
+    fun second_spacer_placed_below_fold_with_separating_fold() {
         setUp(foldSizePx = 0)
 
         assertEquals(foldBoundsPx.bottom, secondSpacerTopPx)
     }
 
     @Test
-    fun no_fold_places_normally() {
+    fun second_spacer_placed_below_first_spacer_without_fold() {
         setUp(includeFold = false)
 
         composeTestRule.onNodeWithTag(testTag).assertTopPositionInRootIsEqualTo(firstSpacerDp)
     }
 
     @Test
-    fun non_separating_fold_places_normally() {
+    fun second_spacer_placed_below_first_spacer_with_nonseparating_fold() {
         setUp(foldSizePx = 0, foldState = FoldingFeature.State.FLAT)
 
         composeTestRule.onNodeWithTag(testTag).assertTopPositionInRootIsEqualTo(firstSpacerDp)
     }
 
     @Test
-    fun vertical_fold_places_normally() {
+    fun second_spacer_placed_below_first_spacer_with_vertical_fold() {
         setUp(foldOrientation = FoldingFeature.Orientation.VERTICAL)
 
         composeTestRule.onNodeWithTag(testTag).assertTopPositionInRootIsEqualTo(firstSpacerDp)
     }
 
     @Test
-    fun ignore_fold_modifier_places_correctly() {
+    fun second_spacer_placed_below_first_spacer_with_ignore_fold_modifier() {
         setUp(secondSpacerModifier = Modifier.ignoreFold())
 
         composeTestRule.onNodeWithTag(testTag).assertTopPositionInRootIsEqualTo(firstSpacerDp)
     }
 
     @Test
-    fun even_fold_padding_modifier_places_correctly_around_fold() {
+    fun even_fold_padding_modifier_applies_around_fold() {
         val foldPadding = 20.dp
         setUp(foldPadding = PaddingValues(vertical = foldPadding))
 
@@ -123,7 +120,7 @@ class FoldAwareColumnTest {
     }
 
     @Test
-    fun uneven_fold_padding_modifier_places_correctly_around_fold() {
+    fun uneven_fold_padding_modifier_applies_around_fold() {
         val foldPaddingBottom = 40.dp
         setUp(foldPadding = PaddingValues(top = 15.dp, bottom = 40.dp))
 
@@ -133,30 +130,33 @@ class FoldAwareColumnTest {
     }
 
     @Test
-    fun layout_bounds_align_with_child_bounds_normally() {
+    fun layout_bounds_align_with_child_bounds_without_separating_fold() {
         setUp(includeFold = false)
 
-        val layoutBottomPx = composeTestRule.onRoot().fetchSemanticsNode().boundsInWindow.bottom
+        val layoutBottomPx = composeTestRule.onRoot()
+            .fetchSemanticsNode().layoutInfo.coordinates.trueBoundsInWindow().bottom
 
-        assertEquals(layoutBottomPx, secondSpacerBoundsPx.bottom)
+        assertEquals(layoutBottomPx, secondSpacerBottomPx)
     }
 
     @Test
     fun layout_bounds_contain_child_bounds_with_separating_fold() {
         setUp(firstSpacerPct = 0.1f, secondSpacerPct = 0.1f)
 
-        val layoutBottomPx = composeTestRule.onRoot().fetchSemanticsNode().boundsInWindow.bottom
+        val layoutBottomPx = composeTestRule.onRoot()
+            .fetchSemanticsNode().layoutInfo.coordinates.trueBoundsInWindow().bottom
 
-        assert(secondSpacerBoundsPx.bottom <= layoutBottomPx)
+        assert(secondSpacerBottomPx <= layoutBottomPx)
     }
 
     @Test
-    fun layout_bounds_align_with_child_bounds_when_pushed_below_separating_fold() {
+    fun layout_bounds_contain_child_bounds_when_pushed_below_separating_fold() {
         setUp()
 
-        val layoutBottomPx = composeTestRule.onRoot().fetchSemanticsNode().boundsInWindow.bottom
+        val layoutBottomPx = composeTestRule.onRoot()
+            .fetchSemanticsNode().layoutInfo.coordinates.trueBoundsInWindow().bottom
 
-        assertEquals(layoutBottomPx, secondSpacerBoundsPx.bottom)
+        assert(secondSpacerBottomPx <= layoutBottomPx)
     }
 
     private fun setUp(
@@ -189,7 +189,7 @@ class FoldAwareColumnTest {
                     .computeCurrentWindowMetrics(composeTestRule.activity)
 
                 with(density) {
-                    foldBoundsPx = fakeFoldingFeature.bounds.toRectF()
+                    foldBoundsPx = fakeFoldingFeature.bounds.toComposeRect()
                     windowHeight = metrics.bounds.height().toDp()
                 }
 
@@ -207,18 +207,14 @@ class FoldAwareColumnTest {
                 Spacer(
                     modifier = Modifier
                         .height(firstSpacerDp)
-                        .width(10.dp)
                 )
                 Spacer(
                     modifier = secondSpacerModifier
                         .height(secondSpacerDp)
-                        .width(10.dp)
                         .testTag(testTag)
                         .onGloballyPositioned {
                             secondSpacerTopPx = it.positionInWindow().y
-                            secondSpacerBoundsPx = it
-                                .boundsInWindow()
-                                .toAndroidRectF()
+                            secondSpacerBottomPx = secondSpacerTopPx + it.size.height
                         }
                 )
             }

@@ -16,6 +16,8 @@
 
 package com.google.accompanist.adaptive
 
+import android.util.Range
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,17 +26,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.layout.IntrinsicMeasurable
 import androidx.compose.ui.layout.IntrinsicMeasureScope
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasurePolicy
 import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.layout.ParentDataModifier
 import androidx.compose.ui.layout.Placeable
+import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.boundsInWindow
+import androidx.compose.ui.layout.findRootCoordinates
 import androidx.compose.ui.platform.InspectorInfo
 import androidx.compose.ui.platform.InspectorValueInfo
 import androidx.compose.ui.platform.LocalDensity
@@ -160,15 +166,17 @@ internal fun foldAwareColumnMeasurePolicy(
             // and height of the largest child when laying out to cover the maximum possible height
             val heightPadding = foldBoundsPx?.let { bounds ->
                 val largestChildHeight = rowColumnMeasureHelper.placeables.maxOfOrNull {
-                    if ((it?.parentData as? RowColumnParentData)?.ignoreFold == false)
-                        it.height
-                    else
+                    if ((it?.parentData as? RowColumnParentData)?.ignoreFold == true) {
                         0
+                    } else {
+                        it?.height ?: 0
+                    }
                 } ?: 0
                 bounds.height.roundToInt() + largestChildHeight
             } ?: 0
+            val paddedLayoutHeight = layoutHeight + heightPadding
 
-            return layout(layoutWidth, layoutHeight + heightPadding) {
+            return layout(layoutWidth, paddedLayoutHeight) {
                 rowColumnMeasureHelper.foldAwarePlaceHelper(
                     this,
                     measureResult,
@@ -249,7 +257,7 @@ private class FoldAwareColumnMeasurementHelper(
         foldBoundsPx: Rect?
     ) {
         with(placeableScope) {
-            val layoutBounds = coordinates!!.boundsInWindow()
+            val layoutBounds = coordinates!!.trueBoundsInWindow()
 
             var placeableY = 0
 
@@ -279,7 +287,7 @@ private class FoldAwareColumnMeasurementHelper(
                         relativeBounds.translate(layoutBounds.left, layoutBounds.top)
 
                     // If placeable overlaps fold, push placeable below
-                    if (foldBoundsPx?.let { absoluteBounds.overlaps(it) } == true &&
+                    if (foldBoundsPx?.overlapsVertically(absoluteBounds) == true &&
                         (placeable.parentData as? RowColumnParentData)?.ignoreFold != true
                     ) {
                         placeableY = (foldBoundsPx.bottom - layoutBounds.top).toInt()
@@ -292,6 +300,54 @@ private class FoldAwareColumnMeasurementHelper(
             }
         }
     }
+}
+
+/**
+ * Copy of original [LayoutCoordinates.boundsInWindow], but without the nonzero dimension check.
+ *
+ * Instead of returning [Rect.Zero] for a layout with zero width/height, this method will still
+ * return a Rect with the layout's bounds.
+ */
+@VisibleForTesting
+internal fun LayoutCoordinates.trueBoundsInWindow(): Rect {
+    this.boundsInWindow()
+    val root = findRootCoordinates()
+    val bounds = boundsInRoot()
+    val rootWidth = root.size.width.toFloat()
+    val rootHeight = root.size.height.toFloat()
+
+    val boundsLeft = bounds.left.coerceIn(0f, rootWidth)
+    val boundsTop = bounds.top.coerceIn(0f, rootHeight)
+    val boundsRight = bounds.right.coerceIn(0f, rootWidth)
+    val boundsBottom = bounds.bottom.coerceIn(0f, rootHeight)
+
+    val topLeft = root.localToWindow(Offset(boundsLeft, boundsTop))
+    val topRight = root.localToWindow(Offset(boundsRight, boundsTop))
+    val bottomRight = root.localToWindow(Offset(boundsRight, boundsBottom))
+    val bottomLeft = root.localToWindow(Offset(boundsLeft, boundsBottom))
+
+    val left = minOf(topLeft.x, topRight.x, bottomLeft.x, bottomRight.x)
+    val top = minOf(topLeft.y, topRight.y, bottomLeft.y, bottomRight.y)
+    val right = maxOf(topLeft.x, topRight.x, bottomLeft.x, bottomRight.x)
+    val bottom = maxOf(topLeft.y, topRight.y, bottomLeft.y, bottomRight.y)
+
+    return Rect(left, top, right, bottom)
+}
+
+/**
+ * Checks if the vertical ranges of the two Rects overlap (inclusive)
+ */
+private fun Rect.overlapsVertically(other: Rect): Boolean {
+    val verticalRange = Range(top, bottom)
+    val otherVerticalRange = Range(other.top, other.bottom)
+    return verticalRange.overlaps(otherVerticalRange)
+}
+
+/**
+ * Inclusive check to see if the given float ranges overlap
+ */
+private fun Range<Float>.overlaps(other: Range<Float>): Boolean {
+    return (lower >= other.lower && lower <= other.upper) || (upper >= other.lower && upper <= other.upper)
 }
 
 /**
