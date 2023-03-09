@@ -16,12 +16,13 @@
 
 package com.google.accompanist.adaptive
 
+import android.annotation.SuppressLint
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.toComposeRect
@@ -35,15 +36,16 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.window.layout.DisplayFeature
 import androidx.window.layout.FoldingFeature
 import androidx.window.layout.WindowLayoutInfo
 import androidx.window.layout.WindowMetricsCalculator
 import androidx.window.testing.layout.FoldingFeature
 import androidx.window.testing.layout.WindowLayoutInfoPublisherRule
 import com.google.accompanist.adaptive.FoldAwareColumnScopeInstance.ignoreFold
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -51,78 +53,122 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class FoldAwareColumnTest {
-    private val testTag = "FoldAwareColumnTestTag"
-
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     @get:Rule
     val publisherRule = WindowLayoutInfoPublisherRule()
 
-    private var windowHeight = 0.dp
-    private lateinit var density: Density
-    private lateinit var foldBoundsPx: Rect
-    private var firstSpacerDp = 0.dp
-    private var secondSpacerDp = 0.dp
+    private val testTag = "FoldAwareColumnTestTag"
+    private var firstSpacerHeightDp = 0.dp
     private var secondSpacerTopPx = 0f
     private var secondSpacerBottomPx = 0f
 
+    @After
+    fun cleanUp() {
+        firstSpacerHeightDp = 0.dp
+        secondSpacerTopPx = 0f
+        secondSpacerBottomPx = 0f
+    }
+
     @Test
     fun second_spacer_placed_below_fold_with_hinge() {
-        setUp()
+        composeTestRule.setContent {
+            FoldAwareColumnWithSpacers()
+        }
+
+        val foldBoundsPx = simulateFoldingFeature()
 
         assertEquals(foldBoundsPx.bottom, secondSpacerTopPx)
     }
 
     @Test
     fun second_spacer_placed_below_fold_with_separating_fold() {
-        setUp(foldSizePx = 0)
+        composeTestRule.setContent {
+            FoldAwareColumnWithSpacers()
+        }
+
+        val foldBoundsPx = simulateFoldingFeature(foldSizePx = 0)
 
         assertEquals(foldBoundsPx.bottom, secondSpacerTopPx)
     }
 
     @Test
     fun second_spacer_placed_below_first_spacer_without_fold() {
-        setUp(includeFold = false)
+        composeTestRule.setContent {
+            FoldAwareColumnWithSpacers()
+        }
 
-        composeTestRule.onNodeWithTag(testTag).assertTopPositionInRootIsEqualTo(firstSpacerDp)
+        composeTestRule.onNodeWithTag(testTag).assertTopPositionInRootIsEqualTo(firstSpacerHeightDp)
     }
 
     @Test
-    fun second_spacer_placed_below_first_spacer_with_nonseparating_fold() {
-        setUp(foldSizePx = 0, foldState = FoldingFeature.State.FLAT)
+    fun second_spacer_placed_below_first_spacer_with_non_separating_fold() {
+        composeTestRule.setContent {
+            FoldAwareColumnWithSpacers()
+        }
 
-        composeTestRule.onNodeWithTag(testTag).assertTopPositionInRootIsEqualTo(firstSpacerDp)
+        simulateFoldingFeature(foldSizePx = 0, foldState = FoldingFeature.State.FLAT)
+
+        composeTestRule.onNodeWithTag(testTag).assertTopPositionInRootIsEqualTo(firstSpacerHeightDp)
     }
 
     @Test
-    fun second_spacer_placed_below_first_spacer_with_vertical_fold() {
-        setUp(foldOrientation = FoldingFeature.Orientation.VERTICAL)
+    fun second_spacer_placed_below_first_spacer_with_vertical_hinge() {
+        composeTestRule.setContent {
+            FoldAwareColumnWithSpacers()
+        }
 
-        composeTestRule.onNodeWithTag(testTag).assertTopPositionInRootIsEqualTo(firstSpacerDp)
+        simulateFoldingFeature(foldOrientation = FoldingFeature.Orientation.VERTICAL)
+
+        composeTestRule.onNodeWithTag(testTag).assertTopPositionInRootIsEqualTo(firstSpacerHeightDp)
     }
 
     @Test
     fun second_spacer_placed_below_first_spacer_with_ignore_fold_modifier() {
-        setUp(secondSpacerModifier = Modifier.ignoreFold())
+        composeTestRule.setContent {
+            FoldAwareColumnWithSpacers(secondSpacerModifier = Modifier.ignoreFold())
+        }
 
-        composeTestRule.onNodeWithTag(testTag).assertTopPositionInRootIsEqualTo(firstSpacerDp)
+        simulateFoldingFeature()
+
+        composeTestRule.onNodeWithTag(testTag).assertTopPositionInRootIsEqualTo(firstSpacerHeightDp)
     }
 
     @Test
-    fun even_fold_padding_modifier_applies_around_fold() {
-        val foldPadding = 20.dp
-        setUp(foldPadding = PaddingValues(vertical = foldPadding))
+    fun even_fold_padding_modifier_applies_around_hinge() {
+        val foldPaddingDp = 20.dp
+        lateinit var density: Density
+
+        composeTestRule.setContent {
+            density = LocalDensity.current
+
+            FoldAwareColumnWithSpacers(
+                foldPadding = PaddingValues(vertical = foldPaddingDp)
+            )
+        }
+
+        val foldBoundsPx = simulateFoldingFeature()
 
         with(density) {
-            assertEquals(foldBoundsPx.bottom + foldPadding.toPx(), secondSpacerTopPx)
+            assertEquals(foldBoundsPx.bottom + foldPaddingDp.toPx(), secondSpacerTopPx)
         }
     }
 
     @Test
-    fun uneven_fold_padding_modifier_applies_around_fold() {
+    fun uneven_fold_padding_modifier_applies_around_hinge() {
         val foldPaddingBottom = 40.dp
-        setUp(foldPadding = PaddingValues(top = 15.dp, bottom = 40.dp))
+        lateinit var density: Density
+
+        composeTestRule.setContent {
+            density = LocalDensity.current
+
+            FoldAwareColumnWithSpacers(
+                foldPadding = PaddingValues(top = 15.dp, bottom = foldPaddingBottom)
+            )
+        }
+
+        val foldBoundsPx = simulateFoldingFeature()
 
         with(density) {
             assertEquals(foldBoundsPx.bottom + foldPaddingBottom.toPx(), secondSpacerTopPx)
@@ -131,7 +177,9 @@ class FoldAwareColumnTest {
 
     @Test
     fun layout_bounds_align_with_child_bounds_without_separating_fold() {
-        setUp(includeFold = false)
+        composeTestRule.setContent {
+            FoldAwareColumnWithSpacers()
+        }
 
         val layoutBottomPx = composeTestRule.onRoot()
             .fetchSemanticsNode().layoutInfo.coordinates.trueBoundsInWindow().bottom
@@ -140,8 +188,15 @@ class FoldAwareColumnTest {
     }
 
     @Test
-    fun layout_bounds_contain_child_bounds_with_separating_fold() {
-        setUp(firstSpacerPct = 0.1f, secondSpacerPct = 0.1f)
+    fun layout_bounds_contain_child_bounds_when_placed_above_hinge() {
+        composeTestRule.setContent {
+            FoldAwareColumnWithSpacers(
+                firstSpacerHeightPct = 0.1f,
+                secondSpacerHeightPct = 0.1f
+            )
+        }
+
+        simulateFoldingFeature()
 
         val layoutBottomPx = composeTestRule.onRoot()
             .fetchSemanticsNode().layoutInfo.coordinates.trueBoundsInWindow().bottom
@@ -150,8 +205,12 @@ class FoldAwareColumnTest {
     }
 
     @Test
-    fun layout_bounds_contain_child_bounds_when_pushed_below_separating_fold() {
-        setUp()
+    fun layout_bounds_contain_child_bounds_when_placed_below_hinge() {
+        composeTestRule.setContent {
+            FoldAwareColumnWithSpacers()
+        }
+
+        simulateFoldingFeature()
 
         val layoutBottomPx = composeTestRule.onRoot()
             .fetchSemanticsNode().layoutInfo.coordinates.trueBoundsInWindow().bottom
@@ -159,17 +218,57 @@ class FoldAwareColumnTest {
         assert(secondSpacerBottomPx <= layoutBottomPx)
     }
 
-    private fun setUp(
-        secondSpacerModifier: Modifier = Modifier,
+    /**
+     * Test layout for FoldAwareColumn that includes two spacers with the provided heights
+     */
+    @Composable
+    @SuppressLint("ModifierParameter")
+    private fun FoldAwareColumnWithSpacers(
         foldPadding: PaddingValues = PaddingValues(),
-        horizontalAlignment: Alignment.Horizontal = Alignment.Start,
-        firstSpacerPct: Float = 0.25f,
-        secondSpacerPct: Float = 0.25f,
-        includeFold: Boolean = true,
+        firstSpacerHeightPct: Float = 0.25f,
+        secondSpacerHeightPct: Float = 0.25f,
+        secondSpacerModifier: Modifier = Modifier,
+    ) {
+        var secondSpacerHeightDp: Dp
+        val metrics = remember(LocalConfiguration.current) {
+            WindowMetricsCalculator.getOrCreate()
+                .computeCurrentWindowMetrics(composeTestRule.activity)
+        }
+
+        with(LocalDensity.current) {
+            val windowHeight = metrics.bounds.height().toDp().value
+            firstSpacerHeightDp = (firstSpacerHeightPct * windowHeight).dp
+            secondSpacerHeightDp = (secondSpacerHeightPct * windowHeight).dp
+        }
+
+        FoldAwareColumn(
+            displayFeatures = calculateDisplayFeatures(activity = composeTestRule.activity),
+            foldPadding = foldPadding,
+        ) {
+            Spacer(
+                modifier = Modifier.height(firstSpacerHeightDp)
+            )
+            Spacer(
+                modifier = secondSpacerModifier
+                    .height(secondSpacerHeightDp)
+                    .testTag(testTag)
+                    .onGloballyPositioned {
+                        secondSpacerTopPx = it.positionInWindow().y
+                        secondSpacerBottomPx = secondSpacerTopPx + it.size.height
+                    }
+            )
+        }
+    }
+
+    /**
+     * Simulates a Jetpack Window Manager folding feature with the provided properties and returns
+     * the bounding box of the fold
+     */
+    private fun simulateFoldingFeature(
         foldSizePx: Int = 25,
         foldState: FoldingFeature.State = FoldingFeature.State.HALF_OPENED,
         foldOrientation: FoldingFeature.Orientation = FoldingFeature.Orientation.HORIZONTAL
-    ) {
+    ): Rect {
         val fakeFoldingFeature = FoldingFeature(
             activity = composeTestRule.activity,
             size = foldSizePx,
@@ -177,52 +276,10 @@ class FoldAwareColumnTest {
             orientation = foldOrientation,
         )
 
-        lateinit var displayFeatures: List<DisplayFeature>
-
-        composeTestRule.setContent {
-            density = LocalDensity.current
-
-            displayFeatures = calculateDisplayFeatures(activity = composeTestRule.activity)
-
-            remember(LocalConfiguration.current) {
-                val metrics = WindowMetricsCalculator.getOrCreate()
-                    .computeCurrentWindowMetrics(composeTestRule.activity)
-
-                with(density) {
-                    foldBoundsPx = fakeFoldingFeature.bounds.toComposeRect()
-                    windowHeight = metrics.bounds.height().toDp()
-                }
-
-                firstSpacerDp = (firstSpacerPct * windowHeight.value).dp
-                secondSpacerDp = (secondSpacerPct * windowHeight.value).dp
-
-                null
-            }
-
-            FoldAwareColumn(
-                displayFeatures = displayFeatures,
-                foldPadding = foldPadding,
-                horizontalAlignment = horizontalAlignment
-            ) {
-                Spacer(
-                    modifier = Modifier
-                        .height(firstSpacerDp)
-                )
-                Spacer(
-                    modifier = secondSpacerModifier
-                        .height(secondSpacerDp)
-                        .testTag(testTag)
-                        .onGloballyPositioned {
-                            secondSpacerTopPx = it.positionInWindow().y
-                            secondSpacerBottomPx = secondSpacerTopPx + it.size.height
-                        }
-                )
-            }
-        }
-
-        if (includeFold)
-            publisherRule.overrideWindowLayoutInfo(WindowLayoutInfo(listOf(fakeFoldingFeature)))
+        publisherRule.overrideWindowLayoutInfo(WindowLayoutInfo(listOf(fakeFoldingFeature)))
 
         composeTestRule.waitForIdle()
+
+        return fakeFoldingFeature.bounds.toComposeRect()
     }
 }
