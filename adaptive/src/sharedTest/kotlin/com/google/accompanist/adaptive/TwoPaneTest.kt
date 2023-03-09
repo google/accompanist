@@ -23,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toAndroidRect
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.platform.LocalDensity
@@ -1578,7 +1577,12 @@ private fun fakeDisplayFeatures(
         }
 
         FoldingFeature(
-            windowBounds = bounds.toAndroidRect(),
+            windowBounds = android.graphics.Rect(
+                bounds.left.toInt(),
+                bounds.top.toInt(),
+                bounds.right.toInt(),
+                bounds.bottom.toInt()
+            ),
             center = center,
             size = size,
             state = localFoldingFeature.state,
