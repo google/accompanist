@@ -21,11 +21,6 @@ import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.layout.IntrinsicMeasurable
-import androidx.compose.ui.layout.IntrinsicMeasureScope
-import androidx.compose.ui.layout.Measurable
-import androidx.compose.ui.layout.MeasurePolicy
-import androidx.compose.ui.layout.MeasureResult
-import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.layout.Measured
 import androidx.compose.ui.layout.ParentDataModifier
 import androidx.compose.ui.layout.Placeable
@@ -33,7 +28,6 @@ import androidx.compose.ui.platform.InspectorInfo
 import androidx.compose.ui.platform.InspectorValueInfo
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.util.fastForEach
 import com.google.accompanist.adaptive.LayoutOrientation.Horizontal
@@ -42,92 +36,13 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
 
-internal fun rowColumnMeasurePolicy(
-    orientation: LayoutOrientation,
-    arrangement: (Int, IntArray, LayoutDirection, Density, IntArray) -> Unit,
-    arrangementSpacing: Dp,
-    crossAxisSize: SizeMode,
-    crossAxisAlignment: CrossAxisAlignment
-): MeasurePolicy {
-    return object : MeasurePolicy {
-        override fun MeasureScope.measure(
-            measurables: List<Measurable>,
-            constraints: Constraints
-        ): MeasureResult {
-            val placeables = arrayOfNulls<Placeable?>(measurables.size)
-            val rowColumnMeasureHelper =
-                RowColumnMeasurementHelper(
-                    orientation,
-                    arrangement,
-                    arrangementSpacing,
-                    crossAxisSize,
-                    crossAxisAlignment,
-                    measurables,
-                    placeables
-                )
-
-            val measureResult = rowColumnMeasureHelper
-                .measureWithoutPlacing(
-                    this,
-                    constraints, 0, measurables.size
-                )
-
-            val layoutWidth: Int
-            val layoutHeight: Int
-            if (orientation == LayoutOrientation.Horizontal) {
-                layoutWidth = measureResult.mainAxisSize
-                layoutHeight = measureResult.crossAxisSize
-            } else {
-                layoutWidth = measureResult.crossAxisSize
-                layoutHeight = measureResult.mainAxisSize
-            }
-            return layout(layoutWidth, layoutHeight) {
-                rowColumnMeasureHelper.placeHelper(
-                    this,
-                    measureResult,
-                    0,
-                    layoutDirection
-                )
-            }
-        }
-
-        override fun IntrinsicMeasureScope.minIntrinsicWidth(
-            measurables: List<IntrinsicMeasurable>,
-            height: Int
-        ) = MinIntrinsicWidthMeasureBlock(orientation)(
-            measurables,
-            height,
-            arrangementSpacing.roundToPx()
-        )
-
-        override fun IntrinsicMeasureScope.minIntrinsicHeight(
-            measurables: List<IntrinsicMeasurable>,
-            width: Int
-        ) = MinIntrinsicHeightMeasureBlock(orientation)(
-            measurables,
-            width,
-            arrangementSpacing.roundToPx()
-        )
-
-        override fun IntrinsicMeasureScope.maxIntrinsicWidth(
-            measurables: List<IntrinsicMeasurable>,
-            height: Int
-        ) = MaxIntrinsicWidthMeasureBlock(orientation)(
-            measurables,
-            height,
-            arrangementSpacing.roundToPx()
-        )
-
-        override fun IntrinsicMeasureScope.maxIntrinsicHeight(
-            measurables: List<IntrinsicMeasurable>,
-            width: Int
-        ) = MaxIntrinsicHeightMeasureBlock(orientation)(
-            measurables,
-            width,
-            arrangementSpacing.roundToPx()
-        )
-    }
-}
+/**
+ * Copied from:
+ * RowColumnImpl.kt
+ * https://android-review.googlesource.com/c/platform/frameworks/support/+/2260390/27/compose/foundation/foundation-layout/src/commonMain/kotlin/androidx/compose/foundation/layout/RowColumnImpl.kt
+ *
+ * The only changes were updating access modifiers and removing unused code
+ */
 
 /**
  * [Row] will be [Horizontal], [Column] is [Vertical].

@@ -25,7 +25,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.graphics.toComposeRect
 import androidx.compose.ui.layout.IntrinsicMeasurable
 import androidx.compose.ui.layout.IntrinsicMeasureScope
 import androidx.compose.ui.layout.Layout
@@ -50,12 +49,18 @@ import kotlin.math.roundToInt
 /**
  * A simplified version of [Column] that places children in a fold-aware manner.
  *
+ * The layout starts placing children from the top of the available space. If there is a horizontal
+ * [separating](https://developer.android.com/reference/kotlin/androidx/window/layout/FoldingFeature#isSeparating())
+ * fold present in the window, then the layout will check to see if any children overlap the fold.
+ * If a child would overlap the fold in its current position, then the layout will increase its
+ * y coordinate so that the child is now placed below the fold, and any subsequent children will
+ * also be placed below the fold.
+ *
+ *
  * @param displayFeatures a list of display features the device currently has
  * @param modifier an optional modifier for the layout
  * @param foldPadding the optional padding to add around a fold
  * @param horizontalAlignment the horizontal alignment of the layout's children.
- *
- * @see [Column]
  */
 @Composable
 public fun FoldAwareColumn(
@@ -75,12 +80,12 @@ public fun FoldAwareColumn(
         val topPaddingPx = foldPadding.calculateTopPadding().roundToPx()
         val bottomPaddingPx = foldPadding.calculateBottomPadding().roundToPx()
 
-        fold?.bounds?.toComposeRect()?.let {
+        fold?.bounds?.let {
             Rect(
-                top = it.top - topPaddingPx,
-                left = it.left,
-                right = it.right,
-                bottom = it.bottom + bottomPaddingPx
+                left = it.left.toFloat(),
+                top = it.top.toFloat() - topPaddingPx,
+                right = it.right.toFloat(),
+                bottom = it.bottom.toFloat() + bottomPaddingPx
             )
         }
     }
@@ -99,9 +104,11 @@ public fun FoldAwareColumn(
 /**
  * FoldAwareColumn version of [rowColumnMeasurePolicy] that uses [FoldAwareColumnMeasurementHelper.foldAwarePlaceHelper]
  * method instead of [RowColumnMeasurementHelper.placeHelper]
+ *
+ * TODO: change from internal to private once metalava issue is solved https://partnerissuetracker.corp.google.com/issues/271539608
  */
 @Composable
-private fun foldAwareColumnMeasurePolicy(
+internal fun foldAwareColumnMeasurePolicy(
     verticalArrangement: Arrangement.Vertical,
     horizontalAlignment: Alignment.Horizontal,
     foldBoundsPx: Rect?
@@ -247,8 +254,7 @@ private class FoldAwareColumnMeasurementHelper(
             var placeableY = 0
 
             for (i in measureResult.startIndex until measureResult.endIndex) {
-                val placeable = placeables[i]
-                placeable!!
+                val placeable = placeables[i]!!
                 val mainAxisPositions = measureResult.mainAxisPositions
                 val crossAxisPosition = getCrossAxisPosition(
                     placeable,

@@ -30,6 +30,14 @@ import kotlin.math.roundToInt
 import kotlin.math.sign
 
 /**
+ * Copied from:
+ * RowColumnMeasurementHelper.kt
+ * https://android-review.googlesource.com/c/platform/frameworks/support/+/2260390/27/compose/foundation/foundation-layout/src/commonMain/kotlin/androidx/compose/foundation/layout/RowColumnMeasurementHelper.kt
+ *
+ * The only changes were updating access modifiers and making RowColumnMeasurementHelper an open class
+ */
+
+/**
  * This is a data class that holds the determined width, height of a row,
  * and information on how to retrieve main axis and cross axis positions.
  */
