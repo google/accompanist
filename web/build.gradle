@@ -99,6 +99,7 @@ dependencies {
 
     // TODO: Remove when fixed https://github.com/gradle/gradle/issues/24037
     implementation libs.kotlin.coroutines.android
+    implementation libs.androidx.lifecycle.common
 
     // ======================
     // Test dependencies
