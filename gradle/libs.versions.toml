@@ -2,7 +2,7 @@
 
 compose = "1.4.0-alpha05"
 composeCompiler = "1.4.2"
-composeMaterial3 = "1.0.1"
+composeMaterial3 = "1.1.0-alpha08"
 composesnapshot = "-" # a single character = no snapshot
 
 # gradlePlugin and lint need to be updated together
