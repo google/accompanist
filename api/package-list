@@ -15,8 +15,6 @@ module:navigation-animation
 com.google.accompanist.navigation.animation
 module:navigation-material
 com.google.accompanist.navigation.material
-module:pager
-com.google.accompanist.pager
 module:pager-indicators
 com.google.accompanist.pager
 module:permissions
