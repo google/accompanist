@@ -310,7 +310,6 @@ private class FoldAwareColumnMeasurementHelper(
  */
 @VisibleForTesting
 internal fun LayoutCoordinates.trueBoundsInWindow(): Rect {
-    this.boundsInWindow()
     val root = findRootCoordinates()
     val bounds = boundsInRoot()
     val rootWidth = root.size.width.toFloat()
@@ -375,7 +374,7 @@ internal class IgnoreFoldModifier(
     }
 
     override fun hashCode(): Int {
-        return hashCode()
+        return 0
     }
 
     override fun toString(): String =
