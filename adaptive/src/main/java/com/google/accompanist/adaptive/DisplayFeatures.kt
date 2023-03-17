@@ -29,12 +29,13 @@ import androidx.window.layout.WindowInfoTracker
  */
 @Composable
 public fun calculateDisplayFeatures(activity: Activity): List<DisplayFeature> {
-    val windowInfoTracker = remember(activity) { WindowInfoTracker.getOrCreate(activity) }
-    val windowLayoutInfo = remember(windowInfoTracker, activity) {
-        windowInfoTracker.windowLayoutInfo(activity)
+    val windowLayoutInfo = remember(activity) {
+        WindowInfoTracker.getOrCreate(activity).windowLayoutInfo(activity)
     }
-
-    val displayFeatures by produceState(initialValue = emptyList<DisplayFeature>()) {
+    val displayFeatures by produceState(
+        initialValue = emptyList<DisplayFeature>(),
+        key1 = windowLayoutInfo
+    ) {
         windowLayoutInfo.collect { info ->
             value = info.displayFeatures
         }
