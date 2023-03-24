@@ -26,9 +26,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
@@ -37,12 +35,13 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.view.children
 import com.google.accompanist.web.LoadingState.Finished
 import com.google.accompanist.web.LoadingState.Loading
 import kotlinx.coroutines.CoroutineScope
@@ -70,6 +69,7 @@ import kotlinx.coroutines.withContext
  * @param factory An optional WebView factory for using a custom subclass of WebView
  * @sample com.google.accompanist.sample.webview.BasicWebViewSample
  */
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun WebView(
     state: WebViewState,
@@ -77,10 +77,15 @@ fun WebView(
     captureBackPresses: Boolean = true,
     navigator: WebViewNavigator = rememberWebViewNavigator(),
     onCreated: (WebView) -> Unit = {},
+    onReset: (WebView) -> Unit = {},
     onDispose: (WebView) -> Unit = {},
     client: AccompanistWebViewClient = remember { AccompanistWebViewClient() },
     chromeClient: AccompanistWebChromeClient = remember { AccompanistWebChromeClient() },
-    factory: ((Context) -> WebView)? = null
+    factory: ((Context) -> WebView)? = null,
+    layoutParams: FrameLayout.LayoutParams = FrameLayout.LayoutParams(
+        LayoutParams.MATCH_PARENT,
+        LayoutParams.MATCH_PARENT
+    )
 ) {
     var webView by remember { mutableStateOf<WebView?>(null) }
 
@@ -114,14 +119,6 @@ fun WebView(
         }
     }
 
-    val currentOnDispose by rememberUpdatedState(onDispose)
-
-    webView?.let {
-        DisposableEffect(it) {
-            onDispose { currentOnDispose(it) }
-        }
-    }
-
     // Set the state of the client and chrome client
     // This is done internally to ensure they always are the same instance as the
     // parent Web composable
@@ -129,50 +126,39 @@ fun WebView(
     client.navigator = navigator
     chromeClient.state = state
 
-    BoxWithConstraints(modifier) {
+    AndroidView(
+        factory = { context ->
+            val childView = (factory?.invoke(context) ?: WebView(context)).apply {
+                onCreated(this)
 
-        // WebView changes it's layout strategy based on
-        // it's layoutParams. We convert from Compose Modifier to
-        // layout params here.
-        val width =
-            if (constraints.hasFixedWidth)
-                LayoutParams.MATCH_PARENT
-            else
-                LayoutParams.WRAP_CONTENT
-        val height =
-            if (constraints.hasFixedHeight)
-                LayoutParams.MATCH_PARENT
-            else
-                LayoutParams.WRAP_CONTENT
+                this.layoutParams = layoutParams
 
-        AndroidView(
-            factory = { context ->
-                val childView = (factory?.invoke(context) ?: WebView(context)).apply {
-                    onCreated(this)
+                webChromeClient = chromeClient
+                webViewClient = client
+            }.also { webView = it }
 
-                    layoutParams = LayoutParams(
-                        width,
-                        height
-                    )
+            // Workaround a crash on certain devices that expect WebView to be
+            // wrapped in a ViewGroup.
+            // b/243567497
+            val parentLayout = FrameLayout(context)
+            parentLayout.layoutParams = layoutParams
+            parentLayout.addView(childView)
 
-                    webChromeClient = chromeClient
-                    webViewClient = client
-                }.also { webView = it }
-
-                // Workaround a crash on certain devices that expect WebView to be
-                // wrapped in a ViewGroup.
-                // b/243567497
-                val parentLayout = FrameLayout(context)
-                parentLayout.layoutParams = LayoutParams(
-                    width,
-                    height
-                )
-                parentLayout.addView(childView)
-
-                parentLayout
-            }
-        )
-    }
+            parentLayout
+        },
+        onReset = { parentFrame ->
+            webView = null
+            onReset(parentFrame.children.first() as WebView)
+        },
+        onRelease = { parentFrame ->
+            webView = null
+            onDispose(parentFrame.children.first() as WebView)
+        },
+        modifier = modifier,
+        update = {
+            webView = it.children.first() as WebView
+        }
+    )
 }
 
 /**
