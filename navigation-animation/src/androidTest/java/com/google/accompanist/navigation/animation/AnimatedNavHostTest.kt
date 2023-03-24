@@ -66,7 +66,7 @@ class AnimatedNavHostTest {
         composeTestRule.mainClock.autoAdvance = true
 
         composeTestRule.runOnIdle {
-            assertThat(firstEntry?.lifecycle?.currentState)
+            assertThat(firstEntry?.getLifecycle()?.currentState)
                 .isEqualTo(Lifecycle.State.RESUMED)
         }
 
@@ -76,17 +76,17 @@ class AnimatedNavHostTest {
             navController.navigate(second)
         }
 
-        assertThat(firstEntry?.lifecycle?.currentState)
+        assertThat(firstEntry?.getLifecycle()?.currentState)
             .isEqualTo(Lifecycle.State.CREATED)
-        assertThat(navController.currentBackStackEntry?.lifecycle?.currentState)
+        assertThat(navController.currentBackStackEntry?.getLifecycle()?.currentState)
             .isEqualTo(Lifecycle.State.STARTED)
 
         // advance half way between the crossfade
         composeTestRule.mainClock.advanceTimeBy(AnimationConstants.DefaultDurationMillis.toLong() / 2)
 
-        assertThat(firstEntry?.lifecycle?.currentState)
+        assertThat(firstEntry?.getLifecycle()?.currentState)
             .isEqualTo(Lifecycle.State.CREATED)
-        assertThat(navController.currentBackStackEntry?.lifecycle?.currentState)
+        assertThat(navController.currentBackStackEntry?.getLifecycle()?.currentState)
             .isEqualTo(Lifecycle.State.STARTED)
 
         composeTestRule.onNodeWithText(first).assertExists()
@@ -95,9 +95,9 @@ class AnimatedNavHostTest {
         composeTestRule.mainClock.autoAdvance = true
 
         composeTestRule.runOnIdle {
-            assertThat(firstEntry?.lifecycle?.currentState)
+            assertThat(firstEntry?.getLifecycle()?.currentState)
                 .isEqualTo(Lifecycle.State.CREATED)
-            assertThat(navController.currentBackStackEntry?.lifecycle?.currentState)
+            assertThat(navController.currentBackStackEntry?.getLifecycle()?.currentState)
                 .isEqualTo(Lifecycle.State.RESUMED)
         }
 
@@ -109,17 +109,17 @@ class AnimatedNavHostTest {
             navController.popBackStack()
         }
 
-        assertThat(navController.currentBackStackEntry?.lifecycle?.currentState)
+        assertThat(navController.currentBackStackEntry?.getLifecycle()?.currentState)
             .isEqualTo(Lifecycle.State.STARTED)
-        assertThat(secondEntry?.lifecycle?.currentState)
+        assertThat(secondEntry?.getLifecycle()?.currentState)
             .isEqualTo(Lifecycle.State.CREATED)
 
         // advance half way between the crossfade
         composeTestRule.mainClock.advanceTimeBy(AnimationConstants.DefaultDurationMillis.toLong() / 2)
 
-        assertThat(navController.currentBackStackEntry?.lifecycle?.currentState)
+        assertThat(navController.currentBackStackEntry?.getLifecycle()?.currentState)
             .isEqualTo(Lifecycle.State.STARTED)
-        assertThat(secondEntry?.lifecycle?.currentState)
+        assertThat(secondEntry?.getLifecycle()?.currentState)
             .isEqualTo(Lifecycle.State.CREATED)
 
         composeTestRule.onNodeWithText(first).assertExists()
@@ -128,9 +128,9 @@ class AnimatedNavHostTest {
         composeTestRule.mainClock.autoAdvance = true
 
         composeTestRule.runOnIdle {
-            assertThat(navController.currentBackStackEntry?.lifecycle?.currentState)
+            assertThat(navController.currentBackStackEntry?.getLifecycle()?.currentState)
                 .isEqualTo(Lifecycle.State.RESUMED)
-            assertThat(secondEntry?.lifecycle?.currentState)
+            assertThat(secondEntry?.getLifecycle()?.currentState)
                 .isEqualTo(Lifecycle.State.DESTROYED)
         }
     }
@@ -186,9 +186,9 @@ class AnimatedNavHostTest {
         composeTestRule.mainClock.autoAdvance = true
 
         composeTestRule.runOnIdle {
-            assertThat(firstEntry.lifecycle.currentState)
+            assertThat(firstEntry.getLifecycle().currentState)
                 .isEqualTo(Lifecycle.State.CREATED)
-            assertThat(secondEntry.lifecycle.currentState)
+            assertThat(secondEntry.getLifecycle().currentState)
                 .isEqualTo(Lifecycle.State.RESUMED)
         }
     }
