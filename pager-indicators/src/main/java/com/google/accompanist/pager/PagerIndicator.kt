@@ -73,7 +73,6 @@ import kotlin.math.sign
 For more migration information, please visit https://google.github.io/accompanist/pager/#migration
 """
 )
-@ExperimentalPagerApi
 @Composable
 fun HorizontalPagerIndicator(
     pagerState: PagerState,
@@ -138,7 +137,6 @@ fun HorizontalPagerIndicator(
  * @param indicatorShape the shape representing each indicator. This defaults to [CircleShape].
  */
 @OptIn(ExperimentalFoundationApi::class)
-@ExperimentalPagerApi
 @Composable
 fun HorizontalPagerIndicator(
     pagerState: androidx.compose.foundation.pager.PagerState,
@@ -271,7 +269,6 @@ private fun HorizontalPagerIndicator(
 For more migration information, please visit https://google.github.io/accompanist/pager/#migration
 """
 )
-@ExperimentalPagerApi
 @Composable
 fun VerticalPagerIndicator(
     pagerState: PagerState,
@@ -334,7 +331,6 @@ fun VerticalPagerIndicator(
  * @param indicatorShape the shape representing each indicator. This defaults to [CircleShape].
  */
 @OptIn(ExperimentalFoundationApi::class)
-@ExperimentalPagerApi
 @Composable
 fun VerticalPagerIndicator(
     pagerState: androidx.compose.foundation.pager.PagerState,

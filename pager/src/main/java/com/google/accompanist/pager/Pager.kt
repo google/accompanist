@@ -82,7 +82,6 @@ The androidx.compose equivalent of Pager is androidx.compose.foundation.pager.Pa
 For more migration information, please visit https://google.github.io/accompanist/pager/#migration
 """
 )
-@ExperimentalPagerApi
 object PagerDefaults {
     /**
      * The default implementation for the `maximumFlingDistance` parameter of
@@ -256,7 +255,6 @@ For more migration information, please visit https://google.github.io/accompanis
  * [PagerScope.currentPage] and other properties in [PagerScope].
  */
 @OptIn(ExperimentalSnapperApi::class)
-@ExperimentalPagerApi
 @Composable
 @Deprecated(
     """
@@ -323,7 +321,6 @@ fun HorizontalPager(
  * [PagerScope.currentPage] and other properties in [PagerScope].
  */
 @OptIn(ExperimentalSnapperApi::class)
-@ExperimentalPagerApi
 @Composable
 @Deprecated(
     """
@@ -363,7 +360,7 @@ fun VerticalPager(
         content = content
     )
 }
-@ExperimentalPagerApi
+
 @Composable
 internal fun Pager(
     count: Int,
@@ -486,7 +483,6 @@ internal fun Pager(
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
 private class ConsumeFlingNestedScrollConnection(
     private val consumeHorizontal: Boolean,
     private val consumeVertical: Boolean,
@@ -542,7 +538,6 @@ The androidx.compose equivalent of Pager is androidx.compose.foundation.pager.Pa
 For more migration information, please visit https://google.github.io/accompanist/pager/#migration
 """
 )
-@ExperimentalPagerApi
 @Stable
 interface PagerScope {
     /**
@@ -556,7 +551,6 @@ interface PagerScope {
     val currentPageOffset: Float
 }
 
-@ExperimentalPagerApi
 private class PagerScopeImpl(
     private val state: PagerState,
 ) : PagerScope {
@@ -580,7 +574,6 @@ The androidx.compose equivalent of Pager is androidx.compose.foundation.pager.Pa
 For more migration information, please visit https://google.github.io/accompanist/pager/#migration
 """
 )
-@ExperimentalPagerApi
 fun PagerScope.calculateCurrentOffsetForPage(page: Int): Float {
     return (currentPage - page) + currentPageOffset
 }

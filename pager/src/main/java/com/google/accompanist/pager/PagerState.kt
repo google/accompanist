@@ -63,7 +63,6 @@ For more migration information, please visit https://google.github.io/accompanis
         "androidx.compose.foundation.pager.rememberPagerState"
     )
 )
-@ExperimentalPagerApi
 @Composable
 fun rememberPagerState(
     @IntRange(from = 0) initialPage: Int = 0,
@@ -91,7 +90,6 @@ For more migration information, please visit https://google.github.io/accompanis
         "androidx.compose.foundation.pager.PagerState"
     )
 )
-@ExperimentalPagerApi
 @Stable
 class PagerState(
     @IntRange(from = 0) currentPage: Int = 0,
