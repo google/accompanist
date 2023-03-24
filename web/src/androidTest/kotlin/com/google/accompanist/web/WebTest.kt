@@ -18,6 +18,7 @@ package com.google.accompanist.web
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.os.Bundle
 import android.webkit.WebView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -611,7 +612,7 @@ class WebTest {
                 WebTestContent(
                     state,
                     idleResource,
-                    onDispose = { isOnDisposeCalled = true },
+                    onDispose = { _, _ -> isOnDisposeCalled = true },
                 )
             }
         }
@@ -736,7 +737,7 @@ private fun WebTestContent(
     modifier: Modifier = Modifier,
     navigator: WebViewNavigator = rememberWebViewNavigator(),
     onCreated: (WebView) -> Unit = { it.settings.javaScriptEnabled = true },
-    onDispose: (WebView) -> Unit = {},
+    onDispose: (WebView, Bundle) -> Unit = { _, _ -> },
     client: AccompanistWebViewClient = remember { AccompanistWebViewClient() },
     chromeClient: AccompanistWebChromeClient = remember { AccompanistWebChromeClient() },
     factory: ((Context) -> WebView)? = null

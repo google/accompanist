@@ -425,8 +425,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".webview.WebViewListSample"
-            android:label="@string/webview_list"
+            android:name=".webview.WebViewSaveStateSample"
+            android:label="@string/webview_savestate"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

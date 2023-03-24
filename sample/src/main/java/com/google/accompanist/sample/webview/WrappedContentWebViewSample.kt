@@ -18,7 +18,6 @@ package com.google.accompanist.sample.webview
 
 import android.os.Bundle
 import android.webkit.WebView
-import android.widget.FrameLayout.LayoutParams
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
@@ -81,8 +80,7 @@ class WrappedContentWebViewSample : ComponentActivity() {
 fun WrappingWebContent(
     body: String,
     onCreated: (WebView) -> Unit = {},
-    onReset: (WebView) -> Unit = {},
-    onDispose: (WebView) -> Unit = {}
+    onDispose: (WebView, Bundle) -> Unit = { _, _ -> }
 ) {
     val webViewState = rememberWebViewStateWithHTMLData(
         data = "<html><head>\n" +
@@ -98,9 +96,7 @@ fun WrappingWebContent(
         modifier = Modifier.fillMaxWidth()
             .heightIn(min = 1.dp), // A bottom sheet can't support content with 0 height.
         onCreated = onCreated,
-        onReset = onReset,
         onDispose = onDispose,
         captureBackPresses = false,
-        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
     )
 }
