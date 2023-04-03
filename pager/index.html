@@ -21,7 +21,7 @@
         <link rel="next" href="../swiperefresh/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.3">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.5">
     
     
       
@@ -29,7 +29,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.c4a75a56.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.7a7fce14.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.a0c5b2b5.min.css">
@@ -1566,19 +1566,19 @@
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 </div>
-<p>**This library is deprecated, with official pager support in <code>androidx.compose.foundation.pager</code> ** 
+<p><strong>This library is deprecated, with official pager support in <code>androidx.compose.foundation.pager</code></strong>
 The original documentation is below the migration guide.</p>
 <h2 id="migration">Migration<a class="headerlink" href="#migration" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Make sure you are using Compose 1.4.0+ before attempting to migrate to <code>androidx.compose.foundation.pager</code>. </li>
+<li>Make sure you are using Compose 1.4.0+ before attempting to migrate to <code>androidx.compose.foundation.pager</code>.</li>
 <li>Change <code>com.google.accompanist.pager.HorizontalPager</code> to <code>androidx.compose.foundation.pager.HorizontalPager</code>, and the same for <code>com.google.accompanist.pager.VerticalPager</code> to change to <code>androidx.compose.foundation.pager.VerticalPager</code></li>
-<li>Change <code>count</code> variable to <code>pageCount</code>. </li>
+<li>Change <code>count</code> variable to <code>pageCount</code>.</li>
 <li>Change <code>itemSpacing</code> parameter to <code>pageSpacing</code>.</li>
 <li>Change any usages of <code>rememberPagerState()</code> to <code>androidx.compose.foundation.pager.rememberPagerState()</code></li>
-<li>For more mappings - see the migration table below. </li>
-<li>Run your changes on device and check to see if there are any differences. </li>
+<li>For more mappings - see the migration table below.</li>
+<li>Run your changes on device and check to see if there are any differences.</li>
 </ol>
-<p>One thing to note is that there is a new parameter on <code>androidx.compose.foundation.Pager</code>, for <code>pageSize</code>, by default this 
+<p>One thing to note is that there is a new parameter on <code>androidx.compose.foundation.Pager</code>, for <code>pageSize</code>, by default this
 uses a <code>PageSize.Fill</code>, but can also be changed to use a fixed size, like <code>PageSize.Fixed(200.dp)</code> for a fixed size paging.</p>
 <h2 id="migration-table">Migration Table<a class="headerlink" href="#migration-table" title="Permanent link">&para;</a></h2>
 <p>The following is a mapping of the pager classes from accompanist to androidx.compose:</p>
@@ -1620,11 +1620,11 @@ uses a <code>PageSize.Fill</code>, but can also be changed to use a fixed size, 
 </tr>
 <tr>
 <td><code>HorizontalPagerIndicator</code></td>
-<td>Implement it yourself, or still include and use <code>accompanist-pager-indicators</code>, it now supports <code>androidx.compose.foundation.pager.HorizontalPager</code></td>
+<td>Implement it yourself, or still include and use <code>accompanist-pager-indicators</code>, it now supports <code>androidx.compose.foundation.pager.HorizontalPager</code> by explicitly providing a <code>pageCount</code> param to the <code>HorizontalPagerIndicator</code> method</td>
 </tr>
 <tr>
 <td><code>VerticalPagerIndicator</code></td>
-<td>Implement it yourself, or still include and use <code>accompanist-pager-indicators</code>, it now supports <code>androidx.compose.foundation.pager.HorizontalPager</code></td>
+<td>Implement it yourself, or still include and use <code>accompanist-pager-indicators</code>, it now supports <code>androidx.compose.foundation.pager.HorizontalPager</code> by explicitly providing a <code>pageCount</code> param to the <code>HorizontalPagerIndicator</code> method</td>
 </tr>
 <tr>
 <td><code>PagerDefaults.flingBehavior()</code></td>
@@ -1857,7 +1857,7 @@ here as an example, you can set each of the padding dimensions to whatever value
 <li>The <code>infiniteLooping</code> parameter and feature have been removed. A sample demonstrating how to achieve this effect can be found <a href="https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/pager/HorizontalPagerLoopingSample.kt">here</a>.</li>
 <li>The <code>offscreenLimit</code> parameter has been removed. We no longer have control of what items are laid out 'off screen'.</li>
 <li>The <code>dragEnabled</code> parameter has removed.</li>
-<li><code>PagerScope</code> (the page item scope) no longer implements <code>BoxScope</code>. </li>
+<li><code>PagerScope</code> (the page item scope) no longer implements <code>BoxScope</code>.</li>
 </ul>
 <hr />
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
@@ -1868,7 +1868,7 @@ here as an example, you can set each of the padding dimensions to whatever value
 <span class="n">dependencies</span><span class="w"> </span><span class="o">{</span>
 <span class="w">    </span><span class="n">implementation</span><span class="w"> </span><span class="s2">&quot;com.google.accompanist:accompanist-pager:&lt;version&gt;&quot;</span>
 
-<span class="w">    </span><span class="c1">// If using indicators, also depend on </span>
+<span class="w">    </span><span class="c1">// If using indicators, also depend on</span>
 <span class="w">    </span><span class="n">implementation</span><span class="w"> </span><span class="s2">&quot;com.google.accompanist:accompanist-pager-indicators:&lt;version&gt;&quot;</span>
 <span class="o">}</span>
 </code></pre></div>
@@ -1933,7 +1933,7 @@ limitations under the License.
     <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.efa0ade1.min.js"></script>
+      <script src="../assets/javascripts/bundle.407015b8.min.js"></script>
       
     
   </body>
