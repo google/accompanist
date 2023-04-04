@@ -19,7 +19,7 @@ package com.google.accompanist.sample.navigation.animation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -100,28 +100,28 @@ fun ExperimentalAnimationNav() {
             enterTransition = {
                 when (initialState.destination.route) {
                     "Red" ->
-                        slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+                        slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left, animationSpec = tween(700))
                     else -> null
                 }
             },
             exitTransition = {
                 when (targetState.destination.route) {
                     "Red" ->
-                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+                        slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left, animationSpec = tween(700))
                     else -> null
                 }
             },
             popEnterTransition = {
                 when (initialState.destination.route) {
                     "Red" ->
-                        slideIntoContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
+                        slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right, animationSpec = tween(700))
                     else -> null
                 }
             },
             popExitTransition = {
                 when (targetState.destination.route) {
                     "Red" ->
-                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
+                        slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, animationSpec = tween(700))
                     else -> null
                 }
             }
@@ -131,36 +131,36 @@ fun ExperimentalAnimationNav() {
             enterTransition = {
                 when (initialState.destination.route) {
                     "Blue" ->
-                        slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+                        slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left, animationSpec = tween(700))
                     "Green" ->
-                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
+                        slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up, animationSpec = tween(700))
                     else -> null
                 }
             },
             exitTransition = {
                 when (targetState.destination.route) {
                     "Blue" ->
-                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+                        slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left, animationSpec = tween(700))
                     "Green" ->
-                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
+                        slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Up, animationSpec = tween(700))
                     else -> null
                 }
             },
             popEnterTransition = {
                 when (initialState.destination.route) {
                     "Blue" ->
-                        slideIntoContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
+                        slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right, animationSpec = tween(700))
                     "Green" ->
-                        slideIntoContainer(AnimatedContentScope.SlideDirection.Down, animationSpec = tween(700))
+                        slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Down, animationSpec = tween(700))
                     else -> null
                 }
             },
             popExitTransition = {
                 when (targetState.destination.route) {
                     "Blue" ->
-                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
+                        slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, animationSpec = tween(700))
                     "Green" ->
-                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Down, animationSpec = tween(700))
+                        slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down, animationSpec = tween(700))
                     else -> null
                 }
             }
@@ -177,7 +177,7 @@ fun ExperimentalAnimationNav() {
                     when (initialState.destination.route) {
                         "Red" ->
                             slideIntoContainer(
-                                AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700)
+                                AnimatedContentTransitionScope.SlideDirection.Up, animationSpec = tween(700)
                             )
                         else -> null
                     }
@@ -186,7 +186,7 @@ fun ExperimentalAnimationNav() {
                     when (targetState.destination.route) {
                         "Red" ->
                             slideOutOfContainer(
-                                AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700)
+                                AnimatedContentTransitionScope.SlideDirection.Up, animationSpec = tween(700)
                             )
                         else -> null
                     }
@@ -195,7 +195,7 @@ fun ExperimentalAnimationNav() {
                     when (initialState.destination.route) {
                         "Red" ->
                             slideIntoContainer(
-                                AnimatedContentScope.SlideDirection.Down, animationSpec = tween(700)
+                                AnimatedContentTransitionScope.SlideDirection.Down, animationSpec = tween(700)
                             )
                         else -> null
                     }
@@ -204,7 +204,7 @@ fun ExperimentalAnimationNav() {
                     when (targetState.destination.route) {
                         "Red" ->
                             slideOutOfContainer(
-                                AnimatedContentScope.SlideDirection.Down, animationSpec = tween(700)
+                                AnimatedContentTransitionScope.SlideDirection.Down, animationSpec = tween(700)
                             )
                         else -> null
                     }

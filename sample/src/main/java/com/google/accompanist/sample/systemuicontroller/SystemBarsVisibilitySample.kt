@@ -105,16 +105,7 @@ private fun Sample() {
                     DropdownMenuItem(
                         onClick = {
                             systemUiController.systemBarsBehavior =
-                                WindowInsetsControllerCompat.BEHAVIOR_SHOW_BARS_BY_TOUCH
-                            isShowingDropdownMenu = false
-                        }
-                    ) {
-                        Text("BEHAVIOR_SHOW_BARS_BY_TOUCH")
-                    }
-                    DropdownMenuItem(
-                        onClick = {
-                            systemUiController.systemBarsBehavior =
-                                WindowInsetsControllerCompat.BEHAVIOR_SHOW_BARS_BY_SWIPE
+                                WindowInsetsControllerCompat.BEHAVIOR_DEFAULT
                             isShowingDropdownMenu = false
                         }
                     ) {
