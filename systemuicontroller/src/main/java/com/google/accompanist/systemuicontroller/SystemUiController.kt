@@ -48,8 +48,8 @@ interface SystemUiController {
     /**
      * Control for the behavior of the system bars. This value should be one of the
      * [WindowInsetsControllerCompat] behavior constants:
-     * [WindowInsetsControllerCompat.BEHAVIOR_SHOW_BARS_BY_TOUCH],
-     * [WindowInsetsControllerCompat.BEHAVIOR_SHOW_BARS_BY_SWIPE] and
+     * [WindowInsetsControllerCompat.BEHAVIOR_SHOW_BARS_BY_TOUCH] (Deprecated),
+     * [WindowInsetsControllerCompat.BEHAVIOR_DEFAULT] and
      * [WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE].
      */
     var systemBarsBehavior: Int

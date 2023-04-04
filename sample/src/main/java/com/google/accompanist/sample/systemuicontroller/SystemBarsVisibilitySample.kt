@@ -109,7 +109,7 @@ private fun Sample() {
                             isShowingDropdownMenu = false
                         }
                     ) {
-                        Text("BEHAVIOR_SHOW_BARS_BY_SWIPE")
+                        Text("BEHAVIOR_DEFAULT")
                     }
                     DropdownMenuItem(
                         onClick = {
