@@ -61,6 +61,10 @@ package com.google.accompanist.web {
     property public final String? mimeType;
   }
 
+  public static final class WebContent.NavigatorOnly extends com.google.accompanist.web.WebContent {
+    field public static final com.google.accompanist.web.WebContent.NavigatorOnly INSTANCE;
+  }
+
   public static final class WebContent.Url extends com.google.accompanist.web.WebContent {
     ctor public WebContent.Url(String url, optional java.util.Map<java.lang.String,java.lang.String> additionalHttpHeaders);
     method public String component1();
@@ -84,10 +88,14 @@ package com.google.accompanist.web {
   }
 
   public final class WebViewKt {
-    method @androidx.compose.runtime.Composable public static void WebView(com.google.accompanist.web.WebViewState state, optional androidx.compose.ui.Modifier modifier, optional boolean captureBackPresses, optional com.google.accompanist.web.WebViewNavigator navigator, optional kotlin.jvm.functions.Function1<? super android.webkit.WebView,kotlin.Unit> onCreated, optional kotlin.jvm.functions.Function1<? super android.webkit.WebView,kotlin.Unit> onReset, optional kotlin.jvm.functions.Function1<? super android.webkit.WebView,kotlin.Unit> onDispose, optional com.google.accompanist.web.AccompanistWebViewClient client, optional com.google.accompanist.web.AccompanistWebChromeClient chromeClient, optional kotlin.jvm.functions.Function1<? super android.content.Context,? extends android.webkit.WebView>? factory, optional android.widget.FrameLayout.LayoutParams layoutParams);
+    method @androidx.compose.runtime.Composable public static void WebView(com.google.accompanist.web.WebViewState state, optional androidx.compose.ui.Modifier modifier, optional boolean captureBackPresses, optional com.google.accompanist.web.WebViewNavigator navigator, optional kotlin.jvm.functions.Function1<? super android.webkit.WebView,kotlin.Unit> onCreated, optional kotlin.jvm.functions.Function2<? super android.webkit.WebView,? super android.os.Bundle,kotlin.Unit> onDispose, optional com.google.accompanist.web.AccompanistWebViewClient client, optional com.google.accompanist.web.AccompanistWebChromeClient chromeClient, optional kotlin.jvm.functions.Function1<? super android.content.Context,? extends android.webkit.WebView>? factory);
+    method @androidx.compose.runtime.Composable public static void WebView(com.google.accompanist.web.WebViewState state, android.widget.FrameLayout.LayoutParams layoutParams, optional androidx.compose.ui.Modifier modifier, optional boolean captureBackPresses, optional com.google.accompanist.web.WebViewNavigator navigator, optional kotlin.jvm.functions.Function1<? super android.webkit.WebView,kotlin.Unit> onCreated, optional kotlin.jvm.functions.Function2<? super android.webkit.WebView,? super android.os.Bundle,kotlin.Unit> onDispose, optional com.google.accompanist.web.AccompanistWebViewClient client, optional com.google.accompanist.web.AccompanistWebChromeClient chromeClient, optional kotlin.jvm.functions.Function1<? super android.content.Context,? extends android.webkit.WebView>? factory);
+    method public static androidx.compose.runtime.saveable.Saver<com.google.accompanist.web.WebViewState,java.lang.Object> getWebStateSaver();
+    method @androidx.compose.runtime.Composable public static com.google.accompanist.web.WebViewState rememberSaveableWebViewState();
     method @androidx.compose.runtime.Composable public static com.google.accompanist.web.WebViewNavigator rememberWebViewNavigator(optional kotlinx.coroutines.CoroutineScope coroutineScope);
     method @androidx.compose.runtime.Composable public static com.google.accompanist.web.WebViewState rememberWebViewState(String url, optional java.util.Map<java.lang.String,java.lang.String> additionalHttpHeaders);
     method @androidx.compose.runtime.Composable public static com.google.accompanist.web.WebViewState rememberWebViewStateWithHTMLData(String data, optional String? baseUrl, optional String encoding, optional String? mimeType, optional String? historyUrl);
+    property public static final androidx.compose.runtime.saveable.Saver<com.google.accompanist.web.WebViewState,java.lang.Object> WebStateSaver;
   }
 
   @androidx.compose.runtime.Stable public final class WebViewNavigator {
@@ -99,6 +107,7 @@ package com.google.accompanist.web {
     method public void navigateBack();
     method public void navigateForward();
     method public void reload();
+    method public kotlinx.coroutines.Job restoreState(android.os.Bundle bundle);
     method public void stopLoading();
     property public final boolean canGoBack;
     property public final boolean canGoForward;
