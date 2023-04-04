@@ -1,6 +1,6 @@
 [versions]
 
-compose = "1.4.0"
+compose = "1.5.0-alpha01"
 composeCompiler = "1.4.3"
 composeMaterial3 = "1.0.1"
 composesnapshot = "-" # a single character = no snapshot
@@ -16,7 +16,7 @@ okhttp = "3.12.13"
 coil = "1.3.2"
 
 androidxtest = "1.4.0"
-androidxnavigation = "2.5.3"
+androidxnavigation = "2.6.0-alpha08"
 androidxWindow = "1.0.0"
 
 [libraries]

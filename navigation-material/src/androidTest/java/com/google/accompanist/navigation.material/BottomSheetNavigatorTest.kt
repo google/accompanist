@@ -298,7 +298,7 @@ internal class BottomSheetNavigatorTest {
 
         assertThat(navigatorState.transitionsInProgress.value).doesNotContain(backStackEntry1)
         assertThat(navigatorState.transitionsInProgress.value).doesNotContain(backStackEntry2)
-        assertThat(backStackEntry2.getLifecycle().currentState).isEqualTo(Lifecycle.State.RESUMED)
+        assertThat(backStackEntry2.lifecycle.currentState).isEqualTo(Lifecycle.State.RESUMED)
     }
 
     @Test
@@ -387,7 +387,7 @@ internal class BottomSheetNavigatorTest {
         }
 
         composeTestRule.runOnIdle {
-            assertThat(bottomSheetEntry.getLifecycle().currentState).isEqualTo(Lifecycle.State.DESTROYED)
+            assertThat(bottomSheetEntry.lifecycle.currentState).isEqualTo(Lifecycle.State.DESTROYED)
         }
     }
 
@@ -676,7 +676,7 @@ internal class BottomSheetNavigatorTest {
         assertThat(navController.currentBackStackEntry?.destination?.route).isEqualTo(
             sheetDestination
         )
-        assertThat(navController.currentBackStackEntry?.getLifecycle()?.currentState).isEqualTo(Lifecycle.State.RESUMED)
+        assertThat(navController.currentBackStackEntry?.lifecycle?.currentState).isEqualTo(Lifecycle.State.RESUMED)
         assertThat(navigator.navigatorSheetState.isVisible).isTrue()
 
         composeTestRule.onNodeWithTag(sheetLayoutTestTag)
