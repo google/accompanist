@@ -5,8 +5,7 @@
 A library which provides paging layouts for Jetpack Compose. If you've used Android's [`ViewPager`](https://developer.android.com/reference/kotlin/androidx/viewpager/widget/ViewPager) before, it has similar properties.
 
 !!! warning
-**This library is deprecated, with official pager support in `androidx.compose.foundation.pager`**
-The original documentation is below the migration guide.
+    **This library is deprecated, with official pager support in [androidx.compose.foundation.pager](https://developer.android.com/reference/kotlin/androidx/compose/foundation/pager/package-summary).** The original documentation is below the migration guide.
 
 ## Migration
 
