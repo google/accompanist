@@ -38,5 +38,11 @@ package com.google.accompanist.adaptive {
     method public com.google.accompanist.adaptive.SplitResult calculateSplitResult(androidx.compose.ui.unit.Density density, androidx.compose.ui.unit.LayoutDirection layoutDirection, androidx.compose.ui.layout.LayoutCoordinates layoutCoordinates);
   }
 
+  public final class WindowSizeKt {
+    method @androidx.compose.runtime.Composable public static androidx.compose.ui.unit.DpRect calculateWindowBounds();
+    method @androidx.compose.runtime.Composable public static androidx.window.layout.WindowMetrics calculateWindowMetrics();
+    method @androidx.compose.runtime.Composable public static long calculateWindowSize();
+  }
+
 }
 
