@@ -60,7 +60,6 @@ fun Modifier.pagerTabIndicatorOffset(
  * [androidx.compose.foundation.pager.VerticalPager].
  */
 @OptIn(ExperimentalFoundationApi::class)
-@ExperimentalPagerApi
 fun Modifier.pagerTabIndicatorOffset(
     pagerState: androidx.compose.foundation.pager.PagerState,
     tabPositions: List<TabPosition>,
