@@ -85,7 +85,7 @@ fun WebView(
     captureBackPresses: Boolean = true,
     navigator: WebViewNavigator = rememberWebViewNavigator(),
     onCreated: (WebView) -> Unit = {},
-    onDispose: (WebView, Bundle) -> Unit = { _, _ -> },
+    onDispose: (WebView) -> Unit = {},
     client: AccompanistWebViewClient = remember { AccompanistWebViewClient() },
     chromeClient: AccompanistWebChromeClient = remember { AccompanistWebChromeClient() },
     factory: ((Context) -> WebView)? = null,
@@ -158,12 +158,12 @@ fun WebView(
     captureBackPresses: Boolean = true,
     navigator: WebViewNavigator = rememberWebViewNavigator(),
     onCreated: (WebView) -> Unit = {},
-    onDispose: (WebView, Bundle) -> Unit = { _, _ -> },
+    onDispose: (WebView) -> Unit = {},
     client: AccompanistWebViewClient = remember { AccompanistWebViewClient() },
     chromeClient: AccompanistWebChromeClient = remember { AccompanistWebChromeClient() },
     factory: ((Context) -> WebView)? = null,
 ) {
-    var webView by remember { mutableStateOf<WebView?>(null) }
+    val webView = state.webView
 
     BackHandler(captureBackPresses && navigator.canGoBack) {
         webView?.goBack()
@@ -175,10 +175,12 @@ fun WebView(
                 wv.handleNavigationEvents()
             }
         }
-    }
 
-    webView?.let { wv ->
         LaunchedEffect(wv, state) {
+            state.viewState?.let {
+                wv.restoreState(it)
+            }
+
             snapshotFlow { state.content }.collect { content ->
                 when (content) {
                     is WebContent.Url -> {
@@ -219,7 +221,7 @@ fun WebView(
 
                 webChromeClient = chromeClient
                 webViewClient = client
-            }.also { webView = it }
+            }.also { state.webView = it }
 
             // Workaround a crash on certain devices that expect WebView to be
             // wrapped in a ViewGroup.
@@ -233,10 +235,7 @@ fun WebView(
         modifier = modifier,
         onRelease = { parentFrame ->
             val wv = parentFrame.children.first() as WebView
-            val bundle = Bundle().apply { wv.saveState(this) }
-            webView = null
-
-            onDispose(wv, bundle)
+            onDispose(wv)
         }
     )
 }
@@ -255,7 +254,7 @@ open class AccompanistWebViewClient : WebViewClient() {
     open lateinit var navigator: WebViewNavigator
         internal set
 
-    override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+    override fun onPageStarted(view: WebView, url: String?, favicon: Bitmap?) {
         super.onPageStarted(view, url, favicon)
         state.loadingState = LoadingState.Loading(0.0f)
         state.errorsForCurrentRequest.clear()
@@ -265,20 +264,20 @@ open class AccompanistWebViewClient : WebViewClient() {
         state.lastLoadedUrl = url
     }
 
-    override fun onPageFinished(view: WebView?, url: String?) {
+    override fun onPageFinished(view: WebView, url: String?) {
         super.onPageFinished(view, url)
         state.loadingState = LoadingState.Finished
     }
 
-    override fun doUpdateVisitedHistory(view: WebView?, url: String?, isReload: Boolean) {
+    override fun doUpdateVisitedHistory(view: WebView, url: String?, isReload: Boolean) {
         super.doUpdateVisitedHistory(view, url, isReload)
 
-        navigator.canGoBack = view?.canGoBack() ?: false
-        navigator.canGoForward = view?.canGoForward() ?: false
+        navigator.canGoBack = view.canGoBack()
+        navigator.canGoForward = view.canGoForward()
     }
 
     override fun onReceivedError(
-        view: WebView?,
+        view: WebView,
         request: WebResourceRequest?,
         error: WebResourceError?
     ) {
@@ -302,17 +301,17 @@ open class AccompanistWebChromeClient : WebChromeClient() {
     open lateinit var state: WebViewState
         internal set
 
-    override fun onReceivedTitle(view: WebView?, title: String?) {
+    override fun onReceivedTitle(view: WebView, title: String?) {
         super.onReceivedTitle(view, title)
         state.pageTitle = title
     }
 
-    override fun onReceivedIcon(view: WebView?, icon: Bitmap?) {
+    override fun onReceivedIcon(view: WebView, icon: Bitmap?) {
         super.onReceivedIcon(view, icon)
         state.pageIcon = icon
     }
 
-    override fun onProgressChanged(view: WebView?, newProgress: Int) {
+    override fun onProgressChanged(view: WebView, newProgress: Int) {
         super.onProgressChanged(view, newProgress)
         if (state.loadingState is LoadingState.Finished) return
         state.loadingState = LoadingState.Loading(newProgress / 100.0f)
@@ -417,6 +416,18 @@ class WebViewState(webContent: WebContent) {
      * For more fine grained control use the OnError callback of the WebView.
      */
     val errorsForCurrentRequest: SnapshotStateList<WebViewError> = mutableStateListOf()
+
+    /**
+     * The saved view state from when the view was destroyed last. To restore state,
+     * use the navigator and only call loadUrl if the bundle is null.
+     * See WebViewSaveStateSample.
+     */
+    var viewState: Bundle? = null
+        internal set
+
+    // We need access to this in the state saver. An internal DisposableEffect or AndroidView
+    // onDestroy is called after the state saver and so can't be used.
+    internal var webView by mutableStateOf<WebView?>(null)
 }
 
 /**
@@ -427,7 +438,6 @@ class WebViewState(webContent: WebContent) {
  */
 @Stable
 class WebViewNavigator(private val coroutineScope: CoroutineScope) {
-
     private sealed interface NavigationEvent {
         object Back : NavigationEvent
         object Forward : NavigationEvent
@@ -446,8 +456,6 @@ class WebViewNavigator(private val coroutineScope: CoroutineScope) {
             val encoding: String? = "utf-8",
             val historyUrl: String? = null
         ) : NavigationEvent
-
-        data class RestoreState(val bundle: Bundle) : NavigationEvent
     }
 
     private val navigationEvents: MutableSharedFlow<NavigationEvent> = MutableSharedFlow(replay = 1)
@@ -470,9 +478,6 @@ class WebViewNavigator(private val coroutineScope: CoroutineScope) {
 
                 is NavigationEvent.LoadUrl -> {
                     loadUrl(event.url, event.additionalHttpHeaders)
-                }
-                is NavigationEvent.RestoreState -> {
-                    restoreState(event.bundle)
                 }
             }
         }
@@ -547,10 +552,6 @@ class WebViewNavigator(private val coroutineScope: CoroutineScope) {
      */
     fun stopLoading() {
         coroutineScope.launch { navigationEvents.emit(NavigationEvent.StopLoading) }
-    }
-
-    fun restoreState(bundle: Bundle) = coroutineScope.launch {
-        navigationEvents.emit(NavigationEvent.RestoreState(bundle))
     }
 }
 
@@ -645,18 +646,22 @@ fun rememberSaveableWebViewState(): WebViewState =
 val WebStateSaver = run {
     val pageTitleKey = "pagetitle"
     val lastLoadedUrlKey = "lastloaded"
+    val stateBundle = "bundle"
 
     mapSaver(
         save = {
+            val viewState = Bundle().apply { it.webView?.saveState(this) }
             mapOf(
                 pageTitleKey to it.pageTitle,
-                lastLoadedUrlKey to it.lastLoadedUrl
+                lastLoadedUrlKey to it.lastLoadedUrl,
+                stateBundle to viewState
             )
         },
         restore = {
             WebViewState(WebContent.NavigatorOnly).apply {
                 this.pageTitle = it[pageTitleKey] as String?
                 this.lastLoadedUrl = it[lastLoadedUrlKey] as String?
+                this.viewState = it[stateBundle] as Bundle?
             }
         }
     )

@@ -30,8 +30,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
@@ -79,16 +77,12 @@ class WebViewSaveStateSample : ComponentActivity() {
 @Composable
 private fun Home() {
     val webViewState = rememberSaveableWebViewState()
-    val webViewBundleState = rememberSaveable { mutableStateOf<Bundle?>(null) }
     val navigator = rememberWebViewNavigator()
 
     LaunchedEffect(navigator) {
-        val bundle = webViewBundleState.value
-        if (bundle != null) {
-            // If we have pre-existing saved state, load it.
-            navigator.restoreState(bundle)
-        } else {
-            // Else this is the first time load, so load the home page.
+        val bundle = webViewState.viewState
+        if (bundle == null) {
+            // This is the first time load, so load the home page.
             navigator.loadUrl("https://bbc.com")
         }
     }
@@ -96,9 +90,6 @@ private fun Home() {
     WebView(
         state = webViewState,
         navigator = navigator,
-        onDispose = { _, savedState ->
-            webViewBundleState.value = savedState
-        },
         modifier = Modifier.fillMaxSize()
     )
 }

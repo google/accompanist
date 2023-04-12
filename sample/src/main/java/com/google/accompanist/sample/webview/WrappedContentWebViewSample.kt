@@ -80,7 +80,7 @@ class WrappedContentWebViewSample : ComponentActivity() {
 fun WrappingWebContent(
     body: String,
     onCreated: (WebView) -> Unit = {},
-    onDispose: (WebView, Bundle) -> Unit = { _, _ -> }
+    onDispose: (WebView) -> Unit = {}
 ) {
     val webViewState = rememberWebViewStateWithHTMLData(
         data = "<html><head>\n" +

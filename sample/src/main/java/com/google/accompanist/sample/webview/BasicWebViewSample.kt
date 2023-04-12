@@ -130,7 +130,7 @@ class BasicWebViewSample : ComponentActivity() {
                     val webClient = remember {
                         object : AccompanistWebViewClient() {
                             override fun onPageStarted(
-                                view: WebView?,
+                                view: WebView,
                                 url: String?,
                                 favicon: Bitmap?
                             ) {
