@@ -78,9 +78,7 @@ class WrappedContentWebViewSample : ComponentActivity() {
  */
 @Composable
 fun WrappingWebContent(
-    body: String,
-    onCreated: (WebView) -> Unit = {},
-    onDispose: (WebView) -> Unit = {}
+    body: String
 ) {
     val webViewState = rememberWebViewStateWithHTMLData(
         data = "<html><head>\n" +
@@ -95,8 +93,6 @@ fun WrappingWebContent(
         state = webViewState,
         modifier = Modifier.fillMaxWidth()
             .heightIn(min = 1.dp), // A bottom sheet can't support content with 0 height.
-        onCreated = onCreated,
-        onDispose = onDispose,
         captureBackPresses = false,
     )
 }

@@ -177,10 +177,6 @@ fun WebView(
         }
 
         LaunchedEffect(wv, state) {
-            state.viewState?.let {
-                wv.restoreState(it)
-            }
-
             snapshotFlow { state.content }.collect { content ->
                 when (content) {
                     is WebContent.Url -> {
@@ -218,6 +214,10 @@ fun WebView(
                 onCreated(this)
 
                 this.layoutParams = layoutParams
+
+                state.viewState?.let {
+                    this.restoreState(it)
+                }
 
                 webChromeClient = chromeClient
                 webViewClient = client
