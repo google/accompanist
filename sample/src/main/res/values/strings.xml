@@ -64,6 +64,7 @@
 
     <string name="webview_title_basic">WebView: Basic</string>
     <string name="webview_title_wrapped">WebView: Wrapped Content</string>
+    <string name="webview_savestate">WebView: Save State on Navigation</string>
 
     <string name="adaptive_two_pane_basic">Adaptive: TwoPane Basic</string>
     <string name="adaptive_two_pane_horizontal">Adaptive: TwoPane Horizontal</string>

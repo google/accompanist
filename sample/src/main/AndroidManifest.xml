@@ -424,6 +424,15 @@
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".webview.WebViewSaveStateSample"
+            android:label="@string/webview_savestate"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".adaptive.BasicTwoPaneSample"

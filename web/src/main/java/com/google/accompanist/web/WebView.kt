@@ -18,6 +18,7 @@ package com.google.accompanist.web
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.os.Bundle
 import android.view.ViewGroup.LayoutParams
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
@@ -28,7 +29,6 @@ import android.widget.FrameLayout
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
@@ -37,12 +37,14 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.mapSaver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.view.children
 import com.google.accompanist.web.LoadingState.Finished
 import com.google.accompanist.web.LoadingState.Loading
 import kotlinx.coroutines.CoroutineScope
@@ -57,7 +59,11 @@ import kotlinx.coroutines.withContext
  * If you require more customisation you are most likely better rolling your own and using this
  * wrapper as an example.
  *
+ * The WebView attempts to set the layoutParams based on the Compose modifier passed in. If it
+ * is incorrectly sizing, use the layoutParams composable function instead.
+ *
  * @param state The webview state holder where the Uri to load is defined.
+ * @param modifier A compose modifier
  * @param captureBackPresses Set to true to have this Composable capture back presses and navigate
  * the WebView back.
  * @param navigator An optional navigator object that can be used to control the WebView's
@@ -65,6 +71,8 @@ import kotlinx.coroutines.withContext
  * @param onCreated Called when the WebView is first created, this can be used to set additional
  * settings on the WebView. WebChromeClient and WebViewClient should not be set here as they will be
  * subsequently overwritten after this lambda is called.
+ * @param onDispose Called when the WebView is destroyed. Provides a bundle which can be saved
+ * if you need to save and restore state in this WebView.
  * @param client Provides access to WebViewClient via subclassing
  * @param chromeClient Provides access to WebChromeClient via subclassing
  * @param factory An optional WebView factory for using a custom subclass of WebView
@@ -80,57 +88,9 @@ fun WebView(
     onDispose: (WebView) -> Unit = {},
     client: AccompanistWebViewClient = remember { AccompanistWebViewClient() },
     chromeClient: AccompanistWebChromeClient = remember { AccompanistWebChromeClient() },
-    factory: ((Context) -> WebView)? = null
+    factory: ((Context) -> WebView)? = null,
 ) {
-    var webView by remember { mutableStateOf<WebView?>(null) }
-
-    BackHandler(captureBackPresses && navigator.canGoBack) {
-        webView?.goBack()
-    }
-
-    LaunchedEffect(webView, navigator) {
-        with(navigator) { webView?.handleNavigationEvents() }
-    }
-
-    LaunchedEffect(webView, state) {
-        if (webView == null) return@LaunchedEffect
-
-        snapshotFlow { state.content }.collect { content ->
-            when (content) {
-                is WebContent.Url -> {
-                    webView?.loadUrl(content.url, content.additionalHttpHeaders)
-                }
-
-                is WebContent.Data -> {
-                    webView?.loadDataWithBaseURL(
-                        content.baseUrl,
-                        content.data,
-                        content.mimeType,
-                        content.encoding,
-                        content.historyUrl
-                    )
-                }
-            }
-        }
-    }
-
-    val currentOnDispose by rememberUpdatedState(onDispose)
-
-    webView?.let {
-        DisposableEffect(it) {
-            onDispose { currentOnDispose(it) }
-        }
-    }
-
-    // Set the state of the client and chrome client
-    // This is done internally to ensure they always are the same instance as the
-    // parent Web composable
-    client.state = state
-    client.navigator = navigator
-    chromeClient.state = state
-
     BoxWithConstraints(modifier) {
-
         // WebView changes it's layout strategy based on
         // it's layoutParams. We convert from Compose Modifier to
         // layout params here.
@@ -145,34 +105,139 @@ fun WebView(
             else
                 LayoutParams.WRAP_CONTENT
 
-        AndroidView(
-            factory = { context ->
-                val childView = (factory?.invoke(context) ?: WebView(context)).apply {
-                    onCreated(this)
+        val layoutParams = FrameLayout.LayoutParams(
+            width,
+            height
+        )
 
-                    layoutParams = LayoutParams(
-                        width,
-                        height
-                    )
-
-                    webChromeClient = chromeClient
-                    webViewClient = client
-                }.also { webView = it }
-
-                // Workaround a crash on certain devices that expect WebView to be
-                // wrapped in a ViewGroup.
-                // b/243567497
-                val parentLayout = FrameLayout(context)
-                parentLayout.layoutParams = LayoutParams(
-                    width,
-                    height
-                )
-                parentLayout.addView(childView)
-
-                parentLayout
-            }
+        WebView(
+            state,
+            layoutParams,
+            Modifier,
+            captureBackPresses,
+            navigator,
+            onCreated,
+            onDispose,
+            client,
+            chromeClient,
+            factory
         )
     }
+}
+
+/**
+ * A wrapper around the Android View WebView to provide a basic WebView composable.
+ *
+ * If you require more customisation you are most likely better rolling your own and using this
+ * wrapper as an example.
+ *
+ * The WebView attempts to set the layoutParams based on the Compose modifier passed in. If it
+ * is incorrectly sizing, use the layoutParams composable function instead.
+ *
+ * @param state The webview state holder where the Uri to load is defined.
+ * @param layoutParams A FrameLayout.LayoutParams object to custom size the underlying WebView.
+ * @param modifier A compose modifier
+ * @param captureBackPresses Set to true to have this Composable capture back presses and navigate
+ * the WebView back.
+ * @param navigator An optional navigator object that can be used to control the WebView's
+ * navigation from outside the composable.
+ * @param onCreated Called when the WebView is first created, this can be used to set additional
+ * settings on the WebView. WebChromeClient and WebViewClient should not be set here as they will be
+ * subsequently overwritten after this lambda is called.
+ * @param onDispose Called when the WebView is destroyed. Provides a bundle which can be saved
+ * if you need to save and restore state in this WebView.
+ * @param client Provides access to WebViewClient via subclassing
+ * @param chromeClient Provides access to WebChromeClient via subclassing
+ * @param factory An optional WebView factory for using a custom subclass of WebView
+ */
+@Composable
+fun WebView(
+    state: WebViewState,
+    layoutParams: FrameLayout.LayoutParams,
+    modifier: Modifier = Modifier,
+    captureBackPresses: Boolean = true,
+    navigator: WebViewNavigator = rememberWebViewNavigator(),
+    onCreated: (WebView) -> Unit = {},
+    onDispose: (WebView) -> Unit = {},
+    client: AccompanistWebViewClient = remember { AccompanistWebViewClient() },
+    chromeClient: AccompanistWebChromeClient = remember { AccompanistWebChromeClient() },
+    factory: ((Context) -> WebView)? = null,
+) {
+    val webView = state.webView
+
+    BackHandler(captureBackPresses && navigator.canGoBack) {
+        webView?.goBack()
+    }
+
+    webView?.let { wv ->
+        LaunchedEffect(wv, navigator) {
+            with(navigator) {
+                wv.handleNavigationEvents()
+            }
+        }
+
+        LaunchedEffect(wv, state) {
+            snapshotFlow { state.content }.collect { content ->
+                when (content) {
+                    is WebContent.Url -> {
+                        wv.loadUrl(content.url, content.additionalHttpHeaders)
+                    }
+
+                    is WebContent.Data -> {
+                        wv.loadDataWithBaseURL(
+                            content.baseUrl,
+                            content.data,
+                            content.mimeType,
+                            content.encoding,
+                            content.historyUrl
+                        )
+                    }
+
+                    is WebContent.NavigatorOnly -> {
+                        // NO-OP
+                    }
+                }
+            }
+        }
+    }
+
+    // Set the state of the client and chrome client
+    // This is done internally to ensure they always are the same instance as the
+    // parent Web composable
+    client.state = state
+    client.navigator = navigator
+    chromeClient.state = state
+
+    AndroidView(
+        factory = { context ->
+            val childView = (factory?.invoke(context) ?: WebView(context)).apply {
+                onCreated(this)
+
+                this.layoutParams = layoutParams
+
+                state.viewState?.let {
+                    this.restoreState(it)
+                }
+
+                webChromeClient = chromeClient
+                webViewClient = client
+            }.also { state.webView = it }
+
+            // Workaround a crash on certain devices that expect WebView to be
+            // wrapped in a ViewGroup.
+            // b/243567497
+            val parentLayout = FrameLayout(context)
+            parentLayout.layoutParams = layoutParams
+            parentLayout.addView(childView)
+
+            parentLayout
+        },
+        modifier = modifier,
+        onRelease = { parentFrame ->
+            val wv = parentFrame.children.first() as WebView
+            onDispose(wv)
+        }
+    )
 }
 
 /**
@@ -189,7 +254,7 @@ open class AccompanistWebViewClient : WebViewClient() {
     open lateinit var navigator: WebViewNavigator
         internal set
 
-    override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+    override fun onPageStarted(view: WebView, url: String?, favicon: Bitmap?) {
         super.onPageStarted(view, url, favicon)
         state.loadingState = LoadingState.Loading(0.0f)
         state.errorsForCurrentRequest.clear()
@@ -199,20 +264,20 @@ open class AccompanistWebViewClient : WebViewClient() {
         state.lastLoadedUrl = url
     }
 
-    override fun onPageFinished(view: WebView?, url: String?) {
+    override fun onPageFinished(view: WebView, url: String?) {
         super.onPageFinished(view, url)
         state.loadingState = LoadingState.Finished
     }
 
-    override fun doUpdateVisitedHistory(view: WebView?, url: String?, isReload: Boolean) {
+    override fun doUpdateVisitedHistory(view: WebView, url: String?, isReload: Boolean) {
         super.doUpdateVisitedHistory(view, url, isReload)
 
-        navigator.canGoBack = view?.canGoBack() ?: false
-        navigator.canGoForward = view?.canGoForward() ?: false
+        navigator.canGoBack = view.canGoBack()
+        navigator.canGoForward = view.canGoForward()
     }
 
     override fun onReceivedError(
-        view: WebView?,
+        view: WebView,
         request: WebResourceRequest?,
         error: WebResourceError?
     ) {
@@ -236,17 +301,17 @@ open class AccompanistWebChromeClient : WebChromeClient() {
     open lateinit var state: WebViewState
         internal set
 
-    override fun onReceivedTitle(view: WebView?, title: String?) {
+    override fun onReceivedTitle(view: WebView, title: String?) {
         super.onReceivedTitle(view, title)
         state.pageTitle = title
     }
 
-    override fun onReceivedIcon(view: WebView?, icon: Bitmap?) {
+    override fun onReceivedIcon(view: WebView, icon: Bitmap?) {
         super.onReceivedIcon(view, icon)
         state.pageIcon = icon
     }
 
-    override fun onProgressChanged(view: WebView?, newProgress: Int) {
+    override fun onProgressChanged(view: WebView, newProgress: Int) {
         super.onProgressChanged(view, newProgress)
         if (state.loadingState is LoadingState.Finished) return
         state.loadingState = LoadingState.Loading(newProgress / 100.0f)
@@ -272,8 +337,11 @@ sealed class WebContent {
         return when (this) {
             is Url -> url
             is Data -> baseUrl
+            is NavigatorOnly -> throw IllegalStateException("Unsupported")
         }
     }
+
+    object NavigatorOnly : WebContent()
 }
 
 internal fun WebContent.withUrl(url: String) = when (this) {
@@ -348,6 +416,18 @@ class WebViewState(webContent: WebContent) {
      * For more fine grained control use the OnError callback of the WebView.
      */
     val errorsForCurrentRequest: SnapshotStateList<WebViewError> = mutableStateListOf()
+
+    /**
+     * The saved view state from when the view was destroyed last. To restore state,
+     * use the navigator and only call loadUrl if the bundle is null.
+     * See WebViewSaveStateSample.
+     */
+    var viewState: Bundle? = null
+        internal set
+
+    // We need access to this in the state saver. An internal DisposableEffect or AndroidView
+    // onDestroy is called after the state saver and so can't be used.
+    internal var webView by mutableStateOf<WebView?>(null)
 }
 
 /**
@@ -358,7 +438,6 @@ class WebViewState(webContent: WebContent) {
  */
 @Stable
 class WebViewNavigator(private val coroutineScope: CoroutineScope) {
-
     private sealed interface NavigationEvent {
         object Back : NavigationEvent
         object Forward : NavigationEvent
@@ -379,7 +458,7 @@ class WebViewNavigator(private val coroutineScope: CoroutineScope) {
         ) : NavigationEvent
     }
 
-    private val navigationEvents: MutableSharedFlow<NavigationEvent> = MutableSharedFlow()
+    private val navigationEvents: MutableSharedFlow<NavigationEvent> = MutableSharedFlow(replay = 1)
 
     // Use Dispatchers.Main to ensure that the webview methods are called on UI thread
     internal suspend fun WebView.handleNavigationEvents(): Nothing = withContext(Dispatchers.Main) {
@@ -548,3 +627,42 @@ fun rememberWebViewStateWithHTMLData(
             data, baseUrl, encoding, mimeType, historyUrl
         )
     }
+
+/**
+ * Creates a WebView state that is remembered across Compositions and saved
+ * across activity recreation.
+ * When using saved state, you cannot change the URL via recomposition. The only way to load
+ * a URL is via a WebViewNavigator.
+ *
+ * @param data The uri to load in the WebView
+ * @sample com.google.accompanist.sample.webview.WebViewSaveStateSample
+ */
+@Composable
+fun rememberSaveableWebViewState(): WebViewState =
+    rememberSaveable(saver = WebStateSaver) {
+        WebViewState(WebContent.NavigatorOnly)
+    }
+
+val WebStateSaver = run {
+    val pageTitleKey = "pagetitle"
+    val lastLoadedUrlKey = "lastloaded"
+    val stateBundle = "bundle"
+
+    mapSaver(
+        save = {
+            val viewState = Bundle().apply { it.webView?.saveState(this) }
+            mapOf(
+                pageTitleKey to it.pageTitle,
+                lastLoadedUrlKey to it.lastLoadedUrl,
+                stateBundle to viewState
+            )
+        },
+        restore = {
+            WebViewState(WebContent.NavigatorOnly).apply {
+                this.pageTitle = it[pageTitleKey] as String?
+                this.lastLoadedUrl = it[lastLoadedUrlKey] as String?
+                this.viewState = it[stateBundle] as Bundle?
+            }
+        }
+    )
+}
