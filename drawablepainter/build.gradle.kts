@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("UnstableApiUsage")
 
 plugins {
     id("com.android.library")
@@ -28,12 +29,12 @@ kotlin {
 android {
     namespace = "com.google.accompanist.drawablepainter"
 
-    compileSdkVersion = 33
+    compileSdk = 33
 
     defaultConfig {
-        minSdkVersion 21
+        minSdk = 21
         // targetSdkVersion has no effect for libraries. This is only used for the test APK
-        targetSdkVersion 33
+        targetSdk = 33
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -51,16 +52,16 @@ android {
         kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
 
-    lintOptions {
+    lint {
         textReport = true
-        textOutput 'stdout'
+        textOutput = File("stdout")
         // We run a full lint analysis as build part in CI, so skip vital checks for assemble tasks
         checkReleaseBuilds = false
     }
 
     testOptions {
         unitTests {
-            includeAndroidResources = true
+            isIncludeAndroidResources = true
         }
         animationsDisabled = true
     }
@@ -77,4 +78,4 @@ dependencies {
     implementation(libs.kotlin.coroutines.android)
 }
 
-apply plugin: "com.vanniktech.maven.publish"
+apply(plugin = "com.vanniktech.maven.publish")
