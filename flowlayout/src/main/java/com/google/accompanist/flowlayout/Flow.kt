@@ -339,15 +339,6 @@ public enum class SizeMode {
     Expand
 }
 
-/**
- * Used to specify the alignment of a layout's children, in main axis direction.
- */
-@Deprecated(
-    """
-accompanist/MainAxisAlignment is deprecated.
-For more migration information, please visit https://google.github.io/accompanist/flowlayouts/#migration
-"""
-)
 public enum class MainAxisAlignment(internal val arrangement: Arrangement.Vertical) {
     // TODO(soboleva) support RTl in Flow
     // workaround for now - use Arrangement that equals to previous Arrangement

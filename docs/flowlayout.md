@@ -75,22 +75,23 @@ FlowRow(
 )
 ```
   
-7. `crossAxisSpacing` can be supported by adding a padding to each child
+7. `crossAxisSpacing` with `VerticalArrangement.spacedBy(50.dp)` in `FlowRow` and `HorizontalArrangement.spacedBy(50.dp)` in `FlowColumn`
 
 ``` kotlin
 FlowRow(
-    { repeat(10) { Box(Modifier.padding(bottom = 20.dp) } }
+    verticalArrangement = VerticalArrangement.spacedBy(50.dp),
+    content = { // columns }
 )
 ```
   
-8. `lastLineMainAxisAlignment` can be supported by using `alignBy` on the respective child 
-
 ``` kotlin
-FlowRow(
-    horizontalArrangement = HorizontalArrangement.spacedBy(50.dp)
-) { Box(Modifier.alignBy(FirstBaseLine) }
-
+FlowColumn(
+    horizontalArrangement = HorizontalArrangement.spacedBy(50.dp),
+    content = { // rows }
+)
 ```
+  
+8. `lastLineMainAxisAlignment` is currently not supported in Compose Flow Layouts.
 
 ### New Features: 
 #### Add weights to each child
