@@ -44,6 +44,7 @@
         <attr name="colorSurfaceInverse" />
         <attr name="colorOnSurfaceInverse" />
         <attr name="colorOutline" />
+        <attr name="colorOutlineVariant" />
         <attr name="colorError" />
         <attr name="colorOnError" />
         <attr name="colorErrorContainer" />

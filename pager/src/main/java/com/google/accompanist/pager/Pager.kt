@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
 @file:JvmName("Pager")
 
 package com.google.accompanist.pager
@@ -60,6 +61,13 @@ import kotlinx.coroutines.flow.filter
  */
 internal const val DebugLog = false
 
+@Deprecated(
+    """
+accompanist/pager is deprecated.
+The androidx.compose equivalent of Pager is androidx.compose.foundation.pager.Pager.
+For more migration information, please visit https://google.github.io/accompanist/pager/#migration
+"""
+)
 @RequiresOptIn(message = "Accompanist Pager is experimental. The API may be changed in the future.")
 @Retention(AnnotationRetention.BINARY)
 annotation class ExperimentalPagerApi
@@ -67,7 +75,13 @@ annotation class ExperimentalPagerApi
 /**
  * Contains the default values used by [HorizontalPager] and [VerticalPager].
  */
-@ExperimentalPagerApi
+@Deprecated(
+    """
+accompanist/pager is deprecated.
+The androidx.compose equivalent of Pager is androidx.compose.foundation.pager.Pager.
+For more migration information, please visit https://google.github.io/accompanist/pager/#migration
+"""
+)
 object PagerDefaults {
     /**
      * The default implementation for the `maximumFlingDistance` parameter of
@@ -107,9 +121,15 @@ object PagerDefaults {
      * @param endContentPadding The amount of content padding on the end edge of the lazy list
      * in pixels (end/bottom depending on the scrolling direction).
      */
+    @Deprecated(
+        """
+            accompanist/pager is deprecated.
+            The androidx.compose equivalent of Pager is androidx.compose.foundation.pager.Pager.
+            For more migration information, please visit https://google.github.io/accompanist/pager/#migration
+    """
+    )
     @Composable
     @ExperimentalSnapperApi
-    @Deprecated("MaximumFlingDistance has been deprecated in Snapper, replaced with snapIndex")
     @Suppress("DEPRECATION")
     fun flingBehavior(
         state: PagerState,
@@ -144,6 +164,13 @@ object PagerDefaults {
      * for the layout. Some common use cases include limiting the fling distance, and rounding up/down
      * to achieve snapping to groups of items.
      */
+    @Deprecated(
+        """
+accompanist/pager is deprecated.
+The androidx.compose equivalent of Pager is androidx.compose.foundation.pager.Pager
+For more migration information, please visit https://google.github.io/accompanist/pager/#migration
+"""
+    )
     @Composable
     @ExperimentalSnapperApi
     fun flingBehavior(
@@ -174,6 +201,16 @@ object PagerDefaults {
      * @param endContentPadding The amount of content padding on the end edge of the lazy list
      * in pixels (end/bottom depending on the scrolling direction).
      */
+    @Deprecated(
+        """
+accompanist/pager is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/pager/#migration
+""",
+        replaceWith = ReplaceWith(
+            "androidx.compose.foundation.pager.PagerDefaults.flingBehavior(state = state)",
+            "androidx.compose.foundation.pager.PagerDefaults"
+        )
+    )
     @Composable
     @ExperimentalSnapperApi
     fun flingBehavior(
@@ -218,8 +255,18 @@ object PagerDefaults {
  * [PagerScope.currentPage] and other properties in [PagerScope].
  */
 @OptIn(ExperimentalSnapperApi::class)
-@ExperimentalPagerApi
 @Composable
+@Deprecated(
+    """
+accompanist/pager is deprecated.
+The androidx.compose equivalent of HorizontalPager is androidx.compose.foundation.pager.HorizontalPager
+For more migration information, please visit https://google.github.io/accompanist/pager/#migration
+""",
+    replaceWith = ReplaceWith(
+        "HorizontalPager",
+        "androidx.compose.foundation.pager.HorizontalPager"
+    )
+)
 fun HorizontalPager(
     count: Int,
     modifier: Modifier = Modifier,
@@ -274,8 +321,14 @@ fun HorizontalPager(
  * [PagerScope.currentPage] and other properties in [PagerScope].
  */
 @OptIn(ExperimentalSnapperApi::class)
-@ExperimentalPagerApi
 @Composable
+@Deprecated(
+    """
+accompanist/pager is deprecated.
+The androidx.compose equivalent of VerticalPager is androidx.compose.foundation.pager.VerticalPager.
+For more migration information, please visit https://google.github.io/accompanist/pager/#migration
+"""
+)
 fun VerticalPager(
     count: Int,
     modifier: Modifier = Modifier,
@@ -308,7 +361,6 @@ fun VerticalPager(
     )
 }
 
-@ExperimentalPagerApi
 @Composable
 internal fun Pager(
     count: Int,
@@ -431,7 +483,6 @@ internal fun Pager(
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
 private class ConsumeFlingNestedScrollConnection(
     private val consumeHorizontal: Boolean,
     private val consumeVertical: Boolean,
@@ -480,7 +531,13 @@ private fun Velocity.consume(
 /**
  * Scope for [HorizontalPager] content.
  */
-@ExperimentalPagerApi
+@Deprecated(
+    """
+accompanist/pager is deprecated.
+The androidx.compose equivalent of Pager is androidx.compose.foundation.pager.Pager.
+For more migration information, please visit https://google.github.io/accompanist/pager/#migration
+"""
+)
 @Stable
 interface PagerScope {
     /**
@@ -494,7 +551,6 @@ interface PagerScope {
     val currentPageOffset: Float
 }
 
-@ExperimentalPagerApi
 private class PagerScopeImpl(
     private val state: PagerState,
 ) : PagerScope {
@@ -511,7 +567,13 @@ private class PagerScopeImpl(
  *
  * @sample com.google.accompanist.sample.pager.HorizontalPagerWithOffsetTransition
  */
-@ExperimentalPagerApi
+@Deprecated(
+    """
+accompanist/pager is deprecated.
+The androidx.compose equivalent of Pager is androidx.compose.foundation.pager.Pager.
+For more migration information, please visit https://google.github.io/accompanist/pager/#migration
+"""
+)
 fun PagerScope.calculateCurrentOffsetForPage(page: Int): Float {
     return (currentPage - page) + currentPageOffset
 }

@@ -254,7 +254,7 @@ class WebTest {
                 state,
                 idleResource,
                 client = object : AccompanistWebViewClient() {
-                    override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                    override fun onPageStarted(view: WebView, url: String?, favicon: Bitmap?) {
                         super.onPageStarted(view, url, favicon)
                         pageStartCalled = true
                     }
@@ -284,7 +284,7 @@ class WebTest {
                 state,
                 idleResource,
                 chromeClient = object : AccompanistWebChromeClient() {
-                    override fun onReceivedTitle(view: WebView?, title: String?) {
+                    override fun onReceivedTitle(view: WebView, title: String?) {
                         super.onReceivedTitle(view, title)
                         titleReceived = title
                     }
@@ -626,7 +626,7 @@ class WebTest {
         lateinit var state: WebViewState
         var pageStartedCalled = 0
         val client = object : AccompanistWebViewClient() {
-            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+            override fun onPageStarted(view: WebView, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
                 pageStartedCalled++
             }

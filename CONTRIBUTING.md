@@ -29,3 +29,13 @@ All submissions, including submissions by project members, require review. We
 use GitHub pull requests for this purpose. Consult
 [GitHub Help](https://help.github.com/articles/about-pull-requests/) for more
 information on using pull requests.
+
+## API Changes
+
+If you are changing any public APIs, you need to run `./gradlew metalavaGenerateSignatureRelease` which will 
+update the API signatures.
+
+## Formatting 
+
+To apply formatting, we use spotless. Run `./gradlew :pager:spotlessApply` to format the code according 
+to the spec.

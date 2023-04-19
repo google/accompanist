@@ -245,6 +245,7 @@ class DialogSystemUiControllerTest {
         }
     }
 
+    @Suppress("DEPRECATION")
     @Test
     @SdkSuppress(minSdkVersion = 30) // TODO: https://issuetracker.google.com/issues/189366125
     fun systemBarsBehavior_showBarsByTouch() {
@@ -270,11 +271,11 @@ class DialogSystemUiControllerTest {
 
         rule.scenario.onActivity {
             controller.systemBarsBehavior =
-                WindowInsetsControllerCompat.BEHAVIOR_SHOW_BARS_BY_SWIPE
+                WindowInsetsControllerCompat.BEHAVIOR_DEFAULT
         }
 
         assertThat(WindowCompat.getInsetsController(window, contentView).systemBarsBehavior)
-            .isEqualTo(WindowInsetsControllerCompat.BEHAVIOR_SHOW_BARS_BY_SWIPE)
+            .isEqualTo(WindowInsetsControllerCompat.BEHAVIOR_DEFAULT)
     }
 
     @Test

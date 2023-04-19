@@ -1,22 +1,22 @@
 [versions]
 
-compose = "1.4.0-alpha04"
-composeCompiler = "1.4.0-alpha02"
+compose = "1.5.0-alpha01"
+composeCompiler = "1.4.3"
 composeMaterial3 = "1.0.1"
 composesnapshot = "-" # a single character = no snapshot
 
 # gradlePlugin and lint need to be updated together
-gradlePlugin = "7.3.1"
+gradlePlugin = "7.4.1"
 lintMinCompose = "30.0.0"
 
 ktlint = "0.45.2"
-kotlin = "1.7.21"
+kotlin = "1.8.10"
 coroutines = "1.6.4"
 okhttp = "3.12.13"
 coil = "1.3.2"
 
 androidxtest = "1.4.0"
-androidxnavigation = "2.5.3"
+androidxnavigation = "2.6.0-alpha08"
 androidxWindow = "1.0.0"
 
 [libraries]
@@ -37,7 +37,7 @@ snapper = "dev.chrisbanes.snapper:snapper:0.2.2"
 
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "gradlePlugin" }
 gradleMavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.17.0"
-metalavaGradle = "me.tylerbwong.gradle:metalava-gradle:0.1.9"
+metalavaGradle = "me.tylerbwong.gradle.metalava:plugin:0.3.2"
 
 glide = "com.github.bumptech.glide:glide:4.12.0"
 
@@ -64,15 +64,16 @@ androidx-core = "androidx.core:core-ktx:1.8.0"
 androidx-activity-compose = "androidx.activity:activity-compose:1.5.1"
 androidx-fragment = "androidx.fragment:fragment-ktx:1.5.1"
 androidx-dynamicanimation = "androidx.dynamicanimation:dynamicanimation-ktx:1.0.0-alpha03"
-androidx-lifecycle-runtime = "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
-androidx-lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
+androidx-lifecycle-runtime = "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
+androidx-lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1"
+androidx-lifecycle-common = "androidx.lifecycle:lifecycle-common-java8:2.6.0"
 androidx-window = { module = "androidx.window:window", version.ref = "androidxWindow" }
 androidx-window-testing = { module = "androidx.window:window-testing", version.ref = "androidxWindow" }
 
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidxnavigation" }
 androidx-navigation-testing = { module = "androidx.navigation:navigation-testing", version.ref = "androidxnavigation" }
 
-mdc = "com.google.android.material:material:1.7.0"
+mdc = "com.google.android.material:material:1.8.0"
 
 napier = "io.github.aakira:napier:1.4.1"
 

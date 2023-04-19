@@ -2,9 +2,11 @@
 package com.google.accompanist.flowlayout {
 
   @Deprecated public enum FlowCrossAxisAlignment {
-    enum_constant @Deprecated public static final com.google.accompanist.flowlayout.FlowCrossAxisAlignment Center;
-    enum_constant @Deprecated public static final com.google.accompanist.flowlayout.FlowCrossAxisAlignment End;
-    enum_constant @Deprecated public static final com.google.accompanist.flowlayout.FlowCrossAxisAlignment Start;
+    method public static com.google.accompanist.flowlayout.FlowCrossAxisAlignment valueOf(String name) throws java.lang.IllegalArgumentException;
+    method public static com.google.accompanist.flowlayout.FlowCrossAxisAlignment[] values();
+    enum_constant public static final com.google.accompanist.flowlayout.FlowCrossAxisAlignment Center;
+    enum_constant public static final com.google.accompanist.flowlayout.FlowCrossAxisAlignment End;
+    enum_constant public static final com.google.accompanist.flowlayout.FlowCrossAxisAlignment Start;
   }
 
   public final class FlowKt {
@@ -13,17 +15,21 @@ package com.google.accompanist.flowlayout {
   }
 
   @Deprecated public enum MainAxisAlignment {
-    enum_constant @Deprecated public static final com.google.accompanist.flowlayout.MainAxisAlignment Center;
-    enum_constant @Deprecated public static final com.google.accompanist.flowlayout.MainAxisAlignment End;
-    enum_constant @Deprecated public static final com.google.accompanist.flowlayout.MainAxisAlignment SpaceAround;
-    enum_constant @Deprecated public static final com.google.accompanist.flowlayout.MainAxisAlignment SpaceBetween;
-    enum_constant @Deprecated public static final com.google.accompanist.flowlayout.MainAxisAlignment SpaceEvenly;
-    enum_constant @Deprecated public static final com.google.accompanist.flowlayout.MainAxisAlignment Start;
+    method public static com.google.accompanist.flowlayout.MainAxisAlignment valueOf(String name) throws java.lang.IllegalArgumentException;
+    method public static com.google.accompanist.flowlayout.MainAxisAlignment[] values();
+    enum_constant public static final com.google.accompanist.flowlayout.MainAxisAlignment Center;
+    enum_constant public static final com.google.accompanist.flowlayout.MainAxisAlignment End;
+    enum_constant public static final com.google.accompanist.flowlayout.MainAxisAlignment SpaceAround;
+    enum_constant public static final com.google.accompanist.flowlayout.MainAxisAlignment SpaceBetween;
+    enum_constant public static final com.google.accompanist.flowlayout.MainAxisAlignment SpaceEvenly;
+    enum_constant public static final com.google.accompanist.flowlayout.MainAxisAlignment Start;
   }
 
   @Deprecated public enum SizeMode {
-    enum_constant @Deprecated public static final com.google.accompanist.flowlayout.SizeMode Expand;
-    enum_constant @Deprecated public static final com.google.accompanist.flowlayout.SizeMode Wrap;
+    method public static com.google.accompanist.flowlayout.SizeMode valueOf(String name) throws java.lang.IllegalArgumentException;
+    method public static com.google.accompanist.flowlayout.SizeMode[] values();
+    enum_constant public static final com.google.accompanist.flowlayout.SizeMode Expand;
+    enum_constant public static final com.google.accompanist.flowlayout.SizeMode Wrap;
   }
 
 }

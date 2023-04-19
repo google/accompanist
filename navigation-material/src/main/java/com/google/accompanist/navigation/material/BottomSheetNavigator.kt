@@ -16,6 +16,7 @@
 
 package com.google.accompanist.navigation.material
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material.ExperimentalMaterialApi
@@ -42,9 +43,9 @@ import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
 import androidx.navigation.NavigatorState
 import com.google.accompanist.navigation.material.BottomSheetNavigator.Destination
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.transform
 
 /**
@@ -200,11 +201,16 @@ class BottomSheetNavigator(
                     // the sheet first before deciding whether to re-show it or keep it hidden
                     try {
                         sheetState.hide()
+                    } catch (_: CancellationException) {
+                        // We catch but ignore possible cancellation exceptions as we don't want
+                        // them to bubble up and cancel the whole produceState coroutine
                     } finally {
                         emit(backStackEntries.lastOrNull())
                     }
                 }
-                .collectLatest { value = it }
+                .collect {
+                    value = it
+                }
         }
 
         if (retainedEntry != null) {
@@ -247,6 +253,7 @@ class BottomSheetNavigator(
         content = {}
     )
 
+    @SuppressLint("NewApi") // b/187418647
     override fun navigate(
         entries: List<NavBackStackEntry>,
         navOptions: NavOptions?,

@@ -18,6 +18,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        gradlePluginPortal()
     }
 
     dependencies {
@@ -41,6 +42,7 @@ plugins {
 
 apply plugin: 'org.jetbrains.dokka'
 apply plugin: 'com.dropbox.affectedmoduledetector'
+apply plugin: 'com.diffplug.spotless'
 
 tasks.withType(org.jetbrains.dokka.gradle.DokkaMultiModuleTask).configureEach {
     outputDirectory = rootProject.file('docs/api')
@@ -146,16 +148,6 @@ subprojects {
             } else {
                 project.ext.set(prop.key, prop.value)
             }
-        }
-    }
-
-    // If we have a POM Artifact ID, we should generate API files
-    if (project.hasProperty('POM_ARTIFACT_ID')) {
-        apply plugin: 'me.tylerbwong.gradle.metalava'
-
-        metalava {
-            filename = "api/current.api"
-            reportLintsAsErrors = true
         }
     }
 
