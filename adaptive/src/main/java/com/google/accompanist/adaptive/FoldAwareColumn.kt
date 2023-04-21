@@ -69,6 +69,7 @@ import kotlin.math.roundToInt
  * @param horizontalAlignment the horizontal alignment of the layout's children.
  */
 @Composable
+@ExperimentalAdaptiveApi
 public fun FoldAwareColumn(
     displayFeatures: List<DisplayFeature>,
     modifier: Modifier = Modifier,

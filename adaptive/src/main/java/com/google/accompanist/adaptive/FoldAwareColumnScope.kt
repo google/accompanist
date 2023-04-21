@@ -34,6 +34,7 @@ import androidx.compose.ui.platform.debugInspectorInfo
  */
 @LayoutScopeMarker
 @Immutable
+@ExperimentalAdaptiveApi
 public interface FoldAwareColumnScope {
     /**
      * Ignore the fold when placing this child within the [FoldAwareColumn].
@@ -91,6 +92,7 @@ public interface FoldAwareColumnScope {
     fun Modifier.alignBy(alignmentLineBlock: (Measured) -> Int): Modifier
 }
 
+@ExperimentalAdaptiveApi
 internal object FoldAwareColumnScopeInstance : FoldAwareColumnScope {
     @Stable
     override fun Modifier.ignoreFold() = this.then(

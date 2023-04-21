@@ -45,6 +45,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.adaptive.ExperimentalAdaptiveApi
 import com.google.accompanist.adaptive.FoldAwareColumn
 import com.google.accompanist.adaptive.calculateDisplayFeatures
 import com.google.accompanist.sample.AccompanistSampleTheme
@@ -64,6 +65,7 @@ class DraggableFoldAwareColumnSample : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalAdaptiveApi::class)
 @Composable
 fun DraggableExample(activity: Activity) {
     var offset by remember { mutableStateOf(Offset(0f, 0f)) }

@@ -5,11 +5,14 @@ package com.google.accompanist.adaptive {
     method @androidx.compose.runtime.Composable public static java.util.List<androidx.window.layout.DisplayFeature> calculateDisplayFeatures(android.app.Activity activity);
   }
 
-  public final class FoldAwareColumnKt {
-    method @androidx.compose.runtime.Composable public static void FoldAwareColumn(java.util.List<? extends androidx.window.layout.DisplayFeature> displayFeatures, optional androidx.compose.ui.Modifier modifier, optional androidx.compose.foundation.layout.PaddingValues foldPadding, optional androidx.compose.ui.Alignment.Horizontal horizontalAlignment, kotlin.jvm.functions.Function1<? super com.google.accompanist.adaptive.FoldAwareColumnScope,kotlin.Unit> content);
+  @kotlin.RequiresOptIn(message="This APIs are experimental and may change in the future.") @kotlin.annotation.Retention(kotlin.annotation.AnnotationRetention.BINARY) public @interface ExperimentalAdaptiveApi {
   }
 
-  @androidx.compose.foundation.layout.LayoutScopeMarker @androidx.compose.runtime.Immutable public interface FoldAwareColumnScope {
+  public final class FoldAwareColumnKt {
+    method @androidx.compose.runtime.Composable @com.google.accompanist.adaptive.ExperimentalAdaptiveApi public static void FoldAwareColumn(java.util.List<? extends androidx.window.layout.DisplayFeature> displayFeatures, optional androidx.compose.ui.Modifier modifier, optional androidx.compose.foundation.layout.PaddingValues foldPadding, optional androidx.compose.ui.Alignment.Horizontal horizontalAlignment, kotlin.jvm.functions.Function1<? super com.google.accompanist.adaptive.FoldAwareColumnScope,kotlin.Unit> content);
+  }
+
+  @androidx.compose.foundation.layout.LayoutScopeMarker @androidx.compose.runtime.Immutable @com.google.accompanist.adaptive.ExperimentalAdaptiveApi public interface FoldAwareColumnScope {
     method @androidx.compose.runtime.Stable public androidx.compose.ui.Modifier align(androidx.compose.ui.Modifier, androidx.compose.ui.Alignment.Horizontal alignment);
     method @androidx.compose.runtime.Stable public androidx.compose.ui.Modifier alignBy(androidx.compose.ui.Modifier, androidx.compose.ui.layout.VerticalAlignmentLine alignmentLine);
     method @androidx.compose.runtime.Stable public androidx.compose.ui.Modifier alignBy(androidx.compose.ui.Modifier, kotlin.jvm.functions.Function1<? super androidx.compose.ui.layout.Measured,java.lang.Integer> alignmentLineBlock);
