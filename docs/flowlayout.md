@@ -145,7 +145,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.google.accompanist:accompanist-flowlayout:<version>"
+    implementation "androidx.compose.foundation:foundation:<compose-version>"
 }
 ```
 
