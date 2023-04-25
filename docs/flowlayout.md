@@ -133,7 +133,7 @@ FlowRow(maxItemsInEachRow = 3)
 ## Examples
 
 For examples, refer to the [Flow Row samples](https://android.googlesource.com/platform/frameworks/support/+/refs/heads/androidx-main/compose/foundation/foundation-layout/samples/src/main/java/androidx/compose/foundation/layout/samples/FlowRowSample.kt) 
-and the [Flow Column samples](https://android.googlesource.com/platform/frameworks/support/+/refs/heads/androidx-main/compose/foundation/foundation-layout/samples/src/main/java/androidx/compose/foundation/layout/samples/FlowColumnSamples.kt).
+and the [Flow Column samples](https://android.googlesource.com/platform/frameworks/support/+/refs/heads/androidx-main/compose/foundation/foundation-layout/samples/src/main/java/androidx/compose/foundation/layout/samples/FlowColumnSample.kt).
 
 ## Download
 
