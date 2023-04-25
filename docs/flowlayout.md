@@ -35,11 +35,16 @@ import androidx.compose.foundation.layout.FlowRow
 ```
   
 For `FlowColumn`:  
-2. Replace Modifier `mainAxisAlignment` with `verticalArrangement`  
+
+2. Replace Modifier `mainAxisAlignment` with `verticalArrangement` 
+
 3. Replace Modifier `crossAxisAlignment` with `horizontalAlignment`
+
   
 For `FlowRow`  
+
 4. `mainAxisAlignment` is now `horizontalArrangement`  
+
 5. `crossAxisAlignment` is now `verticalAlignment`  
 
 ``` kotlin
