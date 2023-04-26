@@ -8,8 +8,8 @@ Flow Layouts in Androidx.
 The official `androidx.compose.foundation` FlowLayouts support is very similar to accompanist/flowlayouts, with a few changes.
 
 It is most similar to `Row` and `Column` and shares similar modifiers and the scopes. 
-Unlike the standard `Row` and `Column` composables, these layout children across multiple 
-rows/columns if they exceed the available space.
+Unlike the standard `Row` and `Column` composables, if it runs out of space on the current row, 
+the children are placed in the next line, and this repeats until the children are fully placed.
 
 ## Usage
   
