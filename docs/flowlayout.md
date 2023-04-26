@@ -94,21 +94,17 @@ FlowColumn(
 
 ### New Features: 
 #### Add weights to each child
-To scale an item based on the size of its parent and the space available, adding weights are perfect. 
-Adding a weight in `FlowRow` and `FlowColumn` is different than in `Row` and `Column`
+To scale an item based on the size of its parent and the space available, adding weights is helpful. 
+Adding a weight in `FlowRow` and `FlowColumn` is different than in `Row` and `Column`.
 
-In `FlowLayout` it is based on the number of items placed on the row it falls on and their weights. 
+In `FlowLayout`, it is based on the number of items placed on the row it falls on and their weights. 
 First we check to see if an item can fit in the current row or column based on its intrinsic size. 
-If it fits and has a weight, its final size is grown based on the available space and the number of items 
+If it fits and has a weight, its final size is expanded based on the available space and the number of items 
 with weights placed on the row or column it falls on. 
 
-Because of the nature of `FlowLayouts` an item only grows and does not reduce in size. Its width in `FlowRow`
-or height in `FlowColumn` determines it minimum width or height, and then grows based on its weight
-and its available space, and the other items that fall on its row and column and their respective weights.
-
-If it cannot fit based on its intrinsic minimum size, then it is placed in the next row and column. 
-Once all the number of items that can fit the new row and column is calculated, 
-then its final width and size is calculated 
+Because of the nature of `FlowLayouts` an item only expands and does not shrink in size. Its width in `FlowRow`
+or height in `FlowColumn` determines it minimum width or height, and then expands based on its weight and 
+the available space remaining after row items' width/height have been determined.
 
 ``` kotlin
 FlowRow() { 
