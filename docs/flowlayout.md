@@ -120,8 +120,9 @@ FlowRow() {
 You may choose to limit the number of items that appear in each row in `FlowRow` or column in `FlowColumn`
 This can be configured using `maxItemsInEachRow` or `maxItemsInEachColumn`: 
 ``` kotlin
-FlowRow(maxItemsInEachRow = 3)
-    { repeat(10) { Box(Modifier.size(20.dp).weight(1f, true) } }
+FlowRow(maxItemsInEachRow = 3) { 
+     repeat(10) { Box(Modifier.size(20.dp).weight(1f, true) } 
+}
 ```
 
 ## Examples
