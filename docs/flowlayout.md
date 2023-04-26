@@ -67,7 +67,7 @@ FlowRow(
   
 6. Replace `mainAxisSpacing` with `HorizontalArrangement.spacedBy(50.dp, Alignment.*)` in `FlowRow` and `VerticalArrangement.spacedBy(50.dp, Alignment.*)` in `FlowColumn`.
 
-7. `crossAxisSpacing` with `VerticalArrangement.spacedBy(50.dp, Alignment.*)` in `FlowRow` and `HorizontalArrangement.spacedBy(50.dp)` in `FlowColumn`. 
+7. Replace `crossAxisSpacing` with `VerticalArrangement.spacedBy(50.dp, Alignment.*)` in `FlowRow` and `HorizontalArrangement.spacedBy(50.dp)` in `FlowColumn`. 
 
 Here `Alignment.*` is the Alignment you wish to use such as `Alignment.Start`, `Alignment.Top` etc
 
