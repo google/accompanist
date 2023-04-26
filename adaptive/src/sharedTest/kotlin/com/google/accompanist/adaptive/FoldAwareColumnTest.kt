@@ -52,6 +52,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
+@OptIn(ExperimentalAdaptiveApi::class)
 class FoldAwareColumnTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
@@ -151,7 +152,7 @@ class FoldAwareColumnTest {
         val foldBoundsPx = simulateFoldingFeature()
 
         with(density) {
-            assertEquals(foldBoundsPx.bottom + foldPaddingDp.toPx(), secondSpacerTopPx)
+            assertEquals(foldBoundsPx.bottom + foldPaddingDp.roundToPx(), secondSpacerTopPx)
         }
     }
 
@@ -171,7 +172,7 @@ class FoldAwareColumnTest {
         val foldBoundsPx = simulateFoldingFeature()
 
         with(density) {
-            assertEquals(foldBoundsPx.bottom + foldPaddingBottom.toPx(), secondSpacerTopPx)
+            assertEquals(foldBoundsPx.bottom + foldPaddingBottom.roundToPx(), secondSpacerTopPx)
         }
     }
 
