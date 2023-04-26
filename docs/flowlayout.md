@@ -38,20 +38,20 @@ For `FlowColumn`:
 
 2. Replace Modifier `mainAxisAlignment` with `verticalArrangement` 
 
-3. Replace Modifier `crossAxisAlignment` with `horizontalAlignment`
+3. Replace Modifier `crossAxisAlignment` with `horizontalArrangement`
 
   
 For `FlowRow`  
 
 4. `mainAxisAlignment` is now `horizontalArrangement`  
 
-5. `crossAxisAlignment` is now `verticalAlignment`  
+5. `crossAxisAlignment` is now `verticalArrangement`  
 
 ``` kotlin
 FlowColumn(
     modifier = Modifier,
     verticalArrangement = Arrangement.Top,
-    horizontalAlignment = Alignment.Start,
+    horizontalArrangement = Arrangement.Start,
     content = { // columns }
 ) 
 ```
@@ -60,39 +60,33 @@ FlowColumn(
 FlowRow(
     modifier = Modifier,
     horizontalArrangement = Arrangement.Start,
-    verticalAlignment = Alignment.Top,
+    verticalArrangement = Arrangement.Top,
     content = { // rows }
 ) 
 ```
   
-6. Replace `mainAxisSpacing` with `VerticalArrangement.spacedBy(50.dp)` in `FlowColumn` and `HorizontalArrangement.spacedBy(50.dp)` in `FlowRow`
-``` kotlin
-FlowColumn(
-    verticalArrangement = VerticalArrangement.spacedBy(50.dp),
-    content = { // columns }
-)
-```
+6. Replace `mainAxisSpacing` with `HorizontalArrangement.spacedBy(50.dp, Alignment.*)` in `FlowRow` and `VerticalArrangement.spacedBy(50.dp, Alignment.*)` in `FlowColumn`.
+
+7. `crossAxisSpacing` with `VerticalArrangement.spacedBy(50.dp, Alignment.*)` in `FlowRow` and `HorizontalArrangement.spacedBy(50.dp)` in `FlowColumn`. 
+
+Here `Alignment.*` is the Alignment you wish to use such as `Alignment.Start`, `Alignment.Top` etc
+
   
 ``` kotlin
 FlowRow(
-    horizontalArrangement = HorizontalArrangement.spacedBy(50.dp),
+    modifier = Modifier,
+    horizontalArrangement = HorizontalArrangement.spacedBy(50.dp, Alignment.Start),
+    verticalArrangement = VerticalArrangement.spacedBy(50.dp, Alignment.Top),
     content = { // rows }
 )
 ```
-  
-7. `crossAxisSpacing` with `VerticalArrangement.spacedBy(50.dp)` in `FlowRow` and `HorizontalArrangement.spacedBy(50.dp)` in `FlowColumn`
 
 ``` kotlin
-FlowRow(
-    verticalArrangement = VerticalArrangement.spacedBy(50.dp),
-    content = { // columns }
-)
-```
-  
-``` kotlin
 FlowColumn(
-    horizontalArrangement = HorizontalArrangement.spacedBy(50.dp),
-    content = { // rows }
+    modifier = Modifier,
+    verticalArrangement = VerticalArrangement.spacedBy(50.dp, Alignment.Top),
+    horizontalArrangement = HorizontalArrangement.spacedBy(50.dp, Alignment.Start),
+    content = { // columns }
 )
 ```
   
@@ -117,9 +111,9 @@ Once all the number of items that can fit the new row and column is calculated,
 then its final width and size is calculated 
 
 ``` kotlin
-FlowRow()
-    { repeat(20) { Box(Modifier.size(20.dp).weight(1f, true) } }
-
+FlowRow() { 
+     repeat(20) { Box(Modifier.size(20.dp).weight(1f, true) } 
+}
 ```
 
 #### Create a maximum number of items in row or column
