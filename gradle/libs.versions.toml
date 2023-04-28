@@ -5,7 +5,7 @@ composeCompiler = "1.4.6"
 composeMaterial3 = "1.0.1"
 composesnapshot = "-" # a single character = no snapshot
 
-dokka = "1.5.0"
+dokka = "1.8.10"
 
 # gradlePlugin and lint need to be updated together
 gradlePlugin = "8.0.0"
