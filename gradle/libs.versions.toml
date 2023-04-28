@@ -22,7 +22,7 @@ androidxnavigation = "2.6.0-alpha08"
 androidxWindow = "1.0.0"
 
 metalava = "0.3.2"
-vanniktechPublish = "0.17.0"
+vanniktechPublish = "0.25.2"
 
 [libraries]
 compose-ui-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
