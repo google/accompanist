@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,11 @@
 @file:Suppress("UnstableApiUsage")
 
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
-    id("org.jetbrains.dokka")
-    id("me.tylerbwong.gradle.metalava")
+    id(libs.plugins.android.library.get().pluginId)
+    id(libs.plugins.android.kotlin.get().pluginId)
+    id(libs.plugins.jetbrains.dokka.get().pluginId)
+    id(libs.plugins.gradle.metalava.get().pluginId)
+    id(libs.plugins.vanniktech.maven.publish.get().pluginId)
 }
 
 kotlin {
@@ -77,5 +78,3 @@ dependencies {
     implementation(libs.compose.ui.ui)
     implementation(libs.kotlin.coroutines.android)
 }
-
-apply(plugin = "com.vanniktech.maven.publish")
