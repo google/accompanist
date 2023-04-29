@@ -99,5 +99,6 @@ markdown_extensions:
       permalink: true
   - pymdownx.betterem
   - pymdownx.superfences
-  - pymdownx.tabbed
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.details
