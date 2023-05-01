@@ -13,19 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("UnstableApiUsage")
 
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
+    id(libs.plugins.android.library.get().pluginId)
+    id(libs.plugins.android.kotlin.get().pluginId)
 }
 
 android {
     namespace = "com.google.accompanist.internal.test"
 
-    compileSdkVersion = 33
+    compileSdk = 33
 
     defaultConfig {
-        minSdkVersion 21
+        minSdk = 21
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -43,18 +44,18 @@ android {
         kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
 
-    lintOptions {
+    lint {
         textReport = true
-        textOutput 'stdout'
+        textOutput = File("stdout")
         // We run a full lint analysis as build part in CI, so skip vital checks for assemble tasks
         checkReleaseBuilds = false
     }
-
-    packagingOptions {
+    packaging {
         // Certain libraries include licence files in their JARs. Exclude them to enable
         // our test APK to build (has no effect on our AARs)
-        excludes += "/META-INF/AL2.0"
-        excludes += "/META-INF/LGPL2.1"
+        resources {
+            excludes += listOf("/META-INF/AL2.0", "/META-INF/LGPL2.1")
+        }
     }
 }
 
