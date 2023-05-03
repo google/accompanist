@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("UnstableApiUsage")
 
 plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
-    id 'org.jetbrains.dokka'
-    id 'me.tylerbwong.gradle.metalava'
+    id(libs.plugins.android.library.get().pluginId)
+    id(libs.plugins.android.kotlin.get().pluginId)
+    id(libs.plugins.jetbrains.dokka.get().pluginId)
+    id(libs.plugins.gradle.metalava.get().pluginId)
+    id(libs.plugins.vanniktech.maven.publish.get().pluginId)
 }
 
 kotlin {
@@ -26,43 +28,43 @@ kotlin {
 }
 
 android {
-    namespace "com.google.accompanist.drawablepainter"
+    namespace = "com.google.accompanist.drawablepainter"
 
-    compileSdkVersion 33
+    compileSdk = 33
 
     defaultConfig {
-        minSdkVersion 21
+        minSdk = 21
         // targetSdkVersion has no effect for libraries. This is only used for the test APK
-        targetSdkVersion 33
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        targetSdk = 33
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     buildFeatures {
-        buildConfig false
-        compose true
+        buildConfig = false
+        compose = true
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion libs.versions.composeCompiler.get()
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
 
-    lintOptions {
-        textReport true
-        textOutput 'stdout'
+    lint {
+        textReport = true
+        textOutput = File("stdout")
         // We run a full lint analysis as build part in CI, so skip vital checks for assemble tasks
-        checkReleaseBuilds false
+        checkReleaseBuilds = false
     }
 
     testOptions {
         unitTests {
-            includeAndroidResources = true
+            isIncludeAndroidResources = true
         }
-        animationsDisabled true
+        animationsDisabled = true
     }
 }
 
@@ -73,8 +75,6 @@ metalava {
 }
 
 dependencies {
-    implementation libs.compose.ui.ui
-    implementation libs.kotlin.coroutines.android
+    implementation(libs.compose.ui.ui)
+    implementation(libs.kotlin.coroutines.android)
 }
-
-apply plugin: "com.vanniktech.maven.publish"
