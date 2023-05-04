@@ -49,7 +49,7 @@ import kotlin.math.max
 @Deprecated(
     """
 accompanist/FlowRow is deprecated.
-For more migration information, please visit https://google.github.io/accompanist/flowlayouts/#migration
+For more migration information, please visit https://google.github.io/accompanist/flowlayout/
 """,
     replaceWith = ReplaceWith(
         "FlowRow",
@@ -98,7 +98,7 @@ public fun FlowRow(
 @Deprecated(
     """
 accompanist/FlowColumn is deprecated.
-For more migration information, please visit https://google.github.io/accompanist/flowlayouts/#migration
+For more migration information, please visit https://google.github.io/accompanist/flowlayout/
 """,
     replaceWith = ReplaceWith(
         "FlowColumn",
@@ -135,7 +135,7 @@ public fun FlowColumn(
 @Deprecated(
     """
 accompanist/FlowCrossAxisAlignment is deprecated.
-For more migration information, please visit https://google.github.io/accompanist/flowlayouts/#migration
+For more migration information, please visit https://google.github.io/accompanist/flowlayout/
 """
 )
 public enum class FlowCrossAxisAlignment {
@@ -156,7 +156,7 @@ public enum class FlowCrossAxisAlignment {
 @Deprecated(
     """
 accompanist/FlowMainAxisAlignment is deprecated.
-For more migration information, please visit https://google.github.io/accompanist/flowlayouts/#migration
+For more migration information, please visit https://google.github.io/accompanist/flowlayout/
 """
 )
 public typealias FlowMainAxisAlignment = MainAxisAlignment
@@ -168,7 +168,7 @@ public typealias FlowMainAxisAlignment = MainAxisAlignment
 @Deprecated(
     """
 accompanist/Flow is deprecated.
-For more migration information, please visit https://google.github.io/accompanist/flowlayouts/#migration
+For more migration information, please visit https://google.github.io/accompanist/flowlayout/
 """
 )
 private fun Flow(
@@ -323,7 +323,7 @@ private fun Flow(
 @Deprecated(
     """
 accompanist/SizeMode is deprecated.
-For more migration information, please visit https://google.github.io/accompanist/flowlayouts/#migration
+For more migration information, please visit https://google.github.io/accompanist/flowlayout/
 """
 )
 public enum class SizeMode {
