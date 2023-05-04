@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("UnstableApiUsage")
 
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
-    id("org.jetbrains.dokka")
-    id("me.tylerbwong.gradle.metalava")
+    id(libs.plugins.android.library.get().pluginId)
+    id(libs.plugins.android.kotlin.get().pluginId)
+    id(libs.plugins.jetbrains.dokka.get().pluginId)
+    id(libs.plugins.gradle.metalava.get().pluginId)
+    id(libs.plugins.vanniktech.maven.publish.get().pluginId)
 }
 
 kotlin {
@@ -28,12 +30,12 @@ kotlin {
 android {
     namespace = "com.google.accompanist.navigation.animation"
 
-    compileSdkVersion = 33
+    compileSdk = 33
 
     defaultConfig {
-        minSdkVersion 21
+        minSdk = 21
         // targetSdkVersion has no effect for libraries. This is only used for the test APK
-        targetSdkVersion 33
+        targetSdk = 33
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -52,24 +54,26 @@ android {
         kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
 
-    lintOptions {
+    lint {
         textReport = true
-        textOutput 'stdout'
+        textOutput = File("stdout")
         // We run a full lint analysis as build part in CI, so skip vital checks for assemble tasks
         checkReleaseBuilds = false
     }
 
     testOptions {
         unitTests {
-            includeAndroidResources = true
+            isIncludeAndroidResources = true
         }
         animationsDisabled = true
     }
 
-    packagingOptions {
-        // Exclude license files to enable our test APK to build (has no effect on our AARs)
-        excludes += "/META-INF/AL2.0"
-        excludes += "/META-INF/LGPL2.1"
+    packaging {
+        // Some of the META-INF files conflict with coroutines-test. Exclude them to enable
+        // our test APK to build (has no effect on our AARs)
+        resources {
+            excludes += listOf("/META-INF/AL2.0", "/META-INF/LGPL2.1")
+        }
     }
 }
 
@@ -101,5 +105,3 @@ dependencies {
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.androidx.test.rules)
 }
-
-apply plugin: "com.vanniktech.maven.publish"
