@@ -313,6 +313,10 @@ open class AccompanistWebChromeClient : WebChromeClient() {
 
     override fun onProgressChanged(view: WebView, newProgress: Int) {
         super.onProgressChanged(view, newProgress)
+        if (newProgress == 100.0f) {
+            state.loadingState = LoadingState.Finished
+            return
+        }
         if (state.loadingState is LoadingState.Finished) return
         state.loadingState = LoadingState.Loading(newProgress / 100.0f)
     }
