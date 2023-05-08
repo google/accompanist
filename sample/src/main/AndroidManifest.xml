@@ -23,6 +23,7 @@
 
     <!-- Used for the permissions sample -->
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="false"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -418,6 +419,15 @@
         <activity
             android:name=".webview.WrappedContentWebViewSample"
             android:label="@string/webview_title_wrapped"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".webview.WebViewSaveStateSample"
+            android:label="@string/webview_savestate"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

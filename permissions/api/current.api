@@ -1,7 +1,7 @@
 // Signature format: 4.0
 package com.google.accompanist.permissions {
 
-  @kotlin.RequiresOptIn(message="Accompanist Permissions is experimental. The API may be changed in the future.") @kotlin.annotation.Retention(kotlin.annotation.AnnotationRetention) public @interface ExperimentalPermissionsApi {
+  @kotlin.RequiresOptIn(message="Accompanist Permissions is experimental. The API may be changed in the future.") @kotlin.annotation.Retention(kotlin.annotation.AnnotationRetention.BINARY) public @interface ExperimentalPermissionsApi {
   }
 
   @androidx.compose.runtime.Stable @com.google.accompanist.permissions.ExperimentalPermissionsApi public interface MultiplePermissionsState {

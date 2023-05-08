@@ -5,8 +5,43 @@
 A library which provides paging layouts for Jetpack Compose. If you've used Android's [`ViewPager`](https://developer.android.com/reference/kotlin/androidx/viewpager/widget/ViewPager) before, it has similar properties.
 
 !!! warning
-    The pager layouts are currently experimental and the APIs could change at any time.
-    All of the APIs are marked with the `@ExperimentalPagerApi` annotation.
+    **This library is deprecated, with official pager support in [androidx.compose.foundation.pager](https://developer.android.com/reference/kotlin/androidx/compose/foundation/pager/package-summary).** The original documentation is below the migration guide.
+
+## Migration
+
+1. Make sure you are using Compose 1.4.0+ before attempting to migrate to `androidx.compose.foundation.pager`.
+2. Change `com.google.accompanist.pager.HorizontalPager` to `androidx.compose.foundation.pager.HorizontalPager`, and the same for `com.google.accompanist.pager.VerticalPager` to change to `androidx.compose.foundation.pager.VerticalPager`
+3. Change `count` variable to `pageCount`.
+4. Change `itemSpacing` parameter to `pageSpacing`.
+5. Change any usages of `rememberPagerState()` to `androidx.compose.foundation.pager.rememberPagerState()`
+6. For more mappings - see the migration table below.
+7. Run your changes on device and check to see if there are any differences.
+
+One thing to note is that there is a new parameter on `androidx.compose.foundation.Pager`, for `pageSize`, by default this
+uses a `PageSize.Fill`, but can also be changed to use a fixed size, like `PageSize.Fixed(200.dp)` for a fixed size paging.
+
+
+## Migration Table
+
+The following is a mapping of the pager classes from accompanist to androidx.compose:
+
+| accompanist/pager                    | androidx.compose.foundation                                                                                                                         |
+|--------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `HorizontalPager`                    | `androidx.compose.foundation.pager.HorizontalPager`                                                                                                 |
+| `VerticalPager`                      | `androidx.compose.foundation.pager.VerticalPager`                                                                                                   |
+| `rememberPagerState`                 | `androidx.compose.foundation.pager.rememberPagerState`                                                                                              |
+| `PagerState#pageCount`               | Use `canScrollForward` or `canScrollBackward`                                                                                                       |
+| `calculateCurrentOffsetForPage`      | Use `(pagerState.currentPage - page) + pagerState.currentPageOffsetFraction`                                                                        |
+| `PagerState#currentPageOffset`       | `PagerState#currentPageOffsetFraction`                                                                                                              |
+| `Modifier.pagerTabIndicatorOffset()` | Implement it yourself, or still include and use `accompanist-pager-indicators`, it now supports `androidx.compose.foundation.pager.PagerState`      |
+| `HorizontalPagerIndicator`           | Implement it yourself, or still include and use `accompanist-pager-indicators`, it now supports `androidx.compose.foundation.pager.HorizontalPager` by explicitly providing a `pageCount` param to the `HorizontalPagerIndicator` method |
+| `VerticalPagerIndicator`             | Implement it yourself, or still include and use `accompanist-pager-indicators`, it now supports `androidx.compose.foundation.pager.HorizontalPager` by explicitly providing a `pageCount` param to the `HorizontalPagerIndicator` method |
+| `PagerDefaults.flingBehavior()`      | `androidx.compose.foundation.pager.PagerDefaults.flingBehavior()`                                                                                   |
+
+The biggest change is that `HorizontalPager` and `VerticalPager`'s number of pages is now called `pageCount` instead of `count`.
+
+# Deprecated Guidance for Accompanist Pager
+The following is the deprecated guide for using Pager in Accompanist. Please see above migration section for how to use the `androidx.compose` Pager.
 
 ## HorizontalPager
 
@@ -284,7 +319,7 @@ In v0.19.0 both `HorizontalPager` and `VerticalPager` were re-written to be base
 - The `infiniteLooping` parameter and feature have been removed. A sample demonstrating how to achieve this effect can be found [here][looping-sample].
 - The `offscreenLimit` parameter has been removed. We no longer have control of what items are laid out 'off screen'.
 - The `dragEnabled` parameter has removed.
-- `PagerScope` (the page item scope) no longer implements `BoxScope`. 
+- `PagerScope` (the page item scope) no longer implements `BoxScope`.
 
 ---
 
@@ -298,7 +333,7 @@ repositories {
 dependencies {
     implementation "com.google.accompanist:accompanist-pager:<version>"
 
-    // If using indicators, also depend on 
+    // If using indicators, also depend on
     implementation "com.google.accompanist:accompanist-pager-indicators:<version>"
 }
 ```
@@ -318,7 +353,7 @@ Make sure to read the [Contributing](../contributing) page first though.
 
 ```
 Copyright 2021 The Android Open Source Project
- 
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at

@@ -66,7 +66,7 @@ For more examples, refer to the [samples](https://github.com/google/accompanist/
 ## Limitations
 
 This permissions wrapper is built on top of the available Android platform APIs. We cannot extend
-the platform's capabilities. For example, it's not possible to differentiate the between the
+the platform's capabilities. For example, it's not possible to differentiate between the
 _it's the first time requesting the permission_ vs _the user doesn't want to be asked again_
 use cases.
 

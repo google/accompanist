@@ -1,22 +1,27 @@
 [versions]
-compose = "1.4.0-alpha04"
-composeCompiler = "1.4.0-alpha02"
+compose = "1.5.0-alpha01"
+composeCompiler = "1.4.6"
 composeMaterial3 = "1.0.1"
 composesnapshot = "-" # a single character = no snapshot
 
+dokka = "1.8.10"
+
 # gradlePlugin and lint need to be updated together
-gradlePlugin = "7.3.1"
+gradlePlugin = "8.0.0"
 lintMinCompose = "30.0.0"
 
 ktlint = "0.45.2"
-kotlin = "1.7.21"
+kotlin = "1.8.20"
 coroutines = "1.6.4"
 okhttp = "3.12.13"
 coil = "1.3.2"
 
 androidxtest = "1.4.0"
-androidxnavigation = "2.5.3"
+androidxnavigation = "2.6.0-alpha08"
 androidxWindow = "1.0.0"
+
+metalava = "0.3.2"
+vanniktechPublish = "0.25.2"
 
 [libraries]
 compose-ui-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
@@ -35,8 +40,8 @@ compose-animation-animation = { module = "androidx.compose.animation:animation",
 snapper = "dev.chrisbanes.snapper:snapper:0.2.2"
 
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "gradlePlugin" }
-gradleMavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.17.0"
-metalavaGradle = "me.tylerbwong.gradle:metalava-gradle:0.1.9"
+gradleMavenPublishPlugin = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "vanniktechPublish" }
+metalavaGradle = { module = "me.tylerbwong.gradle.metalava:plugin", version.ref = "metalava" }
 
 glide = "com.github.bumptech.glide:glide:4.12.0"
 
@@ -49,7 +54,7 @@ kotlin-metadataJvm = "org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.3.0"
 kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
-dokka = "org.jetbrains.dokka:dokka-gradle-plugin:1.5.0"
+dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka" }
 
 okhttp-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 okhttp-mockWebServer = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "okhttp" }
@@ -63,15 +68,16 @@ androidx-core = "androidx.core:core-ktx:1.8.0"
 androidx-activity-compose = "androidx.activity:activity-compose:1.5.1"
 androidx-fragment = "androidx.fragment:fragment-ktx:1.5.1"
 androidx-dynamicanimation = "androidx.dynamicanimation:dynamicanimation-ktx:1.0.0-alpha03"
-androidx-lifecycle-runtime = "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
-androidx-lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
+androidx-lifecycle-runtime = "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
+androidx-lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1"
+androidx-lifecycle-common = "androidx.lifecycle:lifecycle-common-java8:2.6.0"
 androidx-window = { module = "androidx.window:window", version.ref = "androidxWindow" }
 androidx-window-testing = { module = "androidx.window:window-testing", version.ref = "androidxWindow" }
 
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidxnavigation" }
 androidx-navigation-testing = { module = "androidx.navigation:navigation-testing", version.ref = "androidxnavigation" }
 
-mdc = "com.google.android.material:material:1.7.0"
+mdc = "com.google.android.material:material:1.8.0"
 
 napier = "io.github.aakira:napier:1.4.1"
 
@@ -82,8 +88,8 @@ androidx-test-orchestrator = "androidx.test:orchestrator:1.4.1"
 androidx-test-uiAutomator = "androidx.test.uiautomator:uiautomator:2.2.0"
 
 # alpha for robolectric x compose fix
-androidx-test-espressoCore = "androidx.test.espresso:espresso-core:3.5.0-alpha07"
-androidx-test-espressoWeb = "androidx.test.espresso:espresso-web:3.5.0-alpha07"
+androidx-test-espressoCore = "androidx.test.espresso:espresso-core:3.5.1"
+androidx-test-espressoWeb = "androidx.test.espresso:espresso-web:3.5.1"
 
 junit = "junit:junit:4.13.2"
 truth = "com.google.truth:truth:1.1.2"
@@ -97,3 +103,10 @@ android-tools-lint-api = { module = "com.android.tools.lint:lint-api", version.r
 android-tools-lint-tests = { module = "com.android.tools.lint:lint-tests", version.ref = "lintMinCompose" }
 
 squareup-mockwebserver = "com.squareup.okhttp3:mockwebserver:4.9.3"
+
+[plugins]
+android-kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+android-library = { id = "com.android.library", version.ref = "gradlePlugin" }
+jetbrains-dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+gradle-metalava = { id = "me.tylerbwong.gradle.metalava", version.ref = "metalava" }
+vanniktech-maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "vanniktechPublish" }

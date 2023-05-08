@@ -60,7 +60,7 @@ open class LayoutTest {
         size: Ref<IntSize>,
         position: Ref<Offset>,
         positionedLatch: CountDownLatch
-    ): Modifier = onGloballyPositioned { coordinates ->
+    ): Modifier = this then onGloballyPositioned { coordinates ->
         size.value = IntSize(coordinates.size.width, coordinates.size.height)
         position.value = coordinates.localToRoot(Offset(0f, 0f))
         positionedLatch.countDown()

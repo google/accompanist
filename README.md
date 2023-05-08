@@ -24,7 +24,10 @@ Each [release](https://github.com/google/accompanist/releases) outlines what ver
   <td>Compose UI 1.3 (1.3.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-permissions?versionPrefix=0.28"></td>
  </tr>
  <tr>
-  <td>Compose UI 1.4 (1.4.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-permissions"></td>
+  <td>Compose UI 1.4 (1.4.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-permissions?versionPrefix=0.30"></td>
+ </tr>
+ <tr>
+  <td>Compose UI 1.5 (1.5.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-permissions"></td>
  </tr>
 </table>
 
@@ -46,17 +49,14 @@ A library that enables the reuse of [MDC-Android][mdc] Material 2 XML themes, fo
 ### 🎨 [Material 3 Theme Adapter](./themeadapter-material3/)
 A library that enables the reuse of [MDC-Android][mdc] Material 3 XML themes, for theming in Jetpack Compose.
 
-### 📖 [Pager](./pager/)
-A library that provides utilities for building paginated layouts in Jetpack Compose, similar to Android's [ViewPager][viewpager].
-
 ### 📫 [Permissions](./permissions/)
 A library that provides [Android runtime permissions][runtimepermissions] support for Jetpack Compose.
 
 ### ⏳ [Placeholder](./placeholder/)
 A library that provides easy-to-use modifiers for displaying a placeholder UI while content is loading.
 
-### 🌊 [Flow Layouts](./flowlayout/)
-A library that adds Flexbox-like layout components to Jetpack Compose.
+### 🌊 [Flow Layouts](./flowlayout/) (Deprecated)
+See our [Migration Guide](https://google.github.io/accompanist/flowlayout/) for migrating to FlowLayout in Compose.
 
 ### 🧭✨[Navigation-Animation](./navigation-animation/)
 A library which provides [Compose Animation](https://developer.android.com/jetpack/compose/animation) support for Jetpack Navigation Compose.
@@ -84,6 +84,9 @@ See our [Migration Guide](https://google.github.io/accompanist/swiperefresh/) fo
 
 ### 🎨 [AppCompat Theme Adapter](./appcompat-theme/) (Deprecated)
 See our [Migration Guide](https://google.github.io/accompanist/appcompat-theme/) for migrating to the new artifact in Accompanist.
+
+### 📖 [Pager](./pager/) (Deprecated)
+See our [Migration Guide](https://google.github.io/accompanist/pager/) for migrating to Pager in Compose.
 
 ---
 

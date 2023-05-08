@@ -16,6 +16,7 @@
 
 package com.google.accompanist.navigation.animation
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
@@ -24,6 +25,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
+import kotlin.collections.forEach
 
 /**
  * Navigator that navigates through [Composable]s. Every destination using this Navigator must
@@ -39,6 +41,7 @@ public class AnimatedComposeNavigator : Navigator<AnimatedComposeNavigator.Desti
 
     internal val isPop = mutableStateOf(false)
 
+    @SuppressLint("NewApi") // b/187418647
     override fun navigate(
         entries: List<NavBackStackEntry>,
         navOptions: NavOptions?,

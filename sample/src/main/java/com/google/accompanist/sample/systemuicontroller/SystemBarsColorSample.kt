@@ -132,7 +132,7 @@ private fun Sample() {
                         width = maxWidth.roundToPx(),
                         height = maxHeight.roundToPx()
                     )
-                },
+                }
             ),
             contentDescription = null,
             contentScale = ContentScale.Crop,

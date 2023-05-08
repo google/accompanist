@@ -17,13 +17,13 @@
 package com.google.accompanist.sample.webview
 
 import android.os.Bundle
+import android.webkit.WebView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.Button
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
@@ -54,7 +54,7 @@ class WrappedContentWebViewSample : ComponentActivity() {
                     ModalBottomSheetLayout(
                         sheetState = sheetState,
                         sheetContent = {
-                            WebContent()
+                            WrappingWebContent("Hello")
                         }
                     ) {
                         val scope = rememberCoroutineScope()
@@ -73,11 +73,13 @@ class WrappedContentWebViewSample : ComponentActivity() {
 }
 
 /***
- * A sample WebView that is wrapping it's content inside of a bottom sheet.
+ * A sample WebView that is wrapping it's content height.
  * The sheet should be the size of the rendered content and not unbounded.
  */
 @Composable
-fun WebContent() {
+fun WrappingWebContent(
+    body: String
+) {
     val webViewState = rememberWebViewStateWithHTMLData(
         data = "<html><head>\n" +
             "<style>\n" +
@@ -85,12 +87,12 @@ fun WebContent() {
             "  background-color: #f00;\n" +
             "}\n" +
             "</style>\n" +
-            "</head><body><p>Hello</p></body></html>"
+            "</head><body><p>$body</p></body></html>"
     )
     WebView(
         state = webViewState,
         modifier = Modifier.fillMaxWidth()
-            .wrapContentHeight()
-            .heightIn(min = 1.dp) // A bottom sheet can't support content with 0 height.
+            .heightIn(min = 1.dp), // A bottom sheet can't support content with 0 height.
+        captureBackPresses = false,
     )
 }
