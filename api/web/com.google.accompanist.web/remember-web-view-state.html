@@ -1,51 +1,66 @@
+<!doctype html>
 <html>
-  <head>
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>rememberWebViewState</title>
-</head><body><link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script><script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script><link href="../../styles/style.css" rel="Stylesheet"><link href="../../styles/logo-styles.css" rel="Stylesheet"><link href="../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../styles/main.css" rel="Stylesheet"><script type="text/javascript" src="../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../scripts/main.js" async></script>
-  
-    <div id="container">
-      <div id="leftColumn"><a href="../../index.html">
-            <div id="logo"></div>
-          </a>
-        <div id="paneSearch"></div>
-        <div id="sideMenu"></div>
-      </div>
-      <div id="main">
-        <script type="text/javascript" src="../../scripts/main.js"></script><div id="leftToggler"><span class="icon-toggler"></span></div>
-
-        <div class="main-content" id="content" pageids="web::com.google.accompanist.web//rememberWebViewState/#kotlin.String#kotlin.collections.Map[kotlin.String,kotlin.String]/PointingToDeclaration//-870575855">
-          <div class="navigation-wrapper" id="navigation-wrapper">
-            <div class="breadcrumbs"><a href="../index.html">web</a>/<a href="index.html">com.google.accompanist.web</a>/<a href="remember-web-view-state.html">rememberWebViewState</a></div>
-            <div class="pull-right d-flex">
-              <div id="searchBar"></div>
-            </div>
-          </div>
-          <div class="cover ">
-            <h1 class="cover"><span>remember</span><wbr><span>Web</span><wbr><span>View</span><wbr><span>State</span></h1>
-          </div>
-<div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><div class="block"><div class="block">@<a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html">Composable</a>()</div></div>fun <a href="remember-web-view-state.html">rememberWebViewState</a>(url: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, additionalHttpHeaders: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt; = emptyMap()): <a href="-web-view-state/index.html">WebViewState</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<p class="paragraph">Creates a WebView state that is remembered across Compositions.</p><h2 class="">Parameters</h2><div data-togglable="Parameters"><div class="platform-hinted WithExtraAttributes" data-platform-hinted="data-platform-hinted" data-togglable="Parameters"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div data-togglable="Parameters"><div class="table" data-togglable="Parameters"><div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex">url</span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">The url to load in the WebView</p></div></div></div></div></div><div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex">additionalHttpHeaders</span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">Optional, additional HTTP headers that are passed to <a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html#loadurl">WebView.loadUrl</a>.     Note that these headers are used for all subsequent requests of the WebView.</p></div></div></div></div></div></div></div></div></div></div></div>
-          <h2 class="">Sources</h2>
-          <div class="table" data-togglable="Sources"><a data-name="1927697543%2FSource%2F636117155" anchor-label="https://github.com/google/accompanist/blob/main/web/src/main/java/com/google/accompanist/web/WebView.kt#L582" id="1927697543%2FSource%2F636117155" data-filterable-set=":web:dokkaHtmlPartial/main"></a>
-            <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/main" data-filterable-set=":web:dokkaHtmlPartial/main">
-              <div class="main-subrow keyValue ">
-                <div class=""><span class="inline-flex"><a href="https://github.com/google/accompanist/blob/main/web/src/main/java/com/google/accompanist/web/WebView.kt#L582">androidJvm source</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1927697543%2FSource%2F636117155"></span>
-                      <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                    </span></span></div>
-                <div></div>
-              </div>
-            </div>
-          </div>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+<a href="../../index.html">
+<span>accompanist</span>            </a>    </div>
+    <div>
+    </div>
+    <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":web:dokkaHtmlPartial/release">androidJvm</button>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
+        <div id="sideMenu"></div>
+    </div>
+    <div id="main">
+<div class="main-content" data-page-type="member" id="content" pageids="web::com.google.accompanist.web//rememberWebViewState/#kotlin.String#kotlin.collections.Map[kotlin.String,kotlin.String]/PointingToDeclaration//-870575855">
+  <div class="breadcrumbs"><a href="../index.html">web</a><span class="delimiter">/</span><a href="index.html">com.google.accompanist.web</a><span class="delimiter">/</span><span class="current">rememberWebViewState</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>remember</span><wbr><span>Web</span><wbr><span>View</span><wbr><span><span>State</span></span></h1>
+  </div>
+  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="remember-web-view-state.html"><span class="token function">rememberWebViewState</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">url<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">additionalHttpHeaders<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyMap()</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-web-view-state/index.html">WebViewState</a></div><p class="paragraph">Creates a WebView state that is remembered across Compositions.</p><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>url</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The url to load in the WebView</p></div></div></div></div><div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>additional</span><wbr><span>Http</span><wbr><span><span>Headers</span></span></u></div></span></div><div><div class="title"><p class="paragraph">Optional, additional HTTP headers that are passed to <a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html#loadurl">WebView.loadUrl</a>.     Note that these headers are used for all subsequent requests of the WebView.</p></div></div></div></div></div></div></div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
       </div>
     </div>
-  
-</body></html>
-
+</div>
+</body>
+</html>
 

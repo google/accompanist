@@ -1,202 +1,218 @@
+<!doctype html>
 <html>
-  <head>
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>WebViewNavigator</title>
-</head><body><link href="../../../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script><script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../../scripts/main.js" async></script>
-  
-    <div id="container">
-      <div id="leftColumn"><a href="../../../index.html">
-            <div id="logo"></div>
-          </a>
-        <div id="paneSearch"></div>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+<a href="../../../index.html">
+<span>accompanist</span>            </a>    </div>
+    <div>
+    </div>
+    <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":web:dokkaHtmlPartial/release">androidJvm</button>
+        </div>
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
         <div id="sideMenu"></div>
-      </div>
-      <div id="main">
-        <script type="text/javascript" src="../../../scripts/main.js"></script><div id="leftToggler"><span class="icon-toggler"></span></div>
-
-        <div class="main-content" id="content" pageids="web::com.google.accompanist.web/WebViewNavigator///PointingToDeclaration//-870575855">
-          <div class="navigation-wrapper" id="navigation-wrapper">
-            <div class="breadcrumbs"><a href="../../index.html">web</a>/<a href="../index.html">com.google.accompanist.web</a>/<a href="index.html">WebViewNavigator</a></div>
-            <div class="pull-right d-flex">
-              <div id="searchBar"></div>
-            </div>
-          </div>
-          <div class="cover ">
-            <h1 class="cover"><span>Web</span><wbr><span>View</span><wbr><span>Navigator</span></h1>
-            <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><div class="block"><div class="block">@<a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Stable.html">Stable</a>()</div></div>class <a href="index.html">WebViewNavigator</a>(coroutineScope: <span data-unresolved-link="kotlinx.coroutines/CoroutineScope///PointingToDeclaration/">CoroutineScope</span>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Allows control over the navigation of a WebView from outside the composable. E.g. for performing a back navigation in response to the user clicking the "up" button in a TopAppBar.</p></div></div>
-          </div>
-          <div class="tabbedcontent">
-            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Constructors">Constructors</button><button class="section-tab" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button><button class="section-tab" data-togglable="Sources">Sources</button><button class="section-tab" data-togglable="See also">See also</button></div>
-            <div class="tabs-section-body">
-              <h2 class="">See also</h2>
-              <div data-togglable="See also">
-                <div class="platform-hinted WithExtraAttributes" data-platform-hinted="data-platform-hinted" data-togglable="See also"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div data-togglable="See also"><div class="table" data-togglable="See also"><div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="main-subrow keyValue WithExtraAttributes RowTitle"><div class=""><span class="inline-flex"><a href="../remember-web-view-navigator.html">rememberWebViewNavigator</a></span><span class="inline-flex"><div data-togglable="See also"></div></span></div><div></div></div></div></div></div></div></div>
-              </div>
-              <h2 class="tabbedcontent">Constructors</h2>
-              <div class="table" data-togglable="Constructors"><a data-name="-1240369065%2FConstructors%2F-870575855" anchor-label="WebViewNavigator" id="-1240369065%2FConstructors%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue TabbedContent">
-                    <div class=""><span class="inline-flex"><a href="-web-view-navigator.html">WebViewNavigator</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1240369065%2FConstructors%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">fun <a href="-web-view-navigator.html">WebViewNavigator</a>(coroutineScope: <span data-unresolved-link="kotlinx.coroutines/CoroutineScope///PointingToDeclaration/">CoroutineScope</span>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="">Functions</h2>
-              <div class="table" data-togglable="Functions"><a data-name="-1149334780%2FFunctions%2F-870575855" anchor-label="loadHtml" id="-1149334780%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="load-html.html">loadHtml</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1149334780%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">fun <a href="load-html.html">loadHtml</a>(html: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, baseUrl: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>? = null, mimeType: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>? = null, encoding: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>? = "utf-8", historyUrl: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>? = null)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+    </div>
+    <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="web::com.google.accompanist.web/WebViewNavigator///PointingToDeclaration//-870575855">
+  <div class="breadcrumbs"><a href="../../index.html">web</a><span class="delimiter">/</span><a href="../index.html">com.google.accompanist.web</a><span class="delimiter">/</span><span class="current">WebViewNavigator</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Web</span><wbr><span>View</span><wbr><span><span>Navigator</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Stable.html"><span class="token annotation builtin">Stable</span></a></div></div><span class="token keyword">class </span><a href="index.html">WebViewNavigator</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">coroutineScope<span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines/CoroutineScope///PointingToDeclaration/">CoroutineScope</span></span></span><span class="token punctuation">)</span></div><p class="paragraph">Allows control over the navigation of a WebView from outside the composable. E.g. for performing a back navigation in response to the user clicking the "up" button in a TopAppBar.</p><h4 class="">See also</h4><div class="table"><div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../remember-web-view-navigator.html"><span>remember</span><wbr><span>Web</span><wbr><span>View</span><wbr><span><span>Navigator</span></span></a></div></span></div><div></div></div></div></div></div></div>
   </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-24380139%2FFunctions%2F-870575855" anchor-label="loadUrl" id="-24380139%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="load-url.html">loadUrl</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-24380139%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">fun <a href="load-url.html">loadUrl</a>(url: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, additionalHttpHeaders: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt; = emptyMap())<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-388477927%2FFunctions%2F-870575855" anchor-label="navigateBack" id="-388477927%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="navigate-back.html">navigateBack</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-388477927%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">fun <a href="navigate-back.html">navigateBack</a>()<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="-388477927%2FFunctions%2F-870575855" anchor-label="navigateBack" id="-388477927%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a><div class="brief "><a data-name="-388477927%2FFunctions%2F-870575855" anchor-label="navigateBack" id="-388477927%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>Navigates the webview back to the previous page.</div></div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-2065023403%2FFunctions%2F-870575855" anchor-label="navigateForward" id="-2065023403%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="navigate-forward.html">navigateForward</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2065023403%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">fun <a href="navigate-forward.html">navigateForward</a>()<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="-2065023403%2FFunctions%2F-870575855" anchor-label="navigateForward" id="-2065023403%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a><div class="brief "><a data-name="-2065023403%2FFunctions%2F-870575855" anchor-label="navigateForward" id="-2065023403%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>Navigates the webview forward after going back from a page.</div></div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-1356439912%2FFunctions%2F-870575855" anchor-label="reload" id="-1356439912%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="reload.html">reload</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1356439912%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">fun <a href="reload.html">reload</a>()<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="-1356439912%2FFunctions%2F-870575855" anchor-label="reload" id="-1356439912%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a><div class="brief "><a data-name="-1356439912%2FFunctions%2F-870575855" anchor-label="reload" id="-1356439912%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>Reloads the current page in the webview.</div></div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="70993999%2FFunctions%2F-870575855" anchor-label="stopLoading" id="70993999%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="stop-loading.html">stopLoading</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="70993999%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">fun <a href="stop-loading.html">stopLoading</a>()<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="70993999%2FFunctions%2F-870575855" anchor-label="stopLoading" id="70993999%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a><div class="brief "><a data-name="70993999%2FFunctions%2F-870575855" anchor-label="stopLoading" id="70993999%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>Stops the current page load (if one is loading).</div></div>
-</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="">Properties</h2>
-              <div class="table" data-togglable="Properties"><a data-name="-1162343446%2FProperties%2F-870575855" anchor-label="canGoBack" id="-1162343446%2FProperties%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="can-go-back.html">canGoBack</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1162343446%2FProperties%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><a data-name="-1162343446%2FProperties%2F-870575855" anchor-label="canGoBack" id="-1162343446%2FProperties%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a><div class="symbol monospace">var <a href="can-go-back.html">canGoBack</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-1162343446%2FProperties%2F-870575855" anchor-label="canGoBack" id="-1162343446%2FProperties%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>True when the web view is able to navigate backwards, false otherwise.</div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-908255004%2FProperties%2F-870575855" anchor-label="canGoForward" id="-908255004%2FProperties%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="can-go-forward.html">canGoForward</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-908255004%2FProperties%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><a data-name="-908255004%2FProperties%2F-870575855" anchor-label="canGoForward" id="-908255004%2FProperties%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a><div class="symbol monospace">var <a href="can-go-forward.html">canGoForward</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-908255004%2FProperties%2F-870575855" anchor-label="canGoForward" id="-908255004%2FProperties%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>True when the web view is able to navigate forwards, false otherwise.</div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="">Sources</h2>
-              <div class="table" data-togglable="Sources"><a data-name="585857838%2FSource%2F636117155" anchor-label="https://github.com/google/accompanist/blob/main/web/src/main/java/com/google/accompanist/web/WebView.kt#L433" id="585857838%2FSource%2F636117155" data-filterable-set=":web:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/main" data-filterable-set=":web:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="https://github.com/google/accompanist/blob/main/web/src/main/java/com/google/accompanist/web/WebView.kt#L433">androidJvm source</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="585857838%2FSource%2F636117155"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div></div>
-                  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,FUNCTION,PROPERTY">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="">Constructors</h2>
+        <div class="table"><a data-name="-1240369065%2FConstructors%2F-870575855" anchor-label="WebViewNavigator" id="-1240369065%2FConstructors%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-web-view-navigator.html"><span>Web</span><wbr><span>View</span><wbr><span><span>Navigator</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1240369065%2FConstructors%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">coroutineScope<span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines/CoroutineScope///PointingToDeclaration/">CoroutineScope</span></span></span><span class="token punctuation">)</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="-1149334780%2FFunctions%2F-870575855" anchor-label="loadHtml" id="-1149334780%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="load-html.html"><span>load</span><wbr><span><span>Html</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1149334780%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="load-html.html"><span class="token function">loadHtml</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">html<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">baseUrl<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">mimeType<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">encoding<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span><span class="token string">"utf-8"</span><span class="token punctuation">, </span></span><span class="parameter ">historyUrl<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-24380139%2FFunctions%2F-870575855" anchor-label="loadUrl" id="-24380139%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="load-url.html"><span>load</span><wbr><span><span>Url</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-24380139%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="load-url.html"><span class="token function">loadUrl</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">url<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">additionalHttpHeaders<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyMap()</span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-388477927%2FFunctions%2F-870575855" anchor-label="navigateBack" id="-388477927%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="navigate-back.html"><span>navigate</span><wbr><span><span>Back</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-388477927%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="navigate-back.html"><span class="token function">navigateBack</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Navigates the webview back to the previous page.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2065023403%2FFunctions%2F-870575855" anchor-label="navigateForward" id="-2065023403%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="navigate-forward.html"><span>navigate</span><wbr><span><span>Forward</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2065023403%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="navigate-forward.html"><span class="token function">navigateForward</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Navigates the webview forward after going back from a page.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1356439912%2FFunctions%2F-870575855" anchor-label="reload" id="-1356439912%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="reload.html"><span><span>reload</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1356439912%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="reload.html"><span class="token function">reload</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Reloads the current page in the webview.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="70993999%2FFunctions%2F-870575855" anchor-label="stopLoading" id="70993999%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="stop-loading.html"><span>stop</span><wbr><span><span>Loading</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="70993999%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="stop-loading.html"><span class="token function">stopLoading</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Stops the current page load (if one is loading).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="-1162343446%2FProperties%2F-870575855" anchor-label="canGoBack" id="-1162343446%2FProperties%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="can-go-back.html"><span>can</span><wbr><span>Go</span><wbr><span><span>Back</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1162343446%2FProperties%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="can-go-back.html">canGoBack</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">True when the web view is able to navigate backwards, false otherwise.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-908255004%2FProperties%2F-870575855" anchor-label="canGoForward" id="-908255004%2FProperties%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="can-go-forward.html"><span>can</span><wbr><span>Go</span><wbr><span><span>Forward</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-908255004%2FProperties%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="can-go-forward.html">canGoForward</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">True when the web view is able to navigate forwards, false otherwise.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  
-</body></html>
-
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>
 

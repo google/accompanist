@@ -1,457 +1,443 @@
+<!doctype html>
 <html>
-  <head>
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>AccompanistWebChromeClient</title>
-</head><body><link href="../../../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script><script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../../scripts/main.js" async></script>
-  
-    <div id="container">
-      <div id="leftColumn"><a href="../../../index.html">
-            <div id="logo"></div>
-          </a>
-        <div id="paneSearch"></div>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+<a href="../../../index.html">
+<span>accompanist</span>            </a>    </div>
+    <div>
+    </div>
+    <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":web:dokkaHtmlPartial/release">androidJvm</button>
+        </div>
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
         <div id="sideMenu"></div>
-      </div>
-      <div id="main">
-        <script type="text/javascript" src="../../../scripts/main.js"></script><div id="leftToggler"><span class="icon-toggler"></span></div>
-
-        <div class="main-content" id="content" pageids="web::com.google.accompanist.web/AccompanistWebChromeClient///PointingToDeclaration//-870575855">
-          <div class="navigation-wrapper" id="navigation-wrapper">
-            <div class="breadcrumbs"><a href="../../index.html">web</a>/<a href="../index.html">com.google.accompanist.web</a>/<a href="index.html">AccompanistWebChromeClient</a></div>
-            <div class="pull-right d-flex">
-              <div id="searchBar"></div>
-            </div>
-          </div>
-          <div class="cover ">
-            <h1 class="cover"><span>Accompanist</span><wbr><span>Web</span><wbr><span>Chrome</span><wbr><span>Client</span></h1>
-            <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">open class <a href="index.html">AccompanistWebChromeClient</a> : <a href="https://developer.android.com/reference/kotlin/android/webkit/WebChromeClient.html">WebChromeClient</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">AccompanistWebChromeClient</p><p class="paragraph">A parent class implementation of WebChromeClient that can be subclassed to add custom behaviour.</p><p class="paragraph">As Accompanist Web needs to set its own web client to function, it provides this intermediary class that can be overriden if further custom behaviour is required.</p></div></div>
-          </div>
-          <div class="tabbedcontent">
-            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Constructors">Constructors</button><button class="section-tab" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button><button class="section-tab" data-togglable="Sources">Sources</button></div>
-            <div class="tabs-section-body">
-              <h2 class="tabbedcontent">Constructors</h2>
-              <div class="table" data-togglable="Constructors"><a data-name="1121883795%2FConstructors%2F-870575855" anchor-label="AccompanistWebChromeClient" id="1121883795%2FConstructors%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue TabbedContent">
-                    <div class=""><span class="inline-flex"><a href="-accompanist-web-chrome-client.html">AccompanistWebChromeClient</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1121883795%2FConstructors%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">fun <a href="-accompanist-web-chrome-client.html">AccompanistWebChromeClient</a>()<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="">Functions</h2>
-              <div class="table" data-togglable="Functions"><a data-name="1476212932%2FFunctions%2F-870575855" anchor-label="getDefaultVideoPoster" id="1476212932%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#1476212932%2FFunctions%2F-870575855">getDefaultVideoPoster</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1476212932%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">open fun <a href="index.html#1476212932%2FFunctions%2F-870575855">getDefaultVideoPoster</a>(): <a href="https://developer.android.com/reference/kotlin/android/graphics/Bitmap.html">Bitmap</a>?<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+    </div>
+    <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="web::com.google.accompanist.web/AccompanistWebChromeClient///PointingToDeclaration//-870575855">
+  <div class="breadcrumbs"><a href="../../index.html">web</a><span class="delimiter">/</span><a href="../index.html">com.google.accompanist.web</a><span class="delimiter">/</span><span class="current">AccompanistWebChromeClient</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Accompanist</span><wbr><span>Web</span><wbr><span>Chrome</span><wbr><span><span>Client</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="index.html">AccompanistWebChromeClient</a> : <a href="https://developer.android.com/reference/kotlin/android/webkit/WebChromeClient.html">WebChromeClient</a></div><p class="paragraph">AccompanistWebChromeClient</p><p class="paragraph">A parent class implementation of WebChromeClient that can be subclassed to add custom behaviour.</p><p class="paragraph">As Accompanist Web needs to set its own web client to function, it provides this intermediary class that can be overriden if further custom behaviour is required.</p></div></div>
   </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="2070250264%2FFunctions%2F-870575855" anchor-label="getVideoLoadingProgressView" id="2070250264%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#2070250264%2FFunctions%2F-870575855">getVideoLoadingProgressView</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2070250264%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">open fun <a href="index.html#2070250264%2FFunctions%2F-870575855">getVideoLoadingProgressView</a>(): <a href="https://developer.android.com/reference/kotlin/android/view/View.html">View</a>?<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-574836608%2FFunctions%2F-870575855" anchor-label="getVisitedHistory" id="-574836608%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#-574836608%2FFunctions%2F-870575855">getVisitedHistory</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-574836608%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">open fun <a href="index.html#-574836608%2FFunctions%2F-870575855">getVisitedHistory</a>(p0: <a href="https://developer.android.com/reference/kotlin/android/webkit/ValueCallback.html">ValueCallback</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html">Array</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt;&gt;)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="1409377548%2FFunctions%2F-870575855" anchor-label="onCloseWindow" id="1409377548%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#1409377548%2FFunctions%2F-870575855">onCloseWindow</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1409377548%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">open fun <a href="index.html#1409377548%2FFunctions%2F-870575855">onCloseWindow</a>(p0: <a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-683346821%2FFunctions%2F-870575855" anchor-label="onConsoleMessage" id="-683346821%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#-683346821%2FFunctions%2F-870575855">onConsoleMessage</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-683346821%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">open fun <a href="index.html#-683346821%2FFunctions%2F-870575855">onConsoleMessage</a>(p0: <a href="https://developer.android.com/reference/kotlin/android/webkit/ConsoleMessage.html">ConsoleMessage</a>): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-1515237599%2FFunctions%2F-870575855" anchor-label="onCreateWindow" id="-1515237599%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#-1515237599%2FFunctions%2F-870575855">onCreateWindow</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1515237599%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">open fun <a href="index.html#-1515237599%2FFunctions%2F-870575855">onCreateWindow</a>(p0: <a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a>, p1: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, p2: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, p3: <a href="https://developer.android.com/reference/kotlin/android/os/Message.html">Message</a>): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-74115562%2FFunctions%2F-870575855" anchor-label="onGeolocationPermissionsHidePrompt" id="-74115562%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#-74115562%2FFunctions%2F-870575855">onGeolocationPermissionsHidePrompt</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-74115562%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">open fun <a href="index.html#-74115562%2FFunctions%2F-870575855">onGeolocationPermissionsHidePrompt</a>()<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="322323182%2FFunctions%2F-870575855" anchor-label="onGeolocationPermissionsShowPrompt" id="322323182%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#322323182%2FFunctions%2F-870575855">onGeolocationPermissionsShowPrompt</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="322323182%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">open fun <a href="index.html#322323182%2FFunctions%2F-870575855">onGeolocationPermissionsShowPrompt</a>(p0: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, p1: <a href="https://developer.android.com/reference/kotlin/android/webkit/GeolocationPermissions.Callback.html">GeolocationPermissions.Callback</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="1314996162%2FFunctions%2F-870575855" anchor-label="onHideCustomView" id="1314996162%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#1314996162%2FFunctions%2F-870575855">onHideCustomView</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1314996162%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">open fun <a href="index.html#1314996162%2FFunctions%2F-870575855">onHideCustomView</a>()<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="973831131%2FFunctions%2F-870575855" anchor-label="onJsAlert" id="973831131%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#973831131%2FFunctions%2F-870575855">onJsAlert</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="973831131%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">open fun <a href="index.html#973831131%2FFunctions%2F-870575855">onJsAlert</a>(p0: <a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a>, p1: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, p2: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, p3: <a href="https://developer.android.com/reference/kotlin/android/webkit/JsResult.html">JsResult</a>): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="1807108545%2FFunctions%2F-870575855" anchor-label="onJsBeforeUnload" id="1807108545%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#1807108545%2FFunctions%2F-870575855">onJsBeforeUnload</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1807108545%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">open fun <a href="index.html#1807108545%2FFunctions%2F-870575855">onJsBeforeUnload</a>(p0: <a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a>, p1: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, p2: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, p3: <a href="https://developer.android.com/reference/kotlin/android/webkit/JsResult.html">JsResult</a>): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-1285658377%2FFunctions%2F-870575855" anchor-label="onJsConfirm" id="-1285658377%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#-1285658377%2FFunctions%2F-870575855">onJsConfirm</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1285658377%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">open fun <a href="index.html#-1285658377%2FFunctions%2F-870575855">onJsConfirm</a>(p0: <a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a>, p1: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, p2: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, p3: <a href="https://developer.android.com/reference/kotlin/android/webkit/JsResult.html">JsResult</a>): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-285013092%2FFunctions%2F-870575855" anchor-label="onJsPrompt" id="-285013092%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#-285013092%2FFunctions%2F-870575855">onJsPrompt</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-285013092%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">open fun <a href="index.html#-285013092%2FFunctions%2F-870575855">onJsPrompt</a>(p0: <a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a>, p1: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, p2: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, p3: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, p4: <a href="https://developer.android.com/reference/kotlin/android/webkit/JsPromptResult.html">JsPromptResult</a>): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-976422515%2FFunctions%2F-870575855" anchor-label="onPermissionRequest" id="-976422515%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#-976422515%2FFunctions%2F-870575855">onPermissionRequest</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-976422515%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">open fun <a href="index.html#-976422515%2FFunctions%2F-870575855">onPermissionRequest</a>(p0: <a href="https://developer.android.com/reference/kotlin/android/webkit/PermissionRequest.html">PermissionRequest</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-1953065996%2FFunctions%2F-870575855" anchor-label="onPermissionRequestCanceled" id="-1953065996%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#-1953065996%2FFunctions%2F-870575855">onPermissionRequestCanceled</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1953065996%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">open fun <a href="index.html#-1953065996%2FFunctions%2F-870575855">onPermissionRequestCanceled</a>(p0: <a href="https://developer.android.com/reference/kotlin/android/webkit/PermissionRequest.html">PermissionRequest</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="1097186871%2FFunctions%2F-870575855" anchor-label="onProgressChanged" id="1097186871%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="on-progress-changed.html">onProgressChanged</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1097186871%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">open override fun <a href="on-progress-changed.html">onProgressChanged</a>(view: <a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a>, newProgress: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="1195326840%2FFunctions%2F-870575855" anchor-label="onReceivedIcon" id="1195326840%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="on-received-icon.html">onReceivedIcon</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1195326840%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">open override fun <a href="on-received-icon.html">onReceivedIcon</a>(view: <a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a>, icon: <a href="https://developer.android.com/reference/kotlin/android/graphics/Bitmap.html">Bitmap</a>?)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="546763944%2FFunctions%2F-870575855" anchor-label="onReceivedTitle" id="546763944%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="on-received-title.html">onReceivedTitle</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="546763944%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">open override fun <a href="on-received-title.html">onReceivedTitle</a>(view: <a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a>, title: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="943485513%2FFunctions%2F-870575855" anchor-label="onReceivedTouchIconUrl" id="943485513%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#943485513%2FFunctions%2F-870575855">onReceivedTouchIconUrl</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="943485513%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">open fun <a href="index.html#943485513%2FFunctions%2F-870575855">onReceivedTouchIconUrl</a>(p0: <a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a>, p1: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, p2: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-2117682875%2FFunctions%2F-870575855" anchor-label="onRequestFocus" id="-2117682875%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#-2117682875%2FFunctions%2F-870575855">onRequestFocus</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2117682875%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">open fun <a href="index.html#-2117682875%2FFunctions%2F-870575855">onRequestFocus</a>(p0: <a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="1756333106%2FFunctions%2F-870575855" anchor-label="onShowCustomView" id="1756333106%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#1756333106%2FFunctions%2F-870575855">onShowCustomView</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1756333106%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">open fun <a href="index.html#1756333106%2FFunctions%2F-870575855">onShowCustomView</a>(p0: <a href="https://developer.android.com/reference/kotlin/android/view/View.html">View</a>, p1: <a href="https://developer.android.com/reference/kotlin/android/webkit/WebChromeClient.CustomViewCallback.html">WebChromeClient.CustomViewCallback</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="417371782%2FFunctions%2F-870575855" anchor-label="onShowFileChooser" id="417371782%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#417371782%2FFunctions%2F-870575855">onShowFileChooser</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="417371782%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">open fun <a href="index.html#417371782%2FFunctions%2F-870575855">onShowFileChooser</a>(p0: <a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a>, p1: <a href="https://developer.android.com/reference/kotlin/android/webkit/ValueCallback.html">ValueCallback</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html">Array</a>&lt;<a href="https://developer.android.com/reference/kotlin/android/net/Uri.html">Uri</a>&gt;&gt;, p2: <a href="https://developer.android.com/reference/kotlin/android/webkit/WebChromeClient.FileChooserParams.html">WebChromeClient.FileChooserParams</a>): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="">Properties</h2>
-              <div class="table" data-togglable="Properties"><a data-name="365063433%2FProperties%2F-870575855" anchor-label="state" id="365063433%2FProperties%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="state.html">state</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="365063433%2FProperties%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><a data-name="365063433%2FProperties%2F-870575855" anchor-label="state" id="365063433%2FProperties%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a><div class="symbol monospace">open lateinit var <a href="state.html">state</a>: <a href="../-web-view-state/index.html">WebViewState</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="">Sources</h2>
-              <div class="table" data-togglable="Sources"><a data-name="-1846952577%2FSource%2F636117155" anchor-label="https://github.com/google/accompanist/blob/main/web/src/main/java/com/google/accompanist/web/WebView.kt#L292" id="-1846952577%2FSource%2F636117155" data-filterable-set=":web:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/main" data-filterable-set=":web:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="https://github.com/google/accompanist/blob/main/web/src/main/java/com/google/accompanist/web/WebView.kt#L292">androidJvm source</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1846952577%2FSource%2F636117155"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div></div>
-                  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,FUNCTION,PROPERTY">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="">Constructors</h2>
+        <div class="table"><a data-name="1121883795%2FConstructors%2F-870575855" anchor-label="AccompanistWebChromeClient" id="1121883795%2FConstructors%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-accompanist-web-chrome-client.html"><span>Accompanist</span><wbr><span>Web</span><wbr><span>Chrome</span><wbr><span><span>Client</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1121883795%2FConstructors%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="1476212932%2FFunctions%2F-870575855" anchor-label="getDefaultVideoPoster" id="1476212932%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1476212932%2FFunctions%2F-870575855"><span>get</span><wbr><span>Default</span><wbr><span>Video</span><wbr><span><span>Poster</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1476212932%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#1476212932%2FFunctions%2F-870575855"><span class="token function">getDefaultVideoPoster</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/graphics/Bitmap.html">Bitmap</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2070250264%2FFunctions%2F-870575855" anchor-label="getVideoLoadingProgressView" id="2070250264%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#2070250264%2FFunctions%2F-870575855"><span>get</span><wbr><span>Video</span><wbr><span>Loading</span><wbr><span>Progress</span><wbr><span><span>View</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2070250264%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#2070250264%2FFunctions%2F-870575855"><span class="token function">getVideoLoadingProgressView</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/view/View.html">View</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-574836608%2FFunctions%2F-870575855" anchor-label="getVisitedHistory" id="-574836608%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-574836608%2FFunctions%2F-870575855"><span>get</span><wbr><span>Visited</span><wbr><span><span>History</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-574836608%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#-574836608%2FFunctions%2F-870575855"><span class="token function">getVisitedHistory</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/webkit/ValueCallback.html">ValueCallback</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1409377548%2FFunctions%2F-870575855" anchor-label="onCloseWindow" id="1409377548%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1409377548%2FFunctions%2F-870575855"><span>on</span><wbr><span>Close</span><wbr><span><span>Window</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1409377548%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#1409377548%2FFunctions%2F-870575855"><span class="token function">onCloseWindow</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-683346821%2FFunctions%2F-870575855" anchor-label="onConsoleMessage" id="-683346821%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-683346821%2FFunctions%2F-870575855"><span>on</span><wbr><span>Console</span><wbr><span><span>Message</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-683346821%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#-683346821%2FFunctions%2F-870575855"><span class="token function">onConsoleMessage</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/webkit/ConsoleMessage.html">ConsoleMessage</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1515237599%2FFunctions%2F-870575855" anchor-label="onCreateWindow" id="-1515237599%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1515237599%2FFunctions%2F-870575855"><span>on</span><wbr><span>Create</span><wbr><span><span>Window</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1515237599%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#-1515237599%2FFunctions%2F-870575855"><span class="token function">onCreateWindow</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a><span class="token punctuation">, </span></span><span class="parameter ">p1<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token punctuation">, </span></span><span class="parameter ">p2<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token punctuation">, </span></span><span class="parameter ">p3<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/os/Message.html">Message</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-74115562%2FFunctions%2F-870575855" anchor-label="onGeolocationPermissionsHidePrompt" id="-74115562%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-74115562%2FFunctions%2F-870575855"><span>on</span><wbr><span>Geolocation</span><wbr><span>Permissions</span><wbr><span>Hide</span><wbr><span><span>Prompt</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-74115562%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#-74115562%2FFunctions%2F-870575855"><span class="token function">onGeolocationPermissionsHidePrompt</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="322323182%2FFunctions%2F-870575855" anchor-label="onGeolocationPermissionsShowPrompt" id="322323182%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#322323182%2FFunctions%2F-870575855"><span>on</span><wbr><span>Geolocation</span><wbr><span>Permissions</span><wbr><span>Show</span><wbr><span><span>Prompt</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="322323182%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#322323182%2FFunctions%2F-870575855"><span class="token function">onGeolocationPermissionsShowPrompt</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">p1<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/webkit/GeolocationPermissions.Callback.html">GeolocationPermissions.Callback</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1314996162%2FFunctions%2F-870575855" anchor-label="onHideCustomView" id="1314996162%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1314996162%2FFunctions%2F-870575855"><span>on</span><wbr><span>Hide</span><wbr><span>Custom</span><wbr><span><span>View</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1314996162%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#1314996162%2FFunctions%2F-870575855"><span class="token function">onHideCustomView</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="973831131%2FFunctions%2F-870575855" anchor-label="onJsAlert" id="973831131%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#973831131%2FFunctions%2F-870575855"><span>on</span><wbr><span>Js</span><wbr><span><span>Alert</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="973831131%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#973831131%2FFunctions%2F-870575855"><span class="token function">onJsAlert</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a><span class="token punctuation">, </span></span><span class="parameter ">p1<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">p2<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">p3<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/webkit/JsResult.html">JsResult</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1807108545%2FFunctions%2F-870575855" anchor-label="onJsBeforeUnload" id="1807108545%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1807108545%2FFunctions%2F-870575855"><span>on</span><wbr><span>Js</span><wbr><span>Before</span><wbr><span><span>Unload</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1807108545%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#1807108545%2FFunctions%2F-870575855"><span class="token function">onJsBeforeUnload</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a><span class="token punctuation">, </span></span><span class="parameter ">p1<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">p2<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">p3<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/webkit/JsResult.html">JsResult</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1285658377%2FFunctions%2F-870575855" anchor-label="onJsConfirm" id="-1285658377%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1285658377%2FFunctions%2F-870575855"><span>on</span><wbr><span>Js</span><wbr><span><span>Confirm</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1285658377%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#-1285658377%2FFunctions%2F-870575855"><span class="token function">onJsConfirm</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a><span class="token punctuation">, </span></span><span class="parameter ">p1<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">p2<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">p3<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/webkit/JsResult.html">JsResult</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-285013092%2FFunctions%2F-870575855" anchor-label="onJsPrompt" id="-285013092%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-285013092%2FFunctions%2F-870575855"><span>on</span><wbr><span>Js</span><wbr><span><span>Prompt</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-285013092%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#-285013092%2FFunctions%2F-870575855"><span class="token function">onJsPrompt</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a><span class="token punctuation">, </span></span><span class="parameter ">p1<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">p2<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">p3<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">p4<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/webkit/JsPromptResult.html">JsPromptResult</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-976422515%2FFunctions%2F-870575855" anchor-label="onPermissionRequest" id="-976422515%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-976422515%2FFunctions%2F-870575855"><span>on</span><wbr><span>Permission</span><wbr><span><span>Request</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-976422515%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#-976422515%2FFunctions%2F-870575855"><span class="token function">onPermissionRequest</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/webkit/PermissionRequest.html">PermissionRequest</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1953065996%2FFunctions%2F-870575855" anchor-label="onPermissionRequestCanceled" id="-1953065996%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1953065996%2FFunctions%2F-870575855"><span>on</span><wbr><span>Permission</span><wbr><span>Request</span><wbr><span><span>Canceled</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1953065996%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#-1953065996%2FFunctions%2F-870575855"><span class="token function">onPermissionRequestCanceled</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/webkit/PermissionRequest.html">PermissionRequest</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1097186871%2FFunctions%2F-870575855" anchor-label="onProgressChanged" id="1097186871%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="on-progress-changed.html"><span>on</span><wbr><span>Progress</span><wbr><span><span>Changed</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1097186871%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="on-progress-changed.html"><span class="token function">onProgressChanged</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">view<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a><span class="token punctuation">, </span></span><span class="parameter ">newProgress<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1195326840%2FFunctions%2F-870575855" anchor-label="onReceivedIcon" id="1195326840%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="on-received-icon.html"><span>on</span><wbr><span>Received</span><wbr><span><span>Icon</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1195326840%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="on-received-icon.html"><span class="token function">onReceivedIcon</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">view<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a><span class="token punctuation">, </span></span><span class="parameter ">icon<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/graphics/Bitmap.html">Bitmap</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="546763944%2FFunctions%2F-870575855" anchor-label="onReceivedTitle" id="546763944%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="on-received-title.html"><span>on</span><wbr><span>Received</span><wbr><span><span>Title</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="546763944%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="on-received-title.html"><span class="token function">onReceivedTitle</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">view<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a><span class="token punctuation">, </span></span><span class="parameter ">title<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="943485513%2FFunctions%2F-870575855" anchor-label="onReceivedTouchIconUrl" id="943485513%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#943485513%2FFunctions%2F-870575855"><span>on</span><wbr><span>Received</span><wbr><span>Touch</span><wbr><span>Icon</span><wbr><span><span>Url</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="943485513%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#943485513%2FFunctions%2F-870575855"><span class="token function">onReceivedTouchIconUrl</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a><span class="token punctuation">, </span></span><span class="parameter ">p1<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">p2<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2117682875%2FFunctions%2F-870575855" anchor-label="onRequestFocus" id="-2117682875%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-2117682875%2FFunctions%2F-870575855"><span>on</span><wbr><span>Request</span><wbr><span><span>Focus</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2117682875%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#-2117682875%2FFunctions%2F-870575855"><span class="token function">onRequestFocus</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1756333106%2FFunctions%2F-870575855" anchor-label="onShowCustomView" id="1756333106%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1756333106%2FFunctions%2F-870575855"><span>on</span><wbr><span>Show</span><wbr><span>Custom</span><wbr><span><span>View</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1756333106%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#1756333106%2FFunctions%2F-870575855"><span class="token function">onShowCustomView</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/view/View.html">View</a><span class="token punctuation">, </span></span><span class="parameter ">p1<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/webkit/WebChromeClient.CustomViewCallback.html">WebChromeClient.CustomViewCallback</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="417371782%2FFunctions%2F-870575855" anchor-label="onShowFileChooser" id="417371782%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#417371782%2FFunctions%2F-870575855"><span>on</span><wbr><span>Show</span><wbr><span>File</span><wbr><span><span>Chooser</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="417371782%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#417371782%2FFunctions%2F-870575855"><span class="token function">onShowFileChooser</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a><span class="token punctuation">, </span></span><span class="parameter ">p1<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/webkit/ValueCallback.html">ValueCallback</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://developer.android.com/reference/kotlin/android/net/Uri.html">Uri</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">p2<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/webkit/WebChromeClient.FileChooserParams.html">WebChromeClient.FileChooserParams</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="365063433%2FProperties%2F-870575855" anchor-label="state" id="365063433%2FProperties%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="state.html"><span><span>state</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="365063433%2FProperties%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">lateinit </span><span class="token keyword">var </span><a href="state.html">state</a><span class="token operator">: </span><a href="../-web-view-state/index.html">WebViewState</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  
-</body></html>
-
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>
 

@@ -21,7 +21,7 @@
         <link rel="next" href="../systemuicontroller/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.8">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.11">
     
     
       
@@ -29,10 +29,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.ded33207.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.85bb2934.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.a0c5b2b5.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.a6bdf11c.min.css">
       
       
 
@@ -2112,13 +2112,15 @@ wrap your content. This would typically be done near the top level of your compo
 </code></pre></div>
 <p>See the <a href="../api/insets-ui/com.google.accompanist.insets.ui/">API docs</a> for a list of the other layouts provided in the library.</p>
 <h3 id="animated-insets-support">Animated Insets support<a class="headerlink" href="#animated-insets-support" title="Permanent link">&para;</a></h3>
-<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Info</label><div class="tabbed-content">
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Info</label><label for="__tabbed_1_2">Usage</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <p><img align="right" alt="" loading="lazy" src="images/ime-insets.gif" /></p>
 <p>The library now has experimental support for <a href="https://developer.android.com/reference/android/view/WindowInsetsAnimation"><code>WindowInsetsAnimations</code></a>, allowing your content is react to inset animations, such as the on screen-keyboard (IME) being animated on/off screen. The <code>imePadding()</code> and <code>navigationBarsWithImePadding()</code> modifiers are available especially for this use-case. </p>
 <p>This functionality works wherever <a href="https://developer.android.com/reference/androidx/core/view/WindowInsetsAnimationCompat">WindowInsetsAnimationCompat</a> works, which at the time or writing is on devices running API 21+.</p>
 <p>To enable animated insets support, you need need to new <code>ProvideWindowInsets</code> overload, and set <code>windowInsetsAnimationsEnabled = true</code>.</p>
 </div>
-<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Usage</label><div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="n">ProvideWindowInsets</span><span class="p">(</span><span class="n">windowInsetsAnimationsEnabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// content</span>
 <span class="p">}</span>
@@ -2132,6 +2134,7 @@ wrap your content. This would typically be done near the top level of your compo
 <p>See the <a href="https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/insets/ImeAnimationSample.kt">ImeAnimationSample</a> for a working example.</p>
 </div>
 </div>
+</div>
 <h3 id="ime-animations">IME animations<a class="headerlink" href="#ime-animations" title="Permanent link">&para;</a></h3>
 <p>If you're using the animation insets support for IME/keyboard animations, you also need to ensure that the activity's <code>windowSoftInputMode</code> is set to <code>adjustResize</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">&lt;activity</span>
@@ -2143,12 +2146,14 @@ wrap your content. This would typically be done near the top level of your compo
 <h2 id="experimental">🚧 Experimental<a class="headerlink" href="#experimental" title="Permanent link">&para;</a></h2>
 <p>The features below are experimental, and require developers to <a href="https://kotlinlang.org/docs/reference/opt-in-requirements.html">opt-in</a>.</p>
 <h3 id="controlling-the-ime-on-screen-keyboard">Controlling the IME (on-screen keyboard)<a class="headerlink" href="#controlling-the-ime-on-screen-keyboard" title="Permanent link">&para;</a></h3>
-<div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Info</label><div class="tabbed-content">
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Info</label><label for="__tabbed_2_2">Usage</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <p><img align="right" alt="" loading="lazy" src="images/ime-scroll.gif" /></p>
 <p>This library also has support for controlling the IME from scroll gestures, allowing your scrollable components to pull/push the IME on/off screen. This is achieved through the built-in <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/gesture/nestedscroll/NestedScrollConnection"><code>NestedScrollConnection</code></a> implementation returned by <a href="../api/insets/com.google.accompanist.insets/remember-ime-nested-scroll-connection.html"><code>rememberImeNestedScrollConnection()</code></a>.</p>
 <p>This functionality only works when running on devices with API 30+.</p>
 </div>
-<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">Usage</label><div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="c1">// Here we&#39;re using a scrollable Column, but it also works with LazyColumn, etc.</span>
 <span class="n">Column</span><span class="p">(</span>
 <span class="w">    </span><span class="c1">// We use the nestedScroll modifier, passing in the </span>
@@ -2161,6 +2166,7 @@ wrap your content. This would typically be done near the top level of your compo
 <span class="p">}</span>
 </code></pre></div>
 <p>See the <a href="https://github.com/google/accompanist/blob/main/sample/src/main/java/com/google/accompanist/sample/insets/ImeAnimationSample.kt">ImeAnimationSample</a> for a working example.</p>
+</div>
 </div>
 </div>
 <h2 id="download">Download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h2>
@@ -2224,7 +2230,7 @@ wrap your content. This would typically be done near the top level of your compo
     <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.51198bba.min.js"></script>
+      <script src="../assets/javascripts/bundle.fac441b0.min.js"></script>
       
     
   </body>

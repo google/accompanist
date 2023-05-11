@@ -1,213 +1,289 @@
+<!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>All modules</title>
-<link href="images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "";</script><script type="text/javascript" src="scripts/sourceset_dependencies.js" async="async"></script><link href="styles/style.css" rel="Stylesheet"><link href="styles/logo-styles.css" rel="Stylesheet"><link href="styles/jetbrains-mono.css" rel="Stylesheet"><link href="styles/main.css" rel="Stylesheet"><script type="text/javascript" src="scripts/clipboard.js" async="async"></script><script type="text/javascript" src="scripts/navigation-loader.js" async="async"></script><script type="text/javascript" src="scripts/platform-content-handler.js" async="async"></script><script type="text/javascript" src="scripts/main.js" async="async"></script><link href="styles/multimodule.css" rel="Stylesheet">  </head>
-  <body>
-    <div id="container">
-      <div id="leftColumn"><a href="index.html">
-          <div id="logo"></div>
-        </a>
-        <div id="paneSearch"></div>
+    <link href="images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "";</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="scripts/sourceset_dependencies.js" async="async"></script>
+<link href="styles/style.css" rel="Stylesheet">
+<link href="styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="styles/main.css" rel="Stylesheet">
+<link href="styles/prism.css" rel="Stylesheet">
+<link href="styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="scripts/clipboard.js" async="async"></script>
+<script type="text/javascript" src="scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
+</head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+            <a href="index.html">
+                    <span>accompanist</span>
+            </a>
+    </div>
+    <div>
+    </div>
+    <div class="pull-right d-flex">
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
         <div id="sideMenu"></div>
-      </div>
-      <div id="main">
-        <div id="leftToggler"><span class="icon-toggler"></span></div>
-<script type="text/javascript" src="scripts/main.js"></script>        <div class="main-content" id="content" pageIds="accompanist::.ext/allModules///PointingToDeclaration//0">
-          <div class="navigation-wrapper" id="navigation-wrapper">
-            <div class="breadcrumbs"></div>
-            <div class="pull-right d-flex">
-              <div id="searchBar"></div>
-            </div>
-          </div>
-          <div class="cover ">
-            <h2 class="">All modules:</h2>
-            <div class="table"><a data-name="2114484383%2FMain%2F0" anchor-label="adaptive" id="2114484383%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex"><a href="adaptive/index.html">adaptive</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2114484383%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment"></span></div>
-                </div>
-              </div>
-<a data-name="47555328%2FMain%2F0" anchor-label="drawablepainter" id="47555328%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex"><a href="drawablepainter/index.html">drawablepainter</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="47555328%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment"></span></div>
-                </div>
-              </div>
-<a data-name="-1252645251%2FMain%2F0" anchor-label="flowlayout" id="-1252645251%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex"><a href="flowlayout/index.html">flowlayout</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1252645251%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment"></span></div>
-                </div>
-              </div>
-<a data-name="-1834068705%2FMain%2F0" anchor-label="insets" id="-1834068705%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex"><a href="insets/index.html">insets</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1834068705%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment"></span></div>
-                </div>
-              </div>
-<a data-name="857199650%2FMain%2F0" anchor-label="insets-ui" id="857199650%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex"><a href="insets-ui/index.html">insets-ui</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="857199650%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment"></span></div>
-                </div>
-              </div>
-<a data-name="1459100586%2FMain%2F0" anchor-label="navigation-animation" id="1459100586%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex"><a href="navigation-animation/index.html">navigation-animation</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1459100586%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment"></span></div>
-                </div>
-              </div>
-<a data-name="1820562125%2FMain%2F0" anchor-label="navigation-material" id="1820562125%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex"><a href="navigation-material/index.html">navigation-material</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1820562125%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment"></span></div>
-                </div>
-              </div>
-<a data-name="1807539591%2FMain%2F0" anchor-label="pager-indicators" id="1807539591%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex"><a href="pager-indicators/index.html">pager-indicators</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1807539591%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment"></span></div>
-                </div>
-              </div>
-<a data-name="1596666761%2FMain%2F0" anchor-label="permissions" id="1596666761%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex"><a href="permissions/index.html">permissions</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1596666761%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment"></span></div>
-                </div>
-              </div>
-<a data-name="-890272727%2FMain%2F0" anchor-label="permissions-lint" id="-890272727%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex"><a href="permissions-lint/index.html">permissions-lint</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-890272727%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment"></span></div>
-                </div>
-              </div>
-<a data-name="1230781818%2FMain%2F0" anchor-label="placeholder" id="1230781818%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex"><a href="placeholder/index.html">placeholder</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1230781818%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment"></span></div>
-                </div>
-              </div>
-<a data-name="765914932%2FMain%2F0" anchor-label="placeholder-material" id="765914932%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex"><a href="placeholder-material/index.html">placeholder-material</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="765914932%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment"></span></div>
-                </div>
-              </div>
-<a data-name="202140859%2FMain%2F0" anchor-label="placeholder-material3" id="202140859%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex"><a href="placeholder-material3/index.html">placeholder-material3</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="202140859%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment"></span></div>
-                </div>
-              </div>
-<a data-name="1595104598%2FMain%2F0" anchor-label="systemuicontroller" id="1595104598%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex"><a href="systemuicontroller/index.html">systemuicontroller</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1595104598%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment"></span></div>
-                </div>
-              </div>
-<a data-name="1642954159%2FMain%2F0" anchor-label="testharness" id="1642954159%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex"><a href="testharness/index.html">testharness</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1642954159%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment"></span></div>
-                </div>
-              </div>
-<a data-name="-649734759%2FMain%2F0" anchor-label="themeadapter-appcompat" id="-649734759%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex"><a href="themeadapter-appcompat/index.html">themeadapter-appcompat</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-649734759%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment"></span></div>
-                </div>
-              </div>
-<a data-name="-1715395161%2FMain%2F0" anchor-label="themeadapter-core" id="-1715395161%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex"><a href="themeadapter-core/index.html">themeadapter-core</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1715395161%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment"></span></div>
-                </div>
-              </div>
-<a data-name="1989285535%2FMain%2F0" anchor-label="themeadapter-material" id="1989285535%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex"><a href="themeadapter-material/index.html">themeadapter-material</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1989285535%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment"></span></div>
-                </div>
-              </div>
-<a data-name="-528076112%2FMain%2F0" anchor-label="themeadapter-material3" id="-528076112%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex"><a href="themeadapter-material3/index.html">themeadapter-material3</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-528076112%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment"></span></div>
-                </div>
-              </div>
-<a data-name="2115355321%2FMain%2F0" anchor-label="web" id="2115355321%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex"><a href="web/index.html">web</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2115355321%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment"></span></div>
-                </div>
-              </div>
-            </div>
-          </div>
+    </div>
+    <div id="main">
+<div class="main-content" id="content" pageIds="accompanist::.ext/allModules///PointingToDeclaration//0">
+  <div class="breadcrumbs"></div>
+  <div class="cover ">
+    <h2 class="">All modules:</h2>
+    <div class="table"><a data-name="2114484383%2FMain%2F0" anchor-label="adaptive" id="2114484383%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="adaptive/index.html">adaptive</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2114484383%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment"></span></div>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+      </div>
+<a data-name="47555328%2FMain%2F0" anchor-label="drawablepainter" id="47555328%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="drawablepainter/index.html">drawablepainter</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="47555328%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment"></span></div>
+        </div>
+      </div>
+<a data-name="-1252645251%2FMain%2F0" anchor-label="flowlayout" id="-1252645251%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="flowlayout/index.html">flowlayout</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1252645251%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment"></span></div>
+        </div>
+      </div>
+<a data-name="-1834068705%2FMain%2F0" anchor-label="insets" id="-1834068705%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="insets/index.html">insets</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1834068705%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment"></span></div>
+        </div>
+      </div>
+<a data-name="857199650%2FMain%2F0" anchor-label="insets-ui" id="857199650%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="insets-ui/index.html">insets-ui</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="857199650%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment"></span></div>
+        </div>
+      </div>
+<a data-name="1459100586%2FMain%2F0" anchor-label="navigation-animation" id="1459100586%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="navigation-animation/index.html">navigation-animation</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1459100586%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment"></span></div>
+        </div>
+      </div>
+<a data-name="1820562125%2FMain%2F0" anchor-label="navigation-material" id="1820562125%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="navigation-material/index.html">navigation-material</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1820562125%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment"></span></div>
+        </div>
+      </div>
+<a data-name="1807539591%2FMain%2F0" anchor-label="pager-indicators" id="1807539591%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="pager-indicators/index.html">pager-indicators</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1807539591%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment"></span></div>
+        </div>
+      </div>
+<a data-name="1596666761%2FMain%2F0" anchor-label="permissions" id="1596666761%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="permissions/index.html">permissions</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1596666761%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment"></span></div>
+        </div>
+      </div>
+<a data-name="-890272727%2FMain%2F0" anchor-label="permissions-lint" id="-890272727%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="permissions-lint/index.html">permissions-lint</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-890272727%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment"></span></div>
+        </div>
+      </div>
+<a data-name="1230781818%2FMain%2F0" anchor-label="placeholder" id="1230781818%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="placeholder/index.html">placeholder</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1230781818%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment"></span></div>
+        </div>
+      </div>
+<a data-name="765914932%2FMain%2F0" anchor-label="placeholder-material" id="765914932%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="placeholder-material/index.html">placeholder-material</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="765914932%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment"></span></div>
+        </div>
+      </div>
+<a data-name="202140859%2FMain%2F0" anchor-label="placeholder-material3" id="202140859%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="placeholder-material3/index.html">placeholder-material3</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="202140859%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment"></span></div>
+        </div>
+      </div>
+<a data-name="1595104598%2FMain%2F0" anchor-label="systemuicontroller" id="1595104598%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="systemuicontroller/index.html">systemuicontroller</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1595104598%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment"></span></div>
+        </div>
+      </div>
+<a data-name="1642954159%2FMain%2F0" anchor-label="testharness" id="1642954159%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="testharness/index.html">testharness</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1642954159%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment"></span></div>
+        </div>
+      </div>
+<a data-name="-649734759%2FMain%2F0" anchor-label="themeadapter-appcompat" id="-649734759%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="themeadapter-appcompat/index.html">themeadapter-appcompat</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-649734759%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment"></span></div>
+        </div>
+      </div>
+<a data-name="-1715395161%2FMain%2F0" anchor-label="themeadapter-core" id="-1715395161%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="themeadapter-core/index.html">themeadapter-core</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1715395161%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment"></span></div>
+        </div>
+      </div>
+<a data-name="1989285535%2FMain%2F0" anchor-label="themeadapter-material" id="1989285535%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="themeadapter-material/index.html">themeadapter-material</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1989285535%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment"></span></div>
+        </div>
+      </div>
+<a data-name="-528076112%2FMain%2F0" anchor-label="themeadapter-material3" id="-528076112%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="themeadapter-material3/index.html">themeadapter-material3</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-528076112%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment"></span></div>
+        </div>
+      </div>
+<a data-name="2115355321%2FMain%2F0" anchor-label="web" id="2115355321%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="web/index.html">web</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2115355321%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment"></span></div>
+        </div>
       </div>
     </div>
-  </body>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span
+                class="pull-right"><span>Generated by </span><a
+                href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
 </html>
-

@@ -21,7 +21,7 @@
         <link rel="next" href="../permissions/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.8">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.11">
     
     
       
@@ -29,10 +29,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.ded33207.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.85bb2934.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.a0c5b2b5.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.a6bdf11c.min.css">
       
       
 
@@ -1012,6 +1012,53 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#migration-guide-to-the-official-flowlayouts" class="md-nav__link">
+    Migration Guide to the official FlowLayouts
+  </a>
+  
+    <nav class="md-nav" aria-label="Migration Guide to the official FlowLayouts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#new-features" class="md-nav__link">
+    New Features:
+  </a>
+  
+    <nav class="md-nav" aria-label="New Features:">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#add-weights-to-each-child" class="md-nav__link">
+    Add weights to each child
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-a-maximum-number-of-items-in-row-or-column" class="md-nav__link">
+    Create a maximum number of items in row or column
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#download" class="md-nav__link">
     Download
   </a>
@@ -1538,6 +1585,53 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#migration-guide-to-the-official-flowlayouts" class="md-nav__link">
+    Migration Guide to the official FlowLayouts
+  </a>
+  
+    <nav class="md-nav" aria-label="Migration Guide to the official FlowLayouts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#new-features" class="md-nav__link">
+    New Features:
+  </a>
+  
+    <nav class="md-nav" aria-label="New Features:">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#add-weights-to-each-child" class="md-nav__link">
+    Add weights to each child
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-a-maximum-number-of-items-in-row-or-column" class="md-nav__link">
+    Create a maximum number of items in row or column
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#download" class="md-nav__link">
     Download
   </a>
@@ -1564,8 +1658,12 @@
 
 <h1 id="jetpack-compose-flow-layouts">Jetpack Compose Flow Layouts<a class="headerlink" href="#jetpack-compose-flow-layouts" title="Permanent link">&para;</a></h1>
 <p><a href="https://search.maven.org/search?q=g:com.google.accompanist"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-flowlayout" /></a></p>
-<p>Flow layouts adapted from the versions which were available in <a href="https://developer.android.com/jetpack/compose">Jetpack Compose</a> until they were removed.</p>
-<p>Unlike the standard <code>Row</code> and <code>Column</code> composables, these layout children across multiple rows/columns if they exceed the available space.</p>
+<p>Flow Layouts in Accompanist is now deprecated. Please see the migration guide below to begin using 
+Flow Layouts in Androidx.</p>
+<p>The official <code>androidx.compose.foundation</code> FlowLayouts support is very similar to accompanist/flowlayouts, with a few changes.</p>
+<p>It is most similar to <code>Row</code> and <code>Column</code> and shares similar modifiers and the scopes. 
+Unlike the standard <code>Row</code> and <code>Column</code> composables, if it runs out of space on the current row, 
+the children are placed in the next line, and this repeats until the children are fully placed.</p>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="n">FlowRow</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// row contents</span>
@@ -1575,7 +1673,97 @@
 <span class="w">    </span><span class="c1">// column contents</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>For examples, refer to the <a href="https://github.com/google/accompanist/tree/main/sample/src/main/java/com/google/accompanist/sample/flowlayout">samples</a>.</p>
+<h2 id="migration-guide-to-the-official-flowlayouts">Migration Guide to the official FlowLayouts<a class="headerlink" href="#migration-guide-to-the-official-flowlayouts" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Replace import packages to point to Androidx.Compose
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">androidx.compose.foundation.layout.FlowColumn</span>
+</code></pre></div></li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">androidx.compose.foundation.layout.FlowRow</span>
+</code></pre></div>
+<p>For <code>FlowColumn</code>:  </p>
+<ol>
+<li>
+<p>Replace Modifier <code>mainAxisAlignment</code> with <code>verticalArrangement</code> </p>
+</li>
+<li>
+<p>Replace Modifier <code>crossAxisAlignment</code> with <code>horizontalArrangement</code></p>
+</li>
+</ol>
+<p>For <code>FlowRow</code>  </p>
+<ol>
+<li>
+<p><code>mainAxisAlignment</code> is now <code>horizontalArrangement</code>  </p>
+</li>
+<li>
+<p><code>crossAxisAlignment</code> is now <code>verticalArrangement</code>  </p>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="n">FlowColumn</span><span class="p">(</span>
+<span class="w">    </span><span class="n">modifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Modifier</span><span class="p">,</span>
+<span class="w">    </span><span class="n">verticalArrangement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Arrangement</span><span class="p">.</span><span class="na">Top</span><span class="p">,</span>
+<span class="w">    </span><span class="n">horizontalArrangement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Arrangement</span><span class="p">.</span><span class="na">Start</span><span class="p">,</span>
+<span class="w">    </span><span class="n">content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// columns }</span>
+<span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">FlowRow</span><span class="p">(</span>
+<span class="w">    </span><span class="n">modifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Modifier</span><span class="p">,</span>
+<span class="w">    </span><span class="n">horizontalArrangement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Arrangement</span><span class="p">.</span><span class="na">Start</span><span class="p">,</span>
+<span class="w">    </span><span class="n">verticalArrangement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Arrangement</span><span class="p">.</span><span class="na">Top</span><span class="p">,</span>
+<span class="w">    </span><span class="n">content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// rows }</span>
+<span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<ol>
+<li>
+<p>Replace <code>mainAxisSpacing</code> with <code>HorizontalArrangement.spacedBy(50.dp, Alignment.*)</code> in <code>FlowRow</code> and <code>VerticalArrangement.spacedBy(50.dp, Alignment.*)</code> in <code>FlowColumn</code>.</p>
+</li>
+<li>
+<p>Replace <code>crossAxisSpacing</code> with <code>VerticalArrangement.spacedBy(50.dp, Alignment.*)</code> in <code>FlowRow</code> and <code>HorizontalArrangement.spacedBy(50.dp)</code> in <code>FlowColumn</code>. </p>
+</li>
+</ol>
+<p>Here <code>Alignment.*</code> is the Alignment you wish to use such as <code>Alignment.Start</code>, <code>Alignment.Top</code> etc</p>
+<div class="highlight"><pre><span></span><code><span class="n">FlowRow</span><span class="p">(</span>
+<span class="w">    </span><span class="n">modifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Modifier</span><span class="p">,</span>
+<span class="w">    </span><span class="n">horizontalArrangement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HorizontalArrangement</span><span class="p">.</span><span class="na">spacedBy</span><span class="p">(</span><span class="m">50.</span><span class="n">dp</span><span class="p">,</span><span class="w"> </span><span class="n">Alignment</span><span class="p">.</span><span class="na">Start</span><span class="p">),</span>
+<span class="w">    </span><span class="n">verticalArrangement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">VerticalArrangement</span><span class="p">.</span><span class="na">spacedBy</span><span class="p">(</span><span class="m">50.</span><span class="n">dp</span><span class="p">,</span><span class="w"> </span><span class="n">Alignment</span><span class="p">.</span><span class="na">Top</span><span class="p">),</span>
+<span class="w">    </span><span class="n">content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// rows }</span>
+<span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">FlowColumn</span><span class="p">(</span>
+<span class="w">    </span><span class="n">modifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Modifier</span><span class="p">,</span>
+<span class="w">    </span><span class="n">verticalArrangement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">VerticalArrangement</span><span class="p">.</span><span class="na">spacedBy</span><span class="p">(</span><span class="m">50.</span><span class="n">dp</span><span class="p">,</span><span class="w"> </span><span class="n">Alignment</span><span class="p">.</span><span class="na">Top</span><span class="p">),</span>
+<span class="w">    </span><span class="n">horizontalArrangement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HorizontalArrangement</span><span class="p">.</span><span class="na">spacedBy</span><span class="p">(</span><span class="m">50.</span><span class="n">dp</span><span class="p">,</span><span class="w"> </span><span class="n">Alignment</span><span class="p">.</span><span class="na">Start</span><span class="p">),</span>
+<span class="w">    </span><span class="n">content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// columns }</span>
+<span class="p">)</span>
+</code></pre></div>
+<ol>
+<li><code>lastLineMainAxisAlignment</code> is currently not supported in Compose Flow Layouts.</li>
+</ol>
+<h3 id="new-features">New Features:<a class="headerlink" href="#new-features" title="Permanent link">&para;</a></h3>
+<h4 id="add-weights-to-each-child">Add weights to each child<a class="headerlink" href="#add-weights-to-each-child" title="Permanent link">&para;</a></h4>
+<p>To scale an item based on the size of its parent and the space available, adding weights is helpful. 
+Adding a weight in <code>FlowRow</code> and <code>FlowColumn</code> is different than in <code>Row</code> and <code>Column</code>.</p>
+<p>In <code>FlowLayout</code>, it is based on the number of items placed on the row it falls on and their weights. 
+First we check to see if an item can fit in the current row or column based on its intrinsic size. 
+If it fits and has a weight, its final size is expanded based on the available space and the number of items 
+with weights placed on the row or column it falls on. </p>
+<p>Because of the nature of <code>FlowLayouts</code> an item only expands and does not shrink in size. Its width in <code>FlowRow</code>
+or height in <code>FlowColumn</code> determines it minimum width or height, and then expands based on its weight and 
+the available space remaining after row items' width/height have been determined.</p>
+<div class="highlight"><pre><span></span><code><span class="n">FlowRow</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="w">     </span><span class="n">repeat</span><span class="p">(</span><span class="m">20</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Box</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="na">size</span><span class="p">(</span><span class="m">20.</span><span class="n">dp</span><span class="p">).</span><span class="na">weight</span><span class="p">(</span><span class="m">1f</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">}</span><span class="w"> </span>
+<span class="p">}</span>
+</code></pre></div>
+<h4 id="create-a-maximum-number-of-items-in-row-or-column">Create a maximum number of items in row or column<a class="headerlink" href="#create-a-maximum-number-of-items-in-row-or-column" title="Permanent link">&para;</a></h4>
+<p>You may choose to limit the number of items that appear in each row in <code>FlowRow</code> or column in <code>FlowColumn</code>
+This can be configured using <code>maxItemsInEachRow</code> or <code>maxItemsInEachColumn</code>: 
+<div class="highlight"><pre><span></span><code><span class="n">FlowRow</span><span class="p">(</span><span class="n">maxItemsInEachRow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="w">     </span><span class="n">repeat</span><span class="p">(</span><span class="m">10</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Box</span><span class="p">(</span><span class="n">Modifier</span><span class="p">.</span><span class="na">size</span><span class="p">(</span><span class="m">20.</span><span class="n">dp</span><span class="p">).</span><span class="na">weight</span><span class="p">(</span><span class="m">1f</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">}</span><span class="w"> </span>
+<span class="p">}</span>
+</code></pre></div></p>
+<h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
+<p>For examples, refer to the <a href="https://android.googlesource.com/platform/frameworks/support/+/refs/heads/androidx-main/compose/foundation/foundation-layout/samples/src/main/java/androidx/compose/foundation/layout/samples/FlowRowSample.kt">Flow Row samples</a> 
+and the <a href="https://android.googlesource.com/platform/frameworks/support/+/refs/heads/androidx-main/compose/foundation/foundation-layout/samples/src/main/java/androidx/compose/foundation/layout/samples/FlowColumnSample.kt">Flow Column samples</a>.</p>
 <h2 id="download">Download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h2>
 <p><a href="https://search.maven.org/search?q=g:com.google.accompanist"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-flowlayout" /></a></p>
 <div class="highlight"><pre><span></span><code><span class="n">repositories</span><span class="w"> </span><span class="o">{</span>
@@ -1583,7 +1771,7 @@
 <span class="o">}</span>
 
 <span class="n">dependencies</span><span class="w"> </span><span class="o">{</span>
-<span class="w">    </span><span class="n">implementation</span><span class="w"> </span><span class="s2">&quot;com.google.accompanist:accompanist-flowlayout:&lt;version&gt;&quot;</span>
+<span class="w">    </span><span class="n">implementation</span><span class="w"> </span><span class="s2">&quot;androidx.compose.foundation:foundation:&lt;compose-version&gt;&quot;</span>
 <span class="o">}</span>
 </code></pre></div>
 <p>Snapshots of the development version are available in <a href="https://oss.sonatype.org/content/repositories/snapshots/com/google/accompanist/accompanist-flowlayout/">Sonatype's <code>snapshots</code> repository</a>. These are updated on every commit.</p>
@@ -1627,7 +1815,7 @@
     <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.51198bba.min.js"></script>
+      <script src="../assets/javascripts/bundle.fac441b0.min.js"></script>
       
     
   </body>

@@ -21,7 +21,7 @@
         <link rel="next" href="../drawablepainter/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.8">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.11">
     
     
       
@@ -29,10 +29,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.ded33207.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.85bb2934.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.a0c5b2b5.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.a6bdf11c.min.css">
       
       
 
@@ -1686,7 +1686,9 @@
 <h2 id="basic-usage">Basic usage<a class="headerlink" href="#basic-usage" title="Permanent link">&para;</a></h2>
 <p>At the most basic usage, the modifier will draw a shape over your composable content, filled with the provided color.</p>
 <p><img alt="Basic Placeholder demo" src="basic.jpg" /></p>
-<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Placeholder Material</label><div class="tabbed-content">
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Placeholder Material</label><label for="__tabbed_1_2">Placeholder Foundation</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.google.accompanist.placeholder.material.placeholder</span>
 
 <span class="n">Text</span><span class="p">(</span>
@@ -1697,7 +1699,7 @@
 <span class="p">)</span>
 </code></pre></div>
 </div>
-<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Placeholder Foundation</label><div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.google.accompanist.placeholder.placeholder</span>
 
 <span class="n">Text</span><span class="p">(</span>
@@ -1714,6 +1716,7 @@
 </code></pre></div>
 </div>
 </div>
+</div>
 <h2 id="placeholder-highlights">Placeholder highlights<a class="headerlink" href="#placeholder-highlights" title="Permanent link">&para;</a></h2>
 <p>The library also provides some 'highlight' animations to entertain the user while they are waiting. There are two provided by the library, but you can also provide your own.</p>
 <h3 id="fade">Fade<a class="headerlink" href="#fade" title="Permanent link">&para;</a></h3>
@@ -1726,7 +1729,9 @@
     <figcaption>Placeholder Fade demo</figcaption>
 </figure>
 
-<div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Placeholder Material</label><div class="tabbed-content">
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Placeholder Material</label><label for="__tabbed_2_2">Placeholder Foundation</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.google.accompanist.placeholder.PlaceholderHighlight</span>
 <span class="k">import</span><span class="w"> </span><span class="nn">com.google.accompanist.placeholder.material.placeholder</span>
 <span class="k">import</span><span class="w"> </span><span class="nn">com.google.accompanist.placeholder.material.fade</span>
@@ -1742,7 +1747,7 @@
 <span class="p">)</span>
 </code></pre></div>
 </div>
-<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">Placeholder Foundation</label><div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.google.accompanist.placeholder.PlaceholderHighlight</span>
 <span class="k">import</span><span class="w"> </span><span class="nn">com.google.accompanist.placeholder.placeholder</span>
 <span class="k">import</span><span class="w"> </span><span class="nn">com.google.accompanist.placeholder.fade</span>
@@ -1764,6 +1769,7 @@
 </code></pre></div>
 </div>
 </div>
+</div>
 <h3 id="shimmer">Shimmer<a class="headerlink" href="#shimmer" title="Permanent link">&para;</a></h3>
 <p>This displays a gradient shimmer effect which emanates from the top-start corner.</p>
 <figure>
@@ -1774,7 +1780,9 @@
     <figcaption>Placeholder Shimmer demo</figcaption>
 </figure>
 
-<div class="tabbed-set" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><label for="__tabbed_3_1">Placeholder Material</label><div class="tabbed-content">
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Placeholder Material</label><label for="__tabbed_3_2">Placeholder Foundation</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.google.accompanist.placeholder.PlaceholderHighlight</span>
 <span class="k">import</span><span class="w"> </span><span class="nn">com.google.accompanist.placeholder.material.placeholder</span>
 <span class="k">import</span><span class="w"> </span><span class="nn">com.google.accompanist.placeholder.material.shimmer</span>
@@ -1790,7 +1798,7 @@
 <span class="p">)</span>
 </code></pre></div>
 </div>
-<input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><label for="__tabbed_3_2">Placeholder Foundation</label><div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.google.accompanist.placeholder.PlaceholderHighlight</span>
 <span class="k">import</span><span class="w"> </span><span class="nn">com.google.accompanist.placeholder.placeholder</span>
 <span class="k">import</span><span class="w"> </span><span class="nn">com.google.accompanist.placeholder.shimmer</span>
@@ -1810,6 +1818,7 @@
 <span class="w">        </span><span class="p">)</span>
 <span class="p">)</span>
 </code></pre></div>
+</div>
 </div>
 </div>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
@@ -1886,7 +1895,7 @@ limitations under the License.
     <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.51198bba.min.js"></script>
+      <script src="../assets/javascripts/bundle.fac441b0.min.js"></script>
       
     
   </body>

@@ -1,268 +1,277 @@
+<!doctype html>
 <html>
-  <head>
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>com.google.accompanist.web</title>
-</head><body><link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script><script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script><link href="../../styles/style.css" rel="Stylesheet"><link href="../../styles/logo-styles.css" rel="Stylesheet"><link href="../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../styles/main.css" rel="Stylesheet"><script type="text/javascript" src="../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../scripts/main.js" async></script>
-  
-    <div id="container">
-      <div id="leftColumn"><a href="../../index.html">
-            <div id="logo"></div>
-          </a>
-        <div id="paneSearch"></div>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+<a href="../../index.html">
+<span>accompanist</span>            </a>    </div>
+    <div>
+    </div>
+    <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":web:dokkaHtmlPartial/release">androidJvm</button>
+        </div>
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
         <div id="sideMenu"></div>
-      </div>
-      <div id="main">
-        <script type="text/javascript" src="../../scripts/main.js"></script><div id="leftToggler"><span class="icon-toggler"></span></div>
-
-        <div class="main-content" id="content" pageids="web::com.google.accompanist.web////PointingToDeclaration//-870575855">
-          <div class="navigation-wrapper" id="navigation-wrapper">
-            <div class="breadcrumbs"><a href="../index.html">web</a>/<a href="index.html">com.google.accompanist.web</a></div>
-            <div class="pull-right d-flex">
-              <div id="searchBar"></div>
+    </div>
+    <div id="main">
+<div class="main-content" data-page-type="package" id="content" pageids="web::com.google.accompanist.web////PointingToDeclaration//-870575855">
+  <div class="breadcrumbs"><a href="../index.html">web</a><span class="delimiter">/</span><span class="current">com.google.accompanist.web</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button><button class="section-tab" data-togglable="PROPERTY,EXTENSION_PROPERTY">Properties</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="">Types</h2>
+        <div class="table"><a data-name="-1846952577%2FClasslikes%2F-870575855" anchor-label="AccompanistWebChromeClient" id="-1846952577%2FClasslikes%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-accompanist-web-chrome-client/index.html"><span>Accompanist</span><wbr><span>Web</span><wbr><span>Chrome</span><wbr><span><span>Client</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1846952577%2FClasslikes%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="-accompanist-web-chrome-client/index.html">AccompanistWebChromeClient</a> : <a href="https://developer.android.com/reference/kotlin/android/webkit/WebChromeClient.html">WebChromeClient</a></div><div class="brief "><p class="paragraph">AccompanistWebChromeClient</p></div></div></div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="cover ">
-            <h1 class="cover"><span>Package com.</span><wbr><span>google.</span><wbr><span>accompanist.</span><wbr><span>web</span></h1>
-          </div>
-          <div class="tabbedcontent">
-            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Types">Types</button><button class="section-tab" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button></div>
-            <div class="tabs-section-body">
-              <h2 class="">Types</h2>
-              <div class="table" data-togglable="Types"><a data-name="-1846952577%2FClasslikes%2F-870575855" anchor-label="AccompanistWebChromeClient" id="-1846952577%2FClasslikes%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="-accompanist-web-chrome-client/index.html">AccompanistWebChromeClient</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1846952577%2FClasslikes%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">open class <a href="-accompanist-web-chrome-client/index.html">AccompanistWebChromeClient</a> : <a href="https://developer.android.com/reference/kotlin/android/webkit/WebChromeClient.html">WebChromeClient</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="-1846952577%2FClasslikes%2F-870575855" anchor-label="AccompanistWebChromeClient" id="-1846952577%2FClasslikes%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a><div class="brief "><a data-name="-1846952577%2FClasslikes%2F-870575855" anchor-label="AccompanistWebChromeClient" id="-1846952577%2FClasslikes%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>AccompanistWebChromeClientA parent class implementation of WebChromeClient that can be subclassed to add custom behaviour.</div></div>
-</div>
-                    </div>
-                  </div>
-                </div>
 <a data-name="-438134604%2FClasslikes%2F-870575855" anchor-label="AccompanistWebViewClient" id="-438134604%2FClasslikes%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="-accompanist-web-view-client/index.html">AccompanistWebViewClient</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-438134604%2FClasslikes%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">open class <a href="-accompanist-web-view-client/index.html">AccompanistWebViewClient</a> : <a href="https://developer.android.com/reference/kotlin/android/webkit/WebViewClient.html">WebViewClient</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="-438134604%2FClasslikes%2F-870575855" anchor-label="AccompanistWebViewClient" id="-438134604%2FClasslikes%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a><div class="brief "><a data-name="-438134604%2FClasslikes%2F-870575855" anchor-label="AccompanistWebViewClient" id="-438134604%2FClasslikes%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>AccompanistWebViewClientA parent class implementation of WebViewClient that can be subclassed to add custom behaviour.</div></div>
-</div>
-                    </div>
-                  </div>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-accompanist-web-view-client/index.html"><span>Accompanist</span><wbr><span>Web</span><wbr><span>View</span><wbr><span><span>Client</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-438134604%2FClasslikes%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="-accompanist-web-view-client/index.html">AccompanistWebViewClient</a> : <a href="https://developer.android.com/reference/kotlin/android/webkit/WebViewClient.html">WebViewClient</a></div><div class="brief "><p class="paragraph">AccompanistWebViewClient</p></div></div></div>
                 </div>
+              </div>
+            </div>
+          </div>
 <a data-name="1724097047%2FClasslikes%2F-870575855" anchor-label="LoadingState" id="1724097047%2FClasslikes%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="-loading-state/index.html">LoadingState</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1724097047%2FClasslikes%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">sealed class <a href="-loading-state/index.html">LoadingState</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="1724097047%2FClasslikes%2F-870575855" anchor-label="LoadingState" id="1724097047%2FClasslikes%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a><div class="brief "><a data-name="1724097047%2FClasslikes%2F-870575855" anchor-label="LoadingState" id="1724097047%2FClasslikes%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>Sealed class for constraining possible loading states.</div></div>
-</div>
-                    </div>
-                  </div>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-loading-state/index.html"><span>Loading</span><wbr><span><span>State</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1724097047%2FClasslikes%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">class </span><a href="-loading-state/index.html">LoadingState</a></div><div class="brief "><p class="paragraph">Sealed class for constraining possible loading states. See <a href="-loading-state/-loading/index.html">Loading</a> and <a href="-loading-state/-finished/index.html">Finished</a>.</p></div></div></div>
                 </div>
+              </div>
+            </div>
+          </div>
 <a data-name="1509149959%2FClasslikes%2F-870575855" anchor-label="WebContent" id="1509149959%2FClasslikes%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="-web-content/index.html">WebContent</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1509149959%2FClasslikes%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace">sealed class <a href="-web-content/index.html">WebContent</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
-                    </div>
-                  </div>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-web-content/index.html"><span>Web</span><wbr><span><span>Content</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1509149959%2FClasslikes%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">class </span><a href="-web-content/index.html">WebContent</a></div></div></div>
                 </div>
+              </div>
+            </div>
+          </div>
 <a data-name="-474216803%2FClasslikes%2F-870575855" anchor-label="WebViewError" id="-474216803%2FClasslikes%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="-web-view-error/index.html">WebViewError</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-474216803%2FClasslikes%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><div class="block"><div class="block">@<a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Immutable.html">Immutable</a>()</div></div>data class <a href="-web-view-error/index.html">WebViewError</a>(request: <a href="https://developer.android.com/reference/kotlin/android/webkit/WebResourceRequest.html">WebResourceRequest</a>?, error: <a href="https://developer.android.com/reference/kotlin/android/webkit/WebResourceError.html">WebResourceError</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="-474216803%2FClasslikes%2F-870575855" anchor-label="WebViewError" id="-474216803%2FClasslikes%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a><div class="brief "><a data-name="-474216803%2FClasslikes%2F-870575855" anchor-label="WebViewError" id="-474216803%2FClasslikes%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>A wrapper class to hold errors from the WebView.</div></div>
-</div>
-                    </div>
-                  </div>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-web-view-error/index.html"><span>Web</span><wbr><span>View</span><wbr><span><span>Error</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-474216803%2FClasslikes%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Immutable.html"><span class="token annotation builtin">Immutable</span></a></div></div><span class="token keyword">data </span><span class="token keyword">class </span><a href="-web-view-error/index.html">WebViewError</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>request<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/webkit/WebResourceRequest.html">WebResourceRequest</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>error<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/webkit/WebResourceError.html">WebResourceError</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A wrapper class to hold errors from the WebView.</p></div></div></div>
                 </div>
+              </div>
+            </div>
+          </div>
 <a data-name="585857838%2FClasslikes%2F-870575855" anchor-label="WebViewNavigator" id="585857838%2FClasslikes%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="-web-view-navigator/index.html">WebViewNavigator</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="585857838%2FClasslikes%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><div class="block"><div class="block">@<a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Stable.html">Stable</a>()</div></div>class <a href="-web-view-navigator/index.html">WebViewNavigator</a>(coroutineScope: <span data-unresolved-link="kotlinx.coroutines/CoroutineScope///PointingToDeclaration/">CoroutineScope</span>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="585857838%2FClasslikes%2F-870575855" anchor-label="WebViewNavigator" id="585857838%2FClasslikes%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a><div class="brief "><a data-name="585857838%2FClasslikes%2F-870575855" anchor-label="WebViewNavigator" id="585857838%2FClasslikes%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>Allows control over the navigation of a WebView from outside the composable.</div></div>
-</div>
-                    </div>
-                  </div>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-web-view-navigator/index.html"><span>Web</span><wbr><span>View</span><wbr><span><span>Navigator</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="585857838%2FClasslikes%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Stable.html"><span class="token annotation builtin">Stable</span></a></div></div><span class="token keyword">class </span><a href="-web-view-navigator/index.html">WebViewNavigator</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">coroutineScope<span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines/CoroutineScope///PointingToDeclaration/">CoroutineScope</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Allows control over the navigation of a WebView from outside the composable. E.g. for performing a back navigation in response to the user clicking the "up" button in a TopAppBar.</p></div></div></div>
                 </div>
+              </div>
+            </div>
+          </div>
 <a data-name="1215811636%2FClasslikes%2F-870575855" anchor-label="WebViewState" id="1215811636%2FClasslikes%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="-web-view-state/index.html">WebViewState</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1215811636%2FClasslikes%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><div class="block"><div class="block">@<a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Stable.html">Stable</a>()</div></div>class <a href="-web-view-state/index.html">WebViewState</a>(webContent: <a href="-web-content/index.html">WebContent</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="1215811636%2FClasslikes%2F-870575855" anchor-label="WebViewState" id="1215811636%2FClasslikes%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a><div class="brief "><a data-name="1215811636%2FClasslikes%2F-870575855" anchor-label="WebViewState" id="1215811636%2FClasslikes%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>A state holder to hold the state for the WebView.</div></div>
-</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="">Functions</h2>
-              <div class="table" data-togglable="Functions"><a data-name="-686363497%2FFunctions%2F-870575855" anchor-label="rememberSaveableWebViewState" id="-686363497%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="remember-saveable-web-view-state.html">rememberSaveableWebViewState</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-686363497%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><div class="block"><div class="block">@<a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html">Composable</a>()</div></div>fun <a href="remember-saveable-web-view-state.html">rememberSaveableWebViewState</a>(): <a href="-web-view-state/index.html">WebViewState</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="-686363497%2FFunctions%2F-870575855" anchor-label="rememberSaveableWebViewState" id="-686363497%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a><div class="brief "><a data-name="-686363497%2FFunctions%2F-870575855" anchor-label="rememberSaveableWebViewState" id="-686363497%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>Creates a WebView state that is remembered across Compositions and saved across activity recreation.</div></div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="1495472066%2FFunctions%2F-870575855" anchor-label="rememberWebViewNavigator" id="1495472066%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="remember-web-view-navigator.html">rememberWebViewNavigator</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1495472066%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><div class="block"><div class="block">@<a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html">Composable</a>()</div></div>fun <a href="remember-web-view-navigator.html">rememberWebViewNavigator</a>(coroutineScope: <span data-unresolved-link="kotlinx.coroutines/CoroutineScope///PointingToDeclaration/">CoroutineScope</span> = rememberCoroutineScope()): <a href="-web-view-navigator/index.html">WebViewNavigator</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="1495472066%2FFunctions%2F-870575855" anchor-label="rememberWebViewNavigator" id="1495472066%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a><div class="brief "><a data-name="1495472066%2FFunctions%2F-870575855" anchor-label="rememberWebViewNavigator" id="1495472066%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>Creates and remembers a <a href="-web-view-navigator/index.html">WebViewNavigator</a> using the default <span data-unresolved-link="kotlinx.coroutines/CoroutineScope///PointingToDeclaration/">CoroutineScope</span> or a provided override.</div></div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="1927697543%2FFunctions%2F-870575855" anchor-label="rememberWebViewState" id="1927697543%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="remember-web-view-state.html">rememberWebViewState</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1927697543%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><div class="block"><div class="block">@<a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html">Composable</a>()</div></div>fun <a href="remember-web-view-state.html">rememberWebViewState</a>(url: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, additionalHttpHeaders: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt; = emptyMap()): <a href="-web-view-state/index.html">WebViewState</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="1927697543%2FFunctions%2F-870575855" anchor-label="rememberWebViewState" id="1927697543%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a><div class="brief "><a data-name="1927697543%2FFunctions%2F-870575855" anchor-label="rememberWebViewState" id="1927697543%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>Creates a WebView state that is remembered across Compositions.</div></div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-5946574%2FFunctions%2F-870575855" anchor-label="rememberWebViewStateWithHTMLData" id="-5946574%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="remember-web-view-state-with-h-t-m-l-data.html">rememberWebViewStateWithHTMLData</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-5946574%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><div class="block"><div class="block">@<a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html">Composable</a>()</div></div>fun <a href="remember-web-view-state-with-h-t-m-l-data.html">rememberWebViewStateWithHTMLData</a>(data: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, baseUrl: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>? = null, encoding: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a> = "utf-8", mimeType: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>? = null, historyUrl: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>? = null): <a href="-web-view-state/index.html">WebViewState</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="-5946574%2FFunctions%2F-870575855" anchor-label="rememberWebViewStateWithHTMLData" id="-5946574%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a><div class="brief "><a data-name="-5946574%2FFunctions%2F-870575855" anchor-label="rememberWebViewStateWithHTMLData" id="-5946574%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>Creates a WebView state that is remembered across Compositions.</div></div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="1941047323%2FFunctions%2F-870575855" anchor-label="WebView" id="1941047323%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="-web-view.html">WebView</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1941047323%2FFunctions%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><div class="block"><div class="block">@<a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html">Composable</a>()</div></div>fun <a href="-web-view.html">WebView</a>(state: <a href="-web-view-state/index.html">WebViewState</a>, modifier: <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier.html">Modifier</a> = Modifier, captureBackPresses: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a> = true, navigator: <a href="-web-view-navigator/index.html">WebViewNavigator</a> = rememberWebViewNavigator(), onCreated: (<a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a> = {}, onDispose: (<a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a> = {}, client: <a href="-accompanist-web-view-client/index.html">AccompanistWebViewClient</a> = remember { AccompanistWebViewClient() }, chromeClient: <a href="-accompanist-web-chrome-client/index.html">AccompanistWebChromeClient</a> = remember { AccompanistWebChromeClient() }, factory: (<a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a>) -&gt; <a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a>? = null)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="-1349505444%2FFunctions%2F-870575855" anchor-label="WebView" id="-1349505444%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a><div class="brief "><a data-name="-1349505444%2FFunctions%2F-870575855" anchor-label="WebView" id="-1349505444%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>A wrapper around the Android View WebView to provide a basic WebView composable.</div></div>
-<div class="divergent-group" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><div class="block"><div class="block">@<a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html">Composable</a>()</div></div>fun <a href="-web-view.html">WebView</a>(state: <a href="-web-view-state/index.html">WebViewState</a>, layoutParams: <a href="https://developer.android.com/reference/kotlin/android/widget/FrameLayout.LayoutParams.html">FrameLayout.LayoutParams</a>, modifier: <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier.html">Modifier</a> = Modifier, captureBackPresses: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a> = true, navigator: <a href="-web-view-navigator/index.html">WebViewNavigator</a> = rememberWebViewNavigator(), onCreated: (<a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a> = {}, onDispose: (<a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a>) -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a> = {}, client: <a href="-accompanist-web-view-client/index.html">AccompanistWebViewClient</a> = remember { AccompanistWebViewClient() }, chromeClient: <a href="-accompanist-web-chrome-client/index.html">AccompanistWebChromeClient</a> = remember { AccompanistWebChromeClient() }, factory: (<a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a>) -&gt; <a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a>? = null)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="1056890413%2FFunctions%2F-870575855" anchor-label="WebView" id="1056890413%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a><div class="brief "><a data-name="1056890413%2FFunctions%2F-870575855" anchor-label="WebView" id="1056890413%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>A wrapper around the Android View WebView to provide a basic WebView composable.</div></div>
-</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="">Properties</h2>
-              <div class="table" data-togglable="Properties"><a data-name="-1816349393%2FProperties%2F-870575855" anchor-label="WebStateSaver" id="-1816349393%2FProperties%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="-web-state-saver.html">WebStateSaver</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1816349393%2FProperties%2F-870575855"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><a data-name="-1816349393%2FProperties%2F-870575855" anchor-label="WebStateSaver" id="-1816349393%2FProperties%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a><div class="symbol monospace">val <a href="-web-state-saver.html">WebStateSaver</a>: <span data-unresolved-link="/<ERROR CLASS>///PointingToDeclaration/">&lt;ERROR CLASS&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-web-view-state/index.html"><span>Web</span><wbr><span>View</span><wbr><span><span>State</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1215811636%2FClasslikes%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Stable.html"><span class="token annotation builtin">Stable</span></a></div></div><span class="token keyword">class </span><a href="-web-view-state/index.html">WebViewState</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">webContent<span class="token operator">: </span><a href="-web-content/index.html">WebContent</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A state holder to hold the state for the WebView. In most cases this will be remembered using the rememberWebViewState(uri) function.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="-686363497%2FFunctions%2F-870575855" anchor-label="rememberSaveableWebViewState" id="-686363497%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="remember-saveable-web-view-state.html"><span>remember</span><wbr><span>Saveable</span><wbr><span>Web</span><wbr><span>View</span><wbr><span><span>State</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-686363497%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="remember-saveable-web-view-state.html"><span class="token function">rememberSaveableWebViewState</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-web-view-state/index.html">WebViewState</a></div><div class="brief "><p class="paragraph">Creates a WebView state that is remembered across Compositions and saved across activity recreation. When using saved state, you cannot change the URL via recomposition. The only way to load a URL is via a WebViewNavigator.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1495472066%2FFunctions%2F-870575855" anchor-label="rememberWebViewNavigator" id="1495472066%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="remember-web-view-navigator.html"><span>remember</span><wbr><span>Web</span><wbr><span>View</span><wbr><span><span>Navigator</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1495472066%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="remember-web-view-navigator.html"><span class="token function">rememberWebViewNavigator</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">coroutineScope<span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines/CoroutineScope///PointingToDeclaration/">CoroutineScope</span><span class="token operator"> = </span>rememberCoroutineScope()</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-web-view-navigator/index.html">WebViewNavigator</a></div><div class="brief "><p class="paragraph">Creates and remembers a <a href="-web-view-navigator/index.html">WebViewNavigator</a> using the default <span data-unresolved-link="kotlinx.coroutines/CoroutineScope///PointingToDeclaration/">CoroutineScope</span> or a provided override.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1927697543%2FFunctions%2F-870575855" anchor-label="rememberWebViewState" id="1927697543%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="remember-web-view-state.html"><span>remember</span><wbr><span>Web</span><wbr><span>View</span><wbr><span><span>State</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1927697543%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="remember-web-view-state.html"><span class="token function">rememberWebViewState</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">url<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">additionalHttpHeaders<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyMap()</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-web-view-state/index.html">WebViewState</a></div><div class="brief "><p class="paragraph">Creates a WebView state that is remembered across Compositions.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-5946574%2FFunctions%2F-870575855" anchor-label="rememberWebViewStateWithHTMLData" id="-5946574%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="remember-web-view-state-with-h-t-m-l-data.html"><span>remember</span><wbr><span>Web</span><wbr><span>View</span><wbr><span>State</span><wbr><span>With</span><wbr><span><span>HTMLData</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-5946574%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="remember-web-view-state-with-h-t-m-l-data.html"><span class="token function">rememberWebViewStateWithHTMLData</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">data<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">baseUrl<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">encoding<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"utf-8"</span><span class="token punctuation">, </span></span><span class="parameter ">mimeType<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">historyUrl<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-web-view-state/index.html">WebViewState</a></div><div class="brief "><p class="paragraph">Creates a WebView state that is remembered across Compositions.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1941047323%2FFunctions%2F-870575855" anchor-label="WebView" id="1941047323%2FFunctions%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-web-view.html"><span>Web</span><wbr><span><span>View</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1941047323%2FFunctions%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="-web-view.html"><span class="token function">WebView</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">state<span class="token operator">: </span><a href="-web-view-state/index.html">WebViewState</a><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier.html">Modifier</a><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">captureBackPresses<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span><span class="token punctuation">, </span></span><span class="parameter ">navigator<span class="token operator">: </span><a href="-web-view-navigator/index.html">WebViewNavigator</a><span class="token operator"> = </span>rememberWebViewNavigator()<span class="token punctuation">, </span></span><span class="parameter ">onCreated<span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span><a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator"> = </span>{}<span class="token punctuation">, </span></span><span class="parameter ">onDispose<span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span><a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator"> = </span>{}<span class="token punctuation">, </span></span><span class="parameter ">client<span class="token operator">: </span><a href="-accompanist-web-view-client/index.html">AccompanistWebViewClient</a><span class="token operator"> = </span>remember { AccompanistWebViewClient() }<span class="token punctuation">, </span></span><span class="parameter ">chromeClient<span class="token operator">: </span><a href="-accompanist-web-chrome-client/index.html">AccompanistWebChromeClient</a><span class="token operator"> = </span>remember { AccompanistWebChromeClient() }<span class="token punctuation">, </span></span><span class="parameter ">factory<span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="-web-view.html"><span class="token function">WebView</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">state<span class="token operator">: </span><a href="-web-view-state/index.html">WebViewState</a><span class="token punctuation">, </span></span><span class="parameter ">layoutParams<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/widget/FrameLayout.LayoutParams.html">FrameLayout.LayoutParams</a><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier.html">Modifier</a><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">captureBackPresses<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span><span class="token punctuation">, </span></span><span class="parameter ">navigator<span class="token operator">: </span><a href="-web-view-navigator/index.html">WebViewNavigator</a><span class="token operator"> = </span>rememberWebViewNavigator()<span class="token punctuation">, </span></span><span class="parameter ">onCreated<span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span><a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator"> = </span>{}<span class="token punctuation">, </span></span><span class="parameter ">onDispose<span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span><a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator"> = </span>{}<span class="token punctuation">, </span></span><span class="parameter ">client<span class="token operator">: </span><a href="-accompanist-web-view-client/index.html">AccompanistWebViewClient</a><span class="token operator"> = </span>remember { AccompanistWebViewClient() }<span class="token punctuation">, </span></span><span class="parameter ">chromeClient<span class="token operator">: </span><a href="-accompanist-web-chrome-client/index.html">AccompanistWebChromeClient</a><span class="token operator"> = </span>remember { AccompanistWebChromeClient() }<span class="token punctuation">, </span></span><span class="parameter ">factory<span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://developer.android.com/reference/kotlin/android/webkit/WebView.html">WebView</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A wrapper around the Android View WebView to provide a basic WebView composable.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="-1816349393%2FProperties%2F-870575855" anchor-label="WebStateSaver" id="-1816349393%2FProperties%2F-870575855" data-filterable-set=":web:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":web:dokkaHtmlPartial/release" data-filterable-set=":web:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-web-state-saver.html"><span>Web</span><wbr><span>State</span><wbr><span><span>Saver</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1816349393%2FProperties%2F-870575855"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":web:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="-web-state-saver.html">WebStateSaver</a><span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/saveable/Saver.html">Saver</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-web-view-state/index.html">WebViewState</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  
-</body></html>
-
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>
 

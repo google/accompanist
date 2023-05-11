@@ -1,128 +1,153 @@
+<!doctype html>
 <html>
-  <head>
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>com.google.accompanist.placeholder</title>
-</head><body><link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script><script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script><link href="../../styles/style.css" rel="Stylesheet"><link href="../../styles/logo-styles.css" rel="Stylesheet"><link href="../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../styles/main.css" rel="Stylesheet"><script type="text/javascript" src="../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../scripts/main.js" async></script>
-  
-    <div id="container">
-      <div id="leftColumn"><a href="../../index.html">
-            <div id="logo"></div>
-          </a>
-        <div id="paneSearch"></div>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+<a href="../../index.html">
+<span>accompanist</span>            </a>    </div>
+    <div>
+    </div>
+    <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":placeholder:dokkaHtmlPartial/release">androidJvm</button>
+        </div>
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
         <div id="sideMenu"></div>
-      </div>
-      <div id="main">
-        <script type="text/javascript" src="../../scripts/main.js"></script><div id="leftToggler"><span class="icon-toggler"></span></div>
-
-        <div class="main-content" id="content" pageids="placeholder::com.google.accompanist.placeholder////PointingToDeclaration//-1917104494">
-          <div class="navigation-wrapper" id="navigation-wrapper">
-            <div class="breadcrumbs"><a href="../index.html">placeholder</a>/<a href="index.html">com.google.accompanist.placeholder</a></div>
-            <div class="pull-right d-flex">
-              <div id="searchBar"></div>
-            </div>
-          </div>
-          <div class="cover ">
-            <h1 class="cover"><span>Package com.</span><wbr><span>google.</span><wbr><span>accompanist.</span><wbr><span>placeholder</span></h1>
-          </div>
-          <div class="tabbedcontent">
-            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Types">Types</button><button class="section-tab" data-togglable="Functions">Functions</button></div>
-            <div class="tabs-section-body">
-              <h2 class="">Types</h2>
-              <div class="table" data-togglable="Types"><a data-name="-110838830%2FClasslikes%2F-1917104494" anchor-label="PlaceholderDefaults" id="-110838830%2FClasslikes%2F-1917104494" data-filterable-set=":placeholder:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":placeholder:dokkaHtmlPartial/release" data-filterable-set=":placeholder:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="-placeholder-defaults/index.html">PlaceholderDefaults</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-110838830%2FClasslikes%2F-1917104494"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":placeholder:dokkaHtmlPartial/release" data-filterable-set=":placeholder:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":placeholder:dokkaHtmlPartial/release"><div class="symbol monospace">object <a href="-placeholder-defaults/index.html">PlaceholderDefaults</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+    </div>
+    <div id="main">
+<div class="main-content" data-page-type="package" id="content" pageids="placeholder::com.google.accompanist.placeholder////PointingToDeclaration//-1917104494">
+  <div class="breadcrumbs"><a href="../index.html">placeholder</a><span class="delimiter">/</span><span class="current">com.google.accompanist.placeholder</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
   </div>
-<a data-name="-110838830%2FClasslikes%2F-1917104494" anchor-label="PlaceholderDefaults" id="-110838830%2FClasslikes%2F-1917104494" data-filterable-set=":placeholder:dokkaHtmlPartial/release"></a><div class="brief "><a data-name="-110838830%2FClasslikes%2F-1917104494" anchor-label="PlaceholderDefaults" id="-110838830%2FClasslikes%2F-1917104494" data-filterable-set=":placeholder:dokkaHtmlPartial/release"></a>Contains default values used by <a href="placeholder.html">Modifier.placeholder</a> and <a href="-placeholder-highlight/index.html">PlaceholderHighlight</a>.</div></div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="59194026%2FClasslikes%2F-1917104494" anchor-label="PlaceholderHighlight" id="59194026%2FClasslikes%2F-1917104494" data-filterable-set=":placeholder:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":placeholder:dokkaHtmlPartial/release" data-filterable-set=":placeholder:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="-placeholder-highlight/index.html">PlaceholderHighlight</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="59194026%2FClasslikes%2F-1917104494"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":placeholder:dokkaHtmlPartial/release" data-filterable-set=":placeholder:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":placeholder:dokkaHtmlPartial/release"><div class="symbol monospace"><div class="block"><div class="block">@<a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Stable.html">Stable</a>()</div></div>interface <a href="-placeholder-highlight/index.html">PlaceholderHighlight</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="59194026%2FClasslikes%2F-1917104494" anchor-label="PlaceholderHighlight" id="59194026%2FClasslikes%2F-1917104494" data-filterable-set=":placeholder:dokkaHtmlPartial/release"></a><div class="brief "><a data-name="59194026%2FClasslikes%2F-1917104494" anchor-label="PlaceholderHighlight" id="59194026%2FClasslikes%2F-1917104494" data-filterable-set=":placeholder:dokkaHtmlPartial/release"></a>A class which provides a brush to paint placeholder based on progress.</div></div>
-</div>
-                    </div>
-                  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="">Types</h2>
+        <div class="table"><a data-name="-110838830%2FClasslikes%2F-1917104494" anchor-label="PlaceholderDefaults" id="-110838830%2FClasslikes%2F-1917104494" data-filterable-set=":placeholder:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":placeholder:dokkaHtmlPartial/release" data-filterable-set=":placeholder:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-placeholder-defaults/index.html"><span>Placeholder</span><wbr><span><span>Defaults</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-110838830%2FClasslikes%2F-1917104494"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":placeholder:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">object </span><a href="-placeholder-defaults/index.html">PlaceholderDefaults</a></div><div class="brief "><p class="paragraph">Contains default values used by <a href="placeholder.html">Modifier.placeholder</a> and <a href="-placeholder-highlight/index.html">PlaceholderHighlight</a>.</p></div></div></div>
                 </div>
               </div>
-              <h2 class="">Functions</h2>
-              <div class="table" data-togglable="Functions"><a data-name="483362549%2FFunctions%2F-1917104494" anchor-label="fade" id="483362549%2FFunctions%2F-1917104494" data-filterable-set=":placeholder:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":placeholder:dokkaHtmlPartial/release" data-filterable-set=":placeholder:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="fade.html">fade</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="483362549%2FFunctions%2F-1917104494"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":placeholder:dokkaHtmlPartial/release" data-filterable-set=":placeholder:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":placeholder:dokkaHtmlPartial/release"><div class="symbol monospace">fun <a href="-placeholder-highlight/-companion/index.html">PlaceholderHighlight.Companion</a>.<a href="fade.html">fade</a>(highlightColor: <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a>, animationSpec: <a href="https://developer.android.com/reference/kotlin/androidx/compose/animation/core/InfiniteRepeatableSpec.html">InfiniteRepeatableSpec</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html">Float</a>&gt; = PlaceholderDefaults.fadeAnimationSpec): <a href="-placeholder-highlight/index.html">PlaceholderHighlight</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="483362549%2FFunctions%2F-1917104494" anchor-label="fade" id="483362549%2FFunctions%2F-1917104494" data-filterable-set=":placeholder:dokkaHtmlPartial/release"></a><div class="brief "><a data-name="483362549%2FFunctions%2F-1917104494" anchor-label="fade" id="483362549%2FFunctions%2F-1917104494" data-filterable-set=":placeholder:dokkaHtmlPartial/release"></a>Creates a <a href="../../placeholder/com.google.accompanist.placeholder/-fade/index.html">Fade</a> brush with the given initial and target colors.</div></div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="2124782876%2FFunctions%2F-1917104494" anchor-label="placeholder" id="2124782876%2FFunctions%2F-1917104494" data-filterable-set=":placeholder:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":placeholder:dokkaHtmlPartial/release" data-filterable-set=":placeholder:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="placeholder.html">placeholder</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2124782876%2FFunctions%2F-1917104494"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":placeholder:dokkaHtmlPartial/release" data-filterable-set=":placeholder:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":placeholder:dokkaHtmlPartial/release"><div class="symbol monospace">fun <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier.html">Modifier</a>.<a href="placeholder.html">placeholder</a>(visible: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, color: <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a>, shape: <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Shape.html">Shape</a> = RectangleShape, highlight: <a href="-placeholder-highlight/index.html">PlaceholderHighlight</a>? = null, placeholderFadeTransitionSpec: <span>@<a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html">Composable</a>()&nbsp;</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/animation/core/Transition.Segment.html">Transition.Segment</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>&gt;.() -&gt; <a href="https://developer.android.com/reference/kotlin/androidx/compose/animation/core/FiniteAnimationSpec.html">FiniteAnimationSpec</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html">Float</a>&gt; = { spring() }, contentFadeTransitionSpec: <span>@<a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html">Composable</a>()&nbsp;</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/animation/core/Transition.Segment.html">Transition.Segment</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>&gt;.() -&gt; <a href="https://developer.android.com/reference/kotlin/androidx/compose/animation/core/FiniteAnimationSpec.html">FiniteAnimationSpec</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html">Float</a>&gt; = { spring() }): <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier.html">Modifier</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="2124782876%2FFunctions%2F-1917104494" anchor-label="placeholder" id="2124782876%2FFunctions%2F-1917104494" data-filterable-set=":placeholder:dokkaHtmlPartial/release"></a><div class="brief "><a data-name="2124782876%2FFunctions%2F-1917104494" anchor-label="placeholder" id="2124782876%2FFunctions%2F-1917104494" data-filterable-set=":placeholder:dokkaHtmlPartial/release"></a>Draws some skeleton UI which is typically used whilst content is 'loading'.</div></div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-499453938%2FFunctions%2F-1917104494" anchor-label="shimmer" id="-499453938%2FFunctions%2F-1917104494" data-filterable-set=":placeholder:dokkaHtmlPartial/release"></a>
-                <div class="table-row" data-filterable-current=":placeholder:dokkaHtmlPartial/release" data-filterable-set=":placeholder:dokkaHtmlPartial/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="shimmer.html">shimmer</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-499453938%2FFunctions%2F-1917104494"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":placeholder:dokkaHtmlPartial/release" data-filterable-set=":placeholder:dokkaHtmlPartial/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":placeholder:dokkaHtmlPartial/release"><div class="symbol monospace">fun <a href="-placeholder-highlight/-companion/index.html">PlaceholderHighlight.Companion</a>.<a href="shimmer.html">shimmer</a>(highlightColor: <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a>, animationSpec: <a href="https://developer.android.com/reference/kotlin/androidx/compose/animation/core/InfiniteRepeatableSpec.html">InfiniteRepeatableSpec</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html">Float</a>&gt; = PlaceholderDefaults.shimmerAnimationSpec, <span>@<a href="https://developer.android.com/reference/kotlin/androidx/annotation/FloatRange.html">FloatRange</a>(<span>from = <span class="breakable-word">0.0.toDouble()</span>, </span><wbr><span>to = <span class="breakable-word">1.0.toDouble()</span></span><wbr>)&nbsp;</span>progressForMaxAlpha: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html">Float</a> = 0.6f): <a href="-placeholder-highlight/index.html">PlaceholderHighlight</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="-499453938%2FFunctions%2F-1917104494" anchor-label="shimmer" id="-499453938%2FFunctions%2F-1917104494" data-filterable-set=":placeholder:dokkaHtmlPartial/release"></a><div class="brief "><a data-name="-499453938%2FFunctions%2F-1917104494" anchor-label="shimmer" id="-499453938%2FFunctions%2F-1917104494" data-filterable-set=":placeholder:dokkaHtmlPartial/release"></a>Creates a <a href="-placeholder-highlight/index.html">PlaceholderHighlight</a> which 'shimmers', using the given <a href="shimmer.html">highlightColor</a>.</div></div>
-</div>
-                    </div>
-                  </div>
+            </div>
+          </div>
+<a data-name="59194026%2FClasslikes%2F-1917104494" anchor-label="PlaceholderHighlight" id="59194026%2FClasslikes%2F-1917104494" data-filterable-set=":placeholder:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":placeholder:dokkaHtmlPartial/release" data-filterable-set=":placeholder:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-placeholder-highlight/index.html"><span>Placeholder</span><wbr><span><span>Highlight</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="59194026%2FClasslikes%2F-1917104494"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":placeholder:dokkaHtmlPartial/release"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Stable.html"><span class="token annotation builtin">Stable</span></a></div></div><span class="token keyword">interface </span><a href="-placeholder-highlight/index.html">PlaceholderHighlight</a></div><div class="brief "><p class="paragraph">A class which provides a brush to paint placeholder based on progress.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+      </div>
+      <div data-togglable="EXTENSION_FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="483362549%2FFunctions%2F-1917104494" anchor-label="fade" id="483362549%2FFunctions%2F-1917104494" data-filterable-set=":placeholder:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":placeholder:dokkaHtmlPartial/release" data-filterable-set=":placeholder:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="fade.html"><span><span>fade</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="483362549%2FFunctions%2F-1917104494"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":placeholder:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-placeholder-highlight/-companion/index.html">PlaceholderHighlight.Companion</a><span class="token punctuation">.</span><a href="fade.html"><span class="token function">fade</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">highlightColor<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a><span class="token punctuation">, </span></span><span class="parameter ">animationSpec<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/animation/core/InfiniteRepeatableSpec.html">InfiniteRepeatableSpec</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html">Float</a><span class="token operator">&gt;</span><span class="token operator"> = </span>PlaceholderDefaults.fadeAnimationSpec</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-placeholder-highlight/index.html">PlaceholderHighlight</a></div><div class="brief "><p class="paragraph">Creates a <a href="../../placeholder/com.google.accompanist.placeholder/-fade/index.html">Fade</a> brush with the given initial and target colors.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2124782876%2FFunctions%2F-1917104494" anchor-label="placeholder" id="2124782876%2FFunctions%2F-1917104494" data-filterable-set=":placeholder:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":placeholder:dokkaHtmlPartial/release" data-filterable-set=":placeholder:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="placeholder.html"><span><span>placeholder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2124782876%2FFunctions%2F-1917104494"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":placeholder:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier.html">Modifier</a><span class="token punctuation">.</span><a href="placeholder.html"><span class="token function">placeholder</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">visible<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token punctuation">, </span></span><span class="parameter ">color<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a><span class="token punctuation">, </span></span><span class="parameter ">shape<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Shape.html">Shape</a><span class="token operator"> = </span>RectangleShape<span class="token punctuation">, </span></span><span class="parameter ">highlight<span class="token operator">: </span><a href="-placeholder-highlight/index.html">PlaceholderHighlight</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">placeholderFadeTransitionSpec<span class="token operator">: </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a>&nbsp;</span><span class="token keyword"></span><a href="https://developer.android.com/reference/kotlin/androidx/compose/animation/core/Transition.Segment.html">Transition.Segment</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://developer.android.com/reference/kotlin/androidx/compose/animation/core/FiniteAnimationSpec.html">FiniteAnimationSpec</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html">Float</a><span class="token operator">&gt;</span><span class="token operator"> = </span>{ spring() }<span class="token punctuation">, </span></span><span class="parameter ">contentFadeTransitionSpec<span class="token operator">: </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a>&nbsp;</span><span class="token keyword"></span><a href="https://developer.android.com/reference/kotlin/androidx/compose/animation/core/Transition.Segment.html">Transition.Segment</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://developer.android.com/reference/kotlin/androidx/compose/animation/core/FiniteAnimationSpec.html">FiniteAnimationSpec</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html">Float</a><span class="token operator">&gt;</span><span class="token operator"> = </span>{ spring() }</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier.html">Modifier</a></div><div class="brief "><p class="paragraph">Draws some skeleton UI which is typically used whilst content is 'loading'.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-499453938%2FFunctions%2F-1917104494" anchor-label="shimmer" id="-499453938%2FFunctions%2F-1917104494" data-filterable-set=":placeholder:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":placeholder:dokkaHtmlPartial/release" data-filterable-set=":placeholder:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="shimmer.html"><span><span>shimmer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-499453938%2FFunctions%2F-1917104494"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":placeholder:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-placeholder-highlight/-companion/index.html">PlaceholderHighlight.Companion</a><span class="token punctuation">.</span><a href="shimmer.html"><span class="token function">shimmer</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">highlightColor<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a><span class="token punctuation">, </span></span><span class="parameter ">animationSpec<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/animation/core/InfiniteRepeatableSpec.html">InfiniteRepeatableSpec</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html">Float</a><span class="token operator">&gt;</span><span class="token operator"> = </span>PlaceholderDefaults.shimmerAnimationSpec<span class="token punctuation">, </span></span><span class="parameter "><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/annotation/FloatRange.html"><span class="token annotation builtin">FloatRange</span></a><span class="token punctuation">(</span><span>from<span class="token operator"> = </span><span class="breakable-word"><span class="token constant">0.0</span></span><span class="token punctuation">, </span></span><wbr><span>to<span class="token operator"> = </span><span class="breakable-word"><span class="token constant">1.0</span></span></span><wbr><span class="token punctuation">)</span>&nbsp;</span>progressForMaxAlpha<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html">Float</a><span class="token operator"> = </span><span class="token constant">0.6f</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-placeholder-highlight/index.html">PlaceholderHighlight</a></div><div class="brief "><p class="paragraph">Creates a <a href="-placeholder-highlight/index.html">PlaceholderHighlight</a> which 'shimmers', using the given <a href="shimmer.html">highlightColor</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  
-</body></html>
-
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>
 
