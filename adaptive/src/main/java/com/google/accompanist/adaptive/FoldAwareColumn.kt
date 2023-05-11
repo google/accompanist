@@ -43,7 +43,6 @@ import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.findRootCoordinates
 import androidx.compose.ui.platform.InspectorInfo
 import androidx.compose.ui.platform.InspectorValueInfo
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
@@ -77,32 +76,19 @@ public fun FoldAwareColumn(
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
     content: @Composable FoldAwareColumnScope.() -> Unit,
 ) {
-    // Extract folding feature if horizontal and separating
-    val fold = displayFeatures.find {
-        it is FoldingFeature && it.orientation == FoldingFeature.Orientation.HORIZONTAL && it.isSeparating
-    } as FoldingFeature?
-
-    // Calculate fold bounds in pixels (including any added fold padding)
-    val foldBoundsPx = with(LocalDensity.current) {
-        val topPaddingPx = foldPadding.calculateTopPadding().roundToPx()
-        val bottomPaddingPx = foldPadding.calculateBottomPadding().roundToPx()
-
-        fold?.bounds?.let {
-            Rect(
-                left = it.left.toFloat(),
-                top = it.top.toFloat() - topPaddingPx,
-                right = it.right.toFloat(),
-                bottom = it.bottom.toFloat() + bottomPaddingPx
-            )
-        }
-    }
-
     Layout(
         modifier = modifier,
         measurePolicy = foldAwareColumnMeasurePolicy(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = horizontalAlignment,
-            foldBoundsPx = foldBoundsPx
+            fold = {
+                // Extract folding feature if horizontal and separating
+                displayFeatures.find {
+                    it is FoldingFeature && it.orientation == FoldingFeature.Orientation.HORIZONTAL &&
+                        it.isSeparating
+                } as FoldingFeature?
+            },
+            foldPadding = foldPadding,
         ),
         content = { FoldAwareColumnScopeInstance.content() }
     )
@@ -111,15 +97,15 @@ public fun FoldAwareColumn(
 /**
  * FoldAwareColumn version of [rowColumnMeasurePolicy] that uses [FoldAwareColumnMeasurementHelper.foldAwarePlaceHelper]
  * method instead of [RowColumnMeasurementHelper.placeHelper]
- *
- * TODO: change from internal to private once metalava issue is solved https://partnerissuetracker.corp.google.com/issues/271539608
  */
+// TODO: change from internal to private once metalava issue is solved https://issuetracker.google.com/issues/271539608
 @Composable
 internal fun foldAwareColumnMeasurePolicy(
     verticalArrangement: Arrangement.Vertical,
     horizontalAlignment: Alignment.Horizontal,
-    foldBoundsPx: Rect?
-) = remember(verticalArrangement, horizontalAlignment, foldBoundsPx) {
+    fold: () -> FoldingFeature?,
+    foldPadding: PaddingValues
+) = remember(verticalArrangement, horizontalAlignment, fold, foldPadding) {
 
     val orientation = LayoutOrientation.Vertical
     val arrangement: (Int, IntArray, LayoutDirection, Density, IntArray) -> Unit =
@@ -161,6 +147,21 @@ internal fun foldAwareColumnMeasurePolicy(
             } else {
                 layoutWidth = measureResult.crossAxisSize
                 layoutHeight = measureResult.mainAxisSize
+            }
+
+            // Calculate fold bounds in pixels (including any added fold padding)
+            val foldBoundsPx = with(density) {
+                val topPaddingPx = foldPadding.calculateTopPadding().roundToPx()
+                val bottomPaddingPx = foldPadding.calculateBottomPadding().roundToPx()
+
+                fold()?.bounds?.let {
+                    Rect(
+                        left = it.left.toFloat(),
+                        top = it.top.toFloat() - topPaddingPx,
+                        right = it.right.toFloat(),
+                        bottom = it.bottom.toFloat() + bottomPaddingPx
+                    )
+                }
             }
 
             // We only know how much padding is added inside the placement scope, so just add fold height
