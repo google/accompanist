@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
-    id 'org.jetbrains.dokka'
-    id 'me.tylerbwong.gradle.metalava'
+    id("com.android.library")
+    id("kotlin-android")
+    id("org.jetbrains.dokka")
+    id("me.tylerbwong.gradle.metalava")
 }
 
 kotlin {
@@ -26,7 +26,7 @@ kotlin {
 }
 
 android {
-    namespace "com.google.accompanist.permissions"
+    namespace = "com.google.accompanist.permissions"
 
     compileSdkVersion 33
 
@@ -35,41 +35,41 @@ android {
         // targetSdkVersion has no effect for libraries. This is only used for the test APK
         targetSdkVersion 33
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         // The following argument makes the Android Test Orchestrator run its
         // "pm clear" command after each test invocation. This command ensures
         // that the app's state is completely cleared between tests.
-        testInstrumentationRunnerArguments clearPackageData: 'true'
+        testInstrumentationRunnerArguments clearPackageData: "true"
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     buildFeatures {
-        buildConfig false
-        compose true
+        buildConfig = false
+        compose = true
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion libs.versions.composeCompiler.get()
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
 
     lintOptions {
-        textReport true
+        textReport = true
         textOutput 'stdout'
         // We run a full lint analysis as build part in CI, so skip vital checks for assemble tasks
-        checkReleaseBuilds false
+        checkReleaseBuilds = false
     }
 
     testOptions {
         unitTests {
             includeAndroidResources = true
         }
-        animationsDisabled true
-        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+        animationsDisabled = true
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
 
     packagingOptions {
@@ -86,10 +86,10 @@ metalava {
 }
 
 dependencies {
-    implementation libs.androidx.activity.compose
-    implementation libs.compose.foundation.foundation
-    implementation libs.kotlin.coroutines.android
-    implementation libs.napier
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.compose.foundation.foundation)
+    implementation(libs.kotlin.coroutines.android)
+    implementation(libs.napier)
 
     lintChecks(project(":permissions-lint"))
     lintPublish(project(":permissions-lint"))
@@ -98,21 +98,21 @@ dependencies {
     // Test dependencies
     // ======================
 
-    androidTestUtil libs.androidx.test.orchestrator
+    androidTestUtil(libs.androidx.test.orchestrator)
 
-    androidTestImplementation project(':internal-testutils')
-    androidTestImplementation libs.androidx.activity.compose
-    androidTestImplementation libs.compose.material.material
+    androidTestImplementation(project(":internal-testutils"))
+    androidTestImplementation(libs.androidx.activity.compose)
+    androidTestImplementation(libs.compose.material.material)
 
-    androidTestImplementation libs.junit
-    androidTestImplementation libs.truth
+    androidTestImplementation(libs.junit)
+    androidTestImplementation(libs.truth)
 
-    androidTestImplementation libs.compose.ui.test.junit4
-    androidTestImplementation libs.compose.ui.test.manifest
-    androidTestImplementation libs.compose.foundation.foundation
-    androidTestImplementation libs.androidx.test.runner
-    androidTestImplementation libs.androidx.test.rules
-    androidTestImplementation libs.androidx.test.uiAutomator
+    androidTestImplementation(libs.compose.ui.test.junit4)
+    androidTestImplementation(libs.compose.ui.test.manifest)
+    androidTestImplementation(libs.compose.foundation.foundation)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.test.rules)
+    androidTestImplementation(libs.androidx.test.uiAutomator)
 }
 
 apply plugin: "com.vanniktech.maven.publish"
