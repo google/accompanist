@@ -60,10 +60,12 @@ android {
         checkReleaseBuilds = false
     }
 
-    packagingOptions {
+    packaging {
         // Multiple dependencies bring these files in. Exclude them to enable
         // our test APK to build (has no effect on our AARs)
-        excludes += listOf("/META-INF/AL2.0", "/META-INF/LGPL2.1")
+        resources {
+            excludes += setOf("/META-INF/AL2.0", "/META-INF/LGPL2.1")
+        }
     }
 
     testOptions {

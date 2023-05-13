@@ -60,7 +60,7 @@ android {
         checkReleaseBuilds = false
     }
 
-    packagingOptions {
+    packaging {
         // Some of the META-INF files conflict with coroutines-test. Exclude them to enable
         // our test APK to build (has no effect on our AARs)
         resources {

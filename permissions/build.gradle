@@ -57,11 +57,11 @@ android {
         kotlinCompilerExtensionVersion libs.versions.composeCompiler.get()
     }
 
-    lintOptions {
-        textReport true
-        textOutput 'stdout'
+    lint {
+        textReport = true
+        textOutput = new File("stdout")
         // We run a full lint analysis as build part in CI, so skip vital checks for assemble tasks
-        checkReleaseBuilds false
+        checkReleaseBuilds = false
     }
 
     testOptions {
@@ -74,8 +74,9 @@ android {
 
     packagingOptions {
         // Exclude license files to enable our test APK to build (has no effect on our AARs)
-        excludes += "/META-INF/AL2.0"
-        excludes += "/META-INF/LGPL2.1"
+        resources {
+            excludes += ['/META-INF/AL2.0', '/META-INF/LGPL2.1']
+        }
     }
 }
 
