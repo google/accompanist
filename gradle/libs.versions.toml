@@ -106,6 +106,7 @@ android-tools-lint-tests = { module = "com.android.tools.lint:lint-tests", versi
 squareup-mockwebserver = "com.squareup.okhttp3:mockwebserver:4.9.3"
 
 [plugins]
+android-application = { id = "com.android.application", version.ref = "gradlePlugin" }
 android-kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "gradlePlugin" }
 jetbrains-dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }

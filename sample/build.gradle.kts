@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,18 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("UnstableApiUsage")
 
 plugins {
-    id("com.android.application")
-    id("kotlin-android")
+    id(libs.plugins.android.application.get().pluginId)
+    id(libs.plugins.android.kotlin.get().pluginId)
 }
+
 android {
-    compileSdkVersion = 33
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "com.google.accompanist.sample"
-        minSdkVersion 21
-        targetSdkVersion 33
+        minSdk = 21
+        targetSdk = 33
 
         versionCode = 1
         versionName = "1.0"
@@ -46,8 +48,8 @@ android {
     }
 
     buildTypes {
-        release {
-            signingConfig = signingConfigs.debug
+        getByName("release") {
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 
@@ -71,7 +73,7 @@ dependencies {
     implementation(project(":swiperefresh"))
     implementation(project(":testharness")) // Don't use in production! Use the configurations below
     testImplementation(project(":testharness"))
-    androidTestImplementation project(':testharness')
+    androidTestImplementation(project(":testharness"))
     implementation(project(":themeadapter-material"))
     implementation(project(":themeadapter-material3"))
     implementation(project(":web"))
