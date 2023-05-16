@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
-    id 'org.jetbrains.dokka'
-    id 'me.tylerbwong.gradle.metalava'
+    id("com.android.library")
+    id("kotlin-android")
+    id("org.jetbrains.dokka")
+    id("me.tylerbwong.gradle.metalava")
 }
 
 kotlin {
@@ -26,36 +26,36 @@ kotlin {
 }
 
 android {
-    namespace "com.google.accompanist.placeholder.material"
+    namespace = "com.google.accompanist.placeholder.material"
 
-    compileSdkVersion 33
+    compileSdkVersion = 33
 
     defaultConfig {
         minSdkVersion 21
         // targetSdkVersion has no effect for libraries. This is only used for the test APK
         targetSdkVersion 33
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     buildFeatures {
-        buildConfig false
-        compose true
+        buildConfig = false
+        compose = true
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion libs.versions.composeCompiler.get()
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
 
     lintOptions {
-        textReport true
+        textReport = true
         textOutput 'stdout'
         // We run a full lint analysis as build part in CI, so skip vital checks for assemble tasks
-        checkReleaseBuilds false
+        checkReleaseBuilds = false
     }
 
     packagingOptions {
@@ -69,7 +69,7 @@ android {
         unitTests {
             includeAndroidResources = true
         }
-        animationsDisabled true
+        animationsDisabled = true
     }
 }
 
@@ -80,25 +80,25 @@ metalava {
 }
 
 dependencies {
-    implementation libs.compose.material.material
-    api project(':placeholder')
-    implementation libs.napier
-    implementation libs.kotlin.coroutines.android
+    implementation(libs.compose.material.material)
+    api(project(":placeholder"))
+    implementation(libs.napier)
+    implementation(libs.kotlin.coroutines.android)
 
     // ======================
     // Test dependencies
     // ======================
 
-    androidTestImplementation libs.junit
-    androidTestImplementation libs.truth
+    androidTestImplementation(libs.junit)
+    androidTestImplementation(libs.truth)
 
-    androidTestImplementation libs.compose.ui.test.junit4
-    androidTestImplementation libs.compose.ui.test.manifest
-    androidTestImplementation libs.compose.foundation.foundation
+    androidTestImplementation(libs.compose.ui.test.junit4)
+    androidTestImplementation(libs.compose.ui.test.manifest)
+    androidTestImplementation(libs.compose.foundation.foundation)
 
-    androidTestImplementation libs.androidx.test.core
-    androidTestImplementation libs.androidx.test.rules
-    androidTestImplementation libs.androidx.test.runner
+    androidTestImplementation(libs.androidx.test.core)
+    androidTestImplementation(libs.androidx.test.rules)
+    androidTestImplementation(libs.androidx.test.runner)
 }
 
 apply plugin: "com.vanniktech.maven.publish"
