@@ -14,90 +14,90 @@
  * limitations under the License.
  */
 
-apply plugin: 'com.android.application'
-
-apply plugin: 'kotlin-android'
-
+plugins {
+    id("com.android.application")
+    id("kotlin-android")
+}
 android {
-    compileSdkVersion 33
+    compileSdkVersion = 33
 
     defaultConfig {
-        applicationId "com.google.accompanist.sample"
+        applicationId = "com.google.accompanist.sample"
         minSdkVersion 21
         targetSdkVersion 33
 
-        versionCode 1
-        versionName "1.0"
+        versionCode = 1
+        versionName = "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     buildFeatures {
-        compose true
+        compose = true
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion libs.versions.composeCompiler.get()
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
 
     buildTypes {
         release {
-            signingConfig signingConfigs.debug
+            signingConfig = signingConfigs.debug
         }
     }
 
-    namespace 'com.google.accompanist.sample'
+    namespace = "com.google.accompanist.sample"
 }
 
 dependencies {
-    implementation project(':adaptive')
-    implementation project(':drawablepainter')
-    implementation project(':insets')
-    implementation project(':insets-ui')
-    implementation project(':navigation-animation')
-    implementation project(':navigation-material')
-    implementation project(':pager')
-    implementation project(':pager-indicators')
-    implementation project(':permissions')
-    implementation project(':placeholder')
-    implementation project(':placeholder-material')
-    implementation project(':flowlayout')
-    implementation project(':systemuicontroller')
-    implementation project(':swiperefresh')
-    implementation project(':testharness') // Don't use in production! Use the configurations below.
-    testImplementation project(':testharness')
+    implementation(project(":adaptive"))
+    implementation(project(":drawablepainter"))
+    implementation(project(":insets"))
+    implementation(project(":insets-ui"))
+    implementation(project(":navigation-animation"))
+    implementation(project(":navigation-material"))
+    implementation(project(":pager"))
+    implementation(project(":pager-indicators"))
+    implementation(project(":permissions"))
+    implementation(project(":placeholder"))
+    implementation(project(":placeholder-material"))
+    implementation(project(":flowlayout"))
+    implementation(project(":systemuicontroller"))
+    implementation(project(":swiperefresh"))
+    implementation(project(":testharness")) // Don't use in production! Use the configurations below
+    testImplementation(project(":testharness"))
     androidTestImplementation project(':testharness')
-    implementation project(':themeadapter-material')
-    implementation project(':themeadapter-material3')
-    implementation project(':web')
+    implementation(project(":themeadapter-material"))
+    implementation(project(":themeadapter-material3"))
+    implementation(project(":web"))
 
-    implementation libs.androidx.appcompat
-    implementation libs.mdc
+    implementation(libs.androidx.appcompat)
+    implementation(libs.mdc)
 
-    implementation libs.coil.compose
-    implementation libs.coil.gif
+    implementation(libs.coil.compose)
+    implementation(libs.coil.gif)
 
-    implementation libs.compose.material.material
-    implementation libs.compose.material.iconsext
-    implementation libs.compose.material3.material3
-    implementation libs.compose.foundation.layout
-    debugImplementation libs.compose.ui.tooling
-    implementation libs.compose.ui.tooling.preview
-    implementation libs.compose.ui.util
+    implementation(libs.compose.material.material)
+    implementation(libs.compose.material.iconsext)
+    implementation(libs.compose.material3.material3)
+    implementation(libs.compose.foundation.layout)
+    debugImplementation(libs.compose.ui.tooling)
+    implementation(libs.compose.ui.tooling.preview)
+    implementation(libs.compose.ui.util)
 
-    implementation libs.androidx.lifecycle.viewmodel.compose
-    implementation libs.androidx.activity.compose
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.activity.compose)
 
-    implementation libs.androidx.core
-    implementation libs.androidx.fragment
-    implementation libs.androidx.lifecycle.runtime
+    implementation(libs.androidx.core)
+    implementation(libs.androidx.fragment)
+    implementation(libs.androidx.lifecycle.runtime)
 
-    implementation libs.kotlin.stdlib
+    implementation(libs.kotlin.stdlib)
 
     lintChecks(project(":permissions-lint"))
 }
