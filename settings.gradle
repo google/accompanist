@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,40 +15,40 @@
  */
 
 plugins {
-    id 'com.gradle.enterprise' version '3.10.3'
+    id("com.gradle.enterprise") version("3.10.3")
 }
 
 gradleEnterprise {
     buildScan {
-        termsOfServiceUrl = 'https://gradle.com/terms-of-service'
-        termsOfServiceAgree = 'yes'
+        termsOfServiceUrl = "https://gradle.com/terms-of-service"
+        termsOfServiceAgree = "yes"
     }
 }
 
-include ':adaptive'
-include ':internal-testutils'
-include ':insets'
-include ':insets-ui'
-include ':appcompat-theme'
-include ':drawablepainter'
-include ':navigation-animation'
-include ':navigation-material'
-include ':pager'
-include ':pager-indicators'
-include ':permissions'
-include ':permissions-lint'
-include ':placeholder'
-include ':placeholder-material'
-include ':placeholder-material3'
-include ':flowlayout'
-include ':systemuicontroller'
-include ':swiperefresh'
-include ':sample'
-include ':testharness'
-include ':themeadapter-core'
-include ':themeadapter-appcompat'
-include ':themeadapter-material'
-include ':themeadapter-material3'
-include ':web'
+include(":adaptive")
+include(":internal-testutils")
+include(":insets")
+include(":insets-ui")
+include(":appcompat-theme")
+include(":drawablepainter")
+include(":navigation-animation")
+include(":navigation-material")
+include(":pager")
+include(":pager-indicators")
+include(":permissions")
+include(":permissions-lint")
+include(":placeholder")
+include(":placeholder-material")
+include(":placeholder-material3")
+include(":flowlayout")
+include(":systemuicontroller")
+include(":swiperefresh")
+include(":sample")
+include(":testharness")
+include(":themeadapter-core")
+include(":themeadapter-appcompat")
+include(":themeadapter-material")
+include(":themeadapter-material3")
+include(":web")
 
-rootProject.name = 'accompanist'
+rootProject.name = "accompanist"
