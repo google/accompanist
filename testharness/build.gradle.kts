@@ -13,27 +13,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("UnstableApiUsage")
 
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
-    id("org.jetbrains.dokka")
-    id("me.tylerbwong.gradle.metalava")
+    id(libs.plugins.android.library.get().pluginId)
+    id(libs.plugins.android.kotlin.get().pluginId)
+    id(libs.plugins.jetbrains.dokka.get().pluginId)
+    id(libs.plugins.gradle.metalava.get().pluginId)
+    id(libs.plugins.vanniktech.maven.publish.get().pluginId)
+    jacoco
 }
 
 kotlin {
     explicitApi()
 }
 
+tasks.withType<Test> {
+    configure<JacocoTaskExtension> {
+        // Required for JaCoCo + Robolectric
+        // https://github.com/robolectric/robolectric/issues/2230
+        isIncludeNoLocationClasses = true
+
+        // Required for JDK 11 with the above
+        // https://github.com/gradle/gradle/issues/5184#issuecomment-391982009
+        excludes?.add("jdk.internal.*")
+    }
+}
+
 android {
     namespace = "com.google.accompanist.testharness"
 
-    compileSdkVersion = 33
+    compileSdk = 33
 
     defaultConfig {
-        minSdkVersion 21
+        minSdk = 21
         // targetSdkVersion has no effect for libraries. This is only used for the test APK
-        targetSdkVersion 33
+        targetSdk = 33
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -43,7 +58,7 @@ android {
     }
 
     buildTypes {
-        debug {
+        getByName("debug") {
             enableUnitTestCoverage = true
         }
     }
@@ -57,18 +72,19 @@ android {
         kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
 
-    lintOptions {
+    lint {
         textReport = true
-        textOutput 'stdout'
+        textOutput = File("stdout")
         // We run a full lint analysis as build part in CI, so skip vital checks for assemble tasks
         checkReleaseBuilds = false
     }
 
-    packagingOptions {
+    packaging {
         // Some of the META-INF files conflict with coroutines-test. Exclude them to enable
         // our test APK to build (has no effect on our AARs)
-        excludes += "/META-INF/AL2.0"
-        excludes += "/META-INF/LGPL2.1"
+        resources {
+            excludes += listOf("/META-INF/AL2.0", "/META-INF/LGPL2.1")
+        }
     }
 
     testCoverage {
@@ -77,33 +93,24 @@ android {
 
     testOptions {
         unitTests {
-            includeAndroidResources = true
+            isIncludeAndroidResources = true
         }
         unitTests.all {
-            useJUnit {
-                excludeCategories "com.google.accompanist.internal.test.IgnoreOnRobolectric"
-            }
-            jacoco {
-                // Required for JaCoCo + Robolectric
-                // https://github.com/robolectric/robolectric/issues/2230
-                includeNoLocationClasses = true
-
-                // Required for JDK 11 with the above
-                // https://github.com/gradle/gradle/issues/5184#issuecomment-391982009
-                excludes = ["jdk.internal.*"]
+            it.useJUnit {
+                excludeCategories("com.google.accompanist.internal.test.IgnoreOnRobolectric")
             }
         }
         animationsDisabled = true
     }
 
     sourceSets {
-        test {
-            java.srcDirs += "src/sharedTest/kotlin"
-            res.srcDirs += "src/sharedTest/res"
+        named("test") {
+            java.srcDirs("src/sharedTest/kotlin")
+            res.srcDirs("src/sharedTest/res")
         }
-        androidTest {
-            java.srcDirs += "src/sharedTest/kotlin"
-            res.srcDirs += "src/sharedTest/res"
+        named("androidTest") {
+            java.srcDirs("src/sharedTest/kotlin")
+            res.srcDirs("src/sharedTest/res")
         }
     }
 }
@@ -145,5 +152,3 @@ dependencies {
 
     testImplementation(libs.robolectric)
 }
-
-apply plugin: "com.vanniktech.maven.publish"
