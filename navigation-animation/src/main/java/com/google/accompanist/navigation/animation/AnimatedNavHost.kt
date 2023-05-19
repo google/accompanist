@@ -29,6 +29,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.with
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -142,6 +143,14 @@ public fun AnimatedNavHost(
     navController.setViewModelStore(viewModelStoreOwner.viewModelStore)
     if (onBackPressedDispatcher != null) {
         navController.setOnBackPressedDispatcher(onBackPressedDispatcher)
+    }
+    // Ensure that the NavController only receives back events while
+    // the AnimatedNavHost is in composition
+    DisposableEffect(navController) {
+        navController.enableOnBackPressed(true)
+        onDispose {
+            navController.enableOnBackPressed(false)
+        }
     }
 
     navController.graph = graph
