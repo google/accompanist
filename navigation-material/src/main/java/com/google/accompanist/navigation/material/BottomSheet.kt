@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.Dp
 public fun ModalBottomSheetLayout(
     bottomSheetNavigator: BottomSheetNavigator,
     modifier: Modifier = Modifier,
+    sheetGesturesEnabled: Boolean = true,
     sheetShape: Shape = MaterialTheme.shapes.large,
     sheetElevation: Dp = ModalBottomSheetDefaults.Elevation,
     sheetBackgroundColor: Color = MaterialTheme.colors.surface,
@@ -49,6 +50,7 @@ public fun ModalBottomSheetLayout(
         sheetState = bottomSheetNavigator.sheetState,
         sheetContent = bottomSheetNavigator.sheetContent,
         modifier = modifier,
+        sheetGesturesEnabled = sheetGesturesEnabled,
         sheetShape = sheetShape,
         sheetElevation = sheetElevation,
         sheetBackgroundColor = sheetBackgroundColor,

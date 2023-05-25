@@ -2,7 +2,7 @@
 package com.google.accompanist.navigation.material {
 
   public final class BottomSheetKt {
-    method @androidx.compose.runtime.Composable @com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi public static void ModalBottomSheetLayout(com.google.accompanist.navigation.material.BottomSheetNavigator bottomSheetNavigator, optional androidx.compose.ui.Modifier modifier, optional androidx.compose.ui.graphics.Shape sheetShape, optional float sheetElevation, optional long sheetBackgroundColor, optional long sheetContentColor, optional long scrimColor, kotlin.jvm.functions.Function0<kotlin.Unit> content);
+    method @androidx.compose.runtime.Composable @com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi public static void ModalBottomSheetLayout(com.google.accompanist.navigation.material.BottomSheetNavigator bottomSheetNavigator, optional androidx.compose.ui.Modifier modifier, optional boolean sheetGesturesEnabled, optional androidx.compose.ui.graphics.Shape sheetShape, optional float sheetElevation, optional long sheetBackgroundColor, optional long sheetContentColor, optional long scrimColor, kotlin.jvm.functions.Function0<kotlin.Unit> content);
   }
 
   @androidx.navigation.Navigator.Name("BottomSheetNavigator") @com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi public final class BottomSheetNavigator extends androidx.navigation.Navigator<com.google.accompanist.navigation.material.BottomSheetNavigator.Destination> {

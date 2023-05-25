@@ -111,7 +111,7 @@ public fun NavGraphBuilder.navigation(
     )? = exitTransition,
     builder: NavGraphBuilder.() -> Unit
 ) {
-    navigation(startDestination, route, arguments, deepLinks, builder).apply {
+    navigation(startDestination, route, arguments, deepLinks, builder = builder).apply {
         enterTransition?.let { enterTransitions[route] = enterTransition }
         exitTransition?.let { exitTransitions[route] = exitTransition }
         popEnterTransition?.let { popEnterTransitions[route] = popEnterTransition }

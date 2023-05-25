@@ -78,7 +78,7 @@ internal class BottomSheetNavigatorTest {
 
     @Test
     fun testNavigateAddsDestinationToBackStack(): Unit = runBlocking {
-        val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
+        val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden, composeTestRule.density)
         val navigatorState = TestNavigatorState()
         val navigator = BottomSheetNavigator(sheetState)
 
@@ -93,7 +93,7 @@ internal class BottomSheetNavigatorTest {
 
     @Test
     fun testNavigateAddsDestinationToBackStackAndKeepsPrevious(): Unit = runBlocking {
-        val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
+        val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden, composeTestRule.density)
         val navigator = BottomSheetNavigator(sheetState)
         val navigatorState = TestNavigatorState()
 
@@ -118,7 +118,7 @@ internal class BottomSheetNavigatorTest {
 
     @Test
     fun testNavigateComposesDestinationAndDisposesPreviousDestination(): Unit = runBlocking {
-        val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
+        val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden, composeTestRule.density)
         val navigator = BottomSheetNavigator(sheetState)
         val navigatorState = TestNavigatorState()
         navigator.onAttach(navigatorState)
@@ -177,7 +177,7 @@ internal class BottomSheetNavigatorTest {
     @Test
     fun testBackStackEntryPoppedAfterManualSheetDismiss(): Unit = runBlocking {
         val navigatorState = TestNavigatorState()
-        val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
+        val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden, composeTestRule.density)
         val navigator = BottomSheetNavigator(sheetState = sheetState)
         navigator.onAttach(navigatorState)
 
@@ -227,7 +227,7 @@ internal class BottomSheetNavigatorTest {
         var savedState: Bundle? = null
         var compositionState by mutableStateOf(0)
 
-        val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
+        val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden, composeTestRule.density)
         val textInSheetTag = "textInSheet"
 
         composeTestRule.setContent {
@@ -268,7 +268,7 @@ internal class BottomSheetNavigatorTest {
 
     @Test
     fun testNavigateCompletesEntriesTransitions() = runBlocking {
-        val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
+        val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden, composeTestRule.density)
         val navigator = BottomSheetNavigator(sheetState)
         val navigatorState = TestNavigatorState()
 
@@ -303,7 +303,7 @@ internal class BottomSheetNavigatorTest {
 
     @Test
     fun testComposeSheetContentBeforeNavigatorAttached(): Unit = runBlocking {
-        val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
+        val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden, composeTestRule.density)
         val navigator = BottomSheetNavigator(sheetState)
         val navigatorState = TestNavigatorState()
 

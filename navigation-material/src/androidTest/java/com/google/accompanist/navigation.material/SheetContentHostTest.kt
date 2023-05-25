@@ -64,7 +64,7 @@ internal class SheetContentHostTest {
 
     @Test
     fun testOnSheetDismissedCalled_ManualDismiss() = runTest {
-        val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
+        val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden, composeTestRule.density)
         val backStackEntry = createBackStackEntry(sheetState)
 
         val dismissedBackStackEntries = mutableListOf<NavBackStackEntry>()
@@ -89,7 +89,7 @@ internal class SheetContentHostTest {
 
     @Test
     fun testOnSheetDismissedCalled_initiallyExpanded() = runTest {
-        val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Expanded)
+        val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Expanded, composeTestRule.density)
         val backStackEntry = createBackStackEntry(sheetState)
 
         val dismissedBackStackEntries = mutableListOf<NavBackStackEntry>()
@@ -114,7 +114,7 @@ internal class SheetContentHostTest {
 
     @Test
     fun testOnSheetShownCalled_onBackStackEntryEnter_shortSheet() = runTest {
-        val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
+        val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden, composeTestRule.density)
         val backStackEntryState = mutableStateOf<NavBackStackEntry?>(null)
         val shownBackStackEntries = mutableListOf<NavBackStackEntry>()
 
@@ -141,7 +141,7 @@ internal class SheetContentHostTest {
 
     @Test
     fun testOnSheetShownCalled_onBackStackEntryEnter_tallSheet() = runTest {
-        val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
+        val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden, composeTestRule.density)
         val backStackEntryState = mutableStateOf<NavBackStackEntry?>(null)
         val shownBackStackEntries = mutableListOf<NavBackStackEntry>()
 
