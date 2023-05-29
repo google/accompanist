@@ -116,7 +116,7 @@ internal class NavGraphBuilderTest {
     }
 
     private fun createBottomSheetNavigator() =
-        BottomSheetNavigator(sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden))
+        BottomSheetNavigator(sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden, composeTestRule.density))
 }
 
 private const val firstRoute = "first"

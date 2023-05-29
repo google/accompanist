@@ -27,7 +27,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.with
+import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -203,7 +203,7 @@ public fun AnimatedNavHost(
                 if (initialState in visibleEntries) {
                     ContentTransform(finalEnter(this), finalExit(this), zIndex)
                 } else {
-                    EnterTransition.None with ExitTransition.None
+                    EnterTransition.None togetherWith ExitTransition.None
                 }
             },
             contentAlignment,
