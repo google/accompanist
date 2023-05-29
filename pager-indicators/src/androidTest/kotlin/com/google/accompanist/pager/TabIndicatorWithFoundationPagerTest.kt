@@ -59,7 +59,7 @@ class TabIndicatorWithFoundationPagerTest {
     @Test
     fun emptyPager() {
         rule.setContent {
-            val pagerState = rememberFoundationPagerState()
+            val pagerState = rememberFoundationPagerState(pageCount = { 0 })
             TabRow(pagerState, 0)
         }
     }
@@ -69,10 +69,10 @@ class TabIndicatorWithFoundationPagerTest {
         lateinit var pagerState: FoundationPagerState
         val pageCount = 4
         rule.setContent {
-            pagerState = rememberFoundationPagerState()
+            pagerState = rememberFoundationPagerState(pageCount = { pageCount })
             Column {
                 TabRow(pagerState, pageCount)
-                FoundationHorizontalPager(pageCount = pageCount, state = pagerState) {
+                FoundationHorizontalPager(state = pagerState) {
                     Box(Modifier.fillMaxSize())
                 }
             }
@@ -99,10 +99,10 @@ class TabIndicatorWithFoundationPagerTest {
         lateinit var pagerState: FoundationPagerState
         val pageCount = 4
         rule.setContent {
-            pagerState = rememberFoundationPagerState()
+            pagerState = rememberFoundationPagerState(pageCount = { pageCount })
             Column {
                 TabRow(pagerState, pageCount)
-                FoundationHorizontalPager(pageCount = pageCount, state = pagerState) {
+                FoundationHorizontalPager(state = pagerState) {
                     Box(Modifier.fillMaxSize())
                 }
             }
@@ -129,10 +129,10 @@ class TabIndicatorWithFoundationPagerTest {
         lateinit var pagerState: FoundationPagerState
         val pageCount = 4
         rule.setContent {
-            pagerState = rememberFoundationPagerState()
+            pagerState = rememberFoundationPagerState(pageCount = { pageCount })
             Column {
                 TabRow(pagerState, pageCount)
-                FoundationHorizontalPager(pageCount = pageCount, state = pagerState) {
+                FoundationHorizontalPager(state = pagerState) {
                     Box(Modifier.fillMaxSize())
                 }
             }
