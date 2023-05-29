@@ -1,7 +1,7 @@
 [versions]
 
-compose = "1.5.0-alpha01"
-composeCompiler = "1.4.6"
+compose = "1.5.0-beta01"
+composeCompiler = "1.4.7"
 composeMaterial3 = "1.0.1"
 composesnapshot = "-" # a single character = no snapshot
 
@@ -12,7 +12,7 @@ gradlePlugin = "8.0.0"
 lintMinCompose = "30.0.0"
 
 ktlint = "0.45.2"
-kotlin = "1.8.20"
+kotlin = "1.8.21"
 coroutines = "1.6.4"
 okhttp = "3.12.13"
 coil = "1.3.2"
