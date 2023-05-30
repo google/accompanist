@@ -22,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.navigation.NavHostController
 import androidx.navigation.NoOpNavigator
+import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.get
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -53,7 +54,7 @@ class NavHostControllerTest {
         }
 
         val navigator = composeTestRule.runOnIdle {
-            navController.navigatorProvider[AnimatedComposeNavigator::class]
+            navController.navigatorProvider[ComposeNavigator::class]
         }
 
         // trigger recompose
@@ -62,7 +63,7 @@ class NavHostControllerTest {
         }
 
         composeTestRule.runOnIdle {
-            assertThat(navController.navigatorProvider[AnimatedComposeNavigator::class])
+            assertThat(navController.navigatorProvider[ComposeNavigator::class])
                 .isEqualTo(navigator)
         }
     }

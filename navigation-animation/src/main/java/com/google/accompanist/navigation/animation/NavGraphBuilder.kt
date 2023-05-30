@@ -28,8 +28,8 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraph
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import androidx.navigation.get
 
 /**
  * Add the [Composable] to the [NavGraphBuilder]
@@ -58,26 +58,16 @@ public fun NavGraphBuilder.composable(
         AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?
     )? = exitTransition,
     content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
-) {
-    addDestination(
-        AnimatedComposeNavigator.Destination(
-            provider[AnimatedComposeNavigator::class],
-            content
-        ).apply {
-            this.route = route
-            arguments.forEach { (argumentName, argument) ->
-                addArgument(argumentName, argument)
-            }
-            deepLinks.forEach { deepLink ->
-                addDeepLink(deepLink)
-            }
-            enterTransition?.let { enterTransitions[route] = enterTransition }
-            exitTransition?.let { exitTransitions[route] = exitTransition }
-            popEnterTransition?.let { popEnterTransitions[route] = popEnterTransition }
-            popExitTransition?.let { popExitTransitions[route] = popExitTransition }
-        }
-    )
-}
+) = composable(
+    route,
+    arguments,
+    deepLinks,
+    enterTransition,
+    exitTransition,
+    popEnterTransition,
+    popExitTransition,
+    content
+)
 
 /**
  * Construct a nested [NavGraph]
@@ -110,11 +100,14 @@ public fun NavGraphBuilder.navigation(
         AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?
     )? = exitTransition,
     builder: NavGraphBuilder.() -> Unit
-) {
-    navigation(startDestination, route, arguments, deepLinks, builder).apply {
-        enterTransition?.let { enterTransitions[route] = enterTransition }
-        exitTransition?.let { exitTransitions[route] = exitTransition }
-        popEnterTransition?.let { popEnterTransitions[route] = popEnterTransition }
-        popExitTransition?.let { popExitTransitions[route] = popExitTransition }
-    }
-}
+) = navigation(
+    startDestination,
+    route,
+    arguments,
+    deepLinks,
+    enterTransition,
+    exitTransition,
+    popEnterTransition,
+    popExitTransition,
+    builder
+)
