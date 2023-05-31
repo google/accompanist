@@ -18,7 +18,6 @@ package com.google.accompanist.navigation.animation
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.Navigator
@@ -35,7 +34,4 @@ import androidx.navigation.compose.rememberNavController
 @Composable
 fun rememberAnimatedNavController(
     vararg navigators: Navigator<out NavDestination>
-): NavHostController {
-    val animatedNavigator = remember { AnimatedComposeNavigator() }
-    return rememberNavController(animatedNavigator, *navigators)
-}
+): NavHostController = rememberNavController(*navigators)
