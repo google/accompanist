@@ -44,8 +44,11 @@ import androidx.navigation.Navigator
 import androidx.navigation.NavigatorState
 import com.google.accompanist.navigation.material.BottomSheetNavigator.Destination
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.transform
 
 /**
@@ -175,6 +178,22 @@ class BottomSheetNavigator(
         }
 
     /**
+     * Get the sheetGesturesEnabled from the [state]. In some cases, the [sheetContent] might be
+     * composed before the Navigator is attached, so we specifically return an flow with true if we
+     * aren't attached yet.
+     */
+    internal val sheetGesturesEnabled: Flow<Boolean>
+        get() = if (attached) {
+            state.backStack.mapNotNull {
+                if (it.lastOrNull()?.destination is Destination)
+                    (it.lastOrNull()?.destination as Destination).sheetGesturesEnabled
+                else null
+            }.distinctUntilChanged()
+        } else {
+            MutableStateFlow(true)
+        }
+
+    /**
      * Access properties of the [ModalBottomSheetLayout]'s [ModalBottomSheetState]
      */
     val navigatorSheetState = BottomSheetNavigatorSheetState(sheetState)
@@ -274,6 +293,7 @@ class BottomSheetNavigator(
     @NavDestination.ClassType(Composable::class)
     class Destination(
         navigator: BottomSheetNavigator,
+        internal val sheetGesturesEnabled: Boolean = true,
         internal val content: @Composable ColumnScope.(NavBackStackEntry) -> Unit
     ) : NavDestination(navigator), FloatingWindow
 }

@@ -39,12 +39,14 @@ public fun NavGraphBuilder.bottomSheet(
     route: String,
     arguments: List<NamedNavArgument> = emptyList(),
     deepLinks: List<NavDeepLink> = emptyList(),
+    sheetGesturesEnabled: Boolean = true,
     content: @Composable ColumnScope.(backstackEntry: NavBackStackEntry) -> Unit
 ) {
     addDestination(
         BottomSheetNavigator.Destination(
-            provider[BottomSheetNavigator::class],
-            content
+            navigator = provider[BottomSheetNavigator::class],
+            sheetGesturesEnabled = sheetGesturesEnabled,
+            content = content
         ).apply {
             this.route = route
             arguments.forEach { (argumentName, argument) ->

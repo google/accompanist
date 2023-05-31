@@ -52,7 +52,8 @@ class BottomSheetNavSample : ComponentActivity() {
 private object Destinations {
     const val Home = "HOME"
     const val Feed = "FEED"
-    const val Sheet = "SHEET"
+    const val SheetWithGestures = "SHEET_WITH_GESTURES"
+    const val SheetWithoutGestures = "SHEET_WITHOUT_GESTURES"
 }
 
 @OptIn(ExperimentalMaterialNavigationApi::class)
@@ -65,19 +66,35 @@ fun BottomSheetNavDemo() {
         NavHost(navController, Destinations.Home) {
             composable(Destinations.Home) {
                 HomeScreen(
-                    showSheet = {
-                        navController.navigate(Destinations.Sheet + "?arg=From Home Screen")
+                    showSheetWithGestures = {
+                        navController.navigate(Destinations.SheetWithGestures + "?arg=From Home Screen")
+                    },
+                    showSheetWithoutGestures = {
+                        navController.navigate(Destinations.SheetWithoutGestures + "?arg=From Home Screen")
                     },
                     showFeed = { navController.navigate(Destinations.Feed) }
                 )
             }
             composable(Destinations.Feed) { Text("Feed!") }
-            bottomSheet(Destinations.Sheet + "?arg={arg}") { backstackEntry ->
+            bottomSheet(Destinations.SheetWithGestures + "?arg={arg}") { backstackEntry ->
                 val arg = backstackEntry.arguments?.getString("arg") ?: "Missing argument :("
                 BottomSheet(
                     showFeed = { navController.navigate(Destinations.Feed) },
                     showAnotherSheet = {
-                        navController.navigate(Destinations.Sheet + "?arg=${UUID.randomUUID()}")
+                        navController.navigate(Destinations.SheetWithGestures + "?arg=${UUID.randomUUID()}")
+                    },
+                    arg = arg
+                )
+            }
+            bottomSheet(
+                Destinations.SheetWithoutGestures + "?arg={arg}",
+                sheetGesturesEnabled = false
+            ) { backstackEntry ->
+                val arg = backstackEntry.arguments?.getString("arg") ?: "Missing argument :("
+                BottomSheet(
+                    showFeed = { navController.navigate(Destinations.Feed) },
+                    showAnotherSheet = {
+                        navController.navigate(Destinations.SheetWithoutGestures + "?arg=${UUID.randomUUID()}")
                     },
                     arg = arg
                 )
@@ -87,11 +104,18 @@ fun BottomSheetNavDemo() {
 }
 
 @Composable
-private fun HomeScreen(showSheet: () -> Unit, showFeed: () -> Unit) {
+private fun HomeScreen(
+    showSheetWithGestures: () -> Unit,
+    showSheetWithoutGestures: () -> Unit,
+    showFeed: () -> Unit
+) {
     Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         Text("Body")
-        Button(onClick = showSheet) {
-            Text("Show sheet!")
+        Button(onClick = showSheetWithGestures) {
+            Text("Show Sheet With Gestures")
+        }
+        Button(onClick = showSheetWithoutGestures) {
+            Text("Show Sheet Without Gestures")
         }
         Button(onClick = showFeed) {
             Text("Navigate to Feed")

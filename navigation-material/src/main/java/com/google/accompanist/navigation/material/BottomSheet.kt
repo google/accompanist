@@ -22,6 +22,7 @@ import androidx.compose.material.ModalBottomSheetDefaults
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -38,7 +39,6 @@ import androidx.compose.ui.unit.Dp
 public fun ModalBottomSheetLayout(
     bottomSheetNavigator: BottomSheetNavigator,
     modifier: Modifier = Modifier,
-    sheetGesturesEnabled: Boolean = true,
     sheetShape: Shape = MaterialTheme.shapes.large,
     sheetElevation: Dp = ModalBottomSheetDefaults.Elevation,
     sheetBackgroundColor: Color = MaterialTheme.colors.surface,
@@ -46,16 +46,19 @@ public fun ModalBottomSheetLayout(
     scrimColor: Color = ModalBottomSheetDefaults.scrimColor,
     content: @Composable () -> Unit
 ) {
+    val sheetGesturesState = bottomSheetNavigator.sheetGesturesEnabled.collectAsState(
+        initial = true
+    )
     ModalBottomSheetLayout(
         sheetState = bottomSheetNavigator.sheetState,
         sheetContent = bottomSheetNavigator.sheetContent,
         modifier = modifier,
         sheetShape = sheetShape,
-        sheetGesturesEnabled = sheetGesturesEnabled,
         sheetElevation = sheetElevation,
         sheetBackgroundColor = sheetBackgroundColor,
         sheetContentColor = sheetContentColor,
         scrimColor = scrimColor,
+        sheetGesturesEnabled = sheetGesturesState.value,
         content = content
     )
 }
