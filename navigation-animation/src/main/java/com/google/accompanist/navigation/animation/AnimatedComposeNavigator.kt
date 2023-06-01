@@ -32,9 +32,20 @@ import kotlin.collections.forEach
  * set a valid [Composable] by setting it directly on an instantiated [Destination] or calling
  * [composable].
  */
+@Deprecated(
+    message = "Replace with ComposeNavigator from Androidx Navigation and change import " +
+        "from com.google.accompanist.navigation.animation.AnimatedComposeNavigator to " +
+        "androidx.navigation.compose.ComposeNavigator.",
+    replaceWith = ReplaceWith(
+        "ComposeNavigator",
+        "androidx.navigation.compose.ComposeNavigator"
+    )
+)
 @ExperimentalAnimationApi
 @Navigator.Name("animatedComposable")
-public class AnimatedComposeNavigator : Navigator<AnimatedComposeNavigator.Destination>() {
+@Suppress("DEPRECATION")
+public class AnimatedComposeNavigator private constructor() : Navigator<AnimatedComposeNavigator.Destination>() {
+
     internal val transitionsInProgress get() = state.transitionsInProgress
 
     internal val backStack get() = state.backStack
@@ -53,6 +64,10 @@ public class AnimatedComposeNavigator : Navigator<AnimatedComposeNavigator.Desti
         isPop.value = false
     }
 
+    @Deprecated(
+        message = "Replace with ComposeNavigator.createDestination from " +
+            "Androidx Navigation"
+    )
     override fun createDestination(): Destination {
         return Destination(this, content = { })
     }
@@ -69,6 +84,14 @@ public class AnimatedComposeNavigator : Navigator<AnimatedComposeNavigator.Desti
     /**
      * NavDestination specific to [AnimatedComposeNavigator]
      */
+    @Deprecated(
+        message = "Replace with Androidx ComposeNavigator.Destination and change import to " +
+            "androidx.navigation.compose.ComposeNavigator.",
+        replaceWith = ReplaceWith(
+            "ComposeNavigator.Destination",
+            "androidx.navigation.compose.ComposeNavigator"
+        )
+    )
     @ExperimentalAnimationApi
     @NavDestination.ClassType(Composable::class)
     public class Destination(
@@ -76,7 +99,17 @@ public class AnimatedComposeNavigator : Navigator<AnimatedComposeNavigator.Desti
         internal val content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
     ) : NavDestination(navigator)
 
-    internal companion object {
+    companion object {
         internal const val NAME = "animatedComposable"
+
+        @Deprecated(
+            message = "Replace with Androidx ComposeNavigator and change import to " +
+                "androidx.navigation.compose.ComposeNavigator.",
+            replaceWith = ReplaceWith(
+                "ComposeNavigator()",
+                "androidx.navigation.compose.ComposeNavigator"
+            )
+        )
+        public operator fun invoke() = AnimatedComposeNavigator()
     }
 }

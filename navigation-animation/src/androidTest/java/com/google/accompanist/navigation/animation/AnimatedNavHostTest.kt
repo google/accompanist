@@ -41,6 +41,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @OptIn(ExperimentalAnimationApi::class)
+@Suppress("DEPRECATION")
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class AnimatedNavHostTest {

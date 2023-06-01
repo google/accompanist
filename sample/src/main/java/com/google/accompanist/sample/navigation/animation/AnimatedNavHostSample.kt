@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
+
 package com.google.accompanist.sample.navigation.animation
 
 import android.os.Bundle

@@ -30,6 +30,14 @@ import androidx.navigation.compose.rememberNavController
  *
  * @see AnimatedNavHost
  */
+@Deprecated(
+    message = "Replace with Androidx rememberNavController. Change import to " +
+        "androidx.navigation.compose.rememberNavController",
+    replaceWith = ReplaceWith(
+        "rememberNavController(*navigators)",
+        "androidx.navigation.compose.rememberNavController"
+    )
+)
 @ExperimentalAnimationApi
 @Composable
 fun rememberAnimatedNavController(
