@@ -43,6 +43,12 @@ import androidx.navigation.compose.navigation
  * @param popExitTransition callback to determine the destination's popExit transition
  * @param content composable for the destination
  */
+@Deprecated(
+    "Migrate to Androidx navigation-compose NavGraphBuilder.composable with the " +
+        "same parameters. To migrate, change import from " +
+        "com.google.accompanist.navigation.animation.composable to " +
+        "androidx.navigation.compose.composable."
+)
 @SuppressLint("NewApi") // b/187418647
 @ExperimentalAnimationApi
 public fun NavGraphBuilder.composable(
@@ -85,6 +91,12 @@ public fun NavGraphBuilder.composable(
  *
  * @return the newly constructed nested NavGraph
  */
+@Deprecated(
+    "Migrate to Androidx navigation-compose NavGraphBuilder.navigation with the " +
+        "same parameters. To migrate, change import from " +
+        "com.google.accompanist.navigation.animation.navigation to " +
+        "androidx.navigation.compose.navigation."
+)
 @ExperimentalAnimationApi
 public fun NavGraphBuilder.navigation(
     startDestination: String,

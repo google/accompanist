@@ -54,6 +54,12 @@ import androidx.navigation.get
  * @param popExitTransition callback to define popExit transitions for destination in this host
  * @param builder the builder used to construct the graph
  */
+@Deprecated(
+    "AnimatedNavHost has been migrated back into Androidx Navigation. Replace " +
+        "with navigation-compose NavHost with the same parameters. Change import from " +
+        "com.google.accompanist.navigation.animation.AnimatedNavHost to " +
+        "androidx.navigation.compose.NavHost."
+)
 @Composable
 @ExperimentalAnimationApi
 public fun AnimatedNavHost(
@@ -96,6 +102,12 @@ public fun AnimatedNavHost(
  * @param popEnterTransition callback to define popEnter transitions for destination in this host
  * @param popExitTransition callback to define popExit transitions for destination in this host
  */
+@Deprecated(
+    "AnimatedNavHost has been migrated back into Androidx Navigation. Replace " +
+        "with navigation-compose NavHost with the same parameters. Change import from " +
+        "com.google.accompanist.navigation.animation.AnimatedNavHost to " +
+        "androidx.navigation.compose.NavHost."
+)
 @ExperimentalAnimationApi
 @Composable
 public fun AnimatedNavHost(

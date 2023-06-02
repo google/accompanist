@@ -5,9 +5,40 @@
 A library which provides [Compose Animation](https://developer.android.com/jetpack/compose/animation) support for [Jetpack Navigation Compose](https://developer.android.com/jetpack/compose/navigation).
 
 !!! warning
-    The navigation APIs are currently experimental and they could change at any time.
-    All of the APIs are marked with the `@ExperimentalAnimationApi` annotation.
+    **This library is deprecated, with official navigation-compose support in [androidx.navigation.compose](https://developer.android.com/jetpack/compose/navigation).** The original documentation is below the migration guide.
 
+## Migration
+
+The official `androidx.navigation.compose` version 2.7.0-alpha01+ offers all of the same functionality as Accompanist Navigation Animation.
+
+1. Make sure you are using Compose 1.5.0-beta01+ before migrating to `androidx.navigation.compose`.
+2. Replace dependency `com.google.accompanist:accompanist-navigation-animation:<version>` with `androidx.navigation:navigation-compose:<version>`
+3. Replace `rememberAnimatedNavController` with `rememberNavController` and change import to `androidx.navigation.compose.rememberNavController`
+4. Replace `AnimatedNavHost` with `NavHost` and change import to `androidx.navigation.compose.NavHost`
+5. Replace `AnimatedComposeNavigator` with `ComposeNavigator` and change import to `androidx.navigation.compose.ComposeNavigator`
+6. Replace `AnimatedComposeNavigator()` constructor with `ComposeNavigator()` constructor
+7. Replace `AnimatedComposeNavigator.Destination` with `ComposeNavigator.Destination`
+8. Change import for composable from `com.google.accompanist.navigation.animation.composable` to `androidx.navigation.compose.composable`
+9. Change import for navigation from `com.google.accompanist.navigation.animation.navigation` to `androidx.navigation.compose.navigation`
+
+## Migration Table
+
+The following is a mapping of Navigation classes and functions from accompanist to androidx.compose:
+
+| accompanist navigation-animation       | androidx.navigation.compose    |
+|----------------------------------------|--------------------------------|
+| `AnimatedNavHost`                      | `NavHost`                      |
+| `AnimatedComposeNavigator`             | `ComposeNavigator`             |
+| `AnimatedComposeNavigator.Destination` | `ComposeNavigator.Destination` |
+| `rememberAnimatedNavController()`      | `rememberNavController()`      |
+| `NavGraphBuilder.composable()`         | `NavGraphBuilder.composable()` |
+| `NavGraphBuilder.navigation()`         | `NavGraphBuilder.navigation()` |
+
+Of note, ComposeNavigation.Destination allows use of `AnimatedContentScope` instead of just `AnimatedVisibilityScope`.
+
+# Deprecated Guidance for Accompanist Navigation
+
+The following is the deprecated guide for using Navigation in Accompanist. Please see above migration section for how to use the `androidx.navigation.compose` Navigation.
 
 ## Download
 
