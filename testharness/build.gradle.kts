@@ -21,23 +21,10 @@ plugins {
     id(libs.plugins.jetbrains.dokka.get().pluginId)
     id(libs.plugins.gradle.metalava.get().pluginId)
     id(libs.plugins.vanniktech.maven.publish.get().pluginId)
-    jacoco
 }
 
 kotlin {
     explicitApi()
-}
-
-tasks.withType<Test> {
-    configure<JacocoTaskExtension> {
-        // Required for JaCoCo + Robolectric
-        // https://github.com/robolectric/robolectric/issues/2230
-        isIncludeNoLocationClasses = true
-
-        // Required for JDK 11 with the above
-        // https://github.com/gradle/gradle/issues/5184#issuecomment-391982009
-        excludes?.add("jdk.internal.*")
-    }
 }
 
 android {
@@ -85,10 +72,6 @@ android {
         resources {
             excludes += listOf("/META-INF/AL2.0", "/META-INF/LGPL2.1")
         }
-    }
-
-    testCoverage {
-        jacocoVersion = "0.8.8"
     }
 
     testOptions {
