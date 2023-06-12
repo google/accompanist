@@ -46,7 +46,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.adaptive.ExperimentalAdaptiveApi
 import com.google.accompanist.adaptive.FoldAwareColumn
 import com.google.accompanist.adaptive.calculateDisplayFeatures
 import com.google.accompanist.sample.AccompanistSampleTheme
@@ -65,7 +64,6 @@ class NavRailFoldAwareColumnSample : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalAdaptiveApi::class)
 @Composable
 fun NavRail(activity: Activity) {
     val icons = listOf(

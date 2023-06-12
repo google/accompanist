@@ -52,7 +52,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-@OptIn(ExperimentalAdaptiveApi::class)
 class FoldAwareColumnTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
