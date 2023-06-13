@@ -33,6 +33,8 @@ import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -581,6 +583,174 @@ internal class BottomSheetNavigatorTest {
         composeTestRule.runOnUiThread { navController.navigate(homeDestination) }
         composeTestRule.waitForIdle()
         assertThat(navigator.navigatorSheetState.isVisible).isFalse()
+    }
+
+    @Test
+    fun testSheetMaintainsSkipHalfExpandedOnNavigationFrom_False_to_False() {
+        lateinit var navigator: BottomSheetNavigator
+        lateinit var navController: NavHostController
+        val homeDestination = "home"
+        val firstSheetDestination = "sheet1"
+        val secondSheetDestination = "sheet2"
+        lateinit var sheetGesturesState: State<Boolean>
+
+        composeTestRule.setContent {
+            navigator = rememberBottomSheetNavigator()
+            navController = rememberNavController(navigator)
+            sheetGesturesState = navigator.sheetGesturesEnabled.collectAsState(initial = true)
+            ModalBottomSheetLayout(navigator) {
+                NavHost(navController, homeDestination) {
+                    composable(homeDestination) {
+                        Box(Modifier.fillMaxSize().background(Color.Blue))
+                    }
+                    bottomSheet(firstSheetDestination, sheetGesturesEnabled = false) {
+                        Box(Modifier.height(200.dp).fillMaxWidth().background(Color.Green)) {
+                            Text("Hello!")
+                        }
+                    }
+                    bottomSheet(secondSheetDestination, sheetGesturesEnabled = false) {
+                        Box(Modifier.height(200.dp).fillMaxWidth().background(Color.Blue)) {
+                            Text("Hello!")
+                        }
+                    }
+                }
+            }
+        }
+
+        composeTestRule.runOnUiThread { navController.navigate(firstSheetDestination) }
+        composeTestRule.waitForIdle()
+        assertThat(navigator.navigatorSheetState.isVisible).isTrue()
+
+        // confirm if for the current route the gestures are enabled.
+        assertThat(sheetGesturesState.value).isFalse()
+
+        // navigate to another sheet with gestures disabled
+        composeTestRule.runOnUiThread { navController.navigate(secondSheetDestination) }
+        composeTestRule.waitForIdle()
+        assertThat(navigator.navigatorSheetState.isVisible).isTrue()
+
+        // confirm if for the current route the gestures are enabled.
+        assertThat(sheetGesturesState.value).isFalse()
+
+        // pop to navigate back to the first sheet
+        composeTestRule.runOnUiThread { navController.popBackStack() }
+        composeTestRule.waitForIdle()
+        assertThat(navigator.navigatorSheetState.isVisible).isTrue()
+
+        // confirm if for the current route the gestures are enabled.
+        assertThat(sheetGesturesState.value).isFalse()
+    }
+
+    @Test
+    fun testSheetMaintainsSkipHalfExpandedOnNavigationFrom_False_to_True() {
+        lateinit var navigator: BottomSheetNavigator
+        lateinit var navController: NavHostController
+        val homeDestination = "home"
+        val firstSheetDestination = "sheet1"
+        val secondSheetDestination = "sheet2"
+        lateinit var sheetGesturesState: State<Boolean>
+
+        composeTestRule.setContent {
+            navigator = rememberBottomSheetNavigator()
+            navController = rememberNavController(navigator)
+            sheetGesturesState = navigator.sheetGesturesEnabled.collectAsState(initial = true)
+            ModalBottomSheetLayout(navigator) {
+                NavHost(navController, homeDestination) {
+                    composable(homeDestination) {
+                        Box(Modifier.fillMaxSize().background(Color.Blue))
+                    }
+                    bottomSheet(firstSheetDestination, sheetGesturesEnabled = false) {
+                        Box(Modifier.height(200.dp).fillMaxWidth().background(Color.Green)) {
+                            Text("Hello!")
+                        }
+                    }
+                    bottomSheet(secondSheetDestination, sheetGesturesEnabled = true) {
+                        Box(Modifier.height(200.dp).fillMaxWidth().background(Color.Blue)) {
+                            Text("Hello!")
+                        }
+                    }
+                }
+            }
+        }
+
+        composeTestRule.runOnUiThread { navController.navigate(firstSheetDestination) }
+        composeTestRule.waitForIdle()
+        assertThat(navigator.navigatorSheetState.isVisible).isTrue()
+
+        // confirm if for the current route the gestures are enabled.
+        assertThat(sheetGesturesState.value).isFalse()
+
+        // navigate to another sheet with gestures disabled
+        composeTestRule.runOnUiThread { navController.navigate(secondSheetDestination) }
+        composeTestRule.waitForIdle()
+        assertThat(navigator.navigatorSheetState.isVisible).isTrue()
+
+        // confirm if for the current route the gestures are enabled.
+        assertThat(sheetGesturesState.value).isTrue()
+
+        // pop to navigate back to the first sheet
+        composeTestRule.runOnUiThread { navController.popBackStack() }
+        composeTestRule.waitForIdle()
+        assertThat(navigator.navigatorSheetState.isVisible).isTrue()
+
+        // confirm if for the current route the gestures are enabled.
+        assertThat(sheetGesturesState.value).isFalse()
+    }
+
+    @Test
+    fun testSheetMaintainsSkipHalfExpandedOnNavigationFrom_True_to_False() {
+        lateinit var navigator: BottomSheetNavigator
+        lateinit var navController: NavHostController
+        val homeDestination = "home"
+        val firstSheetDestination = "sheet1"
+        val secondSheetDestination = "sheet2"
+        lateinit var sheetGesturesState: State<Boolean>
+
+        composeTestRule.setContent {
+            navigator = rememberBottomSheetNavigator()
+            navController = rememberNavController(navigator)
+            sheetGesturesState = navigator.sheetGesturesEnabled.collectAsState(initial = true)
+            ModalBottomSheetLayout(navigator) {
+                NavHost(navController, homeDestination) {
+                    composable(homeDestination) {
+                        Box(Modifier.fillMaxSize().background(Color.Blue))
+                    }
+                    bottomSheet(firstSheetDestination, sheetGesturesEnabled = true) {
+                        Box(Modifier.height(200.dp).fillMaxWidth().background(Color.Green)) {
+                            Text("Hello!")
+                        }
+                    }
+                    bottomSheet(secondSheetDestination, sheetGesturesEnabled = false) {
+                        Box(Modifier.height(200.dp).fillMaxWidth().background(Color.Blue)) {
+                            Text("Hello!")
+                        }
+                    }
+                }
+            }
+        }
+
+        composeTestRule.runOnUiThread { navController.navigate(firstSheetDestination) }
+        composeTestRule.waitForIdle()
+        assertThat(navigator.navigatorSheetState.isVisible).isTrue()
+
+        // confirm if for the current route the gestures are enabled.
+        assertThat(sheetGesturesState.value).isTrue()
+
+        // navigate to another sheet with gestures disabled
+        composeTestRule.runOnUiThread { navController.navigate(secondSheetDestination) }
+        composeTestRule.waitForIdle()
+        assertThat(navigator.navigatorSheetState.isVisible).isTrue()
+
+        // confirm if for the current route the gestures are disabled.
+        assertThat(sheetGesturesState.value).isFalse()
+
+        // pop to navigate back to the first sheet
+        composeTestRule.runOnUiThread { navController.popBackStack() }
+        composeTestRule.waitForIdle()
+        assertThat(navigator.navigatorSheetState.isVisible).isTrue()
+
+        // confirm if for the current route the gestures are enabled.
+        assertThat(sheetGesturesState.value).isTrue()
     }
 
     @OptIn(ExperimentalMaterialApi::class)

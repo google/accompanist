@@ -201,13 +201,18 @@ internal class SheetContentHostTest {
 
     private fun createBackStackEntry(
         sheetState: ModalBottomSheetState,
-        sheetContent: @Composable ColumnScope.(NavBackStackEntry) -> Unit = { Text("Fake Sheet Content") }
+        sheetGesturesEnabled: Boolean = true,
+        sheetContent: @Composable ColumnScope.(NavBackStackEntry) -> Unit = { Text("Fake Sheet Content") },
     ): NavBackStackEntry {
         val navigatorState = TestNavigatorState()
         val navigator = BottomSheetNavigator(sheetState)
         navigator.onAttach(navigatorState)
 
-        val destination = BottomSheetNavigator.Destination(navigator, sheetContent)
+        val destination = BottomSheetNavigator.Destination(
+            navigator = navigator,
+            content = sheetContent,
+            sheetGesturesEnabled = sheetGesturesEnabled
+        )
         val backStackEntry = navigatorState.createBackStackEntry(destination, null)
         navigator.navigate(listOf(backStackEntry), null, null)
         return backStackEntry
