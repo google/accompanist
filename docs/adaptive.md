@@ -30,6 +30,20 @@ the [`TwoPane`](../api/adaptive/com.google.accompanist.adaptive/-two-pane.html) 
 
 When there is no fold, the default supplied strategy will be used instead.
 
+## FoldAwareColumn
+
+[`FoldAwareColumn`](../api/adaptive/com.google.accompanist.adaptive/-fold-aware-column.html) is a simplified version of [Column](https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/package-summary#Column(androidx.compose.ui.Modifier,androidx.compose.foundation.layout.Arrangement.Vertical,androidx.compose.ui.Alignment.Horizontal,kotlin.Function1)) that places children in a fold-aware manner.
+
+[`FoldAwareColumn`](../api/adaptive/com.google.accompanist.adaptive/-fold-aware-column.html) requires a list of display features (to be retrieved with [`calculateDisplayFeatures`](#calculatedisplayfeatures)) to determine which folds to handle automatically.
+
+The built-in `foldPadding` parameter is zero, and the values of the vertical padding are used in the layout determine how much space should be left around a fold when placing children.
+
+When there is a horizontal fold that is obscuring or separating, the layout will begin placing children from the top of the available space. If a child is projected to overlap the fold, then its y-coordinate is increased so it will be placed fully below the fold, as will any other remaining children.
+
+When there is no fold, the children will be placed consecutively with no y-coordinate adjustments.
+
+Optionally, children can be modified with the `ignoreFold()` attribute, which means that they will be placed as if no fold is present even if they overlap a fold.
+
 ## Download
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-adaptive)](https://search.maven.org/search?q=g:com.google.accompanist)
