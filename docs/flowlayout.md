@@ -75,8 +75,8 @@ Here `Alignment.*` is the Alignment you wish to use such as `Alignment.Start`, `
 ``` kotlin
 FlowRow(
     modifier = Modifier,
-    horizontalArrangement = HorizontalArrangement.spacedBy(50.dp, Alignment.Start),
-    verticalArrangement = VerticalArrangement.spacedBy(50.dp, Alignment.Top),
+    horizontalArrangement = Arrangement.spacedBy(50.dp, Alignment.Start),
+    verticalArrangement = Arrangement.spacedBy(50.dp, Alignment.Top),
     content = { // rows }
 )
 ```
@@ -84,8 +84,8 @@ FlowRow(
 ``` kotlin
 FlowColumn(
     modifier = Modifier,
-    verticalArrangement = VerticalArrangement.spacedBy(50.dp, Alignment.Top),
-    horizontalArrangement = HorizontalArrangement.spacedBy(50.dp, Alignment.Start),
+    verticalArrangement = Arrangement.spacedBy(50.dp, Alignment.Top),
+    horizontalArrangement = Arrangement.spacedBy(50.dp, Alignment.Start),
     content = { // columns }
 )
 ```
