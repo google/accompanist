@@ -1,6 +1,6 @@
 [versions]
 
-compose = "1.5.0-beta01"
+compose = "1.5.0-beta02"
 composeCompiler = "1.4.7"
 composeMaterial3 = "1.0.1"
 composesnapshot = "-" # a single character = no snapshot
