@@ -55,9 +55,6 @@ A library that provides [Android runtime permissions][runtimepermissions] suppor
 ### ⏳ [Placeholder](./placeholder/)
 A library that provides easy-to-use modifiers for displaying a placeholder UI while content is loading.
 
-### 🧭✨[Navigation-Animation](./navigation-animation/)
-A library which provides [Compose Animation](https://developer.android.com/jetpack/compose/animation) support for Jetpack Navigation Compose.
-
 ### 🧭🎨️ [Navigation-Material](./navigation-material/)
 A library which provides [Compose Material](https://developer.android.com/jetpack/androidx/releases/compose-material) support, such as modal bottom sheets, for Jetpack Navigation Compose.
 
@@ -87,6 +84,9 @@ See our [Migration Guide](https://google.github.io/accompanist/pager/) for migra
 
 ### 🌊 [Flow Layouts](./flowlayout/) (Deprecated)
 See our [Migration Guide](https://google.github.io/accompanist/flowlayout/) for migrating to FlowLayout in Compose.
+
+### 🧭✨[Navigation-Animation](./navigation-animation/) (Deprecated)
+See our [Migration Guide](https://google.github.io/accompanist/navigation-animation/) for migrating to using built in support for animations in Jetpack Navigation Compose. 
 
 ---
 
