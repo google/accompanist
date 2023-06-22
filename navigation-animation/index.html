@@ -21,7 +21,7 @@
         <link rel="next" href="../navigation-material/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.14">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.16">
     
     
       
@@ -29,10 +29,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.85bb2934.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.26e3688c.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.a6bdf11c.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ecc896b0.min.css">
       
       
 
@@ -1131,22 +1131,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#download" class="md-nav__link">
-    Download
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    Usage
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#migration" class="md-nav__link">
     Migration
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration-table" class="md-nav__link">
+    Migration Table
   </a>
   
 </li>
@@ -1538,22 +1531,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#download" class="md-nav__link">
-    Download
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    Usage
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#migration" class="md-nav__link">
     Migration
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration-table" class="md-nav__link">
+    Migration Table
   </a>
   
 </li>
@@ -1581,9 +1567,60 @@
 <p>A library which provides <a href="https://developer.android.com/jetpack/compose/animation">Compose Animation</a> support for <a href="https://developer.android.com/jetpack/compose/navigation">Jetpack Navigation Compose</a>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>The navigation APIs are currently experimental and they could change at any time.
-All of the APIs are marked with the <code>@ExperimentalAnimationApi</code> annotation.</p>
+<p><strong>This library is deprecated, with official navigation-compose support in <a href="https://developer.android.com/jetpack/compose/navigation">androidx.navigation.compose</a>.</strong> The original documentation is below the migration guide.</p>
 </div>
+<h2 id="migration">Migration<a class="headerlink" href="#migration" title="Permanent link">&para;</a></h2>
+<p>The official <code>androidx.navigation.compose</code> version 2.7.0-alpha01+ offers all of the same functionality as Accompanist Navigation Animation.</p>
+<ol>
+<li>Make sure you are using Compose 1.5.0-beta01+ before migrating to <code>androidx.navigation.compose</code>.</li>
+<li>Replace dependency <code>com.google.accompanist:accompanist-navigation-animation:&lt;version&gt;</code> with <code>androidx.navigation:navigation-compose:&lt;version&gt;</code></li>
+<li>Replace <code>rememberAnimatedNavController</code> with <code>rememberNavController</code> and change import to <code>androidx.navigation.compose.rememberNavController</code></li>
+<li>Replace <code>AnimatedNavHost</code> with <code>NavHost</code> and change import to <code>androidx.navigation.compose.NavHost</code></li>
+<li>Replace <code>AnimatedComposeNavigator</code> with <code>ComposeNavigator</code> and change import to <code>androidx.navigation.compose.ComposeNavigator</code></li>
+<li>Replace <code>AnimatedComposeNavigator()</code> constructor with <code>ComposeNavigator()</code> constructor</li>
+<li>Replace <code>AnimatedComposeNavigator.Destination</code> with <code>ComposeNavigator.Destination</code></li>
+<li>Change import for composable from <code>com.google.accompanist.navigation.animation.composable</code> to <code>androidx.navigation.compose.composable</code></li>
+<li>Change import for navigation from <code>com.google.accompanist.navigation.animation.navigation</code> to <code>androidx.navigation.compose.navigation</code></li>
+</ol>
+<h2 id="migration-table">Migration Table<a class="headerlink" href="#migration-table" title="Permanent link">&para;</a></h2>
+<p>The following is a mapping of Navigation classes and functions from accompanist to androidx.compose:</p>
+<table>
+<thead>
+<tr>
+<th>accompanist navigation-animation</th>
+<th>androidx.navigation.compose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AnimatedNavHost</code></td>
+<td><code>NavHost</code></td>
+</tr>
+<tr>
+<td><code>AnimatedComposeNavigator</code></td>
+<td><code>ComposeNavigator</code></td>
+</tr>
+<tr>
+<td><code>AnimatedComposeNavigator.Destination</code></td>
+<td><code>ComposeNavigator.Destination</code></td>
+</tr>
+<tr>
+<td><code>rememberAnimatedNavController()</code></td>
+<td><code>rememberNavController()</code></td>
+</tr>
+<tr>
+<td><code>NavGraphBuilder.composable()</code></td>
+<td><code>NavGraphBuilder.composable()</code></td>
+</tr>
+<tr>
+<td><code>NavGraphBuilder.navigation()</code></td>
+<td><code>NavGraphBuilder.navigation()</code></td>
+</tr>
+</tbody>
+</table>
+<p>Of note, ComposeNavigation.Destination allows use of <code>AnimatedContentScope</code> instead of just <code>AnimatedVisibilityScope</code>.</p>
+<h1 id="deprecated-guidance-for-accompanist-navigation">Deprecated Guidance for Accompanist Navigation<a class="headerlink" href="#deprecated-guidance-for-accompanist-navigation" title="Permanent link">&para;</a></h1>
+<p>The following is the deprecated guide for using Navigation in Accompanist. Please see above migration section for how to use the <code>androidx.navigation.compose</code> Navigation.</p>
 <h2 id="download">Download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h2>
 <p><a href="https://search.maven.org/search?q=g:com.google.accompanist"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-navigation-animation" /></a></p>
 <div class="highlight"><pre><span></span><code><span class="n">repositories</span><span class="w"> </span><span class="o">{</span>
@@ -1678,7 +1715,7 @@ destination, a <code>navigation</code> element, or to the <code>AnimatedNavHost<
 <span class="p">}</span>
 </code></pre></div>
 <p>For more examples, refer to the <a href="https://github.com/google/accompanist/tree/main/sample/src/main/java/com/google/accompanist/sample/navigation/animation">samples</a>.</p>
-<h2 id="migration">Migration<a class="headerlink" href="#migration" title="Permanent link">&para;</a></h2>
+<h2 id="migration_1">Migration<a class="headerlink" href="#migration_1" title="Permanent link">&para;</a></h2>
 <p>To migrate from using the Navigation Compose APIs do the following:</p>
 <ul>
 <li>Replace <code>rememberNavController()</code> with <code>rememberAnimatedNavController()</code></li>
@@ -1728,7 +1765,7 @@ destination, a <code>navigation</code> element, or to the <code>AnimatedNavHost<
     <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.b4d07000.min.js"></script>
+      <script src="../assets/javascripts/bundle.a51614de.min.js"></script>
       
     
   </body>

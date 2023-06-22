@@ -11,8 +11,6 @@ module:insets
 com.google.accompanist.insets
 module:insets-ui
 com.google.accompanist.insets.ui
-module:navigation-animation
-com.google.accompanist.navigation.animation
 module:navigation-material
 com.google.accompanist.navigation.material
 module:pager-indicators
