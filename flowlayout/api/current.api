@@ -2,11 +2,11 @@
 package com.google.accompanist.flowlayout {
 
   @Deprecated public enum FlowCrossAxisAlignment {
-    method public static com.google.accompanist.flowlayout.FlowCrossAxisAlignment valueOf(String name) throws java.lang.IllegalArgumentException;
-    method public static com.google.accompanist.flowlayout.FlowCrossAxisAlignment[] values();
-    enum_constant public static final com.google.accompanist.flowlayout.FlowCrossAxisAlignment Center;
-    enum_constant public static final com.google.accompanist.flowlayout.FlowCrossAxisAlignment End;
-    enum_constant public static final com.google.accompanist.flowlayout.FlowCrossAxisAlignment Start;
+    method @Deprecated public static com.google.accompanist.flowlayout.FlowCrossAxisAlignment valueOf(String name) throws java.lang.IllegalArgumentException;
+    method @Deprecated public static com.google.accompanist.flowlayout.FlowCrossAxisAlignment[] values();
+    enum_constant @Deprecated public static final com.google.accompanist.flowlayout.FlowCrossAxisAlignment Center;
+    enum_constant @Deprecated public static final com.google.accompanist.flowlayout.FlowCrossAxisAlignment End;
+    enum_constant @Deprecated public static final com.google.accompanist.flowlayout.FlowCrossAxisAlignment Start;
   }
 
   public final class FlowKt {
@@ -14,7 +14,7 @@ package com.google.accompanist.flowlayout {
     method @Deprecated @androidx.compose.runtime.Composable public static void FlowRow(optional androidx.compose.ui.Modifier modifier, optional com.google.accompanist.flowlayout.SizeMode mainAxisSize, optional com.google.accompanist.flowlayout.MainAxisAlignment mainAxisAlignment, optional float mainAxisSpacing, optional com.google.accompanist.flowlayout.FlowCrossAxisAlignment crossAxisAlignment, optional float crossAxisSpacing, optional com.google.accompanist.flowlayout.MainAxisAlignment lastLineMainAxisAlignment, kotlin.jvm.functions.Function0<kotlin.Unit> content);
   }
 
-  @Deprecated public enum MainAxisAlignment {
+  public enum MainAxisAlignment {
     method public static com.google.accompanist.flowlayout.MainAxisAlignment valueOf(String name) throws java.lang.IllegalArgumentException;
     method public static com.google.accompanist.flowlayout.MainAxisAlignment[] values();
     enum_constant public static final com.google.accompanist.flowlayout.MainAxisAlignment Center;
@@ -26,10 +26,10 @@ package com.google.accompanist.flowlayout {
   }
 
   @Deprecated public enum SizeMode {
-    method public static com.google.accompanist.flowlayout.SizeMode valueOf(String name) throws java.lang.IllegalArgumentException;
-    method public static com.google.accompanist.flowlayout.SizeMode[] values();
-    enum_constant public static final com.google.accompanist.flowlayout.SizeMode Expand;
-    enum_constant public static final com.google.accompanist.flowlayout.SizeMode Wrap;
+    method @Deprecated public static com.google.accompanist.flowlayout.SizeMode valueOf(String name) throws java.lang.IllegalArgumentException;
+    method @Deprecated public static com.google.accompanist.flowlayout.SizeMode[] values();
+    enum_constant @Deprecated public static final com.google.accompanist.flowlayout.SizeMode Expand;
+    enum_constant @Deprecated public static final com.google.accompanist.flowlayout.SizeMode Wrap;
   }
 
 }

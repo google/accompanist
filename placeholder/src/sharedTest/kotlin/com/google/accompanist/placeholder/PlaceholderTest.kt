@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
 package com.google.accompanist.placeholder
 
 import androidx.compose.animation.core.InfiniteRepeatableSpec

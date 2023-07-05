@@ -52,9 +52,6 @@ A library that enables the reuse of [MDC-Android][mdc] Material 3 XML themes, fo
 ### 📫 [Permissions](./permissions/)
 A library that provides [Android runtime permissions][runtimepermissions] support for Jetpack Compose.
 
-### ⏳ [Placeholder](./placeholder/)
-A library that provides easy-to-use modifiers for displaying a placeholder UI while content is loading.
-
 ### 🧭🎨️ [Navigation-Material](./navigation-material/)
 A library which provides [Compose Material](https://developer.android.com/jetpack/androidx/releases/compose-material) support, such as modal bottom sheets, for Jetpack Navigation Compose.
 
@@ -87,6 +84,9 @@ See our [Migration Guide](https://google.github.io/accompanist/flowlayout/) for 
 
 ### 🧭✨[Navigation-Animation](./navigation-animation/) (Deprecated)
 See our [Migration Guide](https://google.github.io/accompanist/navigation-animation/) for migrating to using built in support for animations in Jetpack Navigation Compose. 
+
+### ⏳ [Placeholder](./placeholder/) (Deprecated)
+A library that provides easy-to-use modifiers for displaying a placeholder UI while content is loading.
 
 ---
 
