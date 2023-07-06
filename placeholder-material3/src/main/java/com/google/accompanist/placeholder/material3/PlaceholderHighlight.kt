@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
 package com.google.accompanist.placeholder.material3
 
 import androidx.annotation.FloatRange
@@ -33,6 +34,13 @@ import com.google.accompanist.placeholder.shimmer
  *
  * @param animationSpec the [AnimationSpec] to configure the animation.
  */
+@Deprecated(
+    """
+accompanist/placeholder is deprecated and the API is no longer maintained. 
+We recommend forking the implementation and customising it to your needs. 
+For more information please visit https://google.github.io/accompanist/placeholder
+"""
+)
 @Composable
 fun PlaceholderHighlight.Companion.fade(
     animationSpec: InfiniteRepeatableSpec<Float> = PlaceholderDefaults.fadeAnimationSpec,
@@ -54,6 +62,13 @@ fun PlaceholderHighlight.Companion.fade(
  * @param progressForMaxAlpha The progress where the shimmer should be at it's peak opacity.
  * Defaults to 0.6f.
  */
+@Deprecated(
+    """
+accompanist/placeholder is deprecated and the API is no longer maintained. 
+We recommend forking the implementation and customising it to your needs. 
+For more information please visit https://google.github.io/accompanist/placeholder
+"""
+)
 @Composable
 fun PlaceholderHighlight.Companion.shimmer(
     animationSpec: InfiniteRepeatableSpec<Float> = PlaceholderDefaults.shimmerAnimationSpec,

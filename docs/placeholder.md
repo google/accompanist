@@ -2,6 +2,9 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-placeholder)](https://search.maven.org/search?q=g:com.google.accompanist)
 
+!!! warning
+**This library is deprecated, and the API is no longer maintained. We recommend forking the implementation and customising it to your needs.** The original documentation is below.
+
 A library which provides a [modifier][modifier] for display 'placeholder' UI while content is loading.
 
 More information on the UX provided by this library can be found on the Material Theming [Placeholder UI](https://material.io/design/communication/launch-screen.html#placeholder-ui) guidelines.

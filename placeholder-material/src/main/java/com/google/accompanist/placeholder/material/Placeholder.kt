@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
 package com.google.accompanist.placeholder.material
 
 import androidx.compose.animation.core.FiniteAnimationSpec
@@ -41,6 +42,13 @@ import com.google.accompanist.placeholder.placeholder
  * @param contentAlpha The alpha component to set on [contentColor] when compositing the color
  * on top of [backgroundColor]. Defaults to `0.1f`.
  */
+@Deprecated(
+    """
+accompanist/placeholder is deprecated and the API is no longer maintained. 
+We recommend forking the implementation and customising it to your needs. 
+For more information please visit https://google.github.io/accompanist/placeholder
+"""
+)
 @Composable
 fun PlaceholderDefaults.color(
     backgroundColor: Color = MaterialTheme.colors.surface,
@@ -56,6 +64,13 @@ fun PlaceholderDefaults.color(
  * `MaterialTheme.colors.surface`.
  * @param alpha The alpha component to set on [backgroundColor]. Defaults to `0.3f`.
  */
+@Deprecated(
+    """
+accompanist/placeholder is deprecated and the API is no longer maintained. 
+We recommend forking the implementation and customising it to your needs. 
+For more information please visit https://google.github.io/accompanist/placeholder
+"""
+)
 @Composable
 fun PlaceholderDefaults.fadeHighlightColor(
     backgroundColor: Color = MaterialTheme.colors.surface,
@@ -70,6 +85,13 @@ fun PlaceholderDefaults.fadeHighlightColor(
  * `MaterialTheme.colors.surface`.
  * @param alpha The alpha component to set on [backgroundColor]. Defaults to `0.75f`.
  */
+@Deprecated(
+    """
+accompanist/placeholder is deprecated and the API is no longer maintained. 
+We recommend forking the implementation and customising it to your needs. 
+For more information please visit https://google.github.io/accompanist/placeholder
+"""
+)
 @Composable
 fun PlaceholderDefaults.shimmerHighlightColor(
     backgroundColor: Color = MaterialTheme.colors.surface,
@@ -108,6 +130,13 @@ fun PlaceholderDefaults.shimmerHighlightColor(
  * @param contentFadeTransitionSpec The transition spec to use when fading the content
  * on/off screen. The boolean parameter defined for the transition is [visible].
  */
+@Deprecated(
+    """
+accompanist/placeholder is deprecated and the API is no longer maintained. 
+We recommend forking the implementation and customising it to your needs. 
+For more information please visit https://google.github.io/accompanist/placeholder
+"""
+)
 fun Modifier.placeholder(
     visible: Boolean,
     color: Color = Color.Unspecified,
