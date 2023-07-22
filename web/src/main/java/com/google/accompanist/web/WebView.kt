@@ -44,7 +44,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.view.children
 import com.google.accompanist.web.LoadingState.Finished
 import com.google.accompanist.web.LoadingState.Loading
 import kotlinx.coroutines.CoroutineScope
@@ -225,7 +224,8 @@ fun WebView(
         },
         modifier = modifier,
         onRelease = { parentFrame ->
-            val wv = parentFrame.children.first() as WebView
+            // Since FrameLayout is removed,parentFrame is just the WebView
+            val wv = parentFrame
             onDispose(wv)
         }
     )
