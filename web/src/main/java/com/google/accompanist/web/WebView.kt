@@ -222,7 +222,6 @@ fun WebView(
                 webChromeClient = chromeClient
                 webViewClient = client
             }.also { state.webView = it }
-
         },
         modifier = modifier,
         onRelease = { parentFrame ->
