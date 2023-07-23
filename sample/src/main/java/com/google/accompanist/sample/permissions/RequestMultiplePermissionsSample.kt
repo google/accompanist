@@ -42,7 +42,7 @@ class RequestMultiplePermissionsSample : ComponentActivity() {
             AccompanistSampleTheme {
                 val multiplePermissionsState = rememberMultiplePermissionsState(
                     listOf(
-                        android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                        android.Manifest.permission.RECORD_AUDIO,
                         android.Manifest.permission.CAMERA,
                     )
                 )
