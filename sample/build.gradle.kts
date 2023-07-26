@@ -59,7 +59,6 @@ android {
 dependencies {
     implementation(project(":adaptive"))
     implementation(project(":drawablepainter"))
-    implementation(project(":insets"))
     implementation(project(":insets-ui"))
     implementation(project(":navigation-animation"))
     implementation(project(":navigation-material"))

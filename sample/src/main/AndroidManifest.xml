@@ -51,58 +51,6 @@
         </activity>
 
         <activity
-            android:name="com.google.accompanist.sample.insets.InsetsBasicSample"
-            android:label="@string/insets_title_basic"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name="com.google.accompanist.sample.insets.InsetsFragmentSample"
-            android:label="@string/insets_title_fragment"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-
-        <activity
-            android:name="com.google.accompanist.sample.insets.EdgeToEdgeLazyColumnWithBottomNav"
-            android:label="@string/insets_title_list_bottomnav"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name="com.google.accompanist.sample.insets.EdgeToEdgeLazyColumn"
-            android:label="@string/insets_title_list"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name="com.google.accompanist.sample.insets.ImeAnimationSample"
-            android:label="@string/insets_title_imeanim"
-            android:windowSoftInputMode="adjustResize"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
             android:name=".pager.HorizontalPagerBasicSample"
             android:label="@string/horiz_pager_title_basics"
             android:exported="true">

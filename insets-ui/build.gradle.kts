@@ -100,7 +100,6 @@ metalava {
 }
 
 dependencies {
-    api(project(":insets"))
     api(libs.compose.material.material)
 
     implementation(libs.kotlin.coroutines.android)

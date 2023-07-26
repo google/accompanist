@@ -27,7 +27,6 @@ gradleEnterprise {
 
 include(":adaptive")
 include(":internal-testutils")
-include(":insets")
 include(":insets-ui")
 include(":appcompat-theme")
 include(":drawablepainter")
