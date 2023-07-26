@@ -44,7 +44,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.view.children
 import com.google.accompanist.web.LoadingState.Finished
 import com.google.accompanist.web.LoadingState.Loading
 import kotlinx.coroutines.CoroutineScope
@@ -210,7 +209,7 @@ fun WebView(
 
     AndroidView(
         factory = { context ->
-            val childView = (factory?.invoke(context) ?: WebView(context)).apply {
+            (factory?.invoke(context) ?: WebView(context)).apply {
                 onCreated(this)
 
                 this.layoutParams = layoutParams
@@ -222,20 +221,10 @@ fun WebView(
                 webChromeClient = chromeClient
                 webViewClient = client
             }.also { state.webView = it }
-
-            // Workaround a crash on certain devices that expect WebView to be
-            // wrapped in a ViewGroup.
-            // b/243567497
-            val parentLayout = FrameLayout(context)
-            parentLayout.layoutParams = layoutParams
-            parentLayout.addView(childView)
-
-            parentLayout
         },
         modifier = modifier,
-        onRelease = { parentFrame ->
-            val wv = parentFrame.children.first() as WebView
-            onDispose(wv)
+        onRelease = {
+            onDispose(it)
         }
     )
 }
