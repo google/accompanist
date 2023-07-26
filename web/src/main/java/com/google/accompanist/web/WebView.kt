@@ -223,10 +223,8 @@ fun WebView(
             }.also { state.webView = it }
         },
         modifier = modifier,
-        onRelease = { parentFrame ->
-            // Since FrameLayout is removed,parentFrame is just the WebView
-            val wv = parentFrame
-            onDispose(wv)
+        onRelease = {
+            onDispose(it)
         }
     )
 }
