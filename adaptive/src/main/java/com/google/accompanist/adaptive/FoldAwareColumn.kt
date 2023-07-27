@@ -370,8 +370,7 @@ internal class IgnoreFoldModifier(
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is IgnoreFoldModifier) return false
-        return true
+        return other is IgnoreFoldModifier
     }
 
     override fun hashCode(): Int {

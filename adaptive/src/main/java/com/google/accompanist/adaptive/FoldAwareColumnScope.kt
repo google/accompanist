@@ -39,7 +39,7 @@ public interface FoldAwareColumnScope {
      * Ignore the fold when placing this child within the [FoldAwareColumn].
      */
     @Stable
-    fun Modifier.ignoreFold(): Modifier
+    public fun Modifier.ignoreFold(): Modifier
 
     /**
      * Align the element horizontally within the [Column]. This alignment will have priority over
@@ -49,7 +49,7 @@ public interface FoldAwareColumnScope {
      * @sample androidx.compose.foundation.layout.samples.SimpleAlignInColumn
      */
     @Stable
-    fun Modifier.align(alignment: Alignment.Horizontal): Modifier
+    public fun Modifier.align(alignment: Alignment.Horizontal): Modifier
 
     /**
      * Position the element horizontally such that its [alignmentLine] aligns with sibling elements
@@ -68,7 +68,7 @@ public interface FoldAwareColumnScope {
      * @sample androidx.compose.foundation.layout.samples.SimpleRelativeToSiblingsInColumn
      */
     @Stable
-    fun Modifier.alignBy(alignmentLine: VerticalAlignmentLine): Modifier
+    public fun Modifier.alignBy(alignmentLine: VerticalAlignmentLine): Modifier
 
     /**
      * Position the element horizontally such that the alignment line for the content as
@@ -88,7 +88,7 @@ public interface FoldAwareColumnScope {
      * @sample androidx.compose.foundation.layout.samples.SimpleRelativeToSiblings
      */
     @Stable
-    fun Modifier.alignBy(alignmentLineBlock: (Measured) -> Int): Modifier
+    public fun Modifier.alignBy(alignmentLineBlock: (Measured) -> Int): Modifier
 }
 
 internal object FoldAwareColumnScopeInstance : FoldAwareColumnScope {

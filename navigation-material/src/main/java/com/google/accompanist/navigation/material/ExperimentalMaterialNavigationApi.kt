@@ -18,4 +18,4 @@ package com.google.accompanist.navigation.material
 
 @RequiresOptIn(message = "This APIs are experimental and may change in the future.")
 @Retention(AnnotationRetention.BINARY)
-annotation class ExperimentalMaterialNavigationApi
+public annotation class ExperimentalMaterialNavigationApi

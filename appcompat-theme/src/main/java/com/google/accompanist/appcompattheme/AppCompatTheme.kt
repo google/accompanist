@@ -105,7 +105,7 @@ import androidx.core.content.res.use
     """
 )
 @Composable
-fun AppCompatTheme(
+public fun AppCompatTheme(
     context: Context = LocalContext.current,
     readColors: Boolean = true,
     readTypography: Boolean = true,
@@ -144,7 +144,7 @@ fun AppCompatTheme(
      For more migration information, please visit https://google.github.io/accompanist/appcompat-theme/#migration
     """
 )
-data class ThemeParameters(
+public data class ThemeParameters(
     val colors: Colors?,
     val typography: Typography?
 )
@@ -170,7 +170,7 @@ data class ThemeParameters(
      For more migration information, please visit https://google.github.io/accompanist/appcompat-theme/#migration
     """
 )
-fun Context.createAppCompatTheme(
+public fun Context.createAppCompatTheme(
     readColors: Boolean = true,
     readTypography: Boolean = true
 ): ThemeParameters = obtainStyledAttributes(R.styleable.AppCompatThemeAdapterTheme).use { ta ->

@@ -165,8 +165,8 @@ abstract class BaseMdc3ThemeTest<T : AppCompatActivity>(
             val monospace = FontFamilyWithWeight(FontFamily.Monospace)
 
             typography.displayLarge.run {
-                com.google.accompanist.themeadapter.material3.assertTextUnitEquals(97.54.sp, fontSize, density)
-                com.google.accompanist.themeadapter.material3.assertTextUnitEquals((-0.0015).em, letterSpacing, density)
+                assertTextUnitEquals(97.54.sp, fontSize, density)
+                assertTextUnitEquals((-0.0015).em, letterSpacing, density)
                 assertEquals(rubik300, fontFamily)
             }
 
@@ -206,7 +206,7 @@ abstract class BaseMdc3ThemeTest<T : AppCompatActivity>(
             typography.titleMedium.run {
                 assertEquals(monospace.fontFamily, fontFamily)
                 assertEquals(monospace.weight, fontWeight)
-                com.google.accompanist.themeadapter.material3.assertTextUnitEquals(0.em, letterSpacing, density)
+                assertTextUnitEquals(0.em, letterSpacing, density)
             }
 
             typography.titleSmall.run {
@@ -214,8 +214,8 @@ abstract class BaseMdc3ThemeTest<T : AppCompatActivity>(
             }
 
             typography.bodyLarge.run {
-                com.google.accompanist.themeadapter.material3.assertTextUnitEquals(16.26.sp, fontSize, density)
-                com.google.accompanist.themeadapter.material3.assertTextUnitEquals(0.005.em, letterSpacing, density)
+                assertTextUnitEquals(16.26.sp, fontSize, density)
+                assertTextUnitEquals(0.005.em, letterSpacing, density)
                 assertEquals(rubik400, fontFamily)
                 assertNull(shadow)
             }
@@ -227,7 +227,7 @@ abstract class BaseMdc3ThemeTest<T : AppCompatActivity>(
 
             typography.bodySmall.run {
                 assertEquals(FontFamily.SansSerif, fontFamily)
-                com.google.accompanist.themeadapter.material3.assertTextUnitEquals(0.04.em, letterSpacing, density)
+                assertTextUnitEquals(0.04.em, letterSpacing, density)
             }
 
             typography.labelLarge.run {

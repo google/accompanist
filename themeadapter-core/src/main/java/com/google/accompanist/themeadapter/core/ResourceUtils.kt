@@ -57,7 +57,7 @@ import kotlin.concurrent.getOrSet
  * @param fallbackColor Value to return if the attribute is not defined or can't be coerced to a
  * [Color].
  */
-fun TypedArray.parseColor(
+public fun TypedArray.parseColor(
     index: Int,
     fallbackColor: Color = Color.Unspecified
 ): Color = if (hasValue(index)) Color(getColorOrThrow(index)) else fallbackColor
@@ -71,7 +71,7 @@ fun TypedArray.parseColor(
  * @param setTextColors Whether to read and set text colors from the style. Defaults to `false`.
  * @param defaultFontFamily Optional default font family to use in [TextStyle]s.
  */
-fun parseTextAppearance(
+public fun parseTextAppearance(
     context: Context,
     @StyleRes id: Int,
     density: Density,
@@ -165,7 +165,7 @@ fun parseTextAppearance(
  *
  * @param index Index of attribute to retrieve.
  */
-fun TypedArray.parseFontFamily(index: Int): FontFamilyWithWeight? {
+public fun TypedArray.parseFontFamily(index: Int): FontFamilyWithWeight? {
     val tv = tempTypedValue.getOrSet(::TypedValue)
     if (getValue(index, tv) && tv.type == TypedValue.TYPE_STRING) {
         return when (tv.string) {
@@ -200,7 +200,7 @@ fun TypedArray.parseFontFamily(index: Int): FontFamilyWithWeight? {
 /**
  * A lightweight class for storing a [FontFamily] and [FontWeight].
  */
-data class FontFamilyWithWeight(
+public data class FontFamilyWithWeight(
     val fontFamily: FontFamily,
     val weight: FontWeight = FontWeight.Normal
 )
@@ -212,8 +212,9 @@ data class FontFamilyWithWeight(
  * @param id ID of XML resource to retrieve.
  */
 @SuppressLint("RestrictedApi") // FontResourcesParserCompat.*
-@RequiresApi(23) // XML font families with > 1 fonts are only supported on API 23+
-fun Resources.parseXmlFontFamily(id: Int): FontFamily? {
+@RequiresApi(23)
+// XML font families with > 1 fonts are only supported on API 23+
+public fun Resources.parseXmlFontFamily(id: Int): FontFamily? {
     val parser = getXml(id)
 
     // Can't use {} since XmlResourceParser is AutoCloseable, not Closeable
@@ -259,7 +260,7 @@ private fun fontWeightOf(weight: Int): FontWeight = when (weight) {
  * @param fallbackTextUnit Value to return if the attribute is not defined or can't be coerced to a
  * [TextUnit].
  */
-fun TypedArray.parseTextUnit(
+public fun TypedArray.parseTextUnit(
     index: Int,
     density: Density,
     fallbackTextUnit: TextUnit = TextUnit.Unspecified
@@ -289,7 +290,7 @@ fun TypedArray.parseTextUnit(
  * @param fallbackShape Value to return if the style resource ID is not defined or can't be coerced
  * to a [CornerBasedShape].
  */
-fun parseShapeAppearance(
+public fun parseShapeAppearance(
     context: Context,
     @StyleRes id: Int,
     layoutDirection: LayoutDirection,
@@ -349,7 +350,7 @@ fun parseShapeAppearance(
  *
  * @param index Index of attribute to retrieve.
  */
-fun TypedArray.parseCornerSize(index: Int): CornerSize? {
+public fun TypedArray.parseCornerSize(index: Int): CornerSize? {
     val tv = tempTypedValue.getOrSet { TypedValue() }
     if (getValue(index, tv)) {
         return when (tv.type) {

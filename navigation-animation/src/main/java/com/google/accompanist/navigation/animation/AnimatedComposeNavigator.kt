@@ -99,7 +99,7 @@ public class AnimatedComposeNavigator private constructor() : Navigator<Animated
         internal val content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
     ) : NavDestination(navigator)
 
-    companion object {
+    public companion object {
         internal const val NAME = "animatedComposable"
 
         @Deprecated(
@@ -110,6 +110,6 @@ public class AnimatedComposeNavigator private constructor() : Navigator<Animated
                 "androidx.navigation.compose.ComposeNavigator"
             )
         )
-        public operator fun invoke() = AnimatedComposeNavigator()
+        public operator fun invoke(): AnimatedComposeNavigator = AnimatedComposeNavigator()
     }
 }

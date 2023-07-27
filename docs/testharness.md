@@ -31,7 +31,7 @@ This content is the `@Composable` UI under test, so standard usage would look li
 @Test
 fun example() {
     composeTestRule.setContent {
-        TestHarness(/* ... */) {
+        TestHarness {
             MyComponent()
         }
     }

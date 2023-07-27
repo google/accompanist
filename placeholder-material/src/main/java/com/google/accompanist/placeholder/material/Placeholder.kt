@@ -50,7 +50,7 @@ For more information please visit https://google.github.io/accompanist/placehold
 """
 )
 @Composable
-fun PlaceholderDefaults.color(
+public fun PlaceholderDefaults.color(
     backgroundColor: Color = MaterialTheme.colors.surface,
     contentColor: Color = contentColorFor(backgroundColor),
     contentAlpha: Float = 0.1f,
@@ -72,7 +72,7 @@ For more information please visit https://google.github.io/accompanist/placehold
 """
 )
 @Composable
-fun PlaceholderDefaults.fadeHighlightColor(
+public fun PlaceholderDefaults.fadeHighlightColor(
     backgroundColor: Color = MaterialTheme.colors.surface,
     alpha: Float = 0.3f,
 ): Color = backgroundColor.copy(alpha = alpha)
@@ -93,7 +93,7 @@ For more information please visit https://google.github.io/accompanist/placehold
 """
 )
 @Composable
-fun PlaceholderDefaults.shimmerHighlightColor(
+public fun PlaceholderDefaults.shimmerHighlightColor(
     backgroundColor: Color = MaterialTheme.colors.surface,
     alpha: Float = 0.75f,
 ): Color {
@@ -137,7 +137,7 @@ We recommend forking the implementation and customising it to your needs.
 For more information please visit https://google.github.io/accompanist/placeholder
 """
 )
-fun Modifier.placeholder(
+public fun Modifier.placeholder(
     visible: Boolean,
     color: Color = Color.Unspecified,
     shape: Shape? = null,

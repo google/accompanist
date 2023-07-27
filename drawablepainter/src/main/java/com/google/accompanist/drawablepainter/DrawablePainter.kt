@@ -52,8 +52,8 @@ private val MAIN_HANDLER by lazy(LazyThreadSafetyMode.NONE) {
  *
  * Instances are usually retrieved from [rememberDrawablePainter].
  */
-class DrawablePainter(
-    val drawable: Drawable
+public class DrawablePainter(
+    public val drawable: Drawable
 ) : Painter(), RememberObserver {
     private var drawInvalidateTick by mutableStateOf(0)
     private var drawableIntrinsicSize by mutableStateOf(drawable.intrinsicSize)
@@ -90,7 +90,7 @@ class DrawablePainter(
         if (drawable is Animatable) drawable.start()
     }
 
-    override fun onAbandoned() = onForgotten()
+    override fun onAbandoned(): Unit = onForgotten()
 
     override fun onForgotten() {
         if (drawable is Animatable) drawable.stop()
@@ -149,7 +149,7 @@ class DrawablePainter(
  * @sample com.google.accompanist.sample.drawablepainter.BasicSample
  */
 @Composable
-fun rememberDrawablePainter(drawable: Drawable?): Painter = remember(drawable) {
+public fun rememberDrawablePainter(drawable: Drawable?): Painter = remember(drawable) {
     when (drawable) {
         null -> EmptyPainter
         is ColorDrawable -> ColorPainter(Color(drawable.color))

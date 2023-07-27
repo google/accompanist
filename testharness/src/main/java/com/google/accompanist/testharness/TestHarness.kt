@@ -70,7 +70,7 @@ import kotlin.math.floor
  * the [isScreenRound] will be left unchanged.
  */
 @Composable
-fun TestHarness(
+public fun TestHarness(
     size: DpSize = DpSize.Unspecified,
     darkMode: Boolean = isSystemInDarkTheme(),
     locales: LocaleListCompat = ConfigurationCompat.getLocales(LocalConfiguration.current),

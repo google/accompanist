@@ -64,7 +64,7 @@ For more migration information, please visit https://google.github.io/accompanis
     )
 )
 @Composable
-fun rememberPagerState(
+public fun rememberPagerState(
     @IntRange(from = 0) initialPage: Int = 0,
 ): PagerState = rememberSaveable(saver = PagerState.Saver) {
     PagerState(
@@ -91,7 +91,7 @@ For more migration information, please visit https://google.github.io/accompanis
     )
 )
 @Stable
-class PagerState(
+public class PagerState(
     @IntRange(from = 0) currentPage: Int = 0,
 ) : ScrollableState {
     // Should this be public?
@@ -125,7 +125,7 @@ class PagerState(
      * list is being dragged. If you want to know whether the fling (or animated scroll) is in
      * progress, use [isScrollInProgress].
      */
-    val interactionSource: InteractionSource
+    public val interactionSource: InteractionSource
         get() = lazyListState.interactionSource
 
     /**
@@ -133,7 +133,7 @@ class PagerState(
      */
     @get:IntRange(from = 0)
     @Deprecated("pageCount is deprecated, use androidx.compose.foundation.pager.PagerState.canScrollForward or androidx.compose.foundation.pager.PagerState.canScrollBackward")
-    val pageCount: Int by derivedStateOf {
+    public val pageCount: Int by derivedStateOf {
         lazyListState.layoutInfo.totalItemsCount
     }
 
@@ -144,7 +144,7 @@ class PagerState(
      * To update the scroll position, use [scrollToPage] or [animateScrollToPage].
      */
     @get:IntRange(from = 0)
-    var currentPage: Int
+    public var currentPage: Int
         get() = _currentPage
         internal set(value) {
             if (value != _currentPage) {
@@ -160,7 +160,7 @@ class PagerState(
      *
      * To update the scroll position, use [scrollToPage] or [animateScrollToPage].
      */
-    val currentPageOffset: Float by derivedStateOf {
+    public val currentPageOffset: Float by derivedStateOf {
         currentPageLayoutInfo?.let {
             (-it.offset / (it.size + itemSpacing).toFloat()).coerceIn(-0.5f, 0.5f)
         } ?: 0f
@@ -184,7 +184,7 @@ class PagerState(
             "we are planning to remove this property in future.",
         ReplaceWith("currentPage")
     )
-    val targetPage: Int
+    public val targetPage: Int
         get() = animationTargetPage
             ?: flingAnimationTarget?.invoke()
             ?: when {
@@ -203,7 +203,7 @@ class PagerState(
         ReplaceWith("animateScrollToPage(page = page, pageOffset = pageOffset)")
     )
     @Suppress("UNUSED_PARAMETER")
-    suspend fun animateScrollToPage(
+    public suspend fun animateScrollToPage(
         @IntRange(from = 0) page: Int,
         @FloatRange(from = 0.0, to = 1.0) pageOffset: Float = 0f,
         animationSpec: AnimationSpec<Float> = spring(),
@@ -223,7 +223,7 @@ class PagerState(
      * @param pageOffset the percentage of the page size to offset, from the start of [page].
      * Must be in the range -1f..1f.
      */
-    suspend fun animateScrollToPage(
+    public suspend fun animateScrollToPage(
         @IntRange(from = 0) page: Int,
         @FloatRange(from = -1.0, to = 1.0) pageOffset: Float = 0f,
     ) {
@@ -296,7 +296,7 @@ class PagerState(
      * @param pageOffset the percentage of the page size to offset, from the start of [page].
      * Must be in the range -1f..1f.
      */
-    suspend fun scrollToPage(
+    public suspend fun scrollToPage(
         @IntRange(from = 0) page: Int,
         @FloatRange(from = -1.0, to = 1.0) pageOffset: Float = 0f,
     ) {
@@ -340,7 +340,7 @@ class PagerState(
     override suspend fun scroll(
         scrollPriority: MutatePriority,
         block: suspend ScrollScope.() -> Unit
-    ) = lazyListState.scroll(scrollPriority, block)
+    ): Unit = lazyListState.scroll(scrollPriority, block)
 
     override fun dispatchRawDelta(delta: Float): Float {
         return lazyListState.dispatchRawDelta(delta)
@@ -363,11 +363,11 @@ class PagerState(
         require(value in -1f..1f) { "$name must be >= -1 and <= 1" }
     }
 
-    companion object {
+    public companion object {
         /**
          * The default [Saver] implementation for [PagerState].
          */
-        val Saver: Saver<PagerState, *> = listSaver(
+        public val Saver: Saver<PagerState, *> = listSaver(
             save = {
                 listOf<Any>(
                     it.currentPage,

@@ -70,7 +70,7 @@ For more migration information, please visit https://google.github.io/accompanis
 )
 @RequiresOptIn(message = "Accompanist Pager is experimental. The API may be changed in the future.")
 @Retention(AnnotationRetention.BINARY)
-annotation class ExperimentalPagerApi
+public annotation class ExperimentalPagerApi
 
 /**
  * Contains the default values used by [HorizontalPager] and [VerticalPager].
@@ -82,7 +82,7 @@ The androidx.compose equivalent of Pager is androidx.compose.foundation.pager.Pa
 For more migration information, please visit https://google.github.io/accompanist/pager/#migration
 """
 )
-object PagerDefaults {
+public object PagerDefaults {
     /**
      * The default implementation for the `maximumFlingDistance` parameter of
      * [flingBehavior] which limits the fling distance to a single page.
@@ -90,7 +90,7 @@ object PagerDefaults {
     @ExperimentalSnapperApi
     @Suppress("MemberVisibilityCanBePrivate")
     @Deprecated("MaximumFlingDistance has been deprecated in Snapper")
-    val singlePageFlingDistance: (SnapperLayoutInfo) -> Float = { layoutInfo ->
+    public val singlePageFlingDistance: (SnapperLayoutInfo) -> Float = { layoutInfo ->
         // We can scroll up to the scrollable size of the lazy layout
         layoutInfo.endScrollOffset - layoutInfo.startScrollOffset.toFloat()
     }
@@ -100,7 +100,7 @@ object PagerDefaults {
      * [flingBehavior] which limits the fling distance to a single page.
      */
     @ExperimentalSnapperApi
-    val singlePageSnapIndex: (SnapperLayoutInfo, startIndex: Int, targetIndex: Int) -> Int =
+    public val singlePageSnapIndex: (SnapperLayoutInfo, startIndex: Int, targetIndex: Int) -> Int =
         { layoutInfo, startIndex, targetIndex ->
             targetIndex
                 .coerceIn(startIndex - 1, startIndex + 1)
@@ -131,7 +131,7 @@ object PagerDefaults {
     @Composable
     @ExperimentalSnapperApi
     @Suppress("DEPRECATION")
-    fun flingBehavior(
+    public fun flingBehavior(
         state: PagerState,
         decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
         snapAnimationSpec: AnimationSpec<Float> = SnapperFlingBehaviorDefaults.SpringAnimationSpec,
@@ -173,7 +173,7 @@ For more migration information, please visit https://google.github.io/accompanis
     )
     @Composable
     @ExperimentalSnapperApi
-    fun flingBehavior(
+    public fun flingBehavior(
         state: PagerState,
         decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
         snapAnimationSpec: AnimationSpec<Float> = SnapperFlingBehaviorDefaults.SpringAnimationSpec,
@@ -213,7 +213,7 @@ For more migration information, please visit https://google.github.io/accompanis
     )
     @Composable
     @ExperimentalSnapperApi
-    fun flingBehavior(
+    public fun flingBehavior(
         state: PagerState,
         decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
         snapAnimationSpec: AnimationSpec<Float> = SnapperFlingBehaviorDefaults.SpringAnimationSpec,
@@ -267,7 +267,7 @@ For more migration information, please visit https://google.github.io/accompanis
         "androidx.compose.foundation.pager.HorizontalPager"
     )
 )
-fun HorizontalPager(
+public fun HorizontalPager(
     count: Int,
     modifier: Modifier = Modifier,
     state: PagerState = rememberPagerState(),
@@ -329,7 +329,7 @@ The androidx.compose equivalent of VerticalPager is androidx.compose.foundation.
 For more migration information, please visit https://google.github.io/accompanist/pager/#migration
 """
 )
-fun VerticalPager(
+public fun VerticalPager(
     count: Int,
     modifier: Modifier = Modifier,
     state: PagerState = rememberPagerState(),
@@ -539,16 +539,16 @@ For more migration information, please visit https://google.github.io/accompanis
 """
 )
 @Stable
-interface PagerScope {
+public interface PagerScope {
     /**
      * Returns the current selected page
      */
-    val currentPage: Int
+    public val currentPage: Int
 
     /**
      * The current offset from the start of [currentPage], as a ratio of the page width.
      */
-    val currentPageOffset: Float
+    public val currentPageOffset: Float
 }
 
 private class PagerScopeImpl(
@@ -574,6 +574,6 @@ The androidx.compose equivalent of Pager is androidx.compose.foundation.pager.Pa
 For more migration information, please visit https://google.github.io/accompanist/pager/#migration
 """
 )
-fun PagerScope.calculateCurrentOffsetForPage(page: Int): Float {
+public fun PagerScope.calculateCurrentOffsetForPage(page: Int): Float {
     return (currentPage - page) + currentPageOffset
 }

@@ -40,6 +40,6 @@ import androidx.navigation.compose.rememberNavController
 )
 @ExperimentalAnimationApi
 @Composable
-fun rememberAnimatedNavController(
+public fun rememberAnimatedNavController(
     vararg navigators: Navigator<out NavDestination>
 ): NavHostController = rememberNavController(*navigators)

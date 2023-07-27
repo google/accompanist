@@ -31,7 +31,7 @@ import androidx.compose.runtime.Stable
  */
 @ExperimentalPermissionsApi
 @Composable
-fun rememberPermissionState(
+public fun rememberPermissionState(
     permission: String,
     onPermissionResult: (Boolean) -> Unit = {}
 ): PermissionState {
@@ -48,17 +48,17 @@ fun rememberPermissionState(
  */
 @ExperimentalPermissionsApi
 @Stable
-interface PermissionState {
+public interface PermissionState {
 
     /**
      * The permission to control and observe.
      */
-    val permission: String
+    public val permission: String
 
     /**
      * [permission]'s status
      */
-    val status: PermissionStatus
+    public val status: PermissionStatus
 
     /**
      * Request the [permission] to the user.
@@ -71,5 +71,5 @@ interface PermissionState {
      * again or has denied the permission multiple times.
      * This behavior varies depending on the Android level API.
      */
-    fun launchPermissionRequest(): Unit
+    public fun launchPermissionRequest(): Unit
 }

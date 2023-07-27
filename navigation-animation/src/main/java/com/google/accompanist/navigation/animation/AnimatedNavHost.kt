@@ -24,7 +24,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,7 +32,6 @@ import androidx.navigation.NavGraph
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.get
 
 /**
  * Provides in place in the Compose hierarchy for self contained navigation to occur.
@@ -75,7 +73,7 @@ public fun AnimatedNavHost(
     popEnterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition) = enterTransition,
     popExitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition) = exitTransition,
     builder: NavGraphBuilder.() -> Unit
-) = NavHost(
+): Unit = NavHost(
     navController,
     startDestination,
     modifier,
@@ -121,7 +119,7 @@ public fun AnimatedNavHost(
         { fadeOut(animationSpec = tween(700)) },
     popEnterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition) = enterTransition,
     popExitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition) = exitTransition,
-) = NavHost(
+): Unit = NavHost(
     navController,
     graph,
     modifier,

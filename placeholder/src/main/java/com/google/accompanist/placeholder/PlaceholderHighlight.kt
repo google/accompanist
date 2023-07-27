@@ -40,11 +40,11 @@ We recommend forking the implementation and customising it to your needs.
 For more information please visit https://google.github.io/accompanist/placeholder
 """
 )
-interface PlaceholderHighlight {
+public interface PlaceholderHighlight {
     /**
      * The optional [AnimationSpec] to use when running the animation for this highlight.
      */
-    val animationSpec: InfiniteRepeatableSpec<Float>?
+    public val animationSpec: InfiniteRepeatableSpec<Float>?
 
     /**
      * Return a [Brush] to draw for the given [progress] and [size].
@@ -52,7 +52,7 @@ interface PlaceholderHighlight {
      * @param progress the current animated progress in the range of 0f..1f.
      * @param size The size of the current layout to draw in.
      */
-    fun brush(
+    public fun brush(
         @FloatRange(from = 0.0, to = 1.0) progress: Float,
         size: Size
     ): Brush
@@ -63,9 +63,9 @@ interface PlaceholderHighlight {
      * @param progress the current animated progress in the range of 0f..1f.
      */
     @FloatRange(from = 0.0, to = 1.0)
-    fun alpha(progress: Float): Float
+    public fun alpha(progress: Float): Float
 
-    companion object
+    public companion object
 }
 
 /**
@@ -83,7 +83,7 @@ We recommend forking the implementation and customising it to your needs.
 For more information please visit https://google.github.io/accompanist/placeholder
 """
 )
-fun PlaceholderHighlight.Companion.fade(
+public fun PlaceholderHighlight.Companion.fade(
     highlightColor: Color,
     animationSpec: InfiniteRepeatableSpec<Float> = PlaceholderDefaults.fadeAnimationSpec,
 ): PlaceholderHighlight = Fade(
@@ -112,7 +112,7 @@ We recommend forking the implementation and customising it to your needs.
 For more information please visit https://google.github.io/accompanist/placeholder
 """
 )
-fun PlaceholderHighlight.Companion.shimmer(
+public fun PlaceholderHighlight.Companion.shimmer(
     highlightColor: Color,
     animationSpec: InfiniteRepeatableSpec<Float> = PlaceholderDefaults.shimmerAnimationSpec,
     @FloatRange(from = 0.0, to = 1.0) progressForMaxAlpha: Float = 0.6f,

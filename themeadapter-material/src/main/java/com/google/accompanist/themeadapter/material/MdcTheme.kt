@@ -73,7 +73,7 @@ import java.lang.reflect.Method
  * [context]'s theme, over any specified in the MDC text appearances. Defaults to `false`.
  */
 @Composable
-fun MdcTheme(
+public fun MdcTheme(
     context: Context = LocalContext.current,
     readColors: Boolean = true,
     readTypography: Boolean = true,
@@ -123,7 +123,7 @@ fun MdcTheme(
  * This class contains the individual components of a [MaterialTheme]: [Colors], [Typography]
  * and [Shapes].
  */
-data class ThemeParameters(
+public data class ThemeParameters(
     val colors: Colors?,
     val typography: Typography?,
     val shapes: Shapes?
@@ -159,7 +159,7 @@ data class ThemeParameters(
  * @return [ThemeParameters] instance containing the resulting [Colors], [Typography]
  * and [Shapes].
  */
-fun createMdcTheme(
+public fun createMdcTheme(
     context: Context,
     layoutDirection: LayoutDirection,
     density: Density = Density(context),

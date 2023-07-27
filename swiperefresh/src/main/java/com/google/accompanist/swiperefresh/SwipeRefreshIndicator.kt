@@ -110,7 +110,7 @@ private val LargeSizes = SwipeRefreshIndicatorSizes(
     """
 )
 @Composable
-fun SwipeRefreshIndicator(
+public fun SwipeRefreshIndicator(
     state: SwipeRefreshState,
     refreshTriggerDistance: Dp,
     modifier: Modifier = Modifier,
