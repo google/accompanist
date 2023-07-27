@@ -67,9 +67,6 @@ A library providing a collection of utilities for adaptive layouts.
 ### 🗜 [Test Harness](./testharness/)
 Utilities for testing Compose layouts.
 
-### 📐 [Insets](./insets/) (Deprecated)
-See our [Migration Guide](https://google.github.io/accompanist/insets/) for migrating to Insets in Compose.
-
 ### ⬇️ [Swipe to Refresh](./swiperefresh/) (Deprecated)
 See our [Migration Guide](https://google.github.io/accompanist/swiperefresh/) for migrating to PullRefresh in Compose Material.
 
@@ -87,6 +84,9 @@ See our [Migration Guide](https://google.github.io/accompanist/navigation-animat
 
 ### ⏳ [Placeholder](./placeholder/) (Deprecated)
 A library that provides easy-to-use modifiers for displaying a placeholder UI while content is loading.
+
+### 📐 [Insets](./insets/) (Deprecated & Removed)
+See our [Migration Guide](https://google.github.io/accompanist/insets/) for migrating to Insets in Compose.
 
 ---
 
