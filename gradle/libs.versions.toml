@@ -8,7 +8,7 @@ composesnapshot = "-" # a single character = no snapshot
 dokka = "1.8.10"
 
 # gradlePlugin and lint need to be updated together
-gradlePlugin = "8.0.2"
+gradlePlugin = "8.1.0"
 lintMinCompose = "30.0.0"
 
 ktlint = "0.45.2"
