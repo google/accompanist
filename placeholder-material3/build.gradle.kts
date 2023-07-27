@@ -30,7 +30,7 @@ kotlin {
 android {
     namespace = "com.google.accompanist.placeholder.material3"
 
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 21

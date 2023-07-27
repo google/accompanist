@@ -235,10 +235,10 @@ internal data class OrientationIndependentConstraints(
     val crossAxisMax: Int
 ) {
     constructor(c: Constraints, orientation: LayoutOrientation) : this(
-        if (orientation === LayoutOrientation.Horizontal) c.minWidth else c.minHeight,
-        if (orientation === LayoutOrientation.Horizontal) c.maxWidth else c.maxHeight,
-        if (orientation === LayoutOrientation.Horizontal) c.minHeight else c.minWidth,
-        if (orientation === LayoutOrientation.Horizontal) c.maxHeight else c.maxWidth
+        if (orientation === Horizontal) c.minWidth else c.minHeight,
+        if (orientation === Horizontal) c.maxWidth else c.maxHeight,
+        if (orientation === Horizontal) c.minHeight else c.minWidth,
+        if (orientation === Horizontal) c.maxHeight else c.maxWidth
     )
 
     // Creates a new instance with the same main axis constraints and maximum tight cross axis.
@@ -251,7 +251,7 @@ internal data class OrientationIndependentConstraints(
 
     // Given an orientation, resolves the current instance to traditional constraints.
     fun toBoxConstraints(orientation: LayoutOrientation) =
-        if (orientation === LayoutOrientation.Horizontal) {
+        if (orientation === Horizontal) {
             Constraints(mainAxisMin, mainAxisMax, crossAxisMin, crossAxisMax)
         } else {
             Constraints(crossAxisMin, crossAxisMax, mainAxisMin, mainAxisMax)
@@ -259,7 +259,7 @@ internal data class OrientationIndependentConstraints(
 
     // Given an orientation, resolves the max width constraint this instance represents.
     fun maxWidth(orientation: LayoutOrientation) =
-        if (orientation === LayoutOrientation.Horizontal) {
+        if (orientation === Horizontal) {
             mainAxisMax
         } else {
             crossAxisMax
@@ -267,7 +267,7 @@ internal data class OrientationIndependentConstraints(
 
     // Given an orientation, resolves the max height constraint this instance represents.
     fun maxHeight(orientation: LayoutOrientation) =
-        if (orientation === LayoutOrientation.Horizontal) {
+        if (orientation === Horizontal) {
             crossAxisMax
         } else {
             mainAxisMax
@@ -290,28 +290,28 @@ internal val RowColumnParentData?.isRelative: Boolean
     get() = this.crossAxisAlignment?.isRelative ?: false
 
 internal fun MinIntrinsicWidthMeasureBlock(orientation: LayoutOrientation) =
-    if (orientation == LayoutOrientation.Horizontal) {
+    if (orientation == Horizontal) {
         IntrinsicMeasureBlocks.HorizontalMinWidth
     } else {
         IntrinsicMeasureBlocks.VerticalMinWidth
     }
 
 internal fun MinIntrinsicHeightMeasureBlock(orientation: LayoutOrientation) =
-    if (orientation == LayoutOrientation.Horizontal) {
+    if (orientation == Horizontal) {
         IntrinsicMeasureBlocks.HorizontalMinHeight
     } else {
         IntrinsicMeasureBlocks.VerticalMinHeight
     }
 
 internal fun MaxIntrinsicWidthMeasureBlock(orientation: LayoutOrientation) =
-    if (orientation == LayoutOrientation.Horizontal) {
+    if (orientation == Horizontal) {
         IntrinsicMeasureBlocks.HorizontalMaxWidth
     } else {
         IntrinsicMeasureBlocks.VerticalMaxWidth
     }
 
 internal fun MaxIntrinsicHeightMeasureBlock(orientation: LayoutOrientation) =
-    if (orientation == LayoutOrientation.Horizontal) {
+    if (orientation == Horizontal) {
         IntrinsicMeasureBlocks.HorizontalMaxHeight
     } else {
         IntrinsicMeasureBlocks.VerticalMaxHeight
@@ -326,8 +326,8 @@ internal object IntrinsicMeasureBlocks {
                 { w -> maxIntrinsicHeight(w) },
                 availableHeight,
                 mainAxisSpacing,
-                LayoutOrientation.Horizontal,
-                LayoutOrientation.Horizontal
+                Horizontal,
+                Horizontal
             )
         }
     val VerticalMinWidth: (List<IntrinsicMeasurable>, Int, Int) -> Int =
@@ -338,8 +338,8 @@ internal object IntrinsicMeasureBlocks {
                 { w -> maxIntrinsicHeight(w) },
                 availableHeight,
                 mainAxisSpacing,
-                LayoutOrientation.Vertical,
-                LayoutOrientation.Horizontal
+                Vertical,
+                Horizontal
             )
         }
     val HorizontalMinHeight: (List<IntrinsicMeasurable>, Int, Int) -> Int =
@@ -350,8 +350,8 @@ internal object IntrinsicMeasureBlocks {
                 { h -> maxIntrinsicWidth(h) },
                 availableWidth,
                 mainAxisSpacing,
-                LayoutOrientation.Horizontal,
-                LayoutOrientation.Vertical
+                Horizontal,
+                Vertical
             )
         }
     val VerticalMinHeight: (List<IntrinsicMeasurable>, Int, Int) -> Int =
@@ -362,8 +362,8 @@ internal object IntrinsicMeasureBlocks {
                 { h -> maxIntrinsicWidth(h) },
                 availableWidth,
                 mainAxisSpacing,
-                LayoutOrientation.Vertical,
-                LayoutOrientation.Vertical
+                Vertical,
+                Vertical
             )
         }
     val HorizontalMaxWidth: (List<IntrinsicMeasurable>, Int, Int) -> Int =
@@ -374,8 +374,8 @@ internal object IntrinsicMeasureBlocks {
                 { w -> maxIntrinsicHeight(w) },
                 availableHeight,
                 mainAxisSpacing,
-                LayoutOrientation.Horizontal,
-                LayoutOrientation.Horizontal
+                Horizontal,
+                Horizontal
             )
         }
     val VerticalMaxWidth: (List<IntrinsicMeasurable>, Int, Int) -> Int =
@@ -386,8 +386,8 @@ internal object IntrinsicMeasureBlocks {
                 { w -> maxIntrinsicHeight(w) },
                 availableHeight,
                 mainAxisSpacing,
-                LayoutOrientation.Vertical,
-                LayoutOrientation.Horizontal
+                Vertical,
+                Horizontal
             )
         }
     val HorizontalMaxHeight: (List<IntrinsicMeasurable>, Int, Int) -> Int =
@@ -398,8 +398,8 @@ internal object IntrinsicMeasureBlocks {
                 { h -> maxIntrinsicWidth(h) },
                 availableWidth,
                 mainAxisSpacing,
-                LayoutOrientation.Horizontal,
-                LayoutOrientation.Vertical
+                Horizontal,
+                Vertical
             )
         }
     val VerticalMaxHeight: (List<IntrinsicMeasurable>, Int, Int) -> Int =
@@ -410,8 +410,8 @@ internal object IntrinsicMeasureBlocks {
                 { h -> maxIntrinsicWidth(h) },
                 availableWidth,
                 mainAxisSpacing,
-                LayoutOrientation.Vertical,
-                LayoutOrientation.Vertical
+                Vertical,
+                Vertical
             )
         }
 }

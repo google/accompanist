@@ -42,7 +42,7 @@ For more information please visit https://google.github.io/accompanist/placehold
 """
 )
 @Composable
-fun PlaceholderHighlight.Companion.fade(
+public fun PlaceholderHighlight.Companion.fade(
     animationSpec: InfiniteRepeatableSpec<Float> = PlaceholderDefaults.fadeAnimationSpec,
 ): PlaceholderHighlight = PlaceholderHighlight.fade(
     highlightColor = PlaceholderDefaults.fadeHighlightColor(),
@@ -70,7 +70,7 @@ For more information please visit https://google.github.io/accompanist/placehold
 """
 )
 @Composable
-fun PlaceholderHighlight.Companion.shimmer(
+public fun PlaceholderHighlight.Companion.shimmer(
     animationSpec: InfiniteRepeatableSpec<Float> = PlaceholderDefaults.shimmerAnimationSpec,
     @FloatRange(from = 0.0, to = 1.0) progressForMaxAlpha: Float = 0.6f,
 ): PlaceholderHighlight = PlaceholderHighlight.shimmer(

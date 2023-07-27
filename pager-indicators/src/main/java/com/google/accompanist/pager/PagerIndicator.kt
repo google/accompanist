@@ -74,7 +74,7 @@ For more migration information, please visit https://google.github.io/accompanis
 """
 )
 @Composable
-fun HorizontalPagerIndicator(
+public fun HorizontalPagerIndicator(
     pagerState: PagerState,
     modifier: Modifier = Modifier,
     pageCount: Int = pagerState.pageCount,
@@ -138,7 +138,7 @@ fun HorizontalPagerIndicator(
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HorizontalPagerIndicator(
+public fun HorizontalPagerIndicator(
     pagerState: androidx.compose.foundation.pager.PagerState,
     pageCount: Int,
     modifier: Modifier = Modifier,
@@ -270,7 +270,7 @@ For more migration information, please visit https://google.github.io/accompanis
 """
 )
 @Composable
-fun VerticalPagerIndicator(
+public fun VerticalPagerIndicator(
     pagerState: PagerState,
     modifier: Modifier = Modifier,
     pageCount: Int = pagerState.pageCount,
@@ -332,7 +332,7 @@ fun VerticalPagerIndicator(
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun VerticalPagerIndicator(
+public fun VerticalPagerIndicator(
     pagerState: androidx.compose.foundation.pager.PagerState,
     pageCount: Int,
     modifier: Modifier = Modifier,

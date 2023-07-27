@@ -64,7 +64,7 @@ public fun NavGraphBuilder.composable(
         AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?
     )? = exitTransition,
     content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
-) = composable(
+): Unit = composable(
     route,
     arguments,
     deepLinks,
@@ -112,7 +112,7 @@ public fun NavGraphBuilder.navigation(
         AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?
     )? = exitTransition,
     builder: NavGraphBuilder.() -> Unit
-) = navigation(
+): Unit = navigation(
     startDestination,
     route,
     arguments,

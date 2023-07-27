@@ -32,7 +32,7 @@ import androidx.lifecycle.LifecycleEventObserver
 
 @RequiresOptIn(message = "Accompanist Permissions is experimental. The API may be changed in the future.")
 @Retention(AnnotationRetention.BINARY)
-annotation class ExperimentalPermissionsApi
+public annotation class ExperimentalPermissionsApi
 
 /**
  * Model of the status of a permission. It can be granted or denied.
@@ -40,9 +40,9 @@ annotation class ExperimentalPermissionsApi
  */
 @ExperimentalPermissionsApi
 @Stable
-sealed interface PermissionStatus {
-    object Granted : PermissionStatus
-    data class Denied(
+public sealed interface PermissionStatus {
+    public object Granted : PermissionStatus
+    public data class Denied(
         val shouldShowRationale: Boolean
     ) : PermissionStatus
 }
@@ -51,14 +51,14 @@ sealed interface PermissionStatus {
  * `true` if the permission is granted.
  */
 @ExperimentalPermissionsApi
-val PermissionStatus.isGranted: Boolean
+public val PermissionStatus.isGranted: Boolean
     get() = this == PermissionStatus.Granted
 
 /**
  * `true` if a rationale should be presented to the user.
  */
 @ExperimentalPermissionsApi
-val PermissionStatus.shouldShowRationale: Boolean
+public val PermissionStatus.shouldShowRationale: Boolean
     get() = when (this) {
         PermissionStatus.Granted -> false
         is PermissionStatus.Denied -> shouldShowRationale

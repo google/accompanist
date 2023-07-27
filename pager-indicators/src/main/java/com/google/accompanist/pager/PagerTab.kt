@@ -39,7 +39,7 @@ For more migration information, please visit https://google.github.io/accompanis
 """
 )
 @ExperimentalPagerApi
-fun Modifier.pagerTabIndicatorOffset(
+public fun Modifier.pagerTabIndicatorOffset(
     pagerState: PagerState,
     tabPositions: List<TabPosition>,
     pageIndexMapping: (Int) -> Int = { it },
@@ -60,7 +60,7 @@ fun Modifier.pagerTabIndicatorOffset(
  * [androidx.compose.foundation.pager.VerticalPager].
  */
 @OptIn(ExperimentalFoundationApi::class)
-fun Modifier.pagerTabIndicatorOffset(
+public fun Modifier.pagerTabIndicatorOffset(
     pagerState: androidx.compose.foundation.pager.PagerState,
     tabPositions: List<TabPosition>,
     pageIndexMapping: (Int) -> Int = { it },

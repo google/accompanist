@@ -99,7 +99,7 @@ import com.google.accompanist.themeadapter.core.parseFontFamily
  * @param shapes A set of shapes to be used by the components in this hierarchy.
  */
 @Composable
-fun AppCompatTheme(
+public fun AppCompatTheme(
     context: Context = LocalContext.current,
     readColors: Boolean = true,
     readTypography: Boolean = true,
@@ -131,7 +131,7 @@ fun AppCompatTheme(
  * This class contains some of the individual components of a [MaterialTheme]:
  * [Colors] & [Typography].
  */
-data class ThemeParameters(
+public data class ThemeParameters(
     val colors: Colors?,
     val typography: Typography?
 )
@@ -150,7 +150,7 @@ data class ThemeParameters(
  *
  * @return [ThemeParameters] instance containing the resulting [Colors] and [Typography]
  */
-fun Context.createAppCompatTheme(
+public fun Context.createAppCompatTheme(
     readColors: Boolean = true,
     readTypography: Boolean = true
 ): ThemeParameters = obtainStyledAttributes(R.styleable.ThemeAdapterAppCompatTheme).use { ta ->

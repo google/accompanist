@@ -31,7 +31,7 @@ import androidx.compose.runtime.Stable
  */
 @ExperimentalPermissionsApi
 @Composable
-fun rememberMultiplePermissionsState(
+public fun rememberMultiplePermissionsState(
     permissions: List<String>,
     onPermissionsResult: (Map<String, Boolean>) -> Unit = {}
 ): MultiplePermissionsState {
@@ -48,27 +48,27 @@ fun rememberMultiplePermissionsState(
  */
 @ExperimentalPermissionsApi
 @Stable
-interface MultiplePermissionsState {
+public interface MultiplePermissionsState {
 
     /**
      * List of all permissions to request.
      */
-    val permissions: List<PermissionState>
+    public val permissions: List<PermissionState>
 
     /**
      * List of permissions revoked by the user.
      */
-    val revokedPermissions: List<PermissionState>
+    public val revokedPermissions: List<PermissionState>
 
     /**
      * When `true`, the user has granted all [permissions].
      */
-    val allPermissionsGranted: Boolean
+    public val allPermissionsGranted: Boolean
 
     /**
      * When `true`, the user should be presented with a rationale.
      */
-    val shouldShowRationale: Boolean
+    public val shouldShowRationale: Boolean
 
     /**
      * Request the [permissions] to the user.
@@ -81,5 +81,5 @@ interface MultiplePermissionsState {
      * again or has denied the permission multiple times.
      * This behavior varies depending on the Android level API.
      */
-    fun launchMultiplePermissionRequest(): Unit
+    public fun launchMultiplePermissionRequest(): Unit
 }

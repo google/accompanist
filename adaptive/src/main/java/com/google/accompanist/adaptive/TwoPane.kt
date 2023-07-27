@@ -191,24 +191,24 @@ internal fun TwoPane(
 @JvmInline
 public value class FoldAwareConfiguration private constructor(private val value: Int) {
 
-    companion object {
+    public companion object {
         /**
          * The [TwoPane] will only be aware of horizontal folds only, splitting the content
          * vertically.
          */
-        val HorizontalFoldsOnly = FoldAwareConfiguration(0)
+        public val HorizontalFoldsOnly: FoldAwareConfiguration = FoldAwareConfiguration(0)
 
         /**
          * The [TwoPane] will only be aware of vertical folds only, splitting the content
          * horizontally.
          */
-        val VerticalFoldsOnly = FoldAwareConfiguration(1)
+        public val VerticalFoldsOnly: FoldAwareConfiguration = FoldAwareConfiguration(1)
 
         /**
          * The [TwoPane] will be aware of both horizontal and vertical folds, splitting the content
          * vertically and horizontally respectively.
          */
-        val AllFolds = FoldAwareConfiguration(2)
+        public val AllFolds: FoldAwareConfiguration = FoldAwareConfiguration(2)
     }
 }
 
@@ -268,7 +268,7 @@ private fun interface ConditionalTwoPaneStrategy {
      * @param layoutDirection the [LayoutDirection] for measuring and laying out
      * @param layoutCoordinates the [LayoutCoordinates] of the [TwoPane]
      */
-    public fun calculateSplitResult(
+    fun calculateSplitResult(
         density: Density,
         layoutDirection: LayoutDirection,
         layoutCoordinates: LayoutCoordinates

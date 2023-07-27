@@ -30,7 +30,7 @@ kotlin {
 android {
     namespace = "com.google.accompanist.navigation.animation"
 
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 21

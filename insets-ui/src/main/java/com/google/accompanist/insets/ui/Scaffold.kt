@@ -56,7 +56,7 @@ import androidx.compose.ui.unit.dp
 /**
  * Provides the current [Scaffold] content padding values.
  */
-val LocalScaffoldPadding: ProvidableCompositionLocal<PaddingValues> =
+public val LocalScaffoldPadding: ProvidableCompositionLocal<PaddingValues> =
     staticCompositionLocalOf { PaddingValues(0.dp) }
 
 /**
@@ -105,7 +105,7 @@ val LocalScaffoldPadding: ProvidableCompositionLocal<PaddingValues> =
  * the scroller itself.
  */
 @Composable
-fun Scaffold(
+public fun Scaffold(
     modifier: Modifier = Modifier,
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     topBar: @Composable () -> Unit = {},

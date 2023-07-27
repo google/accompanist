@@ -46,7 +46,7 @@ import androidx.compose.ui.unit.dp
  * @sample com.google.accompanist.sample.insets.BottomNavigation_Insets
  */
 @Composable
-fun BottomNavigation(
+public fun BottomNavigation(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     backgroundColor: Color = MaterialTheme.colors.primarySurface,
@@ -62,7 +62,7 @@ fun BottomNavigation(
 }
 
 @Composable
-fun BottomNavigationSurface(
+public fun BottomNavigationSurface(
     modifier: Modifier = Modifier,
     backgroundColor: Color = MaterialTheme.colors.primarySurface,
     contentColor: Color = contentColorFor(backgroundColor),
@@ -80,7 +80,7 @@ fun BottomNavigationSurface(
 }
 
 @Composable
-fun BottomNavigationContent(
+public fun BottomNavigationContent(
     modifier: Modifier = Modifier,
     content: @Composable RowScope.() -> Unit,
 ) {

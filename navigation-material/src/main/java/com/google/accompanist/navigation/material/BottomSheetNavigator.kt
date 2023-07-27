@@ -56,23 +56,23 @@ import kotlinx.coroutines.flow.transform
 @ExperimentalMaterialNavigationApi
 @OptIn(ExperimentalMaterialApi::class)
 @Stable
-class BottomSheetNavigatorSheetState(internal val sheetState: ModalBottomSheetState) {
+public class BottomSheetNavigatorSheetState(internal val sheetState: ModalBottomSheetState) {
     /**
      * @see ModalBottomSheetState.isVisible
      */
-    val isVisible: Boolean
+    public val isVisible: Boolean
         get() = sheetState.isVisible
 
     /**
      * @see ModalBottomSheetState.currentValue
      */
-    val currentValue: ModalBottomSheetValue
+    public val currentValue: ModalBottomSheetValue
         get() = sheetState.currentValue
 
     /**
      * @see ModalBottomSheetState.targetValue
      */
-    val targetValue: ModalBottomSheetValue
+    public val targetValue: ModalBottomSheetValue
         get() = sheetState.targetValue
 
     /**
@@ -82,7 +82,7 @@ class BottomSheetNavigatorSheetState(internal val sheetState: ModalBottomSheetSt
         message = "BottomSheetNavigatorSheetState#offset has been removed",
         level = DeprecationLevel.ERROR
     )
-    val offset: State<Float>
+    public val offset: State<Float>
         get() = error("BottomSheetNavigatorSheetState#offset has been removed")
 
     /**
@@ -92,7 +92,7 @@ class BottomSheetNavigatorSheetState(internal val sheetState: ModalBottomSheetSt
         message = "BottomSheetNavigatorSheetState#direction has been removed",
         level = DeprecationLevel.ERROR
     )
-    val direction: Float
+    public val direction: Float
         get() = error("BottomSheetNavigatorSheetState#direction has been removed.")
 
     /**
@@ -102,7 +102,7 @@ class BottomSheetNavigatorSheetState(internal val sheetState: ModalBottomSheetSt
         message = "BottomSheetNavigatorSheetState#progress has been removed",
         level = DeprecationLevel.ERROR
     )
-    val progress: SwipeProgress<ModalBottomSheetValue>
+    public val progress: SwipeProgress<ModalBottomSheetValue>
         get() = error("BottomSheetNavigatorSheetState#progress has been removed")
 }
 
@@ -112,7 +112,7 @@ class BottomSheetNavigatorSheetState(internal val sheetState: ModalBottomSheetSt
 @ExperimentalMaterialNavigationApi
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun rememberBottomSheetNavigator(
+public fun rememberBottomSheetNavigator(
     animationSpec: AnimationSpec<Float> = SwipeableDefaults.AnimationSpec
 ): BottomSheetNavigator {
     val sheetState = rememberModalBottomSheetState(
@@ -144,7 +144,7 @@ fun rememberBottomSheetNavigator(
 @ExperimentalMaterialNavigationApi
 @OptIn(ExperimentalMaterialApi::class)
 @Navigator.Name("BottomSheetNavigator")
-class BottomSheetNavigator(
+public class BottomSheetNavigator(
     internal val sheetState: ModalBottomSheetState
 ) : Navigator<Destination>() {
 
@@ -177,13 +177,13 @@ class BottomSheetNavigator(
     /**
      * Access properties of the [ModalBottomSheetLayout]'s [ModalBottomSheetState]
      */
-    val navigatorSheetState = BottomSheetNavigatorSheetState(sheetState)
+    public val navigatorSheetState: BottomSheetNavigatorSheetState = BottomSheetNavigatorSheetState(sheetState)
 
     /**
      * A [Composable] function that hosts the current sheet content. This should be set as
      * sheetContent of your [ModalBottomSheetLayout].
      */
-    val sheetContent: @Composable ColumnScope.() -> Unit = {
+    public val sheetContent: @Composable ColumnScope.() -> Unit = {
         val saveableStateHolder = rememberSaveableStateHolder()
         val transitionsInProgressEntries by transitionsInProgress.collectAsState()
 
@@ -272,7 +272,7 @@ class BottomSheetNavigator(
      * [NavDestination] specific to [BottomSheetNavigator]
      */
     @NavDestination.ClassType(Composable::class)
-    class Destination(
+    public class Destination(
         navigator: BottomSheetNavigator,
         internal val content: @Composable ColumnScope.(NavBackStackEntry) -> Unit
     ) : NavDestination(navigator), FloatingWindow

@@ -79,7 +79,7 @@ private fun rememberMutablePermissionsState(
     val context = LocalContext.current
     val activity = context.findActivity()
     val mutablePermissions: List<MutablePermissionState> = remember(permissions) {
-        permissions.map { MutablePermissionState(it, context, activity) }
+        return@remember permissions.map { MutablePermissionState(it, context, activity) }
     }
     // Update each permission with its own launcher
     for (permissionState in mutablePermissions) {

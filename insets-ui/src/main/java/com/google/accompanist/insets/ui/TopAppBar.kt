@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.dp
  * @sample com.google.accompanist.sample.insets.TopAppBar_Insets
  */
 @Composable
-fun TopAppBar(
+public fun TopAppBar(
     title: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
@@ -67,7 +67,7 @@ fun TopAppBar(
 }
 
 @Composable
-fun TopAppBarSurface(
+public fun TopAppBarSurface(
     modifier: Modifier = Modifier,
     backgroundColor: Color = MaterialTheme.colors.primarySurface,
     contentColor: Color = contentColorFor(backgroundColor),
@@ -84,7 +84,7 @@ fun TopAppBarSurface(
 }
 
 @Composable
-fun TopAppBarContent(
+public fun TopAppBarContent(
     title: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     navigationIcon: @Composable (() -> Unit)? = null,

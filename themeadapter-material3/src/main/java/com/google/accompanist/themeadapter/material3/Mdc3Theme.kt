@@ -66,7 +66,7 @@ import java.lang.reflect.Method
  * [context]'s theme, over any specified in the MDC text appearances. Defaults to `false`.
  */
 @Composable
-fun Mdc3Theme(
+public fun Mdc3Theme(
     context: Context = LocalContext.current,
     readColorScheme: Boolean = true,
     readTypography: Boolean = true,
@@ -116,7 +116,7 @@ fun Mdc3Theme(
  * This class contains the individual components of a [MaterialTheme]: [ColorScheme] and
  * [Typography].
  */
-data class Theme3Parameters(
+public data class Theme3Parameters(
     val colorScheme: ColorScheme?,
     val typography: Typography?,
     val shapes: Shapes?
@@ -151,7 +151,7 @@ data class Theme3Parameters(
  * [context]'s theme, over any specified in the MDC text appearances. Defaults to `false`.
  * @return [Theme3Parameters] instance containing the resulting [ColorScheme] and [Typography].
  */
-fun createMdc3Theme(
+public fun createMdc3Theme(
     context: Context,
     layoutDirection: LayoutDirection,
     density: Density = Density(context),

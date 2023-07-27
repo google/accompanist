@@ -10,6 +10,7 @@ on:
       - compose-1.2
       - compose-1.3
       - compose-1.4
+      - compose-1.5
     paths-ignore:
       - '**.md'
   pull_request:

@@ -31,7 +31,7 @@ android {
     namespace = "com.google.accompanist.themeadapter.appcompat"
     testNamespace = "com.google.accompanist.themeadapter.appcompat.test"
 
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 21
