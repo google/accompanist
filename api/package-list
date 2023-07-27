@@ -7,8 +7,6 @@ module:drawablepainter
 com.google.accompanist.drawablepainter
 module:flowlayout
 com.google.accompanist.flowlayout
-module:insets
-com.google.accompanist.insets
 module:insets-ui
 com.google.accompanist.insets.ui
 module:navigation-material
@@ -20,12 +18,6 @@ com.google.accompanist.permissions
 module:permissions-lint
 com.google.accompanist.permissions.lint
 com.google.accompanist.permissions.lint.util
-module:placeholder
-com.google.accompanist.placeholder
-module:placeholder-material
-com.google.accompanist.placeholder.material
-module:placeholder-material3
-com.google.accompanist.placeholder.material3
 module:systemuicontroller
 com.google.accompanist.systemuicontroller
 module:testharness
