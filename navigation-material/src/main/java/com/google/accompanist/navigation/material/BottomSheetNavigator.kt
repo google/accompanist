@@ -18,17 +18,15 @@ package com.google.accompanist.navigation.material
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.SwipeProgress
-import androidx.compose.material.SwipeableDefaults
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -74,36 +72,6 @@ public class BottomSheetNavigatorSheetState(internal val sheetState: ModalBottom
      */
     public val targetValue: ModalBottomSheetValue
         get() = sheetState.targetValue
-
-    /**
-     * @see ModalBottomSheetState.offset
-     */
-    @Deprecated(
-        message = "BottomSheetNavigatorSheetState#offset has been removed",
-        level = DeprecationLevel.ERROR
-    )
-    public val offset: State<Float>
-        get() = error("BottomSheetNavigatorSheetState#offset has been removed")
-
-    /**
-     * @see ModalBottomSheetState.direction
-     */
-    @Deprecated(
-        message = "BottomSheetNavigatorSheetState#direction has been removed",
-        level = DeprecationLevel.ERROR
-    )
-    public val direction: Float
-        get() = error("BottomSheetNavigatorSheetState#direction has been removed.")
-
-    /**
-     * @see ModalBottomSheetState.progress
-     */
-    @Deprecated(
-        message = "BottomSheetNavigatorSheetState#progress has been removed",
-        level = DeprecationLevel.ERROR
-    )
-    public val progress: SwipeProgress<ModalBottomSheetValue>
-        get() = error("BottomSheetNavigatorSheetState#progress has been removed")
 }
 
 /**
@@ -113,7 +81,7 @@ public class BottomSheetNavigatorSheetState(internal val sheetState: ModalBottom
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 public fun rememberBottomSheetNavigator(
-    animationSpec: AnimationSpec<Float> = SwipeableDefaults.AnimationSpec
+    animationSpec: AnimationSpec<Float> = tween()
 ): BottomSheetNavigator {
     val sheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden,
