@@ -18,7 +18,7 @@ package com.google.accompanist.navigation.material
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.core.AnimationSpec
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.SpringSpec
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
@@ -81,7 +81,7 @@ public class BottomSheetNavigatorSheetState(internal val sheetState: ModalBottom
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 public fun rememberBottomSheetNavigator(
-    animationSpec: AnimationSpec<Float> = tween()
+    animationSpec: AnimationSpec<Float> = SpringSpec<Float>()
 ): BottomSheetNavigator {
     val sheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden,
