@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
+
 package com.google.accompanist.insets.ui
 
 import androidx.compose.foundation.layout.PaddingValues
@@ -40,6 +42,13 @@ import androidx.compose.ui.unit.dp
  *
  * @sample com.google.accompanist.sample.insets.TopAppBar_Insets
  */
+@Deprecated(
+    """
+        accompanist/insets-ui has been deprecated.
+        This functionality has been upstreamed to Material.
+        For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+    """
+)
 @Composable
 public fun TopAppBar(
     title: @Composable () -> Unit,
@@ -66,6 +75,13 @@ public fun TopAppBar(
     }
 }
 
+@Deprecated(
+    """
+        accompanist/insets-ui has been deprecated.
+        This functionality has been upstreamed to Material.
+        For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+    """
+)
 @Composable
 public fun TopAppBarSurface(
     modifier: Modifier = Modifier,
@@ -83,6 +99,13 @@ public fun TopAppBarSurface(
     )
 }
 
+@Deprecated(
+    """
+        accompanist/insets-ui has been deprecated.
+        This functionality has been upstreamed to Material.
+        For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+    """
+)
 @Composable
 public fun TopAppBarContent(
     title: @Composable () -> Unit,

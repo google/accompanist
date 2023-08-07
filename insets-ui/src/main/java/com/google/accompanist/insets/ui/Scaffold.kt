@@ -104,6 +104,13 @@ public val LocalScaffoldPadding: ProvidableCompositionLocal<PaddingValues> =
  * you're using VerticalScroller, apply this modifier to the child of the scroller, and not on
  * the scroller itself.
  */
+@Deprecated(
+    """
+        accompanist/insets-ui has been deprecated.
+        This functionality has been upstreamed to Material.
+        For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+    """
+)
 @Composable
 public fun Scaffold(
     modifier: Modifier = Modifier,

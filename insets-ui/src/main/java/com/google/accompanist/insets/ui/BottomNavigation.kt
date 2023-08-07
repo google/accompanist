@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
+
 package com.google.accompanist.insets.ui
 
 import androidx.compose.foundation.layout.Arrangement
@@ -45,6 +47,13 @@ import androidx.compose.ui.unit.dp
  *
  * @sample com.google.accompanist.sample.insets.BottomNavigation_Insets
  */
+@Deprecated(
+    """
+        accompanist/insets-ui has been deprecated.
+        This functionality has been upstreamed to Material.
+        For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+    """
+)
 @Composable
 public fun BottomNavigation(
     modifier: Modifier = Modifier,
@@ -61,6 +70,13 @@ public fun BottomNavigation(
     }
 }
 
+@Deprecated(
+    """
+        accompanist/insets-ui has been deprecated.
+        This functionality has been upstreamed to Material.
+        For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+    """
+)
 @Composable
 public fun BottomNavigationSurface(
     modifier: Modifier = Modifier,
@@ -79,6 +95,13 @@ public fun BottomNavigationSurface(
     }
 }
 
+@Deprecated(
+    """
+        accompanist/insets-ui has been deprecated.
+        This functionality has been upstreamed to Material.
+        For more migration information, please visit https://google.github.io/accompanist/insets/#migration
+    """
+)
 @Composable
 public fun BottomNavigationContent(
     modifier: Modifier = Modifier,
