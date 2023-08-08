@@ -329,7 +329,7 @@ public sealed class WebContent {
         val historyUrl: String? = null
     ) : WebContent()
 
-    data class Post(
+    public data class Post(
         val url: String,
         val postData: ByteArray
     ) : WebContent() {
@@ -574,7 +574,7 @@ public class WebViewNavigator(private val coroutineScope: CoroutineScope) {
         }
     }
 
-    fun postUrl(
+    public fun postUrl(
         url: String,
         postData: ByteArray
     ) {
@@ -697,7 +697,7 @@ public fun rememberWebViewStateWithHTMLData(
  * @param postData The data to be posted to the WebView with the url
  */
 @Composable
-fun rememberWebViewState(
+public fun rememberWebViewState(
     url: String,
     postData: ByteArray
 ): WebViewState =
