@@ -171,6 +171,26 @@ class WebTest {
     }
 
     @Test
+    fun testPostUrlLoaded() {
+        lateinit var state: WebViewState
+
+        rule.setContent {
+            state = rememberWebViewState(
+                url = LINK_URL,
+                postData = "postData".toByteArray()
+            )
+            WebTestContent(
+                state,
+                idleResource
+            )
+        }
+
+        onWebView()
+            .withElement(findElement(Locator.ID, "content"))
+            .check(webMatches(getText(), containsString("Test content")))
+    }
+
+    @Test
     fun testStateUpdated() {
         lateinit var state: WebViewState
 

@@ -193,6 +193,13 @@ public fun WebView(
                         )
                     }
 
+                    is WebContent.Post -> {
+                        wv.postUrl(
+                            content.url,
+                            content.postData
+                        )
+                    }
+
                     is WebContent.NavigatorOnly -> {
                         // NO-OP
                     }
@@ -322,11 +329,35 @@ public sealed class WebContent {
         val historyUrl: String? = null
     ) : WebContent()
 
+    public data class Post(
+        val url: String,
+        val postData: ByteArray
+    ) : WebContent() {
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+
+            other as Post
+
+            if (url != other.url) return false
+            if (!postData.contentEquals(other.postData)) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            var result = url.hashCode()
+            result = 31 * result + postData.contentHashCode()
+            return result
+        }
+    }
+
     @Deprecated("Use state.lastLoadedUrl instead")
     public fun getCurrentUrl(): String? {
         return when (this) {
             is Url -> url
             is Data -> baseUrl
+            is Post -> url
             is NavigatorOnly -> throw IllegalStateException("Unsupported")
         }
     }
@@ -446,6 +477,29 @@ public class WebViewNavigator(private val coroutineScope: CoroutineScope) {
             val encoding: String? = "utf-8",
             val historyUrl: String? = null
         ) : NavigationEvent
+
+        data class PostUrl(
+            val url: String,
+            val postData: ByteArray
+        ) : NavigationEvent {
+            override fun equals(other: Any?): Boolean {
+                if (this === other) return true
+                if (javaClass != other?.javaClass) return false
+
+                other as PostUrl
+
+                if (url != other.url) return false
+                if (!postData.contentEquals(other.postData)) return false
+
+                return true
+            }
+
+            override fun hashCode(): Int {
+                var result = url.hashCode()
+                result = 31 * result + postData.contentHashCode()
+                return result
+            }
+        }
     }
 
     private val navigationEvents: MutableSharedFlow<NavigationEvent> = MutableSharedFlow(replay = 1)
@@ -468,6 +522,10 @@ public class WebViewNavigator(private val coroutineScope: CoroutineScope) {
 
                 is NavigationEvent.LoadUrl -> {
                     loadUrl(event.url, event.additionalHttpHeaders)
+                }
+
+                is NavigationEvent.PostUrl -> {
+                    postUrl(event.url, event.postData)
                 }
             }
         }
@@ -511,6 +569,20 @@ public class WebViewNavigator(private val coroutineScope: CoroutineScope) {
                     mimeType,
                     encoding,
                     historyUrl
+                )
+            )
+        }
+    }
+
+    public fun postUrl(
+        url: String,
+        postData: ByteArray
+    ) {
+        coroutineScope.launch {
+            navigationEvents.emit(
+                NavigationEvent.PostUrl(
+                    url,
+                    postData
                 )
             )
         }
@@ -615,6 +687,33 @@ public fun rememberWebViewStateWithHTMLData(
     }.apply {
         this.content = WebContent.Data(
             data, baseUrl, encoding, mimeType, historyUrl
+        )
+    }
+
+/**
+ * Creates a WebView state that is remembered across Compositions.
+ *
+ * @param url The url to load in the WebView
+ * @param postData The data to be posted to the WebView with the url
+ */
+@Composable
+public fun rememberWebViewState(
+    url: String,
+    postData: ByteArray
+): WebViewState =
+// Rather than using .apply {} here we will recreate the state, this prevents
+    // a recomposition loop when the webview updates the url itself.
+    remember {
+        WebViewState(
+            WebContent.Post(
+                url = url,
+                postData = postData
+            )
+        )
+    }.apply {
+        this.content = WebContent.Post(
+            url = url,
+            postData = postData
         )
     }
 
