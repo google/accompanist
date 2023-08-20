@@ -17,6 +17,7 @@
 package com.google.accompanist.navigation.material
 
 import android.annotation.SuppressLint
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material.ExperimentalMaterialApi
@@ -217,6 +218,10 @@ public class BottomSheetNavigator(
             LaunchedEffect(retainedEntry) {
                 sheetState.show()
             }
+        }
+
+        BackHandler(retainedEntry != null) {
+            state.popWithTransition(retainedEntry!!, false)
         }
 
         SheetContentHost(
