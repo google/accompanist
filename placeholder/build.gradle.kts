@@ -101,7 +101,6 @@ metalava {
 dependencies {
     implementation(libs.compose.foundation.foundation)
     implementation(libs.compose.ui.util)
-    implementation(libs.napier)
     implementation(libs.kotlin.coroutines.android)
 
     // ======================

@@ -109,7 +109,6 @@ dependencies {
     implementation(libs.compose.foundation.foundation)
     implementation(libs.androidx.core)
     testImplementation(libs.androidx.core)
-    implementation(libs.napier)
     implementation(libs.kotlin.coroutines.android)
 
     // ======================

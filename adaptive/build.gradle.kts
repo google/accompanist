@@ -97,8 +97,7 @@ dependencies {
     api(libs.compose.foundation.foundation)
     api(libs.compose.ui.ui)
     api(libs.androidx.window)
-
-    implementation(libs.napier)
+    
     implementation(libs.kotlin.coroutines.android)
     implementation(libs.compose.ui.util)
 

@@ -37,8 +37,6 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import io.github.aakira.napier.DebugAntilog
-import io.github.aakira.napier.Napier
 import kotlin.math.abs
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
@@ -149,9 +147,6 @@ public class PagerState(
         internal set(value) {
             if (value != _currentPage) {
                 _currentPage = value
-                if (DebugLog) {
-                    Napier.d(message = "Current page changed: $_currentPage")
-                }
             }
         }
 
@@ -379,11 +374,5 @@ public class PagerState(
                 )
             }
         )
-
-        init {
-            if (DebugLog) {
-                Napier.base(DebugAntilog(defaultTag = "Pager"))
-            }
-        }
     }
 }
