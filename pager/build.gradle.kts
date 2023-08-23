@@ -98,7 +98,6 @@ dependencies {
     api(libs.compose.foundation.foundation)
     api(libs.snapper)
 
-    implementation(libs.napier)
     implementation(libs.kotlin.coroutines.android)
 
     // ======================

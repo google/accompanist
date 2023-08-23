@@ -86,7 +86,7 @@ metalava {
 dependencies {
     implementation(libs.compose.material.material)
     api(project(":placeholder"))
-    implementation(libs.napier)
+
     implementation(libs.kotlin.coroutines.android)
 
     // ======================

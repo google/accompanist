@@ -93,7 +93,6 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.compose.foundation.foundation)
     implementation(libs.kotlin.coroutines.android)
-    implementation(libs.napier)
 
     lintChecks(project(":permissions-lint"))
     lintPublish(project(":permissions-lint"))
