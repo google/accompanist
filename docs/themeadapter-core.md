@@ -2,6 +2,16 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-themeadapter-core)](https://search.maven.org/search?q=g:com.google.accompanist)
 
+!!! warning
+**This library is deprecated, and the API is no longer maintained.** The original documentation is below.
+
+## Migration
+Recommendation: Use the [Material Theme Builder](https://m3.material.io/theme-builder) tool, or an alternative design tool, to generate a matching XML and Compose theme implementation for your app. See [Migrating XML themes to Compose](https://developer.android.com/jetpack/compose/designsystems/views-to-compose) to learn more.
+
+You can checkout [Material Design 3 in Compose](https://developer.android.com/jetpack/compose/designsystems/material3#material-theming) to learn more about creating and adding theme to your app using Material Theme Builder.
+
+## Original Documenation
+
 A library that includes common utilities that enable the reuse of XML themes, for theming in [Jetpack Compose][compose].
 
 See the [API][api] for more details.
