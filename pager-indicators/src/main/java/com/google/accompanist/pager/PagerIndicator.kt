@@ -136,6 +136,13 @@ public fun HorizontalPagerIndicator(
  * @param spacing the spacing between each indicator in [Dp].
  * @param indicatorShape the shape representing each indicator. This defaults to [CircleShape].
  */
+@Deprecated(
+    """
+   PagerIndicator for is deprecated, we recommend forking this implementation and
+   customising for your needs.
+For more migration information, please visit https://google.github.io/accompanist/pager/
+"""
+)
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 public fun HorizontalPagerIndicator(
@@ -330,6 +337,13 @@ public fun VerticalPagerIndicator(
  * @param spacing the spacing between each indicator in [Dp].
  * @param indicatorShape the shape representing each indicator. This defaults to [CircleShape].
  */
+@Deprecated(
+    """
+   PagerIndicator for is deprecated, we recommend forking this implementation and
+   customising for your needs.
+For more migration information, please visit https://google.github.io/accompanist/pager/
+"""
+)
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 public fun VerticalPagerIndicator(
