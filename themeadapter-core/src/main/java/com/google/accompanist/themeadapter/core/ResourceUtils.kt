@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
+
 package com.google.accompanist.themeadapter.core
 
 import android.annotation.SuppressLint
@@ -57,6 +59,12 @@ import kotlin.concurrent.getOrSet
  * @param fallbackColor Value to return if the attribute is not defined or can't be coerced to a
  * [Color].
  */
+@Deprecated(
+    """
+   ThemeAdapter is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/themeadapter-appcompat/
+"""
+)
 public fun TypedArray.parseColor(
     index: Int,
     fallbackColor: Color = Color.Unspecified
@@ -71,6 +79,12 @@ public fun TypedArray.parseColor(
  * @param setTextColors Whether to read and set text colors from the style. Defaults to `false`.
  * @param defaultFontFamily Optional default font family to use in [TextStyle]s.
  */
+@Deprecated(
+    """
+   ThemeAdapter is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/themeadapter-appcompat/
+"""
+)
 public fun parseTextAppearance(
     context: Context,
     @StyleRes id: Int,
@@ -165,6 +179,12 @@ public fun parseTextAppearance(
  *
  * @param index Index of attribute to retrieve.
  */
+@Deprecated(
+    """
+   ThemeAdapter is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/themeadapter-appcompat/
+"""
+)
 public fun TypedArray.parseFontFamily(index: Int): FontFamilyWithWeight? {
     val tv = tempTypedValue.getOrSet(::TypedValue)
     if (getValue(index, tv) && tv.type == TypedValue.TYPE_STRING) {
@@ -200,6 +220,12 @@ public fun TypedArray.parseFontFamily(index: Int): FontFamilyWithWeight? {
 /**
  * A lightweight class for storing a [FontFamily] and [FontWeight].
  */
+@Deprecated(
+    """
+   ThemeAdapter is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/themeadapter-appcompat/
+"""
+)
 public data class FontFamilyWithWeight(
     val fontFamily: FontFamily,
     val weight: FontWeight = FontWeight.Normal
@@ -211,6 +237,12 @@ public data class FontFamilyWithWeight(
  *
  * @param id ID of XML resource to retrieve.
  */
+@Deprecated(
+    """
+   ThemeAdapter is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/themeadapter-appcompat/
+"""
+)
 @SuppressLint("RestrictedApi") // FontResourcesParserCompat.*
 @RequiresApi(23)
 // XML font families with > 1 fonts are only supported on API 23+
@@ -260,6 +292,12 @@ private fun fontWeightOf(weight: Int): FontWeight = when (weight) {
  * @param fallbackTextUnit Value to return if the attribute is not defined or can't be coerced to a
  * [TextUnit].
  */
+@Deprecated(
+    """
+   ThemeAdapter is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/themeadapter-appcompat/
+"""
+)
 public fun TypedArray.parseTextUnit(
     index: Int,
     density: Density,
@@ -290,6 +328,12 @@ public fun TypedArray.parseTextUnit(
  * @param fallbackShape Value to return if the style resource ID is not defined or can't be coerced
  * to a [CornerBasedShape].
  */
+@Deprecated(
+    """
+   ThemeAdapter is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/themeadapter-appcompat/
+"""
+)
 public fun parseShapeAppearance(
     context: Context,
     @StyleRes id: Int,
@@ -350,6 +394,12 @@ public fun parseShapeAppearance(
  *
  * @param index Index of attribute to retrieve.
  */
+@Deprecated(
+    """
+   ThemeAdapter is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/themeadapter-appcompat/
+"""
+)
 public fun TypedArray.parseCornerSize(index: Int): CornerSize? {
     val tv = tempTypedValue.getOrSet { TypedValue() }
     if (getValue(index, tv)) {

@@ -15,6 +15,7 @@
  */
 
 @file:JvmName("MdcTheme")
+@file:Suppress("DEPRECATION")
 
 package com.google.accompanist.themeadapter.material
 
@@ -72,6 +73,12 @@ import java.lang.reflect.Method
  * @param setDefaultFontFamily whether to read and prioritize the `fontFamily` attributes from
  * [context]'s theme, over any specified in the MDC text appearances. Defaults to `false`.
  */
+@Deprecated(
+    """
+   Material ThemeAdapter is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/themeadapter-material/
+"""
+)
 @Composable
 public fun MdcTheme(
     context: Context = LocalContext.current,
@@ -123,6 +130,12 @@ public fun MdcTheme(
  * This class contains the individual components of a [MaterialTheme]: [Colors], [Typography]
  * and [Shapes].
  */
+@Deprecated(
+    """
+   Material ThemeAdapter is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/themeadapter-material/
+"""
+)
 public data class ThemeParameters(
     val colors: Colors?,
     val typography: Typography?,
@@ -159,6 +172,12 @@ public data class ThemeParameters(
  * @return [ThemeParameters] instance containing the resulting [Colors], [Typography]
  * and [Shapes].
  */
+@Deprecated(
+    """
+   Material ThemeAdapter is deprecated.
+For more migration information, please visit https://google.github.io/accompanist/themeadapter-material/
+"""
+)
 public fun createMdcTheme(
     context: Context,
     layoutDirection: LayoutDirection,
