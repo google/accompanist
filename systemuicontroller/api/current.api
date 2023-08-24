@@ -1,26 +1,26 @@
 // Signature format: 4.0
 package com.google.accompanist.systemuicontroller {
 
-  @androidx.compose.runtime.Stable public interface SystemUiController {
-    method public boolean getNavigationBarDarkContentEnabled();
-    method public boolean getStatusBarDarkContentEnabled();
-    method public int getSystemBarsBehavior();
-    method public default boolean getSystemBarsDarkContentEnabled();
-    method public boolean isNavigationBarContrastEnforced();
-    method public boolean isNavigationBarVisible();
-    method public boolean isStatusBarVisible();
-    method public default boolean isSystemBarsVisible();
-    method public void setNavigationBarColor(long color, optional boolean darkIcons, optional boolean navigationBarContrastEnforced, optional kotlin.jvm.functions.Function1<? super androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color> transformColorForLightContent);
-    method public void setNavigationBarContrastEnforced(boolean);
-    method public void setNavigationBarDarkContentEnabled(boolean);
-    method public void setNavigationBarVisible(boolean);
-    method public void setStatusBarColor(long color, optional boolean darkIcons, optional kotlin.jvm.functions.Function1<? super androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color> transformColorForLightContent);
-    method public void setStatusBarDarkContentEnabled(boolean);
-    method public void setStatusBarVisible(boolean);
-    method public void setSystemBarsBehavior(int);
-    method public default void setSystemBarsColor(long color, optional boolean darkIcons, optional boolean isNavigationBarContrastEnforced, optional kotlin.jvm.functions.Function1<? super androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color> transformColorForLightContent);
-    method public default void setSystemBarsDarkContentEnabled(boolean);
-    method public default void setSystemBarsVisible(boolean);
+  @Deprecated @androidx.compose.runtime.Stable public interface SystemUiController {
+    method @Deprecated public boolean getNavigationBarDarkContentEnabled();
+    method @Deprecated public boolean getStatusBarDarkContentEnabled();
+    method @Deprecated public int getSystemBarsBehavior();
+    method @Deprecated public default boolean getSystemBarsDarkContentEnabled();
+    method @Deprecated public boolean isNavigationBarContrastEnforced();
+    method @Deprecated public boolean isNavigationBarVisible();
+    method @Deprecated public boolean isStatusBarVisible();
+    method @Deprecated public default boolean isSystemBarsVisible();
+    method @Deprecated public void setNavigationBarColor(long color, optional boolean darkIcons, optional boolean navigationBarContrastEnforced, optional kotlin.jvm.functions.Function1<? super androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color> transformColorForLightContent);
+    method @Deprecated public void setNavigationBarContrastEnforced(boolean);
+    method @Deprecated public void setNavigationBarDarkContentEnabled(boolean);
+    method @Deprecated public void setNavigationBarVisible(boolean);
+    method @Deprecated public void setStatusBarColor(long color, optional boolean darkIcons, optional kotlin.jvm.functions.Function1<? super androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color> transformColorForLightContent);
+    method @Deprecated public void setStatusBarDarkContentEnabled(boolean);
+    method @Deprecated public void setStatusBarVisible(boolean);
+    method @Deprecated public void setSystemBarsBehavior(int);
+    method @Deprecated public default void setSystemBarsColor(long color, optional boolean darkIcons, optional boolean isNavigationBarContrastEnforced, optional kotlin.jvm.functions.Function1<? super androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color> transformColorForLightContent);
+    method @Deprecated public default void setSystemBarsDarkContentEnabled(boolean);
+    method @Deprecated public default void setSystemBarsVisible(boolean);
     property public abstract boolean isNavigationBarContrastEnforced;
     property public abstract boolean isNavigationBarVisible;
     property public abstract boolean isStatusBarVisible;
@@ -32,7 +32,7 @@ package com.google.accompanist.systemuicontroller {
   }
 
   public final class SystemUiControllerKt {
-    method @androidx.compose.runtime.Composable public static com.google.accompanist.systemuicontroller.SystemUiController rememberSystemUiController(optional android.view.Window? window);
+    method @Deprecated @androidx.compose.runtime.Composable public static com.google.accompanist.systemuicontroller.SystemUiController rememberSystemUiController(optional android.view.Window? window);
   }
 
 }
