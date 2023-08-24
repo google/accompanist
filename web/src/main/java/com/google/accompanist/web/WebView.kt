@@ -159,6 +159,13 @@ public fun WebView(
  * @param chromeClient Provides access to WebChromeClient via subclassing
  * @param factory An optional WebView factory for using a custom subclass of WebView
  */
+@Deprecated(
+    """
+accompanist/web is deprecated and the API is no longer maintained. 
+We recommend forking the implementation and customising it to your needs. 
+For more information please visit https://google.github.io/accompanist/web
+"""
+)
 @Composable
 public fun WebView(
     state: WebViewState,
@@ -254,6 +261,13 @@ public fun WebView(
  * As Accompanist Web needs to set its own web client to function, it provides this intermediary
  * class that can be overriden if further custom behaviour is required.
  */
+@Deprecated(
+    """
+accompanist/web is deprecated and the API is no longer maintained. 
+We recommend forking the implementation and customising it to your needs. 
+For more information please visit https://google.github.io/accompanist/web
+"""
+)
 public open class AccompanistWebViewClient : WebViewClient() {
     public open lateinit var state: WebViewState
         internal set
@@ -303,6 +317,13 @@ public open class AccompanistWebViewClient : WebViewClient() {
  * As Accompanist Web needs to set its own web client to function, it provides this intermediary
  * class that can be overriden if further custom behaviour is required.
  */
+@Deprecated(
+    """
+accompanist/web is deprecated and the API is no longer maintained. 
+We recommend forking the implementation and customising it to your needs. 
+For more information please visit https://google.github.io/accompanist/web
+"""
+)
 public open class AccompanistWebChromeClient : WebChromeClient() {
     public open lateinit var state: WebViewState
         internal set
@@ -324,6 +345,13 @@ public open class AccompanistWebChromeClient : WebChromeClient() {
     }
 }
 
+@Deprecated(
+    """
+accompanist/web is deprecated and the API is no longer maintained. 
+We recommend forking the implementation and customising it to your needs. 
+For more information please visit https://google.github.io/accompanist/web
+"""
+)
 public sealed class WebContent {
     public data class Url(
         val url: String,

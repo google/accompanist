@@ -1,21 +1,21 @@
 // Signature format: 4.0
 package com.google.accompanist.web {
 
-  public class AccompanistWebChromeClient extends android.webkit.WebChromeClient {
-    ctor public AccompanistWebChromeClient();
-    method public com.google.accompanist.web.WebViewState getState();
+  @Deprecated public class AccompanistWebChromeClient extends android.webkit.WebChromeClient {
+    ctor @Deprecated public AccompanistWebChromeClient();
+    method @Deprecated public com.google.accompanist.web.WebViewState getState();
     property public com.google.accompanist.web.WebViewState state;
-    field public com.google.accompanist.web.WebViewState state;
+    field @Deprecated public com.google.accompanist.web.WebViewState state;
   }
 
-  public class AccompanistWebViewClient extends android.webkit.WebViewClient {
-    ctor public AccompanistWebViewClient();
-    method public com.google.accompanist.web.WebViewNavigator getNavigator();
-    method public com.google.accompanist.web.WebViewState getState();
+  @Deprecated public class AccompanistWebViewClient extends android.webkit.WebViewClient {
+    ctor @Deprecated public AccompanistWebViewClient();
+    method @Deprecated public com.google.accompanist.web.WebViewNavigator getNavigator();
+    method @Deprecated public com.google.accompanist.web.WebViewState getState();
     property public com.google.accompanist.web.WebViewNavigator navigator;
     property public com.google.accompanist.web.WebViewState state;
-    field public com.google.accompanist.web.WebViewNavigator navigator;
-    field public com.google.accompanist.web.WebViewState state;
+    field @Deprecated public com.google.accompanist.web.WebViewNavigator navigator;
+    field @Deprecated public com.google.accompanist.web.WebViewState state;
   }
 
   @Deprecated public abstract sealed class LoadingState {
@@ -37,23 +37,23 @@ package com.google.accompanist.web {
     property public final float progress;
   }
 
-  public abstract sealed class WebContent {
+  @Deprecated public abstract sealed class WebContent {
     method @Deprecated public final String? getCurrentUrl();
   }
 
-  public static final class WebContent.Data extends com.google.accompanist.web.WebContent {
-    ctor public WebContent.Data(String data, optional String? baseUrl, optional String encoding, optional String? mimeType, optional String? historyUrl);
-    method public String component1();
-    method public String? component2();
-    method public String component3();
-    method public String? component4();
-    method public String? component5();
-    method public com.google.accompanist.web.WebContent.Data copy(String data, String? baseUrl, String encoding, String? mimeType, String? historyUrl);
-    method public String? getBaseUrl();
-    method public String getData();
-    method public String getEncoding();
-    method public String? getHistoryUrl();
-    method public String? getMimeType();
+  @Deprecated public static final class WebContent.Data extends com.google.accompanist.web.WebContent {
+    ctor @Deprecated public WebContent.Data(String data, optional String? baseUrl, optional String encoding, optional String? mimeType, optional String? historyUrl);
+    method @Deprecated public String component1();
+    method @Deprecated public String? component2();
+    method @Deprecated public String component3();
+    method @Deprecated public String? component4();
+    method @Deprecated public String? component5();
+    method @Deprecated public com.google.accompanist.web.WebContent.Data copy(String data, String? baseUrl, String encoding, String? mimeType, String? historyUrl);
+    method @Deprecated public String? getBaseUrl();
+    method @Deprecated public String getData();
+    method @Deprecated public String getEncoding();
+    method @Deprecated public String? getHistoryUrl();
+    method @Deprecated public String? getMimeType();
     property public final String? baseUrl;
     property public final String data;
     property public final String encoding;
@@ -61,28 +61,28 @@ package com.google.accompanist.web {
     property public final String? mimeType;
   }
 
-  public static final class WebContent.NavigatorOnly extends com.google.accompanist.web.WebContent {
-    field public static final com.google.accompanist.web.WebContent.NavigatorOnly INSTANCE;
+  @Deprecated public static final class WebContent.NavigatorOnly extends com.google.accompanist.web.WebContent {
+    field @Deprecated public static final com.google.accompanist.web.WebContent.NavigatorOnly INSTANCE;
   }
 
-  public static final class WebContent.Post extends com.google.accompanist.web.WebContent {
-    ctor public WebContent.Post(String url, byte[] postData);
-    method public String component1();
-    method public byte[] component2();
-    method public com.google.accompanist.web.WebContent.Post copy(String url, byte[] postData);
-    method public byte[] getPostData();
-    method public String getUrl();
+  @Deprecated public static final class WebContent.Post extends com.google.accompanist.web.WebContent {
+    ctor @Deprecated public WebContent.Post(String url, byte[] postData);
+    method @Deprecated public String component1();
+    method @Deprecated public byte[] component2();
+    method @Deprecated public com.google.accompanist.web.WebContent.Post copy(String url, byte[] postData);
+    method @Deprecated public byte[] getPostData();
+    method @Deprecated public String getUrl();
     property public final byte[] postData;
     property public final String url;
   }
 
-  public static final class WebContent.Url extends com.google.accompanist.web.WebContent {
-    ctor public WebContent.Url(String url, optional java.util.Map<java.lang.String,java.lang.String> additionalHttpHeaders);
-    method public String component1();
-    method public java.util.Map<java.lang.String,java.lang.String> component2();
-    method public com.google.accompanist.web.WebContent.Url copy(String url, java.util.Map<java.lang.String,java.lang.String> additionalHttpHeaders);
-    method public java.util.Map<java.lang.String,java.lang.String> getAdditionalHttpHeaders();
-    method public String getUrl();
+  @Deprecated public static final class WebContent.Url extends com.google.accompanist.web.WebContent {
+    ctor @Deprecated public WebContent.Url(String url, optional java.util.Map<java.lang.String,java.lang.String> additionalHttpHeaders);
+    method @Deprecated public String component1();
+    method @Deprecated public java.util.Map<java.lang.String,java.lang.String> component2();
+    method @Deprecated public com.google.accompanist.web.WebContent.Url copy(String url, java.util.Map<java.lang.String,java.lang.String> additionalHttpHeaders);
+    method @Deprecated public java.util.Map<java.lang.String,java.lang.String> getAdditionalHttpHeaders();
+    method @Deprecated public String getUrl();
     property public final java.util.Map<java.lang.String,java.lang.String> additionalHttpHeaders;
     property public final String url;
   }
@@ -100,7 +100,7 @@ package com.google.accompanist.web {
 
   public final class WebViewKt {
     method @Deprecated @androidx.compose.runtime.Composable public static void WebView(com.google.accompanist.web.WebViewState state, optional androidx.compose.ui.Modifier modifier, optional boolean captureBackPresses, optional com.google.accompanist.web.WebViewNavigator navigator, optional kotlin.jvm.functions.Function1<? super android.webkit.WebView,kotlin.Unit> onCreated, optional kotlin.jvm.functions.Function1<? super android.webkit.WebView,kotlin.Unit> onDispose, optional com.google.accompanist.web.AccompanistWebViewClient client, optional com.google.accompanist.web.AccompanistWebChromeClient chromeClient, optional kotlin.jvm.functions.Function1<? super android.content.Context,? extends android.webkit.WebView>? factory);
-    method @androidx.compose.runtime.Composable public static void WebView(com.google.accompanist.web.WebViewState state, android.widget.FrameLayout.LayoutParams layoutParams, optional androidx.compose.ui.Modifier modifier, optional boolean captureBackPresses, optional com.google.accompanist.web.WebViewNavigator navigator, optional kotlin.jvm.functions.Function1<? super android.webkit.WebView,kotlin.Unit> onCreated, optional kotlin.jvm.functions.Function1<? super android.webkit.WebView,kotlin.Unit> onDispose, optional com.google.accompanist.web.AccompanistWebViewClient client, optional com.google.accompanist.web.AccompanistWebChromeClient chromeClient, optional kotlin.jvm.functions.Function1<? super android.content.Context,? extends android.webkit.WebView>? factory);
+    method @Deprecated @androidx.compose.runtime.Composable public static void WebView(com.google.accompanist.web.WebViewState state, android.widget.FrameLayout.LayoutParams layoutParams, optional androidx.compose.ui.Modifier modifier, optional boolean captureBackPresses, optional com.google.accompanist.web.WebViewNavigator navigator, optional kotlin.jvm.functions.Function1<? super android.webkit.WebView,kotlin.Unit> onCreated, optional kotlin.jvm.functions.Function1<? super android.webkit.WebView,kotlin.Unit> onDispose, optional com.google.accompanist.web.AccompanistWebViewClient client, optional com.google.accompanist.web.AccompanistWebChromeClient chromeClient, optional kotlin.jvm.functions.Function1<? super android.content.Context,? extends android.webkit.WebView>? factory);
     method @Deprecated public static androidx.compose.runtime.saveable.Saver<com.google.accompanist.web.WebViewState,java.lang.Object> getWebStateSaver();
     method @Deprecated @androidx.compose.runtime.Composable public static com.google.accompanist.web.WebViewState rememberSaveableWebViewState();
     method @Deprecated @androidx.compose.runtime.Composable public static com.google.accompanist.web.WebViewNavigator rememberWebViewNavigator(optional kotlinx.coroutines.CoroutineScope coroutineScope);
