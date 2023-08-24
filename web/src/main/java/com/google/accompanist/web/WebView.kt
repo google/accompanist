@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
+
 package com.google.accompanist.web
 
 import android.content.Context
@@ -78,6 +80,13 @@ import kotlinx.coroutines.withContext
  * @param factory An optional WebView factory for using a custom subclass of WebView
  * @sample com.google.accompanist.sample.webview.BasicWebViewSample
  */
+@Deprecated(
+    """
+accompanist/web is deprecated and the API is no longer maintained. 
+We recommend forking the implementation and customising it to your needs. 
+For more information please visit https://google.github.io/accompanist/web
+"""
+)
 @Composable
 public fun WebView(
     state: WebViewState,
@@ -374,6 +383,13 @@ internal fun WebContent.withUrl(url: String) = when (this) {
  * Sealed class for constraining possible loading states.
  * See [Loading] and [Finished].
  */
+@Deprecated(
+    """
+accompanist/web is deprecated and the API is no longer maintained. 
+We recommend forking the implementation and customising it to your needs. 
+For more information please visit https://google.github.io/accompanist/web
+"""
+)
 public sealed class LoadingState {
     /**
      * Describes a WebView that has not yet loaded for the first time.
@@ -396,6 +412,13 @@ public sealed class LoadingState {
  * A state holder to hold the state for the WebView. In most cases this will be remembered
  * using the rememberWebViewState(uri) function.
  */
+@Deprecated(
+    """
+accompanist/web is deprecated and the API is no longer maintained. 
+We recommend forking the implementation and customising it to your needs. 
+For more information please visit https://google.github.io/accompanist/web
+"""
+)
 @Stable
 public class WebViewState(webContent: WebContent) {
     public var lastLoadedUrl: String? by mutableStateOf(null)
@@ -458,6 +481,13 @@ public class WebViewState(webContent: WebContent) {
  * @see [rememberWebViewNavigator]
  */
 @Stable
+@Deprecated(
+    """
+accompanist/web is deprecated and the API is no longer maintained. 
+We recommend forking the implementation and customising it to your needs. 
+For more information please visit https://google.github.io/accompanist/web
+"""
+)
 public class WebViewNavigator(private val coroutineScope: CoroutineScope) {
     private sealed interface NavigationEvent {
         object Back : NavigationEvent
@@ -622,6 +652,13 @@ public class WebViewNavigator(private val coroutineScope: CoroutineScope) {
  * override.
  */
 @Composable
+@Deprecated(
+    """
+accompanist/web is deprecated and the API is no longer maintained. 
+We recommend forking the implementation and customising it to your needs. 
+For more information please visit https://google.github.io/accompanist/web
+"""
+)
 public fun rememberWebViewNavigator(
     coroutineScope: CoroutineScope = rememberCoroutineScope()
 ): WebViewNavigator = remember(coroutineScope) { WebViewNavigator(coroutineScope) }
@@ -630,6 +667,13 @@ public fun rememberWebViewNavigator(
  * A wrapper class to hold errors from the WebView.
  */
 @Immutable
+@Deprecated(
+    """
+accompanist/web is deprecated and the API is no longer maintained. 
+We recommend forking the implementation and customising it to your needs. 
+For more information please visit https://google.github.io/accompanist/web
+"""
+)
 public data class WebViewError(
     /**
      * The request the error came from.
@@ -649,6 +693,13 @@ public data class WebViewError(
  *                              Note that these headers are used for all subsequent requests of the WebView.
  */
 @Composable
+@Deprecated(
+    """
+accompanist/web is deprecated and the API is no longer maintained. 
+We recommend forking the implementation and customising it to your needs. 
+For more information please visit https://google.github.io/accompanist/web
+"""
+)
 public fun rememberWebViewState(
     url: String,
     additionalHttpHeaders: Map<String, String> = emptyMap()
@@ -675,6 +726,13 @@ public fun rememberWebViewState(
  * @param data The uri to load in the WebView
  */
 @Composable
+@Deprecated(
+    """
+accompanist/web is deprecated and the API is no longer maintained. 
+We recommend forking the implementation and customising it to your needs. 
+For more information please visit https://google.github.io/accompanist/web
+"""
+)
 public fun rememberWebViewStateWithHTMLData(
     data: String,
     baseUrl: String? = null,
@@ -697,6 +755,13 @@ public fun rememberWebViewStateWithHTMLData(
  * @param postData The data to be posted to the WebView with the url
  */
 @Composable
+@Deprecated(
+    """
+accompanist/web is deprecated and the API is no longer maintained. 
+We recommend forking the implementation and customising it to your needs. 
+For more information please visit https://google.github.io/accompanist/web
+"""
+)
 public fun rememberWebViewState(
     url: String,
     postData: ByteArray
@@ -727,11 +792,25 @@ public fun rememberWebViewState(
  * @sample com.google.accompanist.sample.webview.WebViewSaveStateSample
  */
 @Composable
+@Deprecated(
+    """
+accompanist/web is deprecated and the API is no longer maintained. 
+We recommend forking the implementation and customising it to your needs. 
+For more information please visit https://google.github.io/accompanist/web
+"""
+)
 public fun rememberSaveableWebViewState(): WebViewState =
     rememberSaveable(saver = WebStateSaver) {
         WebViewState(WebContent.NavigatorOnly)
     }
 
+@Deprecated(
+    """
+accompanist/web is deprecated and the API is no longer maintained. 
+We recommend forking the implementation and customising it to your needs. 
+For more information please visit https://google.github.io/accompanist/web
+"""
+)
 public val WebStateSaver: Saver<WebViewState, Any> = run {
     val pageTitleKey = "pagetitle"
     val lastLoadedUrlKey = "lastloaded"
