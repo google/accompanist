@@ -47,7 +47,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 @Deprecated(
     """
 accompanist/systemuicontroller is deprecated and the API is no longer maintained. 
-We recommend going edge to edge using EdgeToEdge.enableEdgeToEdge in androidx.activity. 
+We recommend going edge to edge using Activity.enableEdgeToEdge in androidx.activity. 
 For more information please visit https://google.github.io/accompanist/systemuicontroller
 """
 )
