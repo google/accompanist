@@ -203,7 +203,7 @@ For a more complex example, see the [`EdgeToEdgeLazyColumn`](https://github.com/
 ## Inset-aware layouts (`insets-ui`)
 
 !!! warning
-    **This library is deprecated, with [official support](https://android-review.git.corp.google.com/c/platform/frameworks/support/+/2667875) in androidx.compose.material.** The original documentation is below.
+    **This library is deprecated, with [official support](https://android-review.googlesource.com/c/platform/frameworks/support/+/2667875) in androidx.compose.material.** The original documentation is below.
 
 Unfortunately, most of Compose Material's layouts do not support the use of content padding, which means that the following code probably doesn't produce the effect you want:
 

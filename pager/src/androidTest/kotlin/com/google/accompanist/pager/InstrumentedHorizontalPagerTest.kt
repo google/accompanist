@@ -28,7 +28,7 @@ import org.junit.runners.Parameterized
 /**
  * Version of [BaseHorizontalPagerTest] which is designed to be run on device/emulators.
  */
-@Ignore("https://buganizer.corp.google.com/issues/218668336") // To be fixed in alpha04
+@Ignore("https://issuetracker.google.com/issues/218668336") // To be fixed in alpha04
 @RunWith(Parameterized::class)
 class InstrumentedHorizontalPagerTest(
     itemWidthFraction: Float,
