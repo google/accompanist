@@ -40,18 +40,6 @@ For stable versions of Compose, we use the latest *stable* version of the Compos
 
 ## Libraries
 
-### 🍫 [System UI Controller](./systemuicontroller/)
-A library that provides easy-to-use utilities for recoloring the Android system bars from Jetpack Compose.
-
-### 🎨 [AppCompat Theme Adapter](./themeadapter-appcompat/)
-A library that enables the reuse of [AppCompat][appcompat] XML themes, for theming in Jetpack Compose.
-
-### 🎨 [Material Theme Adapter](./themeadapter-material/)
-A library that enables the reuse of [MDC-Android][mdc] Material 2 XML themes, for theming in Jetpack Compose.
-
-### 🎨 [Material 3 Theme Adapter](./themeadapter-material3/)
-A library that enables the reuse of [MDC-Android][mdc] Material 3 XML themes, for theming in Jetpack Compose.
-
 ### 📫 [Permissions](./permissions/)
 A library that provides [Android runtime permissions][runtimepermissions] support for Jetpack Compose.
 
@@ -60,9 +48,6 @@ A library which provides [Compose Material](https://developer.android.com/jetpac
 
 ### 🖌️ [Drawable Painter](./drawablepainter/)
 A library which provides a way to use Android Drawables as Jetpack Compose Painters.
-
-### 🌏 [Web](./web/)
-A wrapper around WebView for basic WebView support in Jetpack Compose.
 
 ### 📜 [Adaptive](./adaptive/)
 A library providing a collection of utilities for adaptive layouts.
@@ -87,6 +72,21 @@ See our [Migration Guide](https://google.github.io/accompanist/navigation-animat
 
 ### ⏳ [Placeholder](./placeholder/) (Deprecated)
 A library that provides easy-to-use modifiers for displaying a placeholder UI while content is loading.
+
+### 🍫 [System UI Controller](./systemuicontroller/) (Deprecated)
+A library that provides easy-to-use utilities for recoloring the Android system bars from Jetpack Compose.
+
+### 🎨 [AppCompat Theme Adapter](./themeadapter-appcompat/) (Deprecated)
+A library that enables the reuse of [AppCompat][appcompat] XML themes, for theming in Jetpack Compose.
+
+### 🎨 [Material Theme Adapter](./themeadapter-material/) (Deprecated)
+A library that enables the reuse of [MDC-Android][mdc] Material 2 XML themes, for theming in Jetpack Compose.
+
+### 🎨 [Material 3 Theme Adapter](./themeadapter-material3/) (Deprecated)
+A library that enables the reuse of [MDC-Android][mdc] Material 3 XML themes, for theming in Jetpack Compose.
+
+### 🌏 [Web](./web/) (Deprecated)
+A wrapper around WebView for basic WebView support in Jetpack Compose.
 
 ### 📐 [Insets](./insets/) (Deprecated & Removed)
 See our [Migration Guide](https://google.github.io/accompanist/insets/) for migrating to Insets in Compose.

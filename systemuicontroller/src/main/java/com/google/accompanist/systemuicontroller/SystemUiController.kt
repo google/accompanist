@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
+
 package com.google.accompanist.systemuicontroller
 
 import android.app.Activity
@@ -42,6 +44,13 @@ import androidx.core.view.WindowInsetsControllerCompat
  *
  * @sample com.google.accompanist.sample.systemuicontroller.SystemUiControllerSample
  */
+@Deprecated(
+    """
+accompanist/systemuicontroller is deprecated and the API is no longer maintained. 
+We recommend going edge to edge using Activity.enableEdgeToEdge in androidx.activity. 
+For more information please visit https://google.github.io/accompanist/systemuicontroller
+"""
+)
 @Stable
 public interface SystemUiController {
 
@@ -180,6 +189,13 @@ public interface SystemUiController {
  * If none of these are found (such as may happen in a preview), then the functionality of the
  * returned [SystemUiController] will be degraded, but won't throw an exception.
  */
+@Deprecated(
+    """
+accompanist/systemuicontroller is deprecated and the API is no longer maintained. 
+We recommend going edge to edge using EdgeToEdge.enableEdgeToEdge in androidx.activity. 
+For more information please visit https://google.github.io/accompanist/systemuicontroller
+"""
+)
 @Composable
 public fun rememberSystemUiController(
     window: Window? = findWindow(),

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
+
 package com.google.accompanist.themeadapter.material
 
 import androidx.appcompat.app.AppCompatActivity
