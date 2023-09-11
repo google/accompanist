@@ -74,7 +74,7 @@ See our [Migration Guide](https://google.github.io/accompanist/navigation-animat
 A library that provides easy-to-use modifiers for displaying a placeholder UI while content is loading.
 
 ### 🍫 [System UI Controller](./systemuicontroller/) (Deprecated)
-A library that provides easy-to-use utilities for recoloring the Android system bars from Jetpack Compose.
+We recommend migrating to edge to edge. See our [Migration Guide](https://google.github.io/accompanist/systemuicontroller/) for more details.
 
 ### 🎨 [AppCompat Theme Adapter](./themeadapter-appcompat/) (Deprecated)
 A library that enables the reuse of [AppCompat][appcompat] XML themes, for theming in Jetpack Compose.
