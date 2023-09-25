@@ -33,7 +33,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Face
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
@@ -67,7 +66,6 @@ class NavRailFoldAwareColumnSample : ComponentActivity() {
 @Composable
 fun NavRail(activity: Activity) {
     val icons = listOf(
-        Icons.Default.List,
         Icons.Default.Done,
         Icons.Default.Face,
         Icons.Default.Lock,
