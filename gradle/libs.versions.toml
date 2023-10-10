@@ -17,6 +17,7 @@ coroutines = "1.6.4"
 okhttp = "3.12.13"
 coil = "1.3.2"
 
+androidlint = "25.3.0"
 androidxtest = "1.4.0"
 androidxnavigation = "2.7.0-alpha01"
 androidxWindow = "1.0.0"
@@ -107,6 +108,7 @@ squareup-mockwebserver = "com.squareup.okhttp3:mockwebserver:4.9.3"
 android-application = { id = "com.android.application", version.ref = "gradlePlugin" }
 android-kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "gradlePlugin" }
+android-lint = { id = "com.android.lint", version.ref = "androidlint"}
 jetbrains-dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 gradle-metalava = { id = "me.tylerbwong.gradle.metalava", version.ref = "metalava" }
 vanniktech-maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "vanniktechPublish" }
