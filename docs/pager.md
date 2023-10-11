@@ -34,8 +34,8 @@ The following is a mapping of the pager classes from accompanist to androidx.com
 | `calculateCurrentOffsetForPage`      | Use `(pagerState.currentPage - page) + pagerState.currentPageOffsetFraction`                                                                        |
 | `PagerState#currentPageOffset`       | `PagerState#currentPageOffsetFraction`                                                                                                              |
 | `Modifier.pagerTabIndicatorOffset()` | Implement it yourself, or still include and use `accompanist-pager-indicators`, it now supports `androidx.compose.foundation.pager.PagerState`      |
-| `HorizontalPagerIndicator`           | Implement it yourself, or still include and use `accompanist-pager-indicators`, it now supports `androidx.compose.foundation.pager.HorizontalPager` by explicitly providing a `pageCount` param to the `HorizontalPagerIndicator` method |
-| `VerticalPagerIndicator`             | Implement it yourself, or still include and use `accompanist-pager-indicators`, it now supports `androidx.compose.foundation.pager.HorizontalPager` by explicitly providing a `pageCount` param to the `HorizontalPagerIndicator` method |
+| `HorizontalPagerIndicator`           | Implement it yourself, or fork `accompanist-pager-indicators` implementation |
+| `VerticalPagerIndicator`             | Implement it yourself, or fork `accompanist-pager-indicators` implementation |
 | `PagerDefaults.flingBehavior()`      | `androidx.compose.foundation.pager.PagerDefaults.flingBehavior()`                                                                                   |
 
 The biggest change is that `HorizontalPager` and `VerticalPager`'s number of pages is now called `pageCount` instead of `count`.
