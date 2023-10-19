@@ -3,7 +3,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-placeholder)](https://search.maven.org/search?q=g:com.google.accompanist)
 
 !!! warning
-**This library is deprecated, and the API is no longer maintained. We recommend forking the implementation and customising it to your needs.** The original documentation is below.
+    **This library is deprecated, and the API is no longer maintained. We recommend forking the implementation and customising it to your needs.** The original documentation is below.
 
 A library which provides a [modifier][modifier] for display 'placeholder' UI while content is loading.
 
