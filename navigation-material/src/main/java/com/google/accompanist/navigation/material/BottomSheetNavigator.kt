@@ -221,7 +221,7 @@ public class BottomSheetNavigator(
         }
 
         BackHandler(retainedEntry != null) {
-            state.popWithTransition(retainedEntry!!, false)
+            retainedEntry?.let { state.popWithTransition(it, false) }
         }
 
         SheetContentHost(
