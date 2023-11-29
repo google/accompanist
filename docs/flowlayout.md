@@ -3,7 +3,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-flowlayout)](https://search.maven.org/search?q=g:com.google.accompanist)
 
 !!! warning
-    **This library is deprecated, with official insets support in androidx.compose.foundation.** The migration guide and original documentation is below.
+    **This library is deprecated, with official FlowLayout support in androidx.compose.foundation.** The migration guide and original documentation is below.
 
 ## Migration Guide to the official FlowLayouts
 
