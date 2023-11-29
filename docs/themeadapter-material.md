@@ -3,7 +3,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-themeadapter-material)](https://search.maven.org/search?q=g:com.google.accompanist)
 
 !!! warning
-**This library is deprecated, and the API is no longer maintained.** The original documentation is below.
+    **This library is deprecated, and the API is no longer maintained.** The original documentation is below.
 
 ## Migration
 Recommendation: Use the [Material Theme Builder](https://m3.material.io/theme-builder) tool, or an alternative design tool, to generate a matching XML and Compose theme implementation for your app. See [Migrating XML themes to Compose](https://developer.android.com/jetpack/compose/designsystems/views-to-compose) to learn more.
@@ -58,9 +58,9 @@ MdcTheme {
 This is especially handy when you're migrating an existing app, a `Fragment` (or other UI container) at a time.
 
 !!! caution
-If you are using an AppCompat (i.e. non-MDC) theme in your app, you should use
-[AppCompat Theme Adapter](https://github.com/google/accompanist/tree/main/themeadapter-appcompat)
-instead, as it attempts to bridge the gap between [AppCompat][appcompat] XML themes, and M2 themes in [Jetpack Compose][compose].
+    If you are using an AppCompat (i.e. non-MDC) theme in your app, you should use
+    [AppCompat Theme Adapter](https://github.com/google/accompanist/tree/main/themeadapter-appcompat)
+    instead, as it attempts to bridge the gap between [AppCompat][appcompat] XML themes, and M2 themes in [Jetpack Compose][compose].
 
 ### Customizing the M2 theme
 

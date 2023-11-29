@@ -3,7 +3,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-systemuicontroller)](https://search.maven.org/search?q=g:com.google.accompanist)
 
 !!! warning
-**This library is deprecated, and the API is no longer maintained. We recommend forking the implementation and customising it to your needs.** The original documentation is below.
+    **This library is deprecated, and the API is no longer maintained. We recommend forking the implementation and customising it to your needs.** The original documentation is below.
 
 ## Migration
 Recommendation: If you were using SystemUIController to go edge-to-edge in your activity and change the system bar colors and system bar icon colors, use the new [Activity.enableEdgeToEdge](https://developer.android.com/reference/androidx/activity/ComponentActivity#(androidx.activity.ComponentActivity).enableEdgeToEdge(androidx.activity.SystemBarStyle,androidx.activity.SystemBarStyle)) method available in androidx.activity 1.8.0-alpha03 and later. This method backports the scrims used on some versions of Android. [This](https://github.com/android/nowinandroid/pull/817) is a sample PR of the migration to the new method and removing the dependency on SystemUIController in Now in Android.

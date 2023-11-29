@@ -5,7 +5,7 @@
 A library which provides a Jetpack Compose wrapper around Android's WebView.
 
 !!! warning
-**This library is deprecated, and the API is no longer maintained. We recommend forking the implementation and customising it to your needs.** The original documentation is below.
+    **This library is deprecated, and the API is no longer maintained. We recommend forking the implementation and customising it to your needs.** The original documentation is below.
 
 ## Usage
 
