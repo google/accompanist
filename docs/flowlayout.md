@@ -2,28 +2,12 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-flowlayout)](https://search.maven.org/search?q=g:com.google.accompanist)
 
-Flow Layouts in Accompanist is now deprecated. Please see the migration guide below to begin using 
-Flow Layouts in Androidx.
-
-The official `androidx.compose.foundation` FlowLayouts support is very similar to accompanist/flowlayouts, with a few changes.
-
-It is most similar to `Row` and `Column` and shares similar modifiers and the scopes. 
-Unlike the standard `Row` and `Column` composables, if it runs out of space on the current row, 
-the children are placed in the next line, and this repeats until the children are fully placed.
-
-## Usage
-  
-``` kotlin
-FlowRow {
-    // row contents
-}
-
-FlowColumn {
-    // column contents
-}
-```
+!!! warning
+    **This library is deprecated, with official FlowLayout support in androidx.compose.foundation.** The migration guide and original documentation is below.
 
 ## Migration Guide to the official FlowLayouts
+
+The official `androidx.compose.foundation` FlowLayouts support is very similar to accompanist/flowlayouts, with a few changes.
 
 1. Replace import packages to point to Androidx.Compose
 ``` kotlin
@@ -126,6 +110,24 @@ FlowRow(maxItemsInEachRow = 3) {
 For examples, refer to the [Flow Row samples](https://android.googlesource.com/platform/frameworks/support/+/refs/heads/androidx-main/compose/foundation/foundation-layout/samples/src/main/java/androidx/compose/foundation/layout/samples/FlowRowSample.kt) 
 and the [Flow Column samples](https://android.googlesource.com/platform/frameworks/support/+/refs/heads/androidx-main/compose/foundation/foundation-layout/samples/src/main/java/androidx/compose/foundation/layout/samples/FlowColumnSample.kt).
 
+## Original Docs
+
+It is most similar to `Row` and `Column` and shares similar modifiers and the scopes. 
+Unlike the standard `Row` and `Column` composables, if it runs out of space on the current row, 
+the children are placed in the next line, and this repeats until the children are fully placed.
+
+## Usage
+  
+``` kotlin
+FlowRow {
+    // row contents
+}
+
+FlowColumn {
+    // column contents
+}
+```
+
 ## Download
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-flowlayout)](https://search.maven.org/search?q=g:com.google.accompanist)
@@ -136,7 +138,7 @@ repositories {
 }
 
 dependencies {
-    implementation "androidx.compose.foundation:foundation:<compose-version>"
+    implementation "com.google.accompanist:accompanist-flowlayout:<version>"
 }
 ```
 
