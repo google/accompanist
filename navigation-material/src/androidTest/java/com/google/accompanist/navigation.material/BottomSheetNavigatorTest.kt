@@ -779,6 +779,71 @@ internal class BottomSheetNavigatorTest {
             .isEqualTo(firstSheetDestination)
     }
 
+    @Test
+    fun testBackPressWithNestedGraphBehind() {
+        lateinit var navigator: BottomSheetNavigator
+        lateinit var navController: NavHostController
+        lateinit var nestedNavController: NavHostController
+        lateinit var backDispatcher: OnBackPressedDispatcher
+        val homeDestination = "home"
+        val firstSheetDestination = "sheet1"
+        val firstNestedDestination = "nested1"
+        val secondNestedDestination = "nested2"
+
+        composeTestRule.setContent {
+            backDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher!!
+            navigator = rememberBottomSheetNavigator()
+            navController = rememberNavController(navigator)
+            ModalBottomSheetLayout(navigator) {
+                NavHost(navController, homeDestination) {
+                    composable(homeDestination) {
+                        nestedNavController = rememberNavController()
+                        NavHost(nestedNavController, "nested1") {
+                            composable(firstNestedDestination) { }
+                            composable(secondNestedDestination) { }
+                        }
+                    }
+                    bottomSheet(firstSheetDestination) {
+                        Text("SheetDestination")
+                    }
+                }
+            }
+        }
+
+        assertThat(navController.currentBackStackEntry?.destination?.route)
+            .isEqualTo(homeDestination)
+
+        composeTestRule.runOnUiThread {
+            nestedNavController.navigate(secondNestedDestination)
+        }
+        composeTestRule.waitForIdle()
+
+        assertThat(navController.currentBackStackEntry?.destination?.route)
+            .isEqualTo(homeDestination)
+        assertThat(nestedNavController.currentBackStackEntry?.destination?.route)
+            .isEqualTo(secondNestedDestination)
+
+        composeTestRule.runOnUiThread {
+            navController.navigate(firstSheetDestination)
+        }
+        composeTestRule.waitForIdle()
+
+        assertThat(navigator.sheetState.currentValue)
+            .isAnyOf(ModalBottomSheetValue.HalfExpanded, ModalBottomSheetValue.Expanded)
+
+        composeTestRule.runOnUiThread {
+            backDispatcher.onBackPressed()
+        }
+        composeTestRule.waitForIdle()
+
+        assertThat(navController.currentBackStackEntry?.destination?.route)
+            .isEqualTo(homeDestination)
+        assertThat(nestedNavController.currentBackStackEntry?.destination?.route)
+            .isEqualTo(secondNestedDestination)
+
+        assertThat(navigator.sheetState.currentValue).isEqualTo(ModalBottomSheetValue.Hidden)
+    }
+
     private fun BottomSheetNavigator.createFakeDestination() =
         BottomSheetNavigator.Destination(this) {
             Text("Fake Sheet Content")
