@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
+
 package com.google.accompanist.testharness
 
 import androidx.compose.ui.platform.LocalConfiguration

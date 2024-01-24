@@ -27,6 +27,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.test.DeviceConfigurationOverride
+import androidx.compose.ui.test.LayoutDirection
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertHeightIsAtLeast
 import androidx.compose.ui.test.assertLeftPositionInRootIsEqualTo
@@ -39,7 +41,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.height
 import androidx.compose.ui.unit.width
-import com.google.accompanist.testharness.TestHarness
 
 /**
  * Contains the [VerticalPager] tests. This class is extended
@@ -105,7 +106,9 @@ abstract class BaseVerticalPagerTest(
         userScrollEnabled: Boolean,
         onPageComposed: (Int) -> Unit
     ) {
-        TestHarness(layoutDirection = LayoutDirection.Ltr) {
+        DeviceConfigurationOverride(
+            DeviceConfigurationOverride.LayoutDirection(layoutDirection = LayoutDirection.Ltr)
+        ) {
             applierScope = rememberCoroutineScope()
 
             Box {

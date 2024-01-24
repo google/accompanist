@@ -1,6 +1,6 @@
 [versions]
 
-compose = "1.6.0"
+compose = "1.7.0-alpha01"
 composeCompiler = "1.5.8"
 composeMaterial3 = "1.0.1"
 composesnapshot = "-" # a single character = no snapshot
@@ -30,6 +30,7 @@ compose-ui-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 compose-ui-util = { module = "androidx.compose.ui:ui-util", version.ref = "compose" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
+compose-ui-test = { module = "androidx.compose.ui:ui-test", version.ref = "compose" }
 compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
 compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose" }
 compose-foundation-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }

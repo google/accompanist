@@ -70,6 +70,32 @@ import kotlin.math.floor
  * the [isScreenRound] will be left unchanged.
  */
 @Composable
+@Deprecated(
+    replaceWith = ReplaceWith(
+        "DeviceConfigurationOverride(DeviceConfigurationOverride.ForcedSize(size) " +
+            "then DeviceConfigurationOverride.DarkMode(darkMode) " +
+            "then DeviceConfigurationOverride.Locales(LocaleList(locales.toLanguageTags()))" +
+            "then DeviceConfigurationOverride.LayoutDirection(layoutDirection)" +
+            "then DeviceConfigurationOverride.FontScale(fontScale)" +
+            "then DeviceConfigurationOverride.FontWeightAdjustment(fontWeightAdjustment)" +
+            "then DeviceConfigurationOverride.RoundScreen(isScreenRound), " +
+            "content)",
+        "androidx.compose.ui.test.DeviceConfigurationOverride",
+        "androidx.compose.ui.test.ForcedSize",
+        "androidx.compose.ui.test.DarkMode",
+        "androidx.compose.ui.test.Locales",
+        "androidx.compose.ui.test.LayoutDirection",
+        "androidx.compose.ui.test.FontScale",
+        "androidx.compose.ui.test.FontWeightAdjustment",
+        "androidx.compose.ui.test.RoundScreen",
+        "androidx.compose.ui.test.then",
+        "androidx.compose.ui.text.intl.LocaleList",
+    ),
+    message = "TestHarness has been superceded by DeviceConfigurationOverride in ui-test. " +
+        "Each argument in TestHarness have been replaced with an individual " +
+        "DeviceConfigurationOverride, so the suggested replacement is likely unnecessarily " +
+        "adding overrides for anything that was previously using the default arguments."
+)
 public fun TestHarness(
     size: DpSize = DpSize.Unspecified,
     darkMode: Boolean = isSystemInDarkTheme(),
