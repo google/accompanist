@@ -110,6 +110,7 @@ dependencies {
     implementation(libs.androidx.core)
     testImplementation(libs.androidx.core)
     implementation(libs.kotlin.coroutines.android)
+    implementation(libs.compose.ui.test)
 
     // ======================
     // Test dependencies

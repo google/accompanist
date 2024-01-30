@@ -107,9 +107,6 @@ dependencies {
     androidTestImplementation(project(":internal-testutils"))
     testImplementation(project(":internal-testutils"))
 
-    androidTestImplementation(project(":testharness"))
-    testImplementation(project(":testharness"))
-
     androidTestImplementation(libs.junit)
     testImplementation(libs.junit)
 

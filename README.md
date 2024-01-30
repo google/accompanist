@@ -55,9 +55,6 @@ A library which provides a way to use Android Drawables as Jetpack Compose Paint
 ### 📜 [Adaptive](./adaptive/)
 A library providing a collection of utilities for adaptive layouts.
 
-### 🗜 [Test Harness](./testharness/)
-Utilities for testing Compose layouts.
-
 ### ⬇️ [Swipe to Refresh](./swiperefresh/) (Deprecated)
 See our [Migration Guide](https://google.github.io/accompanist/swiperefresh/) for migrating to PullRefresh in Compose Material.
 
@@ -90,6 +87,9 @@ A library that enables the reuse of [MDC-Android][mdc] Material 3 XML themes, fo
 
 ### 🌏 [Web](./web/) (Deprecated)
 A wrapper around WebView for basic WebView support in Jetpack Compose.
+
+### 🗜 [Test Harness](./testharness/) (Deprecated)
+Utilities for testing Compose layouts.
 
 ### 📐 [Insets](./insets/) (Deprecated & Removed)
 See our [Migration Guide](https://google.github.io/accompanist/insets/) for migrating to Insets in Compose.

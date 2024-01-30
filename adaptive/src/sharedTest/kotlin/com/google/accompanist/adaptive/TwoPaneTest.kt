@@ -19,6 +19,7 @@ package com.google.accompanist.adaptive
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
@@ -26,7 +27,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.test.DeviceConfigurationOverride
+import androidx.compose.ui.test.ForcedSize
+import androidx.compose.ui.test.LayoutDirection
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.then
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
@@ -42,7 +47,6 @@ import androidx.window.core.ExperimentalWindowApi
 import androidx.window.layout.DisplayFeature
 import androidx.window.layout.FoldingFeature
 import androidx.window.testing.layout.FoldingFeature
-import com.google.accompanist.testharness.TestHarness
 import com.google.common.truth.Truth.assertThat
 import org.junit.Rule
 import org.junit.Test
@@ -62,9 +66,9 @@ class TwoPaneTest {
         lateinit var secondCoordinates: LayoutCoordinates
 
         composeTestRule.setContent {
-            TestHarness(
-                size = DpSize(900.dp, 1200.dp),
-                layoutDirection = LayoutDirection.Ltr
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(900.dp, 1200.dp)) then
+                    DeviceConfigurationOverride.LayoutDirection(LayoutDirection.Ltr)
             ) {
                 density = LocalDensity.current
                 TwoPane(
@@ -88,6 +92,9 @@ class TwoPaneTest {
                         splitFraction = 1f / 3f
                     ),
                     modifier = Modifier
+                        // TODO: This should not be necessary, remove once
+                        //       https://issuetracker.google.com/issues/322354080 is fixed
+                        .requiredSize(900.dp, 1200.dp)
                         .onPlaced { twoPaneCoordinates = it }
                 )
             }
@@ -124,9 +131,9 @@ class TwoPaneTest {
         lateinit var secondCoordinates: LayoutCoordinates
 
         composeTestRule.setContent {
-            TestHarness(
-                size = DpSize(900.dp, 1200.dp),
-                layoutDirection = LayoutDirection.Rtl
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(900.dp, 1200.dp)) then
+                    DeviceConfigurationOverride.LayoutDirection(LayoutDirection.Rtl)
             ) {
                 density = LocalDensity.current
                 TwoPane(
@@ -150,6 +157,9 @@ class TwoPaneTest {
                         splitFraction = 1f / 3f
                     ),
                     modifier = Modifier
+                        // TODO: This should not be necessary, remove once
+                        //       https://issuetracker.google.com/issues/322354080 is fixed
+                        .requiredSize(900.dp, 1200.dp)
                         .onPlaced { twoPaneCoordinates = it }
                 )
             }
@@ -186,9 +196,9 @@ class TwoPaneTest {
         lateinit var secondCoordinates: LayoutCoordinates
 
         composeTestRule.setContent {
-            TestHarness(
-                size = DpSize(900.dp, 1200.dp),
-                layoutDirection = LayoutDirection.Ltr
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(900.dp, 1200.dp)) then
+                    DeviceConfigurationOverride.LayoutDirection(LayoutDirection.Ltr)
             ) {
                 density = LocalDensity.current
                 TwoPane(
@@ -213,6 +223,9 @@ class TwoPaneTest {
                         gapWidth = 64.dp
                     ),
                     modifier = Modifier
+                        // TODO: This should not be necessary, remove once
+                        //       https://issuetracker.google.com/issues/322354080 is fixed
+                        .requiredSize(900.dp, 1200.dp)
                         .onPlaced { twoPaneCoordinates = it }
                 )
             }
@@ -249,9 +262,9 @@ class TwoPaneTest {
         lateinit var secondCoordinates: LayoutCoordinates
 
         composeTestRule.setContent {
-            TestHarness(
-                size = DpSize(900.dp, 1200.dp),
-                layoutDirection = LayoutDirection.Rtl
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(900.dp, 1200.dp)) then
+                    DeviceConfigurationOverride.LayoutDirection(LayoutDirection.Rtl)
             ) {
                 density = LocalDensity.current
                 TwoPane(
@@ -276,6 +289,9 @@ class TwoPaneTest {
                         gapWidth = 64.dp
                     ),
                     modifier = Modifier
+                        // TODO: This should not be necessary, remove once
+                        //       https://issuetracker.google.com/issues/322354080 is fixed
+                        .requiredSize(900.dp, 1200.dp)
                         .onPlaced { twoPaneCoordinates = it }
                 )
             }
@@ -312,8 +328,8 @@ class TwoPaneTest {
         lateinit var secondCoordinates: LayoutCoordinates
 
         composeTestRule.setContent {
-            TestHarness(
-                size = DpSize(900.dp, 1200.dp)
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(900.dp, 1200.dp))
             ) {
                 density = LocalDensity.current
                 TwoPane(
@@ -337,6 +353,9 @@ class TwoPaneTest {
                         splitFraction = 1f / 3f
                     ),
                     modifier = Modifier
+                        // TODO: This should not be necessary, remove once
+                        //       https://issuetracker.google.com/issues/322354080 is fixed
+                        .requiredSize(900.dp, 1200.dp)
                         .onPlaced { twoPaneCoordinates = it }
                 )
             }
@@ -373,8 +392,8 @@ class TwoPaneTest {
         lateinit var secondCoordinates: LayoutCoordinates
 
         composeTestRule.setContent {
-            TestHarness(
-                size = DpSize(900.dp, 1200.dp),
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(900.dp, 1200.dp))
             ) {
                 density = LocalDensity.current
                 TwoPane(
@@ -399,6 +418,9 @@ class TwoPaneTest {
                         gapHeight = 64.dp
                     ),
                     modifier = Modifier
+                        // TODO: This should not be necessary, remove once
+                        //       https://issuetracker.google.com/issues/322354080 is fixed
+                        .requiredSize(900.dp, 1200.dp)
                         .onPlaced { twoPaneCoordinates = it }
                 )
             }
@@ -435,9 +457,9 @@ class TwoPaneTest {
         lateinit var secondCoordinates: LayoutCoordinates
 
         composeTestRule.setContent {
-            TestHarness(
-                size = DpSize(900.dp, 1200.dp),
-                layoutDirection = LayoutDirection.Ltr
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(900.dp, 1200.dp)) then
+                    DeviceConfigurationOverride.LayoutDirection(LayoutDirection.Ltr)
             ) {
                 density = LocalDensity.current
                 TwoPane(
@@ -462,6 +484,9 @@ class TwoPaneTest {
                         offsetFromStart = true,
                     ),
                     modifier = Modifier
+                        // TODO: This should not be necessary, remove once
+                        //       https://issuetracker.google.com/issues/322354080 is fixed
+                        .requiredSize(900.dp, 1200.dp)
                         .onPlaced { twoPaneCoordinates = it }
                 )
             }
@@ -498,9 +523,9 @@ class TwoPaneTest {
         lateinit var secondCoordinates: LayoutCoordinates
 
         composeTestRule.setContent {
-            TestHarness(
-                size = DpSize(900.dp, 1200.dp),
-                layoutDirection = LayoutDirection.Rtl
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(900.dp, 1200.dp)) then
+                    DeviceConfigurationOverride.LayoutDirection(LayoutDirection.Rtl)
             ) {
                 density = LocalDensity.current
                 TwoPane(
@@ -525,6 +550,9 @@ class TwoPaneTest {
                         offsetFromStart = true,
                     ),
                     modifier = Modifier
+                        // TODO: This should not be necessary, remove once
+                        //       https://issuetracker.google.com/issues/322354080 is fixed
+                        .requiredSize(900.dp, 1200.dp)
                         .onPlaced { twoPaneCoordinates = it }
                 )
             }
@@ -561,9 +589,9 @@ class TwoPaneTest {
         lateinit var secondCoordinates: LayoutCoordinates
 
         composeTestRule.setContent {
-            TestHarness(
-                size = DpSize(900.dp, 1200.dp),
-                layoutDirection = LayoutDirection.Ltr
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(900.dp, 1200.dp)) then
+                    DeviceConfigurationOverride.LayoutDirection(LayoutDirection.Ltr)
             ) {
                 density = LocalDensity.current
                 TwoPane(
@@ -589,6 +617,9 @@ class TwoPaneTest {
                         gapWidth = 64.dp
                     ),
                     modifier = Modifier
+                        // TODO: This should not be necessary, remove once
+                        //       https://issuetracker.google.com/issues/322354080 is fixed
+                        .requiredSize(900.dp, 1200.dp)
                         .onPlaced { twoPaneCoordinates = it }
                 )
             }
@@ -625,9 +656,9 @@ class TwoPaneTest {
         lateinit var secondCoordinates: LayoutCoordinates
 
         composeTestRule.setContent {
-            TestHarness(
-                size = DpSize(900.dp, 1200.dp),
-                layoutDirection = LayoutDirection.Rtl
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(900.dp, 1200.dp)) then
+                    DeviceConfigurationOverride.LayoutDirection(LayoutDirection.Rtl)
             ) {
                 density = LocalDensity.current
                 TwoPane(
@@ -653,6 +684,9 @@ class TwoPaneTest {
                         gapWidth = 64.dp
                     ),
                     modifier = Modifier
+                        // TODO: This should not be necessary, remove once
+                        //       https://issuetracker.google.com/issues/322354080 is fixed
+                        .requiredSize(900.dp, 1200.dp)
                         .onPlaced { twoPaneCoordinates = it }
                 )
             }
@@ -689,8 +723,8 @@ class TwoPaneTest {
         lateinit var secondCoordinates: LayoutCoordinates
 
         composeTestRule.setContent {
-            TestHarness(
-                size = DpSize(900.dp, 1200.dp)
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(900.dp, 1200.dp))
             ) {
                 density = LocalDensity.current
                 TwoPane(
@@ -715,6 +749,9 @@ class TwoPaneTest {
                         offsetFromTop = true
                     ),
                     modifier = Modifier
+                        // TODO: This should not be necessary, remove once
+                        //       https://issuetracker.google.com/issues/322354080 is fixed
+                        .requiredSize(900.dp, 1200.dp)
                         .onPlaced { twoPaneCoordinates = it }
                 )
             }
@@ -751,8 +788,8 @@ class TwoPaneTest {
         lateinit var secondCoordinates: LayoutCoordinates
 
         composeTestRule.setContent {
-            TestHarness(
-                size = DpSize(900.dp, 1200.dp)
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(900.dp, 1200.dp))
             ) {
                 density = LocalDensity.current
                 TwoPane(
@@ -778,6 +815,9 @@ class TwoPaneTest {
                         gapHeight = 64.dp
                     ),
                     modifier = Modifier
+                        // TODO: This should not be necessary, remove once
+                        //       https://issuetracker.google.com/issues/322354080 is fixed
+                        .requiredSize(900.dp, 1200.dp)
                         .onPlaced { twoPaneCoordinates = it }
                 )
             }
@@ -814,8 +854,8 @@ class TwoPaneTest {
         lateinit var secondCoordinates: LayoutCoordinates
 
         composeTestRule.setContent {
-            TestHarness(
-                size = DpSize(900.dp, 1200.dp)
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(900.dp, 1200.dp))
             ) {
                 density = LocalDensity.current
                 TwoPane(
@@ -840,6 +880,9 @@ class TwoPaneTest {
                         offsetFromTop = false
                     ),
                     modifier = Modifier
+                        // TODO: This should not be necessary, remove once
+                        //       https://issuetracker.google.com/issues/322354080 is fixed
+                        .requiredSize(900.dp, 1200.dp)
                         .onPlaced { twoPaneCoordinates = it }
                 )
             }
@@ -876,8 +919,8 @@ class TwoPaneTest {
         lateinit var secondCoordinates: LayoutCoordinates
 
         composeTestRule.setContent {
-            TestHarness(
-                size = DpSize(900.dp, 1200.dp)
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(900.dp, 1200.dp))
             ) {
                 density = LocalDensity.current
                 TwoPane(
@@ -903,6 +946,9 @@ class TwoPaneTest {
                         gapHeight = 64.dp
                     ),
                     modifier = Modifier
+                        // TODO: This should not be necessary, remove once
+                        //       https://issuetracker.google.com/issues/322354080 is fixed
+                        .requiredSize(900.dp, 1200.dp)
                         .onPlaced { twoPaneCoordinates = it }
                 )
             }
@@ -946,8 +992,8 @@ class TwoPaneTest {
         }
 
         composeTestRule.setContent {
-            TestHarness(
-                size = DpSize(900.dp, 1200.dp)
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(900.dp, 1200.dp))
             ) {
                 density = LocalDensity.current
                 TwoPane(
@@ -972,6 +1018,9 @@ class TwoPaneTest {
                     ),
                     displayFeatures = displayFeatures,
                     modifier = Modifier
+                        // TODO: This should not be necessary, remove once
+                        //       https://issuetracker.google.com/issues/322354080 is fixed
+                        .requiredSize(900.dp, 1200.dp)
                         .onPlaced { twoPaneCoordinates = it }
                 )
             }
@@ -1022,8 +1071,8 @@ class TwoPaneTest {
         }
 
         composeTestRule.setContent {
-            TestHarness(
-                size = DpSize(900.dp, 1200.dp)
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(900.dp, 1200.dp))
             ) {
                 density = LocalDensity.current
                 TwoPane(
@@ -1048,6 +1097,9 @@ class TwoPaneTest {
                     ),
                     displayFeatures = displayFeatures,
                     modifier = Modifier
+                        // TODO: This should not be necessary, remove once
+                        //       https://issuetracker.google.com/issues/322354080 is fixed
+                        .requiredSize(900.dp, 1200.dp)
                         .onPlaced { twoPaneCoordinates = it }
                 )
             }
@@ -1098,8 +1150,8 @@ class TwoPaneTest {
         }
 
         composeTestRule.setContent {
-            TestHarness(
-                size = DpSize(900.dp, 1200.dp)
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(900.dp, 1200.dp))
             ) {
                 density = LocalDensity.current
                 TwoPane(
@@ -1124,6 +1176,9 @@ class TwoPaneTest {
                     ),
                     displayFeatures = displayFeatures,
                     modifier = Modifier
+                        // TODO: This should not be necessary, remove once
+                        //       https://issuetracker.google.com/issues/322354080 is fixed
+                        .requiredSize(900.dp, 1200.dp)
                         .onPlaced { twoPaneCoordinates = it }
                 )
             }
@@ -1174,8 +1229,8 @@ class TwoPaneTest {
         }
 
         composeTestRule.setContent {
-            TestHarness(
-                size = DpSize(900.dp, 1200.dp)
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(900.dp, 1200.dp))
             ) {
                 density = LocalDensity.current
                 TwoPane(
@@ -1200,6 +1255,9 @@ class TwoPaneTest {
                     ),
                     displayFeatures = displayFeatures,
                     modifier = Modifier
+                        // TODO: This should not be necessary, remove once
+                        //       https://issuetracker.google.com/issues/322354080 is fixed
+                        .requiredSize(900.dp, 1200.dp)
                         .onPlaced { twoPaneCoordinates = it }
                 )
             }
@@ -1250,8 +1308,8 @@ class TwoPaneTest {
         }
 
         composeTestRule.setContent {
-            TestHarness(
-                size = DpSize(900.dp, 1200.dp)
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(900.dp, 1200.dp))
             ) {
                 density = LocalDensity.current
                 TwoPane(
@@ -1276,6 +1334,9 @@ class TwoPaneTest {
                     ),
                     displayFeatures = displayFeatures,
                     modifier = Modifier
+                        // TODO: This should not be necessary, remove once
+                        //       https://issuetracker.google.com/issues/322354080 is fixed
+                        .requiredSize(900.dp, 1200.dp)
                         .onPlaced { twoPaneCoordinates = it }
                 )
             }
@@ -1326,8 +1387,8 @@ class TwoPaneTest {
         }
 
         composeTestRule.setContent {
-            TestHarness(
-                size = DpSize(900.dp, 1200.dp)
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(900.dp, 1200.dp))
             ) {
                 density = LocalDensity.current
                 TwoPane(
@@ -1352,6 +1413,9 @@ class TwoPaneTest {
                     ),
                     displayFeatures = displayFeatures,
                     modifier = Modifier
+                        // TODO: This should not be necessary, remove once
+                        //       https://issuetracker.google.com/issues/322354080 is fixed
+                        .requiredSize(900.dp, 1200.dp)
                         .onPlaced { twoPaneCoordinates = it }
                 )
             }
@@ -1402,8 +1466,8 @@ class TwoPaneTest {
         }
 
         composeTestRule.setContent {
-            TestHarness(
-                size = DpSize(900.dp, 1200.dp)
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(900.dp, 1200.dp))
             ) {
                 density = LocalDensity.current
 
@@ -1429,6 +1493,9 @@ class TwoPaneTest {
                     ),
                     displayFeatures = displayFeatures,
                     modifier = Modifier
+                        // TODO: This should not be necessary, remove once
+                        //       https://issuetracker.google.com/issues/322354080 is fixed
+                        .requiredSize(900.dp, 1200.dp)
                         .onPlaced { twoPaneCoordinates = it }
                 )
             }

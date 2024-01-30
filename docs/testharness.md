@@ -2,6 +2,40 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-testharness)](https://search.maven.org/search?q=g:com.google.accompanist)
 
+!!! warning
+**This library is deprecated, with a superseding version in androidx.compose.ui.test. The migration guide and original documentation is below.
+
+## Migration
+
+`DeviceConfigurationOverride` from `ui-test` is the replacement for `TestHarness`.
+
+The top-level [`@Composable DeviceConfigurationOverride`](https://developer.android.com/reference/kotlin/androidx/compose/ui/test/package-summary#DeviceConfigurationOverride(androidx.compose.ui.test.DeviceConfigurationOverride,kotlin.Function0))
+provides the same structure as `TestHarness`, applying overrides to a piece of `content` under test.
+
+Instead of all of the overrides appearing as parameters to `TestHarness`, the
+`DeviceConfigurationOverride` top-level function takes a particular implementation of the
+[`fun interface DeviceConfigurationOverride`](https://developer.android.com/reference/kotlin/androidx/compose/ui/test/DeviceConfigurationOverride).
+
+The [built-in `DeviceConfigurationOverride`s](https://developer.android.com/reference/kotlin/androidx/compose/ui/test/DeviceConfigurationOverride.Companion)
+are available as extension methods on the companion object of `DeviceConfigurationOverride`, and
+the built-in overrides cover all of the parameters of `TestHarness`.
+
+Multiple `DeviceConfigurationOverride`s can be combined with [then](https://developer.android.com/reference/kotlin/androidx/compose/ui/test/package-summary#(androidx.compose.ui.test.DeviceConfigurationOverride).then(androidx.compose.ui.test.DeviceConfigurationOverride))
+
+## Migration steps:
+
+1. Replace `TestHarness()` with `DeviceConfigurationOverride()` (a deprecation replacement is
+   available)
+1. Remove the override for any argument that was previously using a default value.
+   Because the overrides have been split into independent overrides, the "default" behavior can
+   be achieved by not specifying that override.
+
+   Example: If you want to keep the current dark mode setting and not override it, instead of
+   querying for and specifying the current dark mode theme to apply in an override, don't apply the
+   `DeviceConfigurationOverride.DarkMode` override.
+
+## Original docs
+
 A library providing a test harness for UI components.
 
 ## Background
