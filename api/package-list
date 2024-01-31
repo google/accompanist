@@ -16,5 +16,3 @@ com.google.accompanist.permissions
 module:permissions-lint
 com.google.accompanist.permissions.lint
 com.google.accompanist.permissions.lint.util
-module:testharness
-com.google.accompanist.testharness

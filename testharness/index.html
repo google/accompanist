@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.5">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.6">
     
     
       
@@ -1817,6 +1817,33 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Migration
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Migration steps:
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#original-docs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Original docs
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#background" class="md-nav__link">
     <span class="md-ellipsis">
       Background
@@ -2039,6 +2066,33 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Migration
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Migration steps:
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#original-docs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Original docs
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#background" class="md-nav__link">
     <span class="md-ellipsis">
       Background
@@ -2112,6 +2166,33 @@
 
 <h1 id="test-harness-for-jetpack-compose">Test Harness for Jetpack Compose<a class="headerlink" href="#test-harness-for-jetpack-compose" title="Permanent link">&para;</a></h1>
 <p><a href="https://search.maven.org/search?q=g:com.google.accompanist"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-testharness" /></a></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+</div>
+<p>**This library is deprecated, with a superseding version in androidx.compose.ui.test. The migration guide and original documentation is below.</p>
+<h2 id="migration">Migration<a class="headerlink" href="#migration" title="Permanent link">&para;</a></h2>
+<p><code>DeviceConfigurationOverride</code> from <code>ui-test</code> is the replacement for <code>TestHarness</code>.</p>
+<p>The top-level <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/test/package-summary#DeviceConfigurationOverride(androidx.compose.ui.test.DeviceConfigurationOverride,kotlin.Function0)"><code>@Composable DeviceConfigurationOverride</code></a>
+provides the same structure as <code>TestHarness</code>, applying overrides to a piece of <code>content</code> under test.</p>
+<p>Instead of all of the overrides appearing as parameters to <code>TestHarness</code>, the
+<code>DeviceConfigurationOverride</code> top-level function takes a particular implementation of the
+<a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/test/DeviceConfigurationOverride"><code>fun interface DeviceConfigurationOverride</code></a>.</p>
+<p>The <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/test/DeviceConfigurationOverride.Companion">built-in <code>DeviceConfigurationOverride</code>s</a>
+are available as extension methods on the companion object of <code>DeviceConfigurationOverride</code>, and
+the built-in overrides cover all of the parameters of <code>TestHarness</code>.</p>
+<p>Multiple <code>DeviceConfigurationOverride</code>s can be combined with <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/test/package-summary#(androidx.compose.ui.test.DeviceConfigurationOverride).then(androidx.compose.ui.test.DeviceConfigurationOverride)">then</a></p>
+<h2 id="migration-steps">Migration steps:<a class="headerlink" href="#migration-steps" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Replace <code>TestHarness()</code> with <code>DeviceConfigurationOverride()</code> (a deprecation replacement is
+   available)</li>
+<li>Remove the override for any argument that was previously using a default value.
+   Because the overrides have been split into independent overrides, the "default" behavior can
+   be achieved by not specifying that override.</li>
+</ol>
+<p>Example: If you want to keep the current dark mode setting and not override it, instead of
+   querying for and specifying the current dark mode theme to apply in an override, don't apply the
+   <code>DeviceConfigurationOverride.DarkMode</code> override.</p>
+<h2 id="original-docs">Original docs<a class="headerlink" href="#original-docs" title="Permanent link">&para;</a></h2>
 <p>A library providing a test harness for UI components.</p>
 <h2 id="background">Background<a class="headerlink" href="#background" title="Permanent link">&para;</a></h2>
 <p>Device configuration (locale, font size, screen size, folding features, etc.) are device-wide
@@ -2312,7 +2393,7 @@ not fully supported by layoutlib. In particular, alternate resources are availab
     <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.c18c5fb9.min.js"></script>
+      <script src="../assets/javascripts/bundle.e1c3ead8.min.js"></script>
       
     
   </body>
