@@ -182,13 +182,13 @@ public class BottomSheetNavigator(
                 }
         }
 
-        if (retainedEntry != null) {
-            LaunchedEffect(retainedEntry) {
+        retainedEntry?.let {
+            LaunchedEffect(it) {
                 sheetState.show()
             }
 
             BackHandler {
-                state.popWithTransition(popUpTo = retainedEntry!!, saveState = false)
+                state.popWithTransition(popUpTo = it, saveState = false)
             }
         }
 
