@@ -3,7 +3,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-testharness)](https://search.maven.org/search?q=g:com.google.accompanist)
 
 !!! warning
-**This library is deprecated, with a superseding version in androidx.compose.ui.test. The migration guide and original documentation is below.
+    **This library is deprecated, with a superseding version in androidx.compose.ui.test**. The migration guide and original documentation is below.
 
 ## Migration
 
