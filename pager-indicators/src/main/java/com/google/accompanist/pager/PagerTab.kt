@@ -60,13 +60,6 @@ public fun Modifier.pagerTabIndicatorOffset(
  * [androidx.compose.foundation.pager.VerticalPager].
  */
 @OptIn(ExperimentalFoundationApi::class)
-@Deprecated(
-    """
-   pagerTabIndicatorOffset for accompanist Pagers are deprecated, please use the version that takes 
-   androidx.compose.foundation.pager.PagerState instead
-For more migration information, please visit https://google.github.io/accompanist/pager/#migration
-"""
-)
 public fun Modifier.pagerTabIndicatorOffset(
     pagerState: androidx.compose.foundation.pager.PagerState,
     tabPositions: List<TabPosition>,
