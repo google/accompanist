@@ -33,7 +33,7 @@ The following is a mapping of the pager classes from accompanist to androidx.com
 | `PagerState#pageCount`               | Use `canScrollForward` or `canScrollBackward`                                                                                                       |
 | `calculateCurrentOffsetForPage`      | Use `(pagerState.currentPage - page) + pagerState.currentPageOffsetFraction`                                                                        |
 | `PagerState#currentPageOffset`       | `PagerState#currentPageOffsetFraction`                                                                                                              |
-| `Modifier.pagerTabIndicatorOffset()` | Implement it yourself, or still include and use `accompanist-pager-indicators`, it now supports `androidx.compose.foundation.pager.PagerState`      |
+| `Modifier.pagerTabIndicatorOffset()` | Implement it yourself, or fork `accompanist-pager-indicators` implementation |
 | `HorizontalPagerIndicator`           | Implement it yourself, or fork `accompanist-pager-indicators` implementation |
 | `VerticalPagerIndicator`             | Implement it yourself, or fork `accompanist-pager-indicators` implementation |
 | `PagerDefaults.flingBehavior()`      | `androidx.compose.foundation.pager.PagerDefaults.flingBehavior()`                                                                                   |
