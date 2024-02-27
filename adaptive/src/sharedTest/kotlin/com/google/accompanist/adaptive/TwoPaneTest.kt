@@ -19,7 +19,6 @@ package com.google.accompanist.adaptive
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
@@ -91,11 +90,7 @@ class TwoPaneTest {
                     strategy = FractionHorizontalTwoPaneStrategy(
                         splitFraction = 1f / 3f
                     ),
-                    modifier = Modifier
-                        // TODO: This should not be necessary, remove once
-                        //       https://issuetracker.google.com/issues/322354080 is fixed
-                        .requiredSize(900.dp, 1200.dp)
-                        .onPlaced { twoPaneCoordinates = it }
+                    modifier = Modifier.onPlaced { twoPaneCoordinates = it }
                 )
             }
         }
@@ -156,11 +151,7 @@ class TwoPaneTest {
                     strategy = FractionHorizontalTwoPaneStrategy(
                         splitFraction = 1f / 3f
                     ),
-                    modifier = Modifier
-                        // TODO: This should not be necessary, remove once
-                        //       https://issuetracker.google.com/issues/322354080 is fixed
-                        .requiredSize(900.dp, 1200.dp)
-                        .onPlaced { twoPaneCoordinates = it }
+                    modifier = Modifier.onPlaced { twoPaneCoordinates = it }
                 )
             }
         }
@@ -222,11 +213,7 @@ class TwoPaneTest {
                         splitFraction = 1f / 3f,
                         gapWidth = 64.dp
                     ),
-                    modifier = Modifier
-                        // TODO: This should not be necessary, remove once
-                        //       https://issuetracker.google.com/issues/322354080 is fixed
-                        .requiredSize(900.dp, 1200.dp)
-                        .onPlaced { twoPaneCoordinates = it }
+                    modifier = Modifier.onPlaced { twoPaneCoordinates = it }
                 )
             }
         }
@@ -288,11 +275,7 @@ class TwoPaneTest {
                         splitFraction = 1f / 3f,
                         gapWidth = 64.dp
                     ),
-                    modifier = Modifier
-                        // TODO: This should not be necessary, remove once
-                        //       https://issuetracker.google.com/issues/322354080 is fixed
-                        .requiredSize(900.dp, 1200.dp)
-                        .onPlaced { twoPaneCoordinates = it }
+                    modifier = Modifier.onPlaced { twoPaneCoordinates = it }
                 )
             }
         }
@@ -352,11 +335,7 @@ class TwoPaneTest {
                     strategy = FractionVerticalTwoPaneStrategy(
                         splitFraction = 1f / 3f
                     ),
-                    modifier = Modifier
-                        // TODO: This should not be necessary, remove once
-                        //       https://issuetracker.google.com/issues/322354080 is fixed
-                        .requiredSize(900.dp, 1200.dp)
-                        .onPlaced { twoPaneCoordinates = it }
+                    modifier = Modifier.onPlaced { twoPaneCoordinates = it }
                 )
             }
         }
@@ -417,11 +396,7 @@ class TwoPaneTest {
                         splitFraction = 1f / 3f,
                         gapHeight = 64.dp
                     ),
-                    modifier = Modifier
-                        // TODO: This should not be necessary, remove once
-                        //       https://issuetracker.google.com/issues/322354080 is fixed
-                        .requiredSize(900.dp, 1200.dp)
-                        .onPlaced { twoPaneCoordinates = it }
+                    modifier = Modifier.onPlaced { twoPaneCoordinates = it }
                 )
             }
         }
@@ -483,11 +458,7 @@ class TwoPaneTest {
                         splitOffset = 200.dp,
                         offsetFromStart = true,
                     ),
-                    modifier = Modifier
-                        // TODO: This should not be necessary, remove once
-                        //       https://issuetracker.google.com/issues/322354080 is fixed
-                        .requiredSize(900.dp, 1200.dp)
-                        .onPlaced { twoPaneCoordinates = it }
+                    modifier = Modifier.onPlaced { twoPaneCoordinates = it }
                 )
             }
         }
@@ -549,11 +520,7 @@ class TwoPaneTest {
                         splitOffset = 200.dp,
                         offsetFromStart = true,
                     ),
-                    modifier = Modifier
-                        // TODO: This should not be necessary, remove once
-                        //       https://issuetracker.google.com/issues/322354080 is fixed
-                        .requiredSize(900.dp, 1200.dp)
-                        .onPlaced { twoPaneCoordinates = it }
+                    modifier = Modifier.onPlaced { twoPaneCoordinates = it }
                 )
             }
         }
@@ -616,11 +583,7 @@ class TwoPaneTest {
                         offsetFromStart = true,
                         gapWidth = 64.dp
                     ),
-                    modifier = Modifier
-                        // TODO: This should not be necessary, remove once
-                        //       https://issuetracker.google.com/issues/322354080 is fixed
-                        .requiredSize(900.dp, 1200.dp)
-                        .onPlaced { twoPaneCoordinates = it }
+                    modifier = Modifier.onPlaced { twoPaneCoordinates = it }
                 )
             }
         }
@@ -683,11 +646,7 @@ class TwoPaneTest {
                         offsetFromStart = true,
                         gapWidth = 64.dp
                     ),
-                    modifier = Modifier
-                        // TODO: This should not be necessary, remove once
-                        //       https://issuetracker.google.com/issues/322354080 is fixed
-                        .requiredSize(900.dp, 1200.dp)
-                        .onPlaced { twoPaneCoordinates = it }
+                    modifier = Modifier.onPlaced { twoPaneCoordinates = it }
                 )
             }
         }
@@ -748,11 +707,7 @@ class TwoPaneTest {
                         splitOffset = 300.dp,
                         offsetFromTop = true
                     ),
-                    modifier = Modifier
-                        // TODO: This should not be necessary, remove once
-                        //       https://issuetracker.google.com/issues/322354080 is fixed
-                        .requiredSize(900.dp, 1200.dp)
-                        .onPlaced { twoPaneCoordinates = it }
+                    modifier = Modifier.onPlaced { twoPaneCoordinates = it }
                 )
             }
         }
@@ -814,11 +769,7 @@ class TwoPaneTest {
                         offsetFromTop = true,
                         gapHeight = 64.dp
                     ),
-                    modifier = Modifier
-                        // TODO: This should not be necessary, remove once
-                        //       https://issuetracker.google.com/issues/322354080 is fixed
-                        .requiredSize(900.dp, 1200.dp)
-                        .onPlaced { twoPaneCoordinates = it }
+                    modifier = Modifier.onPlaced { twoPaneCoordinates = it }
                 )
             }
         }
@@ -879,11 +830,7 @@ class TwoPaneTest {
                         splitOffset = 300.dp,
                         offsetFromTop = false
                     ),
-                    modifier = Modifier
-                        // TODO: This should not be necessary, remove once
-                        //       https://issuetracker.google.com/issues/322354080 is fixed
-                        .requiredSize(900.dp, 1200.dp)
-                        .onPlaced { twoPaneCoordinates = it }
+                    modifier = Modifier.onPlaced { twoPaneCoordinates = it }
                 )
             }
         }
@@ -945,11 +892,7 @@ class TwoPaneTest {
                         offsetFromTop = false,
                         gapHeight = 64.dp
                     ),
-                    modifier = Modifier
-                        // TODO: This should not be necessary, remove once
-                        //       https://issuetracker.google.com/issues/322354080 is fixed
-                        .requiredSize(900.dp, 1200.dp)
-                        .onPlaced { twoPaneCoordinates = it }
+                    modifier = Modifier.onPlaced { twoPaneCoordinates = it }
                 )
             }
         }
@@ -1017,11 +960,7 @@ class TwoPaneTest {
                         splitFraction = 1f / 3f
                     ),
                     displayFeatures = displayFeatures,
-                    modifier = Modifier
-                        // TODO: This should not be necessary, remove once
-                        //       https://issuetracker.google.com/issues/322354080 is fixed
-                        .requiredSize(900.dp, 1200.dp)
-                        .onPlaced { twoPaneCoordinates = it }
+                    modifier = Modifier.onPlaced { twoPaneCoordinates = it }
                 )
             }
         }
@@ -1096,11 +1035,7 @@ class TwoPaneTest {
                         splitFraction = 1f / 3f
                     ),
                     displayFeatures = displayFeatures,
-                    modifier = Modifier
-                        // TODO: This should not be necessary, remove once
-                        //       https://issuetracker.google.com/issues/322354080 is fixed
-                        .requiredSize(900.dp, 1200.dp)
-                        .onPlaced { twoPaneCoordinates = it }
+                    modifier = Modifier.onPlaced { twoPaneCoordinates = it }
                 )
             }
         }
@@ -1175,11 +1110,7 @@ class TwoPaneTest {
                         splitFraction = 1f / 3f
                     ),
                     displayFeatures = displayFeatures,
-                    modifier = Modifier
-                        // TODO: This should not be necessary, remove once
-                        //       https://issuetracker.google.com/issues/322354080 is fixed
-                        .requiredSize(900.dp, 1200.dp)
-                        .onPlaced { twoPaneCoordinates = it }
+                    modifier = Modifier.onPlaced { twoPaneCoordinates = it }
                 )
             }
         }
@@ -1254,11 +1185,7 @@ class TwoPaneTest {
                         splitFraction = 1f / 3f
                     ),
                     displayFeatures = displayFeatures,
-                    modifier = Modifier
-                        // TODO: This should not be necessary, remove once
-                        //       https://issuetracker.google.com/issues/322354080 is fixed
-                        .requiredSize(900.dp, 1200.dp)
-                        .onPlaced { twoPaneCoordinates = it }
+                    modifier = Modifier.onPlaced { twoPaneCoordinates = it }
                 )
             }
         }
@@ -1333,11 +1260,7 @@ class TwoPaneTest {
                         splitFraction = 1f / 3f
                     ),
                     displayFeatures = displayFeatures,
-                    modifier = Modifier
-                        // TODO: This should not be necessary, remove once
-                        //       https://issuetracker.google.com/issues/322354080 is fixed
-                        .requiredSize(900.dp, 1200.dp)
-                        .onPlaced { twoPaneCoordinates = it }
+                    modifier = Modifier.onPlaced { twoPaneCoordinates = it }
                 )
             }
         }
@@ -1412,11 +1335,7 @@ class TwoPaneTest {
                         splitFraction = 1f / 3f
                     ),
                     displayFeatures = displayFeatures,
-                    modifier = Modifier
-                        // TODO: This should not be necessary, remove once
-                        //       https://issuetracker.google.com/issues/322354080 is fixed
-                        .requiredSize(900.dp, 1200.dp)
-                        .onPlaced { twoPaneCoordinates = it }
+                    modifier = Modifier.onPlaced { twoPaneCoordinates = it }
                 )
             }
         }
@@ -1492,11 +1411,7 @@ class TwoPaneTest {
                         splitFraction = 1f / 3f
                     ),
                     displayFeatures = displayFeatures,
-                    modifier = Modifier
-                        // TODO: This should not be necessary, remove once
-                        //       https://issuetracker.google.com/issues/322354080 is fixed
-                        .requiredSize(900.dp, 1200.dp)
-                        .onPlaced { twoPaneCoordinates = it }
+                    modifier = Modifier.onPlaced { twoPaneCoordinates = it }
                 )
             }
         }
