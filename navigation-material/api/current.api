@@ -2,31 +2,31 @@
 package com.google.accompanist.navigation.material {
 
   public final class BottomSheetKt {
-    method @androidx.compose.runtime.Composable @com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi public static void ModalBottomSheetLayout(com.google.accompanist.navigation.material.BottomSheetNavigator bottomSheetNavigator, optional androidx.compose.ui.Modifier modifier, optional androidx.compose.ui.graphics.Shape sheetShape, optional float sheetElevation, optional long sheetBackgroundColor, optional long sheetContentColor, optional long scrimColor, kotlin.jvm.functions.Function0<kotlin.Unit> content);
+    method @Deprecated @androidx.compose.runtime.Composable @com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi public static void ModalBottomSheetLayout(com.google.accompanist.navigation.material.BottomSheetNavigator bottomSheetNavigator, optional androidx.compose.ui.Modifier modifier, optional androidx.compose.ui.graphics.Shape sheetShape, optional float sheetElevation, optional long sheetBackgroundColor, optional long sheetContentColor, optional long scrimColor, kotlin.jvm.functions.Function0<kotlin.Unit> content);
   }
 
-  @androidx.navigation.Navigator.Name("BottomSheetNavigator") @com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi public final class BottomSheetNavigator extends androidx.navigation.Navigator<com.google.accompanist.navigation.material.BottomSheetNavigator.Destination> {
-    ctor public BottomSheetNavigator(androidx.compose.material.ModalBottomSheetState sheetState);
-    method public com.google.accompanist.navigation.material.BottomSheetNavigator.Destination createDestination();
-    method public com.google.accompanist.navigation.material.BottomSheetNavigatorSheetState getNavigatorSheetState();
-    method public kotlin.jvm.functions.Function1<androidx.compose.foundation.layout.ColumnScope,kotlin.Unit> getSheetContent();
+  @Deprecated @androidx.navigation.Navigator.Name("BottomSheetNavigator") @com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi public final class BottomSheetNavigator extends androidx.navigation.Navigator<com.google.accompanist.navigation.material.BottomSheetNavigator.Destination> {
+    ctor @Deprecated public BottomSheetNavigator(androidx.compose.material.ModalBottomSheetState sheetState);
+    method @Deprecated public com.google.accompanist.navigation.material.BottomSheetNavigator.Destination createDestination();
+    method @Deprecated public com.google.accompanist.navigation.material.BottomSheetNavigatorSheetState getNavigatorSheetState();
+    method @Deprecated public kotlin.jvm.functions.Function1<androidx.compose.foundation.layout.ColumnScope,kotlin.Unit> getSheetContent();
     property public final com.google.accompanist.navigation.material.BottomSheetNavigatorSheetState navigatorSheetState;
     property public final kotlin.jvm.functions.Function1<androidx.compose.foundation.layout.ColumnScope,kotlin.Unit> sheetContent;
   }
 
-  @androidx.navigation.NavDestination.ClassType(Composable::class) public static final class BottomSheetNavigator.Destination extends androidx.navigation.NavDestination implements androidx.navigation.FloatingWindow {
-    ctor public BottomSheetNavigator.Destination(com.google.accompanist.navigation.material.BottomSheetNavigator navigator, kotlin.jvm.functions.Function2<? super androidx.compose.foundation.layout.ColumnScope,? super androidx.navigation.NavBackStackEntry,kotlin.Unit> content);
+  @Deprecated @androidx.navigation.NavDestination.ClassType(Composable::class) public static final class BottomSheetNavigator.Destination extends androidx.navigation.NavDestination implements androidx.navigation.FloatingWindow {
+    ctor @Deprecated public BottomSheetNavigator.Destination(com.google.accompanist.navigation.material.BottomSheetNavigator navigator, kotlin.jvm.functions.Function2<? super androidx.compose.foundation.layout.ColumnScope,? super androidx.navigation.NavBackStackEntry,kotlin.Unit> content);
   }
 
   public final class BottomSheetNavigatorKt {
-    method @androidx.compose.runtime.Composable @com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi public static com.google.accompanist.navigation.material.BottomSheetNavigator rememberBottomSheetNavigator(optional androidx.compose.animation.core.AnimationSpec<java.lang.Float> animationSpec);
+    method @Deprecated @androidx.compose.runtime.Composable @com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi public static com.google.accompanist.navigation.material.BottomSheetNavigator rememberBottomSheetNavigator(optional androidx.compose.animation.core.AnimationSpec<java.lang.Float> animationSpec);
   }
 
-  @androidx.compose.runtime.Stable @com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi public final class BottomSheetNavigatorSheetState {
-    ctor public BottomSheetNavigatorSheetState(androidx.compose.material.ModalBottomSheetState sheetState);
-    method public androidx.compose.material.ModalBottomSheetValue getCurrentValue();
-    method public androidx.compose.material.ModalBottomSheetValue getTargetValue();
-    method public boolean isVisible();
+  @Deprecated @androidx.compose.runtime.Stable @com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi public final class BottomSheetNavigatorSheetState {
+    ctor @Deprecated public BottomSheetNavigatorSheetState(androidx.compose.material.ModalBottomSheetState sheetState);
+    method @Deprecated public androidx.compose.material.ModalBottomSheetValue getCurrentValue();
+    method @Deprecated public androidx.compose.material.ModalBottomSheetValue getTargetValue();
+    method @Deprecated public boolean isVisible();
     property public final androidx.compose.material.ModalBottomSheetValue currentValue;
     property public final boolean isVisible;
     property public final androidx.compose.material.ModalBottomSheetValue targetValue;
@@ -36,7 +36,7 @@ package com.google.accompanist.navigation.material {
   }
 
   public final class NavGraphBuilderKt {
-    method @com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi public static void bottomSheet(androidx.navigation.NavGraphBuilder, String route, optional java.util.List<androidx.navigation.NamedNavArgument> arguments, optional java.util.List<androidx.navigation.NavDeepLink> deepLinks, kotlin.jvm.functions.Function2<? super androidx.compose.foundation.layout.ColumnScope,? super androidx.navigation.NavBackStackEntry,kotlin.Unit> content);
+    method @Deprecated @com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi public static void bottomSheet(androidx.navigation.NavGraphBuilder, String route, optional java.util.List<androidx.navigation.NamedNavArgument> arguments, optional java.util.List<androidx.navigation.NavDeepLink> deepLinks, kotlin.jvm.functions.Function2<? super androidx.compose.foundation.layout.ColumnScope,? super androidx.navigation.NavBackStackEntry,kotlin.Unit> content);
   }
 
   public final class SheetContentHostKt {

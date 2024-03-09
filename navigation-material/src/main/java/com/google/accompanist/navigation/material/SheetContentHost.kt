@@ -70,8 +70,8 @@ internal fun ColumnScope.SheetContentHost(
                 }
         }
         backStackEntry.LocalOwnersProvider(saveableStateHolder) {
-            val content =
-                (backStackEntry.destination as BottomSheetNavigator.Destination).content
+            @Suppress("DEPRECATION")
+            val content = (backStackEntry.destination as BottomSheetNavigator.Destination).content
             content(backStackEntry)
         }
     }

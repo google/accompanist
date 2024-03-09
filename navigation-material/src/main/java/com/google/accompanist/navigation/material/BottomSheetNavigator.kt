@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
+
 package com.google.accompanist.navigation.material
 
 import android.annotation.SuppressLint
@@ -52,6 +54,12 @@ import kotlinx.coroutines.flow.transform
  *
  * @param sheetState The sheet state that is driven by the [BottomSheetNavigator]
  */
+@Deprecated(
+    "Migrate to Androidx compose.material.navigation BottomSheetNavigatorSheetState " +
+        "with the same parameters. To migrate, change import from " +
+        "com.google.accompanist.navigation.material.BottomSheetNavigatorSheetState to " +
+        "androidx.compose.material.navigation.BottomSheetNavigatorSheetState."
+)
 @ExperimentalMaterialNavigationApi
 @OptIn(ExperimentalMaterialApi::class)
 @Stable
@@ -78,6 +86,12 @@ public class BottomSheetNavigatorSheetState(internal val sheetState: ModalBottom
 /**
  * Create and remember a [BottomSheetNavigator]
  */
+@Deprecated(
+    "Migrate to Androidx compose.material.navigation rememberBottomSheetNavigator " +
+        "with the same parameters. To migrate, change import from " +
+        "com.google.accompanist.navigation.material.rememberBottomSheetNavigator to " +
+        "androidx.compose.material.navigation.rememberBottomSheetNavigator."
+)
 @ExperimentalMaterialNavigationApi
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -110,6 +124,12 @@ public fun rememberBottomSheetNavigator(
  * @param sheetState The [ModalBottomSheetState] that the [BottomSheetNavigator] will use to
  * drive the sheet state
  */
+@Deprecated(
+    "Migrate to Androidx compose.material.navigation BottomSheetNavigator " +
+        "with the same parameters. To migrate, change import from " +
+        "com.google.accompanist.navigation.material.BottomSheetNavigator to " +
+        "androidx.compose.material.navigation.BottomSheetNavigator."
+)
 @ExperimentalMaterialNavigationApi
 @OptIn(ExperimentalMaterialApi::class)
 @Navigator.Name("BottomSheetNavigator")

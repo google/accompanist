@@ -68,6 +68,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import kotlin.math.roundToLong
 
+@Suppress("DEPRECATION")
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterialNavigationApi::class)
