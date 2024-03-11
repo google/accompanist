@@ -33,6 +33,13 @@ import androidx.navigation.get
  * @param deepLinks list of deep links to associate with the destinations
  * @param content the sheet content at the given destination
  */
+@Deprecated(
+    "Migrate to Androidx compose.material.navigation NavGraphBuilder.bottomSheet with the " +
+        "same parameters. To migrate, change import from " +
+        "com.google.accompanist.navigation.material.bottomSheet to " +
+        "androidx.compose.material.navigation.bottomSheet."
+)
+@Suppress("DEPRECATION")
 @SuppressLint("NewApi") // b/187418647
 @ExperimentalMaterialNavigationApi
 public fun NavGraphBuilder.bottomSheet(

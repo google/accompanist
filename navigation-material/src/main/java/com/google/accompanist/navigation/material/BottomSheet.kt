@@ -32,8 +32,15 @@ import androidx.compose.ui.unit.Dp
  *
  * @see [ModalBottomSheetLayout]
  */
+@Deprecated(
+    "Migrate to Androidx compose.material.navigation ModalBottomSheetLayout with the same " +
+        "parameters. To migrate, change import from " +
+        "com.google.accompanist.navigation.material.ModalBottomSheetLayout to " +
+        "androidx.compose.material.navigation.ModalBottomSheetLayout."
+)
 @ExperimentalMaterialNavigationApi
 @OptIn(ExperimentalMaterialApi::class)
+@Suppress("DEPRECATION")
 @Composable
 public fun ModalBottomSheetLayout(
     bottomSheetNavigator: BottomSheetNavigator,

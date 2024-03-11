@@ -6,8 +6,26 @@ A library which provides [Compose Material](https://developer.android.com/jetpac
 This features composable bottom sheet destinations.
 
 !!! warning
-    The navigation APIs are currently experimental and they could change at any time.
-    All of the APIs are marked with the `@ExperimentalMaterialNavigationApi` annotation.
+    **This library is deprecated, with official material-navigation support in
+[androidx.compose.material.navigation](https://developer.android.com/jetpack/androidx/releases/compose-material#1.7.0-alpha04).**
+The original documentation is below the migration guide.
+
+## Migration
+
+The official `androidx.compose.material.navigation` version 1.7.0-alpha04+ offers all of the same functionality as Accompanist Navigation Material.
+
+All class names are the same, the only needed changes are import related.
+
+1. Replace dependency `com.google.accompanist:accompanist-navigation-material:<version>` with `androidx.compose.material:material-navigation:<version>`
+2. Change import for ModalBottomSheetLayout from `com.google.accompanist.navigation.material.ModalBottomSheetLayout` to `androidx.compose.material.navigation.ModalBottomSheetLayout`
+3. Change import for bottomSheet from `com.google.accompanist.navigation.material.bottomSheet` to `androidx.compose.material.navigation.bottomSheet`
+4. Change import for rememberBottomSheetNavigator from `com.google.accompanist.navigation.material.rememberBottomSheetNavigator` to `androidx.compose.material.navigation.rememberBottomSheetNavigator`
+5. Change import for BottomSheetNavigator from `com.google.accompanist.navigation.material.BottomSheetNavigator` to `androidx.compose.material.navigation.BottomSheetNavigator`
+6. Change import for BottomSheetNavigatorSheetState from `com.google.accompanist.navigation.material.BottomSheetNavigatorSheetState` to `androidx.compose.material.navigation.BottomSheetNavigatorSheetState`
+
+# Deprecated Guidance for Accompanist Navigation Material
+
+The following is the deprecated guide for using Navigation Material in Accompanist. Please see above migration section for how to use the `androidx.compose.material.navigation` Material Navigation.
 
 ## Usage
 
