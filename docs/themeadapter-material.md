@@ -10,7 +10,7 @@ Recommendation: Use the [Material Theme Builder](https://m3.material.io/theme-bu
 
 You can checkout [Material Design 3 in Compose](https://developer.android.com/jetpack/compose/designsystems/material3#material-theming) to learn more about creating and adding theme to your app using Material Theme Builder.
 
-## Original Documenation
+## Original Documentation
 
 A library that enables the reuse of [MDC-Android][mdc] Material 2 XML themes, for theming in [Jetpack Compose][compose].
 
