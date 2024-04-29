@@ -18,6 +18,7 @@ package com.google.accompanist.navigation.material
 
 import android.os.Bundle
 import androidx.activity.OnBackPressedDispatcher
+import androidx.activity.OnBackPressedDispatcherOwner
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -60,6 +61,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.testing.TestNavigatorState
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import com.google.accompanist.navigation.material.dismiss.DismissHandler
 import com.google.common.truth.Truth.assertThat
 import com.google.common.truth.Truth.assertWithMessage
 import kotlinx.coroutines.runBlocking
@@ -843,6 +845,145 @@ internal class BottomSheetNavigatorTest {
             .isEqualTo(secondNestedDestination)
 
         assertThat(navigator.sheetState.currentValue).isEqualTo(ModalBottomSheetValue.Hidden)
+    }
+
+    @Test
+    fun testNavigatingBackFromSheetWithDismissHandlerReopensTheSheet() {
+        val animationDuration = 2000
+        val animationSpec = tween<Float>(animationDuration)
+        lateinit var navigator: BottomSheetNavigator
+        lateinit var navController: NavHostController
+        lateinit var onBackPressedDispatcherOwner: OnBackPressedDispatcherOwner
+
+        val sheetLayoutTestTag = "sheetLayout"
+        val homeDestination = "home"
+        val sheetDestination = "sheet1"
+
+        composeTestRule.setContent {
+            navigator = rememberBottomSheetNavigator(animationSpec)
+            navController = rememberNavController(navigator)
+            onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current!!
+            ModalBottomSheetLayout(navigator, Modifier.testTag(sheetLayoutTestTag)) {
+                NavHost(navController, homeDestination) {
+                    composable(homeDestination) {
+                        Box(
+                            Modifier
+                                .fillMaxSize()
+                                .background(Color.Red)
+                        )
+                    }
+                    bottomSheet(sheetDestination) {
+                        Box(
+                            Modifier
+                                .height(200.dp)
+                                .fillMaxWidth()
+                                .background(Color.Green)
+                        ) {
+                            DismissHandler {
+                            }
+                            Text("Hello!")
+                        }
+                    }
+                }
+            }
+        }
+
+        assertThat(navController.currentBackStackEntry?.destination?.route)
+            .isEqualTo(homeDestination)
+
+        composeTestRule.runOnUiThread { navController.navigate(sheetDestination) }
+        composeTestRule.waitForIdle()
+
+        assertThat(navController.currentBackStackEntry?.destination?.route)
+            .isEqualTo(sheetDestination)
+        assertThat(navigator.sheetState.currentValue)
+            .isAnyOf(ModalBottomSheetValue.HalfExpanded, ModalBottomSheetValue.Expanded)
+
+        composeTestRule.runOnUiThread {
+            onBackPressedDispatcherOwner.onBackPressedDispatcher.onBackPressed()
+        }
+        composeTestRule.mainClock.advanceTimeBy(animationDuration.toLong())
+        composeTestRule.mainClock.advanceTimeByFrame()
+
+        assertThat(navigator.sheetState.currentValue).isEqualTo(ModalBottomSheetValue.Hidden)
+
+        composeTestRule.mainClock.autoAdvance = true
+        composeTestRule.mainClock.advanceTimeBy(animationDuration.toLong())
+        composeTestRule.mainClock.advanceTimeByFrame()
+        composeTestRule.waitForIdle()
+
+        assertThat(navigator.sheetState.currentValue)
+            .isAnyOf(ModalBottomSheetValue.HalfExpanded, ModalBottomSheetValue.Expanded)
+        assertThat(navController.currentBackStackEntry?.destination?.route)
+            .isEqualTo(sheetDestination)
+    }
+
+    @Test
+    fun testNavHostNavigatingBackFromSheetWithDismissHandlerGoBack() {
+        val animationDuration = 2000
+        val animationSpec = tween<Float>(animationDuration)
+        lateinit var navigator: BottomSheetNavigator
+        lateinit var navController: NavHostController
+
+        val sheetLayoutTestTag = "sheetLayout"
+        val homeDestination = "home"
+        val sheetDestination = "sheet1"
+
+        composeTestRule.setContent {
+            navigator = rememberBottomSheetNavigator(animationSpec)
+            navController = rememberNavController(navigator)
+            ModalBottomSheetLayout(navigator, Modifier.testTag(sheetLayoutTestTag)) {
+                NavHost(navController, homeDestination) {
+                    composable(homeDestination) {
+                        Box(
+                            Modifier
+                                .fillMaxSize()
+                                .background(Color.Red)
+                        )
+                    }
+                    bottomSheet(sheetDestination) {
+                        Box(
+                            Modifier
+                                .height(200.dp)
+                                .fillMaxWidth()
+                                .background(Color.Green)
+                        ) {
+                            DismissHandler {
+                            }
+                            Text("Hello!")
+                        }
+                    }
+                }
+            }
+        }
+
+        assertThat(navController.currentBackStackEntry?.destination?.route)
+            .isEqualTo(homeDestination)
+
+        composeTestRule.runOnUiThread { navController.navigate(sheetDestination) }
+        composeTestRule.waitForIdle()
+
+        assertThat(navController.currentBackStackEntry?.destination?.route)
+            .isEqualTo(sheetDestination)
+        assertThat(navigator.sheetState.currentValue)
+            .isAnyOf(ModalBottomSheetValue.HalfExpanded, ModalBottomSheetValue.Expanded)
+
+        composeTestRule.runOnUiThread {
+            navController.navigateUp()
+        }
+        composeTestRule.mainClock.advanceTimeBy(animationDuration.toLong())
+        composeTestRule.mainClock.advanceTimeByFrame()
+
+        assertThat(navigator.sheetState.currentValue).isEqualTo(ModalBottomSheetValue.Hidden)
+
+        composeTestRule.mainClock.autoAdvance = true
+        composeTestRule.mainClock.advanceTimeBy(animationDuration.toLong())
+        composeTestRule.mainClock.advanceTimeByFrame()
+        composeTestRule.waitForIdle()
+
+        assertThat(navigator.sheetState.currentValue).isEqualTo(ModalBottomSheetValue.Hidden)
+        assertThat(navController.currentBackStackEntry?.destination?.route)
+            .isEqualTo(homeDestination)
     }
 
     private fun BottomSheetNavigator.createFakeDestination() =

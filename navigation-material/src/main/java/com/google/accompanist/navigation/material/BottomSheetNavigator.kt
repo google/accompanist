@@ -28,6 +28,7 @@ import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
@@ -35,6 +36,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
 import androidx.navigation.FloatingWindow
@@ -44,10 +46,13 @@ import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
 import androidx.navigation.NavigatorState
 import com.google.accompanist.navigation.material.BottomSheetNavigator.Destination
+import com.google.accompanist.navigation.material.dismiss.LocalDismissDispatcher
+import com.google.accompanist.navigation.material.dismiss.OnDismissDispatcher
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.transform
+import kotlinx.coroutines.launch
 
 /**
  * The state of a [ModalBottomSheetLayout] that the [BottomSheetNavigator] drives
@@ -202,38 +207,52 @@ public class BottomSheetNavigator(
                 }
         }
 
-        if (retainedEntry != null) {
-            LaunchedEffect(retainedEntry) {
-                sheetState.show()
+        CompositionLocalProvider(LocalDismissDispatcher provides OnDismissDispatcher()) {
+            val dismissDispatcher = LocalDismissDispatcher.current!!
+            val coroutineScope = rememberCoroutineScope()
+
+            if (retainedEntry != null) {
+                LaunchedEffect(retainedEntry) {
+                    sheetState.show()
+                }
+
+                BackHandler {
+                    coroutineScope.launch {
+                        // delegate call to the StatchSheetContentHost -> onSheetDismissed
+                        sheetState.hide()
+                    }
+                }
             }
 
-            BackHandler {
-                state.popWithTransition(popUpTo = retainedEntry!!, saveState = false)
-            }
+            SheetContentHost(
+                backStackEntry = retainedEntry,
+                sheetState = sheetState,
+                saveableStateHolder = saveableStateHolder,
+                onSheetShown = {
+                    transitionsInProgressEntries.forEach(state::markTransitionComplete)
+                },
+                onSheetDismissed = { backStackEntry ->
+                    // Sheet dismissal can be started through popBackStack in which case we have a
+                    // transition that we'll want to complete
+                    if (transitionsInProgressEntries.contains(backStackEntry)) {
+                        state.markTransitionComplete(backStackEntry)
+                    }
+                    // If there is no transition in progress, the sheet has been dismissed by the
+                    // user (for example by tapping on the scrim or through an accessibility action)
+                    // In this case, we will immediately pop without a transition as the sheet has
+                    // already been hidden
+                    else {
+                        dismissDispatcher.tryToDismissSheet(
+                            state = state,
+                            backStackEntry = backStackEntry,
+                            showSheet = {
+                                coroutineScope.launch { sheetState.show() }
+                            },
+                        )
+                    }
+                },
+            )
         }
-
-        SheetContentHost(
-            backStackEntry = retainedEntry,
-            sheetState = sheetState,
-            saveableStateHolder = saveableStateHolder,
-            onSheetShown = {
-                transitionsInProgressEntries.forEach(state::markTransitionComplete)
-            },
-            onSheetDismissed = { backStackEntry ->
-                // Sheet dismissal can be started through popBackStack in which case we have a
-                // transition that we'll want to complete
-                if (transitionsInProgressEntries.contains(backStackEntry)) {
-                    state.markTransitionComplete(backStackEntry)
-                }
-                // If there is no transition in progress, the sheet has been dimissed by the
-                // user (for example by tapping on the scrim or through an accessibility action)
-                // In this case, we will immediately pop without a transition as the sheet has
-                // already been hidden
-                else {
-                    state.pop(popUpTo = backStackEntry, saveState = false)
-                }
-            }
-        )
     }
 
     override fun onAttach(state: NavigatorState) {

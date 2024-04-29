@@ -44,3 +44,14 @@ package com.google.accompanist.navigation.material {
 
 }
 
+package com.google.accompanist.navigation.material.dismiss {
+
+  public final class DismissDispatcherKt {
+  }
+
+  public final class DismissHandlerKt {
+    method @androidx.compose.runtime.Composable public static void DismissHandler(optional boolean isEnabled, kotlin.jvm.functions.Function0<kotlin.Unit> onDismiss);
+  }
+
+}
+
