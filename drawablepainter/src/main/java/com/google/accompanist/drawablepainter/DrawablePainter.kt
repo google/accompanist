@@ -130,6 +130,10 @@ public class DrawablePainter(
             // Update the Drawable's bounds
             drawable.setBounds(0, 0, size.width.roundToInt(), size.height.roundToInt())
 
+            val scaleX = size.width / drawableIntrinsicSize.width
+            val scaleY = size.height / drawableIntrinsicSize.height
+            canvas.scale(scaleX, scaleY)
+
             canvas.withSave {
                 drawable.draw(canvas.nativeCanvas)
             }
