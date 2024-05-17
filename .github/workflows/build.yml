@@ -73,7 +73,7 @@ jobs:
         run: release/signing-cleanup.sh
 
   test:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     needs: build
     timeout-minutes: 70
 
