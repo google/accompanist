@@ -24,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
@@ -87,7 +86,7 @@ internal fun PermissionLifecycleCheckerEffect(
             }
         }
     }
-    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    val lifecycle = androidx.lifecycle.compose.LocalLifecycleOwner.current.lifecycle
     DisposableEffect(lifecycle, permissionCheckerObserver) {
         lifecycle.addObserver(permissionCheckerObserver)
         onDispose { lifecycle.removeObserver(permissionCheckerObserver) }
@@ -119,7 +118,7 @@ internal fun PermissionsLifecycleCheckerEffect(
             }
         }
     }
-    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    val lifecycle = androidx.lifecycle.compose.LocalLifecycleOwner.current.lifecycle
     DisposableEffect(lifecycle, permissionsCheckerObserver) {
         lifecycle.addObserver(permissionsCheckerObserver)
         onDispose { lifecycle.removeObserver(permissionsCheckerObserver) }
