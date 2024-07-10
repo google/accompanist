@@ -23,9 +23,11 @@ import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.lifecycle.Lifecycle
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
-import androidx.test.uiautomator.UiObject
-import androidx.test.uiautomator.UiSelector
+import androidx.test.uiautomator.UiObject2
+import androidx.test.uiautomator.Until
+import java.io.ByteArrayOutputStream
 
 internal fun <T : ComponentActivity> simulateAppComingFromTheBackground(
     composeTestRule: AndroidComposeTestRule<ActivityScenarioRule<T>, T>
@@ -57,22 +59,15 @@ internal fun grantPermissionInDialog(
 ) {
     val uiDevice = UiDevice.getInstance(instrumentation)
     val sdkVersion = Build.VERSION.SDK_INT
-    val clicked = uiDevice.findPermissionButton(
+    val button = uiDevice.findPermissionButton(
         when (sdkVersion) {
             in 24..28 -> "ALLOW"
-            else -> "Allow"
+            29 -> "Allow only while using the app"
+            else -> "While using the app"
         }
-    ).clickForPermission(instrumentation)
+    )
 
-    // Or maybe this permission doesn't have the Allow option
-    if (!clicked && sdkVersion > 28) {
-        uiDevice.findPermissionButton(
-            when (sdkVersion) {
-                29 -> "Allow only while using the app"
-                else -> "While using the app"
-            }
-        ).clickForPermission(instrumentation)
-    }
+    button.clickForPermission(instrumentation)
 }
 
 internal fun denyPermissionInDialog(
@@ -81,7 +76,7 @@ internal fun denyPermissionInDialog(
     val text = when (Build.VERSION.SDK_INT) {
         in 24..28 -> "DENY"
         in 29..30 -> "Deny"
-        else -> "Don’t allow"
+        else -> "t allow" // Different sdks and devices seem to have either ' or ’
     }
     val permissionButton = UiDevice.getInstance(instrumentation).findPermissionButton(text)
     permissionButton.clickForPermission(instrumentation)
@@ -95,54 +90,54 @@ internal fun doNotAskAgainPermissionInDialog(
         Build.VERSION.SDK_INT >= 30 -> {
             denyPermissionInDialog(instrumentation)
         }
+
         Build.VERSION.SDK_INT > 28 -> {
             uiDevice
                 .findPermissionButton("Deny & don’t ask again")
                 .clickForPermission(instrumentation)
         }
+
         Build.VERSION.SDK_INT == 23 -> {
-            uiDevice.findObject(
-                UiSelector().text("Never ask again")
-            ).clickForPermission(instrumentation)
+            uiDevice.findPermissionButton("Never ask again")
+                .clickForPermission(instrumentation)
             denyPermissionInDialog(instrumentation)
         }
+
         else -> {
-            uiDevice.findObject(
-                UiSelector().text("Don't ask again")
+            uiDevice.findPermissionButton(
+                "Don't ask again"
             ).clickForPermission(instrumentation)
             denyPermissionInDialog(instrumentation)
         }
     }
 }
 
-private fun UiDevice.findPermissionButton(text: String): UiObject =
-    findObject(
-        UiSelector()
-            .textMatches(text)
-            .clickable(true)
-            .className("android.widget.Button")
-    )
+private fun UiDevice.findPermissionButton(
+    text: String
+): UiObject2 {
+    val selector = By
+        .textContains(text)
+        .clickable(true)
+        .clazz("android.widget.Button")
 
-private fun UiObject.clickForPermission(
+    val found = wait(Until.hasObject(selector), 3000)
+
+    if (!found) {
+        val output = ByteArrayOutputStream()
+        dumpWindowHierarchy(output)
+        println(output.toByteArray().decodeToString())
+
+        error("Could not find button with text $text")
+    }
+
+    return findObject(selector)
+}
+
+private fun UiObject2.clickForPermission(
     instrumentation: Instrumentation = InstrumentationRegistry.getInstrumentation()
 ): Boolean {
-    waitUntil { exists() }
-    if (!exists()) return false
-
-    val clicked = waitUntil { exists() && click() }
+    click()
     // Make sure that the tests waits for this click to be processed
-    if (clicked) { instrumentation.waitForIdleSync() }
-    return clicked
-}
-
-private fun waitUntil(timeoutMillis: Long = 2_000, condition: () -> Boolean): Boolean {
-    val startTime = System.nanoTime()
-    while (true) {
-        if (condition()) return true
-        // Let Android run measure, draw and in general any other async operations.
-        Thread.sleep(10)
-        if (System.nanoTime() - startTime > timeoutMillis * 1_000_000) {
-            return false
-        }
-    }
+    instrumentation.waitForIdleSync()
+    return true
 }

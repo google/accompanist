@@ -8,7 +8,7 @@ composesnapshot = "-" # a single character = no snapshot
 dokka = "1.8.10"
 
 # gradlePlugin and lint need to be updated together
-gradlePlugin = "8.2.2"
+gradlePlugin = "8.5.0"
 lintMinCompose = "30.0.0"
 
 ktlint = "0.45.2"
@@ -19,7 +19,7 @@ coil = "1.3.2"
 
 androidlint = "25.3.0"
 androidxtest = "1.4.0"
-androidxnavigation = "2.7.0-alpha01"
+androidxnavigation = "2.7.7"
 androidxWindow = "1.0.0"
 
 metalava = "0.3.2"
@@ -68,8 +68,8 @@ coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 
 androidx-appcompat = "androidx.appcompat:appcompat:1.4.2"
 androidx-core = "androidx.core:core-ktx:1.8.0"
-androidx-activity-compose = "androidx.activity:activity-compose:1.7.2"
-androidx-fragment = "androidx.fragment:fragment-ktx:1.5.1"
+androidx-activity-compose = "androidx.activity:activity-compose:1.9.0"
+androidx-fragment = "androidx.fragment:fragment-ktx:1.8.1"
 androidx-dynamicanimation = "androidx.dynamicanimation:dynamicanimation-ktx:1.0.0-alpha03"
 androidx-lifecycle-runtime = "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
 androidx-lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1"
@@ -82,19 +82,18 @@ androidx-navigation-testing = { module = "androidx.navigation:navigation-testing
 
 mdc = "com.google.android.material:material:1.8.0"
 
-androidx-test-core = "androidx.test:core-ktx:1.5.0-alpha02"
-androidx-test-runner = "androidx.test:runner:1.5.0-alpha04"
+androidx-test-core = "androidx.test:core-ktx:1.6.1"
+androidx-test-runner = "androidx.test:runner:1.6.1"
 androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidxtest" }
-androidx-test-orchestrator = "androidx.test:orchestrator:1.4.1"
-androidx-test-uiAutomator = "androidx.test.uiautomator:uiautomator:2.2.0"
+androidx-test-orchestrator = "androidx.test:orchestrator:1.5.0"
+androidx-test-uiAutomator = "androidx.test.uiautomator:uiautomator:2.3.0"
 
-# alpha for robolectric x compose fix
-androidx-test-espressoCore = "androidx.test.espresso:espresso-core:3.5.1"
-androidx-test-espressoWeb = "androidx.test.espresso:espresso-web:3.5.1"
+androidx-test-espressoCore = "androidx.test.espresso:espresso-core:3.6.1"
+androidx-test-espressoWeb = "androidx.test.espresso:espresso-web:3.6.1"
 
 junit = "junit:junit:4.13.2"
-truth = "com.google.truth:truth:1.1.2"
-robolectric = "org.robolectric:robolectric:4.9"
+truth = "com.google.truth:truth:1.1.3"
+robolectric = "org.robolectric:robolectric:4.12.1"
 
 affectedmoduledetector = "com.dropbox.affectedmoduledetector:affectedmoduledetector:0.1.2"
 
@@ -103,7 +102,7 @@ android-tools-lint-lint = { module = "com.android.tools.lint:lint", version.ref 
 android-tools-lint-api = { module = "com.android.tools.lint:lint-api", version.ref = "lintMinCompose" }
 android-tools-lint-tests = { module = "com.android.tools.lint:lint-tests", version.ref = "lintMinCompose" }
 
-squareup-mockwebserver = "com.squareup.okhttp3:mockwebserver:4.9.3"
+squareup-mockwebserver = "com.squareup.okhttp3:mockwebserver:4.10.0"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "gradlePlugin" }

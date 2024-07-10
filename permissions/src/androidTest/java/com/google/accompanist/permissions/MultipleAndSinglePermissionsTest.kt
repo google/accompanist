@@ -158,7 +158,7 @@ class MultipleAndSinglePermissionsTest {
         composeTestRule.setContent {
             ComposableUnderTest(
                 listOf(
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION,
                     android.Manifest.permission.CAMERA
                 )
             )
@@ -181,7 +181,7 @@ class MultipleAndSinglePermissionsTest {
         composeTestRule.setContent {
             ComposableUnderTest(
                 listOf(
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION,
                     android.Manifest.permission.CAMERA
                 )
             )

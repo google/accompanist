@@ -49,7 +49,7 @@ class PermissionStateTest {
 
     @Test
     fun permissionTest_shouldShowRationale() {
-        val permission = android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+        val permission = android.Manifest.permission.ACCESS_FINE_LOCATION
         composeTestRule.activity.shouldShowRequestPermissionRationale = mapOf(
             permission to true
         )

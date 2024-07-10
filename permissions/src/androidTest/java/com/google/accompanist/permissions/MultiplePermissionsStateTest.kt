@@ -37,7 +37,7 @@ class MultiplePermissionsStateTest {
     @get:Rule
     val permissionRule: GrantPermissionRule = GrantPermissionRule.grant(
         "android.permission.CAMERA",
-        "android.permission.READ_EXTERNAL_STORAGE"
+        "android.permission.ACCESS_FINE_LOCATION"
     )
 
     @Test
@@ -45,7 +45,7 @@ class MultiplePermissionsStateTest {
         composeTestRule.setContent {
             val state = rememberMultiplePermissionsState(
                 listOf(
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION,
                     android.Manifest.permission.CAMERA
                 )
             )
@@ -65,7 +65,7 @@ class MultiplePermissionsStateTest {
             val state = rememberMultiplePermissionsState(
                 listOf(
                     android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION,
                     android.Manifest.permission.CAMERA
                 )
             )
