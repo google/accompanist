@@ -118,7 +118,6 @@ private fun UiDevice.findPermissionButton(
     val selector = By
         .textContains(text)
         .clickable(true)
-        .clazz("android.widget.Button")
 
     val found = wait(Until.hasObject(selector), 3000)
 
