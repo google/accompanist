@@ -62,7 +62,7 @@ internal fun grantPermissionInDialog(
     val button = uiDevice.findPermissionButton(
         when (sdkVersion) {
             in 24..28 -> "ALLOW"
-            29 -> "Allow only while using the app"
+            29 -> "Allow"
             else -> "While using the app"
         }
     )
