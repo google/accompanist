@@ -1,6 +1,6 @@
 [versions]
 
-compose = "1.7.0-beta04"
+compose = "1.7.0-beta07"
 composeCompiler = "1.5.8"
 composeMaterial3 = "1.0.1"
 composesnapshot = "-" # a single character = no snapshot
@@ -8,7 +8,7 @@ composesnapshot = "-" # a single character = no snapshot
 dokka = "1.8.10"
 
 # gradlePlugin and lint need to be updated together
-gradlePlugin = "8.3.2"
+gradlePlugin = "8.5.2"
 lintMinCompose = "30.0.0"
 
 ktlint = "0.45.2"
@@ -18,7 +18,7 @@ okhttp = "3.12.13"
 coil = "1.3.2"
 
 androidlint = "25.3.0"
-androidxtest = "1.4.0"
+androidxtest = "1.6.1"
 androidxnavigation = "2.7.7"
 androidxWindow = "1.0.0"
 
