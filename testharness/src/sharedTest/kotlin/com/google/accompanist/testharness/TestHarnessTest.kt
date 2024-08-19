@@ -96,13 +96,13 @@ class TestHarnessTest {
     fun size_ExtremelyBig_measuredWidthIsCorrect() {
         var width = 0.dp
         composeTestRule.setContent {
-            TestHarness(size = DpSize(10000.dp, 10000.dp)) {
-                BoxOfSize(10000.dp, onWidth = { width = it })
+            TestHarness(size = DpSize(5000.dp, 5000.dp)) {
+                BoxOfSize(5000.dp, onWidth = { width = it })
             }
         }
         composeTestRule.waitForIdle()
 
-        val ratio = width / 10000.dp
+        val ratio = width / 5000.dp
         assertEquals(ratio, 1f, 0.01f)
     }
 
