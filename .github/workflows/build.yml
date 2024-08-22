@@ -81,7 +81,7 @@ jobs:
       # Allow tests to continue on other devices if they fail on one device.
       fail-fast: false
       matrix:
-        api-level: [ 22, 26, 29 ]
+        api-level: [ 22, 26, 30 ]
         shard: [ 0, 1 ] # Need to update shard-count below if this changes
 
     env:
@@ -95,6 +95,12 @@ jobs:
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
 
       - name: Setup java
         uses: actions/setup-java@v3
@@ -126,7 +132,7 @@ jobs:
           API_LEVEL: ${{ matrix.api-level }}
         run: |
           ARCH="x86"
-          if [ "$API_LEVEL" -ge "31" ]; then
+          if [ "$API_LEVEL" -ge "29" ]; then
             ARCH="x86_64"
           fi
           echo "ARCH=$ARCH" >> $GITHUB_OUTPUT

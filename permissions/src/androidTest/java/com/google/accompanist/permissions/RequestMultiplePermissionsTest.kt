@@ -105,7 +105,7 @@ class RequestMultiplePermissionsTest {
         // This is cheating, I know, but the order in which the system request the permissions
         // is unpredictable. Therefore, we need to grant both to make this test deterministic.
         grantPermissionProgrammatically("android.permission.CAMERA")
-        grantPermissionProgrammatically("android.permission.READ_EXTERNAL_STORAGE")
+        grantPermissionProgrammatically("android.permission.ACCESS_FINE_LOCATION")
         simulateAppComingFromTheBackground(composeTestRule)
         composeTestRule.activityRule.scenario.onActivity {
             it.setContent { ComposableUnderTest() }
@@ -119,7 +119,7 @@ class RequestMultiplePermissionsTest {
     private fun ComposableUnderTest() {
         val state = rememberMultiplePermissionsState(
             listOf(
-                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
                 android.Manifest.permission.CAMERA
             )
         )

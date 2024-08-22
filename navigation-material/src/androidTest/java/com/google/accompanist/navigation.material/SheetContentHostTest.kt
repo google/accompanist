@@ -28,9 +28,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -174,10 +178,8 @@ internal class SheetContentHostTest {
         onSheetDismissed: (NavBackStackEntry) -> Unit
     ) {
         setContent {
+            var anchored by remember { mutableStateOf(false) }
             val saveableStateHolder = rememberSaveableStateHolder()
-            LaunchedEffect(backStackEntry.value) {
-                if (backStackEntry.value == null) sheetState.hide() else sheetState.show()
-            }
             ModalBottomSheetLayout(
                 sheetContent = {
                     SheetContentHost(
@@ -189,6 +191,7 @@ internal class SheetContentHostTest {
                     )
                 },
                 sheetState = sheetState,
+                modifier = Modifier.onPlaced { anchored = true },
                 content = {
                     Box(
                         Modifier
@@ -197,6 +200,12 @@ internal class SheetContentHostTest {
                     )
                 }
             )
+
+            if (anchored) {
+                LaunchedEffect(backStackEntry.value) {
+                    if (backStackEntry.value == null) sheetState.hide() else sheetState.show()
+                }
+            }
         }
     }
 

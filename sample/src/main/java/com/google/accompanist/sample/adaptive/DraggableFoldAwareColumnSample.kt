@@ -67,7 +67,6 @@ class DraggableFoldAwareColumnSample : ComponentActivity() {
 @Composable
 fun DraggableExample(activity: Activity) {
     var offset by remember { mutableStateOf(Offset(0f, 0f)) }
-
     FoldAwareColumn(
         modifier = Modifier
             .offset { IntOffset(offset.x.roundToInt(), offset.y.roundToInt()) }

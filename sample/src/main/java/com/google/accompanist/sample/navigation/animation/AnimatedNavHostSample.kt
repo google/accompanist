@@ -47,7 +47,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
@@ -330,7 +329,7 @@ fun NavigateButton(
 fun NavigateBackButton(navController: NavController) {
     // Use LocalLifecycleOwner.current as a proxy for the NavBackStackEntry
     // associated with this Composable
-    if (navController.currentBackStackEntry == LocalLifecycleOwner.current &&
+    if (navController.currentBackStackEntry == androidx.lifecycle.compose.LocalLifecycleOwner.current &&
         navController.previousBackStackEntry != null
     ) {
         Button(

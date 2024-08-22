@@ -74,6 +74,7 @@ class RequestPermissionTest {
         composeTestRule.onNodeWithText("No permission").assertIsDisplayed()
     }
 
+    @SdkSuppress(minSdkVersion = 29) // Flaky below
     @FlakyTest
     @Test
     fun permissionTest_grantInTheBackground() {
@@ -86,11 +87,13 @@ class RequestPermissionTest {
         composeTestRule.onNodeWithText("No permission").assertIsDisplayed()
 
         // This simulates the user going to the Settings screen and granting the permission
-        grantPermissionProgrammatically("android.permission.CAMERA")
+        grantPermissionProgrammatically(android.Manifest.permission.CAMERA)
         simulateAppComingFromTheBackground(composeTestRule)
         composeTestRule.activityRule.scenario.onActivity {
             it.setContent { ComposableUnderTest() }
         }
+
+        composeTestRule.waitForIdle()
 
         composeTestRule.onNodeWithText("Granted").assertIsDisplayed()
     }
