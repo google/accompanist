@@ -6,9 +6,7 @@ A library which provides [Compose Material](https://developer.android.com/jetpac
 This features composable bottom sheet destinations.
 
 !!! warning
-    **This library is deprecated, with official material-navigation support in
-[androidx.compose.material.navigation](https://developer.android.com/jetpack/androidx/releases/compose-material#1.7.0-alpha04).**
-The original documentation is below the migration guide.
+    **This library is deprecated, with official material-navigation support in [androidx.compose.material.navigation](https://developer.android.com/jetpack/androidx/releases/compose-material#1.7.0-alpha04).** The original documentation is below the migration guide.
 
 ## Migration
 
