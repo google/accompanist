@@ -33,7 +33,7 @@ Each [release](https://github.com/google/accompanist/releases) outlines what ver
   <td>Compose UI 1.6 (1.6.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-permissions?versionPrefix=0.34"></td>
  </tr>
   <tr>
-  <td>Compose UI 1.7 (1.7.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-permissions"></td>
+  <td>Compose UI 1.7 & 1.8 (1.7.x)</td><td><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.google.accompanist/accompanist-permissions?versionPrefix=0.36"></td>
  </tr>
 </table>
 
