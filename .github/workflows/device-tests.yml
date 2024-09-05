@@ -48,7 +48,7 @@ jobs:
             ~/.gradle/caches/build-cache-*
           key: gradle-${{ hashFiles('checksum.txt') }}
 
-      # Determine what emulator image to use. We run all API 29+ emulators using
+      # Determine what emulator image to use. We run all API 28+ emulators using
       # the google_apis image
       - name: Determine emulator target
         id: determine-target
@@ -56,20 +56,28 @@ jobs:
           API_LEVEL: ${{ matrix.api-level }}
         run: |
           TARGET="default"
-          if [ "$API_LEVEL" -ge "29" ]; then
+          if [ "$API_LEVEL" -ge "28" ]; then
             TARGET="google_apis"
           fi
           echo "TARGET=$TARGET" >> $GITHUB_OUTPUT
-
-      - name: Run device tests
+      - name: Determine emulator arch
+        id: determine-arch
+        env: 
+          API_LEVEL: ${{ matrix.api-level }}
+        run: |
+          ARCH="x86"
+          if [ "$API_LEVEL" -ge "29" ]; then
+            ARCH="x86_64"
+          fi
+          echo "ARCH=$ARCH" >> $GITHUB_OUTPUT
+      - name: Run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
+          arch: ${{ steps.determine-arch.outputs.ARCH }}
           target: ${{ steps.determine-target.outputs.TARGET }}
           profile: Galaxy Nexus
-          emulator-build: 7425822 # https://github.com/ReactiveCircus/android-emulator-runner/issues/160
-          # We run all tests, sharding them over 3 shards
-          script: ./scripts/run-tests.sh --log-file=logcat.txt --shard-index=${{ matrix.shard }} --shard-count=3
+          script: ./scripts/run-tests.sh --log-file=logcat.txt --run-affected --affected-base-ref=$BASE_REF --shard-index=${{ matrix.shard }} --shard-count=2
 
       - name: Clean secrets
         if: always()
