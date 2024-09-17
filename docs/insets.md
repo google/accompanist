@@ -28,7 +28,7 @@ If you are using insets for IME support, you also still need to ensure that the 
 1. Replace padding modifiers with `androidx.compose.foundation` equivalents. If using `additionalPadding` or only applying the insets to certain sides, use the corresponding [`WindowInsets.add`](https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/package-summary#(androidx.compose.foundation.layout.WindowInsets).add(androidx.compose.foundation.layout.WindowInsets)) and [`WindowInsets.only`](https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/package-summary#(androidx.compose.foundation.layout.WindowInsets).only(androidx.compose.foundation.layout.WindowInsetsSides)) extensions.
 1. Replace `rememberInsetsPaddingValues` with the equivalent `WindowInsets.asPaddingValues`.
 1. Replace direct calculations from `LocalWindowInsets.current` with calculations on `WindowInsets`.
-1. Continue using the non-deprecated [`insets-ui`](#inset-aware-layouts-insets-ui) for now.
+1. Migrate from using `insets-ui` components to the [built-in support](https://developer.android.com/develop/ui/compose/layouts/insets#material3-components) in Material components.
 
 For reference, consult the [Migration table](#migration-table) below.
 
