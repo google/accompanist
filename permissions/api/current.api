@@ -5,18 +5,31 @@ package com.google.accompanist.permissions {
   }
 
   @androidx.compose.runtime.Stable @com.google.accompanist.permissions.ExperimentalPermissionsApi public interface MultiplePermissionsState {
+    method public boolean getAllNotGrantedPermissionsArePermanentlyDenied();
     method public boolean getAllPermissionsGranted();
     method public java.util.List<com.google.accompanist.permissions.PermissionState> getPermissions();
-    method public java.util.List<com.google.accompanist.permissions.PermissionState> getRevokedPermissions();
     method public boolean getShouldShowRationale();
+    method public boolean isNotRequested();
     method public void launchMultiplePermissionRequest();
+    method public void openAppSettings();
+    property public abstract boolean allNotGrantedPermissionsArePermanentlyDenied;
     property public abstract boolean allPermissionsGranted;
+    property public abstract boolean isNotRequested;
     property public abstract java.util.List<com.google.accompanist.permissions.PermissionState> permissions;
-    property public abstract java.util.List<com.google.accompanist.permissions.PermissionState> revokedPermissions;
     property public abstract boolean shouldShowRationale;
   }
 
   public final class MultiplePermissionsStateKt {
+    method public static inline java.util.List<com.google.accompanist.permissions.PermissionState> getDeniedPermissions(com.google.accompanist.permissions.MultiplePermissionsState);
+    method public static inline java.util.List<com.google.accompanist.permissions.PermissionState> getGrantedPermissions(com.google.accompanist.permissions.MultiplePermissionsState);
+    method public static inline java.util.List<com.google.accompanist.permissions.PermissionState> getNotGrantedPermissions(com.google.accompanist.permissions.MultiplePermissionsState);
+    method public static inline java.util.List<com.google.accompanist.permissions.PermissionState> getPermanentlyDeniedPermissions(com.google.accompanist.permissions.MultiplePermissionsState);
+    method @com.google.accompanist.permissions.ExperimentalPermissionsApi public static boolean isDenied(com.google.accompanist.permissions.MultiplePermissionsState, String permission);
+    method @com.google.accompanist.permissions.ExperimentalPermissionsApi public static boolean isGranted(com.google.accompanist.permissions.MultiplePermissionsState, String permission);
+    method @com.google.accompanist.permissions.ExperimentalPermissionsApi public static boolean isNotGranted(com.google.accompanist.permissions.MultiplePermissionsState, String permission);
+    method @com.google.accompanist.permissions.ExperimentalPermissionsApi public static boolean isPermanentlyDenied(com.google.accompanist.permissions.MultiplePermissionsState, String permission);
+    method @com.google.accompanist.permissions.ExperimentalPermissionsApi public static void launchMultiplePermissionRequestOrAppSettings(com.google.accompanist.permissions.MultiplePermissionsState);
+    method @androidx.compose.runtime.Composable public static com.google.accompanist.permissions.MultiplePermissionsState rememberMultiplePermissionsState(String permission, String![] otherPermissions, optional kotlin.jvm.functions.Function1<? super java.util.Map<java.lang.String,java.lang.Boolean>,kotlin.Unit> onPermissionsResult);
     method @androidx.compose.runtime.Composable @com.google.accompanist.permissions.ExperimentalPermissionsApi public static com.google.accompanist.permissions.MultiplePermissionsState rememberMultiplePermissionsState(java.util.List<java.lang.String> permissions, optional kotlin.jvm.functions.Function1<? super java.util.Map<java.lang.String,java.lang.Boolean>,kotlin.Unit> onPermissionsResult);
   }
 
@@ -30,32 +43,45 @@ package com.google.accompanist.permissions {
     method public String getPermission();
     method public com.google.accompanist.permissions.PermissionStatus getStatus();
     method public void launchPermissionRequest();
+    method public void openAppSettings();
     property public abstract String permission;
     property public abstract com.google.accompanist.permissions.PermissionStatus status;
   }
 
   public final class PermissionStateKt {
+    method @com.google.accompanist.permissions.ExperimentalPermissionsApi public static void launchPermissionRequestOrAppSettings(com.google.accompanist.permissions.PermissionState);
     method @androidx.compose.runtime.Composable @com.google.accompanist.permissions.ExperimentalPermissionsApi public static com.google.accompanist.permissions.PermissionState rememberPermissionState(String permission, optional kotlin.jvm.functions.Function1<? super java.lang.Boolean,kotlin.Unit> onPermissionResult);
   }
 
   @androidx.compose.runtime.Stable @com.google.accompanist.permissions.ExperimentalPermissionsApi public sealed interface PermissionStatus {
   }
 
-  public static final class PermissionStatus.Denied implements com.google.accompanist.permissions.PermissionStatus {
-    ctor public PermissionStatus.Denied(boolean shouldShowRationale);
-    method public boolean component1();
-    method public com.google.accompanist.permissions.PermissionStatus.Denied copy(boolean shouldShowRationale);
-    method public boolean getShouldShowRationale();
-    property public final boolean shouldShowRationale;
-  }
-
   public static final class PermissionStatus.Granted implements com.google.accompanist.permissions.PermissionStatus {
     field public static final com.google.accompanist.permissions.PermissionStatus.Granted INSTANCE;
   }
 
+  public static sealed interface PermissionStatus.NotGranted extends com.google.accompanist.permissions.PermissionStatus {
+  }
+
+  public static final class PermissionStatus.NotGranted.Denied implements com.google.accompanist.permissions.PermissionStatus.NotGranted {
+    field public static final com.google.accompanist.permissions.PermissionStatus.NotGranted.Denied INSTANCE;
+  }
+
+  public static final class PermissionStatus.NotGranted.NotRequested implements com.google.accompanist.permissions.PermissionStatus.NotGranted {
+    field public static final com.google.accompanist.permissions.PermissionStatus.NotGranted.NotRequested INSTANCE;
+  }
+
+  public static final class PermissionStatus.NotGranted.PermanentlyDenied implements com.google.accompanist.permissions.PermissionStatus.NotGranted {
+    field public static final com.google.accompanist.permissions.PermissionStatus.NotGranted.PermanentlyDenied INSTANCE;
+  }
+
   public final class PermissionsUtilKt {
     method public static boolean getShouldShowRationale(com.google.accompanist.permissions.PermissionStatus);
+    method public static boolean isDenied(com.google.accompanist.permissions.PermissionStatus);
     method public static boolean isGranted(com.google.accompanist.permissions.PermissionStatus);
+    method public static boolean isNotGranted(com.google.accompanist.permissions.PermissionStatus);
+    method public static boolean isNotRequested(com.google.accompanist.permissions.PermissionStatus);
+    method public static boolean isPermanentlyDenied(com.google.accompanist.permissions.PermissionStatus);
   }
 
 }
