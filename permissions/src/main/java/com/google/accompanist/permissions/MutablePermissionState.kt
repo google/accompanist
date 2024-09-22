@@ -86,7 +86,7 @@ internal class MutablePermissionState(
     private val activity: Activity
 ) : PermissionState {
 
-    override var status: PermissionStatus by mutableStateOf(getPermissionStatus())
+    override var status: PermissionStatus by mutableStateOf(getPermissionStatus(false))
 
     override fun launchPermissionRequest() {
         launcher?.launch(
@@ -94,18 +94,33 @@ internal class MutablePermissionState(
         ) ?: throw IllegalStateException("ActivityResultLauncher cannot be null")
     }
 
+    override fun openAppSettings() {
+        activity.openAppSettings(permission)
+    }
+
     internal var launcher: ActivityResultLauncher<String>? = null
 
     internal fun refreshPermissionStatus() {
-        status = getPermissionStatus()
+        status = getPermissionStatus(isPermissionPostRequest = true)
     }
 
-    private fun getPermissionStatus(): PermissionStatus {
+    private fun getPermissionStatus(isPermissionPostRequest: Boolean): PermissionStatus {
         val hasPermission = context.checkPermission(permission)
         return if (hasPermission) {
             PermissionStatus.Granted
         } else {
-            PermissionStatus.Denied(activity.shouldShowRationale(permission))
+            val shouldShowRationale = activity.shouldShowRationale(permission)
+            when {
+                isPermissionPostRequest -> when {
+                    shouldShowRationale -> PermissionStatus.NotGranted.Denied
+                    else -> PermissionStatus.NotGranted.PermanentlyDenied
+                }
+
+                else -> when {
+                    shouldShowRationale -> PermissionStatus.NotGranted.Denied
+                    else -> PermissionStatus.NotGranted.NotRequested
+                }
+            }
         }
     }
 }

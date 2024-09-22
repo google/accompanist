@@ -19,7 +19,11 @@ package com.google.accompanist.permissions
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
+import android.provider.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Stable
@@ -40,10 +44,12 @@ public annotation class ExperimentalPermissionsApi
 @ExperimentalPermissionsApi
 @Stable
 public sealed interface PermissionStatus {
-    public object Granted : PermissionStatus
-    public data class Denied(
-        val shouldShowRationale: Boolean
-    ) : PermissionStatus
+    public data object Granted : PermissionStatus
+    public sealed interface NotGranted : PermissionStatus {
+        public data object NotRequested : NotGranted
+        public data object Denied : NotGranted
+        public data object PermanentlyDenied : NotGranted
+    }
 }
 
 /**
@@ -54,14 +60,39 @@ public val PermissionStatus.isGranted: Boolean
     get() = this == PermissionStatus.Granted
 
 /**
+ * `true` if the permission is not granted.
+ */
+@ExperimentalPermissionsApi
+public val PermissionStatus.isNotGranted: Boolean
+    get() = this is PermissionStatus.NotGranted
+
+/**
+ * `true` if the permission has not been requested.
+ */
+@ExperimentalPermissionsApi
+public val PermissionStatus.isNotRequested: Boolean
+    get() = this == PermissionStatus.NotGranted.NotRequested
+
+/**
+ * `true` if the permission is denied.
+ */
+@ExperimentalPermissionsApi
+public val PermissionStatus.isDenied: Boolean
+    get() = this == PermissionStatus.NotGranted.Denied
+
+/**
  * `true` if a rationale should be presented to the user.
  */
 @ExperimentalPermissionsApi
 public val PermissionStatus.shouldShowRationale: Boolean
-    get() = when (this) {
-        PermissionStatus.Granted -> false
-        is PermissionStatus.Denied -> shouldShowRationale
-    }
+    get() = isDenied
+
+/**
+ * `true` if the permission is permanently denied.
+ */
+@ExperimentalPermissionsApi
+public val PermissionStatus.isPermanentlyDenied: Boolean
+    get() = this == PermissionStatus.NotGranted.PermanentlyDenied
 
 /**
  * Effect that updates the `hasPermission` state of a revoked [MutablePermissionState] permission
@@ -144,4 +175,24 @@ internal fun Context.checkPermission(permission: String): Boolean {
 
 internal fun Activity.shouldShowRationale(permission: String): Boolean {
     return ActivityCompat.shouldShowRequestPermissionRationale(this, permission)
+}
+
+internal fun Activity.openAppSettings(permission: String?) {
+    if (permission == android.Manifest.permission.POST_NOTIFICATIONS) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            startActivity(
+                Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+                    putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+                }
+            )
+        }
+    } else {
+        startActivity(
+            Intent().apply {
+                action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                data = Uri.fromParts("package", packageName, null)
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            }
+        )
+    }
 }
