@@ -87,6 +87,7 @@ internal class MutablePermissionState(
     private val activity: Activity
 ) : PermissionState {
 
+    internal var isPreviousStatusNotRequested = true
     internal var isPermissionPostRequest = false
 
     override var status: PermissionStatus by mutableStateOf(getPermissionStatus())
@@ -114,9 +115,23 @@ internal class MutablePermissionState(
         } else {
             val shouldShowRationale = activity.shouldShowRationale(permission)
             when {
-                isPermissionPostRequest -> when {
-                    shouldShowRationale -> PermissionStatus.NotGranted.Denied
-                    else -> PermissionStatus.NotGranted.PermanentlyDenied
+                isPermissionPostRequest -> {
+                    when {
+                        shouldShowRationale -> PermissionStatus.NotGranted.Denied
+                        else -> when {
+                            // we can't go from NotRequested->PermanentlyDenied since there's
+                            // no way to determine if the permission was already PermanentlyDenied
+                            // or if the permission request was canceled.
+                            // isPreviousStatusNotRequested forces an extra step by inserting a
+                            // Denied status even though it should be PermanentlyDenied
+                            // since this will allow us to handle the case where the permission
+                            // request was canceled
+                            isPreviousStatusNotRequested -> PermissionStatus.NotGranted.Denied
+                            else -> PermissionStatus.NotGranted.PermanentlyDenied
+                        }
+                    }.also {
+                        isPreviousStatusNotRequested = false
+                    }
                 }
 
                 else -> when {
