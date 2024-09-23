@@ -58,6 +58,7 @@ internal fun rememberMutableMultiplePermissionsState(
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissionsResult ->
+        multiplePermissionsState.isNotRequested = false
         multiplePermissionsState.updatePermissionsStatus(permissionsResult)
         onPermissionsResult(permissionsResult)
     }
@@ -145,8 +146,6 @@ internal class MutableMultiplePermissionsState(
     internal var launcher: ActivityResultLauncher<Array<String>>? = null
 
     internal fun updatePermissionsStatus(permissionsStatus: Map<String, Boolean>) {
-        isNotRequested = false
-
         // Update all permissions with the result
         for (permission in permissionsStatus.keys) {
             mutablePermissions.firstOrNull { it.permission == permission }?.apply {
