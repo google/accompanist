@@ -56,6 +56,7 @@ internal fun rememberMutablePermissionState(
 
     // Remember RequestPermission launcher and assign it to permissionState
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
+        permissionState.isPermissionPostRequest = true
         permissionState.refreshPermissionStatus()
         onPermissionResult(it)
     }
@@ -86,7 +87,9 @@ internal class MutablePermissionState(
     private val activity: Activity
 ) : PermissionState {
 
-    override var status: PermissionStatus by mutableStateOf(getPermissionStatus(false))
+    internal var isPermissionPostRequest = false
+
+    override var status: PermissionStatus by mutableStateOf(getPermissionStatus())
 
     override fun launchPermissionRequest() {
         launcher?.launch(
@@ -101,10 +104,10 @@ internal class MutablePermissionState(
     internal var launcher: ActivityResultLauncher<String>? = null
 
     internal fun refreshPermissionStatus() {
-        status = getPermissionStatus(isPermissionPostRequest = true)
+        status = getPermissionStatus()
     }
 
-    private fun getPermissionStatus(isPermissionPostRequest: Boolean): PermissionStatus {
+    private fun getPermissionStatus(): PermissionStatus {
         val hasPermission = context.checkPermission(permission)
         return if (hasPermission) {
             PermissionStatus.Granted
