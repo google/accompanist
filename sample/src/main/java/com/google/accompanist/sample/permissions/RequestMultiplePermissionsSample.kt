@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.PermissionState
+import com.google.accompanist.permissions.deniedPermissions
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.accompanist.sample.AccompanistSampleTheme
 
@@ -62,7 +63,7 @@ private fun Sample(multiplePermissionsState: MultiplePermissionsState) {
         Column {
             Text(
                 getTextToShowGivenPermissions(
-                    multiplePermissionsState.revokedPermissions,
+                    multiplePermissionsState.deniedPermissions,
                     multiplePermissionsState.shouldShowRationale
                 )
             )
