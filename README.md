@@ -61,9 +61,6 @@ See our [Migration Guide](https://google.github.io/accompanist/appcompat-theme/)
 ### 📖 [Pager](./pager/) (Deprecated)
 See our [Migration Guide](https://google.github.io/accompanist/pager/) for migrating to Pager in Compose.
 
-### 🌊 [Flow Layouts](./flowlayout/) (Deprecated)
-See our [Migration Guide](https://google.github.io/accompanist/flowlayout/) for migrating to FlowLayout in Compose.
-
 ### 🧭✨[Navigation-Animation](./navigation-animation/) (Deprecated)
 See our [Migration Guide](https://google.github.io/accompanist/navigation-animation/) for migrating to using built in support for animations in Jetpack Navigation Compose. 
 

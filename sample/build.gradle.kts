@@ -67,7 +67,6 @@ dependencies {
     implementation(project(":permissions"))
     implementation(project(":placeholder"))
     implementation(project(":placeholder-material"))
-    implementation(project(":flowlayout"))
     implementation(project(":systemuicontroller"))
     implementation(project(":swiperefresh"))
     implementation(project(":testharness")) // Don't use in production! Use the configurations below

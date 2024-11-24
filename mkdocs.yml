@@ -49,9 +49,6 @@ nav:
   - 'Drawable Painter':
     - 'Guide': drawablepainter.md
     - 'API': api/drawablepainter/ 
-  - 'Flow layouts':
-    - 'Guide': flowlayout.md
-    - 'API': api/flowlayout/
   - 'Permissions':
     - 'Guide': permissions.md
     - 'API': api/permissions/
