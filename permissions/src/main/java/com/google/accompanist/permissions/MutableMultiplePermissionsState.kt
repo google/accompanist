@@ -127,7 +127,8 @@ internal class MutableMultiplePermissionsState(
     }
 
     override val shouldShowRationale: Boolean by derivedStateOf {
-        permissions.any { it.status.shouldShowRationale }
+        permissions.any { it.status.shouldShowRationale } &&
+            permissions.none { !it.status.isGranted && !it.status.shouldShowRationale }
     }
 
     override fun launchMultiplePermissionRequest() {
