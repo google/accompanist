@@ -63,8 +63,6 @@ dependencies {
     implementation(project(":navigation-animation"))
     implementation(project(":navigation-material"))
     implementation(project(":permissions"))
-    implementation(project(":placeholder"))
-    implementation(project(":placeholder-material"))
     implementation(project(":systemuicontroller"))
     implementation(project(":testharness")) // Don't use in production! Use the configurations below
     testImplementation(project(":testharness"))
