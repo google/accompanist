@@ -58,9 +58,6 @@ See our [Migration Guide](https://google.github.io/accompanist/swiperefresh/) fo
 ### 🎨 [AppCompat Theme Adapter](./appcompat-theme/) (Deprecated)
 See our [Migration Guide](https://google.github.io/accompanist/appcompat-theme/) for migrating to the new artifact in Accompanist.
 
-### 📖 [Pager](./pager/) (Deprecated)
-See our [Migration Guide](https://google.github.io/accompanist/pager/) for migrating to Pager in Compose.
-
 ### 🧭✨[Navigation-Animation](./navigation-animation/) (Deprecated)
 See our [Migration Guide](https://google.github.io/accompanist/navigation-animation/) for migrating to using built in support for animations in Jetpack Navigation Compose. 
 
