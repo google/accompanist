@@ -15,9 +15,6 @@ repo_url: 'https://github.com/google/accompanist'
 # Navigation
 nav:
   - 'Overview': index.md
-  - 'Insets':
-    - 'Guide': insets.md
-    - 'API': api/insets/
   - 'System UI Controller':
     - 'Guide': systemuicontroller.md
     - 'API': api/systemuicontroller/
