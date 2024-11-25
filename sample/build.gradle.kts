@@ -62,8 +62,6 @@ dependencies {
     implementation(project(":insets-ui"))
     implementation(project(":navigation-animation"))
     implementation(project(":navigation-material"))
-    implementation(project(":pager"))
-    implementation(project(":pager-indicators"))
     implementation(project(":permissions"))
     implementation(project(":placeholder"))
     implementation(project(":placeholder-material"))
