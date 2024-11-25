@@ -66,7 +66,6 @@ dependencies {
     implementation(project(":placeholder"))
     implementation(project(":placeholder-material"))
     implementation(project(":systemuicontroller"))
-    implementation(project(":swiperefresh"))
     implementation(project(":testharness")) // Don't use in production! Use the configurations below
     testImplementation(project(":testharness"))
     androidTestImplementation(project(":testharness"))

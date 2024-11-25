@@ -36,9 +36,6 @@ nav:
   - 'Core Theme Adapter':
     - 'Guide': themeadapter-core.md
     - 'API': api/themeadapter-core/
-  - 'Swipe Refresh':
-    - 'Guide': swiperefresh.md
-    - 'API': api/swiperefresh/
   - 'Placeholder':
     - 'Guide': placeholder.md
     - 'Foundation API': api/placeholder/

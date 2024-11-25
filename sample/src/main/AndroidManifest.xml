@@ -101,46 +101,6 @@
         </activity>
 
         <activity
-            android:name=".swiperefresh.SwipeRefreshBasicSample"
-            android:label="@string/swiperefresh_title_basics"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".swiperefresh.SwipeRefreshContentPaddingSample"
-            android:label="@string/swiperefresh_title_content_padding"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".swiperefresh.SwipeRefreshTweakedIndicatorSample"
-            android:label="@string/swiperefresh_title_tweaked"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".swiperefresh.SwipeRefreshCustomIndicatorSample"
-            android:label="@string/swiperefresh_title_custom"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
             android:name=".systemuicontroller.SystemBarsColorSample"
             android:label="@string/system_ui_controller_title_color"
             android:exported="true"
