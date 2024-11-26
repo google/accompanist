@@ -67,7 +67,6 @@ dependencies {
     implementation(project(":testharness")) // Don't use in production! Use the configurations below
     testImplementation(project(":testharness"))
     androidTestImplementation(project(":testharness"))
-    implementation(project(":web"))
 
     implementation(libs.androidx.appcompat)
     implementation(libs.mdc)
