@@ -29,9 +29,6 @@ package com.google.accompanist.adaptive {
     property public final int VerticalFoldsOnly;
   }
 
-  public final class RowColumnImplKt {
-  }
-
   public final class SplitResult {
     ctor public SplitResult(androidx.compose.foundation.gestures.Orientation gapOrientation, androidx.compose.ui.geometry.Rect gapBounds);
     method public androidx.compose.ui.geometry.Rect getGapBounds();
@@ -41,11 +38,11 @@ package com.google.accompanist.adaptive {
   }
 
   public final class TwoPaneKt {
-    method public static com.google.accompanist.adaptive.TwoPaneStrategy HorizontalTwoPaneStrategy(float splitFraction, optional float gapWidth);
     method public static com.google.accompanist.adaptive.TwoPaneStrategy HorizontalTwoPaneStrategy(float splitOffset, optional boolean offsetFromStart, optional float gapWidth);
+    method public static com.google.accompanist.adaptive.TwoPaneStrategy HorizontalTwoPaneStrategy(float splitFraction, optional float gapWidth);
     method @androidx.compose.runtime.Composable public static void TwoPane(kotlin.jvm.functions.Function0<kotlin.Unit> first, kotlin.jvm.functions.Function0<kotlin.Unit> second, com.google.accompanist.adaptive.TwoPaneStrategy strategy, java.util.List<? extends androidx.window.layout.DisplayFeature> displayFeatures, optional androidx.compose.ui.Modifier modifier, optional int foldAwareConfiguration);
-    method public static com.google.accompanist.adaptive.TwoPaneStrategy VerticalTwoPaneStrategy(float splitFraction, optional float gapHeight);
     method public static com.google.accompanist.adaptive.TwoPaneStrategy VerticalTwoPaneStrategy(float splitOffset, optional boolean offsetFromTop, optional float gapHeight);
+    method public static com.google.accompanist.adaptive.TwoPaneStrategy VerticalTwoPaneStrategy(float splitFraction, optional float gapHeight);
   }
 
   public fun interface TwoPaneStrategy {
