@@ -52,9 +52,6 @@ A library which provides a way to use Android Drawables as Jetpack Compose Paint
 ### 📜 [Adaptive](./adaptive/)
 A library providing a collection of utilities for adaptive layouts.
 
-### 🎨 [AppCompat Theme Adapter](./appcompat-theme/) (Deprecated)
-See our [Migration Guide](https://google.github.io/accompanist/appcompat-theme/) for migrating to the new artifact in Accompanist.
-
 ### 🧭✨[Navigation-Animation](./navigation-animation/) (Deprecated)
 See our [Migration Guide](https://google.github.io/accompanist/navigation-animation/) for migrating to using built in support for animations in Jetpack Navigation Compose. 
 
@@ -66,15 +63,6 @@ A library that provides easy-to-use modifiers for displaying a placeholder UI wh
 
 ### 🍫 [System UI Controller](./systemuicontroller/) (Deprecated)
 We recommend migrating to edge to edge. See our [Migration Guide](https://google.github.io/accompanist/systemuicontroller/) for more details.
-
-### 🎨 [AppCompat Theme Adapter](./themeadapter-appcompat/) (Deprecated)
-A library that enables the reuse of [AppCompat][appcompat] XML themes, for theming in Jetpack Compose.
-
-### 🎨 [Material Theme Adapter](./themeadapter-material/) (Deprecated)
-A library that enables the reuse of [MDC-Android][mdc] Material 2 XML themes, for theming in Jetpack Compose.
-
-### 🎨 [Material 3 Theme Adapter](./themeadapter-material3/) (Deprecated)
-A library that enables the reuse of [MDC-Android][mdc] Material 3 XML themes, for theming in Jetpack Compose.
 
 ### 🌏 [Web](./web/) (Deprecated)
 A wrapper around WebView for basic WebView support in Jetpack Compose.
