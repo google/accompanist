@@ -134,36 +134,6 @@
         </activity>
 
         <activity
-            android:name=".placeholder.PlaceholderBasicSample"
-            android:label="@string/placeholder_title_basics"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".placeholder.PlaceholderFadeSample"
-            android:label="@string/placeholder_title_fade"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".placeholder.PlaceholderShimmerSample"
-            android:label="@string/placeholder_title_shimmer"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
             android:name=".webview.BasicWebViewSample"
             android:label="@string/webview_title_basic"
             android:exported="true">
