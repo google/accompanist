@@ -20,7 +20,7 @@ import android.os.Looper
 import com.google.common.truth.Truth.assertThat
 import java.util.concurrent.TimeoutException
 
-fun waitUntil(timeoutMillis: Long = 2_000, condition: () -> Boolean) {
+public fun waitUntil(timeoutMillis: Long = 2_000, condition: () -> Boolean) {
     if (Looper.getMainLooper() == Looper.myLooper()) {
         assertThat(condition()).isTrue()
     }

@@ -37,6 +37,10 @@ buildscript {
 plugins {
     id "com.diffplug.spotless" version "6.5.2"
     alias(libs.plugins.jetbrains.dokka)
+    alias(libs.plugins.compose.plugin) apply false
+    alias(libs.plugins.accompanist.android.library) apply false
+    alias(libs.plugins.accompanist.android.library.compose) apply false
+    alias(libs.plugins.accompanist.android.lint) apply false
 }
 
 apply plugin: 'com.dropbox.affectedmoduledetector'
@@ -69,18 +73,6 @@ affectedModuleDetector {
     } else {
         // Otherwise we use the previous commit. This is mostly used for commits to main.
         compareFrom = "PreviousCommit"
-    }
-}
-
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-
-        def composeSnapshot = libs.versions.composesnapshot.get()
-        if (composeSnapshot.length() > 1) {
-            maven { url "https://androidx.dev/snapshots/builds/$composeSnapshot/artifacts/repository/" }
-        }
     }
 }
 
@@ -118,19 +110,6 @@ subprojects {
                     && details.requested.version.contains('jre')) {
                 details.useVersion details.requested.version.replace('jre', 'android')
             }
-        }
-    }
-
-    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach { compile ->
-        kotlinOptions {
-            // Treat all Kotlin warnings as errors
-            allWarningsAsErrors = true
-            // Set JVM target to 1.8
-            jvmTarget = "1.8"
-            // Allow use of @OptIn
-            freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
-            // Enable default methods in interfaces
-            freeCompilerArgs += "-Xjvm-default=all"
         }
     }
 

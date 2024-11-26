@@ -15,9 +15,13 @@
  */
 @file:Suppress("UnstableApiUsage")
 
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
+
 plugins {
     id(libs.plugins.android.application.get().pluginId)
     id(libs.plugins.android.kotlin.get().pluginId)
+    alias(libs.plugins.compose.plugin)
 }
 
 android {
@@ -26,7 +30,7 @@ android {
     defaultConfig {
         applicationId = "com.google.accompanist.sample"
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 34
 
         versionCode = 1
         versionName = "1.0"
@@ -35,22 +39,22 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     buildFeatures {
         compose = true
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
-    }
-
     buildTypes {
         getByName("release") {
             signingConfig = signingConfigs.getByName("debug")
         }
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
     }
 
     namespace = "com.google.accompanist.sample"
