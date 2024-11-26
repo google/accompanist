@@ -19,7 +19,6 @@ package com.google.accompanist
 import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Project
 import org.gradle.api.provider.Provider
-import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
@@ -59,5 +58,9 @@ internal fun Project.configureAndroidCompose(
         project.providers.gradleProperty("enableComposeCompilerReports").onlyIfTrue()
             .relativeToRootProject("compose-reports")
             .let(reportsDestination::set)
+
+        // We include source information to match how the main Compose libraries are shipped.
+        // This allows accompanist to be displayed properly in the layout inspector and systrace
+        includeSourceInformation.set(true)
     }
 }
