@@ -20,12 +20,6 @@ package com.google.accompanist.permissions {
     method @androidx.compose.runtime.Composable @com.google.accompanist.permissions.ExperimentalPermissionsApi public static com.google.accompanist.permissions.MultiplePermissionsState rememberMultiplePermissionsState(java.util.List<java.lang.String> permissions, optional kotlin.jvm.functions.Function1<? super java.util.Map<java.lang.String,java.lang.Boolean>,kotlin.Unit> onPermissionsResult);
   }
 
-  public final class MutableMultiplePermissionsStateKt {
-  }
-
-  public final class MutablePermissionStateKt {
-  }
-
   @androidx.compose.runtime.Stable @com.google.accompanist.permissions.ExperimentalPermissionsApi public interface PermissionState {
     method public String getPermission();
     method public com.google.accompanist.permissions.PermissionStatus getStatus();
