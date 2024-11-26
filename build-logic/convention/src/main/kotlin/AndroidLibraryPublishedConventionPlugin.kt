@@ -1,6 +1,7 @@
 import me.tylerbwong.gradle.metalava.extension.MetalavaExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 
 /*
@@ -23,6 +24,8 @@ class AndroidLibraryPublishedConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
+                apply(AndroidLintConventionPlugin::class)
+
                 apply("me.tylerbwong.gradle.metalava")
                 apply("org.jetbrains.dokka")
                 apply("com.vanniktech.maven.publish")

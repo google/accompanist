@@ -19,7 +19,6 @@ plugins {
     alias(libs.plugins.accompanist.android.library)
     alias(libs.plugins.accompanist.android.library.compose)
     alias(libs.plugins.accompanist.android.library.published)
-    alias(libs.plugins.accompanist.android.lint)
 }
 
 android {
