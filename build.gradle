@@ -1,3 +1,5 @@
+import org.jetbrains.dokka.gradle.DokkaMultiModuleTask
+
 /*
  * Copyright 2020 The Android Open Source Project
  *
@@ -18,35 +20,31 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        gradlePluginPortal()
     }
 
     dependencies {
-        classpath libs.android.tools.build.gradle
-        classpath libs.android.gradlePlugin
-        classpath libs.kotlin.gradlePlugin
-
-        classpath libs.gradleMavenPublishPlugin
-
-        classpath libs.metalavaGradle
-
         classpath libs.affectedmoduledetector
     }
 }
 
 plugins {
     id "com.diffplug.spotless" version "6.5.2"
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.android.kotlin) apply false
     alias(libs.plugins.jetbrains.dokka)
     alias(libs.plugins.compose.plugin) apply false
     alias(libs.plugins.accompanist.android.library) apply false
     alias(libs.plugins.accompanist.android.library.compose) apply false
+    alias(libs.plugins.accompanist.android.library.published) apply false
     alias(libs.plugins.accompanist.android.lint) apply false
+    alias(libs.plugins.gradle.metalava) apply false
+    alias(libs.plugins.vanniktech.maven.publish) apply false
 }
 
 apply plugin: 'com.dropbox.affectedmoduledetector'
 apply plugin: 'com.diffplug.spotless'
 
-tasks.withType(org.jetbrains.dokka.gradle.DokkaMultiModuleTask).configureEach {
+tasks.withType(DokkaMultiModuleTask).configureEach {
     outputDirectory = rootProject.file('docs/api')
     failOnWarning = true
 }

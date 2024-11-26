@@ -18,21 +18,12 @@
 plugins {
     alias(libs.plugins.accompanist.android.library)
     alias(libs.plugins.accompanist.android.library.compose)
+    alias(libs.plugins.accompanist.android.library.published)
     alias(libs.plugins.accompanist.android.lint)
-
-    id(libs.plugins.jetbrains.dokka.get().pluginId)
-    id(libs.plugins.gradle.metalava.get().pluginId)
-    id(libs.plugins.vanniktech.maven.publish.get().pluginId)
 }
 
 android {
     namespace = "com.google.accompanist.navigation.animation"
-}
-
-metalava {
-    sourcePaths.setFrom("src/main")
-    filename.set("api/current.api")
-    reportLintsAsErrors.set(true)
 }
 
 dependencies {

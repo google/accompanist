@@ -16,6 +16,8 @@
 
 import com.android.build.gradle.LibraryExtension
 import com.google.accompanist.configureKotlinAndroid
+import com.google.accompanist.libs
+import me.tylerbwong.gradle.metalava.extension.MetalavaExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -34,6 +36,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 configureKotlinAndroid(this)
                 defaultConfig.targetSdk = 34
                 defaultConfig.testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
                 buildFeatures.buildConfig = false
 
                 testOptions.animationsDisabled = true
@@ -41,6 +44,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 // so resources inside ":core:module1" must be prefixed with "core_module1_"
                 resourcePrefix = path.split("""\W""".toRegex()).drop(1).distinct().joinToString(separator = "_").lowercase() + "_"
             }
+
             dependencies {
                 add("androidTestImplementation", kotlin("test"))
                 add("testImplementation", kotlin("test"))

@@ -23,7 +23,7 @@ androidxtest = "1.6.1"
 androidxnavigation = "2.7.7"
 androidxWindow = "1.0.0"
 
-metalava = "0.3.2"
+metalava = "0.3.5"
 vanniktechPublish = "0.25.2"
 
 [libraries]
@@ -118,7 +118,7 @@ vanniktech-maven-publish = { id = "com.vanniktech.maven.publish", version.ref = 
 compose-plugin = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
 #build-logic plugins
-accompanist-android-application-compose = { id = "accompanist.android.application.compose" }
 accompanist-android-library = { id = "accompanist.android.library" }
 accompanist-android-library-compose = { id = "accompanist.android.library.compose" }
+accompanist-android-library-published = { id = "accompanist.android.library.published" }
 accompanist-android-lint = { id = "accompanist.android.lint" }
