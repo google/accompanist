@@ -43,7 +43,10 @@ import java.util.EnumSet
 public class PermissionsLaunchDetector : Detector(), SourceCodeScanner {
 
     override fun getApplicableMethodNames(): List<String> = listOf(
-        LaunchPermissionRequest.shortName, LaunchMultiplePermissionsRequest.shortName
+        LaunchPermissionRequest.shortName, LaunchMultiplePermissionsRequest.shortName,
+        LaunchPermissionRequestOrAppSettings.shortName,
+        LaunchMultiplePermissionsRequestOrAppSettings.shortName,
+        OpenAppSettings.shortName
     )
 
     override fun visitMethodCall(context: JavaContext, node: UCallExpression, method: PsiMethod) {
@@ -87,5 +90,11 @@ private fun PsiMethod.isInPackageName(packageName: PackageName): Boolean =
 private val PermissionsPackageName = Package("com.google.accompanist.permissions")
 private val LaunchPermissionRequest =
     Name(PermissionsPackageName, "launchPermissionRequest")
+private val LaunchPermissionRequestOrAppSettings =
+    Name(PermissionsPackageName, "launchPermissionRequestOrAppSettings")
 private val LaunchMultiplePermissionsRequest =
     Name(PermissionsPackageName, "launchMultiplePermissionRequest")
+private val LaunchMultiplePermissionsRequestOrAppSettings =
+    Name(PermissionsPackageName, "launchMultiplePermissionRequestOrAppSettings")
+private val OpenAppSettings =
+    Name(PermissionsPackageName, "openAppSettings")

@@ -27,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.util.fastAll
 
 /**
  * Creates a [MultiplePermissionsState] that is remembered across compositions.
@@ -57,6 +58,7 @@ internal fun rememberMutableMultiplePermissionsState(
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissionsResult ->
+        multiplePermissionsState.isNotRequested = false
         multiplePermissionsState.updatePermissionsStatus(permissionsResult)
         onPermissionsResult(permissionsResult)
     }
@@ -117,14 +119,15 @@ internal class MutableMultiplePermissionsState(
 
     override val permissions: List<PermissionState> = mutablePermissions
 
-    override val revokedPermissions: List<PermissionState> by derivedStateOf {
-        permissions.filter { it.status != PermissionStatus.Granted }
-    }
+    override var isNotRequested: Boolean = true
 
     override val allPermissionsGranted: Boolean by derivedStateOf {
         permissions.all { it.status.isGranted } || // Up to date when the lifecycle is resumed
-            revokedPermissions.isEmpty() // Up to date when the user launches the action
+            notGrantedPermissions.isEmpty() // Up to date when the user launches the action
     }
+
+    override val allNotGrantedPermissionsArePermanentlyDenied: Boolean
+        get() = permissions.fastAll { it.status.isGranted || it.status.isPermanentlyDenied }
 
     override val shouldShowRationale: Boolean by derivedStateOf {
         permissions.any { it.status.shouldShowRationale } &&
@@ -135,6 +138,10 @@ internal class MutableMultiplePermissionsState(
         launcher?.launch(
             permissions.map { it.permission }.toTypedArray()
         ) ?: throw IllegalStateException("ActivityResultLauncher cannot be null")
+    }
+
+    override fun openAppSettings() {
+        permanentlyDeniedPermissions.firstOrNull()?.openAppSettings()
     }
 
     internal var launcher: ActivityResultLauncher<Array<String>>? = null

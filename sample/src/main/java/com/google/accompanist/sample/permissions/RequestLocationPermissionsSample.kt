@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.deniedPermissions
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.accompanist.sample.AccompanistSampleTheme
 
@@ -59,7 +60,7 @@ private fun Sample() {
         Column {
             val allPermissionsRevoked =
                 locationPermissionsState.permissions.size ==
-                    locationPermissionsState.revokedPermissions.size
+                    locationPermissionsState.deniedPermissions.size
 
             val textToShow = if (!allPermissionsRevoked) {
                 // If not all the permissions are revoked, it's because the user accepted the COARSE

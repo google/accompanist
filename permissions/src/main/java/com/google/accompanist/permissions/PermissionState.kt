@@ -17,7 +17,9 @@
 package com.google.accompanist.permissions
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
+import androidx.compose.ui.platform.LocalInspectionMode
 
 /**
  * Creates a [PermissionState] that is remembered across compositions.
@@ -35,7 +37,10 @@ public fun rememberPermissionState(
     permission: String,
     onPermissionResult: (Boolean) -> Unit = {}
 ): PermissionState {
-    return rememberMutablePermissionState(permission, onPermissionResult)
+    return when {
+        LocalInspectionMode.current -> PreviewPermissionState(permission)
+        else -> rememberMutablePermissionState(permission, onPermissionResult)
+    }
 }
 
 /**
@@ -72,4 +77,40 @@ public interface PermissionState {
      * This behavior varies depending on the Android level API.
      */
     public fun launchPermissionRequest(): Unit
+
+    /**
+     * Open the app settings page.
+     *
+     * If the [permission] is [android.Manifest.permission.POST_NOTIFICATIONS] then
+     * the notification settings will be opened. Otherwise the app's settings will be opened.
+     *
+     * This should always be triggered from non-composable scope, for example, from a side-effect
+     * or a non-composable callback. Otherwise, this will result in an IllegalStateException.
+     */
+    public fun openAppSettings(): Unit
+}
+
+/**
+ * Calls [PermissionState.launchPermissionRequest] or [PermissionState.openAppSettings]
+ * depending on the state of [PermissionState.status].
+ *
+ * This should always be triggered from non-composable scope, for example, from a side-effect
+ * or a non-composable callback. Otherwise, this will result in an IllegalStateException.
+ */
+@ExperimentalPermissionsApi
+public fun PermissionState.launchPermissionRequestOrAppSettings() {
+    when (status) {
+        PermissionStatus.NotGranted.PermanentlyDenied -> openAppSettings()
+        else -> launchPermissionRequest()
+    }
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Immutable
+internal class PreviewPermissionState(
+    override val permission: String
+) : PermissionState {
+    override val status: PermissionStatus = PermissionStatus.NotGranted.NotRequested
+    override fun launchPermissionRequest() {}
+    override fun openAppSettings() {}
 }
