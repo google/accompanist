@@ -17,7 +17,9 @@
 package com.google.accompanist.permissions
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
+import androidx.compose.ui.platform.LocalInspectionMode
 
 /**
  * Creates a [PermissionState] that is remembered across compositions.
@@ -29,13 +31,18 @@ import androidx.compose.runtime.Stable
  * @param onPermissionResult will be called with whether or not the user granted the permission
  *  after [PermissionState.launchPermissionRequest] is called.
  */
+@JvmOverloads
 @ExperimentalPermissionsApi
 @Composable
 public fun rememberPermissionState(
     permission: String,
-    onPermissionResult: (Boolean) -> Unit = {}
+    onPermissionResult: (Boolean) -> Unit = {},
+    previewPermissionStatus: PermissionStatus = PermissionStatus.Granted
 ): PermissionState {
-    return rememberMutablePermissionState(permission, onPermissionResult)
+    return when {
+        LocalInspectionMode.current -> PreviewPermissionState(permission, previewPermissionStatus)
+        else -> rememberMutablePermissionState(permission, onPermissionResult)
+    }
 }
 
 /**
@@ -72,4 +79,13 @@ public interface PermissionState {
      * This behavior varies depending on the Android level API.
      */
     public fun launchPermissionRequest(): Unit
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Immutable
+internal class PreviewPermissionState(
+    override val permission: String,
+    override val status: PermissionStatus
+) : PermissionState {
+    override fun launchPermissionRequest() {}
 }

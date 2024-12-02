@@ -17,7 +17,10 @@
 package com.google.accompanist.permissions
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.util.fastMap
 
 /**
  * Creates a [MultiplePermissionsState] that is remembered across compositions.
@@ -29,13 +32,19 @@ import androidx.compose.runtime.Stable
  * @param onPermissionsResult will be called with whether or not the user granted the permissions
  *  after [MultiplePermissionsState.launchMultiplePermissionRequest] is called.
  */
+@JvmOverloads
 @ExperimentalPermissionsApi
 @Composable
 public fun rememberMultiplePermissionsState(
     permissions: List<String>,
-    onPermissionsResult: (Map<String, Boolean>) -> Unit = {}
+    onPermissionsResult: (Map<String, Boolean>) -> Unit = {},
+    permissionStatuses: Map<String, PermissionStatus> = emptyMap()
 ): MultiplePermissionsState {
-    return rememberMutableMultiplePermissionsState(permissions, onPermissionsResult)
+    return when {
+        LocalInspectionMode.current ->
+            PreviewMultiplePermissionsState(permissions, permissionStatuses)
+        else -> rememberMutableMultiplePermissionsState(permissions, onPermissionsResult)
+    }
 }
 
 /**
@@ -82,4 +91,24 @@ public interface MultiplePermissionsState {
      * This behavior varies depending on the Android level API.
      */
     public fun launchMultiplePermissionRequest(): Unit
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Immutable
+private class PreviewMultiplePermissionsState(
+    permissions: List<String>,
+    permissionStatuses: Map<String, PermissionStatus>
+) : MultiplePermissionsState {
+    override val permissions: List<PermissionState> = permissions.fastMap { permission ->
+        PreviewPermissionState(
+            permission = permission,
+            status = permissionStatuses[permission] ?: PermissionStatus.Granted,
+        )
+    }
+
+    override val revokedPermissions: List<PermissionState> = emptyList()
+    override val allPermissionsGranted: Boolean = false
+    override val shouldShowRationale: Boolean = false
+
+    override fun launchMultiplePermissionRequest() {}
 }
