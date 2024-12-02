@@ -36,10 +36,12 @@ import androidx.compose.ui.util.fastMap
 @Composable
 public fun rememberMultiplePermissionsState(
     permissions: List<String>,
-    onPermissionsResult: (Map<String, Boolean>) -> Unit = {}
+    onPermissionsResult: (Map<String, Boolean>) -> Unit = {},
+    permissionStatuses: Map<String, PermissionStatus> = emptyMap()
 ): MultiplePermissionsState {
     return when {
-        LocalInspectionMode.current -> PreviewMultiplePermissionsState(permissions)
+        LocalInspectionMode.current ->
+            PreviewMultiplePermissionsState(permissions, permissionStatuses)
         else -> rememberMutableMultiplePermissionsState(permissions, onPermissionsResult)
     }
 }
@@ -93,9 +95,16 @@ public interface MultiplePermissionsState {
 @OptIn(ExperimentalPermissionsApi::class)
 @Immutable
 private class PreviewMultiplePermissionsState(
-    permissions: List<String>
+    permissions: List<String>,
+    permissionStatuses: Map<String, PermissionStatus>
 ) : MultiplePermissionsState {
-    override val permissions: List<PermissionState> = permissions.fastMap(::PreviewPermissionState)
+    override val permissions: List<PermissionState> = permissions.fastMap { permission ->
+        PreviewPermissionState(
+            permission = permission,
+            status = permissionStatuses[permission] ?: PermissionStatus.Granted,
+        )
+    }
+
     override val revokedPermissions: List<PermissionState> = emptyList()
     override val allPermissionsGranted: Boolean = false
     override val shouldShowRationale: Boolean = false

@@ -35,10 +35,11 @@ import androidx.compose.ui.platform.LocalInspectionMode
 @Composable
 public fun rememberPermissionState(
     permission: String,
-    onPermissionResult: (Boolean) -> Unit = {}
+    onPermissionResult: (Boolean) -> Unit = {},
+    previewPermissionStatus: PermissionStatus = PermissionStatus.Granted
 ): PermissionState {
     return when {
-        LocalInspectionMode.current -> PreviewPermissionState(permission)
+        LocalInspectionMode.current -> PreviewPermissionState(permission, previewPermissionStatus)
         else -> rememberMutablePermissionState(permission, onPermissionResult)
     }
 }
@@ -83,7 +84,7 @@ public interface PermissionState {
 @Immutable
 internal class PreviewPermissionState(
     override val permission: String,
-    override val status: PermissionStatus = PermissionStatus.Granted
+    override val status: PermissionStatus
 ) : PermissionState {
     override fun launchPermissionRequest() {}
 }
