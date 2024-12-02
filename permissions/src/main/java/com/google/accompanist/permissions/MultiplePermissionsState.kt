@@ -32,6 +32,7 @@ import androidx.compose.ui.util.fastMap
  * @param onPermissionsResult will be called with whether or not the user granted the permissions
  *  after [MultiplePermissionsState.launchMultiplePermissionRequest] is called.
  */
+@JvmOverloads
 @ExperimentalPermissionsApi
 @Composable
 public fun rememberMultiplePermissionsState(

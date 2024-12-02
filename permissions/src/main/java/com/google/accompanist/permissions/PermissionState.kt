@@ -31,6 +31,7 @@ import androidx.compose.ui.platform.LocalInspectionMode
  * @param onPermissionResult will be called with whether or not the user granted the permission
  *  after [PermissionState.launchPermissionRequest] is called.
  */
+@JvmOverloads
 @ExperimentalPermissionsApi
 @Composable
 public fun rememberPermissionState(
