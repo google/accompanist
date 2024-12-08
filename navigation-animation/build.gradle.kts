@@ -23,6 +23,14 @@ plugins {
 
 android {
     namespace = "com.google.accompanist.navigation.animation"
+
+    packaging {
+        // Some of the META-INF files conflict with coroutines-test. Exclude them to enable
+        // our test APK to build (has no effect on our AARs)
+        resources {
+            excludes += listOf("/META-INF/AL2.0", "/META-INF/LGPL2.1")
+        }
+    }
 }
 
 dependencies {
