@@ -17,7 +17,9 @@
 package com.google.accompanist.permissions
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
+import androidx.compose.ui.platform.LocalInspectionMode
 
 /**
  * Creates a [PermissionState] that is remembered across compositions.
@@ -35,7 +37,31 @@ public fun rememberPermissionState(
     permission: String,
     onPermissionResult: (Boolean) -> Unit = {}
 ): PermissionState {
-    return rememberMutablePermissionState(permission, onPermissionResult)
+    return rememberPermissionState(permission, onPermissionResult, PermissionStatus.Granted)
+}
+
+/**
+ * Creates a [PermissionState] that is remembered across compositions.
+ *
+ * It's recommended that apps exercise the permissions workflow as described in the
+ * [documentation](https://developer.android.com/training/permissions/requesting#workflow_for_requesting_permissions).
+ *
+ * @param permission the permission to control and observe.
+ * @param onPermissionResult will be called with whether or not the user granted the permission
+ *  after [PermissionState.launchPermissionRequest] is called.
+ * @param previewPermissionStatus provides a [PermissionStatus] when running in a preview.
+ */
+@ExperimentalPermissionsApi
+@Composable
+public fun rememberPermissionState(
+    permission: String,
+    onPermissionResult: (Boolean) -> Unit = {},
+    previewPermissionStatus: PermissionStatus = PermissionStatus.Granted
+): PermissionState {
+    return when {
+        LocalInspectionMode.current -> PreviewPermissionState(permission, previewPermissionStatus)
+        else -> rememberMutablePermissionState(permission, onPermissionResult)
+    }
 }
 
 /**
@@ -72,4 +98,13 @@ public interface PermissionState {
      * This behavior varies depending on the Android level API.
      */
     public fun launchPermissionRequest(): Unit
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Immutable
+internal class PreviewPermissionState(
+    override val permission: String,
+    override val status: PermissionStatus
+) : PermissionState {
+    override fun launchPermissionRequest() {}
 }
