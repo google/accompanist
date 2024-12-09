@@ -35,6 +35,10 @@ kotlin {
 }
 
 dependencies {
+    // used by BundleInsideHelper.kt
+    implementation(libs.apacheAnt)
+    implementation(libs.shadow)
+
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.android.tools.common)
     compileOnly(libs.compose.gradlePlugin)
