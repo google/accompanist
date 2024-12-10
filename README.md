@@ -61,9 +61,6 @@ See our [Migration Guide](https://google.github.io/accompanist/navigation-materi
 ### 🍫 [System UI Controller](./systemuicontroller/) (Deprecated)
 We recommend migrating to edge to edge. See our [Migration Guide](https://google.github.io/accompanist/systemuicontroller/) for more details.
 
-### 🗜 [Test Harness](./testharness/) (Deprecated)
-Utilities for testing Compose layouts.
-
 ---
 
 ## Future?

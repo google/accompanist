@@ -71,9 +71,6 @@ dependencies {
     implementation(project(":navigation-material"))
     implementation(project(":permissions"))
     implementation(project(":systemuicontroller"))
-    implementation(project(":testharness")) // Don't use in production! Use the configurations below
-    testImplementation(project(":testharness"))
-    androidTestImplementation(project(":testharness"))
 
     implementation(libs.androidx.appcompat)
     implementation(libs.mdc)

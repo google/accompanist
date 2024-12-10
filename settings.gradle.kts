@@ -40,7 +40,6 @@ include(":permissions")
 include(":permissions-lint")
 include(":systemuicontroller")
 include(":sample")
-include(":testharness")
 
 rootProject.name = "accompanist"
 

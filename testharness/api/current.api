@@ -1,9 +1,0 @@
-// Signature format: 4.0
-package com.google.accompanist.testharness {
-
-  public final class TestHarnessKt {
-    method @Deprecated @androidx.compose.runtime.Composable public static void TestHarness(optional long size, optional boolean darkMode, optional androidx.core.os.LocaleListCompat locales, optional androidx.compose.ui.unit.LayoutDirection? layoutDirection, optional float fontScale, optional Integer? fontWeightAdjustment, optional Boolean? isScreenRound, kotlin.jvm.functions.Function0<kotlin.Unit> content);
-  }
-
-}
-
