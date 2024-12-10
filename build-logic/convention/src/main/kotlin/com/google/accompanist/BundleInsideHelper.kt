@@ -32,6 +32,11 @@ import org.gradle.api.tasks.TaskProvider
 import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.register
 
+/**
+ * Originally from https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:buildSrc/public/src/main/kotlin/androidx/build/BundleInsideHelper.kt
+ * Small modifications based on gradle version
+ */
+
 /** Allow java and Android libraries to bundle other projects inside the project jar/aar. */
 object BundleInsideHelper {
     val CONFIGURATION_NAME = "bundleInside"

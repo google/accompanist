@@ -23,10 +23,6 @@ plugins {
     id(libs.plugins.android.lint.get().pluginId)
 }
 
-kotlin {
-    explicitApi()
-}
-
 lint {
     htmlReport = true
     htmlOutput = file("lint-report.html")
