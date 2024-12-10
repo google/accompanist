@@ -192,16 +192,6 @@
                 <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
             </intent-filter>
         </activity>
-        
-        <activity
-            android:name=".testharness.TestHarnessSample"
-            android:label="@string/testharness"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
 
     </application>
 
