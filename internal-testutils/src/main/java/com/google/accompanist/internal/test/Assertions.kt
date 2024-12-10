@@ -28,7 +28,7 @@ import com.google.common.truth.Truth.assertThat
 /**
  * Assert that all of the pixels in this image as of the [expected] color.
  */
-fun ImageBitmap.assertPixels(expected: Color, tolerance: Float = 0.001f) {
+public fun ImageBitmap.assertPixels(expected: Color, tolerance: Float = 0.001f) {
     toPixelMap().buffer.forEach { pixel ->
         val color = Color(pixel)
         assertThat(color.red).isWithin(tolerance).of(expected.red)
@@ -42,7 +42,7 @@ fun ImageBitmap.assertPixels(expected: Color, tolerance: Float = 0.001f) {
  * Run the [SemanticsNodeInteraction] provided by [block] repeatedly until either
  * the assertion succeeds, or the execution runs past [timeoutMillis].
  */
-fun SemanticsNodeInteraction.assertWithTimeout(
+public fun SemanticsNodeInteraction.assertWithTimeout(
     timeoutMillis: Long,
     block: SemanticsNodeInteraction.() -> SemanticsNodeInteraction,
 ): SemanticsNodeInteraction {
@@ -60,7 +60,7 @@ fun SemanticsNodeInteraction.assertWithTimeout(
     return block()
 }
 
-val SemanticsNodeInteraction.exists: Boolean
+public val SemanticsNodeInteraction.exists: Boolean
     get() = try {
         assertExists()
         true
@@ -68,7 +68,7 @@ val SemanticsNodeInteraction.exists: Boolean
         false
     }
 
-val SemanticsNodeInteraction.isLaidOut: Boolean
+public val SemanticsNodeInteraction.isLaidOut: Boolean
     get() = try {
         assertWidthIsAtLeast(Dp.Hairline).assertHeightIsAtLeast(Dp.Hairline)
         true

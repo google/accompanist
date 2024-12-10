@@ -17,7 +17,7 @@
 
 <resources>
 
-    <style name="Theme.Test" parent="@android:style/Theme.Material.Light.NoActionBar">
+    <style name="InternalTestutilsTheme.Test" parent="@android:style/Theme.Material.Light.NoActionBar">
         <item name="android:windowAnimationStyle">@null</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>

@@ -21,14 +21,14 @@ package com.google.accompanist.systemuicontroller {
     method @Deprecated public default void setSystemBarsColor(long color, optional boolean darkIcons, optional boolean isNavigationBarContrastEnforced, optional kotlin.jvm.functions.Function1<? super androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color> transformColorForLightContent);
     method @Deprecated public default void setSystemBarsDarkContentEnabled(boolean);
     method @Deprecated public default void setSystemBarsVisible(boolean);
-    property public abstract boolean isNavigationBarContrastEnforced;
-    property public abstract boolean isNavigationBarVisible;
-    property public abstract boolean isStatusBarVisible;
-    property public default boolean isSystemBarsVisible;
-    property public abstract boolean navigationBarDarkContentEnabled;
-    property public abstract boolean statusBarDarkContentEnabled;
-    property public abstract int systemBarsBehavior;
-    property public default boolean systemBarsDarkContentEnabled;
+    property @Deprecated public abstract boolean isNavigationBarContrastEnforced;
+    property @Deprecated public abstract boolean isNavigationBarVisible;
+    property @Deprecated public abstract boolean isStatusBarVisible;
+    property @Deprecated public default boolean isSystemBarsVisible;
+    property @Deprecated public abstract boolean navigationBarDarkContentEnabled;
+    property @Deprecated public abstract boolean statusBarDarkContentEnabled;
+    property @Deprecated public abstract int systemBarsBehavior;
+    property @Deprecated public default boolean systemBarsDarkContentEnabled;
   }
 
   public final class SystemUiControllerKt {

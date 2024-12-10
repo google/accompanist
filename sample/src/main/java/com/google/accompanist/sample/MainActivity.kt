@@ -127,6 +127,7 @@ class MainActivity : ListActivity() {
         data += temp
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
         val map = l.getItemAtPosition(position) as Map<*, *>
         val intent = map["intent"] as Intent?
