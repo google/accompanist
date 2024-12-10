@@ -14,44 +14,43 @@
  * limitations under the License.
  */
 
-@file:Suppress("DEPRECATION") // ListActivity
-
 package com.google.accompanist.sample
 
 import android.annotation.SuppressLint
-import android.app.ListActivity
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.ListView
-import android.widget.SimpleAdapter
-import java.text.Collator
-import java.util.ArrayList
-import java.util.Collections
-import java.util.Comparator
-import java.util.HashMap
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.Composable
 
 /**
- * A [ListActivity] which automatically populates the list of sample activities in this app
+ * A list which automatically populates the list of sample activities in this app
  * with the category `com.google.accompanist.sample.SAMPLE_CODE`.
  */
-class MainActivity : ListActivity() {
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        listAdapter = SimpleAdapter(
-            this,
-            getData(intent.getStringExtra(EXTRA_PATH)),
-            android.R.layout.simple_list_item_1,
-            arrayOf("title"),
-            intArrayOf(android.R.id.text1)
-        )
+        enableEdgeToEdge()
+        val data = getData(intent.getStringExtra(EXTRA_PATH))
 
-        listView.isTextFilterEnabled = true
+        setContent {
+            AccompanistM3SampleTheme {
+                MainScreen(
+                    listData = data,
+                    onItemClick = { startActivity(it) }
+                )
+            }
+        }
     }
 
-    private fun getData(prefix: String?): List<Map<String, Any>> {
-        val myData = ArrayList<Map<String, Any>>()
+    private fun getData(prefix: String?): List<AccompanistSample> {
+        val myData = mutableListOf<AccompanistSample>()
 
         val mainIntent = Intent(Intent.ACTION_MAIN, null)
         mainIntent.addCategory("com.google.accompanist.sample.SAMPLE_CODE")
@@ -69,7 +68,7 @@ class MainActivity : ListActivity() {
             prefixWithSlash = "$prefix/"
         }
 
-        val entries = HashMap<String, Boolean>()
+        val entries = mutableMapOf<String, Boolean>()
 
         list.forEach { info ->
             val labelSeq = info.loadLabel(packageManager)
@@ -78,22 +77,24 @@ class MainActivity : ListActivity() {
             if (prefixWithSlash.isNullOrEmpty() || label.startsWith(prefixWithSlash)) {
                 val labelPath = label.split("/".toRegex()).toTypedArray()
                 val nextLabel = if (prefixPath == null) labelPath[0] else labelPath[prefixPath.size]
-                if (prefixPath?.size ?: 0 == labelPath.size - 1) {
-                    addItem(
-                        data = myData,
-                        name = nextLabel,
-                        intent = activityIntent(
-                            info.activityInfo.applicationInfo.packageName,
-                            info.activityInfo.name
+                if ((prefixPath?.size ?: 0) == labelPath.size - 1) {
+                    myData.add(
+                        AccompanistSample(
+                            title = nextLabel,
+                            intent = activityIntent(
+                                info.activityInfo.applicationInfo.packageName,
+                                info.activityInfo.name
+                            )
                         )
                     )
                 } else {
                     if (entries[nextLabel] == null) {
-                        addItem(
-                            data = myData,
-                            name = nextLabel,
-                            intent = browseIntent(
-                                if (prefix == "") nextLabel else "$prefix/$nextLabel"
+                        myData.add(
+                            AccompanistSample(
+                                title = nextLabel,
+                                intent = browseIntent(
+                                    if (prefix == "") nextLabel else "$prefix/$nextLabel"
+                                )
                             )
                         )
                         entries[nextLabel] = true
@@ -102,7 +103,7 @@ class MainActivity : ListActivity() {
             }
         }
 
-        Collections.sort(myData, sDisplayNameComparator)
+        myData.sortBy { it.title }
 
         return myData
     }
@@ -119,30 +120,20 @@ class MainActivity : ListActivity() {
         result.putExtra(EXTRA_PATH, path)
         return result
     }
+}
 
-    private fun addItem(data: MutableList<Map<String, Any>>, name: String, intent: Intent) {
-        val temp = mutableMapOf<String, Any>()
-        temp["title"] = name
-        temp["intent"] = intent
-        data += temp
-    }
+private const val EXTRA_PATH = "com.example.android.apis.Path"
 
-    @Deprecated("Deprecated in Java")
-    override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
-        val map = l.getItemAtPosition(position) as Map<*, *>
-        val intent = map["intent"] as Intent?
-        startActivity(intent)
-    }
-
-    companion object {
-        private const val EXTRA_PATH = "com.example.android.apis.Path"
-
-        private val sDisplayNameComparator = object : Comparator<Map<String, Any>> {
-            private val collator = Collator.getInstance()
-
-            override fun compare(map1: Map<String, Any>, map2: Map<String, Any>): Int {
-                return collator.compare(map1["title"], map2["title"])
-            }
-        }
-    }
+/**
+ * TODO Migrate whole sample app to m3 and move to Theme.kt
+ */
+@Composable
+fun AccompanistM3SampleTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable () -> Unit
+) {
+    MaterialTheme(
+        colorScheme = if (darkTheme) darkColorScheme() else lightColorScheme(),
+        content = content
+    )
 }
