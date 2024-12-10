@@ -67,7 +67,6 @@ dependencies {
 
     implementation(project(":adaptive"))
     implementation(project(":drawablepainter"))
-    implementation(project(":navigation-animation"))
     implementation(project(":permissions"))
     implementation(project(":systemuicontroller"))
 

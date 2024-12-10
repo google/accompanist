@@ -52,7 +52,7 @@ A library which provides a way to use Android Drawables as Jetpack Compose Paint
 ### 📜 [Adaptive](./adaptive/)
 A library providing a collection of utilities for adaptive layouts.
 
-### 🧭✨[Navigation-Animation](./navigation-animation/) (Deprecated)
+### 🧭✨[Navigation-Animation](./navigation-animation/) (Deprecated & Removed)
 See our [Migration Guide](https://google.github.io/accompanist/navigation-animation/) for migrating to using built in support for animations in Jetpack Navigation Compose. 
 
 ### 🧭🎨️ [Navigation-Material](./navigation-material/) (Deprecated & Removed)

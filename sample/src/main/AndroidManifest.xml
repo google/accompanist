@@ -51,16 +51,6 @@
         </activity>
 
         <activity
-            android:name=".navigation.animation.AnimatedNavHostSample"
-            android:label="@string/navigation_title_animated"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
             android:name=".permissions.RequestPermissionSample"
             android:label="@string/permissions_title_one"
             android:exported="true">
