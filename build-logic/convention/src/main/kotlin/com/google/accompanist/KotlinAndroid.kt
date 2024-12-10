@@ -49,23 +49,6 @@ internal fun Project.configureKotlinAndroid(
     }
 
     configureKotlin<KotlinAndroidProjectExtension>()
-
-    dependencies {
-    }
-}
-
-/**
- * Configure base Kotlin options for JVM (non-Android)
- */
-internal fun Project.configureKotlinJvm() {
-    extensions.configure<JavaPluginExtension> {
-        // Up to Java 11 APIs are available through desugaring
-        // https://developer.android.com/studio/write/java11-minimal-support-table
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-
-    configureKotlin<KotlinJvmProjectExtension>()
 }
 
 /**
@@ -82,10 +65,6 @@ private inline fun <reified T : KotlinTopLevelExtension> Project.configureKotlin
     }.apply {
         jvmTarget = JvmTarget.JVM_1_8
         allWarningsAsErrors = warningsAsErrors.toBoolean()
-        freeCompilerArgs.add(
-            // Enable experimental coroutines APIs, including Flow
-            "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-        )
         explicitApi()
     }
 }

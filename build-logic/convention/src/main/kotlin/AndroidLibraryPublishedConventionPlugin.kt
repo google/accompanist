@@ -1,9 +1,3 @@
-import me.tylerbwong.gradle.metalava.extension.MetalavaExtension
-import org.gradle.api.Plugin
-import org.gradle.api.Project
-import org.gradle.kotlin.dsl.apply
-import org.gradle.kotlin.dsl.configure
-
 /*
  * Copyright 2024 The Android Open Source Project
  *
@@ -19,6 +13,12 @@ import org.gradle.kotlin.dsl.configure
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import me.tylerbwong.gradle.metalava.extension.MetalavaExtension
+import org.gradle.api.Plugin
+import org.gradle.api.Project
+import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.configure
 
 class AndroidLibraryPublishedConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {

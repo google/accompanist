@@ -30,7 +30,7 @@ android {
     defaultConfig {
         applicationId = "com.google.accompanist.sample"
         minSdk = 21
-        targetSdk = 34
+        targetSdk = 35
 
         versionCode = 1
         versionName = "1.0"
@@ -41,6 +41,8 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+
+        isCoreLibraryDesugaringEnabled = true
     }
 
     buildFeatures {
@@ -61,6 +63,8 @@ android {
 }
 
 dependencies {
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
+
     implementation(project(":adaptive"))
     implementation(project(":drawablepainter"))
     implementation(project(":navigation-animation"))

@@ -16,8 +16,6 @@
 
 import com.android.build.gradle.LibraryExtension
 import com.google.accompanist.configureKotlinAndroid
-import com.google.accompanist.libs
-import me.tylerbwong.gradle.metalava.extension.MetalavaExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -34,7 +32,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
 
             extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
-                defaultConfig.targetSdk = 34
+                defaultConfig.targetSdk = 35
                 defaultConfig.testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
                 buildFeatures.buildConfig = false
