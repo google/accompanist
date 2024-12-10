@@ -32,11 +32,9 @@ dependencyResolutionManagement {
 
 include(":adaptive")
 include(":internal-testutils")
-include(":appcompat-theme")
 include(":drawablepainter")
 include(":permissions")
 include(":permissions-lint")
-include(":systemuicontroller")
 include(":sample")
 
 rootProject.name = "accompanist"

@@ -81,39 +81,6 @@
         </activity>
 
         <activity
-            android:name=".systemuicontroller.SystemBarsColorSample"
-            android:label="@string/system_ui_controller_title_color"
-            android:exported="true"
-            android:theme="@style/SystemBarsColorSampleTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".systemuicontroller.DialogSystemBarsColorSample"
-            android:label="@string/system_ui_controller_title_color_dialog"
-            android:exported="true"
-            android:theme="@style/DialogSystemUiControllerTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-
-        <activity
-            android:name=".systemuicontroller.SystemBarsVisibilitySample"
-            android:label="@string/system_ui_controller_title_visibility"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.accompanist.sample.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
             android:name=".adaptive.BasicTwoPaneSample"
             android:label="@string/adaptive_two_pane_basic"
             android:exported="true">

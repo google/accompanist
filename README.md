@@ -58,7 +58,7 @@ See our [Migration Guide](https://google.github.io/accompanist/navigation-animat
 ### 🧭🎨️ [Navigation-Material](./navigation-material/) (Deprecated & Removed)
 See our [Migration Guide](https://google.github.io/accompanist/navigation-material/) for migrating to using built in material-navigation support. 
 
-### 🍫 [System UI Controller](./systemuicontroller/) (Deprecated)
+### 🍫 [System UI Controller](./systemuicontroller/) (Deprecated & Removed)
 We recommend migrating to edge to edge. See our [Migration Guide](https://google.github.io/accompanist/systemuicontroller/) for more details.
 
 ---
