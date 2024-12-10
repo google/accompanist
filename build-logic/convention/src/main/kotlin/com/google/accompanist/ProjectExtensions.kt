@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 The Android Open Source Project
+ * Copyright 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package com.google.accompanist.internal.test
+package com.google.accompanist
 
-import android.app.Activity
-import androidx.test.core.app.ActivityScenario
+import org.gradle.api.Project
+import org.gradle.api.artifacts.VersionCatalog
+import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.kotlin.dsl.getByType
 
-public fun <A : Activity, T : Any> ActivityScenario<A>.withActivity(
-    action: (A) -> T
-): T {
-    lateinit var result: T
-    onActivity { result = action(it) }
-    return result
-}
+val Project.libs
+    get(): VersionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")

@@ -18,9 +18,9 @@
 
 package com.google.accompanist.internal.test
 
-inline fun parameterizedParams(): List<Array<Any>> = emptyList()
+public inline fun parameterizedParams(): List<Array<Any>> = emptyList()
 
-inline fun <reified T> List<Array<T>>.combineWithParameters(
+public inline fun <reified T> List<Array<T>>.combineWithParameters(
     vararg values: T
 ): List<Array<T>> {
     if (isEmpty()) {

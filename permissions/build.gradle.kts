@@ -16,77 +16,24 @@
 @file:Suppress("UnstableApiUsage")
 
 plugins {
-    id(libs.plugins.android.library.get().pluginId)
-    id(libs.plugins.android.kotlin.get().pluginId)
-    id(libs.plugins.jetbrains.dokka.get().pluginId)
-    id(libs.plugins.gradle.metalava.get().pluginId)
-    id(libs.plugins.vanniktech.maven.publish.get().pluginId)
-}
-
-kotlin {
-    explicitApi()
+    alias(libs.plugins.accompanist.android.library)
+    alias(libs.plugins.accompanist.android.library.compose)
+    alias(libs.plugins.accompanist.android.library.published)
 }
 
 android {
     namespace = "com.google.accompanist.permissions"
 
-    compileSdk = 34
-
     defaultConfig {
-        minSdk = 21
-        // targetSdkVersion has no effect for libraries. This is only used for the test APK
-        targetSdk = 33
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
         // The following argument makes the Android Test Orchestrator run its
         // "pm clear" command after each test invocation. This command ensures
         // that the app's state is completely cleared between tests.
         testInstrumentationRunnerArguments["clearPackageData"] = "true"
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
-    buildFeatures {
-        buildConfig = false
-        compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
-    }
-
-    lint {
-        textReport = true
-        textOutput = File("stdout")
-        // We run a full lint analysis as build part in CI, so skip vital checks for assemble tasks
-        checkReleaseBuilds = false
-        disable += setOf("GradleOverrides")
-    }
-
     testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-        }
-        animationsDisabled = true
         execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
-
-    packaging {
-        // Exclude license files to enable our test APK to build (has no effect on our AARs)
-        resources {
-            excludes += listOf("/META-INF/AL2.0", "/META-INF/LGPL2.1")
-        }
-    }
-}
-
-metalava {
-    sourcePaths.setFrom("src/main")
-    filename.set("api/current.api")
-    reportLintsAsErrors.set(true)
 }
 
 dependencies {
