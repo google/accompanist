@@ -16,16 +16,16 @@
 
 package com.google.accompanist.sample.drawablepainter
 
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import com.google.accompanist.sample.R
 
 @Composable
 fun BasicSample() {
-    val drawable = AppCompatResources.getDrawable(LocalContext.current, R.drawable.rectangle)
+    val drawable = ContextCompat.getDrawable(LocalContext.current, R.drawable.rectangle)
 
     Image(
         painter = rememberDrawablePainter(drawable = drawable),
