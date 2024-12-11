@@ -67,9 +67,7 @@ dependencies {
 
     implementation(project(":adaptive"))
     implementation(project(":drawablepainter"))
-    implementation(project(":navigation-animation"))
     implementation(project(":permissions"))
-    implementation(project(":systemuicontroller"))
 
     implementation(libs.androidx.appcompat)
     implementation(libs.mdc)
