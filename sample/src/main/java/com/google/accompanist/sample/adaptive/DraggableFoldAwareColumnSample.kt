@@ -23,13 +23,11 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -47,7 +45,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.adaptive.FoldAwareColumn
 import com.google.accompanist.adaptive.calculateDisplayFeatures
-import com.google.accompanist.sample.AccompanistM3SampleTheme
+import com.google.accompanist.sample.AccompanistSample
 import com.google.accompanist.sample.R
 import kotlin.math.roundToInt
 
@@ -55,10 +53,8 @@ class DraggableFoldAwareColumnSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AccompanistM3SampleTheme {
-                Surface(modifier = Modifier.fillMaxSize()) {
-                    DraggableExample(this@DraggableFoldAwareColumnSample)
-                }
+            AccompanistSample {
+                DraggableExample(this@DraggableFoldAwareColumnSample)
             }
         }
     }

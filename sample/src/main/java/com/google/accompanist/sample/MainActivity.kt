@@ -22,11 +22,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
-import androidx.compose.runtime.Composable
 
 /**
  * A list which automatically populates the list of sample activities in this app
@@ -40,7 +35,7 @@ class MainActivity : ComponentActivity() {
         val data = getData(intent.getStringExtra(EXTRA_PATH))
 
         setContent {
-            AccompanistM3SampleTheme {
+            AccompanistSampleTheme {
                 MainScreen(
                     listData = data,
                     onItemClick = { startActivity(it) }
@@ -123,17 +118,3 @@ class MainActivity : ComponentActivity() {
 }
 
 private const val EXTRA_PATH = "com.example.android.apis.Path"
-
-/**
- * TODO Migrate whole sample app to m3 and move to Theme.kt
- */
-@Composable
-fun AccompanistM3SampleTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
-) {
-    MaterialTheme(
-        colorScheme = if (darkTheme) darkColorScheme() else lightColorScheme(),
-        content = content
-    )
-}

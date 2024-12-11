@@ -32,14 +32,13 @@ import com.google.accompanist.adaptive.TwoPane
 import com.google.accompanist.adaptive.TwoPaneStrategy
 import com.google.accompanist.adaptive.VerticalTwoPaneStrategy
 import com.google.accompanist.adaptive.calculateDisplayFeatures
-import com.google.accompanist.sample.AccompanistM3SampleTheme
-import com.google.accompanist.sample.AccompanistSampleTheme
+import com.google.accompanist.sample.AccompanistSample
 
 class BasicTwoPaneSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AccompanistM3SampleTheme {
+            AccompanistSample {
                 val displayFeatures = calculateDisplayFeatures(this)
 
                 TwoPane(

@@ -75,7 +75,6 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.gif)
 
-    implementation(libs.compose.material.material)
     implementation(libs.compose.material.iconsext)
     implementation(libs.compose.material3.material3)
     implementation(libs.compose.foundation.layout)

@@ -50,14 +50,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.adaptive.FoldAwareColumn
 import com.google.accompanist.adaptive.calculateDisplayFeatures
-import com.google.accompanist.sample.AccompanistM3SampleTheme
-import com.google.accompanist.sample.AccompanistSampleTheme
+import com.google.accompanist.sample.AccompanistSample
 
 class NavDrawerFoldAwareColumnSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AccompanistM3SampleTheme {
+            AccompanistSample {
                 NavDrawerExample(this)
             }
         }
