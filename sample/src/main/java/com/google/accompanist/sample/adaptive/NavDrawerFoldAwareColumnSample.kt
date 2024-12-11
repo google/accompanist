@@ -56,7 +56,7 @@ class NavDrawerFoldAwareColumnSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AccompanistSample {
+            AccompanistSample(contentPadding = PaddingValues(all = 0.dp)) {
                 NavDrawerExample(this)
             }
         }

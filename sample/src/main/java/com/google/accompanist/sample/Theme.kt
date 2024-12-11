@@ -17,19 +17,34 @@
 package com.google.accompanist.sample
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 
 @Composable
-fun AccompanistSample(content: @Composable () -> Unit) {
+fun AccompanistSample(
+    contentPadding: PaddingValues = PaddingValues(16.dp),
+    content: @Composable () -> Unit
+) {
     AccompanistSampleTheme {
-        Surface(Modifier.fillMaxSize().safeDrawingPadding(), content = content)
+        Surface(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Box(
+                modifier = Modifier.padding(contentPadding),
+                propagateMinConstraints = true
+            ) {
+                content()
+            }
+        }
     }
 }
 
