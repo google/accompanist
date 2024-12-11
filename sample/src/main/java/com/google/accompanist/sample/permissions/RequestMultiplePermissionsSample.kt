@@ -16,14 +16,15 @@
 
 package com.google.accompanist.sample.permissions
 
+import android.Manifest
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.Button
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -31,7 +32,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import com.google.accompanist.sample.AccompanistSampleTheme
+import com.google.accompanist.sample.AccompanistSample
 
 @OptIn(ExperimentalPermissionsApi::class)
 class RequestMultiplePermissionsSample : ComponentActivity() {
@@ -39,11 +40,11 @@ class RequestMultiplePermissionsSample : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            AccompanistSampleTheme {
+            AccompanistSample {
                 val multiplePermissionsState = rememberMultiplePermissionsState(
                     listOf(
-                        android.Manifest.permission.RECORD_AUDIO,
-                        android.Manifest.permission.CAMERA,
+                        Manifest.permission.RECORD_AUDIO,
+                        Manifest.permission.CAMERA,
                     )
                 )
                 Sample(multiplePermissionsState)

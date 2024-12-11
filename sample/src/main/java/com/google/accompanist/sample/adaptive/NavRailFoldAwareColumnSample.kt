@@ -24,12 +24,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.NavigationRail
-import androidx.compose.material.NavigationRailItem
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Face
@@ -38,6 +32,12 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.NavigationRailItem
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,13 +47,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.adaptive.FoldAwareColumn
 import com.google.accompanist.adaptive.calculateDisplayFeatures
-import com.google.accompanist.sample.AccompanistSampleTheme
+import com.google.accompanist.sample.AccompanistSample
 
 class NavRailFoldAwareColumnSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AccompanistSampleTheme {
+            AccompanistSample {
                 Row {
                     NavRail(this@NavRailFoldAwareColumnSample)
                     Surface(modifier = Modifier.fillMaxSize()) {}
@@ -83,7 +83,7 @@ fun NavRail(activity: Activity) {
                 NavigationRailItem(
                     modifier = Modifier
                         .padding(5.dp)
-                        .border(2.dp, MaterialTheme.colors.primary),
+                        .border(2.dp, MaterialTheme.colorScheme.primary),
                     selected = it == selectedIcon,
                     onClick = { selectedIcon = it },
                     icon = { Icon(imageVector = it, contentDescription = it.name) },

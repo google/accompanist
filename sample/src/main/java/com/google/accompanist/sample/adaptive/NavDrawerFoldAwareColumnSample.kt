@@ -25,10 +25,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Face
@@ -38,9 +34,13 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,13 +50,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.adaptive.FoldAwareColumn
 import com.google.accompanist.adaptive.calculateDisplayFeatures
-import com.google.accompanist.sample.AccompanistSampleTheme
+import com.google.accompanist.sample.AccompanistSample
 
 class NavDrawerFoldAwareColumnSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AccompanistSampleTheme {
+            AccompanistSample(contentPadding = PaddingValues(all = 0.dp)) {
                 NavDrawerExample(this)
             }
         }
@@ -89,7 +89,7 @@ fun NavDrawerExample(activity: Activity) {
                         NavigationDrawerItem(
                             modifier = Modifier
                                 .padding(5.dp)
-                                .border(2.dp, MaterialTheme.colors.primary, CircleShape),
+                                .border(2.dp, MaterialTheme.colorScheme.primary, CircleShape),
                             icon = { Icon(imageVector = it, contentDescription = it.name) },
                             label = { Text(it.name.substringAfter('.')) },
                             selected = it == selectedIcon,

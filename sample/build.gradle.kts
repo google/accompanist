@@ -15,12 +15,9 @@
  */
 @file:Suppress("UnstableApiUsage")
 
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
-
 plugins {
-    id(libs.plugins.android.application.get().pluginId)
-    id(libs.plugins.android.kotlin.get().pluginId)
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.kotlin)
     alias(libs.plugins.compose.plugin)
 }
 
@@ -69,13 +66,6 @@ dependencies {
     implementation(project(":drawablepainter"))
     implementation(project(":permissions"))
 
-    implementation(libs.androidx.appcompat)
-    implementation(libs.mdc)
-
-    implementation(libs.coil.compose)
-    implementation(libs.coil.gif)
-
-    implementation(libs.compose.material.material)
     implementation(libs.compose.material.iconsext)
     implementation(libs.compose.material3.material3)
     implementation(libs.compose.foundation.layout)
@@ -83,11 +73,8 @@ dependencies {
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.compose.ui.util)
 
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.activity.compose)
-
     implementation(libs.androidx.core)
-    implementation(libs.androidx.fragment)
+    implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.runtime)
 
     implementation(libs.kotlin.stdlib)
