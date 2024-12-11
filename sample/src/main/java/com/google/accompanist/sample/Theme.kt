@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.darkColorScheme
@@ -39,7 +40,7 @@ fun AccompanistSample(
             modifier = Modifier.fillMaxSize()
         ) {
             Box(
-                modifier = Modifier.padding(contentPadding),
+                modifier = Modifier.padding(contentPadding).safeDrawingPadding(),
                 propagateMinConstraints = true
             ) {
                 content()
