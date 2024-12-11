@@ -23,7 +23,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -33,6 +32,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -56,7 +56,7 @@ class DraggableFoldAwareColumnSample : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AccompanistSampleTheme {
-                Box(modifier = Modifier.fillMaxSize()) {
+                Surface(modifier = Modifier.fillMaxSize()) {
                     DraggableExample(this@DraggableFoldAwareColumnSample)
                 }
             }
