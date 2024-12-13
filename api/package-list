@@ -5,12 +5,6 @@ module:adaptive
 com.google.accompanist.adaptive
 module:drawablepainter
 com.google.accompanist.drawablepainter
-module:flowlayout
-com.google.accompanist.flowlayout
-module:insets-ui
-com.google.accompanist.insets.ui
-module:navigation-material
-com.google.accompanist.navigation.material
 module:permissions
 com.google.accompanist.permissions
 module:permissions-lint
