@@ -9,7 +9,7 @@ dokka = "1.8.10"
 
 # gradlePlugin and lint need to be updated together
 androidTools = "31.7.2"
-gradlePlugin = "8.7.2"
+gradlePlugin = "8.7.3"
 lintMinCompose = "30.0.0"
 
 ktlint = "0.45.2"
@@ -23,7 +23,7 @@ androidxnavigation = "2.7.7"
 androidxWindow = "1.0.0"
 
 metalava = "0.3.5"
-vanniktechPublish = "0.25.2"
+vanniktechPublish = "0.30.0"
 
 [libraries]
 compose-ui-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
@@ -86,7 +86,6 @@ robolectric = "org.robolectric:robolectric:4.12.1"
 affectedmoduledetector = "com.dropbox.affectedmoduledetector:affectedmoduledetector:0.1.2"
 
 android-tools-common = { module = "com.android.tools:common", version.ref = "androidTools" }
-android-tools-build-gradle = { module = "com.android.tools.build:gradle", version.ref = "gradlePlugin" }
 android-tools-lint-lint = { module = "com.android.tools.lint:lint", version.ref = "lintMinCompose" }
 android-tools-lint-api = { module = "com.android.tools.lint:lint-api", version.ref = "lintMinCompose" }
 android-tools-lint-tests = { module = "com.android.tools.lint:lint-tests", version.ref = "lintMinCompose" }

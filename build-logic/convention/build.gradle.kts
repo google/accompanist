@@ -44,6 +44,7 @@ dependencies {
     compileOnly(libs.compose.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.metalavaGradle)
+    compileOnly(libs.gradleMavenPublishPlugin)
     implementation(libs.truth)
 }
 
