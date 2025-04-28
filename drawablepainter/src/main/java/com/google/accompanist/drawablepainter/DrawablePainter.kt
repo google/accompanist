@@ -17,6 +17,7 @@
 package com.google.accompanist.drawablepainter
 
 import android.graphics.drawable.Animatable
+import android.graphics.drawable.AnimatedImageDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
@@ -127,10 +128,22 @@ public class DrawablePainter(
             // Reading this ensures that we invalidate when invalidateDrawable() is called
             drawInvalidateTick
 
-            // Update the Drawable's bounds
-            drawable.setBounds(0, 0, size.width.roundToInt(), size.height.roundToInt())
-
             canvas.withSave {
+                // AnimatedImageDrawable is not respecting the bounds below Android 12, so this is
+                // a workaround to make the render size correct in this specific case
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P &&
+                    Build.VERSION.SDK_INT < Build.VERSION_CODES.S &&
+                    drawable is AnimatedImageDrawable
+                ) {
+                    canvas.scale(
+                        size.width / intrinsicSize.width,
+                        size.height / intrinsicSize.height
+                    )
+                } else {
+                    // Update the Drawable's bounds
+                    drawable.setBounds(0, 0, size.width.roundToInt(), size.height.roundToInt())
+                }
+
                 drawable.draw(canvas.nativeCanvas)
             }
         }
