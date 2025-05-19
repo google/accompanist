@@ -20,7 +20,8 @@ plugins {
     id(libs.plugins.android.kotlin.get().pluginId)
     id(libs.plugins.jetbrains.dokka.get().pluginId)
     id(libs.plugins.gradle.metalava.get().pluginId)
-    id(libs.plugins.vanniktech.maven.publish.get().pluginId)
+//    id(libs.plugins.vanniktech.maven.publish.get().pluginId)
+    id("mimikko-maven")
 }
 
 kotlin {
@@ -87,6 +88,12 @@ android {
             assets.srcDirs("src/androidTest/assets")
         }
     }
+}
+
+mavenConfigs {
+    version = "1.0.0-SNAPSHOT"
+    groupId = "com.mimikko.app.lib"
+    artifactId = "mimikko-lib-web"
 }
 
 metalava {

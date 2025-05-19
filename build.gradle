@@ -31,6 +31,8 @@ buildscript {
         classpath libs.metalavaGradle
 
         classpath libs.affectedmoduledetector
+
+        classpath 'com.mimikko.tools:mimikko-maven:1.1.1'
     }
 }
 
@@ -74,8 +76,8 @@ affectedModuleDetector {
 
 allprojects {
     repositories {
-        google()
-        mavenCentral()
+//        google()
+//        mavenCentral()
 
         def composeSnapshot = libs.versions.composesnapshot.get()
         if (composeSnapshot.length() > 1) {

@@ -14,16 +14,44 @@
  * limitations under the License.
  */
 
-plugins {
-    id("com.gradle.enterprise").version("3.10.3")
-}
-
-gradleEnterprise {
-    buildScan {
-        termsOfServiceUrl = "https://gradle.com/terms-of-service"
-        termsOfServiceAgree = "yes"
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+        maven(url = uri("https://nexus.mimikko.cn/repository/maven-public/")) {
+            credentials {
+                username = "dev"
+                password = "shouer2019"
+            }
+        }
     }
 }
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven(url = uri("https://nexus.mimikko.cn/repository/maven-public/")) {
+            credentials {
+                username = "dev"
+                password = "shouer2019"
+            }
+        }
+    }
+}
+
+//plugins {
+//    id("com.gradle.enterprise").version("3.10.3")
+//}
+
+//gradleEnterprise {
+//    buildScan {
+//        termsOfServiceUrl = "https://gradle.com/terms-of-service"
+//        termsOfServiceAgree = "yes"
+//    }
+//}
 
 include(":adaptive")
 include(":internal-testutils")
