@@ -41,8 +41,8 @@ dependencies {
     implementation(libs.compose.foundation.foundation)
     implementation(libs.kotlin.coroutines.android)
 
-    lintChecks(project(":permissions-lint"))
-    lintPublish(project(":permissions-lint"))
+    lintChecks(projects.permissionsLint)
+    lintPublish(projects.permissionsLint)
 
     // ======================
     // Test dependencies
@@ -50,7 +50,7 @@ dependencies {
 
     androidTestUtil(libs.androidx.test.orchestrator)
 
-    androidTestImplementation(project(":internal-testutils"))
+    androidTestImplementation(projects.internalTestutils)
     androidTestImplementation(libs.androidx.activity.compose)
     androidTestImplementation(libs.compose.material.material)
 
