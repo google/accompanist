@@ -62,9 +62,9 @@ android {
 dependencies {
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
-    implementation(project(":adaptive"))
-    implementation(project(":drawablepainter"))
-    implementation(project(":permissions"))
+    implementation(projects.adaptive)
+    implementation(projects.drawablepainter)
+    implementation(projects.permissions)
 
     implementation(libs.compose.material.iconsext)
     implementation(libs.compose.material3.material3)
@@ -79,5 +79,5 @@ dependencies {
 
     implementation(libs.kotlin.stdlib)
 
-    lintChecks(project(":permissions-lint"))
+    lintChecks(projects.permissionsLint)
 }

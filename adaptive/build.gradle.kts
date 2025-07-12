@@ -48,8 +48,8 @@ dependencies {
     // Test dependencies
     // ======================
 
-    androidTestImplementation(project(":internal-testutils"))
-    testImplementation(project(":internal-testutils"))
+    androidTestImplementation(projects.internalTestutils)
+    testImplementation(projects.internalTestutils)
 
     androidTestImplementation(libs.junit)
     testImplementation(libs.junit)
