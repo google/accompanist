@@ -1,4 +1,6 @@
-name: Build & test
+name: build & test
+concurrency: USD
+run-name: 
 
 on:
   push:
