@@ -116,19 +116,25 @@ public interface MultiplePermissionsState {
 @OptIn(ExperimentalPermissionsApi::class)
 @Immutable
 private class PreviewMultiplePermissionsState(
-    permissions: List<String>,
-    permissionStatuses: Map<String, PermissionStatus>
+    permissionNames: List<String>,
+    permissionStatuses: Map<String, PermissionStatus>,
 ) : MultiplePermissionsState {
-    override val permissions: List<PermissionState> = permissions.fastMap { permission ->
+    override val permissions: List<PermissionState> = permissionNames.fastMap { permission ->
         PreviewPermissionState(
             permission = permission,
             status = permissionStatuses[permission] ?: PermissionStatus.Granted,
         )
     }
 
-    override val revokedPermissions: List<PermissionState> = emptyList()
-    override val allPermissionsGranted: Boolean = false
-    override val shouldShowRationale: Boolean = false
+    override val revokedPermissions: List<PermissionState> =
+        permissions.filter { it.status != PermissionStatus.Granted }
+
+    override val allPermissionsGranted: Boolean =
+        permissions.all { it.status.isGranted } || revokedPermissions.isEmpty()
+
+    override val shouldShowRationale: Boolean =
+        permissions.any { it.status.shouldShowRationale } &&
+            permissions.none { !it.status.isGranted && !it.status.shouldShowRationale }
 
     override fun launchMultiplePermissionRequest() {}
 }
