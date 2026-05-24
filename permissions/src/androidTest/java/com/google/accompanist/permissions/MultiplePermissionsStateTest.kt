@@ -16,6 +16,8 @@
 
 package com.google.accompanist.permissions
 
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.filters.SdkSuppress
 import androidx.test.rule.GrantPermissionRule
@@ -76,6 +78,35 @@ class MultiplePermissionsStateTest {
             assertThat(state.revokedPermissions).hasSize(1)
             assertThat(state.revokedPermissions[0].permission)
                 .isEqualTo("android.permission.WRITE_EXTERNAL_STORAGE")
+        }
+    }
+
+    @Test
+    fun previewMultiplePermissionsState_reflectsPreviewPermissionStatuses() {
+        composeTestRule.setContent {
+            CompositionLocalProvider(LocalInspectionMode provides true) {
+                val state = rememberMultiplePermissionsState(
+                    listOf(
+                        android.Manifest.permission.ACCESS_FINE_LOCATION,
+                        android.Manifest.permission.CAMERA,
+                    ),
+                    previewPermissionStatuses = mapOf(
+                        android.Manifest.permission.ACCESS_FINE_LOCATION to
+                            PermissionStatus.Granted,
+                        android.Manifest.permission.CAMERA to
+                            PermissionStatus.Denied(shouldShowRationale = true),
+                    ),
+                )
+
+                assertThat(state.allPermissionsGranted).isFalse()
+                assertThat(state.shouldShowRationale).isTrue()
+                assertThat(state.revokedPermissions).hasSize(1)
+                assertThat(state.revokedPermissions[0].permission)
+                    .isEqualTo(android.Manifest.permission.CAMERA)
+                assertThat(
+                    state.permissions.size == state.revokedPermissions.size
+                ).isFalse()
+            }
         }
     }
 }
