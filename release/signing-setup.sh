@@ -14,15 +14,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ENCRYPT_KEY=$1
+set -e
 
-if [[ ! -z "$ENCRYPT_KEY" ]]; then
+ENCRYPT_KEY="${ENCRYPT_KEY:-$1}"
+
+if [[ -n "$ENCRYPT_KEY" ]]; then
   # Decrypt GnuPG keyring
-  openssl aes-256-cbc -md sha256 -d -in release/secring.gpg.aes -out release/secring.gpg -k ${ENCRYPT_KEY}
+  openssl aes-256-cbc -md sha256 -d -in release/secring.gpg.aes -out release/secring.gpg -pass env:ENCRYPT_KEY
 
   # Decrypt Play Store key
-  openssl aes-256-cbc -md sha256 -d -in release/signing.properties.aes -out release/signing.properties -k ${ENCRYPT_KEY}
+  openssl aes-256-cbc -md sha256 -d -in release/signing.properties.aes -out release/signing.properties -pass env:ENCRYPT_KEY
 
 else
-  echo "ENCRYPT_KEY is empty"
+  echo "ENCRYPT_KEY is empty, skipping decryption"
+  exit 0
 fi

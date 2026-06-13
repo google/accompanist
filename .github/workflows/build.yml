@@ -39,7 +39,9 @@ jobs:
           java-version: 17
 
       - name: Decrypt secrets
-        run: release/signing-setup.sh ${{ secrets.ENCRYPT_KEY }}
+        run: release/signing-setup.sh
+        env:
+          ENCRYPT_KEY: ${{ secrets.ENCRYPT_KEY }}
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
@@ -109,7 +111,9 @@ jobs:
           java-version: 17
 
       - name: Decrypt secrets
-        run: release/signing-setup.sh ${{ secrets.ENCRYPT_KEY }}
+        run: release/signing-setup.sh
+        env:
+          ENCRYPT_KEY: ${{ secrets.ENCRYPT_KEY }}
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
@@ -187,7 +191,9 @@ jobs:
           java-version: 17
 
       - name: Decrypt secrets
-        run: release/signing-setup.sh ${{ secrets.ENCRYPT_KEY }}
+        run: release/signing-setup.sh
+        env:
+          ENCRYPT_KEY: ${{ secrets.ENCRYPT_KEY }}
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2

@@ -30,7 +30,12 @@ import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -41,6 +46,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.style.TextOverflow
 
 data class AccompanistSample(
     val title: String,
@@ -52,13 +59,25 @@ data class AccompanistSample(
 fun MainScreen(
     listData: List<AccompanistSample>,
     onItemClick: (Intent) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    title: String = stringResource(R.string.app_name),
+    onBackClick: (() -> Unit)? = null
 ) {
     Surface(modifier) {
         Column {
             val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
             TopAppBar(
-                title = { Text(stringResource(R.string.app_name)) },
+                title = { Text(title) },
+                navigationIcon = {
+                    if (onBackClick != null) {
+                        IconButton(onClick = onBackClick) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = stringResource(R.string.navigation_back)
+                            )
+                        }
+                    }
+                },
                 scrollBehavior = scrollBehavior
             )
 
@@ -88,8 +107,23 @@ private fun ContentList(
     ) {
         items(listData) {
             ListItem(
-                headlineText = { Text(it.title) },
-                modifier = Modifier.clickable { onItemClick(it.intent) }
+                headlineText = {
+                    Text(
+                        text = it.title,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                },
+                trailingContent = {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                        contentDescription = null
+                    )
+                },
+                modifier = Modifier.clickable(
+                    role = Role.Button,
+                    onClick = { onItemClick(it.intent) }
+                )
             )
         }
 

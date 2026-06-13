@@ -21,9 +21,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Face
@@ -43,7 +46,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.adaptive.FoldAwareColumn
 import com.google.accompanist.adaptive.calculateDisplayFeatures
@@ -54,9 +59,42 @@ class NavRailFoldAwareColumnSample : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AccompanistSample {
+                val icons = remember {
+                    listOf(
+                        Icons.Default.Done,
+                        Icons.Default.Face,
+                        Icons.Default.Lock,
+                        Icons.Default.Search,
+                        Icons.Default.ThumbUp,
+                        Icons.Default.Warning,
+                        Icons.Default.Star
+                    )
+                }
+                var selectedIcon by remember { mutableStateOf(icons[0]) }
+
                 Row {
-                    NavRail(this@NavRailFoldAwareColumnSample)
-                    Surface(modifier = Modifier.fillMaxSize()) {}
+                    NavRail(
+                        activity = this@NavRailFoldAwareColumnSample,
+                        icons = icons,
+                        selectedIcon = selectedIcon,
+                        onIconSelected = { selectedIcon = it }
+                    )
+                    Surface(modifier = Modifier.fillMaxSize()) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                Icon(
+                                    imageVector = selectedIcon,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(64.dp),
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                                Text(
+                                    text = selectedIcon.name.substringAfter('.'),
+                                    style = MaterialTheme.typography.headlineSmall
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -64,19 +102,12 @@ class NavRailFoldAwareColumnSample : ComponentActivity() {
 }
 
 @Composable
-fun NavRail(activity: Activity) {
-    val icons = listOf(
-        Icons.Default.Done,
-        Icons.Default.Face,
-        Icons.Default.Lock,
-        Icons.Default.Search,
-        Icons.Default.ThumbUp,
-        Icons.Default.Warning,
-        Icons.Default.Star
-    )
-
-    var selectedIcon by remember { mutableStateOf(icons[0]) }
-
+fun NavRail(
+    activity: Activity,
+    icons: List<ImageVector>,
+    selectedIcon: ImageVector,
+    onIconSelected: (ImageVector) -> Unit
+) {
     NavigationRail {
         FoldAwareColumn(displayFeatures = calculateDisplayFeatures(activity)) {
             icons.forEach {
@@ -85,8 +116,8 @@ fun NavRail(activity: Activity) {
                         .padding(5.dp)
                         .border(2.dp, MaterialTheme.colorScheme.primary),
                     selected = it == selectedIcon,
-                    onClick = { selectedIcon = it },
-                    icon = { Icon(imageVector = it, contentDescription = it.name) },
+                    onClick = { onIconSelected(it) },
+                    icon = { Icon(imageVector = it, contentDescription = null) },
                     label = { Text(it.name.substringAfter('.')) }
                 )
             }

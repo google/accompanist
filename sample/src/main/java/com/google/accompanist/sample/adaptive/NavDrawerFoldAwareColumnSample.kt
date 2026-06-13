@@ -21,9 +21,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
@@ -46,7 +49,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.adaptive.FoldAwareColumn
 import com.google.accompanist.adaptive.calculateDisplayFeatures
@@ -57,7 +62,25 @@ class NavDrawerFoldAwareColumnSample : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AccompanistSample(contentPadding = PaddingValues(all = 0.dp)) {
-                NavDrawerExample(this)
+                val icons = remember {
+                    listOf(
+                        Icons.Default.Done,
+                        Icons.Default.Face,
+                        Icons.Default.Lock,
+                        Icons.Default.Search,
+                        Icons.Default.ThumbUp,
+                        Icons.Default.Warning,
+                        Icons.Default.Star
+                    )
+                }
+                var selectedIcon by remember { mutableStateOf(icons[0]) }
+
+                NavDrawerExample(
+                    activity = this@NavDrawerFoldAwareColumnSample,
+                    icons = icons,
+                    selectedIcon = selectedIcon,
+                    onIconSelected = { selectedIcon = it }
+                )
             }
         }
     }
@@ -65,19 +88,12 @@ class NavDrawerFoldAwareColumnSample : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavDrawerExample(activity: Activity) {
-    val icons = listOf(
-        Icons.Default.Done,
-        Icons.Default.Face,
-        Icons.Default.Lock,
-        Icons.Default.Search,
-        Icons.Default.ThumbUp,
-        Icons.Default.Warning,
-        Icons.Default.Star
-    )
-
-    var selectedIcon by remember { mutableStateOf(icons[0]) }
-
+fun NavDrawerExample(
+    activity: Activity,
+    icons: List<ImageVector>,
+    selectedIcon: ImageVector,
+    onIconSelected: (ImageVector) -> Unit
+) {
     ModalNavigationDrawer(
         drawerContent = {
             ModalDrawerSheet {
@@ -90,15 +106,32 @@ fun NavDrawerExample(activity: Activity) {
                             modifier = Modifier
                                 .padding(5.dp)
                                 .border(2.dp, MaterialTheme.colorScheme.primary, CircleShape),
-                            icon = { Icon(imageVector = it, contentDescription = it.name) },
+                            icon = { Icon(imageVector = it, contentDescription = null) },
                             label = { Text(it.name.substringAfter('.')) },
                             selected = it == selectedIcon,
-                            onClick = { selectedIcon = it }
+                            onClick = { onIconSelected(it) }
                         )
                     }
                 }
             }
         },
-        content = { Surface(modifier = Modifier.fillMaxSize()) {} }
+        content = {
+            Surface(modifier = Modifier.fillMaxSize()) {
+                Box(contentAlignment = Alignment.Center) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(
+                            imageVector = selectedIcon,
+                            contentDescription = null,
+                            modifier = Modifier.size(64.dp),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                        Text(
+                            text = selectedIcon.name.substringAfter('.'),
+                            style = MaterialTheme.typography.headlineSmall
+                        )
+                    }
+                }
+            }
+        }
     )
 }

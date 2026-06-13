@@ -22,6 +22,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.ui.res.stringResource
 
 /**
  * A list which automatically populates the list of sample activities in this app
@@ -32,13 +33,20 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()
-        val data = getData(intent.getStringExtra(EXTRA_PATH))
+        val path = intent.getStringExtra(EXTRA_PATH)
+        val data = getData(path)
 
         setContent {
             AccompanistSampleTheme {
                 MainScreen(
                     listData = data,
-                    onItemClick = { startActivity(it) }
+                    onItemClick = { startActivity(it) },
+                    title = path?.substringAfterLast('/') ?: stringResource(R.string.app_name),
+                    onBackClick = if (path != null) {
+                        { finish() }
+                    } else {
+                        null
+                    }
                 )
             }
         }
@@ -66,6 +74,8 @@ class MainActivity : ComponentActivity() {
         val entries = mutableMapOf<String, Boolean>()
 
         list.forEach { info ->
+            if (info.activityInfo.packageName != packageName) return@forEach
+
             val labelSeq = info.loadLabel(packageManager)
             val label = labelSeq?.toString() ?: info.activityInfo.name
 
@@ -117,4 +127,8 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-private const val EXTRA_PATH = "com.example.android.apis.Path"
+/*
+ * Use a project-specific prefix for intent extras to avoid collisions
+ * and follow security best practices.
+ */
+private const val EXTRA_PATH = "com.google.accompanist.sample.PATH"

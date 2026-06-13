@@ -14,25 +14,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-RESULT_FILE=$1
+set -e
 
-if [ -f $RESULT_FILE ]; then
-  rm $RESULT_FILE
+RESULT_FILE="$1"
+
+if [ -f "$RESULT_FILE" ]; then
+  rm "$RESULT_FILE"
 fi
-touch $RESULT_FILE
+touch "$RESULT_FILE"
 
 checksum_file() {
-  echo $(openssl md5 $1 | awk '{print $2}')
+  # Use SHA-256 for better security and collision resistance compared to MD5.
+  if command -v sha256sum >/dev/null 2>&1; then
+    sha256sum "$1" | awk '{print $1}'
+  else
+    openssl dgst -sha256 -r "$1" | awk '{print $1}'
+  fi
 }
 
 FILES=()
-while read -r -d ''; do
-	FILES+=("$REPLY")
+while read -r -d '' FILE; do
+	FILES+=("$FILE")
 done < <(find . -type f \( -name "build.gradle*" -o -name "*.versions.toml" -o -name "gradle-wrapper.properties" \) -print0)
 
-# Loop through files and append MD5 to result file
-for FILE in ${FILES[@]}; do
-	echo $(checksum_file $FILE) >> $RESULT_FILE
+# Loop through files and append SHA-256 to result file
+for FILE in "${FILES[@]}"; do
+	echo "$(checksum_file "$FILE")" >> "$RESULT_FILE"
 done
 # Now sort the file so that it is idempotent
-sort $RESULT_FILE -o $RESULT_FILE
+sort "$RESULT_FILE" -o "$RESULT_FILE"
