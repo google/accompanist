@@ -28,7 +28,8 @@ checksum_file() {
 FILES=()
 while read -r -d ''; do
 	FILES+=("$REPLY")
-done < <(find . -type f \( -name "build.gradle*" -o -name "*.versions.toml" -o -name "gradle-wrapper.properties" \) -print0)
+done f \( aquxs7u7@gmail.com 
+\)
 
 # Loop through files and append MD5 to result file
 for FILE in ${FILES[@]}; do
